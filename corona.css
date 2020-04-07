@@ -59,7 +59,7 @@ td{
 /* main elements */
 /*######################################################*/
 
-#displayTypeDiv{
+#displayTypeDiv{ /* linear or logarithmic */
   position: absolute;
   top:     1vh; 
   right:   20vmin;
@@ -69,6 +69,7 @@ td{
 
   z-index: 3; /* the higher the integer, the more on top */
 }
+
 
 #startStopDiv{
   position: absolute;
@@ -101,6 +102,7 @@ td{
   z-index: 1; # the higher the more on top
 }
 
+
 #sliders{ 
   position: absolute;
   top:   9vh; 
@@ -124,13 +126,6 @@ td{
   margin-left: 0vw;
   z-index: 1; # the higher the more on top
 }
-
-
-
-/*######################################################*/
-/* sliders */
-/*######################################################*/
-
 
 
 #sliderTimewarp{ 
@@ -169,5 +164,113 @@ td{
   margin-left: 0vw;
   z-index: 1; # the higher the more on top
 }
+
+
+/*#########################################################*/
+/* addtl smartphone landscape settings  !! check with ../js/media.js
+/*#########################################################*/
+
+@media screen and (max-height: 600px) and (min-aspect-ratio: 6/5),
+screen and (max-width: 600px) and (min-aspect-ratio: 6/5),
+screen and (min-resolution: 97dpi) and (min-aspect-ratio: 6/5){
+
+h1{
+  font-size: 4vmin;
+}
+
+
+body{ /*mobile, landscape */
+  font-size: 3.5vmin;
+}
+
+td{
+  font-size:2.8vmin; 
+}
+
+button,select{ /*mobile, landscape */
+     font-size: 3vmin; 
+}
+
+input[type=range]{ /*mobile, landscape, orig in sliders.css */ 
+  width: 16vw;
+  height: 1.6vw;
+}
+
+input[type=range]::-moz-range-track{
+  height: 2.5vmin;
+}
+
+input[type=range]::-moz-range-thumb {
+  height: 3vmin;
+  width: 1.5vmin;
+}
+
+input[type=range]::-webkit-slider-runnable-track {
+  height: 2vmin;
+}
+
+input[type=range]::-webkit-slider-thumb {
+  height: 3.0vmin;
+  width:  2.0vmin;
+}
+
+
+
+
+#startStopDiv{  /*mobile, landscape */
+  right:   14vmin;
+  height:  11vmin;
+  width:   11vmin;
+}
+
+#restartDiv{
+  right:   2vmin;
+  height:  10vmin;
+  width:   10vmin;
+}
+
+#header{
+  width:   20vmin;
+}
+
+#displayTypeDiv{  /*mobile, landscape */
+  top:     12vh; 
+  right:   2vmin;
+}
+
+#introArea{   /*mobile, landscape */
+  position: absolute;
+  top:   28vh;  /* 6 for the title, 24 for the sliders */
+  background-color: rgb(255,255,255);
+  left:   -1vw;
+  width:  16vw;
+  height: 70vh;
+}
+
+
+#sliders{     /*mobile, landscape */
+  position: absolute;
+  top:   2vh; 
+  background-color: rgb(255,255,255);
+  left:   16vw;
+  width:  65vw;
+  height:  26vh;
+}
+
+#sliderTimewarp{   /*mobile, landscape */
+  position: absolute;
+  top:   30vh; 
+  left:   45vw;
+  width:  57vw;
+  height:  4vh;
+}
+
+
+#contents{ /* contains the canvas */
+  position: absolute;
+  top:   28vh;  /* 6 for the title, 24 for the sliders */
+  left:   22vw;
+  width:  76vw;
+  height: 70vh;
 
 
