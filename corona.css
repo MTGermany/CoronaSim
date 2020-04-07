@@ -1,0 +1,173 @@
+
+
+/*######################################################*/
+/* general */
+/*######################################################*/
+h1{
+     font-family: helvetica, sans-serif;
+     font-size: 3.4vmin;
+     font-weight: bold;
+     color: #446;
+     padding-top:0px;
+ }
+
+body{
+  margin: 0;
+  padding: 0;
+  font-family: 'helvetica', sans-serif;
+                 /*font-size: 14px;*/
+  font-size: 2.8vmin;
+  /*text-align: center;*/
+  color: #404050;   /* text color */
+  background-color: #FFFFFF;
+}
+
+button,select{
+     font-size: 2.5vmin; 
+}
+
+
+/* text layout of sliders: tables override general text spec) */
+
+th{                    /* only used in infotext */
+  font-size: 2.5vmin;
+  font-weight: bold; 
+  color: #404060;      /* text color */
+
+}
+
+td{
+  font-size:2.2vmin; 
+  font-weight: bold; 
+  color: #404060;   /* only WITHOUT quotes here, not "#404060" etc */
+}
+
+/*######################################################*/
+/* title */
+/*######################################################*/
+
+
+#header{
+  position: absolute;
+  top: -2vmin;
+  left: 5vw;
+  font-weight:bold;
+  z-index: 3;  /* above simulation canvas in rare chances of overlapping */
+}
+
+/*######################################################*/
+/* main elements */
+/*######################################################*/
+
+#displayTypeDiv{
+  position: absolute;
+  top:     1vh; 
+  right:   20vmin;
+  height:  5vmin;
+  width:   25vmin;
+  background-color: rgb(255,240,222);
+
+  z-index: 3; /* the higher the integer, the more on top */
+}
+
+#startStopDiv{
+  position: absolute;
+  top:     0.5vh; 
+  right:   11vmin;
+  height:  9vmin;
+  width:   9vmin;
+  z-index: 3; /* the higher the integer, the more on top */
+}
+
+#restartDiv{
+  position: absolute;
+  top:     0.5vh; 
+  right:   2vmin;
+  height:  8vmin;
+  width:   8vmin;
+  z-index: 3; /* the higher the integer, the more on top */
+}
+
+
+#introArea{ /* introducionary remarks on the simulation */
+  position: absolute;
+  top:   9vh;  /* 6 for the title, 24 for the sliders */
+  left:   2vw;
+  width:  40vw;
+  height: 24vh;
+  background-color: rgb(222,222,255);
+  margin-right: 0vw;
+  margin-left: 0vw;
+  z-index: 1; # the higher the more on top
+}
+
+#sliders{ 
+  position: absolute;
+  top:   9vh; 
+  left:   44vw;
+  width:  54vw;
+  height:  24vh;
+  background-color: rgb(222,255,222);
+  margin-right: 0vw;
+  margin-left: 0vw;
+  z-index: 2;  # the higher the more on top
+}
+
+#contents{ /* contains the canvas */
+  position: absolute;
+  top:   35vh;  /* 6 for the title, 24 for the sliders */
+  left:   2vw;
+  width:  96vw;
+  height: 60vh;
+  background-color: rgb(255,255,255);
+  margin-right: 0vw;
+  margin-left: 0vw;
+  z-index: 1; # the higher the more on top
+}
+
+
+
+/*######################################################*/
+/* sliders */
+/*######################################################*/
+
+
+
+#sliderTimewarp{ 
+  position: absolute;
+  top:   37vh; 
+  left:   51vw;
+  width:  47vw;
+  height:  4vh;
+
+  margin-right: 0vw;
+  margin-left: 0vw;
+  z-index: 2;  # the higher the more on top
+}
+
+
+#loggingWindow{ 
+  position: absolute;
+  top:   100vh; 
+  left:   5vw;
+  width:  90vw;
+  height:  8vh;
+  background-color: rgb(222,222,255);
+  margin-right: 0vw;
+  margin-left: 0vw;
+  z-index: 1; # the higher the more on top
+}
+
+#loggingWindow2{ 
+  position: absolute;
+  top:   110vh; 
+  left:   5vw;
+  width:  90vw;
+  height:  8vh;
+  background-color: rgb(222,222,255);
+  margin-right: 0vw;
+  margin-left: 0vw;
+  z-index: 1; # the higher the more on top
+}
+
+

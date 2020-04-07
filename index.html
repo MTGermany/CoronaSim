@@ -1,0 +1,170 @@
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<title>Simulation von Covid-19 Verl&auml;ufen</title> 
+<link href="styleSliders.css" rel="stylesheet" type="text/css" />
+<link href="corona.css" rel="stylesheet" type="text/css" />
+
+</head>
+
+<!-- ########################################################### -->
+<!-- ########################################################### -->
+
+<body onload="startup()"> 
+
+<div id="header"> 
+<h1>Simulation von <br>Covid-19 Verl&auml;ufen</h1>
+</div>
+
+<div id="introArea"> 
+
+<ul>
+<li> Bezugsgebiet: Deutschland
+<li> Die Simulation startet mit 1000 festgestellten Infektionen und
+  keinerlei Ma&szlig;nahmen davor
+</ul>
+</div>
+
+
+<!-- ######################################################## -->
+<!-- canvas size in pixels only init since init with vw/vh strange results-->
+
+<div id="contents"> 
+  <canvas id="myCanvas" width="300px" height="300px" 
+          onmousemove="onmousemoveCallback(event)"
+          onmouseout="onmouseoutCallback(event)"
+          onmouseenter="onmouseenterCallback(event)"
+          onclick="onclickCallback(event)"
+          onmousedown="onmousedownCallback(event)"
+          onmouseup="onmouseupCallback()" 
+          style="border:1px solid #d3d3d3;">
+   >
+
+    <!-- no onmousedragged-->
+
+    Your browser does not support the HTML5 canvas tag.
+  </canvas>
+</div>
+
+<!-- ######################################################## -->
+
+<div id="sliderTimewarp">
+<center>
+<table id="slidersTable" border="0" cellspacing="1" cellpadding="0" >
+  <tr>
+    <td> Sim-Geschwindigkeit</td>
+    <td> <input id="slider_fps" type="range" 
+                min="1" max="30" step="1"></td> 
+    <td> <div id="slider_fpsText"></div> </td>
+  </tr>
+</table>
+</center>
+</div>
+
+
+
+<div id="sliders">
+<center>
+
+<table id="slidersTable" border="0" cellspacing="1" cellpadding="0" >
+
+<!-- attribute "value" not given, set in js-->
+
+  <tr>
+    <td> Infektionsrate R</td>
+    <td> <input id="slider_R" type="range" 
+                min="0" max="4" step="0.1"></td> 
+    <td> <div id="slider_RText"></div> </td>
+  </tr>
+
+  <tr>
+    <td> Ansteckung beginnt nach</td>
+    <td> <input id="slider_tauRstart" type="range" 
+                min="0" max="7" step="1"></td>   <!-- value in js -->
+    <td> <div id="slider_tauRstartText"></div> </td>
+  </tr>
+
+  <tr>
+    <td> Ansteckung ended nach</td>
+    <td> <input id="slider_tauRend" type="range" 
+                min="7" max="20" step="1"></td>   <!-- value in js -->
+    <td> <div id="slider_tauRendText"></div> </td>
+  </tr>
+
+
+<!--
+  <tr>
+    <td> Parameter 4</td>
+    <td> <input id="slider_param4" type="range" 
+                min="0" max="100" value="12" step="1"></td>
+    <td> <div id="slider_param4Text"></div> </td>
+  </tr>
+-->
+</table>
+ 
+
+<br>
+
+<table border="0" cellspacing="1" cellpadding="0" >
+  <tr>
+    <td> Detektionsrate &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; 
+         &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; </td>
+    <td> <input id="slider_rTest" type="range" 
+                min="0" max="20" step="0.1"></td>  <!-- value in js -->
+    <td> <div id="slider_rTestText"></div> </td>
+  </tr>
+
+  <tr>
+    <td> Test nach </td>
+    <td> <input id="slider_tauTest" type="range" 
+                min="1" max="20" step="1"></td>  <!-- value in js -->
+    <td> <div id="slider_tauTestText"></div> </td>
+  </tr>
+
+
+</table>
+
+</center>
+</div>
+
+<!-- ######################################################## -->
+
+<!--
+<div id="buttonField">
+  <button onclick="startButtonCallback()">Start Simulation</button>
+</div>
+-->
+
+
+<div id="startStopDiv"><img id="startStop" width="100%" 
+     src="figs/buttonGo_small.png" onclick="myStartStopFunction()"/>
+</div>
+
+<div id="restartDiv"><img id="restart" width="100%" 
+     src="figs/buttonRestart_small.png" onclick="myRestartFunction()"/>
+</div>
+
+<!-- consolidate with "var displayType" in corona.js-->
+<div id="displayTypeDiv">
+  <button id="buttonDisplayType" onclick="displayTypeCallback()">
+ <!-- => logarithmische Darstellung</button>--> 
+  => lineare Darstellung</button>
+</div>
+
+
+<!-- ######################################################## -->
+
+<!--
+<div id="loggingWindow">Logging Window</div>
+
+<div id="loggingWindow2">Logging Window 2</div>
+-->
+
+<!-- ######################################################## -->
+
+<script src="corona.js"></script> 
+<script src="corona_gui.js"></script> 
+
+</body>
+</html>
