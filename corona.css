@@ -142,28 +142,18 @@ td{
 }
 
 
-#loggingWindow{ 
-  position: absolute;
-  top:   100vh; 
-  left:   5vw;
-  width:  90vw;
-  height:  8vh;
-  background-color: rgb(222,222,255);
-  margin-right: 0vw;
-  margin-left: 0vw;
-  z-index: 1; # the higher the more on top
-}
 
-#loggingWindow2{ 
+/*#########################################################*/
+/* move "=> logarithmische Darstellung" in header if very landscape
+/*#########################################################*/
+
+@media screen and (min-aspect-ratio: 5/4){
+
+#displayTypeDiv{ /* linear or logarithmic */
   position: absolute;
-  top:   110vh; 
-  left:   5vw;
-  width:  90vw;
-  height:  8vh;
-  background-color: rgb(222,222,255);
-  margin-right: 0vw;
-  margin-left: 0vw;
-  z-index: 1; # the higher the more on top
+  top:     1vmin; 
+  right:   20vmin;
+}
 }
 
 
@@ -352,13 +342,13 @@ input[type=range]::-webkit-slider-thumb {
 
 
 #displayTypeDiv{  /*mobile, portrait */
-  top:     42vmin; 
+  top:     40vmin; 
   right:   2vmin;
 }
 
 #introArea{   /*mobile, portrait */
   position: absolute;
-  top:   120vmin; 
+  top:   calc(42vmin+60vh); 
   background-color: rgb(255,255,255);
   left:   2vmin;
   width:  96vmin;

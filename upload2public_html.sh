@@ -1,6 +1,6 @@
 #!/bin/bash
 
-target=$HOME/public_html/professional/CoronaSim
+target=$HOME/public_html/CoronaSim
 
 cp -r *.css *.js *.html figs $target
 chmod 604 `find $target -type f`

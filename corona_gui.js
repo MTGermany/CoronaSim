@@ -234,31 +234,10 @@ function canvas_resize(){
     canvas.height  = canvasWindow.clientHeight;
   }
 
-  drawsim=new DrawSim();
+  if(drawsim!==null){drawsim.setDisplayType(displayType);}
   console.log("canvas_resize: new canvas dimensions ",
 	      canvas.width," X ",canvas.height);
-}
-
-
-// ###############################################
-// helper functions
-// ###############################################
-
-function log1(msg) {
-  //var p = document.getElementById('loggingWindow');
-  //p.innerHTML = msg;
-  //p.innerHTML = p.innerHTML + " &nbsp;&nbsp;"+msg;
-}
-
-function log2(msg) {
- // var p = document.getElementById('loggingWindow2');
-  //p.innerHTML = msg;
-  //p.innerHTML = p.innerHTML + "  "+msg;
-}
-
-function clearLog1(){
- // var p = document.getElementById('loggingWindow');
- // p.innerHTML = "";
+  console.log("drawsim.hPix=",drawsim.hPix);
 }
 
 

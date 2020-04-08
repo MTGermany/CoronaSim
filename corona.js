@@ -20,9 +20,9 @@ var nxtStart=11000; // number of positively tested infections=13957
 //31 Todesfaelle at mar20
 
 var ln10=Math.log(10);
-//var displayType="rel";  // consolidate with html
-var displayType="absLog"; 
-//var displayTypePrevStep="rel"; // needed if changed during simulation
+//var displayType="lin";  // consolidate with html
+var displayType="log"; 
+
 
 // global simulation  parameters (global to avoid alsways writing "this.")
 
@@ -70,14 +70,16 @@ function startup() {
   xPixLeft=rect.left;
   yPixTop=rect.top;
 
+  corona=new CoronaSim();
+  corona.init(); // it=1 at the end
+  drawsim=new DrawSim();
+
   window.addEventListener("resize", canvas_resize);
   canvas_resize();
 
-  corona=new CoronaSim();
-  drawsim=new DrawSim();
-  corona.init(); // it=1 at the end
 
   console.log("initialized.");
+  drawsim.setDisplayType(displayType);
   drawsim.drawAxes(displayType);
 }
 
@@ -118,20 +120,20 @@ function myRestartFunction(){
 }
 
 function displayTypeCallback(){
-  if(displayType=="rel"){
-    displayType="absLog";
+  if(displayType=="lin"){
+    displayType="log";
     document.getElementById("buttonDisplayType").innerHTML
       ="=> lineare Darstellung";
   }
   else{
-    displayType="rel";
+    displayType="lin";
     document.getElementById("buttonDisplayType").innerHTML
       ="=> logarithmische Darstellung";
   }
-  drawsim.setDisplayType(displayType);
 
+  drawsim.setDisplayType(displayType); // clear and draAxes in setDisplay..
   drawsim.updateOneDay(it,displayType,corona.xtot,corona.xt,
-		       corona.y,corona.yt,corona.z);
+		       corona.y,corona.yt,corona.z); // to redraw lines
   //myRestartFunction();
 }
 
@@ -146,17 +148,13 @@ function simulationRun() {
   doSimulationStep();
   //console.log("simulationRun: it=",it," itmax=",itmax);
   if(it==itmax){
-    clearLog1();
-    log1("simulation finished");
     clearInterval(myRun);
   }
-  displayTypePrevStep=displayType; // needed for drawing in some cases 
 }
 
-// displayType in {"rel", "absLog"}
+// displayType in {"lin", "log"}
 
 function doSimulationStep(){
-  log2("simulation: time="+it+" days");
   corona.updateOneDay(R);
   drawsim.updateOneDay(it,displayType, corona.xtot, corona.xt,
 		       corona.y, corona.yt, corona.z);
@@ -424,12 +422,16 @@ function DrawSim(){
 
   console.log("drawSim created");
 
+  this.unitPers=1000;  // persons counted in multiples of unitPers
+
   this.itmaxDraw=4*7;
   this.yminLin=0;
+  this.ymaxLin=100; // unitPers=1000-> 100 corresp to 100 000 persons
+  this.yminPerc=0;
+  this.ymaxPerc=10;
   this.yminLog=1;
-  this.ymaxLin=0.04; //in fraction [0-1]
   this.ymaxLog=7;
-  this.nmin=10;      // if isplayType==="absLog", display for n>nmin cases
+  this.nmin=10;      // if isplayType==="log", display for n>nmin cases
 
   this.log10min=Math.log(this.nmin)/ln10;
   this.log10max=Math.log(n0)/ln10;
@@ -461,27 +463,31 @@ function DrawSim(){
 
 
   this.colLine=[];
-  this.colLine[0]="rgb(255,140,0)";   // infected
+  this.colLine[0]="rgb(255,90,0)";   // infected
   this.colLine[1]="rgb(233,0,0)";     //Tested
-  this.colLine[2]="rgb(120,255,100)"; //RecoveredReal
-  this.colLine[3]="rgb(0,180,40)";    //RecoveredData
-  this.colLine[4]="rgb(120,90,0)";    //Dead
-  this.colLine[5]="rgb(0,0,0)";       //FracDeadData
+  this.colLine[2]="rgb(60,255,40)"; //RecoveredReal
+  this.colLine[3]="rgb(0,150,40)";    //RecoveredData
+  this.colLine[4]="rgb(0,0,0)";      //Dead
+  this.colLine[5]="rgb(0,0,150)";       //FracDeadData
 
   this.wLine=[2,5,2,5,5,5]; //line width [pix]
   this.isActive=[];   // which line is drawn
-
-
-  this.drawAxes(displayType);
+  this.setDisplayType(displayType);
 }
 
 
 DrawSim.prototype.setDisplayType=function(displayType){
+  this.xPix0  =0.12*canvas.width;
+  this.xPixMax=((displayType==="lin") ? 0.90: 0.98) * canvas.width;
+  this.yPix0  =0.85*canvas.height;
+  this.yPixMax=0.02*canvas.height;
+  this.wPix=this.xPixMax-this.xPix0;
+  this.hPix=this.yPixMax-this.yPix0;  //<0
+
+  if(displayType==="log"){this.isActive=[true,true,true,true,true,false]};
+  if(displayType==="lin"){this.isActive=[false,true,false,true,true,true]};
   this.clear();
   this.drawAxes(displayType);
-  if(displayType==="absTot"){this.isActive=[true,true,true,true,true,false]};
-  if(displayType==="rel")   {this.isActive=[true,true,true,true,false,true]};
-
 }
 
 
@@ -519,11 +525,9 @@ DrawSim.prototype.drawGridLine=function(type,xyrel){
 }
 
 
-// displayType in {"rel", "absLog"}
+// displayType in {"lin", "log"}
 
 DrawSim.prototype.drawAxes=function(displayType){
-
-
 
  // define x axis label positions and text, time starts Mar 20
 
@@ -544,10 +548,10 @@ DrawSim.prototype.drawAxes=function(displayType){
 
   //define y axis label positions and text
 
-  var ymax=(displayType==="rel") ? 100*this.ymaxLin : this.ymaxLog;
-  var ymin=(displayType==="rel") ? 0 : 1
+  var ymin=(displayType==="lin") ? 0 : 1;
+  var ymax=(displayType==="lin") ? this.ymaxLin : this.ymaxLog;
   var dy=1; // always for log
-  if(displayType==="rel"){
+  if(displayType==="lin"){
     var power10=Math.floor(log10(ymax));
     var multiplicator=Math.pow(10, power10);
     var ymaxRange01=ymax/multiplicator;
@@ -559,6 +563,20 @@ DrawSim.prototype.drawAxes=function(displayType){
   var iymin=1; // should work both for lin and log
 
 
+ //define y2 axis label positions and text
+
+  var ymin2=0;
+  var ymax2=Math.max(10,this.ymaxPerc);
+  var power10=Math.floor(log10(ymax2));
+  var multiplicator=Math.pow(10, power10);
+  var ymaxRange01=ymax2/multiplicator;
+  var dy2=(ymaxRange01<2) ? 0.2*multiplicator
+      :(ymaxRange01<5) ? 0.5*multiplicator : multiplicator;
+  var ny2=Math.floor(ymax2/dy2);
+
+
+
+ 
   // define text properties
 
   var textsize=Math.min(0.030*canvas.width,0.045*canvas.height);
@@ -603,57 +621,95 @@ DrawSim.prototype.drawAxes=function(displayType){
 
   // draw name+values y1 axis
 
-  var label_y=(displayType==="rel")
-    ? "Anteil infiziert, genesen, tot [%]"
-    : "Gesamtanzahl";
+  var label_y="Personenzahl (in Tausend)";
+
 
   ctx.setTransform(0,-1,1,0,
-		   this.xPix0-3.0*textsize,this.yPix0+0.1*this.hPix);
+		   this.xPix0-3.0*textsize,this.yPix0+0.2*this.hPix);
   ctx.fillText(label_y,0,0);
   ctx.setTransform(1,0,0,1,0,0)
   for(var iy=ymin; iy<=ny; iy++){
-    var valueStr=(displayType==="rel") ? iy*dy : "10^"+iy;
+    var valueStr=(displayType==="lin") ? iy*dy : "10^"+iy;
     ctx.fillText(valueStr,
 		 this.xPix0-2.5*textsize,
 		 this.yPix0+(iy*dy-ymin)/(ymax-ymin)*this.hPix+0.5*textsize);
   }
 
-  /*
-  // draw name+values y2 axis if displayType="rel"
+  
+  // draw name+values y2 axis if displayType="lin"
 
+  if(displayType==="lin"){
 
-  */
+    var label_y2="Tote/bekannt Erkrankte [%]";
+    ctx.fillStyle=this.colLine[5];
+    ctx.setTransform(0,-1,1,0,
+		   this.xPixMax+3.0*textsize,this.yPix0+0.2*this.hPix);
+    ctx.fillText(label_y2,0,0);
+    ctx.setTransform(1,0,0,1,0,0)
+    console.log("ymin2=",ymin2," ymax2=",ymax2," ny2=",ny2);
+    for(var iy=ymin2; iy<=ny2; iy++){
+      var valueStr= iy*dy2 
+      ctx.fillText(valueStr,
+		  this.xPixMax+0.8*textsize,
+		  this.yPix0+(iy*dy2-ymin2)/(ymax2-ymin2)*this.hPix
+		   +0.5*textsize);
+    }
+  }
+
+  
+  
 
   // draw key
-  var yrelTop=(displayType==="rel") ? 0.96 : -4.5*(1.2*textsize/this.hPix);
-  var xrelLeft=(displayType==="rel") ? 0.02 : 0.60;
+
+  var yrelTop=(displayType==="lin") ? 0.96 : -4.5*(1.2*textsize/this.hPix);
+  var xrelLeft=(displayType==="lin") ? 0.02 : 0.60;
   var dyrel=-1.2*textsize/this.hPix;
-  ctx.fillStyle=this.colLine[0];
-  ctx.fillText("Aktuell real infizierte Personen",
-	         this.xPix0+xrelLeft*this.wPix,this.yPix0+yrelTop*this.hPix); 
+  var il=0;
+  if(this.isActive[0]){
+    ctx.fillStyle=this.colLine[0];
+    ctx.fillText("Aktuell real infizierte Personen",
+	         this.xPix0+xrelLeft*this.wPix,
+		 this.yPix0+(yrelTop-il*dyrel)*this.hPix);
+    il++;
+  }
 
-  ctx.fillStyle=this.colLine[1];
-  ctx.fillText("Erfasste infiz. Personen",
-	       this.xPix0+xrelLeft*this.wPix,this.yPix0+(yrelTop-dyrel)*this.hPix); 
+  if(this.isActive[1]){
+    ctx.fillStyle=this.colLine[1];
+    ctx.fillText("Erfasste infiz. Personen",
+	         this.xPix0+xrelLeft*this.wPix,
+		 this.yPix0+(yrelTop-il*dyrel)*this.hPix);
+    il++;
+  }
 
-  ctx.fillStyle=this.colLine[2];
-  ctx.fillText("Genesene Personen (real)",
-	       this.xPix0+xrelLeft*this.wPix,this.yPix0+(yrelTop-2*dyrel)*this.hPix); 
+  if(this.isActive[2]){
+    ctx.fillStyle=this.colLine[2];
+    ctx.fillText("Genesene Personen (real)",
+	         this.xPix0+xrelLeft*this.wPix,
+		 this.yPix0+(yrelTop-il*dyrel)*this.hPix);
+    il++;
+  }
 
-  ctx.fillStyle=this.colLine[3];
-  ctx.fillText("Genesene Personen (Daten)",
-	       this.xPix0+xrelLeft*this.wPix,this.yPix0+(yrelTop-3*dyrel)*this.hPix); 
+  if(this.isActive[3]){
+    ctx.fillStyle=this.colLine[3];
+    ctx.fillText("Genesene Personen (Daten)",
+	       this.xPix0+xrelLeft*this.wPix,
+		 this.yPix0+(yrelTop-il*dyrel)*this.hPix);
+    il++;
+  }
 
-  if(displayType==="absLog"){
+  if(this.isActive[4]){
     ctx.fillStyle=this.colLine[4];
     ctx.fillText("Gestorbene Personen",
-		 this.xPix0+xrelLeft*this.wPix,this.yPix0+(yrelTop-4*dyrel)*this.hPix);
+		 this.xPix0+xrelLeft*this.wPix,
+		 this.yPix0+(yrelTop-il*dyrel)*this.hPix);
+    il++;
   } 
 
-  if(displayType==="rel"){
+  if(this.isActive[5]){
     ctx.fillStyle=this.colLine[5];
     ctx.fillText("#Tote/#positiv getestet",
-	         this.xPix0+xrelLeft*this.wPix,this.yPix0+(yrelTop-4*dyrel)*this.hPix); 
+	         this.xPix0+xrelLeft*this.wPix,
+		 this.yPix0+(yrelTop-il*dyrel)*this.hPix);
   }
 
 }
@@ -661,7 +717,7 @@ DrawSim.prototype.drawAxes=function(displayType){
 
 
 
-// displayType in {"rel", "absLog"}
+// displayType in {"lin", "log"}
 
 //######################################################################
 DrawSim.prototype.updateOneDay=function(it,displayType,xtot,xt,y,yt,z){
@@ -677,12 +733,12 @@ DrawSim.prototype.updateOneDay=function(it,displayType,xtot,xt,y,yt,z){
 
   // transfer new data
 
-  this.yDataLin[0][it]=xtot;
-  this.yDataLin[1][it]=xt;
-  this.yDataLin[2][it]=y;
-  this.yDataLin[3][it]=yt;
-  this.yDataLin[4][it]=z;
-  this.yDataLin[5][it]=(xt>1e-6) ? z/xt : 0;
+  this.yDataLin[0][it]=n0*xtot/this.unitPers;
+  this.yDataLin[1][it]=n0*xt/this.unitPers;
+  this.yDataLin[2][it]=n0*y/this.unitPers;
+  this.yDataLin[3][it]=n0*yt/this.unitPers;
+  this.yDataLin[4][it]=n0*z/this.unitPers;
+  this.yDataLin[5][it]=(xt>1e-6) ? 100*z/xt : 0; // yDataLin[5] "rel"[%] 
 
   this.yDataLog[0][it]=log10(n0*xtot); 
   this.yDataLog[1][it]=log10(n0*xt);
@@ -704,16 +760,24 @@ DrawSim.prototype.updateOneDay=function(it,displayType,xtot,xt,y,yt,z){
     erase=true;
   }
 
-  for(var q=0; q<6; q++){
-    if(this.yDataLin[q][it]>this.ymaxLin){
-      this.ymaxLin=this.yDataLin[q][it];
-      erase=true;
+  
+  for(var q=0; q<5; q++){
+    if(this.isActive[q]){
+      if((displayType==="lin")&&(this.yDataLin[q][it]>this.ymaxLin)){
+        this.ymaxLin=this.yDataLin[q][it];
+        erase=true;
+      }
+      if((displayType==="log")&&(this.yDataLog[q][it]>this.ymaxLog)){ 
+        this.ymaxLog=this.yDataLog[q][it];
+        erase=true;
+        console.log("this.ymaxLog=",this.ymaxLog);
+      }
     }
-    if(this.yDataLog[q][it]>this.ymaxLog){ 
-      this.ymaxLog=this.yDataLog[q][it];
-      erase=true;
-      console.log("this.ymaxLog=",this.ymaxLog);
-    }
+  }
+
+  if(this.yDataLin[5][it]>this.ymaxPerc){ // yDataLin[5] =z/yt in percent
+    this.ymaxPerc=this.yDataLin[5][it];
+    erase=true;
   }
 
   if(erase){
@@ -723,8 +787,6 @@ DrawSim.prototype.updateOneDay=function(it,displayType,xtot,xt,y,yt,z){
 
   // actual drawing
 
-  if(displayType==="absLog"){this.isActive=[true,true,true,true,true,false]};
-  if(displayType==="rel")   {this.isActive=[true,true,true,true,false,true]};
 
   for(var q=0; q<6; q++){
     if(this.isActive[q]){
@@ -738,11 +800,12 @@ DrawSim.prototype.updateOneDay=function(it,displayType,xtot,xt,y,yt,z){
 DrawSim.prototype.drawCurve=function(it,q,displayType){
 //######################################################################
   //console.log("in DrawSim.drawCurve: q=",q," displayType=",displayType);
-  var data=(displayType==="absLog") ? this.yDataLog[q] : this.yDataLin[q];
+  var data=(displayType==="log") ? this.yDataLog[q] : this.yDataLin[q];
   var w=this.wLine[q]/2;
-  var yminDraw=(displayType==="absLog") ? this.yminLog : this.yminLin;
-  var ymaxDraw=(displayType==="absLog") ? this.ymaxLog : this.ymaxLin;
-
+  var yminDraw=(displayType==="log") ? this.yminLog : this.yminLin;
+  var ymaxDraw=(displayType==="log") ? this.ymaxLog : this.ymaxLin;
+  if(q==5){yminDraw=this.yminPerc; ymaxDraw=this.ymaxPerc};
+  if(q==5){console.log("yminDraw=",yminDraw," ymaxDraw=",ymaxDraw);}
   ctx.fillStyle=this.colLine[q];
 
   for (var itg=0; itg<it; itg++){
