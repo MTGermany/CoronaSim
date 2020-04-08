@@ -118,8 +118,8 @@ td{
 
 #displayTypeDiv{ /* linear or logarithmic */
   position: absolute;
-  top:     32vh; 
-  right:   4vw;
+  top:     31vh; 
+  right:   3vw;
   height:  5vmin;
   width:   25vmin;
   background-color: rgb(255,240,222);

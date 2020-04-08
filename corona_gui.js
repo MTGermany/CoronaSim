@@ -16,15 +16,15 @@ var slider_fpsText = document.getElementById("slider_fpsText");
 
 //fps=parseFloat(slider_fps.value);
 //setSlider(slider_fps, slider_fpsText, slider_fps.value,"");
-setSlider(slider_fps, slider_fpsText, fps,"Tage/s");
+setSlider(slider_fps, slider_fpsText, fps," Tage/s");
 
 
 slider_fps.oninput = function() {
-  slider_fpsText.innerHTML = this.value;
+  slider_fpsText.innerHTML = "&nbsp;"+this.value+" Tage/s";
   fps=parseFloat(this.value);
   console.log("slider1 callback: fps="+fps);
   clearInterval(myRun);
-  myRun=setInterval(simulationRun, 1000/fps);
+  if(!isStopped){myRun=setInterval(simulationRun, 1000/fps);}
 }
 
 
@@ -60,6 +60,11 @@ slider_tauRstart.oninput = function() {
   tauRstart=parseFloat(this.value);
   slider_tauRstartText.innerHTML = "&nbsp;"+this.value
     +((tauRstart==1) ? " Tag" : " Tage");
+  if(tauRend<tauRstart){
+    tauRend=tauRstart;
+    setSlider(slider_tauRend, slider_tauRendText, 
+	      tauRend, " Tage");
+  }
   console.log("slider2 callback: tauRstart="+tauRstart);
 }
 
@@ -77,6 +82,11 @@ slider_tauRend.oninput = function() {
   tauRend=parseFloat(this.value);
   slider_tauRendText.innerHTML = "&nbsp;"+this.value
     +((tauRend==1) ? " Tag" : " Tage");
+  if(tauRstart>tauRend){
+    tauRstart=tauRend;
+    setSlider(slider_tauRstart, slider_tauRstartText, 
+	      tauRstart, " Tage");
+  }
   console.log("slider2 callback: tauRend="+tauRend);
 }
 

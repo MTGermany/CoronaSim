@@ -32,14 +32,14 @@ var displayType="absLog";
 var fps=10;
 var R=1.1;          // infection rate with measures
 var tauRstart=1;     // active infectivity begins [days since infection]
-var tauRend=10;       // active infectivity ends [days since infection]
+var tauRend=10;       // active infectivity ends [days since infection]//10
 var rTest=0.1;   // percentage of tested infected persons 
 var tauTest=10;  // time delay [days] test-infection
 var tauAvg=5;      // smoothing interval for tauTest,tauDie,tauRecover
 
 // not controlled, set statically here
 
-var fracDie=0.004;     // fraction of deaths by desease 
+var fracDie=0.006;     // fraction of deaths by desease //0.004
 var tauDie=25;      // time from infection to death in fracDie cases//!!!
 var tauRecover=28; // time from infection to full recovery//!!!
 var tauSymptoms=7;  // incubation time 
@@ -294,7 +294,8 @@ CoronaSim.prototype.updateOneDay=function(R){ //it++ at end
 
   this.x[0]=0;
   var f_R=1./(tauRend-tauRstart+1);
-  for(var tau=tauRstart; tau<=tauRend; tau++){
+  if(n0*this.xtot>=1){ // infection finally dead if xtot<1
+   for(var tau=tauRstart; tau<=tauRend; tau++){
     this.x[0]+=R*f_R*this.x[tau]
       *(1-(this.xtot+this.y+this.z));
     if(false){
@@ -305,6 +306,7 @@ CoronaSim.prototype.updateOneDay=function(R){ //it++ at end
 		" this.x[0]=",this.x[0].toPrecision(3)
 		 );
     }
+   }
   }
   this.xohne[0]=this.x[0];
 
