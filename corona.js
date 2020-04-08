@@ -422,7 +422,7 @@ function DrawSim(){
 
   console.log("drawSim created");
 
-  this.itmaxDraw=8*7;
+  this.itmaxDraw=4*7;
   this.yminLin=0;
   this.yminLog=1;
   this.ymaxLin=0.04; //in fraction [0-1]
@@ -432,7 +432,7 @@ function DrawSim(){
   this.log10min=Math.log(this.nmin)/ln10;
   this.log10max=Math.log(n0)/ln10;
 
-  this.xPix0  =0.11*canvas.width;
+  this.xPix0  =0.12*canvas.width;
   this.xPixMax=0.98*canvas.width;
   this.yPix0  =0.85*canvas.height;
   this.yPixMax=0.02*canvas.height;
@@ -521,11 +521,48 @@ DrawSim.prototype.drawGridLine=function(type,xyrel){
 
 DrawSim.prototype.drawAxes=function(displayType){
 
-  // need to redefine if rescaling in x
 
-  for(var i=0; i<this.itmaxDraw; i++){
-    this.xPix[i]=this.xPix0+i*(this.xPixMax-this.xPix0)/(this.itmaxDraw-1);
+
+ // define x axis label positions and text, time starts Mar 20
+
+  var itmaxCrit=60;
+  var dFirstDay=(this.itmaxDraw<itmaxCrit) ? 3 : 12;  //Mar23 or Apr1
+  var dDays=(this.itmaxDraw<itmaxCrit) ? 7 : 30.4  // avg month has 30.4 days
+  var timeText=(this.itmaxDraw<itmaxCrit)
+    ? ["23.03", "30.03", "06.04", "13.04", "20.04", "27.04", 
+       "04.05", "11.05", "18.05"]
+    : ["Apr","Mai","Jun", "Jul", "Aug", "Sep", "Okt", 
+       "Nov", "Dez", "Jan", "Feb", "Mar"];
+
+  var timeRel=[];
+  for(var i=0; i<timeText.length; i++){
+    timeRel[i]=(dFirstDay+i*dDays)/this.itmaxDraw;
   }
+
+
+  //define y axis label positions and text
+
+  var ymax=(displayType==="rel") ? 100*this.ymaxLin : this.ymaxLog;
+  var ymin=(displayType==="rel") ? 0 : 1
+  var dy=1; // always for log
+  if(displayType==="rel"){
+    var power10=Math.floor(log10(ymax));
+    var multiplicator=Math.pow(10, power10);
+    var ymaxRange01=ymax/multiplicator;
+    dy=(ymaxRange01<2) ? 0.2*multiplicator
+      :(ymaxRange01<5) ? 0.5*multiplicator : multiplicator;
+  }
+
+  var ny=Math.floor(ymax/dy);
+  var iymin=1; // should work both for lin and log
+
+
+  // define text properties
+
+  var textsize=Math.min(0.030*canvas.width,0.045*canvas.height);
+  //var textsize=0.035*Math.min(canvas.width, canvas.height);
+  ctx.font = textsize+"px Arial";
+
 
 
   // draw 3 px wide lines as coordinates
@@ -539,26 +576,8 @@ DrawSim.prototype.drawAxes=function(displayType){
 
   ctx.strokeStyle="rgb(0,0,0)";
 
-  var ymax=(displayType==="rel") ? 100*this.ymaxLin : this.ymaxLog;
-  var ymin=(displayType==="rel") ? 0 : 1
-  var dx=(this.itmaxDraw<7*20) ? 7 : 28;
-  var dy=1; // always for log
-  if(displayType==="rel"){
-    var power10=Math.floor(log10(ymax));
-    var multiplicator=Math.pow(10, power10);
-    var ymaxRange01=ymax/multiplicator;
-    dy=(ymaxRange01<2) ? 0.2*multiplicator
-      :(ymaxRange01<5) ? 0.5*multiplicator : multiplicator;
-  }
-
-  var nx=Math.floor(this.itmaxDraw/dx);
-  var ny=Math.floor(ymax/dy);
-  var iymin=1; // should work both for lin and log
-
-  //console.log("DrawSim.drawAxes: dx=",dx," nx=",nx,
-//	      " ymax=",ymax," dy=",dy," ny=",ny);
-  for(var ix=1; ix<=nx; ix++){
-    this.drawGridLine("vertical",ix*dx/this.itmaxDraw);
+  for(var ix=0; (ix<timeRel.length)&&(timeRel[ix]<0.96); ix++){
+    this.drawGridLine("vertical", timeRel[ix]);
   }
 
   for(var iy=1; iy<=ny; iy++){
@@ -568,17 +587,14 @@ DrawSim.prototype.drawAxes=function(displayType){
   ctx.stroke();
 
 
-  // draw text x
+  // draw name+values x axis
 
-  var textsize=Math.min(0.025*canvas.width,0.045*canvas.height);
-  //var textsize=0.035*Math.min(canvas.width, canvas.height);
-  ctx.font = textsize+"px Arial";
-  ctx.fillText("Zeit [Wochen ab 2020-03-20]",
+  ctx.fillText("Zeit (Start 20. Maerz 2020)",
 	       this.xPix0+0.4*this.wPix, this.yPix0+3*textsize);
 
-  for(var ix=1; ix<=nx; ix++){
-    ctx.fillText(ix*dx/7,
-		 this.xPix0+this.wPix*ix*dx/this.itmaxDraw-0.5*textsize,
+  for(var ix=0; (ix<timeRel.length)&&(timeRel[ix]<0.96); ix++){
+    ctx.fillText(timeText[ix],
+		 this.xPix0+timeRel[ix]*this.wPix,
 		 this.yPix0+1.5*textsize);
   }
 
@@ -590,7 +606,7 @@ DrawSim.prototype.drawAxes=function(displayType){
     : "Gesamtanzahl";
 
   ctx.setTransform(0,-1,1,0,
-		   this.xPix0-3.5*textsize,this.yPix0+0.1*this.hPix);
+		   this.xPix0-3.0*textsize,this.yPix0+0.1*this.hPix);
   ctx.fillText(label_y,0,0);
   ctx.setTransform(1,0,0,1,0,0)
   for(var iy=ymin; iy<=ny; iy++){
@@ -648,6 +664,14 @@ DrawSim.prototype.drawAxes=function(displayType){
 //######################################################################
 DrawSim.prototype.updateOneDay=function(it,displayType,xtot,xt,y,yt,z){
 //######################################################################
+
+
+  // need to redefine x pixel coords if rescaling in x
+
+  for(var i=0; i<this.itmaxDraw; i++){
+    this.xPix[i]=this.xPix0+i*(this.xPixMax-this.xPix0)/(this.itmaxDraw-1);
+  }
+
 
   // transfer new data
 

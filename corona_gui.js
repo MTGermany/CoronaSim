@@ -53,12 +53,13 @@ var slider_tauRstart=document.getElementById("slider_tauRstart");
 var slider_tauRstartText = document.getElementById("slider_tauRstartText");
 
 setSlider(slider_tauRstart, slider_tauRstartText, 
-	  tauRstart, " Tage");
+	  tauRstart, ((tauRstart==1) ? " Tag" : " Tage"));
 
 
 slider_tauRstart.oninput = function() {
-  slider_tauRstartText.innerHTML = "&nbsp;"+this.value+" Tage";
   tauRstart=parseFloat(this.value);
+  slider_tauRstartText.innerHTML = "&nbsp;"+this.value
+    +((tauRstart==1) ? " Tag" : " Tage");
   console.log("slider2 callback: tauRstart="+tauRstart);
 }
 
@@ -73,8 +74,9 @@ setSlider(slider_tauRend, slider_tauRendText,
 
 
 slider_tauRend.oninput = function() {
-  slider_tauRendText.innerHTML = "&nbsp;"+this.value+" Tage";
   tauRend=parseFloat(this.value);
+  slider_tauRendText.innerHTML = "&nbsp;"+this.value
+    +((tauRend==1) ? " Tag" : " Tage");
   console.log("slider2 callback: tauRend="+tauRend);
 }
 
@@ -101,12 +103,13 @@ var slider_tauTest=document.getElementById("slider_tauTest");
 var slider_tauTestText = document.getElementById("slider_tauTestText");
 
 setSlider(slider_tauTest, slider_tauTestText, 
-	  tauTest, " Tage");
+	  tauTest, " Tagen");
 
 
 slider_tauTest.oninput = function() {
-  slider_tauTestText.innerHTML = "&nbsp;"+this.value+" Tage";
   tauTest=parseFloat(this.value);
+  slider_tauTestText.innerHTML = "&nbsp;"+this.value
+    +((tauTest==1) ? " Tag" : " Tagen");
   console.log("slider2 callback: tauTest="+tauTest);
 }
 

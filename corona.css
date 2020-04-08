@@ -49,8 +49,8 @@ td{
 
 #header{
   position: absolute;
-  top: -2vmin;
-  left: 5vw;
+  top: 0vmin;
+  left: 10vw;
   font-weight:bold;
   z-index: 3;  /* above simulation canvas in rare chances of overlapping */
 }
@@ -58,17 +58,6 @@ td{
 /*######################################################*/
 /* main elements */
 /*######################################################*/
-
-#displayTypeDiv{ /* linear or logarithmic */
-  position: absolute;
-  top:     1vh; 
-  right:   20vmin;
-  height:  5vmin;
-  width:   25vmin;
-  background-color: rgb(255,240,222);
-
-  z-index: 3; /* the higher the integer, the more on top */
-}
 
 
 #startStopDiv{
@@ -127,6 +116,18 @@ td{
   z-index: 1; # the higher the more on top
 }
 
+#displayTypeDiv{ /* linear or logarithmic */
+  position: absolute;
+  top:     32vh; 
+  right:   4vw;
+  height:  5vmin;
+  width:   25vmin;
+  background-color: rgb(255,240,222);
+
+  z-index: 3; /* the higher the integer, the more on top */
+}
+
+
 
 #sliderTimewarp{ 
   position: absolute;
@@ -168,11 +169,12 @@ td{
 
 /*#########################################################*/
 /* addtl smartphone general settings 
+/* dppx=dot per physical inch, dpi=dots per css-inch
 /*#########################################################*/
 
 @media screen and (max-height: 600px),
 screen and (max-width: 600px),
-screen and (min-resolution: 97dpi){
+screen and (min-resolution: 97dppx){ 
 
 
 h1{
@@ -228,9 +230,10 @@ input[type=range]::-webkit-slider-thumb {
 
 @media screen and (max-height: 600px) and (min-aspect-ratio: 1/1), /*6/5*/
 screen and (max-width: 600px) and (min-aspect-ratio: 1/1),
-screen and (min-resolution: 97dpi) and (min-aspect-ratio: 1/1){
+screen and (min-resolution: 97dppx) and (min-aspect-ratio: 1/1){
 
-#header{
+#header{ /*mobile, landscape */
+  left:    4vmin;
   width:   20vmin;
 }
 
@@ -297,7 +300,7 @@ screen and (min-resolution: 97dpi) and (min-aspect-ratio: 1/1){
 
 @media screen and (max-height: 600px) and (max-aspect-ratio: 1/1), /*6/5*/
 screen and (max-width: 600px) and (max-aspect-ratio: 1/1),
-screen and (min-resolution: 97dpi) and (max-aspect-ratio: 1/1){
+screen and (min-resolution: 97dppx) and (max-aspect-ratio: 1/1){
 
 input[type=range]{ /*mobile, portrait, orig in sliders.css */ 
   width: 40vmin;
@@ -330,7 +333,7 @@ input[type=range]::-webkit-slider-thumb {
 #header{
   top:     0vmin;
   left:   20vmin;
-  width:  80vmin;
+  width:  40vmin;
 }
 
 #startStopDiv{  /*mobile, portrait */
