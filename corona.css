@@ -95,7 +95,7 @@ td{
   top:   9vh;  /* 6 for the title, 24 for the sliders */
   left:   2vw;
   width:  40vw;
-  height: 24vh;
+  height: 19vh;
   background-color: rgb(222,222,255);
   margin-right: 0vw;
   margin-left: 0vw;
@@ -108,7 +108,7 @@ td{
   top:   9vh; 
   left:   44vw;
   width:  54vw;
-  height:  24vh;
+  height:  19vh;
   background-color: rgb(222,255,222);
   margin-right: 0vw;
   margin-left: 0vw;
@@ -117,10 +117,10 @@ td{
 
 #contents{ /* contains the canvas */
   position: absolute;
-  top:   35vh;  /* 6 for the title, 24 for the sliders */
+  top:   30vh;  /* 6 for the title, 24 for the sliders */
   left:   2vw;
   width:  96vw;
-  height: 60vh;
+  height: 68vh;
   background-color: rgb(255,255,255);
   margin-right: 0vw;
   margin-left: 0vw;
@@ -167,12 +167,13 @@ td{
 
 
 /*#########################################################*/
-/* addtl smartphone landscape settings  !! check with ../js/media.js
+/* addtl smartphone general settings 
 /*#########################################################*/
 
-@media screen and (max-height: 600px) and (min-aspect-ratio: 6/5),
-screen and (max-width: 600px) and (min-aspect-ratio: 6/5),
-screen and (min-resolution: 97dpi) and (min-aspect-ratio: 6/5){
+@media screen and (max-height: 600px),
+screen and (max-width: 600px),
+screen and (min-resolution: 97dpi){
+
 
 h1{
   font-size: 4vmin;
@@ -193,10 +194,11 @@ button,select{ /*mobile, landscape */
 
 input[type=range]{ /*mobile, landscape, orig in sliders.css */ 
   width: 16vw;
-  height: 1.6vw;
+  height: 2.5vmin;
 }
 
 input[type=range]::-moz-range-track{
+  width: 16vw;
   height: 2.5vmin;
 }
 
@@ -215,7 +217,22 @@ input[type=range]::-webkit-slider-thumb {
 }
 
 
+}
 
+
+
+/*#########################################################*/
+/* addtl smartphone landscape settings (inside general smartphone settings) 
+/*#########################################################*/
+
+
+@media screen and (max-height: 600px) and (min-aspect-ratio: 1/1), /*6/5*/
+screen and (max-width: 600px) and (min-aspect-ratio: 1/1),
+screen and (min-resolution: 97dpi) and (min-aspect-ratio: 1/1){
+
+#header{
+  width:   20vmin;
+}
 
 #startStopDiv{  /*mobile, landscape */
   right:   14vmin;
@@ -229,9 +246,6 @@ input[type=range]::-webkit-slider-thumb {
   width:   10vmin;
 }
 
-#header{
-  width:   20vmin;
-}
 
 #displayTypeDiv{  /*mobile, landscape */
   top:     12vh; 
@@ -240,7 +254,7 @@ input[type=range]::-webkit-slider-thumb {
 
 #introArea{   /*mobile, landscape */
   position: absolute;
-  top:   28vh;  /* 6 for the title, 24 for the sliders */
+  top:   28vh;  
   background-color: rgb(255,255,255);
   left:   -1vw;
   width:  16vw;
@@ -266,11 +280,105 @@ input[type=range]::-webkit-slider-thumb {
 }
 
 
-#contents{ /* contains the canvas */
+#contents{    /*mobile, landscape */
   position: absolute;
-  top:   28vh;  /* 6 for the title, 24 for the sliders */
+  top:   28vh; 
   left:   22vw;
   width:  76vw;
-  height: 70vh;
+  height: 68vh;
+}
 
+}
+
+
+/*#########################################################*/
+/* addtl smartphone portrait settings (geht NICHT nested!)
+/*#########################################################*/
+
+@media screen and (max-height: 600px) and (max-aspect-ratio: 1/1), /*6/5*/
+screen and (max-width: 600px) and (max-aspect-ratio: 1/1),
+screen and (min-resolution: 97dpi) and (max-aspect-ratio: 1/1){
+
+input[type=range]{ /*mobile, portrait, orig in sliders.css */ 
+  width: 40vmin;
+  height: 1.6vmin;
+}
+
+input[type=range]::-moz-range-track{
+  width: 40vmin;
+  height: 1.6vmin;
+}
+
+input[type=range]::-webkit-slider-runnable-track{ /*mobile portrait*/
+  width: 40vmin;
+  height: 1.6vmin;
+}
+
+input[type=range]::-moz-range-thumb {
+  height: 3.5vmin;
+  width:  2.5vmin;
+}
+
+
+input[type=range]::-webkit-slider-thumb {
+  height: 3.5vmin;
+  width:  2.5vmin;
+}
+
+
+
+#header{
+  top:     0vmin;
+  left:   20vmin;
+  width:  80vmin;
+}
+
+#startStopDiv{  /*mobile, portrait */
+  top:     1vmin;
+  right:   14vmin;
+  height:  11vmin;
+  width:   11vmin;
+}
+
+#restartDiv{
+  top:     1vmin;
+  right:   2vmin;
+  height:  10vmin;
+  width:   10vmin;
+}
+
+
+#displayTypeDiv{  /*mobile, portrait */
+  top:     42vmin; 
+  right:   2vmin;
+}
+
+#introArea{   /*mobile, portrait */
+  position: absolute;
+  top:   120vmin; 
+  background-color: rgb(255,255,255);
+  left:   2vmin;
+  width:  96vmin;
+  height:  96vmin;
+}
+
+
+#sliders{     /*mobile, portrait */
+  position: absolute;
+  top:   14vmin; 
+  background-color: rgb(255,255,255);
+  left:   5vmin;
+  width:  93vmin;
+  height: 20vmin;
+}
+
+
+#contents{           /*mobile, portrait */
+  position: absolute;
+  top:   38vmin;  
+  left:  2vmin;
+  width:  96vmin;
+  height: 60vh;
+}
+}  /*smartphone and max-aspect-ratio: 1/1*/
 

@@ -40,7 +40,7 @@ setSlider(slider_R, slider_RText, R,"");
 
 
 slider_R.oninput = function() {
-  slider_RText.innerHTML = this.value;
+  slider_RText.innerHTML = "&nbsp;"+this.value;
   R=parseFloat(this.value);
   console.log("slider1 callback: R="+R);
 }
@@ -53,11 +53,11 @@ var slider_tauRstart=document.getElementById("slider_tauRstart");
 var slider_tauRstartText = document.getElementById("slider_tauRstartText");
 
 setSlider(slider_tauRstart, slider_tauRstartText, 
-	  tauRstart, " Tagen");
+	  tauRstart, " Tage");
 
 
 slider_tauRstart.oninput = function() {
-  slider_tauRstartText.innerHTML = this.value+" Tagen";
+  slider_tauRstartText.innerHTML = "&nbsp;"+this.value+" Tage";
   tauRstart=parseFloat(this.value);
   console.log("slider2 callback: tauRstart="+tauRstart);
 }
@@ -69,11 +69,11 @@ var slider_tauRend=document.getElementById("slider_tauRend");
 var slider_tauRendText = document.getElementById("slider_tauRendText");
 
 setSlider(slider_tauRend, slider_tauRendText, 
-	  tauRend, " Tagen");
+	  tauRend, " Tage");
 
 
 slider_tauRend.oninput = function() {
-  slider_tauRendText.innerHTML = this.value+" Tagen";
+  slider_tauRendText.innerHTML = "&nbsp;"+this.value+" Tage";
   tauRend=parseFloat(this.value);
   console.log("slider2 callback: tauRend="+tauRend);
 }
@@ -89,7 +89,7 @@ setSlider(slider_rTest, slider_rTestText, 100*rTest, " %");
 
 
 slider_rTest.oninput = function() {
-  slider_rTestText.innerHTML = this.value+" %";
+  slider_rTestText.innerHTML = "&nbsp;"+this.value+" %";
   rTest=parseFloat(this.value/100.);
   console.log("slider4 callback: rTest="+rTest);
 }
@@ -101,11 +101,11 @@ var slider_tauTest=document.getElementById("slider_tauTest");
 var slider_tauTestText = document.getElementById("slider_tauTestText");
 
 setSlider(slider_tauTest, slider_tauTestText, 
-	  tauTest, " Tagen");
+	  tauTest, " Tage");
 
 
 slider_tauTest.oninput = function() {
-  slider_tauTestText.innerHTML = this.value+" Tagen";
+  slider_tauTestText.innerHTML = "&nbsp;"+this.value+" Tage";
   tauTest=parseFloat(this.value);
   console.log("slider2 callback: tauTest="+tauTest);
 }
@@ -123,7 +123,7 @@ setSlider(slider_param4, slider_param4Text, param4, " %");
 
 
 slider_param4.oninput = function() {
-  slider_param4Text.innerHTML = this.value+" %";
+  slider_param4Text.innerHTML ="&nbsp;"+ this.value+" %";
   param4=parseFloat(this.value/100.);
   console.log("slider4 callback: param4="+param4);
 }
@@ -141,7 +141,7 @@ slider_param4.oninput = function() {
 function setSlider(slider, sliderText, value, unit){
   console.log("setSlider: slider=",slider);
   slider.value=value;
-  sliderText.innerHTML=value+unit;
+  sliderText.innerHTML="&nbsp;"+value+unit;
 }
 
 

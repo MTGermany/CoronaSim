@@ -49,6 +49,7 @@
 
 <!-- ######################################################## -->
 
+<!--
 <div id="sliderTimewarp">
 <center>
 <table id="slidersTable" border="0" cellspacing="1" cellpadding="0" >
@@ -61,7 +62,7 @@
 </table>
 </center>
 </div>
-
+-->
 
 
 <div id="sliders">
@@ -79,14 +80,14 @@
   </tr>
 
   <tr>
-    <td> Ansteckung beginnt nach</td>
+    <td> Ansteckungsstart </td>
     <td> <input id="slider_tauRstart" type="range" 
                 min="0" max="7" step="1"></td>   <!-- value in js -->
     <td> <div id="slider_tauRstartText"></div> </td>
   </tr>
 
   <tr>
-    <td> Ansteckung ended nach</td>
+    <td> Ansteckungsende</td>
     <td> <input id="slider_tauRend" type="range" 
                 min="7" max="20" step="1"></td>   <!-- value in js -->
     <td> <div id="slider_tauRendText"></div> </td>
@@ -108,6 +109,12 @@
     <td> <div id="slider_tauTestText"></div> </td>
   </tr>
 
+  <tr>
+    <td> Sim-Geschwindigkeit</td>
+    <td> <input id="slider_fps" type="range" 
+                min="1" max="30" step="1"></td> 
+    <td> <div id="slider_fpsText"></div> </td>
+  </tr>
 
 </table>
 
