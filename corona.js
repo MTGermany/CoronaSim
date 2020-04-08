@@ -314,11 +314,11 @@ CoronaSim.prototype.updateOneDay=function(R){ //it++ at end
   // test people 
 
   tauAvg//=5; //!!
-  var dtau=Math.floor(tauAvg/2);
+  var dtau=Math.min(Math.floor(tauAvg/2),Math.round(tauTest));
  
 
 
-  var f_T=1./tauAvg;
+  var f_T=1./(2*dtau+1);
   for(var tau=tauTest-dtau; tau<=tauTest+dtau; tau++){
     this.xt += rTest*f_T*this.xohne[tau];
     if(false&&(it%20==0)){
