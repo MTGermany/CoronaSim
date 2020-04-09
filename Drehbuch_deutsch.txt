@@ -75,6 +75,20 @@ kann.
 Reproduktionsrate R
 ===================
 
+Dies ist Teil 2 der Einfuehrung in die Oekonometrie anhand der
+interaktiven Simulation der Coronavirus-Pandemie auf
+www.corona-simulation.de. Im ersten Teil habe ich die verschiedenen
+simulierten Groessen und die lineare und logarithmische Darstellung
+erklaert, aber nichts an den Parametern der eigentlichen Simulation
+gedreht. 
+
+In diesem Teil will ich den wichtigsten Parameter der Simulation
+betrachten, die Reproduktionsrate R. 
+
+Bevor wir das uns mathematisch
+anschauen, zeige Modell  Dies will  D haben wir uns m
+
+. enden Vorlesungen 
 * Die Dynamik der Infektionen und die Problematik mangelnder
   Informationen uber die tatsaechlich Infizierten laesst sich am
   besten direkt anhand der Parameter der Simulation beschreiben
