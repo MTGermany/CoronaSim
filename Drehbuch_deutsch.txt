@@ -1,26 +1,84 @@
-Allgemeines
+Allgemeines  https://youtu.be/c179ofsADnM
 ==========
 
+* Hallo, liebe Oekonometrie-Studenten und Corona-Simulanten!
 
-* Mit dieser Simulation zeige ich Ihnen, wie schwierig die 
-Entscheidungen zur Kontrolle der Covid 19 Pandemie sind und welche
-Informationen wirklich wichtig waeren
+ Mit dieser Serie von kurzen Videos zur Modellierung der
+ Coronavirus-Pandemie leite ich die virtuellen Vorlesungen
+ in Oekonometrie ein. Diese Pandemie enthaelt, sozusagen in a
+ nutshell, alle Aspekte der mathematischen Modellierung von
+ oekonomischen Sachverhalten
 
-* Die Parameter, also die Stellschrauben der Simulation habe ich so
-angepasst, dass sie den beobachteten Verlauf bis zum 06.April
-widergeben. 
+* Insbesondere zeige ich Ihnen, wie schwierig die 
+Entscheidungen zur Kontrolle der Covid 19 Pandemie sind und vor allem,
+wie wichtig
+dabei die Erfassung und korrekte Interpretation von Informationen ist.
+
+* Dazu habe ich unter corona-simulation.de eine interaktive
+ Online-Simulation erstellt. Mit "reload" stelle ich zunaechst den
+ Startzustand her. 
+
+
+* [SIM 1: Default, linear, speed 5 Tage/s, Sim bis 8.4.] 
+
+  Ich lasse zunaechst einmal
+  die Simulation bis zur Gegenwart, 8.4. laufen. 
 
 * Die Simulation wird ab dem 20. Maerz angezeigt, aber im Vorfeld
  lasse ich in einer Warmup-Phase die Simulation mit gerade einmal 100
  Infizierten im Februar starten. 
 
-* Die Dynamik der Infektionen und die Problematik mangelnder
-  Informationen uber die tatsaechlich Infizierten laesst sich am
-  besten direkt anhand der Parameter der Simulation beschreiben
+* Die Parameter, also die Stellschrauben der Simulation habe ich so
+  angepasst, dass sie den beobachteten Verlauf bis zum 06.April
+  widergeben. 
+ 
+* Dargestellt sind in rot die
+  erfassten infiz Personen. Es wird also am 6.4. die 100 000er
+  Marke uebeschritten. 
+
+* Ausserdem dargestellt ist die Zahl der an der Epidemie Gestorbenen
+  in schwarz und der Anteil der Todesfaelle an den bisher erfassten
+  infiz. Personen in blau. Fuer blau gilt die rechte Skala, es sind
+  also am Anfang Bruchteile von Prozent, am 6.4. aber schon mehr als 1
+  %
+
+[SIM 1a: auf log Darstellung schalten]
+
+Warum der anfaengliche niedrige Wert und dann der Anstieg? Dazu
+schalte ich mal die Darstellung auf logarithmisch um, da man dann
+viele Groessenordnungen auseinanderliegende Werte besser erfassen
+kann. 
+
+* Zunaechst einmal kann man hier die Zahl der Toten besser
+  ablesen. Die Tausendermarke ist bereits am 6.4. ueberschritten. 
+  Die rote Linie der erfassten Infizierten und die schwarze Linie der
+  Toten rueckt im Lauf der Zeit zusammen. Da dies eine log Darstellung
+  ist, ist das *Verhaeltnis* Tote/Infizierte am Abstand
+  abzulesen. Warum, besprechen wir spaeter.
+
+* Ausserdem habe ich hier in duennen Linien die Dunkelziffer
+  dargestellt. Es gibt also nach der Simulation bereits mehr als 1
+  Million infizierte Personen in D, von denen viele wohl keine
+  Symptome zeigen und andere die einer normalen Erkaeltung, beide
+  deshalb nicht gestestet sind. Datenluecken wie die Dunkelziffer sind
+  zentrale Aspekte bei der Interpretation oekonometrischer Daten und
+  werden uns im Verlauf noch viel beschaeftigen.
+
+[weiter simulieren, zunaechst lin, dann log, timewarp erhoehen]
+
+=> rote Linie bis 1 Mio, orange bis 3 Mio gleichzeitig erfasste, insges
+  mehr als 10 Mio infiziert. So geht es nicht weiter.
+
+
 
 
 Reproduktionsrate R
 ===================
+
+* Die Dynamik der Infektionen und die Problematik mangelnder
+  Informationen uber die tatsaechlich Infizierten laesst sich am
+  besten direkt anhand der Parameter der Simulation beschreiben
+
 
 * Der wichtigste und am besten durch Massnahmen zu kontrollierende
   Parameter ist die Infektions- oder Reproduktionsrate R. Sie gibt an,

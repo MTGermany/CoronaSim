@@ -344,45 +344,22 @@ CoronaSim.prototype.updateOneDay=function(R){ //it++ at end
     //dz[tau-tauDie+dtau]=fracDie*f_D*this.xold[tauH][0];
     dz[tau-tauDie+dtau]=fracDie*f_D*this.xohne[tau];
     dzsum+=dz[tau-tauDie+dtau];
-
-    //if(true){
-    if(false&&(it%20==tauDie-tauTest)){
-      console.log("die: it=",it," tau=",tau," x[tau]=",this.xohne[tau],
-		  "dz=",dz[tau-tauDie+dtau]);
-    }
+    this.x[tau] -=dz[tau-tauDie+dtau];
   }
 
   for(var tau=tauRecover-dtau; tau<=tauRecover+dtau; tau++){
     var tauH=Math.min(it,tau);
-    //dy[tau-tauRecover+dtau]=(1-fracDie)*f_Rec*this.xold[tauH][0];
     dy[tau-tauRecover+dtau]=(1-fracDie)*f_Rec*this.xohne[tau];
     dysum+=dy[tau-tauRecover+dtau];
-
-    if(false&&(it%20==tauRecover-tauTest)){
-      console.log("recover: it=",it," tau=",tau," xohne[tau]=",this.xohne[tau],
-		  "dyt=",rTest*dy[tau-tauRecover+dtau]);
-    }
-  }
-
-  // subtract from x[tau] but not from xohne[tau]
-
-  //this.x[tauDie]-=dzsum;
-  //this.x[tauRecover]-=dysum;
-
-  for(var tau=tauDie-dtau; tau<=tauDie+dtau; tau++){
-    this.x[tau] -=dz[tau-tauDie+dtau];
-  }
-  for(var tau=tauRecover-dtau; tau<=tauRecover+dtau; tau++){
     this.x[tau] -=dy[tau-tauRecover+dtau];
   }
-
-
-  //if(tauRecover>tauDie){dysum*=1/(1-fracDie);} //!!!
-  //else{dysum*=1/(1-fracDie/(1+fracDie));}
-
-  this.y   += dysum;
-  this.yt  =rTest*this.y;
   this.z   += dzsum;
+  this.y   += dysum;
+  this.yt  =(rTest-fracDie)/(1-fracDie) *this.y; //!!!
+
+
+
+
   //console.log("it=",it," xt=",this.xt," dysum=",dysum," dzsum=",dzsum);
 
 
@@ -397,7 +374,7 @@ CoronaSim.prototype.updateOneDay=function(R){ //it++ at end
 
   // control output
 
-  if(false){
+  if(true){
     console.log("end CoronaSim.updateOneDay: t_days=",it,
 		" xt=",this.xt.toPrecision(3),
 		" xtot=",this.xtot.toPrecision(3),
