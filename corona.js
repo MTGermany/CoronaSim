@@ -7,7 +7,7 @@
 var myRun;
 var isStopped=true
 var it=0;
-var itmax=365;   // simulated duration [days] since 2020-03-20 [30*7];
+var itmax;      // #days init simulation; to be determined by js Date() object
 
 var n0=80.e6;  // #persons in Germany
 var R0=3;         // baseline infection rate (no measures, no one immune)
@@ -40,8 +40,8 @@ var tauAvg=5;      // smoothing interval for tauTest,tauDie,tauRecover
 // not controlled, set statically here
 
 var fracDie=0.006;     // fraction of deaths by desease //0.004
-var tauDie=25;      // time from infection to death in fracDie cases//!!!
-var tauRecover=28; // time from infection to full recovery//!!!
+var tauDie=25;      // time from infection to death in fracDie cases
+var tauRecover=21; // time from infection to full recovery
 var tauSymptoms=7;  // incubation time 
 
 var taumax=Math.max(tauDie,tauRecover)+tauAvg+1;
@@ -70,8 +70,6 @@ function startup() {
   xPixLeft=rect.left;
   yPixTop=rect.top;
 
-  corona=new CoronaSim();
-  corona.init(); // it=1 at the end
   drawsim=new DrawSim();
 
   window.addEventListener("resize", canvas_resize);
@@ -81,8 +79,39 @@ function startup() {
   console.log("initialized.");
   drawsim.setDisplayType(displayType);
   drawsim.drawAxes(displayType);
+
+  corona=new CoronaSim();
+  corona.init(); // it=1 at the end
+  myStartStopFunction();// starts simulation up to present
+  //console.log("it=",it," itmax=",itmax); //cntrl at thread; cmds useless here
+
 }
 
+
+
+function displayTypeCallback(){
+  if(displayType=="lin"){
+    displayType="log";
+    document.getElementById("buttonDisplayType").innerHTML
+      ="=> lineare Darstellung";
+  }
+  else{
+    displayType="lin";
+    document.getElementById("buttonDisplayType").innerHTML
+      ="=> logarithmische Darstellung";
+  }
+
+  drawsim.setDisplayType(displayType); // clear and draAxes in setDisplay..
+  drawsim.updateOneDay(it,displayType,corona.xtot,corona.xt,
+		       corona.y,corona.yt,corona.z); // to redraw lines
+  //myRestartFunction();
+}
+
+
+
+// ###############################################################
+// !!!do simulations and graphics
+// ###############################################################
 
 function myStartStopFunction(){ 
 
@@ -119,36 +148,11 @@ function myRestartFunction(){
 
 }
 
-function displayTypeCallback(){
-  if(displayType=="lin"){
-    displayType="log";
-    document.getElementById("buttonDisplayType").innerHTML
-      ="=> lineare Darstellung";
-  }
-  else{
-    displayType="lin";
-    document.getElementById("buttonDisplayType").innerHTML
-      ="=> logarithmische Darstellung";
-  }
-
-  drawsim.setDisplayType(displayType); // clear and draAxes in setDisplay..
-  drawsim.updateOneDay(it,displayType,corona.xtot,corona.xt,
-		       corona.y,corona.yt,corona.z); // to redraw lines
-  //myRestartFunction();
-}
-
-
-
-// ###############################################################
-// do simulations and graphics
-// ###############################################################
-
-
 function simulationRun() {
   doSimulationStep();
   //console.log("simulationRun: it=",it," itmax=",itmax);
   if(it==itmax){
-    clearInterval(myRun);
+    clearInterval(myRun);myStartStopFunction();
   }
 }
 
@@ -234,6 +238,13 @@ CoronaSim.prototype.init=function(){
   // reset it for start of proper simulation
 
   it=0; 
+  var present=new Date();
+  var startDay=new Date(2020,02,20); // months start with zero, days with 1
+  var oneDay=(1000 * 3600 * 24);
+  // round because of daylight saving time complications
+  itmax = Math.round(
+    (present.getTime() - startDay.getTime())/(oneDay));
+  console.log("present=",present," startDay=",startDay," itmax=",itmax);
 
 }
 
@@ -509,13 +520,19 @@ DrawSim.prototype.drawAxes=function(displayType){
  // define x axis label positions and text, time starts Mar 20
 
   var itmaxCrit=60;
-  var dFirstDay=(this.itmaxDraw<itmaxCrit) ? 3 : 12;  //Mar23 or Apr1
-  var dDays=(this.itmaxDraw<itmaxCrit) ? 7 : 30.4  // avg month has 30.4 days
+  var itmaxCrit2=450;
+  var dFirstDay=(this.itmaxDraw<itmaxCrit) ? 3//Mar 23 :
+    : (this.itmaxDraw<itmaxCrit2) ? 12 : 103;  //Apr1 or Jul 1
+  var dDays=(this.itmaxDraw<itmaxCrit) ? 7
+    : (this.itmaxDraw<itmaxCrit2) ? 30.4 : 182.6;  // avg month has 30.4 days
   var timeText=(this.itmaxDraw<itmaxCrit)
     ? ["23.03", "30.03", "06.04", "13.04", "20.04", "27.04", 
        "04.05", "11.05", "18.05"]
-    : ["Apr","Mai","Jun", "Jul", "Aug", "Sep", "Okt", 
-       "Nov", "Dez", "Jan", "Feb", "Mar"];
+    : (this.itmaxDraw<itmaxCrit2)
+    ? ["Apr","Mai","Jun", "Jul", "Aug", "Sep", "Okt", 
+       "Nov", "Dez", "Jan2021", "Feb", "Mar", "Apr","Mai","Jun", "Jul"]
+    : ["Jul 2020", "Jan 2021", "Jul 2021", "Jan 2022", "Jul 2022", 
+       "Jan 2023", "Jul 2023", "Jan 2024"];
 
   var timeRel=[];
   for(var i=0; i<timeText.length; i++){

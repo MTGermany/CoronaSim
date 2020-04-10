@@ -1,5 +1,7 @@
-Allgemeines  https://youtu.be/c179ofsADnM
-==========
+
+VL 1 Allgemeines  youtube https://youtu.be/c179ofsADnM
+#####################################################
+
 
 * Hallo, liebe Oekonometrie-Studenten und Corona-Simulanten!
 
@@ -72,41 +74,77 @@ kann.
 
 
 
+VL 2:  Youtube:
+####################################################
+
+
 Reproduktionsrate R
 ===================
 
-Dies ist Teil 2 der Einfuehrung in die Oekonometrie anhand der
+* Dies ist Teil 2 der Einfuehrung in die Oekonometrie anhand der
 interaktiven Simulation der Coronavirus-Pandemie auf
 www.corona-simulation.de. Im ersten Teil habe ich die verschiedenen
 simulierten Groessen und die lineare und logarithmische Darstellung
 erklaert, aber nichts an den Parametern der eigentlichen Simulation
 gedreht. 
 
-In diesem Teil will ich den wichtigsten Parameter der Simulation
-betrachten, die Reproduktionsrate R. 
+* Ich habe die Simulation uebrigens nun dermassen geaendert, dass sie
+ bei Start automatisch bis zur Gegenwart laeuft:  
 
-Bevor wir das uns mathematisch
-anschauen, zeige Modell  Dies will  D haben wir uns m
-
-. enden Vorlesungen 
-* Die Dynamik der Infektionen und die Problematik mangelnder
-  Informationen uber die tatsaechlich Infizierten laesst sich am
-  besten direkt anhand der Parameter der Simulation beschreiben
+ SIM reload
 
 
-* Der wichtigste und am besten durch Massnahmen zu kontrollierende
-  Parameter ist die Infektions- oder Reproduktionsrate R. Sie gibt an,
-  wieviele andere Personen ein Infizierter im Verlauf der Krankheit
-  ansteckt, WENN es keinerlei Immunitaet gibt. 
+* In diesem Teil will ich den wichtigsten Parameter der Simulation
+betrachten, die Reproduktionsrate R. Diese gibt an, wie viele Menschen
+eine infizierte Person im Verlauf der Krankheit
+ansteckt FALLS noch keine Immunitaet herrscht. Die infizierte Person
+ist dabei moeglicherweise symptomfrei.
+
+* Voreingestellt ist 1.1, d.h ohne Immunitaet waechst die Zahl der
+  Infizierten schwach exponentiell an. Diese Rate fitted die Daten am besten
+
+* Fuer die Dynamik ist auch wichtig, wann eine Person ansteckend
+  ist. Die fruehestmoeglichen und spaetestmoeglichen Zeitpunkte sind
+  ebenfalls Modellparameter. Die Angabe bezieht sich dabei auf das
+  INFEKTIONSALTER. Hier sind Personen also zwischen 1 und 10 Tagen
+  nach ihrer eigenen Infektion ansteckend, dazwischen gleichverteilt. 
+  Dies spiegelt auch wider, dass man moeglicherweise 20 Tage
+  ansteckend ist, die meisten Ansteckungen aber eher am Anfang
+  stattfinden. 
 
   - Ist diese >1, nimmt die Zahl der Infizierten, der Kranken, der
   Toten, aber auch der wieder Geheilten exponentiell zu, solange, bis
   ein bedeutender Teil der Bevoelkerung erkrankt ist.  
 
-[SIM1: R=2] Wir simulieren mit R=2.
+Anstiegsrate
+===============
+
+[PDF Lecture] Kann man die Wachstumsrate unter vereinfactne Annahmen
+analytisch berechnen? Dazu habe ich ein pdf vorbereitet:
 
 
-  Ist beispielsweise die Reproduktionsrate R=2, so nimmt die Zahl der
+[SIM5a R=2 Rstart=4 Tage
+Bei Ansteckung genau nach einer Woche: Kurve verzehnfacht sich alle
+2 Wochen, Verdoppelung alle 4 Tage
+
+[SIM5b R=4 Rstart=8 Tage
+dasselbe
+
+
+[SIM5c R=sqrt(2)=1.4 Verdoppelung der Halbwertszeit
+verzehnfacht sich alle 4 Wochen
+
+
+A=Saettigung
+===============
+
+
+[SIM1: R=2] Wie gesagt, die Rechnung nimmt keinerlei Immunitaet
+an. Schauen wir mal, was beim vollen Modell passiert, z.B. mit
+Reproduktionsrate R0=2
+
+
+*Ist beispielsweise die Reproduktionsrate R=2, so nimmt die Zahl der
   aktuell Infizierten solange exponentiell zu, bis die Haelfte der
   Bevoelkerung 
   entweder genesen oder angesteckt oder tot ist. Bei genau der Haelfte
@@ -115,6 +153,10 @@ anschauen, zeige Modell  Dies will  D haben wir uns m
   ungekehrtem 
   Weg exponentiell ab. Bis sie auf null ist, sind dann aber eher 80%
   statt nur der Haelfte infiziert!
+
+*Das Fatale ist, dass die Reduktion der Epedemie durch wachsende
+ Immunitaet auf einer langeren Zeitskala verlaeuft, im Vergleich
+ des  durch eine Reproduktionsrate R0<1 verursachten Endes
 
 [SIM2: R=1 lin] Was geschieht bei einer Reproduktionsrate von 1? 
 
@@ -136,32 +178,8 @@ anschauen, zeige Modell  Dies will  D haben wir uns m
 =>endgueltig besiegt
 
 
-Anstiegsrate
-===============
-
-Wie ergibt sich aber die beruehmte exponentielle Anstiegsrate aus den
-Parametern , ist die Reproduktionsrate allein relevant? Offensichtlich
-nicht, denn wenn es bei R=2 erst nach 10 Tagen zu einer Ansteckung
-kommt, kann sich die Infektinszahl nur alle 10 Tage verdoppeln, bei
-Ansteckung am naechsten Tag jeden Tag. In der Tat ist die
-exponentielle Anstiegsrate gleich dem Logarithmus der Reproduktionsrate
-geteilt durch Ansteckungszeit 
-
-[SIM5a R=2 Rstart=6 Tage, Rend=7 Tage,orange Kurve]
-Bei Ansteckung genau nach einer Woche: Kurve verzehnfacht sich alle
-3.2 Wochen, Verdoppelung jede Woche
-
-[SIM5b R=4 Rstart=6 Tage, Rend=7 Tage,orange Kurve]
-Kurve verzehnfacht sich alle
-1.6 Wochen, Vervierfachung jede Woche
-
-[SIM5c R=1.4 Rstart=6 Tage, Rend=7 Tage,orange Kurve]
-Kurve verzehnfacht sich alle
-6.4 Wochen, Verdoppelung alle 2 Wochen
-
-[SIM5b Rstart=1 Tag, Rend=7 Tage,orange Kurve] Verzehnfachung alle
-3.2 Wochen
-
+VL 3
+############################################
 
 Zeitverzug
 ==========
@@ -211,8 +229,16 @@ Ansteckungsstart und Ansteckungsende beschrieben
 
 
 
-Unsicherheit
-============
+VL 4: Unsicherheit
+#########################
+
+
+* Die Dynamik der Infektionen und die Problematik mangelnder
+  Informationen uber die tatsaechlich Infizierten laesst sich am
+  besten direkt anhand der Parameter der Simulation beschreiben
+
+
+
 
 Neben der Verzoegerungszeit zwischen Infektion und testung ist auch
 die Testdichte entscheident fuer die tatsaechliche Auswirkung. Sie
@@ -244,4 +270,7 @@ Was tun?
 
 * Reproduktionsrate von 1.1 passt zu den Daten
 
+
+VL 5: Math. Modell
+##################
 

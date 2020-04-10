@@ -2,7 +2,7 @@
 
 <head>
 <meta charset="UTF-8">
-<title>Simulation von Covid-19 Verl&auml;ufen</title> 
+<title>Simulation der Coronavirus Covid-19 Pandemie</title> 
 <link href="styleSliders.css" rel="stylesheet" type="text/css" />
 <link href="corona.css" rel="stylesheet" type="text/css" />
 <link rel="icon" 
@@ -17,15 +17,15 @@
 <body onload="startup()"> 
 
 <div id="header"> 
-<h1>Simulation von Covid-19 Verl&auml;ufen</h1>
+<h1>Simulation der Coronavirus Covid-19 Pandemie</h1>
 </div>
 
 <div id="introArea"> 
 
 <ul>
 <li> Bezugsgebiet: Deutschland
-<li> Die Simulation startet mit 13 000 festgestellten Infektionen am
-  20. 03. und Kalibrierung davor
+<li> Simulationsstart: 20.03.2020
+<li> L&auml;ft anf&auml;nglich bis zur Gegenwart
 </ul>
 </div>
 
@@ -76,7 +76,7 @@
 <!-- attribute "value" not given, set in js-->
 
   <tr>
-    <td> Infektionsrate R</td>
+    <td> Infektionsrate R<sub>0</sub></td>
     <td> <input id="slider_R" type="range" 
                 min="0" max="4" step="0.1"></td> 
     <td> <div id="slider_RText"></div> </td>
