@@ -465,6 +465,9 @@ function DrawSim(){
 
 
 DrawSim.prototype.setDisplayType=function(displayType){
+  this.isActiveLog=[true,true,true,true,true,false];
+  this.isActiveLin=[false,true,false,true,true,true];
+  this.isActive=(displayType==="lin") ? this.isActiveLin : this.isActiveLog;
   this.xPix0  =0.12*canvas.width;
   this.xPixMax=((displayType==="lin") ? 0.90: 0.98) * canvas.width;
   this.yPix0  =0.85*canvas.height;
@@ -472,8 +475,6 @@ DrawSim.prototype.setDisplayType=function(displayType){
   this.wPix=this.xPixMax-this.xPix0;
   this.hPix=this.yPixMax-this.yPix0;  //<0
 
-  if(displayType==="log"){this.isActive=[true,true,true,true,true,false]};
-  if(displayType==="lin"){this.isActive=[false,true,false,true,true,true]};
   this.clear();
   this.drawAxes(displayType);
 }
@@ -754,19 +755,24 @@ DrawSim.prototype.updateOneDay=function(it,displayType,xtot,xt,y,yt,z){
     erase=true;
   }
 
-  
-  for(var q=0; q<5; q++){
-    if(this.isActive[q]){
-      if((displayType==="lin")&&(this.yDataLin[q][it]>this.ymaxLin)){
-        this.ymaxLin=this.yDataLin[q][it];
-        erase=true;
-      }
-      if((displayType==="log")&&(this.yDataLog[q][it]>this.ymaxLog)){ 
-        this.ymaxLog=this.yDataLog[q][it];
-        erase=true;
-        console.log("this.ymaxLog=",this.ymaxLog);
-      }
+  // need also to update ymax of display actually not used
+
+  for(var q=0; q<5; q++){ 
+    if((this.isActiveLin[q])&&(this.yDataLin[q][it]>this.ymaxLin)){
+      this.ymaxLin=this.yDataLin[q][it];
+      if(displayType==="lin"){erase=true;}
     }
+    if((this.isActiveLog[q])&&(this.yDataLog[q][it]>this.ymaxLog)){
+      this.ymaxLog=this.yDataLog[q][it];
+      if (displayType==="log"){erase=true;}
+    }
+    if(true){
+      console.log("it=",it," q=",q,
+		  " this.yDataLin[q][it]=",this.yDataLin[q][it],
+		  " this.ymaxLin=",this.ymaxLin,
+		    " this.ymaxLog=",this.ymaxLog);
+    }
+    
   }
 
   if(this.yDataLin[5][it]>this.ymaxPerc){ // yDataLin[5] =z/yt in percent

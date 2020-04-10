@@ -1,4 +1,8 @@
 
+
+https://www.youtube.com/playlist?list=PLhsJ0l0GYIUr-hIOOCZZYVw0w-FZGvr19
+
+
 VL 1 Allgemeines  youtube https://youtu.be/c179ofsADnM
 #####################################################
 
@@ -74,7 +78,7 @@ kann.
 
 
 
-VL 2:  Youtube:
+VL 2:  Youtube: https://youtu.be/9Q-d3CKE2Do
 ####################################################
 
 
@@ -178,13 +182,118 @@ Reproduktionsrate R0=2
 =>endgueltig besiegt
 
 
-VL 3
-############################################
 
-Zeitverzug
-==========
+VL 3: Zeitverzug  https://youtu.be/EcL7xap2yGM
+#####################################################################
 
-[SIM6 R=2, Sim-Geschw 5, log, bis 30.03. STOP R=0.5 bis 11.05. weiter]
+Dies ist der 3. Teil der Einfuehrung in die Oekonometrie anhand der
+Coronavirus-Simulation.
+
+* Im ersten Teil habe ich die Groessen erklaert, im zweiten die oberen
+drei Parameter, die alle mit der Reproduktionsrate zusammenhaengen.
+
+* Im jetztigen 3. Teil geht es darum, die Zeitverzoegerugseffekte und
+die Problematik unvollstaendiger Daten zu verstehen. Schliesslich
+kommt ja im Wort Oekonometrie das Word "metri" vor, was vom
+lateinischen "metiri" fuer "messen" stammt. Datenanalyse ist ganz
+zentral. und hier haben wir ein bestens geeignetes aktuelles Beispiel
+
+
+Um den Zeitverzug und die Dunkelziffer zu verstehen, betrachte ich nun
+den vierten Parameter: Test durchgefuehrt bei Infektionsalter in Tagen
+und 5. Parameter: Anteil der positiv getesteten unter allen Erkrankten
+
+* [SIM Standard, reload, lin]
+
+Ausgangspunkt: Infektionsalter 10 Tage  und 10%. Die Zahl der
+insgesamt infizierten etwa 120 000, die Zahl der Toten, etwa 2000 und
+damit der nun stark auf 2 gestiegene Anteil der Toten unter den
+positiv Getesteten ist korrekt. Bei der ersten Simulation war er
+uebrigens bei gut 1% und der Anstieg auf 2% wurde korrekt
+vorhergesagt. 
+
+* [SIM Standard, weiter sim] 
+
+Im weiteren sagt das Modell bei diesen Parametern
+uebrigens einen weiteren Anstieg auf 6% voraus, falls alles
+unveraendet bleibt. Die Zahl der Gesundeten stimmt uebrigens auch. Sie
+entspricht einem Infektionsalter von 25 Tagen bei Gesundung, der
+Parameter ist aber nicht als Regler herausgefuehrt, um die Simulation
+nicht zau unuebersichtlich zu machen. Wer will, kann sich bei github
+den Quellcode runterladen und auch damit spielen.
+
+* [Reload, Test nach 5 statt 10 Tagen, linear]
+
+  Sind denn nicht auch andere Werte moeglich? Beispielsweise erscheint
+  eine Testung erst nach 10 Tagen reichlich spaet. Drehen wir also das
+  Infektionsalter bei der Testung runter auf 5 Tage und simulieren neu
+
+=> nur noch halb so viele Infizierte bei gleicher Testdurchdringung!
+Wie kann das sein? Erinnern Sie sich, die Simulation benoetigt ein
+Warmup bis 14000 positiv getestete ereicht werden und dieser Tag wird
+auf den 20. Maerz gesetzt. Vorher wird mit der Reproduktionsrate
+R0=2.5 simuliert, die einen Anstieg um den Faktor 2 alle 5 Tage
+entspricht. Am 20.3. wird die Reproduktionsrate auf 1.1
+runtergesetzt. Im einen Fall startet die Simulation, wenn die Zahl der
+getesteten Infizierten 10 Tage vorher, also am 10.3., bei 14000
+lag. Verkeurzt man die Zeit auf 5 Tage, ist dies die Zahl am 15.3. Im
+ersten Fall waere aber am 15.3. die Zahl der spaeter getesteten 
+Infizierten bereits doppelt so hoch, Durch die Reduktion von R0 am
+20.3., ist dieser Effekt danach nicht mehr aktiv und nur die Zahl der
+Infizierten am Stichtag zaehlt, daher die Reduktion um den Faktor 2
+
+* [Erhoehung R0=1.6, restart]
+
+Erhoehen wir nun R, z.B. auf 1.6, ist die gegenwaertige Zahl der
+  positiv getesteten am 10.4. wieder OK, aber die Kurve steigt zu
+  schnell an. Mit 5 Tagen Latenzzeit ist damit keine Ueberinstimmung
+  mit den Daten zu erreichen, sodass die tatsaechliche Latenzzeit eher
+  bei 10 Tagen liegt. Das ist auch plausibel: 
+  - 5 Tage mittl. Inkubationszeit
+  - einige Tage bis die Symptome so schwer sind, dass ein Test erfolgt
+
+* [Reload, Erhoehung Detektionsrate 10%->20%, Restart] 
+
+Nun zur Detektionsrate: Wieviel Prozent der Infiz werden positiv
+  getestet? Ich gehe in den Standardannahmen von 10% aus. Erhoehe ich
+  sie auf 20%, ist die Todesrate zu gering, nur 1% statt der
+  beobachteten 2%. 
+
+[switch log]
+
+In der Tat laesst sich aber in Wirklicheit nur das
+  *Quotient* aus tatsaechlicher Mortalitaetsrate #Tote/#Infizierte und
+  der Detektionsrate anhand der Daten anpassen, kalibrieren wie die
+  Oekonometriker sagen. Ich nehme eine Mortalitaet von 0.6% und eine
+  Detektionsrate von 10% an, dann gibt es etwa 1.5 Mio Infizierte. 
+Ich koennte aber auch 1.2% und 20%
+  annehmen => weniger als 1 Mio Infizierte bei gleichen Daten 
+
+* 
+  Die tatsaechliche Durchseuchung ist zwar bei geringerer
+  Detektionsrate hoeher, sie wirkt sich aber erst bei etwa 20-30%
+  merkbar auf die Dynamik aus. Sie ist aber fuer politische
+  ENtscheidungen emminent wichtig, deshalb sind Zufallsstichproben
+  enorm wichtig. Sie werden deshalb auch endlich durchgefuehrt.
+[SIM 1%] -> hohe #tats Infiz, schnelle Saettigung Ende im Jul
+[SIM 20%] -. bei gleichen Daten geringere #tats Infiz, Saettigung erst
+  naechstes Jahr!
+
+
+VL 1.4. Response auf Politikaenderungen, youtube 
+#############################################################
+
+Nachdem ich im ersten Video die Groessen und Datsrellungen erklaert
+habe und in den beiden folgenden die Parameter werde ich jetzt die
+Simulation anwenden, um den Effekt politischer Entschyeidungen zu
+untersuchen, insbesondere den Zeitverzug.
+ 
+[SIM6 R=2, Sim-Geschw 5, log, bis Gegenwart 10.4. STOP R=0.5 bis
+11.05. weiter]
+
+Ich simuliere zunaechst mit Reprodutionsrate R0=2 bis zur Gegenwart
+und dann mit R0=0.5, extreme Isolation, weiter.
+
 Warum nimmt aber bei einer Ansteckungsrate von 0,5 alles zunaechst
 weiter zu, vor allem die dicken Kurven, die beobachtete Groessen
 angeben, also was Sie taeglich in den Medien lesen? 
@@ -200,15 +309,16 @@ exponentiell!). Verzoegerung=Test-Verzoegerungszeit
   auch hier Nachlaeufer, da die Zahl an infektionsaktiven Leuten
   zunaechst weier steigt
 
-* gestorbenen und genesenen Personen haben Delay etwa gleich de
-  rSterbe- bzw Genesungszeit
+* gestorbenen und genesenen Personen haben Delay etwa gleich der
+  Sterbe- bzw Genesungszeit
 
 [SIM6 R=2, log, Test nach 1 Tag, Sim-Geschw 5,  R=0.5 30.03.]
 [SIM6 R=2, log, Test nach 15 Tagen, Sim-Geschw 5,  R=0.5 30.03.]
 
-Das Fiese ist hier, das es nicht nur Zeitverzug gibt, sondern auch die
-wahre Situation eine andere ist, obwohl die Beobachtungen fast leich
-sid. Dazu widehole ich die Sim. beachten Sie die duenne orange Linie
+Das Fiese ist hier, das es nicht nur Zeitverzug gibt, sondern auch je
+nach Parameter die
+wahre Situation eine andere ist, obwohl die Beobachtungen fast gleich
+sid. Dazu wiederhole ich die Sim. beachten Sie die duenne orange Linie
 der tatsaechlich gerade infizierten.
 
 * bei Messung 1 Tag nach Infektion ist Maxzahl der gleichzeitig
@@ -228,47 +338,6 @@ anstecken. Und die Ansteckungszeit ist ja ebreits durch
 Ansteckungsstart und Ansteckungsende beschrieben
 
 
-
-VL 4: Unsicherheit
-#########################
-
-
-* Die Dynamik der Infektionen und die Problematik mangelnder
-  Informationen uber die tatsaechlich Infizierten laesst sich am
-  besten direkt anhand der Parameter der Simulation beschreiben
-
-
-
-
-Neben der Verzoegerungszeit zwischen Infektion und testung ist auch
-die Testdichte entscheident fuer die tatsaechliche Auswirkung. Sie
-erklaert auch die anfaenglich sehr geringe Todesrate in D
-
-[SIM7 Standardparameter, lin, bis 6.4.]:
-=> Todesrate = #Tote/Zahl der bekannt infizierten Pers steigt von 0.2%
-auf jetzt ueber 1%
-
-[weiter simulieren] Sie wird auf is zu 6% steigen!
-=> bis 3.5% gleichzeitig infizierte
-
-
-[SIM7b 5% statt10% Testrate]
-=> bis 12% Todesrate
-=> bis 5% gleichzeitig infizierte
-
-
-Was tun?
-========
-
-[SIM8: log, Standardparameter bis 6.4.]
-
-* 100 000 getestete Infizierte
-
-* mehr als 1 Mio Infizierte (incl symptomfrei) insgesamt
-
-* etwas mehr als 1000 Tote [linear]: Todefallrate steigt von 0.2 auf 1.5%
-
-* Reproduktionsrate von 1.1 passt zu den Daten
 
 
 VL 5: Math. Modell
