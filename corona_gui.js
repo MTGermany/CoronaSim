@@ -102,7 +102,9 @@ setSlider(slider_rTest, slider_rTestText, 100*rTest, " %");
 
 slider_rTest.oninput = function() {
   slider_rTestText.innerHTML = "&nbsp;"+this.value+" %";
+  var rTestold=rTest;
   rTest=parseFloat(this.value/100.);
+  //corona.xt *=rTest/rTestold; //!!!
   console.log("slider4 callback: rTest="+rTest);
 }
 

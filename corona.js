@@ -110,7 +110,7 @@ function displayTypeCallback(){
 
 
 // ###############################################################
-// !!!do simulations and graphics
+// do simulations and graphics
 // ###############################################################
 
 function myStartStopFunction(){ 
@@ -195,7 +195,10 @@ CoronaSim.prototype.init=function(){
   this.y=0;  // fraction recovered real as a function of time
   this.yt=0; // fraction recovered data
   this.z=0;  // fraction dead
-
+  this.rTestDay=[]; // fraction of tested infected at day t
+  for(var i=0; i<100; i++){ // just initialisation for the first few steps
+    this.rTestDay[i]=rTest;
+  }
   // init infection-age profile this.x[tau] with exponential
 
   var r0=0.3; // initial exponential rate per day  (don't confuse with R0,R)
@@ -322,10 +325,12 @@ CoronaSim.prototype.updateOneDay=function(R){ //it++ at end
 
   // test people 
 
+  this.rTestDay[it]=rTest; // needed to determine fraction of 
+                      // recovered among the tested later on
+
   tauAvg//=5; //!!
   var dtau=Math.min(Math.floor(tauAvg/2),Math.round(tauTest));
  
-
 
   var f_T=1./(2*dtau+1);
   for(var tau=tauTest-dtau; tau<=tauTest+dtau; tau++){
@@ -366,7 +371,10 @@ CoronaSim.prototype.updateOneDay=function(R){ //it++ at end
   }
   this.z   += dzsum;
   this.y   += dysum;
-  this.yt  =(rTest-fracDie)/(1-fracDie) *this.y; //!!!
+  //this.yt  =(rTest-fracDie)/(1-fracDie) *this.y; //!!!
+  var dayTested=Math.max(0,it-Math.round(tauRecover-tauTest));
+
+  this.yt  +=(this.rTestDay[dayTested]-fracDie)/(1-fracDie)*dysum; //!!!
 
 
 
