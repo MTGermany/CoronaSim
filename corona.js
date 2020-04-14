@@ -81,13 +81,25 @@ function startup() {
   drawsim.drawAxes(displayType);
 
   corona=new CoronaSim();
-  corona.init(); // it=1 at the end
-  myStartStopFunction();// starts simulation up to present
-  //console.log("it=",it," itmax=",itmax); //cntrl at thread; cmds useless here
+  
+  //corona.init(); // it=1 at the end !!!
+  //myStartStopFunction();// starts simulation up to present !!!
+
+  var mydataTest = JSON.parse(dataTest);
+  console.log("mydataTest[0]=",mydataTest[0]);
+  console.log("mydataTest[1]=",mydataTest[1]);
+  var mydata = JSON.parse(data);
+  console.log("mydata[0]=",mydata[0]);
+
+  console.log("initialized.");
+
 
 }
 
 
+
+ 
+//####################################################################
 
 function displayTypeCallback(){
   if(displayType=="lin"){
