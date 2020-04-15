@@ -7,14 +7,15 @@
 var myRun;
 var isStopped=true
 var it=0;
-var itmax;      // #days init simulation; to be determined by js Date() object
+var itmaxinit;  // #days init simulation; to be determined by js Date() object
+var itmax;      // can be >itmaxinit during interactive simulation
 
 var n0=80.e6;  // #persons in Germany
 var R0=3;         // baseline infection rate (no measures, no one immune)
                   // for phase1 (nxt<nxtPhase2)
-var R2=1.8;       // infection rate nxtPhase2<=nxt<nxtStart
-var nxtPhase2=1000; // number of positively tested infections=13957
-var nxtStart=11000; // number of positively tested infections=13957
+var R2=1.7;       // infection rate nxtPhase2<=nxt<nxtStart
+var nxtPhase2=2000; // number of positively tested infections=13957
+var nxtStart=10000; // number of positively tested infections=13957
                     // (mar20, begin lockdown)
 var startDay=new Date(2020,02,20); // months start with zero, days with 1
 var oneDay_ms=(1000 * 3600 * 24);
@@ -39,7 +40,7 @@ var displayType="lin"; // "lin" or "log"; consolidate with html
 // now controlled by sliders
 
 var fps=10;
-var R=1.0;          // infection rate with measures
+var R=0.95;          // infection rate with measures
 var tauRstart=1;     // active infectivity begins [days since infection]
 var tauRend=10;       // active infectivity ends [days since infection]//10
 var rTest=0.1;   // percentage of tested infected persons 
@@ -48,8 +49,8 @@ var tauAvg=5;      // smoothing interval for tauTest,tauDie,tauRecover
 
 // not controlled, set statically here
 
-var fracDie=0.006;     // fraction of deaths by desease //0.004
-var tauDie=25;      // time from infection to death in fracDie cases
+var fracDie=0.0045;     // fraction of deaths by desease //0.004
+var tauDie=21;      // time from infection to death in fracDie cases
 var tauRecover=21; // time from infection to full recovery
 var tauSymptoms=7;  // incubation time 
 
@@ -78,15 +79,16 @@ function startup() {
   // get present and difference to startDay
   // =============================================================
 
-  //var present=new Date();
-  var present=new Date(2020,02,23); //!!!
+  var present=new Date();
+  //var present=new Date(2020,02,23); //!!
   
-  // initialisation of itmax; 
+  // initialisation of itmaxinit; 
   // round because of daylight saving time complications
 
-  itmax = Math.round(
+  itmaxinit = Math.round(
     (present.getTime() - startDay.getTime())/(oneDay_ms));
-  console.log("present=",present," startDay=",startDay," itmax=",itmax);
+  itmax=itmaxinit;
+  console.log("present=",present," startDay=",startDay," itmaxinit=",itmaxinit);
 
 
   // =============================================================
@@ -122,15 +124,15 @@ function startup() {
   var istart=-data_diff2start[0];
   if(true){
     console.log(
-      "measured data: istart=",istart," itmax=",itmax,
+      "measured data: istart=",istart," itmaxinit=",itmaxinit,
       "\n  data_date_ddmmyyyy[istart]=", data_date_ddmmyyyy[istart],
       " data_cumCases[istart]=",data_cumCases[istart],
       "\n  data_date_ddmmyyyy[istart+1]=", data_date_ddmmyyyy[istart+1],
       " data_cumCases[istart+1]=",data_cumCases[istart+1],
       "\n  data_date_ddmmyyyy[istart+1]=", data_date_ddmmyyyy[istart+2],
       " data_cumCases[istart+1]=",data_cumCases[istart+2],
-      "\n  data_date_ddmmyyyy[istart+itmax]=",data_date_ddmmyyyy[istart+itmax],
-      " data_cumCases[istart+itmax]=",data_cumCases[istart+itmax]
+      "\n  data_date_ddmmyyyy[istart+itmaxinit]=",data_date_ddmmyyyy[istart+itmaxinit],
+      " data_cumCases[istart+itmaxinit]=",data_cumCases[istart+itmaxinit]
 	       );
   }
 
@@ -240,8 +242,12 @@ function myRestartFunction(){
 function simulationRun() {
   console.log("simulationRun: before doSimulationStep: it=",it);
   doSimulationStep();
-  console.log("simulationRun: after doSimulationStep it=",it," itmax=",itmax);
-  if(it==itmax){
+  console.log("simulationRun: after doSimulationStep it=",it," itmaxinit",itmaxinit);
+
+// the hell knows why i need "+2" and not "+1" 
+// but it works, it's tested by numbers
+
+  if(it==itmaxinit+2){ 
     clearInterval(myRun);myStartStopFunction();
   }
 }
@@ -455,10 +461,9 @@ CoronaSim.prototype.updateOneDay=function(R){ //it++ at end
   }
   this.z   += dzsum;
   this.y   += dysum;
-  //this.yt  =(rTest-fracDie)/(1-fracDie) *this.y; //!!!
   var dayTested=Math.max(0,it-Math.round(tauRecover-tauTest));
 
-  this.yt  +=(this.rTestDay[dayTested]-fracDie)/(1-fracDie)*dysum; //!!!
+  this.yt  +=(this.rTestDay[dayTested]-fracDie)/(1-fracDie)*dysum;
 
 
 
@@ -477,8 +482,8 @@ CoronaSim.prototype.updateOneDay=function(R){ //it++ at end
 
   // control output
 
-  if(false){
-    console.log("end CoronaSim.updateOneDay: t_days=",it,
+  if(true){
+    console.log("end CoronaSim.updateOneDay: it=",it,
 		" xt=",this.xt.toPrecision(3),
 		" xtot=",this.xtot.toPrecision(3),
 		" y=",this.y.toPrecision(3),
@@ -629,7 +634,7 @@ DrawSim.prototype.drawAxes=function(displayType){
 
   var timeRel=[];
   for(var i=0; i<timeText.length; i++){
-    timeRel[i]=(dFirstDay+i*dDays)/itmax;
+    timeRel[i]=(dFirstDay+i*dDays)/(itmax-1); //!!
   }
 
 
