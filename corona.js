@@ -11,12 +11,16 @@ var itmaxinit;  // #days init simulation; to be determined by js Date() object
 var itmax;      // can be >itmaxinit during interactive simulation
 
 var n0=80.e6;  // #persons in Germany
-var R0=3;         // baseline infection rate (no measures, no one immune)
-                  // for phase1 (nxt<nxtPhase2)
-var R2=1.7;       // infection rate nxtPhase2<=nxt<nxtStart
-var nxtPhase2=2000; // number of positively tested infections=13957
-var nxtStart=10000; // number of positively tested infections=13957
-                    // (mar20, begin lockdown)
+var nxtStart=10000; // number of positively tested infections@start
+                    // (mar20, begin lockdown, nxt=13957)
+
+var R01=3;     // varying R0 rates calibrated to data
+var R02=1.6;
+var R03=1.2;
+var nxt1=2000;
+var nxt2=10000;
+var nxtR0=30000;
+
 var startDay=new Date(2020,02,20); // months start with zero, days with 1
 var oneDay_ms=(1000 * 3600 * 24);
 
@@ -40,7 +44,7 @@ var displayType="lin"; // "lin" or "log"; consolidate with html
 // now controlled by sliders
 
 var fps=10;
-var R=0.95;          // infection rate with measures
+var R0=0.78;          // infection rate with measures
 var tauRstart=1;     // active infectivity begins [days since infection]
 var tauRend=10;       // active infectivity ends [days since infection]//10
 var rTest=0.1;   // percentage of tested infected persons 
@@ -49,7 +53,7 @@ var tauAvg=5;      // smoothing interval for tauTest,tauDie,tauRecover
 
 // not controlled, set statically here
 
-var fracDie=0.0045;     // fraction of deaths by desease //0.004
+var fracDie=0.0045;     // init. fracDie=0.045*rTest after rTest callback
 var tauDie=21;      // time from infection to death in fracDie cases
 var tauRecover=21; // time from infection to full recovery
 var tauSymptoms=7;  // incubation time 
@@ -64,6 +68,18 @@ var xPixLeft,yPixTop;
 var xPix,yPix;
 var xPixOld, yPixOld;
 var sizemin=0;
+
+
+//##############################################################
+// function for variable replicationrate R0 as a function of 
+// fraction xt of observed cases
+//##############################################################
+
+function R0fun(xt){
+  return (n0*xt<nxt1) ? R01 : 
+    (n0*xt<nxt2) ? R02 :
+    (n0*xt<nxtR0) ? R03 : R0;  // R0 controlled by sliders
+}
 
 
 //##############################################################
@@ -143,7 +159,7 @@ function startup() {
   // =============================================================
 
   corona=new CoronaSim();
-  corona.init(); // it=1 at the end !!!
+  corona.init(); // it=1 at the end !!
 
 
   // =============================================================
@@ -169,7 +185,7 @@ function startup() {
   // =============================================================
 
   console.log("initialized.");
-  myStartStopFunction(); // starts simulation up to present !!!
+  myStartStopFunction(); // starts simulation up to present !!
 
 
 
@@ -255,7 +271,7 @@ function simulationRun() {
 // displayType in {"lin", "log"}
 
 function doSimulationStep(){
-  corona.updateOneDay(R);
+  corona.updateOneDay(R0fun(corona.xt));
   drawsim.updateOneDay(it,displayType, corona.xtot, corona.xt,
 		       corona.y, corona.yt, corona.z);
   it++;
@@ -298,7 +314,7 @@ CoronaSim.prototype.init=function(){
   }
   // init infection-age profile this.x[tau] with exponential
 
-  var r0=0.3; // initial exponential rate per day  (don't confuse with R0,R)
+  var r0=0.3; // initial exponential rate per day  (don't confuse r0 with R0)
   var denom=0;
   for(var tau=0; tau<taumax; tau++){
     denom+=Math.exp(-r0*tau);
@@ -312,8 +328,8 @@ CoronaSim.prototype.init=function(){
   // do warmup until the required number of observed infections xt is reached
 
   for(it=1; (it<200)&&(n0*this.xt<nxtStart); it++){ //200
-    var R=(n0*this.xt<nxtPhase2) ? R0 : R2;
-    this.updateOneDay(R);
+    var Rt=R0fun(this.xt);
+    this.updateOneDay(Rt);
     if(false){
       console.log("warmup: it=",it,
 		  " n0*this.xtot=",n0*this.xtot.toPrecision(3),
@@ -509,7 +525,9 @@ function DrawSim(){
 
   this.unitPers=1000;  // persons counted in multiples of unitPers
 
+  this.itR0=-1; // it value where n0*xt first exceeds nxtR0 (init val)
   //this.itmaxDraw=4*7;
+
   this.yminLin=0;
   this.ymaxLin=100; // unitPers=1000-> 100 corresp to 100 000 persons
   this.yminPerc=0;
@@ -892,6 +910,26 @@ DrawSim.prototype.updateOneDay=function(it,displayType,xtot,xt,y,yt,z){
     }
   }
 
+// drawing vertical separation line R0 init->R0 slider
+
+  if(this.unitPers*this.yDataLin[1][it]>=nxtR0){
+    if(this.unitPers*this.yDataLin[1][it-1]<nxtR0){
+      this.itR0=it;
+    }
+    if(this.itR0>-1){
+      ctx.fillStyle="#888888";
+      var x0=this.xPix[this.itR0];
+      ctx.fillRect(x0-1,this.yPix0,3,this.hPix);
+      var textsize=Math.min(0.030*canvas.width,0.045*canvas.height);
+
+      ctx.setTransform(0,-1,1,0,x0+1.0*textsize,this.yPix0+0.5*this.hPix);
+      ctx.fillText("R"+toSub(0)+" aktiv",0,0);
+      ctx.setTransform(1,0,0,1,0,0);
+    }
+  }
+
+
+
   // drawing of data from opendata... .eu
 
   if(this.isActive[1]){ // xt
@@ -968,7 +1006,7 @@ DrawSim.prototype.plotPoints=function(it,q,data_arr,displayType){
       var yrel=(y-yminDraw)/(ymaxDraw-yminDraw);
       var dataPix=this.yPix0+yrel*(this.yPixMax-this.yPix0);
        ctx.beginPath(); //!! crucial; otherwise latest col used for ALL
-      ctx.arc(this.xPix[itg],dataPix,0.02*sizemin, 0, 2 * Math.PI);
+      ctx.arc(this.xPix[itg],dataPix,0.015*sizemin, 0, 2 * Math.PI);
       ctx.fill();
     }
   }
@@ -976,4 +1014,24 @@ DrawSim.prototype.plotPoints=function(it,q,data_arr,displayType){
 
 DrawSim.prototype.clear=function(){
   ctx.clearRect(0, 0, canvas.width, canvas.height);
+}
+
+
+// from Stackoverflow; dirty unicode trick
+//since <sub>...</sub> not allowed in canvas
+
+function toSub(value){
+     var str = "";
+     //  Get the number of digits, with a minimum at 0 in case the value itself is 0
+     var mag = Math.max(0, Math.floor(log10(value)));
+     //  Loop through all digits
+     while (mag >= 0)
+     {
+       //  Current digit's value
+       var digit = Math.floor(value/Math.pow(10, mag))%10;
+       //  Append as subscript character
+       str += String.fromCharCode(8320 + digit);
+       mag--;
+     }
+     return str;
 }

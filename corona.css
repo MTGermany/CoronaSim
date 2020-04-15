@@ -12,11 +12,11 @@ h1{
  }
 
 body{
-  margin: 0;
+  margin: 2px;
   padding: 0;
   font-family: 'helvetica', sans-serif;
                  /*font-size: 14px;*/
-  font-size: 2.8vmin;
+  font-size: calc(12px + 1vmin);
   /*text-align: center;*/
   color: #404050;   /* text color */
   background-color: #FFFFFF;
@@ -40,6 +40,10 @@ td{
   font-size:2.2vmin; 
   font-weight: bold; 
   color: #404060;   /* only WITHOUT quotes here, not "#404060" etc */
+}
+
+.important {  color: #F50;
+  font-weight:bold;
 }
 
 
@@ -157,6 +161,15 @@ a:hover {
   z-index: 2; # the higher the more on top
 }
 
+#impressum{ /* top middle of the canvas */
+  position: absolute;
+  top:   94vh;  /* 6 for the title, 24 for the sliders */
+  right:   2vw;
+  width:  15vmin;
+  height: 6vmin;
+  z-index: 2; # the higher the more on top
+}
+
 
 
 #displayTypeDiv{ /* linear or logarithmic */
@@ -216,7 +229,7 @@ h1{
 
 
 body{ /*mobile, landscape */
-  font-size: 3.5vmin;
+  font-size: 3vmin;
 }
 
 td{
@@ -331,6 +344,13 @@ screen and (min-resolution: 97dppx) and (min-aspect-ratio: 1/1){
   width:  15vmin;
 }
 
+#impressum{ /* top middle of the canvas */
+  position: absolute;
+  top:   92vh;  /* 6 for the title, 24 for the sliders */
+  right:   6vw;
+  width:  15vmin;
+}
+
 }
 
 
@@ -398,7 +418,7 @@ input[type=range]::-webkit-slider-thumb {
 
 #introArea{   /*mobile, portrait */
   position: absolute;
-  /*top:   calc(42vmin+60vh); */ /* bug some browsers */
+  /*top:   calc(42vmin + 60vh); */ /* bug some browsers */
   top:   90vh; 
   background-color: rgb(255,255,255);
   left:   2vmin;
@@ -424,5 +444,20 @@ input[type=range]::-webkit-slider-thumb {
   width:  96vmin;
   height: 60vh;
 }
+
+#info{ /* top middle of the canvas */
+  position: absolute;
+  top:   39vmin;    /* 6 for the title, 24 for the sliders */
+  left:   55vw;
+  width:  15vmin;
+}
+
+#impressum{ /* top middle of the canvas */
+  position: absolute;
+  top:   calc(38vmin + 57vh);    /* 6 for the title, 24 for the sliders */
+  right:   2vw;
+  width:  15vmin;
+}
+
 }  /*smartphone and max-aspect-ratio: 1/1*/
 

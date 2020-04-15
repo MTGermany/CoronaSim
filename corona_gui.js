@@ -28,21 +28,21 @@ slider_fps.oninput = function() {
 }
 
 
-// var R
+// var R0
 
-var slider_R=document.getElementById("slider_R");
-var slider_RText = document.getElementById("slider_RText");
-
-
-//R=parseFloat(slider_R.value);
-//setSlider(slider_R, slider_RText, slider_R.value,"");
-setSlider(slider_R, slider_RText, R,"");
+var slider_R0=document.getElementById("slider_R0");
+var slider_R0Text = document.getElementById("slider_R0Text");
 
 
-slider_R.oninput = function() {
-  slider_RText.innerHTML = "&nbsp;"+this.value;
-  R=parseFloat(this.value);
-  console.log("slider1 callback: R="+R);
+//R0=parseFloat(slider_R0.value);
+//setSlider(slider_R0, slider_R0Text, slider_R0.value,"");
+setSlider(slider_R0, slider_R0Text, R0,"");
+
+
+slider_R0.oninput = function() {
+  slider_R0Text.innerHTML = "&nbsp;"+this.value;
+  R0=parseFloat(this.value);
+  console.log("slider1 callback: R0="+R0);
 }
 
 
@@ -104,8 +104,9 @@ slider_rTest.oninput = function() {
   slider_rTestText.innerHTML = "&nbsp;"+this.value+" %";
   var rTestold=rTest;
   rTest=parseFloat(this.value/100.);
-  //corona.xt *=rTest/rTestold; //!!!
-  console.log("slider4 callback: rTest="+rTest);
+  //fracDie=0.0045; 
+  fracDie=0.045*rTest; //!!! coupling such that observations ok
+  console.log("slider4 callback: rTest="+rTest," fracDie=",fracDie);
 }
 
 

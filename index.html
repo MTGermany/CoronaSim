@@ -31,7 +31,9 @@ Info
  </a>
 </div>
 
-
+<div id="impressum"> 
+<a href="impressum.html">Impressum</a>
+</div>
 <!-- ######################################################## -->
 <!-- canvas size in pixels only init since init with vw/vh strange results-->
 
@@ -79,9 +81,9 @@ Info
 
   <tr>
     <td> Infektionsrate R<sub>0</sub></td>
-    <td> <input id="slider_R" type="range" 
-                min="0" max="4" step="0.1"></td> 
-    <td> <div id="slider_RText"></div> </td>
+    <td> <input id="slider_R0" type="range" 
+                min="0" max="4" step="0.01"></td> 
+    <td> <div id="slider_R0Text"></div> </td>
   </tr>
 
   <tr>
@@ -107,7 +109,7 @@ Info
   </tr>
 
   <tr>
-    <td> Detektionsrate &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; 
+    <td> Testrate &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; 
          &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; </td>
     <td> <input id="slider_rTest" type="range" 
                 min="0" max="20" step="0.1"></td>  <!-- value in js -->

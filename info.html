@@ -12,16 +12,262 @@
 <link rel="icon" type="image/webp"  href="figs/corona.webp">
 </head>
 
-<body lang="de">
+<body lang="de" style="margin: 4vw;">
 
 <h1> Information zur Simulation der Coronavirus Covid-19 Pandemie</h1>
 
+<h3> Motivation</h3>
+
+Diese interaktive Simulation soll zwei Dinge verdeutlichen:
 <ul>
-<li> Bezugsgebiet: Deutschland 
-<li> Simulationsstart: 20.03.2020 
-<li> L&auml;uft anf&auml;nglich bis zur Gegenwart 
+<li> Wie verz&ouml;gert sich Ma&szlig;nahmen zur Isolation auf die
+  Infektionszahlen auswirken,
+<li> wie sehr sich die reale Situation von der beobachteten
+  uterscheided, vor allem, wenn wenig und verz&ouml;gert getestet wird.
+</ul>
+Vor allem soll sie verdeutlichen, wie wichtig Zufalls-Stichproben
+ sind, um die unbekannte tats&auml;chliche Sterblichkeit und den Ausma&szlig;
+ der "Durchseuchung" (was f&uuml;r ein Wort!) abzusch&auml;tzen. Die
+ Kenntnis von beidem ist
+ eminent wichtig als Grundlage politischer Entscheidungen. 
+
+<h3> Simulationsablauf und Bedienung</h3>
+
+Gezeigt wird die Situation in Deutschland. Bei Aufruf der Seite wird
+zun&auml;chst vom Auftreten der ersten F&auml;lle bis zur Gegenwart
+simuliert und die Simulation ab 20.03 (erste ernsthafte
+Lockdown-Ma&szlig;nahmen) dargestellt. 
+<ul>
+<li> Die Parameter sind dabei so
+eingestellt, dass sie mit
+den <a href="https://data.europa.eu/euodp/en/data/dataset/covid-19-coronavirus-data">beobachteten
+  Infektionsdaten des EU Open Data Portal</a> (rote und schwarze
+Punkte in der Grafik f&uuml;r dokumentierte F&auml;lle
+bzw. Gestorbene) m&ouml;glichst gut &uuml;bereinstimmen. 
+<li> Ab dem durch
+die vertikale graue Linie gekennzeichneten Zeitpunkt werden die wichtigsten
+Parameter interaktiv durch die Schieberegler bestimmt.
 </ul>
 
+F&uuml;r das
+Stoppen und Wiederholen der Simulation gibt es drei Eskalationsstufen:
+<ul>
+<li> Mit 
+<img src="figs/buttonGo_small.png"
+     style="width:3.5vmin;vertical-align:middle">
+ kann man die Simulation vom
+  aktuellen Zeitpunkt aus fortf&uuml;hren und mit 
+<img src="figs/buttonStop3_small.png"
+     style="width:3.5vmin;vertical-align:middle">
+wieder stoppen. 
+<li> Mit <img src="figs/buttonRestart_small.png"
+     style="width:3vmin;vertical-align:middle">
+startet man die Simulation vom Anfang an mit den gerade eingestellten
+     Parametern wiederholen.
+<li> Schlie&szlig;lich f&uuml;hrt man den Restart mit den "Werkseinstellungen"
+    durch die <tt>
+    Reload</tt>-Funktion des Browsers durch.
+</ul>
+Nach jedem Stop oder auch w&auml;hrend der Simulation
+kann man die wichtigsten Simulationsparameter mittels der Schieber
+ver&auml;ndern. Mit dem eckigen Button kann man die Darstellung
+jederzeit zwischen linear und logarithmisch umschalten.
+
+<h3> Modell</h3>
+Simuliert wird ein Standard-Infektionsausbreitungsmodell:
+<ul>
+
+<li> Jeder Infizierte steckt im Laufe seiner Krankheit
+<br><br>
+<center> 
+<i>R<sub>0</sub>(1-x*)</i>
+</center>
+<br>
+andere Personen an. Hierbei bedeuten <i>R<sub>0</sub></i>
+die <strong>Reproduktionszahl</strong>  und <i>x*</i>
+den <strong>Immunit&auml;tsanteil</strong>.
+
+<br><br><li> der Immunit&auml;tsanteil
+<center> 
+<i>x*=x+y+z</i>
+</center>
+<br>
+wird gleich der 
+ <strong>Durchseuchungsrate</strong> gesetzt, also gleich der Summe des
+Anteils <i>x</i> der gerade (auch symptomfrei) erkrankten Personen, des Anteils <i>y</i> der bereits
+wieder gesunden Personen und  des Anteils <i>z</i> der gestorben
+Personen. Es wird also davon ausgegangen, dass jeder Infizierte und
+ Geheilte zu 100% immun ist und dass keine Impfungen verf&uuml;gbar sind,
+ die <i>x*</i> weiter erh&ouml;hen w&uuml;rden. Alle Anteilswerte beziehen sich immer auf die Bev&ouml;lkerungszahl am
+  Anfang der Pandemie. Die Summe sonstiger Zuw&auml;chse oder Abnahmen
+  der Bev&ouml;lkerung wird gleich null gesetzt.
+
+
+<br><br><li> Die Ansteckung geschieht gleichverteilt innerhalb eines einstellbaren
+  <strong>Infektionsalters</strong>. Der Einfachheit halber ist die
+  Ansteckungsverteilung unabh&auml;ngig vom Alter und von der Existenz
+  oder Schwere der Symptome.
+
+<br><br><li> Die Infizierten sterben im Laufe der Krankheit mit der
+  <strong>wahren Sterblichkeit</strong> <i>p<sub>D</sub></i>, und zwar
+  gleichverteilt nach
+  &tau;<sub>D</sub>&plusmn;2 Tagen
+
+<br><br><li> Mit der Komplement&auml;rwahrscheinlichkeit <i>(1-p<sub>D</sub>)</i> erholen sich die Infizierten, und zwar
+  gleichverteilt
+  &tau;<sub>Rec</sub>&plusmn;2 Tage nach der Infektion. 
+
+</ul>
+
+
+<h3>Modell der Datenerhebung</h3>
+
+<span class="important">Dies betrachte ich als <i>Unique Selling
+    Point</i> meines Simulators</span>
+<ul>
+<li> Getestet wird ein durch die <strong>Testrate</strong>
+  <i>p<sub>T</sub></i> einstellbarer Anteil an 
+  (auch symptomfrei) erkrankten Personen. Die zus&auml;tzlich
+  durchgef&uuml;hrten Tests an gesunden Personen, die sich als nicht
+  angesteckt erweisen, tauchen hier nicht auf (sie sind aber wichtig
+  zur Sch&auml;tzung des Modellparameters der wahre
+  Sterblichkeit <i>p<sub>D</sub></i>).
+<br><br>
+<span class="important">Wichtig:</span> Die Simulation wird so
+initialisiert/initial parametrisiert, dass die <em>beobachteten</em>,
+nicht aber die <em>tats&auml;chlichen</em> Fallzahlen vorgegeben sind. Je
+nach Testrate sind dir tats&auml;chlichen Fallzahlen (d&uuml;nne Linien
+in der logarithmischen Darstellung) zu gegebenen
+Zeitpunkt stark unterschiedlich! An die Testrate habe ich auch die
+wahre Sterblichkeit <i>p<sub>D</sub></i> gekoppelt, da die unbekannte
+tats&auml;chliche Sterbewahrscheinlichkeit sich zumindest anf&auml;nglich
+(geringe Immunit&auml;t) sich nur als Produkt 
+<i>p<sub>D</sub>p<sub>T</sub></i> manifestiert.
+
+<br><br><li> Der Test ist ideal, weist also weder <i>false positives</i>
+noch <i>false negatives</i> auf.
+
+<br><br><li> Getestet wird &tau;<sub>T</sub>&plusmn;2 Tage nach der Infektion.
+
+<br><br><li> Wird die Testrate w&auml;hrend der Simulation ver&auml;ndert,
+  bezieht sich dies nur auf neue Tests. Wird beispielsweise zum
+  Zeitpunkt <i>t</i> die Testrate von 10% auf 20% erh&ouml;ht,
+  werden die vor dem Zeitpunkt <i>t-&tau;<sub>T</sub>-2</i> Infizierten zu
+  10% (positiv) getestet, die nach dem
+  Zeitpunkt <i>t-&tau;<sub>T</sub>+2</i> zu 20% und die dazwischen linear
+  ansteigend zwischen 10% und 20% 
+
+<br><br><li> Bei den Toten ist die Dunkelziffer gleich null, d.h. jeder an Covid19
+  Gestorbene wird entweder w&auml;hrend der Krankheit oder danach durch Autopsie
+  getestet. Durch Konsistenzbetrachtung im Flie&szlig;gleichgewicht oder am
+  Ende der Epidemie ergibt sich daraus der Anteil
+  der <strong>dokumentiert Gesundeten</strong> unter allen Getesteten
+  f&uuml;r jeden Infektionstag getrennt zu 
+<br><br>
+<center>
+<i>P(recovered|positively tested)=(p<sub>T</sub> - p<sub>D</sub>)
+ / (1-p<sub>D</sub>)</i>
+</center>
+<br>
+Offensichtlich ergibt dies nur Sinn, wenn 
+<i>p<sub>T</sub> &gt; p<sub>D</sub></i>
+</ul>
+
+<h3>Parameter</h3>
+<h4> (1) Vom Nutzer beeinflussbare Werte</h4>
+
+<ul>
+<li><span class="important">Reproduktionszahl <i>R<sub>0</sub></i></span> ohne
+  Immunit&auml;t. 
+Werte <i>R<sub>0</sub> &lt; 1</i>  f&uuml;hren zu
+  einer exponentiellen Abnahme an Neuinfektionen, 
+  <i>R<sub>0</sub> &gt; 1</i> 
+ anfangs zu einer exponentiellen Zunahme an Neuinfektionen,
+  Bestandsinfektionen, Toten und Gesundeten
+  und  <i>R<sub>0</sub>=1</i> anfangs zu einer konstanten Rate an
+  Neuinfektionen und zu einer linearen Zunahme von
+  Bestandsinfektionen, Toten und
+ Gesundeten. 
+<br>
+<strong>Dies ist der 
+  wichtigste der politisch beeinflussbaren Parameter</strong>:
+<i>R<sub>0</sub></i> wird reduziert durch
+<ul>
+<li> Isolation nach dem Schrotschussverfahren (wie im April 2020)
+<li> gezielte Isolation Einzelner nach positiver Testung: Je geringer
+  dabei die Dunkelziffer, desto besser
+</ul>
+Nat&uuml;rlich wird die Epidemie auch durch sp&auml;ter verf&uuml;gbare
+Impfungen, d.h. externe Erh&ouml;hung von <i>x*)</i>, ausgebremst.
+
+<br><br><li> <span class="important">Ansteckungsstart</span> 
+gleich 1 Tag bedeutet, bereits einen
+  Tag nach der Infektion ist die (dann fast immer symptomfreie) Person
+  ansteckend
+
+
+<br><br><li><span class="important">Ansteckungsende</span> gleich 10 Tage
+  bedeutet, 11 Tage nach  der Infektion  ist
+  die Person nicht mehr ansteckend bzw. in Quarant&auml;ne. 
+<br>
+Auch wenn die
+  reale Ansteckungsdauer l&auml;nger ist, reflektiert diese Einstellung,
+  dass andere Personen eher am Anfang des Infektionsalters angesteckt
+  werden. 
+
+
+<br><br><li><span class="important">Test nach</span> x Tagen: Mittlere
+    Verz&ouml;gerung zwischen Infektionsanfang und
+    Test. <strong>Beeinflussbar!</strong> 
+
+<br><br><li><span class="important">Testrate <i>p<sub>T</sub></i></span>:
+    Anteil der positiv Getesteten unter den
+    Infizierten. <strong>Beeinflussbar! beeinflusst auch implizit die
+    zu den Daten passende wahre Sterbewahrscheinlichkeit
+    via <i>p<sub>D</sub>=0.045p<sub>T</sub></i>
+</strong> 
+
+<br><br><li><span class="important">Sim-Geschwindigkeit</span>:
+    Beeinflusst nur die Geschwindigkeit der Simulation in Tagen pro Sekunde, nicht aber die
+    dargestellte Dynamik.
+</ul>
+
+
+
+
+</ul>
+
+
+<h4> (2) Feste Werte</h4>
+Diese sind so eingestellt, dass die Simulation mit den Daten
+&uuml;bereinstimmt. Sie k&ouml;nnen
+im <a href="https://github.com/MTGermany/CoronaSim">Open-Source
+  Quellcode</a> ver&auml;ndert werden und zwar i.A. am Anfang
+von <tt>corona.js</tt>
+
+ 
+<ul>
+<li> Anf&auml;ngliche Reproduktionszahlen <tt>R01, R02, R03</tt> und
+  zugeh&ouml;rige positiv getestete Fallzahlen <tt>nxt1, nxt2</tt>
+  und <tt>nxtR0</tt>. Der Wert von <tt>nxtR0</tt> bestimmt die Zeit, ab der der Schieberegler-Wert von 
+<i>R<sub>0</sub></i> gilt 
+  (sobald die Zahl der positiv getesteten Fälle <tt>nxtR0</tt>
+  &uuml;berschreitet) und definiert auch in der
+  Grafik die vertikale graue Linie.
+
+
+<li> Sterbewahrscheinlichkeit <tt>fracDie</tt>. Dies ist auf 0.0045
+  initialisiert und wird als Callback auf Schieberegleraktionen der
+  Testrate in <tt>corona_gui.js</tt> variabel auf 
+<tt>fracDie=0.045*rTest</tt> gesetzt.
+
+<li> Mittlere Zeitdauer &tau;<sub>D</sub> bzw im
+  Javascript <tt>tauDie</tt> von der Infektion bis zum Tod
+
+<li> Mittlere Zeitdauer &tau;<sub>Rec</sub> bzw im
+  Javascript <tt>tauRecover</tt> von der Infektion bis zur Genesung
+
+</ul>
 <hr>
 <a href="impressum.html">Impressum</a>
 
