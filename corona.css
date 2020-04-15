@@ -42,6 +42,38 @@ td{
   color: #404060;   /* only WITHOUT quotes here, not "#404060" etc */
 }
 
+
+/*######################################################*/
+/* links */
+/*######################################################*/
+
+a {
+        color: #07A;
+        font-weight: normal;
+ }
+
+a:link {
+        color: #07A;
+        text-decoration: none;
+}
+
+a:visited {
+        color: #957;
+        text-decoration: none;
+}
+
+a:active {
+        text-decoration: underline;
+        background-color: #F80;
+}
+
+a:hover {
+        text-decoration: underline;
+        color: #07A;
+}
+
+
+
 /*######################################################*/
 /* title */
 /*######################################################*/
@@ -95,8 +127,8 @@ td{
 #sliders{ 
   position: absolute;
   top:   9vh; 
-  left:   44vw;
-  width:  54vw;
+  left:   15vw;
+  width:  70vw;
   height:  19vh;
   background-color: rgb(222,255,222);
   margin-right: 0vw;
@@ -115,6 +147,17 @@ td{
   margin-left: 0vw;
   z-index: 1; # the higher the more on top
 }
+
+#info{ /* top middle of the canvas */
+  position: absolute;
+  top:   31vh;  /* 6 for the title, 24 for the sliders */
+  left:   55vw;
+  width:  15vmin;
+  height: 6vmin;
+  z-index: 2; # the higher the more on top
+}
+
+
 
 #displayTypeDiv{ /* linear or logarithmic */
   position: absolute;
@@ -247,7 +290,7 @@ screen and (min-resolution: 97dppx) and (min-aspect-ratio: 1/1){
 
 #introArea{   /*mobile, landscape */
   position: absolute;
-  top:   28vh;  
+  top:   30vh;  
   background-color: rgb(255,255,255);
   left:   -1vw;
   width:  16vw;
@@ -276,9 +319,16 @@ screen and (min-resolution: 97dppx) and (min-aspect-ratio: 1/1){
 #contents{    /*mobile, landscape */
   position: absolute;
   top:   28vh; 
-  left:   22vw;
-  width:  76vw;
+  left:   5vw;
+  width:  90vw;
   height: 68vh;
+}
+
+#info{ /* top middle of the canvas */
+  position: absolute;
+  top:   29vh;  /* 6 for the title, 24 for the sliders */
+  left:   55vw;
+  width:  15vmin;
 }
 
 }
@@ -348,7 +398,8 @@ input[type=range]::-webkit-slider-thumb {
 
 #introArea{   /*mobile, portrait */
   position: absolute;
-  top:   calc(42vmin+60vh); 
+  /*top:   calc(42vmin+60vh); */ /* bug some browsers */
+  top:   90vh; 
   background-color: rgb(255,255,255);
   left:   2vmin;
   width:  96vmin;

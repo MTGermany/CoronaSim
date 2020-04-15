@@ -7,7 +7,7 @@
 /* http://danielstern.ca/range.css/#/ */
 
 input[type=range]{
-  width: 16vw;
+  width: 25vw;
   height: 1.2vw;
   background: #bbbbc5;
   -moz-appearance: none;
@@ -46,7 +46,7 @@ input[type=range]:focus {
 }
 input[type=range]::-webkit-slider-runnable-track {
   height: 1.5vmin;
-  width: 16vw;
+  width: 25vw;
   cursor: pointer;
   box-shadow: 3px 3px 3px #000000, 0px 0px 1px #0d0d0d;
   background: #bbbbc5;;
