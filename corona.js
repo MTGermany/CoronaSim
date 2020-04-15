@@ -12,17 +12,26 @@ var itmax;      // #days init simulation; to be determined by js Date() object
 var n0=80.e6;  // #persons in Germany
 var R0=3;         // baseline infection rate (no measures, no one immune)
                   // for phase1 (nxt<nxtPhase2)
-var R2=1.9;       // infection rate nxtPhase2<=nxt<nxtStart
+var R2=1.8;       // infection rate nxtPhase2<=nxt<nxtStart
 var nxtPhase2=1000; // number of positively tested infections=13957
 var nxtStart=11000; // number of positively tested infections=13957
                     // (mar20, begin lockdown)
-// https://de.wikipedia.org/wiki/COVID-19-Pandemie_in_Deutschland#März_2020
-//31 Todesfaelle at mar20
+var startDay=new Date(2020,02,20); // months start with zero, days with 1
+var oneDay_ms=(1000 * 3600 * 24);
 
 var ln10=Math.log(10);
-//var displayType="lin";  // consolidate with html
-var displayType="log"; 
+var displayType="lin"; // "lin" or "log"; consolidate with html
 
+// data-related variable (opendata. ... .eu)
+// see also 
+// https://de.wikipedia.org/wiki/COVID-19-Pandemie_in_Deutschland#März_2020
+
+  var data_date_ddmmyyyy=[];
+  var data_diff2start=[];
+  var data_cases=[];
+  var data_cumCases=[];
+  var data_deaths=[];
+  var data_cumDeaths=[];
 
 // global simulation  parameters (global to avoid alsways writing "this.")
 
@@ -30,7 +39,7 @@ var displayType="log";
 // now controlled by sliders
 
 var fps=10;
-var R=1.1;          // infection rate with measures
+var R=1.0;          // infection rate with measures
 var tauRstart=1;     // active infectivity begins [days since infection]
 var tauRend=10;       // active infectivity ends [days since infection]//10
 var rTest=0.1;   // percentage of tested infected persons 
@@ -53,7 +62,7 @@ var ctx;
 var xPixLeft,yPixTop;
 var xPix,yPix;
 var xPixOld, yPixOld;
-
+var sizemin=0;
 
 
 //##############################################################
@@ -64,6 +73,81 @@ var xPixOld, yPixOld;
 //called in the <body onload> event ( <body onload="startup()")
 
 function startup() {
+
+  // =============================================================
+  // get present and difference to startDay
+  // =============================================================
+
+  //var present=new Date();
+  var present=new Date(2020,02,23); //!!!
+  
+  // initialisation of itmax; 
+  // round because of daylight saving time complications
+
+  itmax = Math.round(
+    (present.getTime() - startDay.getTime())/(oneDay_ms));
+  console.log("present=",present," startDay=",startDay," itmax=",itmax);
+
+
+  // =============================================================
+  // parse data from opendata. ... .eu obtained via updateCoronaInput.sh
+  // =============================================================
+
+  var mydata = JSON.parse(data);
+
+  // mydata is ordered reverse chronological (ir=i reverse)
+  var i=0;
+  for(var ir=mydata.length-1; ir>=0; ir--){
+
+    // get date object from mydata[i].dateRep (month is 0-based!)
+    data_date_ddmmyyyy[i]=mydata[ir].dateRep;
+    var dateParts = mydata[ir].dateRep.split("/");
+    var dateObj=new Date(dateParts[2], dateParts[1] - 1, dateParts[0]); 
+
+    // parse mydata to the relevant arrays
+
+    data_diff2start[i]=Math.round(
+      (dateObj.getTime() - startDay.getTime())/oneDay_ms);
+    data_cases[i]=parseInt(mydata[ir].cases);
+    data_deaths[i]=parseInt(mydata[ir].deaths);
+    data_cumCases[i]=((i==0) ? 0 : data_cumCases[i-1]) + data_cases[i];
+    data_cumDeaths[i]=((i==0) ? 0 : data_cumDeaths[i-1]) + data_deaths[i];
+    if(true){
+      console.log("i=",i," data_diff2start[i]=",data_diff2start[i],
+		  " data_cumCases[i]=",data_cumCases[i],
+		  " data_cumDeaths[i]=",data_cumDeaths[i]);
+    }
+    i++;
+  }
+  var istart=-data_diff2start[0];
+  if(true){
+    console.log(
+      "measured data: istart=",istart," itmax=",itmax,
+      "\n  data_date_ddmmyyyy[istart]=", data_date_ddmmyyyy[istart],
+      " data_cumCases[istart]=",data_cumCases[istart],
+      "\n  data_date_ddmmyyyy[istart+1]=", data_date_ddmmyyyy[istart+1],
+      " data_cumCases[istart+1]=",data_cumCases[istart+1],
+      "\n  data_date_ddmmyyyy[istart+1]=", data_date_ddmmyyyy[istart+2],
+      " data_cumCases[istart+1]=",data_cumCases[istart+2],
+      "\n  data_date_ddmmyyyy[istart+itmax]=",data_date_ddmmyyyy[istart+itmax],
+      " data_cumCases[istart+itmax]=",data_cumCases[istart+itmax]
+	       );
+  }
+
+
+
+  // =============================================================
+  // initialize CoronaSim
+  // =============================================================
+
+  corona=new CoronaSim();
+  corona.init(); // it=1 at the end !!!
+
+
+  // =============================================================
+  // initialize graphics
+  // =============================================================
+
   canvas = document.getElementById("myCanvas");
   ctx = canvas.getContext("2d");
   var rect = canvas.getBoundingClientRect();
@@ -75,23 +159,16 @@ function startup() {
   window.addEventListener("resize", canvas_resize);
   canvas_resize();
 
-
-  console.log("initialized.");
   drawsim.setDisplayType(displayType);
-  drawsim.drawAxes(displayType);
 
-  corona=new CoronaSim();
-  
-  //corona.init(); // it=1 at the end !!!
-  //myStartStopFunction();// starts simulation up to present !!!
 
-  var mydataTest = JSON.parse(dataTest);
-  console.log("mydataTest[0]=",mydataTest[0]);
-  console.log("mydataTest[1]=",mydataTest[1]);
-  var mydata = JSON.parse(data);
-  console.log("mydata[0]=",mydata[0]);
+  // =============================================================
+  // actual startup
+  // =============================================================
 
   console.log("initialized.");
+  myStartStopFunction(); // starts simulation up to present !!!
+
 
 
 }
@@ -161,8 +238,9 @@ function myRestartFunction(){
 }
 
 function simulationRun() {
+  console.log("simulationRun: before doSimulationStep: it=",it);
   doSimulationStep();
-  //console.log("simulationRun: it=",it," itmax=",itmax);
+  console.log("simulationRun: after doSimulationStep it=",it," itmax=",itmax);
   if(it==itmax){
     clearInterval(myRun);myStartStopFunction();
   }
@@ -175,6 +253,7 @@ function doSimulationStep(){
   drawsim.updateOneDay(it,displayType, corona.xtot, corona.xt,
 		       corona.y, corona.yt, corona.z);
   it++;
+
 }
 
 
@@ -253,13 +332,6 @@ CoronaSim.prototype.init=function(){
   // reset it for start of proper simulation
 
   it=0; 
-  var present=new Date();
-  var startDay=new Date(2020,02,20); // months start with zero, days with 1
-  var oneDay=(1000 * 3600 * 24);
-  // round because of daylight saving time complications
-  itmax = Math.round(
-    (present.getTime() - startDay.getTime())/(oneDay));
-  console.log("present=",present," startDay=",startDay," itmax=",itmax);
 
 }
 
@@ -277,7 +349,7 @@ CoronaSim.prototype.init=function(){
 //!!!
 CoronaSim.prototype.updateOneDay=function(R){ //it++ at end
 
-  if(n0*this.xt<150000){
+  if(false){
     console.log("Corona.updateOneDay: calib: it=",it,
 		" nxObserved=",Math.round(n0*this.xt),
 		" fracDeadObserved=",(this.z/this.xt).toPrecision(2)
@@ -405,7 +477,7 @@ CoronaSim.prototype.updateOneDay=function(R){ //it++ at end
 
   // control output
 
-  if(true){
+  if(false){
     console.log("end CoronaSim.updateOneDay: t_days=",it,
 		" xt=",this.xt.toPrecision(3),
 		" xtot=",this.xtot.toPrecision(3),
@@ -432,7 +504,7 @@ function DrawSim(){
 
   this.unitPers=1000;  // persons counted in multiples of unitPers
 
-  this.itmaxDraw=4*7;
+  //this.itmaxDraw=4*7;
   this.yminLin=0;
   this.ymaxLin=100; // unitPers=1000-> 100 corresp to 100 000 persons
   this.yminPerc=0;
@@ -542,14 +614,14 @@ DrawSim.prototype.drawAxes=function(displayType){
 
   var itmaxCrit=60;
   var itmaxCrit2=450;
-  var dFirstDay=(this.itmaxDraw<itmaxCrit) ? 3//Mar 23 :
-    : (this.itmaxDraw<itmaxCrit2) ? 12 : 103;  //Apr1 or Jul 1
-  var dDays=(this.itmaxDraw<itmaxCrit) ? 7
-    : (this.itmaxDraw<itmaxCrit2) ? 30.4 : 182.6;  // avg month has 30.4 days
-  var timeText=(this.itmaxDraw<itmaxCrit)
+  var dFirstDay=(itmax<itmaxCrit) ? 3//Mar 23 :
+    : (itmax<itmaxCrit2) ? 12 : 103;  //Apr1 or Jul 1
+  var dDays=(itmax<itmaxCrit) ? 7
+    : (itmax<itmaxCrit2) ? 30.4 : 182.6;  // avg month has 30.4 days
+  var timeText=(itmax<itmaxCrit)
     ? ["23.03", "30.03", "06.04", "13.04", "20.04", "27.04", 
        "04.05", "11.05", "18.05"]
-    : (this.itmaxDraw<itmaxCrit2)
+    : (itmax<itmaxCrit2)
     ? ["Apr","Mai","Jun", "Jul", "Aug", "Sep", "Okt", 
        "Nov", "Dez", "Jan2021", "Feb", "Mar", "Apr","Mai","Jun", "Jul"]
     : ["Jul 2020", "Jan 2021", "Jul 2021", "Jan 2022", "Jul 2022", 
@@ -557,7 +629,7 @@ DrawSim.prototype.drawAxes=function(displayType){
 
   var timeRel=[];
   for(var i=0; i<timeText.length; i++){
-    timeRel[i]=(dFirstDay+i*dDays)/this.itmaxDraw;
+    timeRel[i]=(dFirstDay+i*dDays)/itmax;
   }
 
 
@@ -741,8 +813,8 @@ DrawSim.prototype.updateOneDay=function(it,displayType,xtot,xt,y,yt,z){
 
   // need to redefine x pixel coords if rescaling in x
 
-  for(var i=0; i<this.itmaxDraw; i++){
-    this.xPix[i]=this.xPix0+i*(this.xPixMax-this.xPix0)/(this.itmaxDraw-1);
+  for(var i=0; i<=itmax; i++){
+    this.xPix[i]=this.xPix0+i*(this.xPixMax-this.xPix0)/(itmax);
   }
 
 
@@ -762,16 +834,16 @@ DrawSim.prototype.updateOneDay=function(it,displayType,xtot,xt,y,yt,z){
   this.yDataLog[4][it]=log10(n0*z);
   this.yDataLog[5][it]=(xt>1e-6) ? log10(100*z/xt) : 0;
 
-  if(false){console.log("it=",it,
-		       " this.yDataLin[0][it]=",this.yDataLin[0][it],
+  if(true){console.log("DrawSim.updateOneDay: it=",it,
+		       " this.yDataLin[1][it]=",this.yDataLin[1][it],
 		       " this.yDataLog[0][it]=",this.yDataLog[0][it]);}
 
 // test possible rescaling due to new data
 
   var erase=false;
 
-  if(it>this.itmaxDraw){
-    this.itmaxDraw=it;
+  if(it>itmax){
+    itmax=it;
     erase=true;
   }
 
@@ -786,7 +858,8 @@ DrawSim.prototype.updateOneDay=function(it,displayType,xtot,xt,y,yt,z){
       this.ymaxLog=this.yDataLog[q][it];
       if (displayType==="log"){erase=true;}
     }
-    if(true){
+
+    if(false){
       console.log("it=",it," q=",q,
 		  " this.yDataLin[q][it]=",this.yDataLin[q][it],
 		  " this.ymaxLin=",this.ymaxLin,
@@ -805,14 +878,25 @@ DrawSim.prototype.updateOneDay=function(it,displayType,xtot,xt,y,yt,z){
     this.drawAxes(displayType);
   }
 
-  // actual drawing
 
+  // actual drawing of sim results
 
   for(var q=0; q<6; q++){
     if(this.isActive[q]){
       this.drawCurve(it,q,displayType);
     }
   }
+
+  // drawing of data from opendata... .eu
+
+  if(this.isActive[1]){ // xt
+    this.plotPoints(it, 1, data_cumCases, displayType);
+  }
+
+  if(this.isActive[4]){ // z
+    this.plotPoints(it, 4, data_cumDeaths, displayType);
+  }
+
 }
 
 
@@ -853,6 +937,37 @@ DrawSim.prototype.drawCurve=function(it,q,displayType){
   }
 }
 
+
+// plot the data; q only for determining the corresponding color
+
+//######################################################################
+DrawSim.prototype.plotPoints=function(it,q,data_arr,displayType){
+//######################################################################
+
+  var yminDraw=(displayType==="log") ? this.yminLog : this.yminLin;
+  var ymaxDraw=(displayType==="log") ? this.ymaxLog : this.ymaxLin;
+  ctx.fillStyle=this.colLine[q];
+
+  for (var i=0; i<data_arr.length; i++){
+
+    if(false){console.log("q=",q," i=",i," data_arr[i]=",data_arr[i],
+			 " yminDraw=",yminDraw,
+			 " ymaxDraw=",ymaxDraw);}
+
+    var itg=data_diff2start[i]; // global var difference to startDay
+
+    // log 10 and, if lin, in 1000
+    var y=(displayType==="log") ? log10(data_arr[i]) : 0.001*data_arr[i];
+
+    if((itg>=0)&&(itg<=it)&&(y>=yminDraw) &&(y<=ymaxDraw)){
+      var yrel=(y-yminDraw)/(ymaxDraw-yminDraw);
+      var dataPix=this.yPix0+yrel*(this.yPixMax-this.yPix0);
+       ctx.beginPath(); //!! crucial; otherwise latest col used for ALL
+      ctx.arc(this.xPix[itg],dataPix,0.02*sizemin, 0, 2 * Math.PI);
+      ctx.fill();
+    }
+  }
+}
 
 DrawSim.prototype.clear=function(){
   ctx.clearRect(0, 0, canvas.width, canvas.height);

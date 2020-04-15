@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# get data from the eu opendata website
+wget data/coronaWorldwide.json https://opendata.ecdc.europa.eu/covid19/casedistribution/json/ --output-document=data/coronaWorldwide.json
+
 # transform from DOS to unix text
 
 perl -pi -e 's/\r\n/\n/g' data/coronaWorldwide.json

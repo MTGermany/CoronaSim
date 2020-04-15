@@ -236,6 +236,8 @@ function canvas_resize(){
     canvas.height  = canvasWindow.clientHeight;
   }
 
+  if(hasChanged){sizemin=Math.min(canvas.width,canvas.height);}
+
   if(drawsim!==null){drawsim.setDisplayType(displayType);}
   console.log("canvas_resize: new canvas dimensions ",
 	      canvas.width," X ",canvas.height);
