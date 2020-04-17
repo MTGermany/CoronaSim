@@ -46,6 +46,25 @@ td{
   font-weight:bold;
 }
 
+.red{color:#C00;}
+
+.orange{color:#E60;}
+
+.green{color:#090;}
+
+.lightgreen{color:#0F0;}
+
+.blue{color:#00A;}
+
+
+.button {  background-image:linear-gradient(#EEE, #CCC);
+  font-weight:bold;
+}
+
+.bggraysimple {  background-color:#CCC;
+  font-weight:bold;
+}
+
 
 /*######################################################*/
 /* links */
@@ -174,53 +193,24 @@ a:hover {
 
 #displayTypeDiv{ /* linear or logarithmic */
   position: absolute;
-  top:     31vh; 
-  right:   3vw;
-  height:  5vmin;
-  width:   25vmin;
-  background-color: rgb(255,240,222);
-
+  top:     93vh; 
+  left:   3vw;
   z-index: 3; /* the higher the integer, the more on top */
 }
 
 
 
-#sliderTimewarp{ 
-  position: absolute;
-  top:   37vh; 
-  left:   51vw;
-  width:  47vw;
-  height:  4vh;
-
-  margin-right: 0vw;
-  margin-left: 0vw;
-  z-index: 2;  # the higher the more on top
-}
-
-
-
-/*#########################################################*/
-/* move "=> logarithmische Darstellung" in header if very landscape
-/*#########################################################*/
-
-@media screen and (min-aspect-ratio: 5/4){
-
-#displayTypeDiv{ /* linear or logarithmic */
-  position: absolute;
-  top:     1vmin; 
-  right:   20vmin;
-}
-}
 
 
 /*#########################################################*/
 /* addtl smartphone general settings 
-/* dppx=dot per physical inch, dpi=dots per css-inch
+/* dppx=dot per pixel (1: noteooks, >1: smartphones,tablets)
 /*#########################################################*/
+
 
 @media screen and (max-height: 600px),
 screen and (max-width: 600px),
-screen and (min-resolution: 97dppx){ 
+screen and (min-resolution: 1.5dppx){ 
 
 
 h1{
@@ -276,7 +266,7 @@ input[type=range]::-webkit-slider-thumb {
 
 @media screen and (max-height: 600px) and (min-aspect-ratio: 1/1), /*6/5*/
 screen and (max-width: 600px) and (min-aspect-ratio: 1/1),
-screen and (min-resolution: 97dppx) and (min-aspect-ratio: 1/1){
+screen and (min-resolution: 1.5dppx) and (min-aspect-ratio: 1/1){
 
 #header{ /*mobile, landscape */
   left:    4vmin;
@@ -297,17 +287,9 @@ screen and (min-resolution: 97dppx) and (min-aspect-ratio: 1/1){
 
 
 #displayTypeDiv{  /*mobile, landscape */
-  top:     12vh; 
-  right:   2vmin;
-}
-
-#introArea{   /*mobile, landscape */
-  position: absolute;
-  top:   30vh;  
-  background-color: rgb(255,255,255);
-  left:   -1vw;
-  width:  16vw;
-  height: 70vh;
+  top:     16vh; 
+  width:   15vw;
+  left:    82vw;
 }
 
 
@@ -315,7 +297,7 @@ screen and (min-resolution: 97dppx) and (min-aspect-ratio: 1/1){
   position: absolute;
   top:   2vh; 
   background-color: rgb(255,255,255);
-  left:   16vw;
+  left:   20vw;
   width:  65vw;
   height:  26vh;
 }
@@ -360,7 +342,7 @@ screen and (min-resolution: 97dppx) and (min-aspect-ratio: 1/1){
 
 @media screen and (max-height: 600px) and (max-aspect-ratio: 1/1), /*6/5*/
 screen and (max-width: 600px) and (max-aspect-ratio: 1/1),
-screen and (min-resolution: 97dppx) and (max-aspect-ratio: 1/1){
+screen and (min-resolution: 1.5dppx) and (max-aspect-ratio: 1/1){
 
 input[type=range]{ /*mobile, portrait, orig in sliders.css */ 
   width: 40vmin;
@@ -411,21 +393,6 @@ input[type=range]::-webkit-slider-thumb {
 }
 
 
-#displayTypeDiv{  /*mobile, portrait */
-  top:     40vmin; 
-  right:   2vmin;
-}
-
-#introArea{   /*mobile, portrait */
-  position: absolute;
-  /*top:   calc(42vmin + 60vh); */ /* bug some browsers */
-  top:   90vh; 
-  background-color: rgb(255,255,255);
-  left:   2vmin;
-  width:  96vmin;
-  height:  96vmin;
-}
-
 
 #sliders{     /*mobile, portrait */
   position: absolute;
@@ -451,6 +418,13 @@ input[type=range]::-webkit-slider-thumb {
   left:   55vw;
   width:  15vmin;
 }
+
+#displayTypeDiv{  /*mobile, portrait */
+  position: absolute;
+  top:   calc(38vmin + 56vh);    /* 6 for the title, 24 for the sliders */
+  left:   2vw;
+}
+
 
 #impressum{ /* top middle of the canvas */
   position: absolute;

@@ -37,6 +37,7 @@ var displayType="lin"; // "lin" or "log"; consolidate with html
   var data_cumCases=[];
   var data_deaths=[];
   var data_cumDeaths=[];
+  var data_deathsCases=[];
 
 // global simulation  parameters (global to avoid alsways writing "this.")
 
@@ -47,13 +48,16 @@ var fps=10;
 var R0=0.78;          // infection rate with measures
 var tauRstart=1;     // active infectivity begins [days since infection]
 var tauRend=10;       // active infectivity ends [days since infection]//10
-var rTest=0.1;   // percentage of tested infected persons 
+var pTestInit=0.1;   // initial percentage of tested infected persons 
+var pTest=0.1;       // percentage of tested infected persons 
 var tauTest=10;  // time delay [days] test-infection
 var tauAvg=5;      // smoothing interval for tauTest,tauDie,tauRecover
 
 // not controlled, set statically here
 
-var fracDie=0.0045;     // init. fracDie=0.045*rTest after rTest callback
+var fracDieInit=0.0040;  // fracDie for initial setting of pTest
+var fracDie=fracDieInit; // will be set to fracDieInit*pTest/pTestInit 
+                        // at restart but NOT during simulation
 var tauDie=21;      // time from infection to death in fracDie cases
 var tauRecover=21; // time from infection to full recovery
 var tauSymptoms=7;  // incubation time 
@@ -130,7 +134,9 @@ function startup() {
     data_deaths[i]=parseInt(mydata[ir].deaths);
     data_cumCases[i]=((i==0) ? 0 : data_cumCases[i-1]) + data_cases[i];
     data_cumDeaths[i]=((i==0) ? 0 : data_cumDeaths[i-1]) + data_deaths[i];
-    if(true){
+    data_deathsCases[i]=((i==0)||(data_cumCases[i]==0))
+			  ? 0 : data_cumDeaths[i]/data_cumCases[i];
+    if(false){
       console.log("i=",i," data_diff2start[i]=",data_diff2start[i],
 		  " data_cumCases[i]=",data_cumCases[i],
 		  " data_cumDeaths[i]=",data_cumDeaths[i]);
@@ -138,7 +144,7 @@ function startup() {
     i++;
   }
   var istart=-data_diff2start[0];
-  if(true){
+  if(false){
     console.log(
       "measured data: istart=",istart," itmaxinit=",itmaxinit,
       "\n  data_date_ddmmyyyy[istart]=", data_date_ddmmyyyy[istart],
@@ -205,7 +211,7 @@ function displayTypeCallback(){
   else{
     displayType="lin";
     document.getElementById("buttonDisplayType").innerHTML
-      ="=> logarithmische Darstellung";
+      ="=> log. Darstellung";
   }
 
   drawsim.setDisplayType(displayType); // clear and draAxes in setDisplay..
@@ -240,6 +246,8 @@ function myStartStopFunction(){
 
 function myRestartFunction(){ 
   ctx.clearRect(0, 0, canvas.width, canvas.height)
+  fracDie=fracDieInit*pTest/pTestInit;
+  console.log("restart: fracDie=",fracDie);
   startup();
   clearInterval(myRun);
   //it=1;
@@ -256,9 +264,9 @@ function myRestartFunction(){
 }
 
 function simulationRun() {
-  console.log("simulationRun: before doSimulationStep: it=",it);
+  //console.log("simulationRun: before doSimulationStep: it=",it);
   doSimulationStep();
-  console.log("simulationRun: after doSimulationStep it=",it," itmaxinit",itmaxinit);
+  //console.log("simulationRun: after doSimulationStep it=",it," itmaxinit",itmaxinit);
 
 // the hell knows why i need "+2" and not "+1" 
 // but it works, it's tested by numbers
@@ -308,9 +316,9 @@ CoronaSim.prototype.init=function(){
   this.y=0;  // fraction recovered real as a function of time
   this.yt=0; // fraction recovered data
   this.z=0;  // fraction dead
-  this.rTestDay=[]; // fraction of tested infected at day t
+  this.pTestDay=[]; // fraction of tested infected at day t
   for(var i=0; i<100; i++){ // just initialisation for the first few steps
-    this.rTestDay[i]=rTest;
+    this.pTestDay[i]=pTest;
   }
   // init infection-age profile this.x[tau] with exponential
 
@@ -393,8 +401,8 @@ CoronaSim.prototype.updateOneDay=function(R){ //it++ at end
 		"\n  this.x[tauRecover-1]=",this.x[tauRecover-1].toPrecision(3),
 		"\n  this.x[tauRecover]=",this.x[tauRecover].toPrecision(3),
 		"\n  this.x[tauRecover+1]=",this.x[tauRecover+1].toPrecision(3),
-		"\n  this.xt/rTest-this.y-this.z=",
-		(this.xt/rTest-this.y-this.z).toPrecision(3),
+		"\n  this.xt/pTest-this.y-this.z=",
+		(this.xt/pTest-this.y-this.z).toPrecision(3),
 		"");
   }
 
@@ -431,7 +439,7 @@ CoronaSim.prototype.updateOneDay=function(R){ //it++ at end
 
   // test people 
 
-  this.rTestDay[it]=rTest; // needed to determine fraction of 
+  this.pTestDay[it]=pTest; // needed to determine fraction of 
                       // recovered among the tested later on
 
   tauAvg//=5; //!!
@@ -440,7 +448,7 @@ CoronaSim.prototype.updateOneDay=function(R){ //it++ at end
 
   var f_T=1./(2*dtau+1);
   for(var tau=tauTest-dtau; tau<=tauTest+dtau; tau++){
-    this.xt += rTest*f_T*this.xohne[tau];
+    this.xt += pTest*f_T*this.xohne[tau];
     if(false&&(it%20==0)){
       console.log("\ntest: it=",it," tau=",tau," x[tau]=",this.xohne[tau],
 		  "this.xt=",this.xt);
@@ -479,7 +487,7 @@ CoronaSim.prototype.updateOneDay=function(R){ //it++ at end
   this.y   += dysum;
   var dayTested=Math.max(0,it-Math.round(tauRecover-tauTest));
 
-  this.yt  +=(this.rTestDay[dayTested]-fracDie)/(1-fracDie)*dysum;
+  this.yt  +=(this.pTestDay[dayTested]-fracDie)/(1-fracDie)*dysum;
 
 
 
@@ -498,7 +506,7 @@ CoronaSim.prototype.updateOneDay=function(R){ //it++ at end
 
   // control output
 
-  if(true){
+  if(false){
     console.log("end CoronaSim.updateOneDay: it=",it,
 		" xt=",this.xt.toPrecision(3),
 		" xtot=",this.xtot.toPrecision(3),
@@ -756,7 +764,6 @@ DrawSim.prototype.drawAxes=function(displayType){
 		   this.xPixMax+3.0*textsize,this.yPix0+0.2*this.hPix);
     ctx.fillText(label_y2,0,0);
     ctx.setTransform(1,0,0,1,0,0)
-    console.log("ymin2=",ymin2," ymax2=",ymax2," ny2=",ny2);
     for(var iy=ymin2; iy<=ny2; iy++){
       var valueStr= iy*dy2 
       ctx.fillText(valueStr,
@@ -857,7 +864,7 @@ DrawSim.prototype.updateOneDay=function(it,displayType,xtot,xt,y,yt,z){
   this.yDataLog[4][it]=log10(n0*z);
   this.yDataLog[5][it]=(xt>1e-6) ? log10(100*z/xt) : 0;
 
-  if(true){console.log("DrawSim.updateOneDay: it=",it,
+  if(false){console.log("DrawSim.updateOneDay: it=",it,
 		       " this.yDataLin[1][it]=",this.yDataLin[1][it],
 		       " this.yDataLog[0][it]=",this.yDataLog[0][it]);}
 
@@ -940,6 +947,10 @@ DrawSim.prototype.updateOneDay=function(it,displayType,xtot,xt,y,yt,z){
     this.plotPoints(it, 4, data_cumDeaths, displayType);
   }
 
+  if(this.isActive[5]){ // z/xt
+    this.plotPoints(it, 5, data_deathsCases, displayType);
+  }
+
 }
 
 
@@ -952,7 +963,7 @@ DrawSim.prototype.drawCurve=function(it,q,displayType){
   var yminDraw=(displayType==="log") ? this.yminLog : this.yminLin;
   var ymaxDraw=(displayType==="log") ? this.ymaxLog : this.ymaxLin;
   if(q==5){yminDraw=this.yminPerc; ymaxDraw=this.ymaxPerc};
-  if(q==5){console.log("yminDraw=",yminDraw," ymaxDraw=",ymaxDraw);}
+
   ctx.fillStyle=this.colLine[q];
 
   for (var itg=0; itg<it; itg++){
@@ -989,6 +1000,8 @@ DrawSim.prototype.plotPoints=function(it,q,data_arr,displayType){
 
   var yminDraw=(displayType==="log") ? this.yminLog : this.yminLin;
   var ymaxDraw=(displayType==="log") ? this.ymaxLog : this.ymaxLin;
+  if(q==5){yminDraw=this.yminPerc; ymaxDraw=this.ymaxPerc};
+
   ctx.fillStyle=this.colLine[q];
 
   for (var i=0; i<data_arr.length; i++){
@@ -999,8 +1012,12 @@ DrawSim.prototype.plotPoints=function(it,q,data_arr,displayType){
 
     var itg=data_diff2start[i]; // global var difference to startDay
 
-    // log 10 and, if lin, in 1000
+    // log 10 and, if lin, in 1000 =>*0.001, if perc *100
+
     var y=(displayType==="log") ? log10(data_arr[i]) : 0.001*data_arr[i];
+    if(q==5){y=100*data_arr[i];}
+
+    // actual plotting
 
     if((itg>=0)&&(itg<=it)&&(y>=yminDraw) &&(y<=ymaxDraw)){
       var yrel=(y-yminDraw)/(ymaxDraw-yminDraw);

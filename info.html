@@ -46,7 +46,10 @@ Punkte in der Grafik f&uuml;r dokumentierte F&auml;lle
 bzw. Gestorbene) m&ouml;glichst gut &uuml;bereinstimmen. 
 <li> Ab dem durch
 die vertikale graue Linie gekennzeichneten Zeitpunkt werden die wichtigsten
-Parameter interaktiv durch die Schieberegler bestimmt.
+Parameter interaktiv durch die Schieberegler
+  bestimmt. <span class="important"> Ab dieser Linie beruht die
+    &Uuml;bereinstimmung mit den Daten allein auf der
+    Modellg&uuml;te.</span>
 </ul>
 
 F&uuml;r das
@@ -63,15 +66,62 @@ wieder stoppen.
 <li> Mit <img src="figs/buttonRestart_small.png"
      style="width:3vmin;vertical-align:middle">
 startet man die Simulation vom Anfang an mit den gerade eingestellten
-     Parametern wiederholen.
-<li> Schlie&szlig;lich f&uuml;hrt man den Restart mit den "Werkseinstellungen"
-    durch die <tt>
+     Parametern.
+<li> Schlie&szlig;lich f&uuml;hrt man den "Restart mit Werkseinstellungen"
+    durch die <span class="button">Reload</span> <tt>
     Reload</tt>-Funktion des Browsers durch.
 </ul>
 Nach jedem Stop oder auch w&auml;hrend der Simulation
 kann man die wichtigsten Simulationsparameter mittels der Schieber
-ver&auml;ndern. Mit dem eckigen Button kann man die Darstellung
+ver&auml;ndern. Mit dem anfangs mit <span class="button">
+  =>log. Darstellung</span> beschrifteten Button kann man die Darstellung
 jederzeit zwischen linear und logarithmisch umschalten.
+
+<h3> Simulierte Gr&ouml;&szlig;en</h3>
+
+Alle "dicken" Kurven sind auf das Hellfeld, also auf die getesteten
+Personen bezogen, w&auml;hrend die d&uuml;nnen Kurven (nur in der
+logarithmischen Darstellung) auf die sich aus der Simulation ergebende
+Gesamtheit, also Hell- und Dunkelfeld, beziehen.
+
+<ul>
+
+<li> <span class="red">Rote dicke Kurve:</span> Zahl
+  der <em>erfassten</em> positiv getesteten Personen in der
+  Simulation. Die zugeh&ouml;rigen Daten des
+des <a href="https://data.europa.eu/euodp/en/data/dataset/covid-19-coronavirus-data">EU
+    Open Data Portal</a> sind als <span class="red">rote Punkte</span> dar&uuml;ber geplottet.
+
+<li> Schwarze dicke Kurve und schwarze Punkte: Analoges f&uuml;r
+  die <em>erfasste</em> Anzahl an Covid19-Toten.
+
+<li> <span class="green">Gr&uuml;ne dicke Kurve:</span>
+    simulierte Zahl der 
+    infizierten und wieder gesundeten Personen im Hellfeld.
+
+<li> <span class="blue"> Blaue dicke Kurve und Punkte:</span> Anteil der an Covid19 gestorbenen Personen
+    unter allen positiv 
+    getesteten, also Quotient der schwarzen und der roten
+    Kurve
+    (nur in der linearen Darstellung, rechte Skala)
+
+<li> <span class="orange"> Orange d&uuml;nne Kurve:</span> Reale Anzahl der <em>aktuell
+      erkrankten</em> Personen, wie sie die Simulation impliziert (nur
+      in der logarithmischen Darstellung).
+    
+<li> <span class="lightgreen"> Gr&uuml;ne d&uuml;nne Kurve:</span>
+ Reale Anzahl der <em>aktuell
+      wieder gesundeten</em> Personen, wie sie die Simulation
+      impliziert (nur
+      in der logarithmischen Darstellung). 
+</ul>
+<em>Hinweis:</em> Da bei den Todesf&auml;llen kein Dunkelfeld angenommen
+      wurde, gibt es keine d&uuml;nne schwarze Kurve.
+    
+
+
+
+</ul>
 
 <h3> Modell</h3>
 Simuliert wird ein Standard-Infektionsausbreitungsmodell:
@@ -222,9 +272,7 @@ Auch wenn die
 
 <br><br><li><span class="important">Testrate <i>p<sub>T</sub></i></span>:
     Anteil der positiv Getesteten unter den
-    Infizierten. <strong>Beeinflussbar! beeinflusst auch implizit die
-    zu den Daten passende wahre Sterbewahrscheinlichkeit
-    via <i>p<sub>D</sub>=0.045p<sub>T</sub></i>
+    Infizierten. <strong>Beeinflussbar! </strong>
 </strong> 
 
 <br><br><li><span class="important">Sim-Geschwindigkeit</span>:
@@ -256,10 +304,10 @@ von <tt>corona.js</tt>
   Grafik die vertikale graue Linie.
 
 
-<li> Sterbewahrscheinlichkeit <tt>fracDie</tt>. Dies ist auf 0.0045
-  initialisiert und wird als Callback auf Schieberegleraktionen der
-  Testrate in <tt>corona_gui.js</tt> variabel auf 
-<tt>fracDie=0.045*rTest</tt> gesetzt.
+<li> Sterbewahrscheinlichkeit <tt>fracDie</tt>. Dies ist auf 0.0040
+  initialisiert, wird aber auf <tt>fracDie=0.04*rTest</tt> gesetzt,
+  wenn beim Neustart die Testrate ungleich ihrem anf&auml;ngichen Wert
+  von 10% ist. 
 
 <li> Mittlere Zeitdauer &tau;<sub>D</sub> bzw im
   Javascript <tt>tauDie</tt> von der Infektion bis zum Tod

@@ -91,22 +91,20 @@ slider_tauRend.oninput = function() {
 }
 
 
-//var rTest;
+//var pTest;
 
-var slider_rTest=document.getElementById("slider_rTest");
-console.log("slider_rTest=",slider_rTest);
-var slider_rTestText = document.getElementById("slider_rTestText");
+var slider_pTest=document.getElementById("slider_pTest");
+console.log("slider_pTest=",slider_pTest);
+var slider_pTestText = document.getElementById("slider_pTestText");
 
-setSlider(slider_rTest, slider_rTestText, 100*rTest, " %");
+setSlider(slider_pTest, slider_pTestText, 100*pTest, " %");
 
 
-slider_rTest.oninput = function() {
-  slider_rTestText.innerHTML = "&nbsp;"+this.value+" %";
-  var rTestold=rTest;
-  rTest=parseFloat(this.value/100.);
-  //fracDie=0.0045; 
-  fracDie=0.045*rTest; //!!! coupling such that observations ok
-  console.log("slider4 callback: rTest="+rTest," fracDie=",fracDie);
+slider_pTest.oninput = function() {
+  slider_pTestText.innerHTML = "&nbsp;"+this.value+" %";
+  var pTestold=pTest;
+  pTest=parseFloat(this.value/100.);
+  console.log("slider4 callback: pTest="+pTest);
 }
 
 
