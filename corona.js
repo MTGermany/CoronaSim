@@ -739,7 +739,8 @@ DrawSim.prototype.drawAxes=function(displayType){
 
   // draw name+values y1 axis
 
-  var label_y="Personenzahl (in Tausend)";
+  var label_y=(displayType==="lin")
+    ? "Personenzahl (in Tausend)" : "Personenzahl";
 
 
   ctx.setTransform(0,-1,1,0,
