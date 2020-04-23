@@ -15,13 +15,14 @@ var nxtStart=10000; // number of positively tested infections@start
                     // (mar20, begin lockdown, nxt=13957)
 
 var R01=3;     // varying R0 rates calibrated to data
-var R02=1.6;
+var R02=1.7;
 var R03=1.2;
 var nxt1=2000;
 var nxt2=10000;
 var nxtR0=30000;
 
-var startDay=new Date(2020,02,20); // months start with zero, days with 1
+var dayStartMar=19;
+var startDay=new Date(2020,02,dayStartMar); // months start with zero, days with 1
 var oneDay_ms=(1000 * 3600 * 24);
 
 var ln10=Math.log(10);
@@ -31,21 +32,34 @@ var displayType="lin"; // "lin" or "log"; consolidate with html
 // see also 
 // https://de.wikipedia.org/wiki/COVID-19-Pandemie_in_Deutschland#März_2020
 
-  var data_date_ddmmyyyy=[];
-  var data_diff2start=[];
-  var data_cases=[];
-  var data_cumCases=[];
-  var data_deaths=[];
-  var data_cumDeaths=[];
-  var data_deathsCases=[];
+var data_date_ddmmyyyy=[];
+var data_diff2start=[];
+var data_cases=[];
+var data_cumCases=[];
+var data_deaths=[];
+var data_cumDeaths=[];
+var data_deathsCases=[];
 
+var dataGit_istart;
+var dataGit_date=[];
+var dataGit_cumCases=[];
+var dataGit_cumDeaths=[];
+var dataGit_cumRecovered=[];
+var dataGit_deathsCases=[];
+
+
+// fetch with https://pomber.github.io/covid19/timeseries.json
+// !!! does not work with old browsers
+
+var dataGit_Germany=[];
+var dataGit_dateBegin;
 // global simulation  parameters (global to avoid alsways writing "this.")
 
 
 // now controlled by sliders
 
 var fps=10;
-var R0=0.78;          // infection rate with measures
+var R0=0.73;          // infection rate with measures
 var tauRstart=1;     // active infectivity begins [days since infection]
 var tauRend=10;       // active infectivity ends [days since infection]//10
 var pTestInit=0.1;   // initial percentage of tested infected persons 
@@ -86,15 +100,77 @@ function R0fun(xt){
 }
 
 
+
+// ##############################################################
+// !!! test fetch method: w/o addtl cronjob/script
+// directly from https://pomber.github.io/covid19/timeseries.json
+//
+// called ONLY in the html <body onload="..."> callback
+// NOT: offline
+// Ubuntu 12: Only Chrome! 
+// Ubuntu18: Every browser??
+// Android ??
+//
+// strange extremely confusing order of commands. 
+// It is called erratically before or after startup 
+// (although it should before). It seems to be safely there   
+// at creation time of the THREAD: 
+// setInterval(simulationRun) simulationRun->doSimulationStep()
+// ##############################################################
+
+
+function getGithubData() {//called ONLY in the <body onload> event
+
+  fetch("https://pomber.github.io/covid19/timeseries.json")
+    .then((response1) => {
+      return response1.json();
+    })
+    .then((data1) => {
+      console.log("data1=",data1);
+      dataGit_Germany=data1["Germany"];
+      console.log("inner: dataGit_Germany[0]=",dataGit_Germany[0]);
+      var dateInitStr=dataGit_Germany[0]["date"];
+      dataGit_dateBegin=new Date(dateInitStr);
+      dataGit_istart=Math.round(
+	(startDay.getTime() - dataGit_dateBegin.getTime() )/oneDay_ms);
+
+      var itmaxData=dataGit_Germany.length;
+      for(var it=0; it<itmaxData; it++){
+	dataGit_date[it]=dataGit_Germany[it]["date"];
+	dataGit_cumCases[it]=dataGit_Germany[it]["confirmed"];
+	dataGit_cumDeaths[it]=dataGit_Germany[it]["deaths"];
+	dataGit_cumRecovered[it]=dataGit_Germany[it]["recovered"];
+	dataGit_deathsCases[it]=(dataGit_cumCases[it]==0)
+	  ? 0 : dataGit_cumDeaths[it]/dataGit_cumCases[it];
+	if(true){
+	  console.log("it=",it," dataGit_date=",dataGit_date[it],
+		      "\n dataGit_cumCases=",dataGit_cumCases[it],
+		      " dataGit_cumDeaths=",dataGit_cumDeaths[it],
+		      " dataGit_cumRecovered=",dataGit_cumRecovered[it]);
+	}
+      }
+
+      console.log("\n\n\n\n\n",
+		  "end fetch statement: dateInitStr=",dateInitStr,
+		  " dataGit_dateBegin=",dataGit_dateBegin,
+		  "dataGit_istart=",dataGit_istart,
+		  "\n\n\n\n\n");
+    });
+
+  console.log("outer: dataGit_Germany[0]=",dataGit_Germany[0]);
+}
+
+
 //##############################################################
 // callbacks influencing the overall simulation operation/appearance
 //##############################################################
 
 
-//called in the <body onload> event ( <body onload="startup()")
+//called in the html  <body onload> event and by myRestartFunction()
 
 function startup() {
-
+  console.log("begin <body onload -> startup(): dataGit_Germany[0]=",dataGit_Germany[0]);
+ 
   // =============================================================
   // get present and difference to startDay
   // =============================================================
@@ -112,22 +188,7 @@ function startup() {
 
 
 
-  // =============================================================
-  // !!! test 
-    // =============================================================
-  fetch("https://pomber.github.io/covid19/timeseries.json")
 
-    .then(response => response.json())
-    .then(data => {
-      data["Argentina"].forEach(({ date, confirmed, recovered, deaths }) =>
-        console.log(`${date} active cases: ${confirmed - recovered - deaths}`)
-      );
-    });
-
-
-
-
-  // =============================================================
 
   // =============================================================
   // parse data from opendata. ... .eu obtained via updateCoronaInput.sh
@@ -176,6 +237,7 @@ function startup() {
 	       );
   }
 
+  console.log("\n\nmiddle startup(): dataGit_Germany[0]=",dataGit_Germany[0],"\n\n");
 
 
   // =============================================================
@@ -183,7 +245,10 @@ function startup() {
   // =============================================================
 
   corona=new CoronaSim();
+  console.log("\n\nstartup after new CoronaSim(): dataGit_Germany[0]=",dataGit_Germany[0],"\n\n");
+
   corona.init(); // it=1 at the end !!
+  console.log("\n\nstartup after corona.init(): dataGit_Germany[0]=",dataGit_Germany[0],"\n\n");
 
 
   // =============================================================
@@ -210,6 +275,7 @@ function startup() {
 
   console.log("initialized.");
   myStartStopFunction(); // starts simulation up to present !!
+  console.log("end startup(): dataGit_Germany[0]=",dataGit_Germany[0]);
 
 
 
@@ -267,6 +333,8 @@ function myRestartFunction(){
   fracDie=fracDieInit*pTest/pTestInit;
   console.log("restart: fracDie=",fracDie);
   startup();
+  console.log("restart: after startup: dataGit_Germany[0]=",dataGit_Germany[0]);
+
   clearInterval(myRun);
   //it=1;
   myRun=setInterval(simulationRun, 1000/fps);
@@ -282,9 +350,7 @@ function myRestartFunction(){
 }
 
 function simulationRun() {
-  //console.log("simulationRun: before doSimulationStep: it=",it);
   doSimulationStep();
-  //console.log("simulationRun: after doSimulationStep it=",it," itmaxinit",itmaxinit);
 
 // the hell knows why i need "+2" and not "+1" 
 // but it works, it's tested by numbers
@@ -297,6 +363,11 @@ function simulationRun() {
 // displayType in {"lin", "log"}
 
 function doSimulationStep(){
+  if(false){
+    console.log("doSimulationStep: it=",it,
+		" dataGit_Germany[it][\"confirmed\"]=",
+		dataGit_Germany[it]["confirmed"]);
+  }
   corona.updateOneDay(R0fun(corona.xt));
   drawsim.updateOneDay(it,displayType, corona.xtot, corona.xt,
 		       corona.y, corona.yt, corona.z);
@@ -396,6 +467,10 @@ CoronaSim.prototype.init=function(){
 //#################################################################
 //!!!
 CoronaSim.prototype.updateOneDay=function(R){ //it++ at end
+  if(false){console.log("Corona.updateOneDay: it=",it,
+		       " dataGit_Germany[0]=",
+		       dataGit_Germany[it]);
+	  }
 
   if(false){
     console.log("Corona.updateOneDay: calib: it=",it,
@@ -553,7 +628,6 @@ function DrawSim(){
 
   this.itR0=-1; // it value where n0*xt first exceeds nxtR0 (init val)
   //this.itmaxDraw=4*7;
-
   this.yminLin=0;
   this.ymaxLin=100; // unitPers=1000-> 100 corresp to 100 000 persons
   this.yminPerc=0;
@@ -663,8 +737,9 @@ DrawSim.prototype.drawAxes=function(displayType){
 
   var itmaxCrit=60;
   var itmaxCrit2=450;
-  var dFirstDay=(itmax<itmaxCrit) ? 3//Mar 23 :
-    : (itmax<itmaxCrit2) ? 12 : 103;  //Apr1 or Jul 1
+  var dFirstDay=(itmax<itmaxCrit) ? 23-dayStartMar//Mar 23 :
+    : (itmax<itmaxCrit2) ? 32-dayStartMar //Apr1
+    : 123-dayStartMar;   //Jul 1
   var dDays=(itmax<itmaxCrit) ? 7
     : (itmax<itmaxCrit2) ? 30.4 : 182.6;  // avg month has 30.4 days
   var timeText=(itmax<itmaxCrit)
@@ -745,7 +820,7 @@ DrawSim.prototype.drawAxes=function(displayType){
 
   // draw name+values x axis
 
-  ctx.fillText("Zeit (Start 20. Maerz 2020)",
+  ctx.fillText("Zeit (Start "+dayStartMar+". Maerz 2020)",
 	       this.xPix0+0.4*this.wPix, this.yPix0+3*textsize);
 
   var dxShift=(itmax<itmaxCrit) ? -1.1*textsize : 0;
@@ -960,15 +1035,15 @@ DrawSim.prototype.updateOneDay=function(it,displayType,xtot,xt,y,yt,z){
   // drawing of data from opendata... .eu
 
   if(this.isActive[1]){ // xt
-    this.plotPoints(it, 1, data_cumCases, displayType);
+    this.plotPoints(it, 1, dataGit_cumCases, displayType); //!!!
   }
 
   if(this.isActive[4]){ // z
-    this.plotPoints(it, 4, data_cumDeaths, displayType);
+    this.plotPoints(it, 4, dataGit_cumDeaths, displayType); //!!!
   }
 
   if(this.isActive[5]){ // z/xt
-    this.plotPoints(it, 5, data_deathsCases, displayType);
+    this.plotPoints(it, 5, dataGit_deathsCases, displayType); //!!!
   }
 
 }
@@ -1030,7 +1105,9 @@ DrawSim.prototype.plotPoints=function(it,q,data_arr,displayType){
 			 " yminDraw=",yminDraw,
 			 " ymaxDraw=",ymaxDraw);}
 
-    var itg=data_diff2start[i]; // global var difference to startDay
+    //var itg=data_diff2start[i]; // !!!global var difference to startDay
+    var itg=i-dataGit_istart; // !!!global var difference to startDay
+    //console.log("data_diff2start[i]=",data_diff2start[i]," i-dataGit_istart=",i-dataGit_istart);
 
     // log 10 and, if lin, in 1000 =>*0.001, if perc *100
 
