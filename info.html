@@ -18,12 +18,17 @@
 
 <h3> Motivation</h3>
 
-Diese interaktive Simulation soll zwei Dinge verdeutlichen:
+Diese interaktive Simulation soll drei Dinge verdeutlichen:
 <ul>
 <li> Wie verz&ouml;gert sich Ma&szlig;nahmen zur Isolation auf die
   Infektionszahlen auswirken,
 <li> wie sehr sich die reale Situation von der beobachteten
-  uterscheided, vor allem, wenn wenig und verz&ouml;gert getestet wird.
+  uterscheided, vor allem, wenn wenig und verz&ouml;gert getestet
+  wird.
+<li> Wie schwierig die Reproduktionszahl <i>R<sub>0</sub></i> und ihr
+  zeitlicher Verlauf zu sch&auml;tzen ist: Viele Kombinationen f&uuml;hren
+  zu einer &Uuml;bereinstimmung mit en Daten!
+
 </ul>
 Vor allem soll sie verdeutlichen, wie wichtig Zufalls-Stichproben
  sind, um die unbekannte tats&auml;chliche Sterblichkeit und den Ausma&szlig;
@@ -35,15 +40,22 @@ Vor allem soll sie verdeutlichen, wie wichtig Zufalls-Stichproben
 
 Gezeigt wird die Situation in Deutschland. Bei Aufruf der Seite wird
 zun&auml;chst vom Auftreten der ersten F&auml;lle bis zur Gegenwart
-simuliert und die Simulation ab 20.03 (erste ernsthafte
+simuliert und die Simulation ab 19.03 (erste ernsthafte
 Lockdown-Ma&szlig;nahmen) dargestellt. 
 <ul>
 <li> Die Parameter sind dabei so
 eingestellt, dass sie mit
-den <a href="https://data.europa.eu/euodp/en/data/dataset/covid-19-coronavirus-data">beobachteten
+den <a href="https://pomber.github.io/covid19/timeseries.json">t&auml;glich
+    aktualisierten Beobachtungsdaten</a> weitgehend &uuml;bereinstimmen
+  (siehe auch das  <a href="https://github.com/pomber/covid19">Github
+    Repository</a> dazu).
+<!--
+<a href="https://data.europa.eu/euodp/en/data/dataset/covid-19-coronavirus-data">beobachteten
   Infektionsdaten des EU Open Data Portal</a> (rote und schwarze
 Punkte in der Grafik f&uuml;r dokumentierte F&auml;lle
 bzw. Gestorbene) m&ouml;glichst gut &uuml;bereinstimmen. 
+-->
+
 <li> Ab dem durch
 die vertikale graue Linie gekennzeichneten Zeitpunkt werden die wichtigsten
 Parameter interaktiv durch die Schieberegler
@@ -95,7 +107,7 @@ des <a href="https://data.europa.eu/euodp/en/data/dataset/covid-19-coronavirus-d
 <li> Schwarze dicke Kurve und schwarze Punkte: Analoges f&uuml;r
   die <em>erfasste</em> Anzahl an Covid19-Toten.
 
-<li> <span class="green">Gr&uuml;ne dicke Kurve:</span>
+<li> <span class="green">Gr&uuml;ne dicke Kurve und Punkte:</span>
     simulierte Zahl der 
     infizierten und wieder gesundeten Personen im Hellfeld.
 

@@ -7,6 +7,7 @@
 // updated automatically
 
 var useGithubData=true;
+var country="Germany"
 
 
 
@@ -19,8 +20,6 @@ var itmaxinit;  // #days init simulation; to be determined by js Date() object
 var itmax;      // can be >itmaxinit during interactive simulation
 
 var n0=80.e6;  // #persons in Germany
-var nxtStart=10000; // number of positively tested infections@start
-                    // (mar20, begin lockdown, nxt=13957)
 
 var R01=3;     // varying R0 rates calibrated to data
 var R02=(useGithubData) ? 1.7 : 1.6;
@@ -28,6 +27,8 @@ var R03=1.2;
 var nxt1=2000;
 var nxt2=10000;
 var nxtR0=30000;
+var nxtStart=10000; // number of positively tested infections@start
+                    // (mar20, begin lockdown, nxt=13957)
 
 var dayStartMar=(useGithubData) ? 19 : 20;
 var startDay=new Date(2020,02,dayStartMar); // months start with zero, days with 1
@@ -57,7 +58,7 @@ var dataGit_deathsCases=[];
 // fetch with https://pomber.github.io/covid19/timeseries.json
 // !! does not work with old browsers
 
-var dataGit_Germany=[];
+var dataGit=[];
 var dataGit_dateBegin;
 // global simulation  parameters (global to avoid alsways writing "this.")
 
@@ -128,8 +129,8 @@ function R0fun(xt){
 // I have replaced them with normal anonymous functions 
 // ##############################################################
 
-
-function getGithubData() {//called ONLY in the <body onload> event
+//called ONLY in the <body onload> and toggleData event
+function getGithubData() {
 
   if(typeof fetch === "undefined"){
     console.log("You are using an old Browser that does not understand Javascript's fetch");
@@ -141,54 +142,81 @@ function getGithubData() {//called ONLY in the <body onload> event
   }
 
   else{
-   console.log("fetch defined");
+    console.log("fetch defined");
 
-   fetch("https://pomber.github.io/covid19/timeseries.json")
-    //.then((response1) => {
-    .then(function(response1){
-      return response1.json();
-    })
-    //.then((data1) => {
-    .then(function(data1){
-      console.log("data1=",data1);
-      dataGit_Germany=data1["Germany"];
-      console.log("inner: dataGit_Germany[0]=",dataGit_Germany[0]);
-      var dateInitStr=dataGit_Germany[0]["date"];
-      dataGit_dateBegin=new Date(dateInitStr);
-      dataGit_istart=Math.round(
-	(startDay.getTime() - dataGit_dateBegin.getTime() )/oneDay_ms);
+    fetch("https://pomber.github.io/covid19/timeseries.json")
+      //.then((response1) => {
+      .then(function(response1){
+	return response1.json();
+      })
 
-      var itmaxData=dataGit_Germany.length;
-      for(var it=0; it<itmaxData; it++){
-	dataGit_date[it]=dataGit_Germany[it]["date"];
-	dataGit_cumCases[it]=dataGit_Germany[it]["confirmed"];
-	dataGit_cumDeaths[it]=dataGit_Germany[it]["deaths"];
-	dataGit_cumRecovered[it]=dataGit_Germany[it]["recovered"];
-	dataGit_deathsCases[it]=(dataGit_cumCases[it]==0)
-	  ? 0 : dataGit_cumDeaths[it]/dataGit_cumCases[it];
-	if(true){
+      //.then((data1) => {
+      .then(function(data1){
+        dataGit=data1;
+        console.log("dataGit=",dataGit);
+        console.log("inner: dataGit[country]=",dataGit[country]);
+        initializeData(country);
+      });
+  }
+}
+
+
+
+function initializeData(country) {
+
+  var data=dataGit[country];
+  console.log("initializeData: data=",data);
+  var dateInitStr=data[0]["date"];
+  dataGit_dateBegin=new Date(dateInitStr);
+  dataGit_istart=Math.round(
+    (startDay.getTime() - dataGit_dateBegin.getTime() )/oneDay_ms);
+
+
+  var itmaxData=data.length;
+  for(var it=0; it<itmaxData; it++){
+    dataGit_date[it]=data[it]["date"];
+    dataGit_cumCases[it]=data[it]["confirmed"];
+    dataGit_cumDeaths[it]=data[it]["deaths"];
+    dataGit_cumRecovered[it]=data[it]["recovered"];
+    dataGit_deathsCases[it]=(data_cumCases[it]==0)
+      ? 0 : dataGit_cumDeaths[it]/dataGit_cumCases[it];
+    if(true){
 	  console.log("it=",it," dataGit_date=",dataGit_date[it],
 		      "\n dataGit_cumCases=",dataGit_cumCases[it],
 		      " dataGit_cumDeaths=",dataGit_cumDeaths[it],
 		      " dataGit_cumRecovered=",dataGit_cumRecovered[it]);
-	}
-      }
+    }
+  }
 
-      console.log(
+  console.log(
 	"\n\n\n",
-	"end fetch statement: dateInitStr=",dateInitStr,
+	"end initializeData: dateInitStr=",dateInitStr,
 	" dataGit_dateBegin=",dataGit_dateBegin,
 	"dataGit_istart=",dataGit_istart,
 	"\n dataGit_cumCases.length=",dataGit_cumCases.length,
 	"\n dataGit_date[dataGit_istart]",dataGit_date[dataGit_istart],
 	"\n dataGit_date[dataGit_istart+34]=",dataGit_date[dataGit_istart+34],
 	"\n\n\n");
-    });
-    console.log("outer: dataGit_Germany[0]=",dataGit_Germany[0]);
 
-  }
+  nxtStart=(country==="Germany") ? 10000 : 3000; //3000
+  nxt1=(country==="Germany") ? 2000 : 800; //500
+  nxt2=(country==="Germany") ? 10000 : 2000; //2000
+  nxtR0=(country==="Germany") ? 30000 : 8000;
+  R01=(country==="Germany") ? 3 : 2.5;    //3
+  R02=(country==="Germany") ? 1.7 : 1.7; //1.5
+  R03=(country==="Germany") ? 1.2 : 1.0; //0.9
+  R0=(country==="Germany") ? 0.73 : 0.65;
+  setSlider(slider_R0, slider_R0Text, R0,"");
+
+  fracDieInit=(country==="Germany") ? 0.0040 : 0.0065;
+  tauDie=(country==="Germany") ? 21 : 20;
+  tauTest=(country==="Germany") ? 10 : 10;
+  setSlider(slider_tauTest, slider_tauTestText,tauTest, " Tagen");
+
 
 }
+
+
 
 
 //##############################################################
@@ -350,6 +378,20 @@ function myStartStopFunction(){
   }
 }
 
+function toggleData(){ 
+  if(typeof fetch === "undefined"){
+    console.log("You are using an old Browser that does not understand Javascript's fetch");
+    console.log("cannot change country data");
+    return;
+  }
+
+  country=(country==="Germany") ? "Switzerland" : "Germany";
+  flagName=(country==="Germany") ? "flagSwitzerland.png" : "flagGermany.png";
+  console.log("toggleData: new country=",country," flagName=",flagName);
+  document.getElementById("flag").src="figs/"+flagName;
+  initializeData(country);
+  myRestartFunction();
+}
 
 function myRestartFunction(){ 
   ctx.clearRect(0, 0, canvas.width, canvas.height)
@@ -357,8 +399,8 @@ function myRestartFunction(){
   console.log("restart: fracDie=",fracDie);
   startup();
   if(useGithubData){
-   console.log("restart: after startup: dataGit_Germany[0]=",
-	       dataGit_Germany[0]);
+   console.log("restart: after startup: dataGit[0]=",
+	       dataGit[0]);
   }
 
   clearInterval(myRun);
@@ -645,7 +687,7 @@ function DrawSim(){
 
   this.itR0=-1; // it value where n0*xt first exceeds nxtR0 (init val)
   this.yminLin=0;
-  this.ymaxLin=100; // unitPers=1000-> 100 corresp to 100 000 persons
+  this.ymaxLin=30; // unitPers=1000-> 100 corresp to 100 000 persons
   this.yminPerc=0;
   this.ymaxPerc=10;
   this.yminLog=1;
@@ -836,7 +878,7 @@ DrawSim.prototype.drawAxes=function(displayType){
   // draw name+values x axis
 
   ctx.fillText("Zeit (Start "+dayStartMar+". Maerz 2020)",
-	       this.xPix0+0.4*this.wPix, this.yPix0+3*textsize);
+	       this.xPix0+0.3*this.wPix, this.yPix0+3*textsize);
 
   var dxShift=(itmax<itmaxCrit) ? -1.1*textsize : 0;
   for(var ix=0; (ix<timeRel.length)&&(timeRel[ix]<0.96); ix++){
