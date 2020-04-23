@@ -111,6 +111,32 @@ function startup() {
   console.log("present=",present," startDay=",startDay," itmaxinit=",itmaxinit);
 
 
+
+  // =============================================================
+  // !!! test 
+    // =============================================================
+  node-fetch("https://pomber.github.io/covid19/timeseries.json")
+
+.then(function(response) {
+  if (response.ok)
+    return response.json();
+  else
+    throw new Error('Kurse konnten nicht geladen werden');
+})
+
+/*
+    .then(response => response.json())
+    .then(data => {
+      data["Argentina"].forEach(({ date, confirmed, recovered, deaths }) =>
+        console.log(`${date} active cases: ${confirmed - recovered - deaths}`)
+      );
+    });
+*/
+
+
+
+  // =============================================================
+
   // =============================================================
   // parse data from opendata. ... .eu obtained via updateCoronaInput.sh
   // =============================================================
@@ -730,9 +756,10 @@ DrawSim.prototype.drawAxes=function(displayType){
   ctx.fillText("Zeit (Start 20. Maerz 2020)",
 	       this.xPix0+0.4*this.wPix, this.yPix0+3*textsize);
 
+  var dxShift=(itmax<itmaxCrit) ? -1.1*textsize : 0;
   for(var ix=0; (ix<timeRel.length)&&(timeRel[ix]<0.96); ix++){
     ctx.fillText(timeText[ix],
-		 this.xPix0+timeRel[ix]*this.wPix,
+		 this.xPix0+timeRel[ix]*this.wPix+dxShift,
 		 this.yPix0+1.5*textsize);
   }
 
@@ -748,7 +775,7 @@ DrawSim.prototype.drawAxes=function(displayType){
   ctx.fillText(label_y,0,0);
   ctx.setTransform(1,0,0,1,0,0)
   for(var iy=ymin; iy<=ny; iy++){
-    var valueStr=(displayType==="lin") ? iy*dy : "10^"+iy;
+    var valueStr=(displayType==="lin")  ? iy*dy : "10^"+iy;
     ctx.fillText(valueStr,
 		 this.xPix0-2.5*textsize,
 		 this.yPix0+(iy*dy-ymin)/(ymax-ymin)*this.hPix+0.5*textsize);
