@@ -21,7 +21,7 @@ var nxt1=2000;
 var nxt2=10000;
 var nxtR0=30000;
 
-var dayStartMar=19;
+var dayStartMar=19; //!!!
 var startDay=new Date(2020,02,dayStartMar); // months start with zero, days with 1
 var oneDay_ms=(1000 * 3600 * 24);
 
@@ -73,7 +73,7 @@ var fracDieInit=0.0040;  // fracDie for initial setting of pTest
 var fracDie=fracDieInit; // will be set to fracDieInit*pTest/pTestInit 
                         // at restart but NOT during simulation
 var tauDie=21;      // time from infection to death in fracDie cases
-var tauRecover=21; // time from infection to full recovery
+var tauRecover=25; // time from infection to full recovery
 var tauSymptoms=7;  // incubation time 
 
 var taumax=Math.max(tauDie,tauRecover)+tauAvg+1;
@@ -150,11 +150,15 @@ function getGithubData() {//called ONLY in the <body onload> event
 	}
       }
 
-      console.log("\n\n\n\n\n",
-		  "end fetch statement: dateInitStr=",dateInitStr,
-		  " dataGit_dateBegin=",dataGit_dateBegin,
-		  "dataGit_istart=",dataGit_istart,
-		  "\n\n\n\n\n");
+      console.log(
+	"\n\n\n",
+	"end fetch statement: dateInitStr=",dateInitStr,
+	" dataGit_dateBegin=",dataGit_dateBegin,
+	"dataGit_istart=",dataGit_istart,
+	"\n dataGit_cumCases.length=",dataGit_cumCases.length,
+	"\n dataGit_date[dataGit_istart]",dataGit_date[dataGit_istart],
+	"\n dataGit_date[dataGit_istart+34]=",dataGit_date[dataGit_istart+34],
+	"\n\n\n");
     });
 
   console.log("outer: dataGit_Germany[0]=",dataGit_Germany[0]);
@@ -352,10 +356,10 @@ function myRestartFunction(){
 function simulationRun() {
   doSimulationStep();
 
-// the hell knows why i need "+2" and not "+1" 
+// the hell knows why i need "+2" and not "+1"//!!! 
 // but it works, it's tested by numbers
 
-  if(it==itmaxinit+2){ 
+  if(it==itmaxinit+1){ 
     clearInterval(myRun);myStartStopFunction();
   }
 }
@@ -627,7 +631,6 @@ function DrawSim(){
   this.unitPers=1000;  // persons counted in multiples of unitPers
 
   this.itR0=-1; // it value where n0*xt first exceeds nxtR0 (init val)
-  //this.itmaxDraw=4*7;
   this.yminLin=0;
   this.ymaxLin=100; // unitPers=1000-> 100 corresp to 100 000 persons
   this.yminPerc=0;
@@ -753,9 +756,9 @@ DrawSim.prototype.drawAxes=function(displayType){
 
   var timeRel=[];
   for(var i=0; i<timeText.length; i++){
-    timeRel[i]=(dFirstDay+i*dDays)/(itmax-1); //!!
+    timeRel[i]=(dFirstDay+i*dDays)/(itmax); //!!!
   }
-
+  console.log("itmax=",itmax," timeRel[5]=",timeRel[5]);
 
   //define y axis label positions and text
 
@@ -936,11 +939,6 @@ DrawSim.prototype.updateOneDay=function(it,displayType,xtot,xt,y,yt,z){
 //######################################################################
 
 
-  // need to redefine x pixel coords if rescaling in x
-
-  for(var i=0; i<=itmax; i++){
-    this.xPix[i]=this.xPix0+i*(this.xPixMax-this.xPix0)/(itmax);
-  }
 
 
   // transfer new data
@@ -971,6 +969,11 @@ DrawSim.prototype.updateOneDay=function(it,displayType,xtot,xt,y,yt,z){
     itmax=it;
     erase=true;
   }
+  // need to redefine x pixel coords if rescaling in x
+  console.log("drawsim.updateOneDay: itmax=",itmax);
+  for(var i=0; i<=itmax; i++){
+    this.xPix[i]=this.xPix0+i*(this.xPixMax-this.xPix0)/(itmax);
+  }
 
   // need also to update ymax of display actually not used
 
@@ -997,6 +1000,22 @@ DrawSim.prototype.updateOneDay=function(it,displayType,xtot,xt,y,yt,z){
     this.ymaxPerc=this.yDataLin[5][it];
     erase=true;
   }
+
+  // take care of data=max in linear representation
+
+
+  if((displayType==="lin")&&(this.isActiveLin[1])){
+    var i_dataGit=it+dataGit_istart;
+      if(i_dataGit<dataGit_cumCases.length){
+      if(dataGit_cumCases[i_dataGit]>this.unitPers*this.ymaxLin){
+	//console.log("drawsim.ymaxLin=",this.ymaxLin);
+	this.ymaxLin=dataGit_cumCases[i_dataGit]/this.unitPers;
+	erase=true;
+
+      }
+    }
+  }
+
 
   if(erase){
     this.clear();
@@ -1038,6 +1057,10 @@ DrawSim.prototype.updateOneDay=function(it,displayType,xtot,xt,y,yt,z){
     this.plotPoints(it, 1, dataGit_cumCases, displayType); //!!!
   }
 
+  if(this.isActive[3]){ // yt
+    this.plotPoints(it, 3, dataGit_cumRecovered, displayType); //!!!
+  }
+
   if(this.isActive[4]){ // z
     this.plotPoints(it, 4, dataGit_cumDeaths, displayType); //!!!
   }
@@ -1058,6 +1081,7 @@ DrawSim.prototype.drawCurve=function(it,q,displayType){
   var yminDraw=(displayType==="log") ? this.yminLog : this.yminLin;
   var ymaxDraw=(displayType==="log") ? this.ymaxLog : this.ymaxLin;
   if(q==5){yminDraw=this.yminPerc; ymaxDraw=this.ymaxPerc};
+  if(q==1){console.log("DrawSim.drawCurve: it=",it);}
 
   ctx.fillStyle=this.colLine[q];
 
@@ -1096,18 +1120,13 @@ DrawSim.prototype.plotPoints=function(it,q,data_arr,displayType){
   var yminDraw=(displayType==="log") ? this.yminLog : this.yminLin;
   var ymaxDraw=(displayType==="log") ? this.ymaxLog : this.ymaxLin;
   if(q==5){yminDraw=this.yminPerc; ymaxDraw=this.ymaxPerc};
-
+  if(q==1){console.log("DrawSim.plotPoints: it=",it);}
   ctx.fillStyle=this.colLine[q];
 
   for (var i=0; i<data_arr.length; i++){
 
-    if(false){console.log("q=",q," i=",i," data_arr[i]=",data_arr[i],
-			 " yminDraw=",yminDraw,
-			 " ymaxDraw=",ymaxDraw);}
 
-    //var itg=data_diff2start[i]; // !!!global var difference to startDay
-    var itg=i-dataGit_istart; // !!!global var difference to startDay
-    //console.log("data_diff2start[i]=",data_diff2start[i]," i-dataGit_istart=",i-dataGit_istart);
+    var itg=i-dataGit_istart; // !!global var difference to startDay
 
     // log 10 and, if lin, in 1000 =>*0.001, if perc *100
 
@@ -1116,10 +1135,14 @@ DrawSim.prototype.plotPoints=function(it,q,data_arr,displayType){
 
     // actual plotting
 
-    if((itg>=0)&&(itg<=it)&&(y>=yminDraw) &&(y<=ymaxDraw)){
+    //if((itg>=0)&&(itg<=it)&&(y>=yminDraw) &&(y<=ymaxDraw)){//!!!
+    if((itg>=0)&&(itg<=it)){
+      if(false){console.log("it=",it," i=",i," itg=",itg,
+			   " data_arr[i]=",data_arr[i]);}
+
       var yrel=(y-yminDraw)/(ymaxDraw-yminDraw);
       var dataPix=this.yPix0+yrel*(this.yPixMax-this.yPix0);
-       ctx.beginPath(); //!! crucial; otherwise latest col used for ALL
+      ctx.beginPath(); //!! crucial; otherwise latest col used for ALL
       ctx.arc(this.xPix[itg],dataPix,0.015*sizemin, 0, 2 * Math.PI);
       ctx.fill();
     }
