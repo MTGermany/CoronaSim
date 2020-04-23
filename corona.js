@@ -906,7 +906,7 @@ DrawSim.prototype.drawAxes=function(displayType){
 
   if(this.isActive[3]){
     ctx.fillStyle=this.colLine[3];
-    ctx.fillText("Genesene Personen (Daten)",
+    ctx.fillText("Erfasste genesene Personen",
 	       this.xPix0+xrelLeft*this.wPix,
 		 this.yPix0+(yrelTop-il*dyrel)*this.hPix);
     il++;
