@@ -115,23 +115,15 @@ function startup() {
   // =============================================================
   // !!! test 
     // =============================================================
-  node-fetch("https://pomber.github.io/covid19/timeseries.json")
+  fetch("https://pomber.github.io/covid19/timeseries.json")
 
-.then(function(response) {
-  if (response.ok)
-    return response.json();
-  else
-    throw new Error('Kurse konnten nicht geladen werden');
-})
-
-/*
     .then(response => response.json())
     .then(data => {
       data["Argentina"].forEach(({ date, confirmed, recovered, deaths }) =>
         console.log(`${date} active cases: ${confirmed - recovered - deaths}`)
       );
     });
-*/
+
 
 
 
