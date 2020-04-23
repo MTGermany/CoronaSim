@@ -890,12 +890,14 @@ DrawSim.prototype.drawAxes=function(displayType){
 
   // draw name+values y1 axis
 
+  var land=(country==="Germany") ? "Deutschland" : "Schweiz";
   var label_y=(displayType==="lin")
-    ? "Personenzahl (in Tausend)" : "Personenzahl";
+    ? land+": Personenzahl (in Tausend)" : land+": Personenzahl";
 
-
+  var yPix=(displayType==="lin")
+    ? this.yPix0+0.01*this.hPix : this.yPix0+0.15*this.hPix;
   ctx.setTransform(0,-1,1,0,
-		   this.xPix0-3.0*textsize,this.yPix0+0.2*this.hPix);
+		   this.xPix0-3.0*textsize,yPix);
   ctx.fillText(label_y,0,0);
   ctx.setTransform(1,0,0,1,0,0)
   for(var iy=ymin; iy<=ny; iy++){

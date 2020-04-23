@@ -192,7 +192,7 @@ a:hover {
 #flagsData{ 
   position: absolute;
   top:   93vh;  /* 6 for the title, 24 for the sliders */
-  right:   15vw;
+  right:  18vw;
   width:  6vmin;
   height: 6vmin;
   z-index: 2; # the higher the more on top
@@ -344,7 +344,7 @@ screen and (min-resolution: 1.5dppx) and (min-aspect-ratio: 1/1){
 
 #flagsData{ 
   top:   91vh;  /* 6 for the title, 24 for the sliders */
-  right:   15vw;
+  right:   18vw;
 }
 }
 
