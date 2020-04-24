@@ -18,7 +18,7 @@
 
 <h3> Motivation</h3>
 
-Diese interaktive Simulation soll drei Dinge verdeutlichen:
+Diese <a href="index.html">interaktive Simulation</a> soll drei Dinge verdeutlichen:
 <ul>
 <li> Wie verz&ouml;gert sich Ma&szlig;nahmen zur Isolation auf die
   Infektionszahlen auswirken,
@@ -26,15 +26,28 @@ Diese interaktive Simulation soll drei Dinge verdeutlichen:
   uterscheided, vor allem, wenn wenig und verz&ouml;gert getestet
   wird.
 <li> Wie schwierig die Reproduktionszahl <i>R<sub>0</sub></i> und ihr
-  zeitlicher Verlauf zu sch&auml;tzen ist: Viele Kombinationen f&uuml;hren
-  zu einer &Uuml;bereinstimmung mit en Daten!
+  zeitlicher Verlauf zu sch&auml;tzen ist: Viele Kombinationen
+  von <i>R<sub>0</sub></i> mit anderen Parametern wie die
+  Ansteckungszeit oder auch wann und wie viele Tests gemacht
+  werden, f&uuml;hren
+  zu einer &Uuml;bereinstimmung mit den
+  Daten. <span class="important">Insbesondere
+  wird <i>R<sub>0</sub></i> &uuml;bersch&auml;tzt, wenn die Zahl der Tests
+  schneller zunimmt als die Zahl der Infizierten.</span>
 
 </ul>
 Vor allem soll sie verdeutlichen, wie wichtig Zufalls-Stichproben
- sind, um die unbekannte tats&auml;chliche Sterblichkeit und den Ausma&szlig;
- der "Durchseuchung" (was f&uuml;r ein Wort!) abzusch&auml;tzen. Die
- Kenntnis von beidem ist
- eminent wichtig als Grundlage politischer Entscheidungen. 
+ sind, um die unbekannte tats&auml;chliche Sterbewahrscheinlichkeit und den Ausma&szlig;
+ der "Durchseuchung" (was f&uuml;r ein Wort!) abzusch&auml;tzen. In
+ der aktuellen Phase kann n&auml;mlich nur das Verh&auml;ltnis
+ <i>p<sub>D</sub>/p<sub>T</sub></i> aus der
+ Covid-19 Sterblichkeit <i>p<sub>D</sub></i> und des Testanteils (Hellfeldes) 
+<i>p<sub>T</sub></i> gesch&auml;tzt werden, in Deutschland liegt es
+ bei <i>p<sub>D</sub>/p<sub>T</sub></i>=4%, was bei einem Hellfeld von
+ 10% einer Sterbewahrscheinlichkeit von 0.4% entspr&auml;che. <span class="important">Die
+ Kenntnis der wahren Werte der Sterbewahrscheinlichkeit und der
+ Durchseuchung ist
+ eminent wichtig als Grundlage politischer Entscheidungen.</span>
 
 <h3> Simulationsablauf und Bedienung</h3>
 
@@ -257,10 +270,11 @@ Werte <i>R<sub>0</sub> &lt; 1</i>  f&uuml;hren zu
 <ul>
 <li> Isolation nach dem Schrotschussverfahren (wie im April 2020)
 <li> gezielte Isolation Einzelner nach positiver Testung: Je geringer
-  dabei die Dunkelziffer, desto besser
+  dabei die Dunkelziffer, desto besser,
+<li> und nicht zuletzt vermutlich durch warmes Wetter, wie jede Grippe.
 </ul>
 Nat&uuml;rlich wird die Epidemie auch durch sp&auml;ter verf&uuml;gbare
-Impfungen, d.h. externe Erh&ouml;hung von <i>x*)</i>, ausgebremst.
+Impfungen, d.h. externe Erh&ouml;hung von <i>x*</i>, ausgebremst.
 
 <br><br><li> <span class="important">Ansteckungsstart</span> 
 gleich 1 Tag bedeutet, bereits einen
@@ -316,9 +330,12 @@ von <tt>corona.js</tt>
   Grafik die vertikale graue Linie.
 
 
-<li> Sterbewahrscheinlichkeit <tt>fracDie</tt>. Dies ist auf 0.0040
-  initialisiert, wird aber auf <tt>fracDie=0.04*rTest</tt> gesetzt,
-  wenn beim Neustart die Testrate ungleich ihrem anf&auml;ngichen Wert
+<li> Sterbewahrscheinlichkeit <i>p<sub>D</sub></i> bzw. in Javascript <tt>fracDie</tt>. Dies ist auf 0.004
+  initialisiert, wird aber auf <i>p<sub>D</sub>=0.04
+  p<sub>T</sub></i> gesetzt, 
+  wenn beim Neustart die
+  Testwahrscheinlichkeit <i>p<sub>T</sub></i> ungleich ihrem
+  anf&auml;ngichen Wert 
   von 10% ist. 
 
 <li> Mittlere Zeitdauer &tau;<sub>D</sub> bzw im

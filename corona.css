@@ -189,13 +189,13 @@ a:hover {
   z-index: 2; # the higher the more on top
 }
 
-#flagsData{ 
+#countryData{ 
   position: absolute;
   top:   93vh;  /* 6 for the title, 24 for the sliders */
   right:  18vw;
   width:  6vmin;
   height: 6vmin;
-  z-index: 2; # the higher the more on top
+  z-index: 3; # the higher the more on top
 }
 
 
@@ -295,7 +295,7 @@ screen and (min-resolution: 1.5dppx) and (min-aspect-ratio: 1/1){
 }
 
 
-#displayTypeDiv{  /*mobile, landscape */
+#countryData{ /*mobile, landscape */
   top:     16vh; 
   width:   15vw;
   left:    82vw;
@@ -342,10 +342,11 @@ screen and (min-resolution: 1.5dppx) and (min-aspect-ratio: 1/1){
   width:  15vmin;
 }
 
-#flagsData{ 
+#displayTypeDiv{  /*mobile, landscape */
   top:   91vh;  /* 6 for the title, 24 for the sliders */
   right:   18vw;
 }
+
 }
 
 /*#########################################################*/
@@ -445,7 +446,7 @@ input[type=range]::-webkit-slider-thumb {
   width:  15vmin;
 }
 
-#flagsData{ 
+#countryData{ 
   top:   calc(38vmin + 56vh);
   right:   18vw;
 }

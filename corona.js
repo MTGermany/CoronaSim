@@ -8,6 +8,7 @@
 
 var useGithubData=true;
 var country="Germany"
+var countryGer="Deutschland"
 
 
 
@@ -180,7 +181,7 @@ function initializeData(country) {
     dataGit_cumRecovered[it]=data[it]["recovered"];
     dataGit_deathsCases[it]=(data_cumCases[it]==0)
       ? 0 : dataGit_cumDeaths[it]/dataGit_cumCases[it];
-    if(true){
+    if(false){
 	  console.log("it=",it," dataGit_date=",dataGit_date[it],
 		      "\n dataGit_cumCases=",dataGit_cumCases[it],
 		      " dataGit_cumDeaths=",dataGit_cumDeaths[it],
@@ -378,17 +379,40 @@ function myStartStopFunction(){
   }
 }
 
-function toggleData(){ 
+function selectDataCountry(){ 
+  console.log("in selectDataCountry()");
   if(typeof fetch === "undefined"){
     console.log("You are using an old Browser that does not understand Javascript's fetch");
     console.log("cannot change country data");
     return;
   }
 
-  country=(country==="Germany") ? "Switzerland" : "Germany";
-  flagName=(country==="Germany") ? "flagSwitzerland.png" : "flagGermany.png";
-  console.log("toggleData: new country=",country," flagName=",flagName);
-  document.getElementById("flag").src="figs/"+flagName;
+  const countryGerList={
+    "Germany": "Deutschland",
+    "Austria": "&Ouml;sterreich",
+    "Czechia": "Tschechien",
+    "France": "Frankreich",
+    "United Kingdom": "England",
+    "Italy": "Italien",
+    "Poland": "Polen",
+    "Spain": "Spanien",
+    "Sweden": "Schweden",
+    "Switzerland": "Schweiz",
+    "China": "China",
+    "India": "Indien",
+    "Japan": "Japan",
+    "Russia": "Ru&szlig;land",
+    "Turkey": "T&uuml;rkei",
+    "US": "USA"
+  }
+
+  country=document.getElementById("countries").value;
+  countryGer=countryGerList[country];
+
+  //flagName=(country==="Germany") ? "flagSwitzerland.png" : "flagGermany.png";
+  //document.getElementById("flag").src="figs/"+flagName;
+  document.getElementById("title").innerHTML=
+    "Simulation der Covid-19 Pandemie "+ countryGer;
   initializeData(country);
   myRestartFunction();
 }
@@ -834,13 +858,16 @@ DrawSim.prototype.drawAxes=function(displayType){
  //define y2 axis label positions and text
 
   var ymin2=0;
-  var ymax2=Math.max(10,this.ymaxPerc);
-  var power10=Math.floor(log10(ymax2));
-  var multiplicator=Math.pow(10, power10);
-  var ymaxRange01=ymax2/multiplicator;
-  var dy2=(ymaxRange01<2) ? 0.2*multiplicator
-      :(ymaxRange01<5) ? 0.5*multiplicator : multiplicator;
-  var ny2=Math.floor(ymax2/dy2);
+  var ymax2=this.ymaxPerc;
+  //var ymax2=Math.min(10,this.ymaxPerc);
+  if(displayType==="lin"){
+    var power10=Math.floor(log10(ymax2));
+    var multiplicator=Math.pow(10, power10);
+    var ymaxRange02=ymax2/multiplicator;
+    var dy2=(ymaxRange02<2) ? 0.2*multiplicator
+        :(ymaxRange02<5) ? 0.5*multiplicator : multiplicator;
+    var ny2=Math.floor(ymax2/dy2);
+  }
 
 
 
@@ -890,9 +917,8 @@ DrawSim.prototype.drawAxes=function(displayType){
 
   // draw name+values y1 axis
 
-  var land=(country==="Germany") ? "Deutschland" : "Schweiz";
   var label_y=(displayType==="lin")
-    ? land+": Personenzahl (in Tausend)" : land+": Personenzahl";
+    ? countryGer+": Personenzahl (in Tausend)" : countryGer+": Personenzahl";
 
   var yPix=(displayType==="lin")
     ? this.yPix0+0.01*this.hPix : this.yPix0+0.15*this.hPix;
@@ -1038,6 +1064,7 @@ DrawSim.prototype.updateOneDay=function(it,displayType,xtot,xt,y,yt,z){
       this.ymaxLin=this.yDataLin[q][it];
       if(displayType==="lin"){erase=true;}
     }
+
     if((this.isActiveLog[q])&&(this.yDataLog[q][it]>this.ymaxLog)){
       this.ymaxLog=this.yDataLog[q][it];
       if (displayType==="log"){erase=true;}
@@ -1060,14 +1087,18 @@ DrawSim.prototype.updateOneDay=function(it,displayType,xtot,xt,y,yt,z){
   // take care of data=max in linear representation
 
 
-  if(useGithubData && (displayType==="lin") && (this.isActiveLin[1])){
+  if(useGithubData && (displayType==="lin")){
     var i_dataGit=it+dataGit_istart;
-      if(i_dataGit<dataGit_cumCases.length){
+    if(i_dataGit<dataGit_cumCases.length){
+
       if(dataGit_cumCases[i_dataGit]>this.unitPers*this.ymaxLin){
-	//console.log("drawsim.ymaxLin=",this.ymaxLin);
 	this.ymaxLin=dataGit_cumCases[i_dataGit]/this.unitPers;
 	erase=true;
+      }
 
+      if(100*dataGit_deathsCases[i_dataGit]>this.ymaxPerc){
+	this.ymaxPerc=100*dataGit_deathsCases[i_dataGit];
+	erase=true;
       }
     }
   }
