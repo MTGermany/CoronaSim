@@ -456,6 +456,22 @@ function selectDataCountry(){
     "US": "USA"
   }
 
+  const n0List={
+    "Germany"       :   80500000,
+    "Austria"       :    8800000,
+    "Czechia"       :   10700000,
+    "France"        :   67400000,
+    "United Kingdom":   65100000,
+    "Italy"         :   62200000,
+    "Poland"        :   38400000,
+    "Spain"         :   49300000,
+    "Sweden"        :   10000000,
+    "Switzerland"   :    8300000,
+    "India"         : 1353000000,
+    "Russia"        :  144000000,
+    "US"            :  328000000
+  }
+
   const R03List={
     "Germany"       : 1.70,
     "Austria"       : 1.93,
@@ -507,6 +523,7 @@ function selectDataCountry(){
 
   country=document.getElementById("countries").value;
   countryGer=countryGerList[country];
+  n0=parseInt(n0List[country]);
   R03=R03List[country];
   R04=R04List[country];
   R0=R0List[country];
