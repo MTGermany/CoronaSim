@@ -456,6 +456,24 @@ function selectDataCountry(){
     "US": "USA"
   }
 
+/*
+  const templateList={
+    "Germany"       : 
+    "Austria"       : 
+    "Czechia"       : 
+    "France"        : 
+    "United Kingdom": 
+    "Italy"         : 
+    "Poland"        : 
+    "Spain"         : 
+    "Sweden"        : 
+    "Switzerland"   : 
+    "India"         : 
+    "Russia"        : 
+    "US"            : 
+  }
+*/
+
   const n0List={
     "Germany"       :   80500000,
     "Austria"       :    8800000,
@@ -472,58 +490,147 @@ function selectDataCountry(){
     "US"            :  328000000
   }
 
+
+  const tauRecoverList={
+    "Germany"       : 25,
+    "Austria"       : 28,
+    "Czechia"       : 37,
+    "France"        : 25,
+    "United Kingdom": 25,
+    "Italy"         : 25,
+    "Poland"        : 25,
+    "Spain"         : 25,
+    "Sweden"        : 25,
+    "Switzerland"   : 27,
+    "India"         : 26,
+    "Russia"        : 25,
+    "US"            : 25
+  }
+
+  const tauDieList={
+    "Germany"       : 21,
+    "Austria"       : 22,
+    "Czechia"       : 24,
+    "France"        : 21,
+    "United Kingdom": 21,
+    "Italy"         : 21,
+    "Poland"        : 21,
+    "Spain"         : 21,
+    "Sweden"        : 21,
+    "Switzerland"   : 18,
+    "India"         : 21,
+    "Russia"        : 21,
+    "US"            : 21
+  }
+
+  const fracDieInitList={
+    "Germany"       : 0.0040,
+    "Austria"       : 0.0040,
+    "Czechia"       : 0.0041,
+    "France"        : 0.0040,
+    "United Kingdom": 0.0040,
+    "Italy"         : 0.0040,
+    "Poland"        : 0.0040,
+    "Spain"         : 0.0040,
+    "Sweden"        : 0.0040,
+    "Switzerland"   : 0.0055,
+    "India"         : 0.0085,
+    "Russia"        : 0.0040,
+    "US"            : 0.0040
+  }
+
+
+
+  const R01List={
+    "Germany"       : 2.6,
+    "Austria"       : 3.0,
+    "Czechia"       : 2.6,
+    "France"        : 2.4,
+    "United Kingdom": 3.0,
+    "Italy"         : 2.2,
+    "Poland"        : 2.6,
+    "Spain"         : 2.6,
+    "Sweden"        : 2.2,
+    "Switzerland"   : 3.5,
+    "India"         : 3.5,
+    "Russia"        : 2.6,
+    "US"            : 3.0
+  }
+
+  const R02List={
+    "Germany"       : 2.2,
+    "Austria"       : 2.4,
+    "Czechia"       : 2.2,
+    "France"        : 2.0,
+    "United Kingdom": 3.0,
+    "Italy"         : 1.8,
+    "Poland"        : 2.2,
+    "Spain"         : 2.2,
+    "Sweden"        : 1.8,
+    "Switzerland"   : 1.35,
+    "India"         : 2.6,
+    "Russia"        : 2.2,
+    "US"            : 3.0
+  }
+
   const R03List={
     "Germany"       : 1.70,
-    "Austria"       : 1.93,
+    "Austria"       : 1.34,
     "Czechia"       : 1.64,
-    "France"        : 1.70,
-    "United Kingdom": 2.90,
-    "Italy"         : 0.70,
+    "France"        : 2.05,
+    "United Kingdom": 2.14,
+    "Italy"         : 1.18,
     "Poland"        : 2.09,
-    "Spain"         : 1.98,
-    "Sweden"        : 0.92,
-    "Switzerland"   : 1.76,
-    "India"         : 2.40,
-    "Russia"        : 3.05,
-    "US"            : 3.45
+    "Spain"         : 1.83,
+    "Sweden"        : 1.44,
+    "Switzerland"   : 1.20,
+    "India"         : 1.45,
+    "Russia"        : 2.83,
+    "US"            : 2.73
   }
 
   const R04List={
     "Germany"       : 0.95,
-    "Austria"       : 0.52,
-    "Czechia"       : 0.95,
+    "Austria"       : 0.58,
+    "Czechia"       : 1.04,
     "France"        : 1.04,
-    "United Kingdom": 1.54,
+    "United Kingdom": 1.87,
     "Italy"         : 0.87,
     "Poland"        : 1.62,
     "Spain"         : 0.89,
-    "Sweden"        : 1.42,
-    "Switzerland"   : 0.63,
-    "India"         : 2.61,
-    "Russia"        : 2.66,
-    "US"            : 1.68
+    "Sweden"        : 1.37,
+    "Switzerland"   : 0.80,
+    "India"         : 3.05,
+    "Russia"        : 2.7,
+    "US"            : 1.79
   }
 
   const R0List={
     "Germany"       : 0.75,
-    "Austria"       : 0.60,
-    "Czechia"       : 0.75,
+    "Austria"       : 0.58,
+    "Czechia"       : 0.72,
     "France"        : 0.94,
-    "United Kingdom": 1.12,
+    "United Kingdom": 1.09,
     "Italy"         : 0.90,
     "Poland"        : 1.03,
     "Spain"         : 0.83,
-    "Sweden"        : 1.10,
-    "Switzerland"   : 0.63,
-    "India"         : 1.36,
-    "Russia"        : 1.72,
-    "US"            : 1.06
+    "Sweden"        : 1.05,
+    "Switzerland"   : 0.70,
+    "India"         : 1.41,
+    "Russia"        : 1.78,
+    "US"            : 1.01
   }
 
 
   country=document.getElementById("countries").value;
   countryGer=countryGerList[country];
   n0=parseInt(n0List[country]);
+  fracDieInit=parseFloat(fracDieInitList[country]);
+  tauRecover=parseFloat(tauRecoverList[country]);
+  tauDie=parseFloat(tauDieList[country]);
+  taumax=Math.max(tauDie,tauRecover)+tauAvg+1;
+  R01=R01List[country];
+  R02=R02List[country];
   R03=R03List[country];
   R04=R04List[country];
   R0=R0List[country];
@@ -578,7 +685,7 @@ function simulationRun() {
 //#########################################
 
 function doSimulationStep(){
-  if(it<3){console.log(" calling drawsim.updateOneDay: it=",it,
+  if(false){console.log(" calling drawsim.updateOneDay: it=",it,
 		       " n0* arg corona.xt=",n0*corona.xt);}
   drawsim.updateOneDay(it, displayType, corona.xtot, corona.xt,
 		       corona.y, corona.yt, corona.z);
@@ -611,8 +718,12 @@ function CoronaSim(){
 CoronaSim.prototype.init=function(){
 
   // start warmup at a very early phase
+  // !! start with n0*this.xtot>=1, otherwise infection dead
+  // feature, not bug
 
-  this.xtot=10/n0;  // cumulated fraction of infected as a function of time
+  this.xtot=1.01/n0; 
+  this.xtotohne=1.01/n0; 
+  console.log("n0=",n0," 0.99/n0=",0.99/n0," this.xtot=",this.xtot);
   this.xt=0; // fraction of positively tested persons/n0 as f(t)
   this.y=0;  // fraction recovered real as a function of time
   this.yt=0; // fraction recovered data
@@ -641,7 +752,9 @@ CoronaSim.prototype.init=function(){
     this.updateOneDay(Rt);
     if(false){
       console.log("warmup: it=",it,
-		  " n0*this.xtot=",n0*this.xtot.toPrecision(3),
+		  " R0fun(this.xt)=",R0fun(this.xt),
+		  " this.xtot=",this.xtot,
+		  " n0*this.xtot=",n0*this.xtot,
 		  " n0*this.xt=",n0*this.xt.toPrecision(3),
 		 // " n0*this.y=",n0*this.y.toPrecision(3),
 		  //" n0*this.yt=",n0*this.yt.toPrecision(3),
@@ -657,11 +770,12 @@ CoronaSim.prototype.init=function(){
   // exactly to data nxtStart
  
   var scaleDownFact=nxtStart/(n0*this.xt);
-  this.xtot *= scaleDownFact;
-  this.xt   *= scaleDownFact;
-  this.y    *= scaleDownFact;
-  this.yt   *= scaleDownFact;
-  this.z    *= scaleDownFact;
+  this.xtot     *= scaleDownFact;
+  this.xtotohne *= scaleDownFact;
+  this.xt       *= scaleDownFact;
+  this.y        *= scaleDownFact;
+  this.yt       *= scaleDownFact;
+  this.z        *= scaleDownFact;
   for(var tau=0; tau<taumax; tau++){
     this.x[tau]     *= scaleDownFact;
     this.xohne[tau] *= scaleDownFact;
@@ -704,6 +818,7 @@ CoronaSim.prototype.updateOneDay=function(R){ //it++ at end
   if(false){
     console.log("Corona.updateOneDay: it=",it,
 	//	"this.xtot=",this.xtot.toPrecision(3),
+	//	"this.xtotohne=",this.xtotohne.toPrecision(3),
 		"this.xt=",this.xt.toPrecision(3),
 		"this.yt=",this.yt.toPrecision(3),
 		"this.z=",this.z.toPrecision(3),
@@ -735,10 +850,11 @@ CoronaSim.prototype.updateOneDay=function(R){ //it++ at end
 
   this.x[0]=0;
   var f_R=1./(tauRend-tauRstart+1);
-  if(n0*this.xtot>=1){ // infection finally dead if xtot<1
+  if(n0*this.xtot>=1){ // !!! infection finally dead if xtot<1
    for(var tau=tauRstart; tau<=tauRend; tau++){
     this.x[0]+=R*f_R*this.x[tau]
-      *(1-(this.xtot+this.y+this.z));
+      //*(1-(this.xtot+this.y+this.z)); //!!!
+      *(1-this.xtotohne);
     if(false){
       console.log("Corona.updateOneDay: it=",it," tau=",tau.toPrecision(3),
 		" R*f_R=",R*f_R.toPrecision(3),
@@ -814,20 +930,24 @@ CoronaSim.prototype.updateOneDay=function(R){ //it++ at end
   // sum up the profile of infected people
 
   this.xtot=0;
+  this.xtotohne=0;
   for(var tau=0; tau<taumax; tau++){
-    this.xtot += this.x[tau];
+    this.xtot     += this.x[tau];
+    this.xtotohne += this.xohne[tau];
   }
 
 
   // control output
 
-  if(false){
+  if(it<10){
     console.log("end CoronaSim.updateOneDay: it=",it,
-		" xt=",this.xt.toPrecision(3),
-		" xtot=",this.xtot.toPrecision(3),
-		" y=",this.y.toPrecision(3),
-		" yt=",this.yt.toPrecision(3),
-		" z=",this.z.toPrecision(3)
+		" nxt=",(n0*this.xt).toPrecision(5),
+		" nxtot=",(n0*this.xtot).toPrecision(6),
+		" nxtotohne=",(n0*this.xtotohne).toPrecision(6),
+	//	" ny=",(n0*this.y).toPrecision(5),
+	//	" nyt=",(n0*this.yt).toPrecision(5),
+	//	" nz=",(n0*this.z).toPrecision(5),
+		""
 	     );
   }
 
@@ -1179,7 +1299,7 @@ DrawSim.prototype.updateOneDay=function(it,displayType,xtot,xt,y,yt,z){
   this.yDataLin[2][it]=n0*y/this.unitPers;
   this.yDataLin[3][it]=n0*yt/this.unitPers;
   this.yDataLin[4][it]=n0*z/this.unitPers;
-  this.yDataLin[5][it]=(xt>1e-6) ? 100*z/xt : 0; // yDataLin[5] "rel"[%] 
+  this.yDataLin[5][it]=(xt>1e-12) ? 100*z/xt : 0; // yDataLin[5] "rel"[%] 
 
   this.yDataLog[0][it]=log10(n0*xtot); 
   this.yDataLog[1][it]=log10(n0*xt);
@@ -1188,7 +1308,7 @@ DrawSim.prototype.updateOneDay=function(it,displayType,xtot,xt,y,yt,z){
   this.yDataLog[4][it]=log10(n0*z);
   this.yDataLog[5][it]=(xt>1e-6) ? log10(100*z/xt) : 0;
 
-  if(it<3){console.log("DrawSim.updateOneDay: it=",it,
+  if(false){console.log("DrawSim.updateOneDay: it=",it,
 			" this.yDataLin[1][it]=",this.yDataLin[1][it],
 			//" this.yDataLog[0][it]=",this.yDataLog[0][it],
 			"");}
