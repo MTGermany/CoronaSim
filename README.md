@@ -1,6 +1,7 @@
-# mtreiber.de/CoronaSim/
+# MTGermany/CoronaSim
+
 Source code for the interactive Javascript simulation at
-[mtreiber.de/CoronaSim](https://mtreiber.de/CoronaSim)
+[corona-simulation.de](https://corona-simulation.de)
 
 ## Running the Simulation
 
@@ -20,11 +21,16 @@ drives some initialization via
  <body onload="startup()"> 
 ```
 
+## Data Used
+
+This project uses the [Covid-19
+data](https://pomber.github.io/covid19/timeseries.json) that have been
+brought into the `json` format by the ressources of the Github repo [pomber/covid19](https://github.com/pomber/covid19)
 
 ## Programm Files and Structure
 
 The javascript code uses the pseudo objects `CoronaSim` and
-`DrawSimin` that do what is expected by their names. Particularly,
+`DrawSim` that do what is expected by their names. Particularly,
 both have a method `.updateOneDay` that defines the timestep:
 one day:
 
