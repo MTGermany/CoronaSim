@@ -10,12 +10,11 @@
 
 // var fps
 
+/*
 var slider_fps=document.getElementById("slider_fps");
 var slider_fpsText = document.getElementById("slider_fpsText");
 
 
-//fps=parseFloat(slider_fps.value);
-//setSlider(slider_fps, slider_fpsText, slider_fps.value,"");
 setSlider(slider_fps, slider_fpsText, fps," Tage/s");
 
 
@@ -26,16 +25,42 @@ slider_fps.oninput = function() {
   clearInterval(myRun);
   if(!isStopped){myRun=setInterval(simulationRun, 1000/fps);}
 }
+*/
 
+
+// var R03
+
+var slider_R03=document.getElementById("slider_R03");
+var slider_R03Text = document.getElementById("slider_R03Text");
+
+setSlider(slider_R03, slider_R03Text, R03,"");
+
+
+slider_R03.oninput = function() {
+  slider_R03Text.innerHTML = "&nbsp;"+this.value;
+  R03=parseFloat(this.value);
+  console.log("slider1 callback: R03="+R03);
+}
+
+// var R04
+
+var slider_R04=document.getElementById("slider_R04");
+var slider_R04Text = document.getElementById("slider_R04Text");
+
+setSlider(slider_R04, slider_R04Text, R04,"");
+
+
+slider_R04.oninput = function() {
+  slider_R04Text.innerHTML = "&nbsp;"+this.value;
+  R04=parseFloat(this.value);
+  console.log("slider1 callback: R04="+R04);
+}
 
 // var R0
 
 var slider_R0=document.getElementById("slider_R0");
 var slider_R0Text = document.getElementById("slider_R0Text");
 
-
-//R0=parseFloat(slider_R0.value);
-//setSlider(slider_R0, slider_R0Text, slider_R0.value,"");
 setSlider(slider_R0, slider_R0Text, R0,"");
 
 
@@ -94,7 +119,6 @@ slider_tauRend.oninput = function() {
 //var pTest;
 
 var slider_pTest=document.getElementById("slider_pTest");
-console.log("slider_pTest=",slider_pTest);
 var slider_pTestText = document.getElementById("slider_pTestText");
 
 setSlider(slider_pTest, slider_pTestText, 100*pTest, " %");
@@ -104,7 +128,7 @@ slider_pTest.oninput = function() {
   slider_pTestText.innerHTML = "&nbsp;"+this.value+" %";
   var pTestold=pTest;
   pTest=parseFloat(this.value/100.);
-  console.log("slider4 callback: pTest="+pTest);
+  //console.log("slider4 callback: pTest="+pTest);
 }
 
 
@@ -121,7 +145,7 @@ slider_tauTest.oninput = function() {
   tauTest=parseFloat(this.value);
   slider_tauTestText.innerHTML = "&nbsp;"+this.value
     +((tauTest==1) ? " Tag" : " Tagen");
-  console.log("slider2 callback: tauTest="+tauTest);
+  //console.log("slider2 callback: tauTest="+tauTest);
 }
 
 
@@ -153,7 +177,7 @@ slider_param4.oninput = function() {
 // unit:          as displayed by html, e.g., "%"
 
 function setSlider(slider, sliderText, value, unit){
-  console.log("setSlider: slider=",slider);
+  //console.log("setSlider: slider=",slider);
   slider.value=value;
   sliderText.innerHTML="&nbsp;"+value+unit;
 }
@@ -238,9 +262,9 @@ function canvas_resize(){
   if(hasChanged){sizemin=Math.min(canvas.width,canvas.height);}
 
   if(drawsim!==null){drawsim.setDisplayType(displayType);}
-  console.log("canvas_resize: new canvas dimensions ",
-	      canvas.width," X ",canvas.height);
-  console.log("drawsim.hPix=",drawsim.hPix);
+  //console.log("canvas_resize: new canvas dimensions ",
+//	      canvas.width," X ",canvas.height);
+  //console.log("drawsim.hPix=",drawsim.hPix);
 }
 
 

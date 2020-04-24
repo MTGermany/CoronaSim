@@ -38,20 +38,20 @@ Info
 <label for="countries">Data:</label>
 <select id="countries" onchange=selectDataCountry()> 
   <option value="Germany">Deutschland</option>
-  <option value="Austria">&Ouml;sterreich</option>
-  <option value="Czechia">Tschechien</option>
-  <option value="France">Frankreich</option>
   <option value="United Kingdom">England</option>
+  <option value="France">Frankreich</option>
   <option value="Italy">Italien</option>
+  <option value="Austria">&Ouml;sterreich</option>
   <option value="Poland">Polen</option>
-  <option value="Spain">Spanien</option>
   <option value="Sweden">Schweden</option>
   <option value="Switzerland">Schweiz</option>
-  <option value="China">China</option>
+  <option value="Spain">Spanien</option>
+  <option value="Czechia">Tschechien</option>
+ <!-- <option value="China">China</option>-->
   <option value="India">Indien</option>
-  <option value="Japan">Japan</option>
+ <!-- <option value="Japan">Japan</option>-->
   <option value="Russia">Ru&szlig;land</option>
-  <option value="Turkey">T&uuml;rkei</option>
+ <!-- <option value="Turkey">T&uuml;rkei</option>-->
   <option value="US">USA</option>
 </select>
 </div>
@@ -115,10 +115,27 @@ Info
 
 <!-- attribute "value" not given, set in js-->
 
+
+  <tr>
+    <td> Infektionsrate R<sub>30%</sub></td>
+    <td> <input id="slider_R03" type="range" 
+                min="0" max="4" step="0.01"></td> 
+    <td> <div id="slider_R03Text"></div> </td>
+  </tr>
+
+
+  <tr>
+    <td> Infektionsrate R<sub>start</sub></td>
+    <td> <input id="slider_R04" type="range" 
+                min="0" max="4" step="0.01"></td> 
+    <td> <div id="slider_R04Text"></div> </td>
+  </tr>
+
+
   <tr>
     <td> Infektionsrate R<sub>0</sub></td>
     <td> <input id="slider_R0" type="range" 
-                min="0" max="4" step="0.01"></td> 
+                min="0" max="2" step="0.01"></td> 
     <td> <div id="slider_R0Text"></div> </td>
   </tr>
 
@@ -152,12 +169,14 @@ Info
     <td> <div id="slider_pTestText"></div> </td>
   </tr>
 
+<!--
   <tr>
     <td> Sim-Geschwindigkeit</td>
     <td> <input id="slider_fps" type="range" 
                 min="1" max="30" step="1"></td> 
     <td> <div id="slider_fpsText"></div> </td>
   </tr>
+-->
 
 </table>
 

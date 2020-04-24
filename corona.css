@@ -149,14 +149,14 @@ a:hover {
 
 #sliders{ 
   position: absolute;
-  top:   9vh; 
+  top:   7vh; 
   left:   15vw;
   width:  70vw;
-  height:  19vh;
+  height:  22vh;
   background-color: rgb(222,255,222);
   margin-right: 0vw;
   margin-left: 0vw;
-  z-index: 2;  # the higher the more on top
+  z-index: 3;  # the higher the more on top
 }
 
 #contents{ /* contains the canvas */
@@ -191,18 +191,17 @@ a:hover {
 
 #countryData{ 
   position: absolute;
-  top:   93vh;  /* 6 for the title, 24 for the sliders */
-  right:  18vw;
-  width:  6vmin;
-  height: 6vmin;
-  z-index: 3; # the higher the more on top
+  top:   94vh;  /* 6 for the title, 24 for the sliders */
+  right:  12vw;
+  width:  30vmin;
+  z-index: 4; # the higher the more on top
 }
 
 
 
 #displayTypeDiv{ /* linear or logarithmic */
   position: absolute;
-  top:     93vh; 
+  top:     94vh; 
   left:   3vw;
   z-index: 3; /* the higher the integer, the more on top */
 }
@@ -304,19 +303,11 @@ screen and (min-resolution: 1.5dppx) and (min-aspect-ratio: 1/1){
 
 #sliders{     /*mobile, landscape */
   position: absolute;
-  top:   2vh; 
+  top:   0.5vh; 
   background-color: rgb(255,255,255);
   left:   20vw;
   width:  65vw;
   height:  26vh;
-}
-
-#sliderTimewarp{   /*mobile, landscape */
-  position: absolute;
-  top:   30vh; 
-  left:   45vw;
-  width:  57vw;
-  height:  4vh;
 }
 
 
@@ -419,36 +410,37 @@ input[type=range]::-webkit-slider-thumb {
 
 #contents{           /*mobile, portrait */
   position: absolute;
-  top:   38vmin;  
+  top:   42vmin;  
   left:  2vmin;
   width:  96vmin;
-  height: 60vh;
+  height: 55vh;
 }
 
 #info{ /* top middle of the canvas */
   position: absolute;
-  top:   39vmin;    /* 6 for the title, 24 for the sliders */
+  top:   42vmin;  
   left:   55vw;
   width:  15vmin;
 }
 
 #displayTypeDiv{  /*mobile, portrait */
   position: absolute;
-  top:   calc(38vmin + 56vh);    /* 6 for the title, 24 for the sliders */
+  top:   calc(42vmin + 56vh); 
   left:   2vw;
 }
 
 
 #impressum{ /* top middle of the canvas */
   position: absolute;
-  top:   calc(38vmin + 57vh);    /* 6 for the title, 24 for the sliders */
+  top:   calc(42vmin + 56vh);    
   right:   2vw;
   width:  15vmin;
 }
 
 #countryData{ 
-  top:   calc(38vmin + 56vh);
-  right:   18vw;
+  top:   calc(42vmin + 56vh);
+  width: 40vw;
+  left:   40vw;
 }
 
 }  /*smartphone and max-aspect-ratio: 1/1*/

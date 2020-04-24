@@ -9,6 +9,8 @@
 var useGithubData=true;
 var country="Germany"
 var countryGer="Deutschland"
+var dayStartMar=(useGithubData) ? 19 : 20;
+var startDay=new Date(2020,02,dayStartMar); // months start @ zero, days @ 1
 
 
 
@@ -22,22 +24,51 @@ var itmax;      // can be >itmaxinit during interactive simulation
 
 var n0=80.e6;  // #persons in Germany
 
-var R01=3;     // varying R0 rates calibrated to data
-var R02=(useGithubData) ? 1.7 : 1.6;
-var R03=1.2;
-var nxt1=2000;
-var nxt2=10000;
-var nxtR0=30000;
-var nxtStart=10000; // number of positively tested infections@start
-                    // (mar20, begin lockdown, nxt=13957)
 
-var dayStartMar=(useGithubData) ? 19 : 20;
-var startDay=new Date(2020,02,dayStartMar); // months start with zero, days with 1
+// central R0 values initialized for Germany
+// GER: R03=1.70, R04=0.95, R0=0.75
+// A:   R03=1.93, R04=0.52, R0=0.60
+// CZ:  R03=1.64, R04=0.95, R0=0.75
+// FR:  R03=1.70, R04=1.04, R0=0.94
+// GB:  R03=2.90, R04=1.54, R0=1.12
+// I:   R03=0.70, R04=0.87, R0=0.90 schlecht
+// PL:  R03=2.09, R04=1.62, R0=1.03
+// ESP: R03=1.98, R04=0.89, R0=0.83
+// SWE: R03=0.92, R04=1.42, R0=1.10 
+// SWI: R03=1.76, R04=0.63, R0=0.63
+// IND: R03=2.40, R04=2.61, R0=1.36
+// RUS: R03=3.05, R04=2.66, R0=1.72
+// USA: R03=3.45, R04=1.68, R0=1.06
+
+// TK:  R03=4.00, R04=4.00, R0=1.35 schlecht
+// JP:  R03=0.49, R04=1.66, R0=1.13 schlecht
+
+var R01=2.6;                           // 2.6
+var R02=2.2;                           // 2.2
+var R03=1.7;                            // 1.7
+var R04=(useGithubData) ? 0.95 : 1.05; // 0.95
+var R0=0.75;                           // 0.75
+
+// number of positively tested infections@start
+// nxt=13957  (eu) or 15320 (git)
+
+var nxtStart=(useGithubData) ? 15320 : 13957; // xt @ startDay
+var fact1=0.1;     // fix: R01 active if xt<fact1*xtStart 0.1
+var fact2=0.3;     // fix: R02 active if xt<fact2*xtStart 0.5
+var fact3=1.0;     // fix: R03 active if xt<fact3*xtStart 2.0
+var fact4=3.0;     // fix: R04 active if xt<fact4*xtStart, otherwise R0 
+
+var nxt1=fact1*nxtStart;
+var nxt2=fact2*nxtStart;
+var nxt3=fact3*nxtStart;
+var nxtR0=fact4*nxtStart;
+
 var oneDay_ms=(1000 * 3600 * 24);
 
 var ln10=Math.log(10);
 var displayType="lin"; // "lin" or "log"; consolidate with html
 
+// if use Europe opendata portal
 
 var data_date_ddmmyyyy=[];
 var data_diff2start=[];
@@ -47,6 +78,14 @@ var data_deaths=[];
 var data_cumDeaths=[];
 var data_deathsCases=[];
 
+
+// if(useGithubData) 
+// fetch with https://pomber.github.io/covid19/timeseries.json
+// !! does not work with old browsers
+
+var dataGit=[];
+var dataGit_dateBegin;
+
 var dataGit_istart;
 var dataGit_date=[];
 var dataGit_cumCases=[];
@@ -55,19 +94,16 @@ var dataGit_cumRecovered=[];
 var dataGit_deathsCases=[];
 
 
-// if(useGithubData) 
-// fetch with https://pomber.github.io/covid19/timeseries.json
-// !! does not work with old browsers
-
-var dataGit=[];
-var dataGit_dateBegin;
-// global simulation  parameters (global to avoid alsways writing "this.")
 
 
-// now controlled by sliders
+
+
+// global simulation  parameters
+
+
+// (i) controlled by sliders (apart from R0)
 
 var fps=10;
-var R0=(useGithubData) ? 0.73 : 0.78;   // observed reproduction number
 var tauRstart=1;     // active infectivity begins [days since infection]
 var tauRend=10;       // active infectivity ends [days since infection]//10
 var pTestInit=0.1;   // initial percentage of tested infected persons 
@@ -75,7 +111,7 @@ var pTest=0.1;       // percentage of tested infected persons
 var tauTest=10;  // time delay [days] test-infection
 var tauAvg=5;      // smoothing interval for tauTest,tauDie,tauRecover
 
-// not controlled, set statically here
+// (ii) not controlled
 
 var fracDieInit=0.0040;  // fracDie for initial setting of pTest
 var fracDie=fracDieInit; // will be set to fracDieInit*pTest/pTestInit 
@@ -104,7 +140,8 @@ var sizemin=0;
 function R0fun(xt){
   return (n0*xt<nxt1) ? R01 : 
     (n0*xt<nxt2) ? R02 :
-    (n0*xt<nxtR0) ? R03 : R0;  // R0 controlled by sliders
+    (n0*xt<nxt3) ? R03 :
+    (n0*xt<nxtR0) ? R04 : R0;  // R0 controlled by sliders
 }
 
 
@@ -136,14 +173,18 @@ function getGithubData() {
   if(typeof fetch === "undefined"){
     console.log("You are using an old Browser that does not understand Javascript's fetch");
     useGithubData=false;
-    R02=1.6;
-    R0=0.78;
+    nxtStart=13957;
+    nxt1=fact1*nxtStart;   
+    nxt2=fact2*nxtStart;   
+    nxt3=fact3*nxtStart;   
+    nxtR0=fact4*nxtStart; 
+    R04=1.05;
     dayStartMar=20;
     startDay=new Date(2020,02,dayStartMar);
   }
 
   else{
-    console.log("fetch defined");
+    console.log("getGithubData(): fetch defined");
 
     fetch("https://pomber.github.io/covid19/timeseries.json")
       //.then((response1) => {
@@ -154,8 +195,8 @@ function getGithubData() {
       //.then((data1) => {
       .then(function(data1){
         dataGit=data1;
-        console.log("dataGit=",dataGit);
-        console.log("inner: dataGit[country]=",dataGit[country]);
+       // console.log("dataGit=",dataGit);
+        //console.log("inner: dataGit[country]=",dataGit[country]);
         initializeData(country);
       });
   }
@@ -166,7 +207,6 @@ function getGithubData() {
 function initializeData(country) {
 
   var data=dataGit[country];
-  console.log("initializeData: data=",data);
   var dateInitStr=data[0]["date"];
   dataGit_dateBegin=new Date(dateInitStr);
   dataGit_istart=Math.round(
@@ -189,30 +229,40 @@ function initializeData(country) {
     }
   }
 
-  console.log(
-	"\n\n\n",
-	"end initializeData: dateInitStr=",dateInitStr,
-	" dataGit_dateBegin=",dataGit_dateBegin,
-	"dataGit_istart=",dataGit_istart,
-	"\n dataGit_cumCases.length=",dataGit_cumCases.length,
-	"\n dataGit_date[dataGit_istart]",dataGit_date[dataGit_istart],
-	"\n dataGit_date[dataGit_istart+34]=",dataGit_date[dataGit_istart+34],
-	"\n\n\n");
+  nxtStart=dataGit_cumCases[dataGit_istart]; 
+  nxt1=fact1*nxtStart;   
+  nxt2=fact2*nxtStart;   
+  nxt3=fact3*nxtStart;   
+  nxtR0=fact4*nxtStart; 
+  //R01=(country==="Germany") ? 3 : 2.5;    //3 //!!! NO double setting!
+  //R02=(country==="Germany") ? 1.7 : 1.7; //1.5
+  //R03=(country==="Germany") ? 1.2 : 1.0; //0.9
+  //R0=(country==="Germany") ? 0.78 : 0.65;
+  //setSlider(slider_R0, slider_R0Text, R0,"");
 
-  nxtStart=(country==="Germany") ? 10000 : 3000; //3000
-  nxt1=(country==="Germany") ? 2000 : 800; //500
-  nxt2=(country==="Germany") ? 10000 : 2000; //2000
-  nxtR0=(country==="Germany") ? 30000 : 8000;
-  R01=(country==="Germany") ? 3 : 2.5;    //3
-  R02=(country==="Germany") ? 1.7 : 1.7; //1.5
-  R03=(country==="Germany") ? 1.2 : 1.0; //0.9
-  R0=(country==="Germany") ? 0.73 : 0.65;
-  setSlider(slider_R0, slider_R0Text, R0,"");
-
-  fracDieInit=(country==="Germany") ? 0.0040 : 0.0065;
-  tauDie=(country==="Germany") ? 21 : 20;
+  //fracDieInit=(country==="Germany") ? 0.0040 : 0.0065;
+  //tauDie=(country==="Germany") ? 21 : 20;
   tauTest=(country==="Germany") ? 10 : 10;
   setSlider(slider_tauTest, slider_tauTestText,tauTest, " Tagen");
+
+  console.log(
+    "\nend initializeData: country=",country,
+    "\n dataGit_istart=",dataGit_istart,
+    "\n dataGit_cumCases.length=",dataGit_cumCases.length,
+    "\n dataGit_date[0]=",dataGit_date[0],
+    "\n dataGit_date[dataGit_istart]",dataGit_date[dataGit_istart],
+    "\n dataGit_cumCases[dataGit_istart-1]",dataGit_cumCases[dataGit_istart-1],
+    "\n dataGit_cumCases[dataGit_istart]",dataGit_cumCases[dataGit_istart],
+    "\n dataGit_cumCases[dataGit_istart+1]",dataGit_cumCases[dataGit_istart+1],
+    "\n dataGit_cumCases[dataGit_istart+2]",dataGit_cumCases[dataGit_istart+2],
+    "\n dataGit_date[dataGit_cumCases.length-1]",
+    dataGit_date[dataGit_cumCases.length-1],
+    "\n nxtStart=",nxtStart,
+    "\n nxt1=",nxt1,
+    "\n nxt2=",nxt2,
+    "\n nxtR0=",nxtR0,
+    "\n"
+  );
 
 
 }
@@ -242,7 +292,7 @@ function startup() {
   itmaxinit = Math.round(
     (present.getTime() - startDay.getTime())/(oneDay_ms));
   itmax=itmaxinit;
-  console.log("present=",present," startDay=",startDay," itmaxinit=",itmaxinit);
+  console.log("present=",present);
 
 
 
@@ -328,7 +378,7 @@ function startup() {
   // actual startup
   // =============================================================
 
-  console.log("initialized.");
+  //console.log("initialized.");
   myStartStopFunction(); // starts simulation up to present !!
 
 }
@@ -352,7 +402,7 @@ function displayTypeCallback(){
 
   drawsim.setDisplayType(displayType); // clear and draAxes in setDisplay..
   drawsim.updateOneDay(it,displayType,corona.xtot,corona.xt,
-		       corona.y,corona.yt,corona.z); // to redraw lines
+		       corona.y,corona.yt,corona.z); // !! ONLY to redraw lines
   //myRestartFunction();
 }
 
@@ -365,7 +415,7 @@ function displayTypeCallback(){
 function myStartStopFunction(){ 
 
   clearInterval(myRun);
-  console.log("in myStartStopFunction: isStopped=",isStopped);
+  //console.log("in myStartStopFunction: isStopped=",isStopped);
 
 
   if(isStopped){
@@ -380,7 +430,7 @@ function myStartStopFunction(){
 }
 
 function selectDataCountry(){ 
-  console.log("in selectDataCountry()");
+  console.log("\n\nin selectDataCountry()");
   if(typeof fetch === "undefined"){
     console.log("You are using an old Browser that does not understand Javascript's fetch");
     console.log("cannot change country data");
@@ -398,16 +448,71 @@ function selectDataCountry(){
     "Spain": "Spanien",
     "Sweden": "Schweden",
     "Switzerland": "Schweiz",
-    "China": "China",
+  //  "China": "China",
     "India": "Indien",
-    "Japan": "Japan",
+  //  "Japan": "Japan",
     "Russia": "Ru&szlig;land",
-    "Turkey": "T&uuml;rkei",
+  //  "Turkey": "T&uuml;rkei",
     "US": "USA"
   }
 
+  const R03List={
+    "Germany"       : 1.70,
+    "Austria"       : 1.93,
+    "Czechia"       : 1.64,
+    "France"        : 1.70,
+    "United Kingdom": 2.90,
+    "Italy"         : 0.70,
+    "Poland"        : 2.09,
+    "Spain"         : 1.98,
+    "Sweden"        : 0.92,
+    "Switzerland"   : 1.76,
+    "India"         : 2.40,
+    "Russia"        : 3.05,
+    "US"            : 3.45
+  }
+
+  const R04List={
+    "Germany"       : 0.95,
+    "Austria"       : 0.52,
+    "Czechia"       : 0.95,
+    "France"        : 1.04,
+    "United Kingdom": 1.54,
+    "Italy"         : 0.87,
+    "Poland"        : 1.62,
+    "Spain"         : 0.89,
+    "Sweden"        : 1.42,
+    "Switzerland"   : 0.63,
+    "India"         : 2.61,
+    "Russia"        : 2.66,
+    "US"            : 1.68
+  }
+
+  const R0List={
+    "Germany"       : 0.75,
+    "Austria"       : 0.60,
+    "Czechia"       : 0.75,
+    "France"        : 0.94,
+    "United Kingdom": 1.12,
+    "Italy"         : 0.90,
+    "Poland"        : 1.03,
+    "Spain"         : 0.83,
+    "Sweden"        : 1.10,
+    "Switzerland"   : 0.63,
+    "India"         : 1.36,
+    "Russia"        : 1.72,
+    "US"            : 1.06
+  }
+
+
   country=document.getElementById("countries").value;
   countryGer=countryGerList[country];
+  R03=R03List[country];
+  R04=R04List[country];
+  R0=R0List[country];
+  setSlider(slider_R03, slider_R03Text, R03,"");
+  setSlider(slider_R04, slider_R04Text, R04,"");
+  setSlider(slider_R0,  slider_R0Text,  R0,"");
 
   //flagName=(country==="Germany") ? "flagSwitzerland.png" : "flagGermany.png";
   //document.getElementById("flag").src="figs/"+flagName;
@@ -422,7 +527,7 @@ function myRestartFunction(){
   fracDie=fracDieInit*pTest/pTestInit;
   console.log("restart: fracDie=",fracDie);
   startup();
-  if(useGithubData){
+  if(false&&useGithubData){
    console.log("restart: after startup: dataGit[0]=",
 	       dataGit[0]);
   }
@@ -444,20 +549,23 @@ function myRestartFunction(){
 function simulationRun() {
   doSimulationStep();
 
-// the hell knows why i need "+2" and not "+1"//!!! 
-// but it works, it's tested by numbers
-
   if(it==itmaxinit+1){ 
     clearInterval(myRun);myStartStopFunction();
   }
 }
 
-// displayType in {"lin", "log"}
+//#########################################
+// only called at main run, not warmup
+// need to plot first
+// because warmup already produced start values for it=0
+//#########################################
 
 function doSimulationStep(){
-  corona.updateOneDay(R0fun(corona.xt));
-  drawsim.updateOneDay(it,displayType, corona.xtot, corona.xt,
+  if(it<3){console.log(" calling drawsim.updateOneDay: it=",it,
+		       " n0* arg corona.xt=",n0*corona.xt);}
+  drawsim.updateOneDay(it, displayType, corona.xtot, corona.xt,
 		       corona.y, corona.yt, corona.z);
+  corona.updateOneDay(R0fun(corona.xt));
   it++;
 
 }
@@ -477,7 +585,7 @@ function log10(x){return Math.log(x)/ln10;}
 //################################################################
 
 function CoronaSim(){
-  console.log("CoronaSim created");
+  //console.log("CoronaSim created");
   this.x=[]; // age struture of fraction infected at given timestep
   this.xohne=[]; // age structure without deleting by recover,death
 }
@@ -527,13 +635,27 @@ CoronaSim.prototype.init=function(){
   if(it==200){console.log("required number of observed infections",
 			 " not reached during maximum warmup period");}
 
+
+  // scale down to match init value of n0*this.xt 
+  // exactly to data nxtStart
  
+  var scaleDownFact=nxtStart/(n0*this.xt);
+  this.xtot *= scaleDownFact;
+  this.xt   *= scaleDownFact;
+  this.y    *= scaleDownFact;
+  this.yt   *= scaleDownFact;
+  this.z    *= scaleDownFact;
+  for(var tau=0; tau<taumax; tau++){
+    this.x[tau]     *= scaleDownFact;
+    this.xohne[tau] *= scaleDownFact;
+  }
+
+
   console.log("init: finished warmup period of ",it,"days");
-  console.log("#observed infections : ", n0*this.xt);
-  console.log("#observed infections : ", n0*this.xt);
-  console.log("#total infections: n0*xtot=",n0*this.xtot);
-  console.log("#recovered: ny=n0*y=",n0*this.y);
-  console.log("#deceased: nz=n0*z",n0*this.z);
+  console.log("nxtStart=",nxtStart," #observed infections : ", n0*this.xt);
+  //console.log("#total infections: n0*xtot=",n0*this.xtot);
+  //console.log("#recovered: ny=n0*y=",n0*this.y);
+  //console.log("#deceased: nz=n0*z",n0*this.z);
 
   // reset it for start of proper simulation
 
@@ -705,13 +827,13 @@ CoronaSim.prototype.updateOneDay=function(R){ //it++ at end
 
 function DrawSim(){
 
-  console.log("drawSim created");
+  //console.log("drawSim created");
 
   this.unitPers=1000;  // persons counted in multiples of unitPers
 
   this.itR0=-1; // it value where n0*xt first exceeds nxtR0 (init val)
   this.yminLin=0;
-  this.ymaxLin=30; // unitPers=1000-> 100 corresp to 100 000 persons
+  this.ymaxLin=10; // unitPers=1000-> 100 corresp to 100 000 persons
   this.yminPerc=0;
   this.ymaxPerc=10;
   this.yminLog=1;
@@ -762,11 +884,21 @@ function DrawSim(){
 
 
 DrawSim.prototype.setDisplayType=function(displayType){
-  this.isActiveLog=[true,true,true,true,true,false];
-  this.isActiveLin=[false,true,false,true,true,true];
+  var displayDeadRecovered=( (country==="Germany")
+			     ||(country==="Austria")
+			     ||(country==="Czechia")
+			     ||(country==="Switzerland")
+			     ||(country==="India"));
+  this.isActiveLog=(displayDeadRecovered)
+    ? [true,true,true,true,true,false]
+    : [true,true,false,false, false,false]
+  this.isActiveLin=(displayDeadRecovered)
+    ? [false,true,false,true,true,true]
+    : [false,true,false,false,false,false]
   this.isActive=(displayType==="lin") ? this.isActiveLin : this.isActiveLog;
   this.xPix0  =0.12*canvas.width;
-  this.xPixMax=((displayType==="lin") ? 0.90: 0.98) * canvas.width;
+  this.xPixMax=((displayDeadRecovered&&(displayType==="lin"))
+		? 0.90: 0.98) * canvas.width;
   this.yPix0  =0.85*canvas.height;
   this.yPixMax=0.02*canvas.height;
   this.wPix=this.xPixMax-this.xPix0;
@@ -860,7 +992,7 @@ DrawSim.prototype.drawAxes=function(displayType){
   var ymin2=0;
   var ymax2=this.ymaxPerc;
   //var ymax2=Math.min(10,this.ymaxPerc);
-  if(displayType==="lin"){
+  if((displayType==="lin")&&(this.isActiveLin[5])){
     var power10=Math.floor(log10(ymax2));
     var multiplicator=Math.pow(10, power10);
     var ymaxRange02=ymax2/multiplicator;
@@ -936,7 +1068,7 @@ DrawSim.prototype.drawAxes=function(displayType){
   
   // draw name+values y2 axis if displayType="lin"
 
-  if(displayType==="lin"){
+  if((displayType==="lin")&&(this.isActiveLin[5])){
 
     var label_y2="Tote/bekannt Erkrankte [%]";
     ctx.fillStyle=this.colLine[5];
@@ -1039,9 +1171,10 @@ DrawSim.prototype.updateOneDay=function(it,displayType,xtot,xt,y,yt,z){
   this.yDataLog[4][it]=log10(n0*z);
   this.yDataLog[5][it]=(xt>1e-6) ? log10(100*z/xt) : 0;
 
-  if(false){console.log("DrawSim.updateOneDay: it=",it,
-		       " this.yDataLin[1][it]=",this.yDataLin[1][it],
-		       " this.yDataLog[0][it]=",this.yDataLog[0][it]);}
+  if(it<3){console.log("DrawSim.updateOneDay: it=",it,
+			" this.yDataLin[1][it]=",this.yDataLin[1][it],
+			//" this.yDataLog[0][it]=",this.yDataLog[0][it],
+			"");}
 
 // test possible rescaling due to new data
 
@@ -1118,19 +1251,27 @@ DrawSim.prototype.updateOneDay=function(it,displayType,xtot,xt,y,yt,z){
     }
   }
 
-// drawing vertical separation line R0 init->R0 slider
+// drawing vertical separation lines R0start and R0 
+
+
+  ctx.fillStyle="#888888";
+  var x0=this.xPix0;
+  var y0=this.yPix0+0.4*this.hPix;
+  var textsize=Math.min(0.030*canvas.width,0.045*canvas.height);
+
+  ctx.setTransform(0,-1,1,0,x0+1.0*textsize,y0);
+  ctx.fillText("Rstart aktiv",0,0);
+  ctx.setTransform(1,0,0,1,0,0);
 
   if(this.unitPers*this.yDataLin[1][it]>=nxtR0){
     if(this.unitPers*this.yDataLin[1][it-1]<nxtR0){
       this.itR0=it;
     }
     if(this.itR0>-1){
-      ctx.fillStyle="#888888";
-      var x0=this.xPix[this.itR0];
+      x0=this.xPix[this.itR0];
       ctx.fillRect(x0-1,this.yPix0,3,this.hPix);
-      var textsize=Math.min(0.030*canvas.width,0.045*canvas.height);
 
-      ctx.setTransform(0,-1,1,0,x0+1.0*textsize,this.yPix0+0.5*this.hPix);
+      ctx.setTransform(0,-1,1,0,x0+1.0*textsize,y0);
       ctx.fillText("R"+toSub(0)+" aktiv",0,0);
       ctx.setTransform(1,0,0,1,0,0);
     }
