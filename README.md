@@ -21,7 +21,7 @@ drives some initialization via
  <body onload="startup()"> 
 ```
 
-## Data Used
+## Data Used 
 
 This project uses the [Covid-19
 data](https://pomber.github.io/covid19/timeseries.json) that have been
