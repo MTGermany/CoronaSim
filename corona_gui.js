@@ -30,6 +30,7 @@ slider_fps.oninput = function() {
 
 // var R03
 
+/*
 var slider_R03=document.getElementById("slider_R03");
 var slider_R03Text = document.getElementById("slider_R03Text");
 
@@ -41,6 +42,7 @@ slider_R03.oninput = function() {
   R03=parseFloat(this.value);
   console.log("slider1 callback: R03="+R03);
 }
+*/
 
 // var R04
 

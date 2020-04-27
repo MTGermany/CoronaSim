@@ -234,14 +234,6 @@ function initializeData(country) {
   nxt2=fact2*nxtStart;   
   nxt3=fact3*nxtStart;   
   nxtR0=fact4*nxtStart; 
-  //R01=(country==="Germany") ? 3 : 2.5;    //3 //!!! NO double setting!
-  //R02=(country==="Germany") ? 1.7 : 1.7; //1.5
-  //R03=(country==="Germany") ? 1.2 : 1.0; //0.9
-  //R0=(country==="Germany") ? 0.78 : 0.65;
-  //setSlider(slider_R0, slider_R0Text, R0,"");
-
-  //fracDieInit=(country==="Germany") ? 0.0040 : 0.0065;
-  //tauDie=(country==="Germany") ? 21 : 20;
   tauTest=(country==="Germany") ? 10 : 10;
   setSlider(slider_tauTest, slider_tauTestText,tauTest, " Tagen");
 
@@ -558,7 +550,7 @@ function selectDataCountry(){
   }
 
   const R02List={
-    "Germany"       : 2.2,
+    "Germany"       : 2.2, //2.2
     "Austria"       : 2.4,
     "Czechia"       : 2.2,
     "France"        : 2.0,
@@ -568,22 +560,22 @@ function selectDataCountry(){
     "Spain"         : 2.2,
     "Sweden"        : 1.8,
     "Switzerland"   : 1.35,
-    "India"         : 2.6,
+    "India"         : 2.2,
     "Russia"        : 2.2,
     "US"            : 3.0
   }
 
   const R03List={
-    "Germany"       : 1.70,
+    "Germany"       : 1.70, //1.70
     "Austria"       : 1.34,
     "Czechia"       : 1.64,
     "France"        : 2.05,
     "United Kingdom": 2.14,
     "Italy"         : 1.18,
     "Poland"        : 2.09,
-    "Spain"         : 1.83,
+    "Spain"         : 1.93,
     "Sweden"        : 1.44,
-    "Switzerland"   : 1.20,
+    "Switzerland"   : 1.10,
     "India"         : 1.45,
     "Russia"        : 2.83,
     "US"            : 2.73
@@ -591,13 +583,13 @@ function selectDataCountry(){
 
   const R04List={
     "Germany"       : 0.95,
-    "Austria"       : 0.58,
+    "Austria"       : 0.70,
     "Czechia"       : 1.04,
     "France"        : 1.04,
     "United Kingdom": 1.87,
     "Italy"         : 0.87,
     "Poland"        : 1.62,
-    "Spain"         : 0.89,
+    "Spain"         : 0.90,
     "Sweden"        : 1.37,
     "Switzerland"   : 0.80,
     "India"         : 3.05,
@@ -613,12 +605,12 @@ function selectDataCountry(){
     "United Kingdom": 1.09,
     "Italy"         : 0.90,
     "Poland"        : 1.03,
-    "Spain"         : 0.83,
+    "Spain"         : 0.89,
     "Sweden"        : 1.05,
     "Switzerland"   : 0.70,
-    "India"         : 1.41,
-    "Russia"        : 1.78,
-    "US"            : 1.01
+    "India"         : 1.37,
+    "Russia"        : 1.72,
+    "US"            : 1.02
   }
 
 
@@ -634,7 +626,7 @@ function selectDataCountry(){
   R03=R03List[country];
   R04=R04List[country];
   R0=R0List[country];
-  setSlider(slider_R03, slider_R03Text, R03,"");
+  //setSlider(slider_R03, slider_R03Text, R03,"");
   setSlider(slider_R04, slider_R04Text, R04,"");
   setSlider(slider_R0,  slider_R0Text,  R0,"");
 
@@ -808,18 +800,13 @@ CoronaSim.prototype.init=function(){
 //!!!
 CoronaSim.prototype.updateOneDay=function(R){ //it++ at end
 
-  if(false){
-    console.log("Corona.updateOneDay: calib: it=",it,
-		" nxObserved=",Math.round(n0*this.xt),
-		" fracDeadObserved=",(this.z/this.xt).toPrecision(2)
-	       )
-  }
 
   if(false){
     console.log("Corona.updateOneDay: it=",it,
-	//	"this.xtot=",this.xtot.toPrecision(3),
-	//	"this.xtotohne=",this.xtotohne.toPrecision(3),
+		"this.xtot=",this.xtot.toPrecision(3),
+		"this.xtotohne=",this.xtotohne.toPrecision(3),
 		"this.xt=",this.xt.toPrecision(3),
+/*
 		"this.yt=",this.yt.toPrecision(3),
 		"this.z=",this.z.toPrecision(3),
 		"\n  this.x[tauDie-1]=",this.x[tauDie-1].toPrecision(3),
@@ -833,6 +820,7 @@ CoronaSim.prototype.updateOneDay=function(R){ //it++ at end
 		"\n  this.x[tauRecover+1]=",this.x[tauRecover+1].toPrecision(3),
 		"\n  this.xt/pTest-this.y-this.z=",
 		(this.xt/pTest-this.y-this.z).toPrecision(3),
+*/
 		"");
   }
 
@@ -928,18 +916,21 @@ CoronaSim.prototype.updateOneDay=function(R){ //it++ at end
 
 
   // sum up the profile of infected people
+  // xtot: sum of "actually infected" (neither recoverd nor dead)
+  // xtotohne: cumulative sum of infected (incl recovered, dead)
 
-  this.xtot=0;
-  this.xtotohne=0;
+  this.xtot=0;  
+
+  //this.xtotohne=0; //!!!
+  this.xtotohne+= this.x[0];//!!!
   for(var tau=0; tau<taumax; tau++){
     this.xtot     += this.x[tau];
-    this.xtotohne += this.xohne[tau];
   }
 
 
   // control output
 
-  if(it<10){
+  if(true){
     console.log("end CoronaSim.updateOneDay: it=",it,
 		" nxt=",(n0*this.xt).toPrecision(5),
 		" nxtot=",(n0*this.xtot).toPrecision(6),
@@ -1409,7 +1400,8 @@ DrawSim.prototype.updateOneDay=function(it,displayType,xtot,xt,y,yt,z){
       ctx.fillRect(x0-1,this.yPix0,3,this.hPix);
 
       ctx.setTransform(0,-1,1,0,x0+1.0*textsize,y0);
-      ctx.fillText("R"+toSub(0)+" aktiv",0,0);
+      //ctx.fillText("R"+toSub(0)+" aktiv",0,0);
+      ctx.fillText("R aktiv",0,0);
       ctx.setTransform(1,0,0,1,0,0);
     }
   }

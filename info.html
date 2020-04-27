@@ -25,16 +25,11 @@ Diese <a href="index.html">interaktive Simulation</a> soll drei Dinge verdeutlic
 <li> wie sehr sich die reale Situation von der beobachteten
   uterscheided, vor allem, wenn wenig und verz&ouml;gert getestet
   wird.
-<li> Wie schwierig die Reproduktionszahl <i>R<sub>0</sub></i> und ihr
-  zeitlicher Verlauf zu sch&auml;tzen ist: Viele Kombinationen
-  von <i>R<sub>0</sub></i> mit anderen Parametern wie die
-  Ansteckungszeit oder auch wann und wie viele Tests gemacht
-  werden, f&uuml;hren
-  zu einer &Uuml;bereinstimmung mit den
-  Daten. <span class="important">Insbesondere
-  wird <i>R<sub>0</sub></i> &uuml;bersch&auml;tzt, wenn die Zahl der Tests
-  schneller zunimmt als die Zahl der Infizierten.</span>
-
+<li> Wie schwierig die Reproduktionszahl <i>R</i> und ihr
+  zeitlicher Verlauf zu sch&auml;tzen ist: Je nach den Werten der
+  anderen Parametern wie Zeitraum oder Häufigkeit der Tests ändern
+  sich die "Best-Fit"-Werte und der Zeitverlauf von <i>R</i>. Sie
+  können das hier selbst untersuchen!  
 </ul>
 Vor allem soll sie verdeutlichen, wie wichtig Zufalls-Stichproben
  sind, um die unbekannte tats&auml;chliche Sterbewahrscheinlichkeit und den Ausma&szlig;
@@ -51,13 +46,13 @@ Vor allem soll sie verdeutlichen, wie wichtig Zufalls-Stichproben
 
 <h3> Simulationsablauf und Bedienung</h3>
 
-Gezeigt wird die Situation in Deutschland. Bei Aufruf der Seite wird
+Gezeigt wird die Situation in Deutschland oder, vom Nutzer
+einstellbar, in einer Auswahl anderer Länder. Bei Aufruf der Seite wird
 zun&auml;chst vom Auftreten der ersten F&auml;lle bis zur Gegenwart
 simuliert und die Simulation ab 19.03 (erste ernsthafte
 Lockdown-Ma&szlig;nahmen) dargestellt. 
 <ul>
-<li> Die Parameter sind dabei so
-eingestellt, dass sie mit
+<li> Die Parameter sind dabei je nach Land so eingestellt, dass sie mit
 den <a href="https://pomber.github.io/covid19/timeseries.json">t&auml;glich
     aktualisierten Beobachtungsdaten</a> weitgehend &uuml;bereinstimmen
   (siehe auch das  <a href="https://github.com/pomber/covid19">Github
@@ -69,12 +64,15 @@ Punkte in der Grafik f&uuml;r dokumentierte F&auml;lle
 bzw. Gestorbene) m&ouml;glichst gut &uuml;bereinstimmen. 
 -->
 
-<li> Ab dem durch
-die vertikale graue Linie gekennzeichneten Zeitpunkt werden die wichtigsten
-Parameter interaktiv durch die Schieberegler
-  bestimmt. <span class="important"> Ab dieser Linie beruht die
+<li> Die drei ersten zwei Regler für die Reproduktionszahl <i>R</i> in
+  verschiedenen Zeitr\"aumen sind die wichtigsten. Ab dem durch
+die zweite vertikale graue Linie gekennzeichneten Zeitpunkt sind alle
+  Parameter konstant.  <span class="important"> Ab dieser Linie beruht die
     &Uuml;bereinstimmung mit den Daten allein auf der
-    Modellg&uuml;te.</span>
+    Modellg&uuml;te!</span> Insbesondere erkl\"art ein ab dem 27.03.
+  konstanter <i>R</i>-Wert von unter 1 (siehe zweiten Regler) die
+  beobachteten Fallzahlen perfekt. Eine zeitliche \"Anderung seit
+  diesem Zeitpunkt ist (Stand 2020-04-27) nicht n\"otig!
 </ul>
 
 F&uuml;r das
@@ -159,7 +157,7 @@ Simuliert wird ein Standard-Infektionsausbreitungsmodell:
 </center>
 <br>
 andere Personen an. Hierbei bedeuten <i>R<sub>0</sub></i>
-die <strong>Reproduktionszahl</strong>  und <i>x*</i>
+die <strong>Reproduktionszahl ohne Immunität</strong>  und <i>x*</i>
 den <strong>Immunit&auml;tsanteil</strong>.
 
 <br><br><li> der Immunit&auml;tsanteil
@@ -252,19 +250,23 @@ Offensichtlich ergibt dies nur Sinn, wenn
 <h4> (1) Vom Nutzer beeinflussbare Werte</h4>
 
 <ul>
-<li><span class="important">Reproduktionszahl <i>R<sub>0</sub></i></span> ohne
-  Immunit&auml;t. 
-Werte <i>R<sub>0</sub> &lt; 1</i>  f&uuml;hren zu
+<li><span class="important">Reproduktionszahl <i>R<sub>start</sub></i></span>
+  Reproduktionszahl ab Start der Simulation (19.03.2020).
+ <i>R</i>-Werte  &lt; 1 f&uuml;hren zu
   einer exponentiellen Abnahme an Neuinfektionen, 
-  <i>R<sub>0</sub> &gt; 1</i> 
+  <i>R &gt; 1</i> 
  anfangs zu einer exponentiellen Zunahme an Neuinfektionen,
   Bestandsinfektionen, Toten und Gesundeten
-  und  <i>R<sub>0</sub>=1</i> anfangs zu einer konstanten Rate an
+  und  <i>R=1</i> anfangs zu einer konstanten Rate an
   Neuinfektionen und zu einer linearen Zunahme von
   Bestandsinfektionen, Toten und
  Gesundeten. 
-<br>
-<strong>Dies ist der 
+<br><br>
+<li><span class="important">Reproduktionszahl <i>R</i> </span> nach Anstieg
+    der anfänglichen Infektionszahlen um den Faktor drei (graue
+    Linie in der SImulation)
+<br><br>
+<strong>Der <i>R</i>-Wert  ist der 
   wichtigste der politisch beeinflussbaren Parameter</strong>:
 <i>R<sub>0</sub></i> wird reduziert durch
 <ul>
@@ -301,9 +303,11 @@ Auch wenn die
     Infizierten. <strong>Beeinflussbar! </strong>
 </strong> 
 
+<!--
 <br><br><li><span class="important">Sim-Geschwindigkeit</span>:
     Beeinflusst nur die Geschwindigkeit der Simulation in Tagen pro Sekunde, nicht aber die
     dargestellte Dynamik.
+-->
 </ul>
 
 

@@ -149,10 +149,10 @@ a:hover {
 
 #sliders{ 
   position: absolute;
-  top:   7vh; 
+  top:   8vh; 
   left:   15vw;
   width:  70vw;
-  height:  22vh;
+  height:  19vh;
   background-color: rgb(222,255,222);
   margin-right: 0vw;
   margin-left: 0vw;
@@ -303,11 +303,10 @@ screen and (min-resolution: 1.5dppx) and (min-aspect-ratio: 1/1){
 
 #sliders{     /*mobile, landscape */
   position: absolute;
-  top:   0.5vh; 
+  top:   1.5vh; 
   background-color: rgb(255,255,255);
   left:   20vw;
   width:  65vw;
-  height:  26vh;
 }
 
 
@@ -400,7 +399,7 @@ input[type=range]::-webkit-slider-thumb {
 
 #sliders{     /*mobile, portrait */
   position: absolute;
-  top:   14vmin; 
+  top:   16vmin; 
   background-color: rgb(255,255,255);
   left:   5vmin;
   width:  93vmin;
