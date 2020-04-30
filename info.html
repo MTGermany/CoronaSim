@@ -29,9 +29,8 @@ Diese <a href="index.html">interaktive Simulation</a> soll drei Dinge verdeutlic
   zeitlicher Verlauf zu sch&auml;tzen ist: Je nach den Werten der
   anderen Parametern wie Zeitraum oder Häufigkeit der Tests ändern
   sich die "Best-Fit"-Werte und der Zeitverlauf von <i>R</i>. Sie
-  können das hier selbst untersuchen!  
-</ul>
-Vor allem soll sie verdeutlichen, wie wichtig Zufalls-Stichproben
+  können das hier selbst untersuchen! 
+<li> Wie wichtig Zufalls-Stichproben
  sind, um die unbekannte tats&auml;chliche Sterbewahrscheinlichkeit und den Ausma&szlig;
  der "Durchseuchung" (was f&uuml;r ein Wort!) abzusch&auml;tzen. In
  der aktuellen Phase kann n&auml;mlich nur das Verh&auml;ltnis
@@ -39,15 +38,37 @@ Vor allem soll sie verdeutlichen, wie wichtig Zufalls-Stichproben
  Covid-19 Sterblichkeit <i>p<sub>D</sub></i> und des Testanteils (Hellfeldes) 
 <i>p<sub>T</sub></i> gesch&auml;tzt werden, in Deutschland liegt es
  bei <i>p<sub>D</sub>/p<sub>T</sub></i>=4%, was bei einem Hellfeld von
- 10% einer Sterbewahrscheinlichkeit von 0.4% entspr&auml;che. <span class="important">Die
- Kenntnis der wahren Werte der Sterbewahrscheinlichkeit und der
- Durchseuchung ist
- eminent wichtig als Grundlage politischer Entscheidungen.</span>
+ 10% einer Sterbewahrscheinlichkeit von 0.4% entspr&auml;che. Die
+ Kenntnis der <span class="important"> wahren Werte der
+ Sterbewahrscheinlichkeit</span>  und der
+ <span class="important">Durchseuchung</span> ist
+ eminent wichtig als Grundlage politischer Entscheidungen.
+</ul>
 
+<i>Wichtig:</i> Allen Covid-19-Modellen und Simulationen ist
+gemeinsam, dass sie <span class="important">keine Prognosen</span>
+erm&ouml;glichen. Sehr wohl m&ouml;glich ist aber
+eine <i>Szenarienanalyse</i>, also eine bedingte Projektion in die
+Zukunft, etwa folgender Art:
+<br><br>
+
+<center>
+<table width="70%">
+<td>
+<i>wenn durch die Implementierung oder
+Unterlassung von Ma&szlig;nahmen oder durch das Wetter die
+Reproduktionsrate  <i>R</i>
+den Wert X<sub>1</sub> erreicht, der Infektionszeitraum zwischen X<sub>2</sub> und X<sub>3</sub> liegt,
+und wie bisher getestet und medizinisch behandelt wird, dann wird es
+zum Zeitpunkt Y eine Zahl Z<sub>1</sub> +/- &Delta;Z<sub>1</sub> an bekannten Infektionen
+und eine Zahl Z<sub>2</sub> +/- &Delta;Z<sub>2</sub> an Covid-19-Toten geben</i></td>
+</table>
+</center>
+ 
 <h3> Simulationsablauf und Bedienung</h3>
 
-Gezeigt wird die Situation in Deutschland oder, vom Nutzer
-einstellbar, in einer Auswahl anderer Länder. Bei Aufruf der Seite wird
+Gezeigt wird anf&auml;nglich die Situation in Deutschland, es sind aber
+auch andere L&auml;nder einstellbar. Bei Aufruf der Seite wird
 zun&auml;chst vom Auftreten der ersten F&auml;lle bis zur Gegenwart
 simuliert und die Simulation ab 19.03 (erste ernsthafte
 Lockdown-Ma&szlig;nahmen) dargestellt. 
@@ -65,14 +86,14 @@ bzw. Gestorbene) m&ouml;glichst gut &uuml;bereinstimmen.
 -->
 
 <li> Die drei ersten zwei Regler für die Reproduktionszahl <i>R</i> in
-  verschiedenen Zeitr\"aumen sind die wichtigsten. Ab dem durch
+  verschiedenen Zeitr&auml;umen sind die wichtigsten. Ab dem durch
 die zweite vertikale graue Linie gekennzeichneten Zeitpunkt sind alle
   Parameter konstant.  <span class="important"> Ab dieser Linie beruht die
     &Uuml;bereinstimmung mit den Daten allein auf der
-    Modellg&uuml;te!</span> Insbesondere erkl\"art ein ab dem 27.03.
+    Modellg&uuml;te!</span> Insbesondere erkl&auml;rt ein ab dem 27.03.
   konstanter <i>R</i>-Wert von unter 1 (siehe zweiten Regler) die
-  beobachteten Fallzahlen perfekt. Eine zeitliche \"Anderung seit
-  diesem Zeitpunkt ist (Stand 2020-04-27) nicht n\"otig!
+  beobachteten Fallzahlen perfekt. Eine zeitliche &Auml;nderung seit
+  diesem Zeitpunkt ist (Stand 2020-04-27) nicht n&ouml;tig!
 </ul>
 
 F&uuml;r das
@@ -90,15 +111,36 @@ wieder stoppen.
      style="width:3vmin;vertical-align:middle">
 startet man die Simulation vom Anfang an mit den gerade eingestellten
      Parametern.
-<li> Schlie&szlig;lich f&uuml;hrt man den "Restart mit Werkseinstellungen"
-    durch die <span class="button">Reload</span> <tt>
-    Reload</tt>-Funktion des Browsers durch.
+<li> Mit <img src="figs/buttonReset2_small.png"
+     style="width:3vmin;vertical-align:middle">
+<!-- <span class="button">Reload</span>Reload</tt>-Funktion des Browsers <tt>-->
+f&uuml;hrt man den "Reset auf die Werkseinstellungen"
+    durch.
 </ul>
 Nach jedem Stop oder auch w&auml;hrend der Simulation
 kann man die wichtigsten Simulationsparameter mittels der Schieber
 ver&auml;ndern. Mit dem anfangs mit <span class="button">
   =>log. Darstellung</span> beschrifteten Button kann man die Darstellung
 jederzeit zwischen linear und logarithmisch umschalten.
+
+<h3> Beispiele </h3>
+<ol>
+<li> <b>Szenario "Unver&auml;ndert": </b>Dr&uuml;cken Sie nach dem Stopp der
+      Simulation auf 
+<img src="figs/buttonGo_small.png"
+     style="width:3.5vmin;vertical-align:middle"> 
+und stoppen Sie die Simulation erneut im Juli: Die Infektionen
+lauen sich bei etwa 190 000 gemeldeten Infizierten tot, aber selbst
+Anfang Juli gibt es noch etwa 10 000 <i>real</i> kranke Personen: Die
+Infektion ist noch lange nicht "ausgetrocknet"
+
+<li> <b>Szenario "Laisser faire":</b>
+
+<li> <b>Szenario "Fr&uuml;herer Test":</b>
+
+<li> <b>Szenario "Zunehmende Testintensit&auml;t":</b>
+
+</ol>
 
 <h3> Simulierte Gr&ouml;&szlig;en</h3>
 
@@ -153,11 +195,12 @@ Simuliert wird ein Standard-Infektionsausbreitungsmodell:
 <li> Jeder Infizierte steckt im Laufe seiner Krankheit
 <br><br>
 <center> 
-<i>R<sub>0</sub>(1-x*)</i>
+<i>R(t) (1-x*)</i>
 </center>
 <br>
-andere Personen an. Hierbei bedeuten <i>R<sub>0</sub></i>
-die <strong>Reproduktionszahl ohne Immunität</strong>  und <i>x*</i>
+andere Personen an. Hierbei bedeuten <i>R(t)</i>
+den durch verschiedene Ma&szlig;nahmen aber m&ouml;glicherweise auch durch
+das Wetter zeitlich ver&auml;nderlichen <strong>Reproduktionszahl ohne Immunität</strong>  und <i>x*</i>
 den <strong>Immunit&auml;tsanteil</strong>.
 
 <br><br><li> der Immunit&auml;tsanteil
@@ -264,7 +307,7 @@ Offensichtlich ergibt dies nur Sinn, wenn
 <br><br>
 <li><span class="important">Reproduktionszahl <i>R</i> </span> nach Anstieg
     der anfänglichen Infektionszahlen um den Faktor drei (graue
-    Linie in der SImulation)
+    Linie in der Simulation)
 <br><br>
 <strong>Der <i>R</i>-Wert  ist der 
   wichtigste der politisch beeinflussbaren Parameter</strong>:

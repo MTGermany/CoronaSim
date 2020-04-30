@@ -659,8 +659,15 @@ function myRestartFunction(){
     document.getElementById("startStop").src="figs/buttonStop3_small.png";
     //myRun=setInterval(simulationRun, 1000/fps);
   }
-
 }
+
+// selectDataCountry selects default sliders for the active country
+// => can use it directly as the reset function
+
+function myResetFunction(){ 
+  selectDataCountry();
+}
+
 
 function simulationRun() {
   doSimulationStep();
