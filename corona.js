@@ -27,24 +27,6 @@ var itmax;      // can be >itmaxinit during interactive simulation
 var n0=80.e6;  // #persons in Germany
 
 
-// central R0 values initialized for Germany
-// GER: R03=1.70, R04=0.95, R0=0.75
-// A:   R03=1.93, R04=0.52, R0=0.60
-// CZ:  R03=1.64, R04=0.95, R0=0.75
-// FR:  R03=1.70, R04=1.04, R0=0.94
-// GB:  R03=2.90, R04=1.54, R0=1.12
-// I:   R03=0.70, R04=0.87, R0=0.90 schlecht
-// PL:  R03=2.09, R04=1.62, R0=1.03
-// ESP: R03=1.98, R04=0.89, R0=0.83
-// SWE: R03=0.92, R04=1.42, R0=1.10 
-// SWI: R03=1.76, R04=0.63, R0=0.63
-// IND: R03=2.40, R04=2.61, R0=1.36
-// RUS: R03=3.05, R04=2.66, R0=1.72
-// USA: R03=3.45, R04=1.68, R0=1.06
-
-// TK:  R03=4.00, R04=4.00, R0=1.35 schlecht
-// JP:  R03=0.49, R04=1.66, R0=1.13 schlecht
-
 const RtimeList={   // 0-1,1-3,3-5,... weeks after start
   "Germany"       : [1.05, 0.75, 0.75],
   "Austria"       : [0.8,  0.62, 0.62],
@@ -119,7 +101,7 @@ var tauAvg=5;      // smoothing interval for tauTest,tauDie,tauRecover
 
 // (ii) not controlled
 
-var fracDieInit=0.0040;  // fracDie for initial setting of pTest
+var fracDieInit=0.0044;  // fracDie for initial setting of pTest
 var fracDie=fracDieInit; // will be set to fracDieInit*pTest/pTestInit 
                         // at restart but NOT during simulation
 var tauDie=21;      // time from infection to death in fracDie cases
@@ -496,7 +478,7 @@ function selectDataCountry(){
   }
 
   const fracDieInitList={
-    "Germany"       : 0.0040,
+    "Germany"       : 0.0044,
     "Austria"       : 0.0040,
     "Czechia"       : 0.0041,
     "France"        : 0.0040,
@@ -626,7 +608,7 @@ function selectDataCountry(){
 }
 
 function myRestartFunction(){ 
-  RsliderUsed=false;
+  //RsliderUsed=false;
   ctx.clearRect(0, 0, canvas.width, canvas.height)
   fracDie=fracDieInit*pTest/pTestInit;
   console.log("restart: fracDie=",fracDie);
@@ -702,7 +684,7 @@ function doSimulationStep(){
   drawsim.updateOneDay(it, displayType, corona.xtot, corona.xt,
 		       corona.y, corona.yt, corona.z);
   //corona.updateOneDay(R0fun(corona.xt));//!!!
-  R_actual=(RsliderUsed) ? R0 : R0fun_time(it);
+  R_actual=(RsliderUsed&&(it>=7)) ? R0 : R0fun_time(it);
   R_hist[it]=R_actual;
   console.log("it=",it," R_actual=",R_actual);
   corona.updateOneDay(R_actual);
