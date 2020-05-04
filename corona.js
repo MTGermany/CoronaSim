@@ -672,7 +672,7 @@ function myResetFunction(){
   setSlider(slider_pTest, slider_pTestText, 100*pTest, " %");
 
 
-  if(useGithubData){selectDataCountry();}
+  selectDataCountry();
 }
 
 
