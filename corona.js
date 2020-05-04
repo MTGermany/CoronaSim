@@ -50,7 +50,7 @@ var R04=(useGithubData) ? 0.95 : 1.05; // 0.95
 var R0=0.75;                           // 0.75
 const RtimeList={   // 0-1,1-3,3-5,... weeks after start
   "Germany"       : [1.05, 0.75, 0.75],
-  "Austria"       : [0.8,  0.58, 0.58],
+  "Austria"       : [0.8,  0.62, 0.62],
   "Czechia"       : [0.90, 0.75, 0.75],
   "France"        : [1.10, 1.06, 0.65],
   "United Kingdom": [1.60, 1.10, 0.99],
@@ -123,11 +123,15 @@ var dataGit_deathsCases=[];
 // (i) controlled by sliders (apart from R0)
 
 var fps=10;
-var tauRstart=1;     // active infectivity begins [days since infection]
-var tauRend=10;       // active infectivity ends [days since infection]//10
+
+var tauRstartInit=1;     // active infectivity begins [days since infection]
+var tauRstart=tauRstartInit;
+var tauRendInit=10;       // active infectivity ends [days since infection]//10
+var tauRend=tauRendInit;  
 var pTestInit=0.1;   // initial percentage of tested infected persons 
-var pTest=0.1;       // percentage of tested infected persons 
-var tauTest=10;  // time delay [days] test-infection
+var pTest=pTestInit;       // percentage of tested infected persons 
+var tauTestInit=10;  // time delay [days] test-infection
+var tauTest=tauTestInit;
 var tauAvg=5;      // smoothing interval for tauTest,tauDie,tauRecover
 
 // (ii) not controlled
@@ -253,6 +257,7 @@ function getGithubData() {
        // console.log("dataGit=",dataGit);
         //console.log("inner: dataGit[country]=",dataGit[country]);
         initializeData(country);
+        corona.init(); //!!! only then ensured that data loaded! it=1 as result
       });
   }
 }
@@ -400,7 +405,7 @@ function startup() {
 
   corona=new CoronaSim();
 
-  //corona.init(); // !!! because data lacking here, now in simulationRun
+  //corona.init(); // !!! now inside fetch promise
 
 
   // =============================================================
@@ -729,6 +734,22 @@ function myRestartFunction(){
 
 function myResetFunction(){ 
   RsliderUsed=false;
+
+  tauRstart=tauRstartInit;
+  setSlider(slider_tauRstart, slider_tauRstartText,
+	  tauRstart, ((tauRstart==1) ? " Tag" : " Tage"));
+
+  tauRend=tauRendInit;
+  setSlider(slider_tauRend, slider_tauRendText,
+	  tauRend, " Tage");
+
+  tauTest=tauTestInit;
+  setSlider(slider_tauTest, slider_tauTestText,tauTest, " Tagen");
+
+  pTest=pTestInit; 
+  setSlider(slider_pTest, slider_pTestText, 100*pTest, " %");
+
+
   selectDataCountry();
 }
 
@@ -736,10 +757,11 @@ function myResetFunction(){
 function simulationRun() {
   if(it==0){
     console.log("Test:");
-    for (var t=-15; t<=9; t++){
+    for (var t=-5; t<=2; t++){
       console.log("t=",t," R0fun_time(t)=", R0fun_time(t));
     }
-    corona.init(); // !!! new position  it=1 at the end !
+    //corona.init(); // !!! now inside fetch promise!
+
   }
   doSimulationStep(); //it++ at end
   console.log("RsliderUsed=",RsliderUsed);
@@ -1595,7 +1617,7 @@ DrawSim.prototype.plotPoints=function(it,q,data_arr,displayType){
       var yrel=(y-yminDraw)/(ymaxDraw-yminDraw);
       var dataPix=this.yPix0+yrel*(this.yPixMax-this.yPix0);
       ctx.beginPath(); //!! crucial; otherwise latest col used for ALL
-      ctx.arc(this.xPix[itg],dataPix,0.015*sizemin, 0, 2 * Math.PI);
+      ctx.arc(this.xPix[itg],dataPix,0.010*sizemin, 0, 2 * Math.PI);
       ctx.fill();
     }
   }
