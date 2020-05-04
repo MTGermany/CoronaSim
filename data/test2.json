@@ -1,4 +1,0 @@
-data='[\
-{      "dateRep": "14/04/2020",       "day": "14",       "month": "4",       "year": "2020",       "cases": "2082",       "deaths": "170",       "countriesAndTerritories": "Germany",       "geoId": "DE",       "countryterritoryCode": "DEU",       "popData2018": "82927922"    },\
-{      "dateRep": "13/04/2020",       "day": "13",       "month": "4",       "year": "2020",       "cases": "2537",       "deaths": "126",       "countriesAndTerritories": "Germany",       "geoId": "DE",       "countryterritoryCode": "DEU",       "popData2018": "82927922"    }\
-]'

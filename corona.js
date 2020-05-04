@@ -1,15 +1,17 @@
 
 // https://de.wikipedia.org/wiki/COVID-19-Pandemie_in_Deutschland#März_2020
 
-// useGithubData=false: data from opendata... .eu
-// obtained via script updateCoronaInput.sh
-// useGithubData=true: https://pomber.github.io/covid19/timeseries.json
-// updated automatically
+// useLiveData=true: Obtain github data "live" via the fetch command
+// Unfortunately, the fetch command is still unstable
+// and not working on my ipad
 
-var useGithubData=true;
+// useLiveData=false: obtained data server-side 
+// via script updateCoronaInput.sh. Stable but need to upload once a day
+
+var useLiveData=false;  
 var country="Germany"
 var countryGer="Deutschland"
-var dayStartMar=(useGithubData) ? 19 : 20;
+var dayStartMar=19;
 var startDay=new Date(2020,02,dayStartMar); // months start @ zero, days @ 1
 
 
@@ -43,11 +45,6 @@ var n0=80.e6;  // #persons in Germany
 // TK:  R03=4.00, R04=4.00, R0=1.35 schlecht
 // JP:  R03=0.49, R04=1.66, R0=1.13 schlecht
 
-var R01=2.6;                           // 2.6
-var R02=2.2;                           // 2.2
-var R03=1.7;                            // 1.7
-var R04=(useGithubData) ? 0.95 : 1.05; // 0.95
-var R0=0.75;                           // 0.75
 const RtimeList={   // 0-1,1-3,3-5,... weeks after start
   "Germany"       : [1.05, 0.75, 0.75],
   "Austria"       : [0.8,  0.62, 0.62],
@@ -63,24 +60,11 @@ const RtimeList={   // 0-1,1-3,3-5,... weeks after start
   "Russia"        : [2.0,  1.8, 1.45, 1.4],
   "US"            : [1.3, 1.08, 1.00]
 }
-var Rtime=RtimeList["Germany"]; //!!need direct initialization 
-var R_actual=Rtime[0]; //!!! time dependent R, either by R slider or data-driven
+var Rtime=RtimeList["Germany"]; //!! need direct initialization 
+var R0=Rtime[0];          //!! init time dependent R
+var R_actual=R0;  // R0" controlled by slider, _actual: by data
 var R_hist=[]; R_hist[0]=R_actual;
 var RsliderUsed=false;
-
-// number of positively tested infections@start
-// nxt=13957  (eu) or 15320 (git)
-
-var nxtStart=(useGithubData) ? 15320 : 13957; // xt @ startDay
-var fact1=0.1;     // fix: R01 active if xt<fact1*xtStart 0.1
-var fact2=0.3;     // fix: R02 active if xt<fact2*xtStart 0.5
-var fact3=1.0;     // fix: R03 active if xt<fact3*xtStart 2.0
-var fact4=3.0;     // fix: R04 active if xt<fact4*xtStart, otherwise R0 
-
-var nxt1=fact1*nxtStart;
-var nxt2=fact2*nxtStart;
-var nxt3=fact3*nxtStart;
-var nxtR0=fact4*nxtStart;
 
 var oneDay_ms=(1000 * 3600 * 24);
 
@@ -98,9 +82,8 @@ var data_cumDeaths=[];
 var data_deathsCases=[];
 
 
-// if(useGithubData) 
 // fetch with https://pomber.github.io/covid19/timeseries.json
-// !! does not work with old browsers
+// or load as a variable server-side (if useLiveData=false)
 
 var dataGit=[];
 var dataGit_dateBegin;
@@ -228,21 +211,8 @@ function R0fun_time(t){
 
 //called ONLY in the <body onload> and toggleData event
 function getGithubData() {
+  if(useLiveData && !(typeof fetch === "undefined")){
 
-  if(typeof fetch === "undefined"){
-    console.log("You are using an old Browser that does not understand Javascript's fetch");
-    useGithubData=false;
-    nxtStart=13957;
-    nxt1=fact1*nxtStart;   
-    nxt2=fact2*nxtStart;   
-    nxt3=fact3*nxtStart;   
-    nxtR0=fact4*nxtStart; 
-    R04=1.05;
-    dayStartMar=20;
-    startDay=new Date(2020,02,dayStartMar);
-  }
-
-  else{
     console.log("getGithubData(): fetch defined");
 
     fetch("https://pomber.github.io/covid19/timeseries.json")
@@ -259,6 +229,18 @@ function getGithubData() {
         initializeData(country);
         corona.init(); //!!! only then ensured that data loaded! it=1 as result
       });
+  }
+
+  else{
+    if(useLiveData){
+      useLiveData=false;
+      console.log("You are using an old Browser that does not understand Javascript's fetch");
+    }
+    dataGit = JSON.parse(dataGitLocal);
+    console.log("useLiveData=false: dataGit=",dataGit);
+    initializeData(country);
+    corona=new CoronaSim();
+    corona.init();
   }
 }
 
@@ -290,12 +272,6 @@ function initializeData(country) {
   }
 
   nxtStart=dataGit_cumCases[dataGit_istart]; 
-  nxt1=fact1*nxtStart;   
-  nxt2=fact2*nxtStart;   
-  nxt3=fact3*nxtStart;   
-  nxtR0=fact4*nxtStart; 
-  tauTest=(country==="Germany") ? 10 : 10;
-  setSlider(slider_tauTest, slider_tauTestText,tauTest, " Tagen");
 
   console.log(
     "\nend initializeData: country=",country,
@@ -310,9 +286,6 @@ function initializeData(country) {
     "\n dataGit_date[dataGit_cumCases.length-1]",
     dataGit_date[dataGit_cumCases.length-1],
     "\n nxtStart=",nxtStart,
-    "\n nxt1=",nxt1,
-    "\n nxt2=",nxt2,
-    "\n nxtR0=",nxtR0,
     "\n"
   );
 
@@ -350,54 +323,7 @@ function startup() {
 
 
 
-  // =============================================================
-  // parse data from opendata if useGithubData=false
-  // =============================================================
-
-  var mydata = JSON.parse(data);
-
-  // mydata is ordered reverse chronological (ir=i reverse)
-  var i=0;
-  for(var ir=mydata.length-1; ir>=0; ir--){
-
-    // get date object from mydata[i].dateRep (month is 0-based!)
-    data_date_ddmmyyyy[i]=mydata[ir].dateRep;
-    var dateParts = mydata[ir].dateRep.split("/");
-    var dateObj=new Date(dateParts[2], dateParts[1] - 1, dateParts[0]); 
-
-    // parse mydata to the relevant arrays
-
-    data_diff2start[i]=Math.round(
-      (dateObj.getTime() - startDay.getTime())/oneDay_ms);
-    data_cases[i]=parseInt(mydata[ir].cases);
-    data_deaths[i]=parseInt(mydata[ir].deaths);
-    data_cumCases[i]=((i==0) ? 0 : data_cumCases[i-1]) + data_cases[i];
-    data_cumDeaths[i]=((i==0) ? 0 : data_cumDeaths[i-1]) + data_deaths[i];
-    data_deathsCases[i]=((i==0)||(data_cumCases[i]==0))
-			  ? 0 : data_cumDeaths[i]/data_cumCases[i];
-    if(false){
-      console.log("i=",i," data_diff2start[i]=",data_diff2start[i],
-		  " data_cumCases[i]=",data_cumCases[i],
-		  " data_cumDeaths[i]=",data_cumDeaths[i]);
-    }
-    i++;
-  }
-  var istart=-data_diff2start[0];
-  if(false){
-    console.log(
-      "measured data: istart=",istart," itmaxinit=",itmaxinit,
-      "\n  data_date_ddmmyyyy[istart]=", data_date_ddmmyyyy[istart],
-      " data_cumCases[istart]=",data_cumCases[istart],
-      "\n  data_date_ddmmyyyy[istart+1]=", data_date_ddmmyyyy[istart+1],
-      " data_cumCases[istart+1]=",data_cumCases[istart+1],
-      "\n  data_date_ddmmyyyy[istart+1]=", data_date_ddmmyyyy[istart+2],
-      " data_cumCases[istart+1]=",data_cumCases[istart+2],
-      "\n  data_date_ddmmyyyy[istart+itmaxinit]=",data_date_ddmmyyyy[istart+itmaxinit],
-      " data_cumCases[istart+itmaxinit]=",data_cumCases[istart+itmaxinit]
-	       );
-  }
-
-
+ 
 
   // =============================================================
   // initialize CoronaSim
@@ -405,7 +331,7 @@ function startup() {
 
   corona=new CoronaSim();
 
-  //corona.init(); // !!! now inside fetch promise
+  if(!useLiveData){corona.init();} // !!! now inside fetch promise
 
 
   // =============================================================
@@ -711,10 +637,6 @@ function myRestartFunction(){
   console.log("restart: fracDie=",fracDie);
   startup();
   corona.init(); // because startup redefines CoronaSim() and data there here
-  if(false&&useGithubData){
-   console.log("restart: after startup: dataGit[0]=",
-	       dataGit[0]);
-  }
 
   clearInterval(myRun);
   //it=1;
@@ -750,12 +672,12 @@ function myResetFunction(){
   setSlider(slider_pTest, slider_pTestText, 100*pTest, " %");
 
 
-  selectDataCountry();
+  if(useGithubData){selectDataCountry();}
 }
 
 
 function simulationRun() {
-  if(it==0){
+  if(useLiveData&&(it==0)){
     console.log("Test:");
     for (var t=-5; t<=2; t++){
       console.log("t=",t," R0fun_time(t)=", R0fun_time(t));
@@ -847,37 +769,14 @@ CoronaSim.prototype.init=function(){
 
   // data-driven warmup
 
-  if(!(typeof fetch === "undefined")){
-    for(t=-20; t<=0; t++){
-      var Rt=R0fun_time(t);
-      this.updateOneDay(Rt);
-    }
-  }
-
-
-
-  // warmup: data-less fallback if fetch is undefined
-
-  else{
-   for(it=1; (it<200)&&(n0*this.xt<nxtStart); it++){ //200
-    var Rt=R0fun(this.xt);
+  for(t=-20; t<=0; t++){
+    var Rt=R0fun_time(t);
     this.updateOneDay(Rt);
-    if(false){
-      console.log("warmup: it=",it,
-		  " R0fun(this.xt)=",R0fun(this.xt),
-		  " this.xtot=",this.xtot,
-		  " n0*this.xtot=",n0*this.xtot,
-		  " n0*this.xt=",n0*this.xt.toPrecision(3),
-		 // " n0*this.y=",n0*this.y.toPrecision(3),
-		  //" n0*this.yt=",n0*this.yt.toPrecision(3),
-		  //" n0*this.z=",n0*this.z.toPrecision(3),
-		  "");
-    }
-   }
-   if(it==200){console.log("required number of observed infections",
-			 " not reached during maximum warmup period");}
   }
 
+
+
+  
   // scale down to match init value of n0*this.xt 
   // exactly to data nxtStart
  
@@ -1468,7 +1367,7 @@ DrawSim.prototype.updateOneDay=function(it,displayType,xtot,xt,y,yt,z){
   // take care of data=max in linear representation
 
 
-  if(useGithubData && (displayType==="lin")){
+  if(displayType==="lin"){
     var i_dataGit=it+dataGit_istart;
     if(i_dataGit<dataGit_cumCases.length){
 
@@ -1523,25 +1422,20 @@ DrawSim.prototype.updateOneDay=function(it,displayType,xtot,xt,y,yt,z){
 
 
 
-
-  dat_cumCases=(useGithubData) ? dataGit_cumCases : data_cumCases
-  dat_cumDeaths=(useGithubData) ? dataGit_cumDeaths : data_cumDeaths
-  dat_deathsCases=(useGithubData) ? dataGit_deathsCases : data_deathsCases
-
   if(this.isActive[1]){ // xt
-    this.plotPoints(it, 1, dat_cumCases, displayType);
+    this.plotPoints(it, 1, dataGit_cumCases, displayType);
   }
 
-  if(useGithubData&&(this.isActive[3])){ // yt
+  if(this.isActive[3]){ // yt
     this.plotPoints(it, 3, dataGit_cumRecovered, displayType);
   }
 
   if(this.isActive[4]){ // z
-    this.plotPoints(it, 4, dat_cumDeaths, displayType); 
+    this.plotPoints(it, 4, dataGit_cumDeaths, displayType); 
   }
 
   if(this.isActive[5]){ // z/xt
-    this.plotPoints(it, 5, dat_deathsCases, displayType); 
+    this.plotPoints(it, 5, dataGit_deathsCases, displayType); 
   }
 
 }
@@ -1600,7 +1494,7 @@ DrawSim.prototype.plotPoints=function(it,q,data_arr,displayType){
   for (var i=0; i<data_arr.length; i++){
 
 
-    var itg=(useGithubData) ? i-dataGit_istart : data_diff2start[i];
+    var itg=i-dataGit_istart;
 
     // log 10 and, if lin, in 1000 =>*0.001, if perc *100
 
