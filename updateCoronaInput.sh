@@ -40,7 +40,7 @@ perl -i -p -e 's/\n//g' data/tmp2.json
 perl -i -p -e "s/\]\,\}/\]\}/g"  data/tmp2.json
 rm data/tmp.json
 mv data/tmp2.json data/github.json
-exit
+
 
 
 
