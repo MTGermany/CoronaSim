@@ -408,11 +408,6 @@ function myStartStopFunction(){ //!!! hier bloederweise Daten noch nicht da!!
 
 function selectDataCountry(){ 
   console.log("\n\nin selectDataCountry()");
-  if(typeof fetch === "undefined"){
-    console.log("You are using an old Browser that does not understand Javascript's fetch");
-    console.log("cannot change country data");
-    return;
-  }
 
   const countryGerList={
     "Germany": "Deutschland",
