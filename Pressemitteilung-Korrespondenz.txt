@@ -1,0 +1,70 @@
+
+
+Liebe Frau Schaefer, lieber Herr Kästner, 
+
+ja, eine Ueberarbeitung mache ich bis zum Ende des Wochenendes. Der Schwerpunkt der Simulation ist in der Tat, im Gegensatz etwa zu den nicht-interaktiven Simulationen der TU Illmenau oder des RKI, den Studierenden und dem gemeinen Publikum zu zeigen, wie sehr es auf die Annahmen sowohl im Infektionsmodell als auch in der Messung/Datenentstehung ankommt (Stichwort Hell- und Dunkelfeld). Deshalb die vielen Regler zusaetzlich zum R-Regler: Neben einem validen Modell des eigentlchen Sachverhalts sind Analyse und Interpretation von Beobachtungs- und Messdaten ("Beobachtungsmodell")  zentrale Aspekte der Oekonometrie: Das "-metrie" kommt schliesslich von "Messen" 
+
+Andererseits sollte man sein Licht aber auch nicht unter den Scheffel stellen: Keiner kann valide (unbedingte) Prognosen erstellen, weder Illmenau noch das RKI. Es handelt sich vielmehr immer nur um Szenarien, also bedingte Prognosen der Art "Wenn wir diese und jene Massnahme machen und so den R-Wert X1 realisieren, ausserdem der Ansteckungszeitraum von X2 bis X3 geht und in gleicher Art und Umfang gemessen und behandelt wird wie bisher, dann wird es zum Zeitpunkt Y eine Zahl Z1 +/- dZ1  an gemeldete Faellen sowie Z2+/- dZ2 Tote geben". 
+
+Ich habe unter die Motorhaube der Illmenau-Simulation geschaut und da kamen erstaunlich unrealistische Vereinfachungen zu Tage, die z.B. den drastischen Wochengang der dortigen R-Schaetzung und die teilweise absurd niedrigen R-Werte erklaeren. Insbesondere ist es vom Sachverhalt her sinnlos, einen R-Wert tageweise zu schaetzen. Auch das RKI verwendet unrealistischerweise feste Zeitraeume von der Ansteckung bis zur Meldung. Hier meine ich, dass meine Simulation sogar besser ist, derartige bedingte Prognosen zu machen. 
+
+Besten Gruss und ein schoenes verlaengertes Wochenende, 
+
+Martin Treiber 
+
+
+
+==============================
+
+Sehr geehrter Herr Dr. Treiber, 
+
+danke für Ihre Rückmeldung. Um den Vorgang etwas zu beschleunigen,
+hatte ich heute Vormittag schon mal Kontakt zur Pressestelle
+aufgenommen. Da kam gerade zeitgleich mit Ihrer Rückmeldung die unten
+stehende Rückmeldung. Den Text sprachlich anpassen aus der Wir- in
+eine allgemeine Form sollte kein Problem darstellen. Ich überlege
+eher, wie verhindert werden kann, dass Medien dieses Tool nicht als
+reales Vorhersagemodell auffassen. Könnten Sie eventuell noch etwas
+formulieren, um den Bezug zur Lehre etwas präziser herauszustellen und
+den Hintergrund der Wahl der Variableneinstellung zu
+erklären. Vielleicht müsste auch ein Satz rein, dass mit diesen
+Modellen versucht wird die Realität abzubilden, aber möglicherweise
+nicht alle Einflussgrößen erfasst sind. Der hier demonstrierte Ansatz
+soll Studierende zeigen, wie derartige funktionieren. Vielleicht
+finden Sie hier aber auch noch viel treffendere Aussagen. 
+Ich denke, für das "Herumspielen" und Erklären der Vorgehensweise wäre
+ein eingebauter Reset-Button deutlich nutzerfreundlicher als ein
+Browser-Reset.  
+Vielleicht könnten wir da bis Montag noch mal einen
+überarbeiteten/erweiterten Text der Pressestelle zusenden, ehe die
+dortigen Kollegen über den Weg der Veröffentlichung diskutieren. Ich
+würde das dann auch erst nach Rücksprache als News bei uns einstellen.  
+
+Falls Sie Fragen haben erreichen Sie mich auch telefonisch unter 01577
+459 3886.  
+
+Viele Grüße 
+Gertraud Schäfer 
+
+-----Ursprüngliche Nachricht----- 
+Von: Kästner, Konrad Gesendet: Donnerstag, 30. April 2020 16:17 
+An: Schäfer, Gertraud <gertraud.schaefer@tu-dresden.de> 
+Cc: Pressestelle <pressestelle@tu-dresden.de> 
+Betreff: AW: Pressemitteilung Interaktive Corona-Simulation 
+
+Liebe Frau Schäfer, 
+
+das Thema klingt hinsichtlich der Vermittlung von Lehrinhalten sehr 
+interessant, wir müssten den Text bzgl. Länge und gewählter Perspektive 
+(Ich/Wir-Perspektive, direkte Ansprache der Leser - beides kommt in unseren 
+PI's und im UJ nicht zum Einsatz) aber sicher nochmals bearbeiten. Die 
+Gefahr besteht in meinen Augen, dass die Medien die Simulation nicht als 
+Lehrmodell, sondern als reales Vorhersagemodell aufgreifen ... Ich würde das 
+unbedingt am Montag noch mit Kim-Astrid Magister besprechen wollen. 
+Viele Grüße 
+
+Konrad Kästner 
+Chefredakteur Dresdner Universitätsjournal / Stellvertretender 
+Pressesprecher 
+
+Technische Universität Dresden 
