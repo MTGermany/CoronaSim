@@ -46,6 +46,7 @@ slider_R03.oninput = function() {
 
 // var R04
 
+/*
 var slider_R04=document.getElementById("slider_R04");
 var slider_R04Text = document.getElementById("slider_R04Text");
 
@@ -57,6 +58,7 @@ slider_R04.oninput = function() {
   R04=parseFloat(this.value);
   console.log("slider1 callback: R04="+R04);
 }
+*/
 
 // var R0
 
@@ -67,6 +69,7 @@ setSlider(slider_R0, slider_R0Text, R0,"");
 
 
 slider_R0.oninput = function() {
+  RsliderUsed=true;
   slider_R0Text.innerHTML = "&nbsp;"+this.value;
   R0=parseFloat(this.value);
   console.log("slider1 callback: R0="+R0);

@@ -48,6 +48,25 @@ var R02=2.2;                           // 2.2
 var R03=1.7;                            // 1.7
 var R04=(useGithubData) ? 0.95 : 1.05; // 0.95
 var R0=0.75;                           // 0.75
+const RtimeList={   // 0-1,1-3,3-5,... weeks after start
+  "Germany"       : [1.05, 0.75, 0.75],
+  "Austria"       : [0.8,  0.58, 0.58],
+  "Czechia"       : [0.90, 0.75, 0.75],
+  "France"        : [1.10, 1.06, 0.65],
+  "United Kingdom": [1.60, 1.10, 0.99],
+  "Italy"         : [0.93, 0.90, 0.84],
+  "Poland"        : [1.62, 1.01, 0.97],
+  "Spain"         : [0.90, 0.89, 0.70],
+  "Sweden"        : [1.10, 1.20, 1.05, 1.00],
+  "Switzerland"   : [0.82, 0.82, 0.60, 0.40],
+  "India"         : [2.05, 1.47, 1.25],
+  "Russia"        : [2.0,  1.8, 1.45, 1.4],
+  "US"            : [1.3, 1.08, 1.00]
+}
+var Rtime=RtimeList["Germany"]; //!!need direct initialization 
+var R_actual=Rtime[0]; //!!! time dependent R, either by R slider or data-driven
+var R_hist=[]; R_hist[0]=R_actual;
+var RsliderUsed=false;
 
 // number of positively tested infections@start
 // nxt=13957  (eu) or 15320 (git)
@@ -142,6 +161,42 @@ function R0fun(xt){
     (n0*xt<nxt2) ? R02 :
     (n0*xt<nxt3) ? R03 :
     (n0*xt<nxtR0) ? R04 : R0;  // R0 controlled by sliders
+}
+
+//##############################################################
+// function for variable replicationrate R0 as a function of time
+// t=tsim-date(2020-03-19) [days]
+//##############################################################
+
+function R0fun_time(t){
+  var iPresent=dataGit_istart+t;
+  var iTest    =iPresent+Math.round(tauTest);
+  var iTestPrev=iPresent+Math.round(tauTest-0.5*(tauRstart+tauRend));
+  //console.log("R0fun_time: t=",t," iTest+2=",iTest+2," dataGit_cumCases[iTest+2]=",dataGit_cumCases[iTest+2]);
+  if(t<0){
+    var xtNewnum  =1./2.*(dataGit_cumCases[iTest+1]-dataGit_cumCases[iTest-1]);
+    var xtNewdenom=1./2.*(dataGit_cumCases[iTestPrev+1]
+			  -dataGit_cumCases[iTestPrev-1]);
+    var R=1.02*xtNewnum/xtNewdenom;
+    if(false){
+      console.log("R0fun_time: t=",t," xtCum(iTest)=",dataGit_cumCases[iTest],
+		" xtCum(iTestPrev)=",dataGit_cumCases[iTestPrev],
+		" xtNewnum=",xtNewnum,
+		"");
+    }
+    return R;
+  }
+  else{
+    var iweek=Math.floor(t/7);
+    var nxt=dataGit_cumCases[iPresent];
+    var index=Math.min(Math.floor((iweek+1)/2),Rtime.length-1);
+    //console.log("nxt=",nxt," nxtR0=",nxtR0);
+    //console.log("iweek=",iweek," index=",index," Rtime=",Rtime);
+
+    //return R0fun(nxt/n0);
+    return Rtime[index];
+  }
+
 }
 
 
@@ -345,7 +400,7 @@ function startup() {
 
   corona=new CoronaSim();
 
-  corona.init(); // it=1 at the end !!
+  //corona.init(); // !!! because data lacking here, now in simulationRun
 
 
   // =============================================================
@@ -372,6 +427,7 @@ function startup() {
 
   //console.log("initialized.");
   myStartStopFunction(); // starts simulation up to present !!
+  //myResetFunction();
 
 }
 
@@ -395,7 +451,6 @@ function displayTypeCallback(){
   drawsim.setDisplayType(displayType); // clear and draAxes in setDisplay..
   drawsim.updateOneDay(it,displayType,corona.xtot,corona.xt,
 		       corona.y,corona.yt,corona.z); // !! ONLY to redraw lines
-  //myRestartFunction();
 }
 
 
@@ -404,11 +459,10 @@ function displayTypeCallback(){
 // do simulations and graphics
 // ###############################################################
 
-function myStartStopFunction(){ 
+function myStartStopFunction(){ //!!! hier bloederweise Daten noch nicht da!!
 
   clearInterval(myRun);
   //console.log("in myStartStopFunction: isStopped=",isStopped);
-
 
   if(isStopped){
         isStopped=false;
@@ -614,6 +668,7 @@ function selectDataCountry(){
   }
 
 
+
   country=document.getElementById("countries").value;
   countryGer=countryGerList[country];
   n0=parseInt(n0List[country]);
@@ -626,9 +681,15 @@ function selectDataCountry(){
   R03=R03List[country];
   R04=R04List[country];
   R0=R0List[country];
+  console.log("country=",country);
+  console.log("R04=",R04);
+  Rtime=RtimeList[country];
+  var test=RtimeList["Germany"]; console.log("test=",test);
+  console.log("RtimeList[\"Germany\"]=",RtimeList["Germany"]);
+  console.log("RtimeList=",RtimeList, " Rtime=",Rtime);
   //setSlider(slider_R03, slider_R03Text, R03,"");
-  setSlider(slider_R04, slider_R04Text, R04,"");
-  setSlider(slider_R0,  slider_R0Text,  R0,"");
+  //setSlider(slider_R04, slider_R04Text, R04,"");
+  setSlider(slider_R0,  slider_R0Text,  Rtime[0],"");
 
   //flagName=(country==="Germany") ? "flagSwitzerland.png" : "flagGermany.png";
   //document.getElementById("flag").src="figs/"+flagName;
@@ -639,10 +700,12 @@ function selectDataCountry(){
 }
 
 function myRestartFunction(){ 
+  RsliderUsed=false;
   ctx.clearRect(0, 0, canvas.width, canvas.height)
   fracDie=fracDieInit*pTest/pTestInit;
   console.log("restart: fracDie=",fracDie);
   startup();
+  corona.init(); // because startup redefines CoronaSim() and data there here
   if(false&&useGithubData){
    console.log("restart: after startup: dataGit[0]=",
 	       dataGit[0]);
@@ -665,13 +728,24 @@ function myRestartFunction(){
 // => can use it directly as the reset function
 
 function myResetFunction(){ 
+  RsliderUsed=false;
   selectDataCountry();
 }
 
 
 function simulationRun() {
-  doSimulationStep();
-
+  if(it==0){
+    console.log("Test:");
+    for (var t=-15; t<=9; t++){
+      console.log("t=",t," R0fun_time(t)=", R0fun_time(t));
+    }
+    corona.init(); // !!! new position  it=1 at the end !
+  }
+  doSimulationStep(); //it++ at end
+  console.log("RsliderUsed=",RsliderUsed);
+  if(!RsliderUsed){
+    setSlider(slider_R0, slider_R0Text, R0fun_time(it),"");
+  }
   if(it==itmaxinit+1){ 
     clearInterval(myRun);myStartStopFunction();
   }
@@ -688,7 +762,11 @@ function doSimulationStep(){
 		       " n0* arg corona.xt=",n0*corona.xt);}
   drawsim.updateOneDay(it, displayType, corona.xtot, corona.xt,
 		       corona.y, corona.yt, corona.z);
-  corona.updateOneDay(R0fun(corona.xt));
+  //corona.updateOneDay(R0fun(corona.xt));//!!!
+  R_actual=(RsliderUsed) ? R0 : R0fun_time(it);
+  R_hist[it]=R_actual;
+  console.log("it=",it," R_actual=",R_actual);
+  corona.updateOneDay(R_actual);
   it++;
 
 }
@@ -712,6 +790,7 @@ function CoronaSim(){
   this.x=[]; // age struture of fraction infected at given timestep
   this.xohne=[]; // age structure without deleting by recover,death
 }
+
 
 
 CoronaSim.prototype.init=function(){
@@ -744,9 +823,21 @@ CoronaSim.prototype.init=function(){
     //console.log("this.x[tau]=",this.x[tau]);
   }
 
-  // do warmup until the required number of observed infections xt is reached
+  // data-driven warmup
 
-  for(it=1; (it<200)&&(n0*this.xt<nxtStart); it++){ //200
+  if(!(typeof fetch === "undefined")){
+    for(t=-20; t<=0; t++){
+      var Rt=R0fun_time(t);
+      this.updateOneDay(Rt);
+    }
+  }
+
+
+
+  // warmup: data-less fallback if fetch is undefined
+
+  else{
+   for(it=1; (it<200)&&(n0*this.xt<nxtStart); it++){ //200
     var Rt=R0fun(this.xt);
     this.updateOneDay(Rt);
     if(false){
@@ -760,10 +851,10 @@ CoronaSim.prototype.init=function(){
 		  //" n0*this.z=",n0*this.z.toPrecision(3),
 		  "");
     }
-  }
-  if(it==200){console.log("required number of observed infections",
+   }
+   if(it==200){console.log("required number of observed infections",
 			 " not reached during maximum warmup period");}
-
+  }
 
   // scale down to match init value of n0*this.xt 
   // exactly to data nxtStart
@@ -805,7 +896,7 @@ CoronaSim.prototype.init=function(){
 
 //#################################################################
 //!!!
-CoronaSim.prototype.updateOneDay=function(R){ //it++ at end
+CoronaSim.prototype.updateOneDay=function(R){ 
 
 
   if(false){
@@ -937,7 +1028,7 @@ CoronaSim.prototype.updateOneDay=function(R){ //it++ at end
 
   // control output
 
-  if(true){
+  if(false){
     console.log("end CoronaSim.updateOneDay: it=",it,
 		" nxt=",(n0*this.xt).toPrecision(5),
 		" nxtot=",(n0*this.xtot).toPrecision(6),
@@ -1395,22 +1486,17 @@ DrawSim.prototype.updateOneDay=function(it,displayType,xtot,xt,y,yt,z){
   var textsize=Math.min(0.030*canvas.width,0.045*canvas.height);
 
   ctx.setTransform(0,-1,1,0,x0+1.0*textsize,y0);
-  ctx.fillText("Rstart aktiv",0,0);
+  ctx.fillText("R="+R0fun_time(0),0,0);
   ctx.setTransform(1,0,0,1,0,0);
 
-  if(this.unitPers*this.yDataLin[1][it]>=nxtR0){
-    if(this.unitPers*this.yDataLin[1][it-1]<nxtR0){
-      this.itR0=it;
-    }
-    if(this.itR0>-1){
-      x0=this.xPix[this.itR0];
-      ctx.fillRect(x0-1,this.yPix0,3,this.hPix);
+  for(var iw=1; iw<it/7; iw+=2){
+    var itR=7*iw;
+    x0=this.xPix[itR];
+    ctx.fillRect(x0-1,this.yPix0,3,this.hPix);
 
-      ctx.setTransform(0,-1,1,0,x0+1.0*textsize,y0);
-      //ctx.fillText("R"+toSub(0)+" aktiv",0,0);
-      ctx.fillText("R aktiv",0,0);
-      ctx.setTransform(1,0,0,1,0,0);
-    }
+    ctx.setTransform(0,-1,1,0,x0+1.0*textsize,y0);
+    ctx.fillText("R="+R_hist[itR],0,0);
+    ctx.setTransform(1,0,0,1,0,0);
   }
 
 
@@ -1421,19 +1507,19 @@ DrawSim.prototype.updateOneDay=function(it,displayType,xtot,xt,y,yt,z){
   dat_deathsCases=(useGithubData) ? dataGit_deathsCases : data_deathsCases
 
   if(this.isActive[1]){ // xt
-    this.plotPoints(it, 1, dat_cumCases, displayType); //!!!
+    this.plotPoints(it, 1, dat_cumCases, displayType);
   }
 
   if(useGithubData&&(this.isActive[3])){ // yt
-    this.plotPoints(it, 3, dataGit_cumRecovered, displayType); //!!!
+    this.plotPoints(it, 3, dataGit_cumRecovered, displayType);
   }
 
   if(this.isActive[4]){ // z
-    this.plotPoints(it, 4, dat_cumDeaths, displayType); //!!!
+    this.plotPoints(it, 4, dat_cumDeaths, displayType); 
   }
 
   if(this.isActive[5]){ // z/xt
-    this.plotPoints(it, 5, dat_deathsCases, displayType); //!!!
+    this.plotPoints(it, 5, dat_deathsCases, displayType); 
   }
 
 }
@@ -1501,7 +1587,7 @@ DrawSim.prototype.plotPoints=function(it,q,data_arr,displayType){
 
     // actual plotting
 
-    //if((itg>=0)&&(itg<=it)&&(y>=yminDraw) &&(y<=ymaxDraw)){//!!!
+
     if((itg>=0)&&(itg<=it)){
       if(false){console.log("it=",it," i=",i," itg=",itg,
 			   " data_arr[i]=",data_arr[i]);}
