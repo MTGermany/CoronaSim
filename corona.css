@@ -115,6 +115,30 @@ a:hover {
 /*######################################################*/
 
 
+#logDiv{ /* sadly does not log system generated errors as expected */
+  position: absolute;
+  top:   70vh; 
+  left:   20vw;
+  width:  78vw;
+  height:  30vh;
+  overflow: scroll;
+  background-color: rgb(255,235,235);
+  margin-right: 0vw;
+  margin-left: 0vw;
+  z-index: 4;  # the higher the more on top
+}
+
+ /* print warnings and errors in other color: console.warn, console.error
+ see corona.js->debugApple */
+
+.warnClass{
+  color: #f90;
+}
+
+.errClass{
+  color: #c00;
+}
+
 #startStopDiv{
   position: absolute;
   top:     0.0vh; 

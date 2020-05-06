@@ -8,7 +8,7 @@
 // useLiveData=false: obtained data server-side 
 // via script updateCoronaInput.sh. Stable but need to upload once a day
 
-var debugApple=false; // if true uncomment <div id="logDiv">... in html
+var debugApple=true; // if true uncomment <div id="logDiv">... in html
 var useLiveData=false;  
 var country="Germany"
 var countryGer="Deutschland"
