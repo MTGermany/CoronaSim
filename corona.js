@@ -9,7 +9,7 @@
 // via script updateCoronaInput.sh. Stable but need to upload once a day
 
 var debugApple=false; // if true uncomment <div id="logDiv">... in html
-var useLiveData=false;  
+var useLiveData=true;  
 var country="Germany"
 var countryGer="Deutschland"
 var dayStartMar=19;
@@ -29,7 +29,7 @@ var n0=80.e6;  // #persons in Germany
 
 
 const RtimeList={   // 0-1,1-3,3-5,... weeks after start
-  "Germany"       : [1.05, 0.75, 0.75],
+  "Germany"       : [1.05, 0.75, 0.75, 0.70],
   "Austria"       : [0.8,  0.62, 0.62],
   "Czechia"       : [0.90, 0.75, 0.75],
   "France"        : [1.10, 1.06, 0.65],
@@ -243,15 +243,35 @@ function getGithubData() {
   }
 }
 
+// really malignous error: Apple cannot make date object out of yyyy-m-dd
+// e.g., 2020-1-22 as delivered by dataGit
+
+function insertLeadingZeroes(dateStr){
+  var monthIsOneDigit=(dateStr.lastIndexOf("-")==6);
+  var dayIsOneDigit=(dateStr.charAt(dateStr.length-2)==="-");
+  return dateStr.substr(0,5)
+    + ((monthIsOneDigit) ? "0" : "")
+    + ((monthIsOneDigit) ? dateStr.substr(5,1) : dateStr.substr(5,2))
+    + "-"
+    + ((dayIsOneDigit) ? "0" : "")
+    + ((dayIsOneDigit) ? dateStr.slice(-1) : dateStr.slice(-2));
+
+}
+
 
 
 function initializeData(country) {
 
   var data=dataGit[country];
   var dateInitStr=data[0]["date"];
-  dataGit_dateBegin=new Date(dateInitStr);
+  dataGit_dateBegin=new Date(insertLeadingZeroes(dateInitStr));
   dataGit_istart=Math.round(
     (startDay.getTime() - dataGit_dateBegin.getTime() )/oneDay_ms);
+
+  console.log("new Date(\"2020-01-22\")=",new Date("2020-01-22"));
+  console.log("new Date(\"2020-1-22\")=",new Date("2020-1-22"));
+  console.log("dataGit_dateBegin=",dataGit_dateBegin);
+  console.log("dataGit_istart=",dataGit_istart);
 
 
   var itmaxData=data.length;

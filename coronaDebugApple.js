@@ -243,15 +243,37 @@ function getGithubData() {
   }
 }
 
+// really malignous error: Apple cannot make date object out of yyyy-m-dd
+// e.g., 2020-1-22 as delivered by dataGit
+
+function insertLeadingZeroes(dateStr){
+  var monthIsOneDigit=(dateStr.lastIndexOf("-")==6);
+  var dayIsOneDigit=(dateStr.charAt(dateStr.length-2)==="-");
+  return dateStr.substr(0,5)
+    + ((monthIsOneDigit) ? "0" : "")
+    + ((monthIsOneDigit) ? dateStr.substr(5,1) : dateStr.substr(5,2))
+    + "-"
+    + ((dayIsOneDigit) ? "0" : "")
+    + ((dayIsOneDigit) ? dateStr.slice(-1) : dateStr.slice(-2));
+
+}
 
 
 function initializeData(country) {
 
+  console.log("country=",country);
   var data=dataGit[country];
-  var dateInitStr=data[0]["date"];
+  //console.log("data=",data);
+  var dateInitStr=insertLeadingZeroes(data[0]["date"]);
+  console.log("dateInitStr=",dateInitStr);
+
   dataGit_dateBegin=new Date(dateInitStr);
   dataGit_istart=Math.round(
     (startDay.getTime() - dataGit_dateBegin.getTime() )/oneDay_ms);
+  console.log("new Date(\"2020-01-22\")=",new Date("2020-01-22"));
+  console.log("new Date(\"2020-1-22\")=",new Date("2020-1-22"));
+  console.log("dataGit_dateBegin=",dataGit_dateBegin);
+  console.log("dataGit_istart=",dataGit_istart);
 
 
   var itmaxData=data.length;
@@ -272,7 +294,8 @@ function initializeData(country) {
 
   nxtStart=dataGit_cumCases[dataGit_istart]; 
 
-  console.log(
+  if(false){
+   console.log(
     "\nend initializeData: country=",country,
     "\n dataGit_istart=",dataGit_istart,
     "\n dataGit_cumCases.length=",dataGit_cumCases.length,
@@ -286,7 +309,8 @@ function initializeData(country) {
     dataGit_date[dataGit_cumCases.length-1],
     "\n nxtStart=",nxtStart,
     "\n"
-  );
+   );
+  }
 
 
 }
@@ -364,9 +388,9 @@ function startup() {
     // connect(target,options,includeTimestamp,logAlsoToConsole)
     ConsoleLogHTML.connect(logTarget,null,false);
         // Redirect log messages
-    console.log("example logging by console.log");
-    console.warn("example warning by console.warn");
-    console.error("example error by console.error");
+    //console.log("example logging by console.log");
+    //console.warn("example warning by console.warn");
+    //console.error("example error by console.error1");
     //ConsoleLogHTML.disconnect(); // Stop redirecting
   }
 
@@ -375,7 +399,7 @@ function startup() {
   // actual startup
   // =============================================================
 
-  myStartStopFunction(); // default: starts simulation up to present !!
+  //myStartStopFunction(); // default: starts simulation up to present !!
   //myResetFunction();
 
 }
