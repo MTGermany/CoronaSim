@@ -71,3 +71,5 @@ perl -i -p -e "s/\n//g" data/coronaWorldwide.json
 
 perl -i -p -e 's/\}\,\]/\}\]/g' data/coronaWorldwide.json
 
+
+upload2public_html.sh

@@ -1,0 +1,215 @@
+
+Subject:	AW: AW: WG: Pressemitteilung Interaktive Corona-Simulation
+Date:	Tue, 5 May 2020 08:51:44 +0000
+From:	Gertraud Schaefer <gertraud.schaefer@tu-dresden.de>
+To:	Konrad Kaestner <konrad.kaestner@tu-dresden.de>, Pressestelle <pressestelle@tu-dresden.de>, Socialmedia Team <socialmedia@tu-dresden.de>, studinews@mailbox.tu-dresden.de <studinews@mailbox.tu-dresden.de>
+CC:	Martin Treiber <martin.treiber@tu-dresden.de>
+
+Lieber Herr Kästner, liebe Kolleginnen und Kollegen, 
+
+nun ist die News zur Coronoa-Simulation fertig gestellt und im Newsportal der Fakultät Verkehrswissenschaften online ( https://tu-dresden.de/bu/verkehr/die-fakultaet/news/news/statistiker-der-tu-dresden-modellieren-die-covid-19-pandemie-stand-2-mai-2020). Ich habe sie ins Newsportal der Startseite der TUD eingereicht. Bitte prüfen Sie inwieweit eine weitere Verbreitung über die Social Media Kanäle und den Studierenden Newsletter möglich ist. Sollten Sie weitere Informationen benötigen, können Sie sich gern an mich oder direkt an Herrn Dr. Treiber (Kontaktdaten unter: https://tu-dresden.de/bu/verkehr/ivw/osv/die-professur/beschaeftigte/martin.treiber) wenden. 
+
+Mit freundlichen Grüßen 
+Gertraud Schäfer 
+--------------------------------------------------------------------------------- 
+TU Dresden 
+Fakultät Verkehrswissenschaften "Friedrich List" 
+Dekanat 
+Öffentlichkeitsarbeit 
+01062 Dresden 
+Gerhart-Potthoff-Bau 155 
+Hettnerstr. 3 
+Tel: +49(351) 463 34908/36763 
+Fax: +49(351) 463 36666 
+E-Mail: gertraud.schaefer@tu-dresden.de 
+www.tu-dresden.de/bu/verkehr 
+
+
+
+-----Ursprüngliche Nachricht----- 
+Von: Kästner, Konrad Gesendet: Montag, 4. Mai 2020 16:04 
+An: Schäfer, Gertraud <gertraud.schaefer@tu-dresden.de> 
+Betreff: AW: AW: WG: Pressemitteilung Interaktive Corona-Simulation 
+
+Liebe Frau Schäfer, 
+
+das Team sieht die Meldung eher nicht als Presseinformation zum Versand, aber wir würden sie im Newsportal aufgreifen, wenn Sie sie dort einreichen. Wäre dann ja auch noch was für den Studierendennewsletter und Social Media etc. Wäre das ok? 
+
+Viele Grüße 
+
+Konrad Kästner 
+Chefredakteur Dresdner Universitätsjournal / Stellvertretender Pressesprecher 
+
+Technische Universität Dresden 
+Dezernat Strategie und Kommunikation 
+01062 Dresden (Postanschrift) 
+
+Nöthnitzer Straße 43 
+01187 Dresden (Besucheradresse) 
+Tel.: +49 (351) 463-32427 
+Fax: +49 (351) 463-37165 
+konrad.kaestner@tu-dresden.de https://tu-dresden.de/dezernat-7 www.dresdner-universitaetsjournal.de 
+
+
+-----Ursprüngliche Nachricht----- 
+Von: Martin Treiber <martin.treiber@tu-dresden.de> Gesendet: Montag, 4. Mai 2020 11:27 
+An: Kästner, Konrad <konrad.kaestner@tu-dresden.de>; Schäfer, Gertraud <gertraud.schaefer@tu-dresden.de> 
+Betreff: Re: AW: WG: Pressemitteilung Interaktive Corona-Simulation 
+
+Sehr geehrter Herr Kaestner, 
+
+ich habe es direkt als unformatierte Textdatei geschrieben (war urspruenglich als direkter Mailinhalt ohne Anhang gedacht). 
+
+Besten Gruss, 
+
+Martin Treiber 
+
+On 04.05.20 10:03, Konrad Kaestner wrote: 
+Sehr geehrter Herr Dr. Treiber, 
+
+vielen Dank - haben Sie die Datei noch in einem anderen Format (docx) vorliegen? Ich hatte jetzt eine unformatierte txt-Datei als Anhang erhalten. 
+
+Viele Grüße 
+
+Konrad Kästner 
+Chefredakteur Dresdner Universitätsjournal / Stellvertretender Pressesprecher 
+
+Technische Universität Dresden 
+Dezernat Strategie und Kommunikation 
+01062 Dresden (Postanschrift) 
+
+Nöthnitzer Straße 43 
+01187 Dresden (Besucheradresse) 
+Tel.: +49 (351) 463-32427 
+Fax: +49 (351) 463-37165 
+konrad.kaestner@tu-dresden.de 
+https://tu-dresden.de/dezernat-7 
+www.dresdner-universitaetsjournal.de 
+
+
+
+-----Ursprüngliche Nachricht----- 
+Von: Martin Treiber <martin.treiber@tu-dresden.de> 
+Gesendet: Montag, 4. Mai 2020 09:58 
+An: Schäfer, Gertraud <gertraud.schaefer@tu-dresden.de> 
+Cc: Kästner, Konrad <konrad.kaestner@tu-dresden.de> 
+Betreff: Re: WG: Pressemitteilung Interaktive Corona-Simulation 
+
+Sehr geehrte Frau Schaefer, 
+
+anbei die ueberarbeitete Version der Pressemitteilung. Die Simulation 
+enthsaelt jetzt der Uebersichtlichkeit nur einen R-Regler. 
+
+Besten Gruss, 
+
+
+Martin Treiber 
+
+
+
+On 30.04.20 20:00, Martin Treiber wrote: 
+Liebe Frau Schaefer, lieber Herr Kästner, 
+
+ja, eine Ueberarbeitung mache ich bis zum Ende des Wochenendes. Der 
+Schwerpunkt der Simulation ist in der Tat, im Gegensatz etwa zu den 
+nicht-interaktiven Simulationen der TU Illmenau oder des RKI, den 
+Studierenden und dem gemeinen Publikum zu zeigen, wie sehr es auf die 
+Annahmen sowohl im Infektionsmodell als auch in der 
+Messung/Datenentstehung ankommt (Stichwort Hell- und Dunkelfeld). 
+Deshalb die vielen Regler zusaetzlich zum R-Regler: Neben einem 
+validen Modell des eigentlchen Sachverhalts sind Analyse und 
+Interpretation von Beobachtungs- und Messdaten ("Beobachtungsmodell") 
+zentrale Aspekte der Oekonometrie: Das "-metrie" kommt schliesslich 
+von "Messen" 
+
+Andererseits sollte man sein Licht aber auch nicht unter den Scheffel 
+stellen: Keiner kann valide (unbedingte) Prognosen erstellen, weder 
+Illmenau noch das RKI. Es handelt sich vielmehr immer nur um 
+Szenarien, also bedingte Prognosen der Art "Wenn wir diese und jene 
+Massnahme machen und so den R-Wert X1 realisieren, ausserdem der 
+Ansteckungszeitraum von X2 bis X3 geht und in gleicher Art und Umfang 
+gemessen und behandelt wird wie bisher, dann wird es zum Zeitpunkt Y 
+eine Zahl Z1 +/- dZ1 an gemeldete Faellen sowie Z2+/- dZ2 Tote geben". 
+
+Ich habe unter die Motorhaube der Illmenau-Simulation geschaut und da 
+kamen erstaunlich unrealistische Vereinfachungen zu Tage, die z.B. den 
+drastischen Wochengang der dortigen R-Schaetzung und die teilweise 
+absurd niedrigen R-Werte erklaeren. Insbesondere ist es vom 
+Sachverhalt her sinnlos, einen R-Wert tageweise zu schaetzen. Auch das 
+RKI verwendet unrealistischerweise feste Zeitraeume von der Ansteckung 
+bis zur Meldung. Hier meine ich, dass meine Simulation sogar besser 
+ist, derartige bedingte Prognosen zu machen. 
+
+Besten Gruss und ein schoenes verlaengertes Wochenende, 
+
+Martin Treiber 
+
+
+Liebe Frau Schaefer, lieber Herr Kästner, 
+
+ja, eine Ueberarbeitung mache ich bis zum Ende des Wochenendes. Der Schwerpunkt der Simulation ist in der Tat, im Gegensatz etwa zu den nicht-interaktiven Simulationen der TU Illmenau oder des RKI, den Studierenden und dem gemeinen Publikum zu zeigen, wie sehr es auf die Annahmen sowohl im Infektionsmodell als auch in der Messung/Datenentstehung ankommt (Stichwort Hell- und Dunkelfeld). Deshalb die vielen Regler zusaetzlich zum R-Regler: Neben einem validen Modell des eigentlchen Sachverhalts sind Analyse und Interpretation von Beobachtungs- und Messdaten ("Beobachtungsmodell")  zentrale Aspekte der Oekonometrie: Das "-metrie" kommt schliesslich von "Messen" 
+
+Andererseits sollte man sein Licht aber auch nicht unter den Scheffel stellen: Keiner kann valide (unbedingte) Prognosen erstellen, weder Illmenau noch das RKI. Es handelt sich vielmehr immer nur um Szenarien, also bedingte Prognosen der Art "Wenn wir diese und jene Massnahme machen und so den R-Wert X1 realisieren, ausserdem der Ansteckungszeitraum von X2 bis X3 geht und in gleicher Art und Umfang gemessen und behandelt wird wie bisher, dann wird es zum Zeitpunkt Y eine Zahl Z1 +/- dZ1  an gemeldete Faellen sowie Z2+/- dZ2 Tote geben". 
+
+Ich habe unter die Motorhaube der Illmenau-Simulation geschaut und da kamen erstaunlich unrealistische Vereinfachungen zu Tage, die z.B. den drastischen Wochengang der dortigen R-Schaetzung und die teilweise absurd niedrigen R-Werte erklaeren. Insbesondere ist es vom Sachverhalt her sinnlos, einen R-Wert tageweise zu schaetzen. Auch das RKI verwendet unrealistischerweise feste Zeitraeume von der Ansteckung bis zur Meldung. Hier meine ich, dass meine Simulation sogar besser ist, derartige bedingte Prognosen zu machen. 
+
+Besten Gruss und ein schoenes verlaengertes Wochenende, 
+
+Martin Treiber 
+
+
+
+==============================
+
+Sehr geehrter Herr Dr. Treiber, 
+
+danke für Ihre Rückmeldung. Um den Vorgang etwas zu beschleunigen,
+hatte ich heute Vormittag schon mal Kontakt zur Pressestelle
+aufgenommen. Da kam gerade zeitgleich mit Ihrer Rückmeldung die unten
+stehende Rückmeldung. Den Text sprachlich anpassen aus der Wir- in
+eine allgemeine Form sollte kein Problem darstellen. Ich überlege
+eher, wie verhindert werden kann, dass Medien dieses Tool nicht als
+reales Vorhersagemodell auffassen. Könnten Sie eventuell noch etwas
+formulieren, um den Bezug zur Lehre etwas präziser herauszustellen und
+den Hintergrund der Wahl der Variableneinstellung zu
+erklären. Vielleicht müsste auch ein Satz rein, dass mit diesen
+Modellen versucht wird die Realität abzubilden, aber möglicherweise
+nicht alle Einflussgrößen erfasst sind. Der hier demonstrierte Ansatz
+soll Studierende zeigen, wie derartige funktionieren. Vielleicht
+finden Sie hier aber auch noch viel treffendere Aussagen. 
+Ich denke, für das "Herumspielen" und Erklären der Vorgehensweise wäre
+ein eingebauter Reset-Button deutlich nutzerfreundlicher als ein
+Browser-Reset.  
+Vielleicht könnten wir da bis Montag noch mal einen
+überarbeiteten/erweiterten Text der Pressestelle zusenden, ehe die
+dortigen Kollegen über den Weg der Veröffentlichung diskutieren. Ich
+würde das dann auch erst nach Rücksprache als News bei uns einstellen.  
+
+Falls Sie Fragen haben erreichen Sie mich auch telefonisch unter 01577
+459 3886.  
+
+Viele Grüße 
+Gertraud Schäfer 
+
+-----Ursprüngliche Nachricht----- 
+Von: Kästner, Konrad Gesendet: Donnerstag, 30. April 2020 16:17 
+An: Schäfer, Gertraud <gertraud.schaefer@tu-dresden.de> 
+Cc: Pressestelle <pressestelle@tu-dresden.de> 
+Betreff: AW: Pressemitteilung Interaktive Corona-Simulation 
+
+Liebe Frau Schäfer, 
+
+das Thema klingt hinsichtlich der Vermittlung von Lehrinhalten sehr 
+interessant, wir müssten den Text bzgl. Länge und gewählter Perspektive 
+(Ich/Wir-Perspektive, direkte Ansprache der Leser - beides kommt in unseren 
+PI's und im UJ nicht zum Einsatz) aber sicher nochmals bearbeiten. Die 
+Gefahr besteht in meinen Augen, dass die Medien die Simulation nicht als 
+Lehrmodell, sondern als reales Vorhersagemodell aufgreifen ... Ich würde das 
+unbedingt am Montag noch mit Kim-Astrid Magister besprechen wollen. 
+Viele Grüße 
+
+Konrad Kästner 
+Chefredakteur Dresdner Universitätsjournal / Stellvertretender 
+Pressesprecher 
+
+Technische Universität Dresden 

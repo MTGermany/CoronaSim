@@ -3,7 +3,7 @@
 target=$HOME/public_html/CoronaSim
 
 cp -r *.css *.js *.html figs $target
-cp data/coronaWorldwide.json data/coronaWorldwide2.json data/github.json $target/data
+cp data/coronaWorldwide.json data/github.json $target/data
 chmod 604 `find $target -type f`
 chmod 701 `find $target -type d` 
 
