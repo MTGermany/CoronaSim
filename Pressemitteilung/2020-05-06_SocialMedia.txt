@@ -1,0 +1,54 @@
+Sehr geehrte Frau Jaehnert,
+
+die Grafiken sehen sehr schoen aus! Ich nehme an, es hat grafische/gestalterische  Gruende, dass Sie im Facebook bzw Twitter-Beitrag die Simulation durch die  Textbox nahezu verdecken. Ansonsten koennte man sie etwas hoeher setzen. Die Freigabe haben Sie aber unabhaengig davon.
+
+Besten Gruss,
+
+Martin Treiber
+
+=================================================
+
+On 06.05.20 19:07, Laura Jaehnert wrote:
+
+Sehr geehrter Herr Treiber,
+
+ 
+
+vielen Dank für die schöne Zuarbeit. Im Anhang finden Sie die vorbereiteten Grafiken, die wir so morgen gerne auf Social Media veröffentlichen möchten. Daher bitte ich Sie – wenn möglich – um Freigabe bis morgen Mittag bzw. Mitteilung von Änderungswünschen.
+
+ 
+
+Vielen Dank und beste Grüße
+
+ 
+
+Laura Jähnert
+
+===================================================
+
+
+
+In welcher Vorlesung kam die Corona-Simulation zum Einsatz?
+
+Ich nutze sie im Verkehrsökonometrie Bachelor-Kurs dieses Sommersemesters sowie als allgemeine Einführung in meinem Masters-Kurs Verkehrsdynamik und -simulation (Traffic Flow Dynamics and Simulation).
+
+Wie nutzen die Studierenden das Projekt jetzt?
+
+als interaktive Demonstration, wie sehr eine Modellierung von den Annahmen abhängt. Bekanntlich gibt es Lügen, verdammte Lügen und Statistik (dass dieses Zitat von Disraeli stammt, scheint ebenfalls eine "Lüge zu sein). Außerdem sollte man keiner Statistik trauen, die man nicht selbst gefälscht hat (fälschlicherweise Churchill zugeschrieben). Hier sehen die Studierenden, wo diese despektierlichen Ansichten über Statistik (Ökonometrie ist im Prinzip nichts anderes) herkommen könnten, aber auch, dass statistische Methoden sehr zielführend und mächtig sein können, wenn man immer mit den Daten vergleicht und daran das Modell testet (das "-metrie" in Ökonometrie kommt von "messen") und vorallem die Annahmen kommuniziert.
+
+(Wie) waren die Studierenden an der Erstellung beteiligt?
+
+gar nicht.
+
+Wie kommunizieren Sie mit Ihren Studierenden? Welche digitalen Plattformen für Ihre Vorlesung nutzen Sie?
+
+* das klassische Web in Form von pdf's für das Vorlesungsskript, Übungen und vieles mehr,
+
+* interaktive Simulationen wie diese hier oder für die Verkehrsdynamik-Vorlesung die Verkehrsfluss-Simulationen https://traffic-simulation.de, https://mtreiber.de/mixedTraffic,
+
+* einen Youtube-Kanal "Vorlesungen Ökonometrie".
+
+
+Besten Gruß aus dem Homeoffice
+
+Martin Treiber 
