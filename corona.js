@@ -21,6 +21,8 @@ var countryGer="Deutschland"
 var dayStartMar=19;
 var startDay=new Date(2020,02,dayStartMar); // months start @ zero, days @ 1
 
+const ln10=Math.log(10);
+var displayType="lin"; // "lin" or "log"; consolidate with html
 
 
 // global operative simulation vars 
@@ -57,8 +59,6 @@ var RsliderUsed=false;
 
 var oneDay_ms=(1000 * 3600 * 24);
 
-var ln10=Math.log(10);
-var displayType="lin"; // "lin" or "log"; consolidate with html
 
 // if use Europe opendata portal
 
@@ -128,38 +128,6 @@ var sizemin=0;
 
 
 
-//##############################################################
-// function for variable replicationrate R0 as a function of time
-// t=tsim-date(2020-03-19) [days]
-//##############################################################
-
-function R0fun_time(t){
-  var iPresent=dataGit_istart+t;
-  var iTest    =iPresent+Math.round(tauTest);
-  var iTestPrev=iPresent+Math.round(tauTest-0.5*(tauRstart+tauRend));
-
-  if(t<0){
-    var xtNewnum  =1./2.*(dataGit_cumCases[iTest+1]-dataGit_cumCases[iTest-1]);
-    var xtNewdenom=1./2.*(dataGit_cumCases[iTestPrev+1]
-			  -dataGit_cumCases[iTestPrev-1]);
-    var R=1.02*xtNewnum/xtNewdenom;
-    if(false){
-      console.log("R0fun_time: t=",t," xtCum(iTest)=",dataGit_cumCases[iTest],
-		" xtCum(iTestPrev)=",dataGit_cumCases[iTestPrev],
-		" xtNewnum=",xtNewnum,
-		"");
-    }
-    return R;
-  }
-  else{
-    var iweek=Math.floor(t/7);
-    var nxt=dataGit_cumCases[iPresent];
-    var index=Math.min(Math.floor((iweek+1)/2),Rtime.length-1);
-    return Rtime[index];
-  }
-
-}
-
 
 
 // ##############################################################
@@ -185,6 +153,8 @@ function R0fun_time(t){
 
 //called ONLY in the <body onload> and toggleData event
 function getGithubData() {
+  corona=new CoronaSim(); //!!!
+
   if(debugApple){
     console.log("in ConsoleLogHTML");
     ConsoleLogHTML.DEFAULTS.error = "errClass";
@@ -229,7 +199,7 @@ function getGithubData() {
     dataGit = JSON.parse(dataGitLocal);
     console.log("useLiveData=false: dataGit=",dataGit);
     initializeData(country);
-    corona=new CoronaSim();
+    //corona=new CoronaSim(); //!!!
     corona.init();
   }
 }
@@ -299,10 +269,138 @@ function initializeData(country) {
     "\n"
   );
 
-
+  calibrateR(); //!!!
 }
 
 
+//##############################################################
+// function for variable replicationrate R0 as a function of time
+// t=tsim-date(2020-03-19) [days]
+//##############################################################
+
+function R0fun_time(t){
+  var iPresent=dataGit_istart+t;
+  var iTest    =iPresent+Math.round(tauTest);
+  var iTestPrev=iPresent+Math.round(tauTest-0.5*(tauRstart+tauRend));
+
+  if(t<0){
+    var xtNewnum  =1./2.*(dataGit_cumCases[iTest+1]-dataGit_cumCases[iTest-1]);
+    var xtNewdenom=1./2.*(dataGit_cumCases[iTestPrev+1]
+			  -dataGit_cumCases[iTestPrev-1]);
+    var R=1.02*xtNewnum/xtNewdenom;
+    if(false){
+      console.log("R0fun_time: t=",t," xtCum(iTest)=",dataGit_cumCases[iTest],
+		" xtCum(iTestPrev)=",dataGit_cumCases[iTestPrev],
+		" xtNewnum=",xtNewnum,
+		"");
+    }
+    return R;
+  }
+  else{
+    var iweek=Math.floor(t/7);
+    var nxt=dataGit_cumCases[iPresent];
+    var index=Math.min(Math.floor((iweek+1)/2),Rtime.length-1);
+    return Rtime[index];
+  }
+
+}
+
+/*##############################################################
+ objective function for fitting the two-weekly reproduction rate 
+ via the resulting dynamics of cases to the data
+ used as function arg of the nl opt package fmin:
+ fmin.nelderMead(SSEfunc, guessSSE)  or
+ fmin.conjugateGradient(SSEfunc, guessSSE)
+ gradient fbeta needed only for conjugateGradient
+
+@param R_arr: array of R values: R_arr[0]: for days i<7,
+                                 R_arr[j]: 14 days starting at i=7+(j-1)*14
+@param fR: numerical gradient of func with respect to R
+ ##############################################################*/
+
+function SSEfunc(R_arr,fR,logging) { 
+
+  fR = fR || new Array(R_arr.length).fill(0); // crucial if fbeta missing!
+
+  var sse=0;
+  // init handling of numerical gradient
+
+  var eps=0.001;
+  var Rp=[]; // R arg where the jth component is increased by epsilon
+  var Rm=[]; // R arg where the jth component is decreased by epsilon
+  for (var j=0; j<R_arr.length; j++){
+    Rp[j]=[];
+    Rm[j]=[];
+    for(var k=0; k<R_arr.length; k++){
+      Rp[j][k]=R_arr[k];
+      Rm[j][k]=R_arr[k];
+    }
+    Rp[j][j]+=eps;
+    Rm[j][j]-=eps;
+  }
+
+  // simulation init
+
+  nxtStart=dataGit_cumCases[dataGit_istart];
+  //console.log("SSEfunc: nxtStart=",nxtStart);
+  corona.init();
+
+
+  // calculate SSE
+
+  sse=0;
+  var imax=dataGit_cumCases.length-dataGit_istart;dataGit_cumCases.length
+
+  for(var i=1; i<imax; i++){
+    var iweek=Math.floor(i/7);
+    var index=Math.min(Math.floor((iweek+1)/2),R_arr.length-1);
+    var R_actual=R_arr[index];
+    corona.updateOneDay(R_actual);
+    var nxData=dataGit_cumCases[dataGit_istart+i];
+    var nxSim=n0*corona.xt;
+    if(logging){
+      console.log("SSEfunc: i=",i," nxData=",nxData,
+		  " nxSim=",Math.round(nxSim));
+    }
+    sse+=Math.pow(nxData-nxSim,2);
+  }
+
+
+  // calculate the numerical gradient as side effect
+  // only if gradient-based method. 
+  // These fail here=>do not need to calc grad
+
+  if(false){
+   for (var j=0; j<R_arr.length; j++){
+    fR[j]=0; // gradient
+    corona.init();
+    for(var i=1; i<imax; i++){
+      var iweek=Math.floor(i/7);
+      var index=Math.min(Math.floor((iweek+1)/2),R_arr.length-1);
+      var R_actual=Rp[j][index];
+      corona.updateOneDay(R_actual);
+      var nxData=dataGit_cumCases[i];
+      var nxSim=n0*corona.xt;
+      fR[j]+=Math.pow(nxData-nxSim,2);
+    }
+
+    corona.init();
+    for(var i=1; i<imax; i++){
+      var iweek=Math.floor(i/7);
+      var index=Math.min(Math.floor((iweek+1)/2),R_arr.length-1);
+      var R_actual=Rm[j][index];  // here difference: Rm instead of Rp
+      corona.updateOneDay(R_actual);
+      var nxData=dataGit_cumCases[i];
+      var nxSim=n0*corona.xt;
+      fR[j]-=Math.pow(nxData-nxSim,2); // difference: -= instead of +=
+    }
+    fR[j]/=2*eps;
+   }
+  }
+
+  corona.init(); // reset corona to avoid side effects
+  return sse;
+}
 
 
 //##############################################################
@@ -341,7 +439,7 @@ function startup() {
 
   corona=new CoronaSim();
 
-  if(!useLiveData){corona.init();} // !!! now inside fetch promise
+  if(!useLiveData){corona.init();} // !! now inside fetch promise
 
 
   // =============================================================
@@ -383,6 +481,12 @@ function startup() {
 
 
   // =============================================================
+  // !!! for static testing: add testcode here
+  // and set liveData=false and comment out myStartStopFunction();
+  // =============================================================
+
+
+  // =============================================================
   // actual startup
   // =============================================================
 
@@ -390,6 +494,30 @@ function startup() {
   //myResetFunction();
 
 }
+
+
+// =============================================================
+// calibrate the array R_arr of R values with fmin.nelderMead
+// provided by open-source package fmin
+// notice: fmin.conjugateGradient does not work here
+// => use simple nelderMead and do not need to calculate
+// num derivatives in func as side effect of SSEfunc
+// =============================================================
+
+function calibrateR(){
+  var Rguess=[1.5,1,1,1];
+  sol2_SSEfunc=fmin.nelderMead(SSEfunc, Rguess);
+  for(var j=0; j<Rguess.length; j++){
+    Rtime[j]=sol2_SSEfunc.x[j];
+  }
+  console.log("check optimization:")
+  SSEfunc(Rtime,null,true);
+
+  console.log("\ncalibrateR(): country=",country,
+	      "\n  calibrated R values Rtime=",  Rtime);
+}
+
+
 
 
 
@@ -679,7 +807,7 @@ CoronaSim.prototype.init=function(){
 
   this.xtot=1.01/n0; 
   this.xtotohne=1.01/n0; 
-  console.log("n0=",n0," 0.99/n0=",0.99/n0," this.xtot=",this.xtot);
+  //console.log("n0=",n0," 0.99/n0=",0.99/n0," this.xtot=",this.xtot);
   this.xt=0; // fraction of positively tested persons/n0 as f(t)
   this.y=0;  // fraction recovered real as a function of time
   this.yt=0; // fraction recovered data
@@ -725,13 +853,6 @@ CoronaSim.prototype.init=function(){
     this.x[tau]     *= scaleDownFact;
     this.xohne[tau] *= scaleDownFact;
   }
-
-
-  console.log("init: finished warmup period of ",it,"days");
-  console.log("nxtStart=",nxtStart," #observed infections : ", n0*this.xt);
-  //console.log("#total infections: n0*xtot=",n0*this.xtot);
-  //console.log("#recovered: ny=n0*y=",n0*this.y);
-  //console.log("#deceased: nz=n0*z",n0*this.z);
 
   // reset it for start of proper simulation
 

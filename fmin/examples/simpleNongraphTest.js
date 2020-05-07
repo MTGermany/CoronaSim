@@ -20,7 +20,7 @@ function parabola(x,beta){return beta[0]+beta[1]*x+beta[2]*x*x;}
 // gradient fbeta needed only for conjugateGradient
 
 function SSEfunc(beta,fbeta) { 
-  fbeta = fbeta || [0, 0, 0];
+  fbeta = fbeta || [0, 0, 0];  // crucial if fbeta missing!
   var data_x=[0,1,2,3,4,5,6,7,8,9];
   var data_y=[1,3,6,10,13,19,27,37,43,59];
   var eps=0.001;
@@ -75,6 +75,7 @@ function demo(){
 
 
   var initGuessSSE=[1,1,1];
+  fbeta=[]; // gradient as side effect
   var guessSSE=initGuessSSE;
   console.log("\n\nSSEfunc: guessSSE=",guessSSE);
   var sol1_SSEfunc = fmin.conjugateGradient(SSEfunc, guessSSE);
@@ -89,9 +90,14 @@ function demo(){
   console.log("  conjugateGradient: ",
 	      "\n  sol1_SSEfunc=",sol1_SSEfunc.x,
 	      " func=",SSEfunc(sol1_SSEfunc.x));
+
+  // function arg fbeta only needed if side effect=calc fbeta wanted
+
   console.log("  nelderMead: ",
 	      "\n  sol2_SSEfunc=",sol2_SSEfunc.x,
-	      " func=",SSEfunc(sol2_SSEfunc.x));
+	      " func=",SSEfunc(sol2_SSEfunc.x,fbeta), // fbeta optional
+	      "  \ngradient=",fbeta);
+
   console.log("  gradientDescent (not working, not for bananaFunc as well): ",
 	      "\n  sol3_SSEfunc=",sol3_SSEfunc.x);
 
