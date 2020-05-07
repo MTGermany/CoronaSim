@@ -1,15 +1,21 @@
 
-// https://de.wikipedia.org/wiki/COVID-19-Pandemie_in_Deutschland#März_2020
-
 // useLiveData=true: Obtain github data "live" via the fetch command
-// Unfortunately, the fetch command is still unstable
+// Unfortunately, the fetch command is sometimes unstable
 // and not working on my ipad
 
 // useLiveData=false: obtained data server-side 
 // via script updateCoronaInput.sh. Stable but need to upload once a day
 
-var debugApple=false; // if true uncomment <div id="logDiv">... in html
 var useLiveData=true;  
+
+// debugApple=true for debugging of devices w/o console (ipad) redirect
+// it to a html element using console-log-html.js
+// copy corona.js to coronaDebugApple.js and 
+// use indexDebugApple.html for these purposes 
+// (contains addtl <div id="logDiv">)
+
+var debugApple=false;
+
 var country="Germany"
 var countryGer="Deutschland"
 var dayStartMar=19;
@@ -121,17 +127,6 @@ var xPixOld, yPixOld;
 var sizemin=0;
 
 
-//##############################################################
-// function for variable replicationrate R0 as a function of 
-// fraction xt of observed cases
-//##############################################################
-
-function R0fun(xt){
-  return (n0*xt<nxt1) ? R01 : 
-    (n0*xt<nxt2) ? R02 :
-    (n0*xt<nxt3) ? R03 :
-    (n0*xt<nxtR0) ? R04 : R0;  // R0 controlled by sliders
-}
 
 //##############################################################
 // function for variable replicationrate R0 as a function of time
@@ -142,7 +137,7 @@ function R0fun_time(t){
   var iPresent=dataGit_istart+t;
   var iTest    =iPresent+Math.round(tauTest);
   var iTestPrev=iPresent+Math.round(tauTest-0.5*(tauRstart+tauRend));
-  //console.log("R0fun_time: t=",t," iTest+2=",iTest+2," dataGit_cumCases[iTest+2]=",dataGit_cumCases[iTest+2]);
+
   if(t<0){
     var xtNewnum  =1./2.*(dataGit_cumCases[iTest+1]-dataGit_cumCases[iTest-1]);
     var xtNewdenom=1./2.*(dataGit_cumCases[iTestPrev+1]
@@ -160,10 +155,6 @@ function R0fun_time(t){
     var iweek=Math.floor(t/7);
     var nxt=dataGit_cumCases[iPresent];
     var index=Math.min(Math.floor((iweek+1)/2),Rtime.length-1);
-    //console.log("nxt=",nxt," nxtR0=",nxtR0);
-    //console.log("iweek=",iweek," index=",index," Rtime=",Rtime);
-
-    //return R0fun(nxt/n0);
     return Rtime[index];
   }
 
@@ -551,87 +542,6 @@ function selectDataCountry(){
 
 
 
-  const R01List={
-    "Germany"       : 2.6,
-    "Austria"       : 3.0,
-    "Czechia"       : 2.6,
-    "France"        : 2.4,
-    "United Kingdom": 3.0,
-    "Italy"         : 2.2,
-    "Poland"        : 2.6,
-    "Spain"         : 2.6,
-    "Sweden"        : 2.2,
-    "Switzerland"   : 3.5,
-    "India"         : 3.5,
-    "Russia"        : 2.6,
-    "US"            : 3.0
-  }
-
-  const R02List={
-    "Germany"       : 2.2, //2.2
-    "Austria"       : 2.4,
-    "Czechia"       : 2.2,
-    "France"        : 2.0,
-    "United Kingdom": 3.0,
-    "Italy"         : 1.8,
-    "Poland"        : 2.2,
-    "Spain"         : 2.2,
-    "Sweden"        : 1.8,
-    "Switzerland"   : 1.35,
-    "India"         : 2.2,
-    "Russia"        : 2.2,
-    "US"            : 3.0
-  }
-
-  const R03List={
-    "Germany"       : 1.70, //1.70
-    "Austria"       : 1.34,
-    "Czechia"       : 1.64,
-    "France"        : 2.05,
-    "United Kingdom": 2.14,
-    "Italy"         : 1.18,
-    "Poland"        : 2.09,
-    "Spain"         : 1.93,
-    "Sweden"        : 1.44,
-    "Switzerland"   : 1.10,
-    "India"         : 1.45,
-    "Russia"        : 2.83,
-    "US"            : 2.73
-  }
-
-  const R04List={
-    "Germany"       : 0.95,
-    "Austria"       : 0.70,
-    "Czechia"       : 1.04,
-    "France"        : 1.04,
-    "United Kingdom": 1.87,
-    "Italy"         : 0.87,
-    "Poland"        : 1.62,
-    "Spain"         : 0.90,
-    "Sweden"        : 1.37,
-    "Switzerland"   : 0.80,
-    "India"         : 3.05,
-    "Russia"        : 2.7,
-    "US"            : 1.79
-  }
-
-  const R0List={
-    "Germany"       : 0.75,
-    "Austria"       : 0.58,
-    "Czechia"       : 0.72,
-    "France"        : 0.94,
-    "United Kingdom": 1.09,
-    "Italy"         : 0.90,
-    "Poland"        : 1.03,
-    "Spain"         : 0.89,
-    "Sweden"        : 1.05,
-    "Switzerland"   : 0.70,
-    "India"         : 1.37,
-    "Russia"        : 1.72,
-    "US"            : 1.02
-  }
-
-
 
   country=document.getElementById("countries").value;
   countryGer=countryGerList[country];
@@ -640,19 +550,11 @@ function selectDataCountry(){
   tauRecover=parseFloat(tauRecoverList[country]);
   tauDie=parseFloat(tauDieList[country]);
   taumax=Math.max(tauDie,tauRecover)+tauAvg+1;
-  R01=R01List[country];
-  R02=R02List[country];
-  R03=R03List[country];
-  R04=R04List[country];
-  R0=R0List[country];
   console.log("country=",country);
-  console.log("R04=",R04);
   Rtime=RtimeList[country];
   var test=RtimeList["Germany"]; console.log("test=",test);
   console.log("RtimeList[\"Germany\"]=",RtimeList["Germany"]);
   console.log("RtimeList=",RtimeList, " Rtime=",Rtime);
-  //setSlider(slider_R03, slider_R03Text, R03,"");
-  //setSlider(slider_R04, slider_R04Text, R04,"");
   setSlider(slider_R0,  slider_R0Text,  Rtime[0],"");
 
   //flagName=(country==="Germany") ? "flagSwitzerland.png" : "flagGermany.png";
@@ -739,7 +641,6 @@ function doSimulationStep(){
 		       " n0* arg corona.xt=",n0*corona.xt);}
   drawsim.updateOneDay(it, displayType, corona.xtot, corona.xt,
 		       corona.y, corona.yt, corona.z);
-  //corona.updateOneDay(R0fun(corona.xt));//!!!
   R_actual=(RsliderUsed&&(it>=7)) ? R0 : R0fun_time(it);
   R_hist[it]=R_actual;
   //console.log("it=",it," R_actual=",R_actual);
