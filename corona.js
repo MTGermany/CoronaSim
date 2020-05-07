@@ -35,6 +35,96 @@ var itmax;      // can be >itmaxinit during interactive simulation
 
 var n0=80.e6;  // #persons in Germany
 
+const countryGerList={
+    "Germany": "Deutschland",
+    "Austria": "&Ouml;sterreich",
+    "Czechia": "Tschechien",
+    "France": "Frankreich",
+    "United Kingdom": "England",
+    "Italy": "Italien",
+    "Poland": "Polen",
+    "Spain": "Spanien",
+    "Sweden": "Schweden",
+    "Switzerland": "Schweiz",
+  //  "China": "China",
+    "India": "Indien",
+  //  "Japan": "Japan",
+    "Russia": "Ru&szlig;land",
+  //  "Turkey": "T&uuml;rkei",
+    "US": "USA"
+}
+
+
+const fracDieInitList={
+    "Germany"       : 0.0044,
+    "Austria"       : 0.0040,
+    "Czechia"       : 0.0041,
+    "France"        : 0.0040,
+    "United Kingdom": 0.0040,
+    "Italy"         : 0.0040,
+    "Poland"        : 0.0040,
+    "Spain"         : 0.0040,
+    "Sweden"        : 0.0040,
+    "Switzerland"   : 0.0055,
+    "India"         : 0.0085,
+    "Russia"        : 0.0040,
+    "US"            : 0.0040
+}
+
+
+
+const n0List={
+    "Germany"       :   80500000,
+    "Austria"       :    8800000,
+    "Czechia"       :   10700000,
+    "France"        :   67400000,
+    "United Kingdom":   65100000,
+    "Italy"         :   62200000,
+    "Poland"        :   38400000,
+    "Spain"         :   49300000,
+    "Sweden"        :   10000000,
+    "Switzerland"   :    8300000,
+    "India"         : 1353000000,
+    "Russia"        :  144000000,
+    "US"            :  328000000
+}
+
+
+const tauRecoverList={
+    "Germany"       : 25,
+    "Austria"       : 28,
+    "Czechia"       : 37,
+    "France"        : 25,
+    "United Kingdom": 25,
+    "Italy"         : 25,
+    "Poland"        : 25,
+    "Spain"         : 25,
+    "Sweden"        : 25,
+    "Switzerland"   : 27,
+    "India"         : 26,
+    "Russia"        : 25,
+    "US"            : 25
+}
+
+const tauDieList={
+    "Germany"       : 21,
+    "Austria"       : 22,
+    "Czechia"       : 24,
+    "France"        : 21,
+    "United Kingdom": 21,
+    "Italy"         : 21,
+    "Poland"        : 21,
+    "Spain"         : 21,
+    "Sweden"        : 21,
+    "Switzerland"   : 18,
+    "India"         : 21,
+    "Russia"        : 21,
+    "US"            : 21
+}
+
+
+
+// needed as initialisation and if nonlin opt fmin not used
 
 const RtimeList={   // 0-1,1-3,3-5,... weeks after start
   "Germany"       : [1.05, 0.75, 0.75, 0.70],
@@ -51,6 +141,7 @@ const RtimeList={   // 0-1,1-3,3-5,... weeks after start
   "Russia"        : [2.0,  1.8, 1.45, 1.4],
   "US"            : [1.3, 1.08, 1.00]
 }
+
 var Rtime=RtimeList["Germany"]; //!! need direct initialization 
 var R0=Rtime[0];          //!! init time dependent R
 var R_actual=R0;  // R0" controlled by slider, _actual: by data
@@ -163,7 +254,7 @@ function getGithubData() {
     logTarget=document.getElementById("myULContainer");
 
     // connect(target,options,includeTimestamp,logAlsoToConsole)
-    ConsoleLogHTML.connect(logTarget,null,false);
+    ConsoleLogHTML.connect(logTarget,null,false); 
         // Redirect log messages
     console.log("example logging by console.log");
     console.warn("example warning by console.warn");
@@ -229,10 +320,13 @@ function initializeData(country) {
   dataGit_istart=Math.round(
     (startDay.getTime() - dataGit_dateBegin.getTime() )/oneDay_ms);
 
-  console.log("new Date(\"2020-01-22\")=",new Date("2020-01-22"));
-  console.log("new Date(\"2020-1-22\")=",new Date("2020-1-22"));
-  console.log("dataGit_dateBegin=",dataGit_dateBegin);
-  console.log("dataGit_istart=",dataGit_istart);
+  // extremely heineous apple bug: 
+  // cannot make use of date str such as 2020-1-22
+
+  //console.log("new Date(\"2020-01-22\")=",new Date("2020-01-22"));
+  //console.log("new Date(\"2020-1-22\")=",new Date("2020-1-22"));
+  //console.log("dataGit_dateBegin=",dataGit_dateBegin);
+  //console.log("dataGit_istart=",dataGit_istart);
 
 
   var itmaxData=data.length;
@@ -269,8 +363,10 @@ function initializeData(country) {
     "\n"
   );
 
-  calibrateR(); //!!!
-}
+  RsliderUsed=false;
+  calibrateR();
+  calibrateR(); //!!! need to call it twice since fmin.nelderMead a bit sloppy
+} // initializeData(country);
 
 
 //##############################################################
@@ -342,7 +438,6 @@ function SSEfunc(R_arr,fR,logging) {
   // simulation init
 
   nxtStart=dataGit_cumCases[dataGit_istart];
-  //console.log("SSEfunc: nxtStart=",nxtStart);
   corona.init();
 
 
@@ -352,14 +447,17 @@ function SSEfunc(R_arr,fR,logging) {
   var imax=dataGit_cumCases.length-dataGit_istart;dataGit_cumCases.length
 
   for(var i=1; i<imax; i++){
-    var iweek=Math.floor(i/7);
+     //!!! i->i: otherwise not consistent with doSimulationStep
+    var iweek=Math.floor(i/7); 
     var index=Math.min(Math.floor((iweek+1)/2),R_arr.length-1);
     var R_actual=R_arr[index];
     corona.updateOneDay(R_actual);
     var nxData=dataGit_cumCases[dataGit_istart+i];
     var nxSim=n0*corona.xt;
     if(logging){
-      console.log("SSEfunc: i=",i," nxData=",nxData,
+      console.log("SSEfunc: i=",i,
+		  " R_actual=",R_actual.toPrecision(3),
+		  " nxData=",nxData,
 		  " nxSim=",Math.round(nxSim));
     }
     sse+=Math.pow(nxData-nxSim,2);
@@ -505,13 +603,14 @@ function startup() {
 // =============================================================
 
 function calibrateR(){
-  var Rguess=[1.5,1,1,1];
+  var Rguess=[1,1,1,1];
   sol2_SSEfunc=fmin.nelderMead(SSEfunc, Rguess);
   for(var j=0; j<Rguess.length; j++){
     Rtime[j]=sol2_SSEfunc.x[j];
   }
-  console.log("check optimization:")
-  SSEfunc(Rtime,null,true);
+
+  //console.log("check optimization by re-calculating sim with final R vals:")
+  //SSEfunc(Rtime,null,true); //!!!
 
   console.log("\ncalibrateR(): country=",country,
 	      "\n  calibrated R values Rtime=",  Rtime);
@@ -566,109 +665,6 @@ function myStartStopFunction(){ //!!! hier bloederweise Daten noch nicht da!!
 function selectDataCountry(){ 
   console.log("\n\nin selectDataCountry()");
 
-  const countryGerList={
-    "Germany": "Deutschland",
-    "Austria": "&Ouml;sterreich",
-    "Czechia": "Tschechien",
-    "France": "Frankreich",
-    "United Kingdom": "England",
-    "Italy": "Italien",
-    "Poland": "Polen",
-    "Spain": "Spanien",
-    "Sweden": "Schweden",
-    "Switzerland": "Schweiz",
-  //  "China": "China",
-    "India": "Indien",
-  //  "Japan": "Japan",
-    "Russia": "Ru&szlig;land",
-  //  "Turkey": "T&uuml;rkei",
-    "US": "USA"
-  }
-
-/*
-  const templateList={
-    "Germany"       : 
-    "Austria"       : 
-    "Czechia"       : 
-    "France"        : 
-    "United Kingdom": 
-    "Italy"         : 
-    "Poland"        : 
-    "Spain"         : 
-    "Sweden"        : 
-    "Switzerland"   : 
-    "India"         : 
-    "Russia"        : 
-    "US"            : 
-  }
-*/
-
-  const n0List={
-    "Germany"       :   80500000,
-    "Austria"       :    8800000,
-    "Czechia"       :   10700000,
-    "France"        :   67400000,
-    "United Kingdom":   65100000,
-    "Italy"         :   62200000,
-    "Poland"        :   38400000,
-    "Spain"         :   49300000,
-    "Sweden"        :   10000000,
-    "Switzerland"   :    8300000,
-    "India"         : 1353000000,
-    "Russia"        :  144000000,
-    "US"            :  328000000
-  }
-
-
-  const tauRecoverList={
-    "Germany"       : 25,
-    "Austria"       : 28,
-    "Czechia"       : 37,
-    "France"        : 25,
-    "United Kingdom": 25,
-    "Italy"         : 25,
-    "Poland"        : 25,
-    "Spain"         : 25,
-    "Sweden"        : 25,
-    "Switzerland"   : 27,
-    "India"         : 26,
-    "Russia"        : 25,
-    "US"            : 25
-  }
-
-  const tauDieList={
-    "Germany"       : 21,
-    "Austria"       : 22,
-    "Czechia"       : 24,
-    "France"        : 21,
-    "United Kingdom": 21,
-    "Italy"         : 21,
-    "Poland"        : 21,
-    "Spain"         : 21,
-    "Sweden"        : 21,
-    "Switzerland"   : 18,
-    "India"         : 21,
-    "Russia"        : 21,
-    "US"            : 21
-  }
-
-  const fracDieInitList={
-    "Germany"       : 0.0044,
-    "Austria"       : 0.0040,
-    "Czechia"       : 0.0041,
-    "France"        : 0.0040,
-    "United Kingdom": 0.0040,
-    "Italy"         : 0.0040,
-    "Poland"        : 0.0040,
-    "Spain"         : 0.0040,
-    "Sweden"        : 0.0040,
-    "Switzerland"   : 0.0055,
-    "India"         : 0.0085,
-    "Russia"        : 0.0040,
-    "US"            : 0.0040
-  }
-
-
 
 
   country=document.getElementById("countries").value;
@@ -683,7 +679,7 @@ function selectDataCountry(){
   var test=RtimeList["Germany"]; console.log("test=",test);
   console.log("RtimeList[\"Germany\"]=",RtimeList["Germany"]);
   console.log("RtimeList=",RtimeList, " Rtime=",Rtime);
-  setSlider(slider_R0,  slider_R0Text,  Rtime[0],"");
+  setSlider(slider_R0,  slider_R0Text,  Rtime[0].toPrecision(3),"");
 
   //flagName=(country==="Germany") ? "flagSwitzerland.png" : "flagGermany.png";
   //document.getElementById("flag").src="figs/"+flagName;
@@ -691,7 +687,7 @@ function selectDataCountry(){
     "Simulation der Covid-19 Pandemie "+ countryGer;
   initializeData(country);
   myRestartFunction();
-}
+} // selectDataCountry
 
 function myRestartFunction(){ 
   //RsliderUsed=false;
@@ -702,7 +698,7 @@ function myRestartFunction(){
   corona.init(); // because startup redefines CoronaSim() and data there here
 
   clearInterval(myRun);
-  //it=1;
+  it=0; //!!! only instance global it is reset to zero
   myRun=setInterval(simulationRun, 1000/fps);
 
    // activate thread if stopped
@@ -748,10 +744,10 @@ function simulationRun() {
     //corona.init(); // !!! now inside fetch promise!
 
   }
-  doSimulationStep(); //it++ at end
+  doSimulationStep(); 
   //console.log("RsliderUsed=",RsliderUsed);
   if(!RsliderUsed){
-    setSlider(slider_R0, slider_R0Text, R0fun_time(it),"");
+    setSlider(slider_R0, slider_R0Text, R0fun_time(it).toPrecision(3),"");
   }
   if(it==itmaxinit+1){ 
     clearInterval(myRun);myStartStopFunction();
@@ -766,13 +762,15 @@ function simulationRun() {
 
 function doSimulationStep(){
   if(false){console.log(" calling drawsim.updateOneDay: it=",it,
-		       " n0* arg corona.xt=",n0*corona.xt);}
+		       " n0* arg corona.xt=",n0*corona.xt);} //!!!
   drawsim.updateOneDay(it, displayType, corona.xtot, corona.xt,
 		       corona.y, corona.yt, corona.z);
-  R_actual=(RsliderUsed&&(it>=7)) ? R0 : R0fun_time(it);
+
+//!!! it->(it+1) because otherwise not consistent with "calculate SSE"
+  R_actual=(RsliderUsed&&(it+1>=7)) ? R0 : R0fun_time(it+1);
   R_hist[it]=R_actual;
-  //console.log("it=",it," R_actual=",R_actual);
-  corona.updateOneDay(R_actual);
+  var logging=false;
+  corona.updateOneDay(R_actual,logging); //!!!
   it++;
 
 }
@@ -795,6 +793,7 @@ function CoronaSim(){
   //console.log("CoronaSim created");
   this.x=[]; // age struture of fraction infected at given timestep
   this.xohne=[]; // age structure without deleting by recover,death
+  this.itcount=0;
 }
 
 
@@ -804,6 +803,7 @@ CoronaSim.prototype.init=function(){
   // start warmup at a very early phase
   // !! start with n0*this.xtot>=1, otherwise infection dead
   // feature, not bug
+
 
   this.xtot=1.01/n0; 
   this.xtotohne=1.01/n0; 
@@ -856,7 +856,7 @@ CoronaSim.prototype.init=function(){
 
   // reset it for start of proper simulation
 
-  it=0; 
+  this.itcount=0;
 
 }
 
@@ -872,7 +872,7 @@ CoronaSim.prototype.init=function(){
 
 //#################################################################
 //!!!
-CoronaSim.prototype.updateOneDay=function(R){ 
+CoronaSim.prototype.updateOneDay=function(R,logging){ 
 
 
   if(false){
@@ -995,20 +995,21 @@ CoronaSim.prototype.updateOneDay=function(R){
 
   this.xtot=0;  
 
-  //this.xtotohne=0; //!!!
-  this.xtotohne+= this.x[0];//!!!
+  this.xtotohne+= this.x[0];
   for(var tau=0; tau<taumax; tau++){
     this.xtot     += this.x[tau];
   }
 
+  this.itcount++;
 
   // control output
 
-  if(false){
-    console.log("end CoronaSim.updateOneDay: it=",it,
-		" nxt=",(n0*this.xt).toPrecision(5),
-		" nxtot=",(n0*this.xtot).toPrecision(6),
-		" nxtotohne=",(n0*this.xtotohne).toPrecision(6),
+  if(logging){
+    console.log("end CoronaSim.updateOneDay: this.itcount=",this.itcount,
+		" R=",R.toPrecision(3),
+		" nxt=",Math.round(n0*this.xt),
+	//	" nxtot=",(n0*this.xtot).toPrecision(6),
+	//	" nxtotohne=",(n0*this.xtotohne).toPrecision(6),
 	//	" ny=",(n0*this.y).toPrecision(5),
 	//	" nyt=",(n0*this.yt).toPrecision(5),
 	//	" nz=",(n0*this.z).toPrecision(5),
@@ -1462,7 +1463,7 @@ DrawSim.prototype.updateOneDay=function(it,displayType,xtot,xt,y,yt,z){
   var textsize=Math.min(0.030*canvas.width,0.045*canvas.height);
 
   ctx.setTransform(0,-1,1,0,x0+1.0*textsize,y0);
-  ctx.fillText("R="+R0fun_time(0),0,0);
+  ctx.fillText("R="+R0fun_time(0).toPrecision(3),0,0);
   ctx.setTransform(1,0,0,1,0,0);
 
   for(var iw=1; iw<it/7; iw+=2){
@@ -1471,7 +1472,7 @@ DrawSim.prototype.updateOneDay=function(it,displayType,xtot,xt,y,yt,z){
     ctx.fillRect(x0-1,this.yPix0,3,this.hPix);
 
     ctx.setTransform(0,-1,1,0,x0+1.0*textsize,y0);
-    ctx.fillText("R="+R_hist[itR],0,0);
+    ctx.fillText("R="+R_hist[itR].toPrecision(3),0,0);
     ctx.setTransform(1,0,0,1,0,0);
   }
 
