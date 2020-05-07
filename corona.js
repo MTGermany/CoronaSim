@@ -187,19 +187,20 @@ var dataGit_deathsCases=[];
 
 var fps=10;
 
-var tauRstartInit=1;     // active infectivity begins [days since infection]
+var tauRstartInit=1;   // active infectivity begins [days since infection]//1
+var tauRendInit=10;    // active infectivity ends [days since infection]//10
+var tauTestInit=8;    // time delay [days] test-infection //10
+var pTestInit=0.1;     // initial percentage of tested infected persons //0.1
+
 var tauRstart=tauRstartInit;
-var tauRendInit=10;       // active infectivity ends [days since infection]//10
 var tauRend=tauRendInit;  
-var pTestInit=0.1;   // initial percentage of tested infected persons 
 var pTest=pTestInit;       // percentage of tested infected persons 
-var tauTestInit=10;  // time delay [days] test-infection
 var tauTest=tauTestInit;
 var tauAvg=5;      // smoothing interval for tauTest,tauDie,tauRecover
 
 // (ii) not controlled
 
-var fracDieInit=0.0044;  // fracDie for initial setting of pTest
+var fracDieInit=0.0047;  // fracDie for initial setting of pTest
 var fracDie=fracDieInit; // will be set to fracDieInit*pTest/pTestInit 
                         // at restart but NOT during simulation
 var tauDie=21;      // time from infection to death in fracDie cases
@@ -364,6 +365,7 @@ function initializeData(country) {
   );
 
   RsliderUsed=false;
+  calibrateR();
   calibrateR();
   calibrateR(); //!!! need to call it twice since fmin.nelderMead a bit sloppy
 } // initializeData(country);

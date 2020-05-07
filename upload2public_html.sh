@@ -4,7 +4,7 @@ target=$HOME/public_html/CoronaSim
 
 cp -r *.css *.js *.html figs $target
 cp data/coronaWorldwide.json data/github.json $target/data
-cp fmin/fmin.min.js $target/fmin
+cp fmin/fmin.min.js fmin/LICENSE $target/fmin
 cp fmin/examples/*.html  $target/fmin/examples
 cp fmin/examples/*.js  $target/fmin/examples
 
