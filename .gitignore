@@ -1,5 +1,7 @@
 # user-defined ignores (avoid committing large files)
 
+fmin/src
+
 *.swp
 *.zip
 
