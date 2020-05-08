@@ -221,21 +221,6 @@ var sizemin=0;
 
 
 
-/*
-async function http(
-  request: RequestInfo
-): Promise<any> {
-  const response = await fetch(request);
-  const body = await response.json();
-  return body;
-}
-
-// example consuming code
-const data = await http(
-  "https://jsonplaceholder.typicode.com/todos"
-);
-*/
-
 
 // ##############################################################
 // !!! test fetch method: w/o addtl cronjob/script
@@ -432,8 +417,15 @@ function R0fun_time(t){
  ##############################################################*/
 
 function SSEfunc(R_arr,fR,logging) { 
+  if( typeof fR === "undefined"){
+    fR=[]; for(var j=0; j<R_arr.length; j++){fR[j]=0;}
+    //console.log("inside: fR=",fR);
+  }
+  //console.log("outside: fR=",fR);
 
-  fR = fR || new Array(R_arr.length).fill(0); // crucial if fbeta missing!
+  //following obscure construction fails on some browsers 
+  // although template code 
+  //fR = fR || new Array(R_arr.length).fill(0); // crucial if fbeta missing!
 
   var sse=0;
   // init handling of numerical gradient

@@ -7,7 +7,7 @@ function simple2dfunc(X) {
 // gradient fbeta needed only for conjugateGradient
 
 function bananafunc(X, fxprime) {
-    fxprime = fxprime || [0, 0];
+    fxprime = fxprime || [0, 0]; // !!! see below
     var x = X[0], y = X[1];
     fxprime[0] = 400 * x * x * x - 400 * y * x + 2 * x - 2;
     fxprime[1] = 200 * y - 200 * x * x;
@@ -20,7 +20,14 @@ function parabola(x,beta){return beta[0]+beta[1]*x+beta[2]*x*x;}
 // gradient fbeta needed only for conjugateGradient
 
 function SSEfunc(beta,fbeta) { 
-  fbeta = fbeta || [0, 0, 0];  // crucial if fbeta missing!
+  // following obscure construction breaks down on some browsers
+
+  //fbeta = fbeta || [0, 0, 0];  
+
+  if( typeof fbeta === "undefined"){
+    fbeta=[0]; for(var j=0; j<beta.length; j++){fbeta[j]=0;}
+  }
+
   var data_x=[0,1,2,3,4,5,6,7,8,9];
   var data_y=[1,3,6,10,13,19,27,37,43,59];
   var eps=0.001;
