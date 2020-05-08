@@ -313,7 +313,7 @@ function insertLeadingZeroes(dateStr){
 
 
 
-function initializeData(country) {
+function initializeData(country) { 
 
   var data=dataGit[country];
   var dateInitStr=data[0]["date"];
@@ -365,7 +365,8 @@ function initializeData(country) {
   );
 
   RsliderUsed=false;
-  calibrateR();
+  //SSEfunc([1,1,1,1],null,true); //!!! test
+  calibrateR(); //!!!
   calibrateR();
   calibrateR(); //!!! need to call it twice since fmin.nelderMead a bit sloppy
 } // initializeData(country);
@@ -382,16 +383,27 @@ function R0fun_time(t){
   var iTestPrev=iPresent+Math.round(tauTest-0.5*(tauRstart+tauRend));
 
   if(t<0){
-    var xtNewnum  =1./2.*(dataGit_cumCases[iTest+1]-dataGit_cumCases[iTest-1]);
-    var xtNewdenom=1./2.*(dataGit_cumCases[iTestPrev+1]
+    var nxtNewnum  =1./2.*(dataGit_cumCases[iTest+1]-dataGit_cumCases[iTest-1]);
+    var nxtNewdenom=1./2.*(dataGit_cumCases[iTestPrev+1]
 			  -dataGit_cumCases[iTestPrev-1]);
-    var R=1.02*xtNewnum/xtNewdenom;
+    var R=1.02*nxtNewnum/nxtNewdenom;
     if(false){
       console.log("R0fun_time: t=",t," xtCum(iTest)=",dataGit_cumCases[iTest],
 		" xtCum(iTestPrev)=",dataGit_cumCases[iTestPrev],
 		" xtNewnum=",xtNewnum,
+		" xtNewdenom=",xtNewdenom,
 		"");
     }
+
+    // !! deflect infinity, NaN etc and too large R values if denom 0
+    // avoid too small R values if num 0
+
+    if(Math.abs(nxtNewdenom)<1e-10){
+      //console.log("R0fun_time: t=",t," error: R factor infinity");
+      R=5;
+    }
+    R=Math.min(5, Math.max(0.2,R));
+
     return R;
   }
   else{
@@ -463,7 +475,7 @@ function SSEfunc(R_arr,fR,logging) {
     corona.updateOneDay(R_actual);
     var nxData=dataGit_cumCases[dataGit_istart+i];
     var nxSim=n0*corona.xt;
-    if(logging){
+    if(logging){ //!!! (logging)
       console.log("SSEfunc: i=",i,
 		  " R_actual=",R_actual.toPrecision(3),
 		  " nxData=",nxData,
@@ -592,7 +604,7 @@ function startup() {
   // and set liveData=false and comment out myStartStopFunction();
   // =============================================================
 
-
+  
   // =============================================================
   // actual startup
   // =============================================================
@@ -816,7 +828,7 @@ CoronaSim.prototype.init=function(){
 
   this.xtot=1.01/n0; 
   this.xtotohne=1.01/n0; 
-  //console.log("n0=",n0," 0.99/n0=",0.99/n0," this.xtot=",this.xtot);
+  //console.log("init: n0=",n0," 0.99/n0=",0.99/n0," this.xtot=",this.xtot);
   this.xt=0; // fraction of positively tested persons/n0 as f(t)
   this.y=0;  // fraction recovered real as a function of time
   this.yt=0; // fraction recovered data
@@ -835,14 +847,15 @@ CoronaSim.prototype.init=function(){
   for(var tau=0; tau<taumax; tau++){
     this.x[tau]=this.xtot*Math.exp(-r0*tau)/denom;
     this.xohne[tau]=this.x[tau];
-    //console.log("this.x[tau]=",this.x[tau]);
+    //console.log("init: this.x[tau]=",this.x[tau]);
   }
 
   // data-driven warmup
 
   for(t=-20; t<=0; t++){
     var Rt=R0fun_time(t);
-    this.updateOneDay(Rt);
+    this.updateOneDay(Rt,false); //!!
+    //this.updateOneDay(Rt,true); // logging=true
   }
 
 
@@ -880,15 +893,15 @@ CoronaSim.prototype.init=function(){
 // } otherwise, the other way round
 
 //#################################################################
-//!!!
+
 CoronaSim.prototype.updateOneDay=function(R,logging){ 
 
 
-  if(false){
-    console.log("Corona.updateOneDay: it=",it,
-		"this.xtot=",this.xtot.toPrecision(3),
-		"this.xtotohne=",this.xtotohne.toPrecision(3),
-		"this.xt=",this.xt.toPrecision(3),
+  if(logging){
+    console.log("Corona.updateOneDay: it=",it," R=",R,
+		" this.xtot=",this.xtot.toPrecision(3),
+		" this.xtotohne=",this.xtotohne.toPrecision(3),
+		" this.xt=",this.xt.toPrecision(3),
 /*
 		"this.yt=",this.yt.toPrecision(3),
 		"this.z=",this.z.toPrecision(3),
@@ -921,10 +934,9 @@ CoronaSim.prototype.updateOneDay=function(R,logging){
 
   this.x[0]=0;
   var f_R=1./(tauRend-tauRstart+1);
-  if(n0*this.xtot>=1){ // !!! infection finally dead if xtot<1
+  if(n0*this.xtot>=1){ // !! infection finally dead if xtot<1
    for(var tau=tauRstart; tau<=tauRend; tau++){
     this.x[0]+=R*f_R*this.x[tau]
-      //*(1-(this.xtot+this.y+this.z)); //!!!
       *(1-this.xtotohne);
     if(false){
       console.log("Corona.updateOneDay: it=",it," tau=",tau.toPrecision(3),
@@ -1179,7 +1191,7 @@ DrawSim.prototype.drawAxes=function(displayType){
 
   var timeRel=[];
   for(var i=0; i<timeText.length; i++){
-    timeRel[i]=(dFirstDay+i*dDays)/(itmax); //!!!
+    timeRel[i]=(dFirstDay+i*dDays)/(itmax); //!!
   }
 
   //define y axis label positions and text
