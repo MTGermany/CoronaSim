@@ -222,6 +222,20 @@ var sizemin=0;
 
 
 
+async function http(
+  request: RequestInfo
+): Promise<any> {
+  const response = await fetch(request);
+  const body = await response.json();
+  return body;
+}
+
+// example consuming code
+const data = await http(
+  "https://jsonplaceholder.typicode.com/todos"
+);
+
+
 // ##############################################################
 // !!! test fetch method: w/o addtl cronjob/script
 // directly from https://pomber.github.io/covid19/timeseries.json
