@@ -1,4 +1,4 @@
-function http(request){
+async function http(request){
   const response = await fetch(request);
   const body = await response.json();
   return body;

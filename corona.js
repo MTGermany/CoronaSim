@@ -221,7 +221,7 @@ var sizemin=0;
 
 
 
-
+/*
 async function http(
   request: RequestInfo
 ): Promise<any> {
@@ -234,6 +234,7 @@ async function http(
 const data = await http(
   "https://jsonplaceholder.typicode.com/todos"
 );
+*/
 
 
 // ##############################################################
