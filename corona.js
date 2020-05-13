@@ -142,11 +142,12 @@ const RtimeList={   // 0-1,1-3,3-5,... weeks after start
   "US"            : [1.3, 1.08, 1.00]
 }
 
+var RsliderUsed=false;
 var Rtime=RtimeList["Germany"]; //!! need direct initialization 
 var R0=Rtime[0];          //!! init time dependent R
 var R_actual=R0;  // R0" controlled by slider, _actual: by data
 var R_hist=[]; R_hist[0]=R_actual;
-var RsliderUsed=false;
+var sigmaR_hist=[]; sigmaR_hist[0]=0; 
 
 var oneDay_ms=(1000 * 3600 * 24);
 
@@ -169,6 +170,7 @@ var dataGit=[];
 var dataGit_dateBegin;
 
 var dataGit_istart;
+var dataGit_imax;
 var dataGit_date=[];
 var dataGit_cumCases=[];
 var dataGit_cumDeaths=[];
@@ -245,7 +247,7 @@ var sizemin=0;
 
 //called ONLY in the <body onload> and toggleData event
 function getGithubData() {
-  corona=new CoronaSim(); //!!!
+  corona=new CoronaSim(); //!!
 
   if(debugApple){
     console.log("in ConsoleLogHTML");
@@ -279,7 +281,7 @@ function getGithubData() {
        // console.log("dataGit=",dataGit);
         //console.log("inner: dataGit[country]=",dataGit[country]);
         initializeData(country);
-        corona.init(); //!!! only then ensured that data loaded! it=1 as result
+        corona.init(); //!! only then ensured that data loaded! it=1 as result
       });
   }
 
@@ -291,7 +293,7 @@ function getGithubData() {
     dataGit = JSON.parse(dataGitLocal);
     console.log("useLiveData=false: dataGit=",dataGit);
     initializeData(country);
-    //corona=new CoronaSim(); //!!!
+    //corona=new CoronaSim(); //!!
     corona.init();
   }
 }
@@ -365,10 +367,134 @@ function initializeData(country) {
   );
 
   RsliderUsed=false;
-  //SSEfunc([1,1,1,1],null,true); //!!! test
-  calibrateR(); //!!!
+  //SSEfunc([1,1,1,1]); //!! test
+  calibrateR(); //!!! need to call it several times fmin.nelderMead sloppy
   calibrateR();
-  calibrateR(); //!!! need to call it twice since fmin.nelderMead a bit sloppy
+  calibrateR(); 
+  calibrateR();
+  calibrateR(); 
+  calibrateR();
+  calibrateR(); 
+  calibrateR();
+  calibrateR(); 
+  calibrateR();
+
+ 
+ //##############################################################
+ //!Inductive statistics of the LSE estimator Rtime
+// Cov(Rtime)=2 V(epsilon) H^{-1}, H=Hessian of SSEfunc(Rtime)
+ //##############################################################
+
+  var dR=0.001;
+  //var H=math.matrix(); // does not work
+  var H=[];
+  var grad=[];
+
+  for(var j=0; j<Rtime.length; j++){H[j]=[];}
+  var Rp=[]; for(var j=0; j<Rtime.length; j++){Rp[j]=Rtime[j];}
+  var Rm=[]; for(var j=0; j<Rtime.length; j++){Rm[j]=Rtime[j];}
+  var Rp=[]; for(var j=0; j<Rtime.length; j++){Rp[j]=Rtime[j];}
+  var Rpp=[]; for(var j=0; j<Rtime.length; j++){Rpp[j]=Rtime[j];}
+  var Rpm=[]; for(var j=0; j<Rtime.length; j++){Rpm[j]=Rtime[j];}
+  var Rmp=[]; for(var j=0; j<Rtime.length; j++){Rmp[j]=Rtime[j];}
+  var Rmm=[]; for(var j=0; j<Rtime.length; j++){Rmm[j]=Rtime[j];}
+
+  // diagonal
+
+  for(var j=0; j<Rtime.length; j++){
+    Rp[j]+=dR;
+    Rm[j]-=dR;
+    H[j][j]=(SSEfunc(Rp)-2*SSEfunc(Rtime)+SSEfunc(Rm))/(dR*dR);
+    grad[j]=(SSEfunc(Rp)-SSEfunc(Rm))/(2*dR);
+    if(false){console.log("\n j=",j," Rtime=",Rtime,"\n Rp=",Rp,"\n Rm=",Rm,
+			 "\n SSEfunc(Rp)=   ",SSEfunc(Rp),
+			 "\n SSEfunc(Rtime)=",SSEfunc(Rtime),
+			 "\n SSEfunc(Rm)=   ",SSEfunc(Rm),
+			 "");}
+
+    Rp[j]=Rtime[j];
+    Rm[j]=Rtime[j];
+  }
+
+  // upper-diagonal
+
+  for(var j=0; j<Rtime.length; j++){
+    for(var k=j; k<Rtime.length; k++){
+      Rpp[j]+=dR; Rpp[k]+=dR; 
+      Rpm[j]+=dR; Rpm[k]-=dR; 
+      Rmp[j]-=dR; Rmp[k]+=dR; 
+      Rmm[j]-=dR; Rmm[k]-=dR; 
+      H[j][k]=(SSEfunc(Rpp)-SSEfunc(Rpm)-SSEfunc(Rmp)+SSEfunc(Rpp))/(4*dR*dR);
+      Rpp[j]=Rtime[j]; Rpp[k]=Rtime[k]; 
+      Rpm[j]=Rtime[j]; Rpm[k]=Rtime[k]; 
+      Rmp[j]=Rtime[j]; Rmp[k]=Rtime[k]; 
+      Rmm[j]=Rtime[j]; Rmm[k]=Rtime[k]; 
+    }
+  }
+
+  // lower-diagonal
+
+  for(var j=1; j<Rtime.length; j++){
+    for(var k=0; k<j; k++){
+      H[j][k]=H[k][j];
+    }
+  }
+
+  // inverse Hessian
+
+  var Hinv=math.inv(H);
+
+  // variance of random term epsilon assuming epsilon \sim i.i.d.
+
+  var vareps=SSEfunc(Rtime)/(dataGit_imax-Rtime.length);
+
+  // one-sigma estimation errors of parameters Rtime[j] (every 2 weeks a new)
+
+  var Rtime_sigma=[];
+  for(var j=0; j<Rtime.length; j++){
+    Rtime_sigma[j]=Math.sqrt(2*vareps*Hinv[j][j]);
+  }
+
+  // one-sigma estimation errors of daily time series of R
+
+  for(var i=0; i<dataGit_imax; i++){
+    var iweek=Math.floor(i/7);
+    var index=Math.min(Math.floor((iweek+1)/2),Rtime.length-1);
+    sigmaR_hist[i]=Rtime_sigma[index];
+    //console.log("i=",i," sigmaR_hist[i]=",sigmaR_hist[i]);
+  }
+
+  if(false){ //!!!
+    console.log("Inductive statistics: Rtime.length=",Rtime.length,
+		" SSE=", SSEfunc(Rtime));
+    console.log("\n gradient grad(SSE)=",grad,"\n");
+
+    for (var j=0; j<Rtime.length; j++){
+      console.log(" row of Hessian=",j," H[j]=",H[j]);
+    }
+    console.log("\n");
+    for (var j=0; j<Rtime.length; j++){
+      console.log(" row of inverse Hessian=",j," Hinv[j]=",Hinv[j]);
+    }
+    console.log("\nEstimates with One-sigma estimation errors:");
+    for (var j=0; j<Rtime.length; j++){
+      console.log("j=",j," Rtime[j]=",Rtime[j].toFixed(2)," +/- ",
+		  Rtime_sigma[j].toFixed(2));
+    }
+
+  }
+
+
+ //##############################################################
+ // !!! for inline nondynamic  testing: add testcode here
+ //##############################################################
+
+  if(false){
+    var testMatrix=[[-1, 2], [3, 1]];
+    console.log("testMatrix=",testMatrix[0],testMatrix[1], " math.inv(testMatrix)=",math.inv(testMatrix)[0],math.inv(testMatrix)[1]);
+  }
+
+
 } // initializeData(country);
 
 
@@ -433,7 +559,9 @@ function SSEfunc(R_arr,fR,logging) {
     fR=[]; for(var j=0; j<R_arr.length; j++){fR[j]=0;}
     //console.log("inside: fR=",fR);
   }
-  //console.log("outside: fR=",fR);
+  if( typeof logging === "undefined"){logging=false;}
+
+  //console.log("fR=",fR," logging=",logging);
 
   //following obscure construction fails on some browsers 
   // although template code 
@@ -465,9 +593,9 @@ function SSEfunc(R_arr,fR,logging) {
   // calculate SSE
 
   sse=0;
-  var imax=dataGit_cumCases.length-dataGit_istart;dataGit_cumCases.length
+  dataGit_imax=dataGit_cumCases.length-dataGit_istart;
 
-  for(var i=1; i<imax; i++){
+  for(var i=1; i<dataGit_imax; i++){
      //!!! i->i: otherwise not consistent with doSimulationStep
     var iweek=Math.floor(i/7); 
     var index=Math.min(Math.floor((iweek+1)/2),R_arr.length-1);
@@ -475,13 +603,13 @@ function SSEfunc(R_arr,fR,logging) {
     corona.updateOneDay(R_actual);
     var nxData=dataGit_cumCases[dataGit_istart+i];
     var nxSim=n0*corona.xt;
-    if(logging){ //!!! (logging)
+    if(logging){ 
       console.log("SSEfunc: i=",i,
-		  " R_actual=",R_actual.toPrecision(3),
+		  " R_actual=",R_actual.toFixed(2),
 		  " nxData=",nxData,
 		  " nxSim=",Math.round(nxSim));
     }
-    sse+=Math.pow(nxData-nxSim,2);
+    sse+=Math.pow(Math.log(nxData)-Math.log(nxSim),2); //!!! Math.log
   }
 
 
@@ -493,7 +621,7 @@ function SSEfunc(R_arr,fR,logging) {
    for (var j=0; j<R_arr.length; j++){
     fR[j]=0; // gradient
     corona.init();
-    for(var i=1; i<imax; i++){
+    for(var i=1; i<dataGit_imax; i++){
       var iweek=Math.floor(i/7);
       var index=Math.min(Math.floor((iweek+1)/2),R_arr.length-1);
       var R_actual=Rp[j][index];
@@ -504,7 +632,7 @@ function SSEfunc(R_arr,fR,logging) {
     }
 
     corona.init();
-    for(var i=1; i<imax; i++){
+    for(var i=1; i<dataGit_imax; i++){
       var iweek=Math.floor(i/7);
       var index=Math.min(Math.floor((iweek+1)/2),R_arr.length-1);
       var R_actual=Rm[j][index];  // here difference: Rm instead of Rp
@@ -599,10 +727,6 @@ function startup() {
   }
 
 
-  // =============================================================
-  // !!! for static testing: add testcode here
-  // and set liveData=false and comment out myStartStopFunction();
-  // =============================================================
 
   
   // =============================================================
@@ -624,7 +748,7 @@ function startup() {
 // =============================================================
 
 function calibrateR(){
-  var Rguess=[1,1,1,1];
+  var Rguess=[1,1,1,1]; //!!!
   sol2_SSEfunc=fmin.nelderMead(SSEfunc, Rguess);
   for(var j=0; j<Rguess.length; j++){
     Rtime[j]=sol2_SSEfunc.x[j];
@@ -633,8 +757,8 @@ function calibrateR(){
   //console.log("check optimization by re-calculating sim with final R vals:")
   //SSEfunc(Rtime,null,true); //!!!
 
-  console.log("\ncalibrateR(): country=",country,
-	      "\n  calibrated R values Rtime=",  Rtime);
+  //console.log("\ncalibrateR(): country=",country,
+//	      "\n  calibrated R values Rtime=",  Rtime);
 }
 
 
@@ -700,7 +824,7 @@ function selectDataCountry(){
   var test=RtimeList["Germany"]; console.log("test=",test);
   console.log("RtimeList[\"Germany\"]=",RtimeList["Germany"]);
   console.log("RtimeList=",RtimeList, " Rtime=",Rtime);
-  setSlider(slider_R0,  slider_R0Text,  Rtime[0].toPrecision(3),"");
+  setSlider(slider_R0,  slider_R0Text,  Rtime[0].toFixed(2),"");
 
   //flagName=(country==="Germany") ? "flagSwitzerland.png" : "flagGermany.png";
   //document.getElementById("flag").src="figs/"+flagName;
@@ -768,7 +892,7 @@ function simulationRun() {
   doSimulationStep(); 
   //console.log("RsliderUsed=",RsliderUsed);
   if(!RsliderUsed){
-    setSlider(slider_R0, slider_R0Text, R0fun_time(it).toPrecision(3),"");
+    setSlider(slider_R0, slider_R0Text, R0fun_time(it).toFixed(2),"");
   }
   if(it==itmaxinit+1){ 
     clearInterval(myRun);myStartStopFunction();
@@ -1027,7 +1151,7 @@ CoronaSim.prototype.updateOneDay=function(R,logging){
 
   if(logging){
     console.log("end CoronaSim.updateOneDay: this.itcount=",this.itcount,
-		" R=",R.toPrecision(3),
+		" R=",R.toFixed(2),
 		" nxt=",Math.round(n0*this.xt),
 	//	" nxtot=",(n0*this.xtot).toPrecision(6),
 	//	" nxtotohne=",(n0*this.xtotohne).toPrecision(6),
@@ -1475,7 +1599,7 @@ DrawSim.prototype.updateOneDay=function(it,displayType,xtot,xt,y,yt,z){
     }
   }
 
-// drawing vertical separation lines R0start and R0 
+// drawing vertical separation lines and R estimates
 
 
   ctx.fillStyle="#888888";
@@ -1484,16 +1608,20 @@ DrawSim.prototype.updateOneDay=function(it,displayType,xtot,xt,y,yt,z){
   var textsize=Math.min(0.030*canvas.width,0.045*canvas.height);
 
   ctx.setTransform(0,-1,1,0,x0+1.0*textsize,y0);
-  ctx.fillText("R="+R0fun_time(0).toPrecision(3),0,0);
+  var str_R="R="+R_hist[0].toFixed(2)
+      +( (RsliderUsed) ? "" : (" +/- "+sigmaR_hist[0].toFixed(2)));
+  ctx.fillText(str_R,0,0);
   ctx.setTransform(1,0,0,1,0,0);
 
-  for(var iw=1; iw<it/7; iw+=2){
+  for(var iw=1; iw<it/7; iw+=2){ // !! iw=1,3,5,7...
     var itR=7*iw;
     x0=this.xPix[itR];
     ctx.fillRect(x0-1,this.yPix0,3,this.hPix);
 
     ctx.setTransform(0,-1,1,0,x0+1.0*textsize,y0);
-    ctx.fillText("R="+R_hist[itR].toPrecision(3),0,0);
+    str_R="R="+R_hist[itR].toFixed(2)
+      +( (RsliderUsed) ? "" : (" +/- "+sigmaR_hist[itR].toFixed(2)));
+    ctx.fillText(str_R,0,0);
     ctx.setTransform(1,0,0,1,0,0);
   }
 
