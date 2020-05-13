@@ -166,6 +166,20 @@ a:hover {
   z-index: 3; /* the higher the integer, the more on top */
 }
 
+#calibrateDiv{ /* normal landscape */
+  position: absolute;
+  top:     10vh; 
+  right:   2vmin;
+  z-index: 3; 
+}
+
+#countryData{ /* normal landscape */
+  position: absolute;
+  top:     16vh; 
+  right:   2vmin;
+  z-index: 4; # the higher the more on top
+}
+
 
 #introArea{ /* introducionary remarks on the simulation */
   position: absolute;
@@ -220,14 +234,6 @@ a:hover {
   width:  15vmin;
   height: 6vmin;
   z-index: 2; # the higher the more on top
-}
-
-#countryData{ 
-  position: absolute;
-  top:   94vh;  /* 6 for the title, 24 for the sliders */
-  right:  12vw;
-  width:  30vmin;
-  z-index: 4; # the higher the more on top
 }
 
 
@@ -326,17 +332,25 @@ screen and (min-resolution: 1.5dppx) and (min-aspect-ratio: 1/1){
   width:   10vmin;
 }
 
-#resetDiv{
+#resetDiv{ /*mobile, landscape */
   right:   2vmin;
   height:  10vmin;
   width:   10vmin;
 }
 
 
-#countryData{ /*mobile, landscape */
-  top:     16vh; 
-  width:   15vw;
-  left:    82vw;
+#calibrateDiv{ /*mobile landscape */
+  position: absolute;
+  top:     11vh; 
+  right:   2vmin;
+  z-index: 3; 
+}
+
+#countryData{ /* mobile landscape */
+  position: absolute;
+  top:     19vh; 
+  right:   2vmin;
+  z-index: 4; # the higher the more on top
 }
 
 
@@ -439,6 +453,13 @@ input[type=range]::-webkit-slider-thumb {
   right:   2vmin;
   height:  10vmin;
   width:   10vmin;
+}
+
+#calibrateDiv{ /*mobile portrait */
+  position: absolute;
+  top:     11vmin; 
+  right:   2vmin;
+  z-index: 3; 
 }
 
 

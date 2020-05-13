@@ -87,6 +87,7 @@ setSlider(slider_tauRstart, slider_tauRstartText,
 
 
 slider_tauRstart.oninput = function() {
+  otherSliderUsed=true;
   tauRstart=parseFloat(this.value);
   slider_tauRstartText.innerHTML = "&nbsp;"+this.value
     +((tauRstart==1) ? " Tag" : " Tage");
@@ -109,6 +110,7 @@ setSlider(slider_tauRend, slider_tauRendText,
 
 
 slider_tauRend.oninput = function() {
+  otherSliderUsed=true;
   tauRend=parseFloat(this.value);
   slider_tauRendText.innerHTML = "&nbsp;"+this.value
     +((tauRend==1) ? " Tag" : " Tage");
@@ -130,6 +132,7 @@ setSlider(slider_pTest, slider_pTestText, 100*pTest, " %");
 
 
 slider_pTest.oninput = function() {
+  otherSliderUsed=true;
   slider_pTestText.innerHTML = "&nbsp;"+this.value+" %";
   var pTestold=pTest;
   pTest=parseFloat(this.value/100.);
@@ -147,30 +150,13 @@ setSlider(slider_tauTest, slider_tauTestText,
 
 
 slider_tauTest.oninput = function() {
+  otherSliderUsed=true;
   tauTest=parseFloat(this.value);
   slider_tauTestText.innerHTML = "&nbsp;"+this.value
     +((tauTest==1) ? " Tag" : " Tagen");
   //console.log("slider2 callback: tauTest="+tauTest);
 }
 
-
-// not yet used
-
-//var param4;
-
-/*
-var slider_param4=document.getElementById("slider_param4");
-var slider_param4Text = document.getElementById("slider_param4Text");
-
-setSlider(slider_param4, slider_param4Text, param4, " %");
-
-
-slider_param4.oninput = function() {
-  slider_param4Text.innerHTML ="&nbsp;"+ this.value+" %";
-  param4=parseFloat(this.value/100.);
-  console.log("slider4 callback: param4="+param4);
-}
-*/
 
 
 

@@ -35,7 +35,7 @@ Info
 
 
 <div id="countryData">
-<label for="countries">Data:</label>
+<label for="countries"></label>
 <select id="countries" onchange=selectDataCountry()> 
   <option value="Germany">Deutschland</option>
   <option value="United Kingdom">England</option>
@@ -198,6 +198,11 @@ Info
 
 <div id="resetDiv"><img id="reset" height="100%" 
      src="figs/buttonReset2_small.png" onclick="myResetFunction()"/>
+</div>
+
+<div id="calibrateDiv">
+  <button id="buttonCalibrate" onclick="myCalibrateFunction()">
+  Kalibriere neu!</button> 
 </div>
 
 <!-- consolidate with "var displayType" in corona.js-->

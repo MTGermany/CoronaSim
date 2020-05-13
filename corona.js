@@ -143,6 +143,7 @@ const RtimeList={   // 0-1,1-3,3-5,... weeks after start
 }
 
 var RsliderUsed=false;
+var otherSliderUsed=false;
 var Rtime=RtimeList["Germany"]; //!! need direct initialization 
 var R0=Rtime[0];          //!! init time dependent R
 var R_actual=R0;  // R0" controlled by slider, _actual: by data
@@ -247,6 +248,7 @@ var sizemin=0;
 
 //called ONLY in the <body onload> and toggleData event
 function getGithubData() {
+  console.log("in getGithubData");
   corona=new CoronaSim(); //!!
 
   if(debugApple){
@@ -316,7 +318,7 @@ function insertLeadingZeroes(dateStr){
 
 
 function initializeData(country) { 
-
+  console.log("in initializeData(country)");
   var data=dataGit[country];
   var dateInitStr=data[0]["date"];
   dataGit_dateBegin=new Date(insertLeadingZeroes(dateInitStr));
@@ -351,138 +353,24 @@ function initializeData(country) {
   nxtStart=dataGit_cumCases[dataGit_istart]; 
 
   console.log(
-    "\nend initializeData: country=",country,
-    "\n dataGit_istart=",dataGit_istart,
-    "\n dataGit_cumCases.length=",dataGit_cumCases.length,
-    "\n dataGit_date[0]=",dataGit_date[0],
-    "\n dataGit_date[dataGit_istart]",dataGit_date[dataGit_istart],
-    "\n dataGit_cumCases[dataGit_istart-1]",dataGit_cumCases[dataGit_istart-1],
-    "\n dataGit_cumCases[dataGit_istart]",dataGit_cumCases[dataGit_istart],
-    "\n dataGit_cumCases[dataGit_istart+1]",dataGit_cumCases[dataGit_istart+1],
-    "\n dataGit_cumCases[dataGit_istart+2]",dataGit_cumCases[dataGit_istart+2],
-    "\n dataGit_date[dataGit_cumCases.length-1]",
+    " dataGit_istart=",dataGit_istart,
+    "\n  dataGit_cumCases.length=",dataGit_cumCases.length,
+    "\n  dataGit_date[0]=",dataGit_date[0],
+    "\n  dataGit_date[dataGit_istart]",dataGit_date[dataGit_istart],
+    "\n  dataGit_cumCases[dataGit_istart-1]",dataGit_cumCases[dataGit_istart-1],
+    "\n  dataGit_cumCases[dataGit_istart]",dataGit_cumCases[dataGit_istart],
+    "\n  dataGit_cumCases[dataGit_istart+1]",dataGit_cumCases[dataGit_istart+1],
+    "\n  dataGit_cumCases[dataGit_istart+2]",dataGit_cumCases[dataGit_istart+2],
+    "\n  dataGit_date[dataGit_cumCases.length-1]",
     dataGit_date[dataGit_cumCases.length-1],
-    "\n nxtStart=",nxtStart,
+    "\n  nxtStart=",nxtStart,
     "\n"
   );
 
   RsliderUsed=false;
-  //SSEfunc([1,1,1,1]); //!! test
-  calibrateR(); //!!! need to call it several times fmin.nelderMead sloppy
-  calibrateR();
-  calibrateR(); 
-  calibrateR();
-  calibrateR(); 
-  calibrateR();
-  calibrateR(); 
-  calibrateR();
-  calibrateR(); 
-  calibrateR();
-
- 
- //##############################################################
- //!Inductive statistics of the LSE estimator Rtime
-// Cov(Rtime)=2 V(epsilon) H^{-1}, H=Hessian of SSEfunc(Rtime)
- //##############################################################
-
-  var dR=0.001;
-  //var H=math.matrix(); // does not work
-  var H=[];
-  var grad=[];
-
-  for(var j=0; j<Rtime.length; j++){H[j]=[];}
-  var Rp=[]; for(var j=0; j<Rtime.length; j++){Rp[j]=Rtime[j];}
-  var Rm=[]; for(var j=0; j<Rtime.length; j++){Rm[j]=Rtime[j];}
-  var Rp=[]; for(var j=0; j<Rtime.length; j++){Rp[j]=Rtime[j];}
-  var Rpp=[]; for(var j=0; j<Rtime.length; j++){Rpp[j]=Rtime[j];}
-  var Rpm=[]; for(var j=0; j<Rtime.length; j++){Rpm[j]=Rtime[j];}
-  var Rmp=[]; for(var j=0; j<Rtime.length; j++){Rmp[j]=Rtime[j];}
-  var Rmm=[]; for(var j=0; j<Rtime.length; j++){Rmm[j]=Rtime[j];}
-
-  // diagonal
-
-  for(var j=0; j<Rtime.length; j++){
-    Rp[j]+=dR;
-    Rm[j]-=dR;
-    H[j][j]=(SSEfunc(Rp)-2*SSEfunc(Rtime)+SSEfunc(Rm))/(dR*dR);
-    grad[j]=(SSEfunc(Rp)-SSEfunc(Rm))/(2*dR);
-    if(false){console.log("\n j=",j," Rtime=",Rtime,"\n Rp=",Rp,"\n Rm=",Rm,
-			 "\n SSEfunc(Rp)=   ",SSEfunc(Rp),
-			 "\n SSEfunc(Rtime)=",SSEfunc(Rtime),
-			 "\n SSEfunc(Rm)=   ",SSEfunc(Rm),
-			 "");}
-
-    Rp[j]=Rtime[j];
-    Rm[j]=Rtime[j];
-  }
-
-  // upper-diagonal
-
-  for(var j=0; j<Rtime.length; j++){
-    for(var k=j; k<Rtime.length; k++){
-      Rpp[j]+=dR; Rpp[k]+=dR; 
-      Rpm[j]+=dR; Rpm[k]-=dR; 
-      Rmp[j]-=dR; Rmp[k]+=dR; 
-      Rmm[j]-=dR; Rmm[k]-=dR; 
-      H[j][k]=(SSEfunc(Rpp)-SSEfunc(Rpm)-SSEfunc(Rmp)+SSEfunc(Rpp))/(4*dR*dR);
-      Rpp[j]=Rtime[j]; Rpp[k]=Rtime[k]; 
-      Rpm[j]=Rtime[j]; Rpm[k]=Rtime[k]; 
-      Rmp[j]=Rtime[j]; Rmp[k]=Rtime[k]; 
-      Rmm[j]=Rtime[j]; Rmm[k]=Rtime[k]; 
-    }
-  }
-
-  // lower-diagonal
-
-  for(var j=1; j<Rtime.length; j++){
-    for(var k=0; k<j; k++){
-      H[j][k]=H[k][j];
-    }
-  }
-
-  // inverse Hessian
-
-  var Hinv=math.inv(H);
-
-  // variance of random term epsilon assuming epsilon \sim i.i.d.
-
-  var vareps=SSEfunc(Rtime)/(dataGit_imax-Rtime.length);
-
-  // one-sigma estimation errors of parameters Rtime[j] (every 2 weeks a new)
-
-  var Rtime_sigma=[];
-  for(var j=0; j<Rtime.length; j++){
-    Rtime_sigma[j]=Math.sqrt(2*vareps*Hinv[j][j]);
-  }
-
-  // one-sigma estimation errors of daily time series of R
-
-  for(var i=0; i<dataGit_imax; i++){
-    var iweek=Math.floor(i/7);
-    var index=Math.min(Math.floor((iweek+1)/2),Rtime.length-1);
-    sigmaR_hist[i]=Rtime_sigma[index];
-    //console.log("i=",i," sigmaR_hist[i]=",sigmaR_hist[i]);
-  }
-
-  if(false){ //!!!
-    console.log("Inductive statistics: Rtime.length=",Rtime.length,
-		" SSE=", SSEfunc(Rtime));
-    console.log("\n gradient grad(SSE)=",grad,"\n");
-
-    for (var j=0; j<Rtime.length; j++){
-      console.log(" row of Hessian=",j," H[j]=",H[j]);
-    }
-    console.log("\n");
-    for (var j=0; j<Rtime.length; j++){
-      console.log(" row of inverse Hessian=",j," Hinv[j]=",Hinv[j]);
-    }
-    console.log("\nEstimates with One-sigma estimation errors:");
-    for (var j=0; j<Rtime.length; j++){
-      console.log("j=",j," Rtime[j]=",Rtime[j].toFixed(2)," +/- ",
-		  Rtime_sigma[j].toFixed(2));
-    }
-
-  }
+  otherSliderUsed=false;
+  //console.log("before calibrate in initializeData(country)");
+  calibrate(); // !!! initializeData(country);
 
 
  //##############################################################
@@ -494,6 +382,7 @@ function initializeData(country) {
     console.log("testMatrix=",testMatrix[0],testMatrix[1], " math.inv(testMatrix)=",math.inv(testMatrix)[0],math.inv(testMatrix)[1]);
   }
 
+  console.log("end initializeData: country=",country);
 
 } // initializeData(country);
 
@@ -658,7 +547,7 @@ function SSEfunc(R_arr,fR,logging) {
 //called in the html  <body onload> event and by myRestartFunction()
 
 function startup() {
- 
+  console.log("in startup");
   // =============================================================
   // get present and difference to startDay
   // =============================================================
@@ -672,7 +561,7 @@ function startup() {
   itmaxinit = Math.round(
     (present.getTime() - startDay.getTime())/(oneDay_ms));
   itmax=itmaxinit;
-  console.log("present=",present);
+  //console.log("present=",present);
 
 
 
@@ -740,14 +629,14 @@ function startup() {
 
 
 // =============================================================
-// calibrate the array R_arr of R values with fmin.nelderMead
+// estimate the array R_arr of R values with fmin.nelderMead
 // provided by open-source package fmin
 // notice: fmin.conjugateGradient does not work here
 // => use simple nelderMead and do not need to calculate
 // num derivatives in func as side effect of SSEfunc
 // =============================================================
 
-function calibrateR(){
+function estimateR(){
   var Rguess=[1,1,1,1]; //!!!
   sol2_SSEfunc=fmin.nelderMead(SSEfunc, Rguess);
   for(var j=0; j<Rguess.length; j++){
@@ -757,12 +646,128 @@ function calibrateR(){
   //console.log("check optimization by re-calculating sim with final R vals:")
   //SSEfunc(Rtime,null,true); //!!!
 
-  //console.log("\ncalibrateR(): country=",country,
-//	      "\n  calibrated R values Rtime=",  Rtime);
+  //console.log("\nestimateR(): country=",country,
+//	      "\n  estimated R values Rtime=",  Rtime);
 }
 
 
+// =============================================================
+// do the complete inductive statistics
+// since fmin.nelderMead is a bit sloppy in estimateR, 
+// need to call it several times
+// =============================================================
 
+function calibrate(){
+  console.log(" in function calibrate(), country=",country);
+  // estimate R and possibly other parameters
+ 
+  for(var ic=0; ic<10; ic++){
+    estimateR();
+  }
+ //##############################################################
+ //!Inductive statistics of the LSE estimator Rtime
+// Cov(Rtime)=2 V(epsilon) H^{-1}, H=Hessian of SSEfunc(Rtime)
+ //##############################################################
+
+  var dR=0.001;
+  //var H=math.matrix(); // does not work
+  var H=[];
+  var grad=[];
+
+  for(var j=0; j<Rtime.length; j++){H[j]=[];}
+  var Rp=[]; for(var j=0; j<Rtime.length; j++){Rp[j]=Rtime[j];}
+  var Rm=[]; for(var j=0; j<Rtime.length; j++){Rm[j]=Rtime[j];}
+  var Rp=[]; for(var j=0; j<Rtime.length; j++){Rp[j]=Rtime[j];}
+  var Rpp=[]; for(var j=0; j<Rtime.length; j++){Rpp[j]=Rtime[j];}
+  var Rpm=[]; for(var j=0; j<Rtime.length; j++){Rpm[j]=Rtime[j];}
+  var Rmp=[]; for(var j=0; j<Rtime.length; j++){Rmp[j]=Rtime[j];}
+  var Rmm=[]; for(var j=0; j<Rtime.length; j++){Rmm[j]=Rtime[j];}
+
+  // diagonal
+
+  for(var j=0; j<Rtime.length; j++){
+    Rp[j]+=dR;
+    Rm[j]-=dR;
+    H[j][j]=(SSEfunc(Rp)-2*SSEfunc(Rtime)+SSEfunc(Rm))/(dR*dR);
+    grad[j]=(SSEfunc(Rp)-SSEfunc(Rm))/(2*dR);
+    if(false){console.log("\n j=",j," Rtime=",Rtime,"\n Rp=",Rp,"\n Rm=",Rm,
+			 "\n SSEfunc(Rp)=   ",SSEfunc(Rp),
+			 "\n SSEfunc(Rtime)=",SSEfunc(Rtime),
+			 "\n SSEfunc(Rm)=   ",SSEfunc(Rm),
+			 "");}
+
+    Rp[j]=Rtime[j];
+    Rm[j]=Rtime[j];
+  }
+
+  // upper-diagonal
+
+  for(var j=0; j<Rtime.length; j++){
+    for(var k=j; k<Rtime.length; k++){
+      Rpp[j]+=dR; Rpp[k]+=dR; 
+      Rpm[j]+=dR; Rpm[k]-=dR; 
+      Rmp[j]-=dR; Rmp[k]+=dR; 
+      Rmm[j]-=dR; Rmm[k]-=dR; 
+      H[j][k]=(SSEfunc(Rpp)-SSEfunc(Rpm)-SSEfunc(Rmp)+SSEfunc(Rpp))/(4*dR*dR);
+      Rpp[j]=Rtime[j]; Rpp[k]=Rtime[k]; 
+      Rpm[j]=Rtime[j]; Rpm[k]=Rtime[k]; 
+      Rmp[j]=Rtime[j]; Rmp[k]=Rtime[k]; 
+      Rmm[j]=Rtime[j]; Rmm[k]=Rtime[k]; 
+    }
+  }
+
+  // lower-diagonal
+
+  for(var j=1; j<Rtime.length; j++){
+    for(var k=0; k<j; k++){
+      H[j][k]=H[k][j];
+    }
+  }
+
+  // inverse Hessian
+
+  var Hinv=math.inv(H);
+
+  // variance of random term epsilon assuming epsilon \sim i.i.d.
+
+  var vareps=SSEfunc(Rtime)/(dataGit_imax-Rtime.length);
+
+  // one-sigma estimation errors of parameters Rtime[j] (every 2 weeks a new)
+
+  var Rtime_sigma=[];
+  for(var j=0; j<Rtime.length; j++){
+    Rtime_sigma[j]=Math.sqrt(2*vareps*Hinv[j][j]);
+  }
+
+  // one-sigma estimation errors of daily time series of R
+
+  for(var i=0; i<dataGit_imax; i++){
+    var iweek=Math.floor(i/7);
+    var index=Math.min(Math.floor((iweek+1)/2),Rtime.length-1);
+    sigmaR_hist[i]=Rtime_sigma[index];
+    //console.log("i=",i," sigmaR_hist[i]=",sigmaR_hist[i]);
+  }
+
+  if(false){ //!!!
+    console.log("Inductive statistics: Rtime.length=",Rtime.length,
+		" SSE=", SSEfunc(Rtime));
+    console.log("\n gradient grad(SSE)=",grad,"\n");
+
+    for (var j=0; j<Rtime.length; j++){
+      console.log(" row of Hessian=",j," H[j]=",H[j]);
+    }
+    console.log("\n");
+    for (var j=0; j<Rtime.length; j++){
+      console.log(" row of inverse Hessian=",j," Hinv[j]=",Hinv[j]);
+    }
+    console.log("\nEstimates with One-sigma estimation errors:");
+    for (var j=0; j<Rtime.length; j++){
+      console.log("j=",j," Rtime[j]=",Rtime[j].toFixed(2)," +/- ",
+		  Rtime_sigma[j].toFixed(2));
+    }
+
+  }
+} // calibrate()
 
 
  
@@ -792,7 +797,7 @@ function displayTypeCallback(){
 // ###############################################################
 
 function myStartStopFunction(){ //!!! hier bloederweise Daten noch nicht da!!
-
+  console.log("in myStartStopFunction");
   clearInterval(myRun);
   //console.log("in myStartStopFunction: isStopped=",isStopped);
 
@@ -808,7 +813,7 @@ function myStartStopFunction(){ //!!! hier bloederweise Daten noch nicht da!!
 }
 
 function selectDataCountry(){ 
-  console.log("\n\nin selectDataCountry()");
+  console.log("\nin selectDataCountry()");
 
 
 
@@ -821,9 +826,9 @@ function selectDataCountry(){
   taumax=Math.max(tauDie,tauRecover)+tauAvg+1;
   console.log("country=",country);
   Rtime=RtimeList[country];
-  var test=RtimeList["Germany"]; console.log("test=",test);
-  console.log("RtimeList[\"Germany\"]=",RtimeList["Germany"]);
-  console.log("RtimeList=",RtimeList, " Rtime=",Rtime);
+  //var test=RtimeList["Germany"]; console.log("test=",test);
+  //console.log("RtimeList[\"Germany\"]=",RtimeList["Germany"]);
+  //console.log("RtimeList=",RtimeList, " Rtime=",Rtime);
   setSlider(slider_R0,  slider_R0Text,  Rtime[0].toFixed(2),"");
 
   //flagName=(country==="Germany") ? "flagSwitzerland.png" : "flagGermany.png";
@@ -835,15 +840,16 @@ function selectDataCountry(){
 } // selectDataCountry
 
 function myRestartFunction(){ 
-  //RsliderUsed=false;
+  console.log("in myRestartFunction");
   ctx.clearRect(0, 0, canvas.width, canvas.height)
   fracDie=fracDieInit*pTest/pTestInit;
-  console.log("restart: fracDie=",fracDie);
+  //console.log("restart: fracDie=",fracDie);
   startup();
   corona.init(); // because startup redefines CoronaSim() and data there here
 
   clearInterval(myRun);
   it=0; //!!! only instance global it is reset to zero
+
   myRun=setInterval(simulationRun, 1000/fps);
 
    // activate thread if stopped
@@ -855,11 +861,22 @@ function myRestartFunction(){
   }
 }
 
+function myCalibrateFunction(){ 
+  RsliderUsed=false;
+  otherSliderUsed=false;
+  calibrate();
+  myRestartFunction();
+}
+
+
+
 // selectDataCountry selects default sliders for the active country
 // => can use it directly as the reset function
 
 function myResetFunction(){ 
+  console.log("in myResetFunction");
   RsliderUsed=false;
+  otherSliderUsed=false;
 
   tauRstart=tauRstartInit;
   setSlider(slider_tauRstart, slider_tauRstartText,
@@ -876,7 +893,8 @@ function myResetFunction(){
   setSlider(slider_pTest, slider_pTestText, 100*pTest, " %");
 
 
-  selectDataCountry();
+  selectDataCountry();  
+
 }
 
 
@@ -1609,7 +1627,8 @@ DrawSim.prototype.updateOneDay=function(it,displayType,xtot,xt,y,yt,z){
 
   ctx.setTransform(0,-1,1,0,x0+1.0*textsize,y0);
   var str_R="R="+R_hist[0].toFixed(2)
-      +( (RsliderUsed) ? "" : (" +/- "+sigmaR_hist[0].toFixed(2)));
+      +( (RsliderUsed||otherSliderUsed)
+	 ? "" : (" +/- "+sigmaR_hist[0].toFixed(2)));
   ctx.fillText(str_R,0,0);
   ctx.setTransform(1,0,0,1,0,0);
 
@@ -1620,7 +1639,8 @@ DrawSim.prototype.updateOneDay=function(it,displayType,xtot,xt,y,yt,z){
 
     ctx.setTransform(0,-1,1,0,x0+1.0*textsize,y0);
     str_R="R="+R_hist[itR].toFixed(2)
-      +( (RsliderUsed) ? "" : (" +/- "+sigmaR_hist[itR].toFixed(2)));
+      +( (RsliderUsed||otherSliderUsed||(itR>=dataGit_imax))
+	 ? "" : (" +/- "+sigmaR_hist[itR].toFixed(2)));
     ctx.fillText(str_R,0,0);
     ctx.setTransform(1,0,0,1,0,0);
   }
