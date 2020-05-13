@@ -18,32 +18,39 @@
 
 <h3> Motivation</h3>
 
-Diese <a href="index.html">interaktive Simulation</a> soll drei Dinge verdeutlichen:
+Diese <a href="index.html">interaktive Simulation</a> soll folgendes verdeutlichen:
 <ul>
-<li> Wie verz&ouml;gert sich Ma&szlig;nahmen zur Isolation auf die
+<li> Wie verz&ouml;gert sich Ma&szlig;nahmen zur Isolation oder auch
+  anders verursachte &Auml;nderungen der Infektionsrate auf die
   Infektionszahlen auswirken,
 <li> wie sehr sich die reale Situation von der beobachteten
-  uterscheided, vor allem, wenn wenig und verz&ouml;gert getestet
-  wird.
-<li> Wie schwierig die Reproduktionszahl <i>R</i> und ihr
+  unterscheidet, vor allem, wenn wenig und verz&ouml;gert getestet
+  wird,
+<li> wie schwierig die <span class="important">
+  Reproduktionszahl <i>R</i></span>  und ihr
   zeitlicher Verlauf zu sch&auml;tzen ist: Je nach den Werten der
   anderen Parametern wie Zeitraum oder Häufigkeit der Tests ändern
-  sich die "Best-Fit"-Werte und der Zeitverlauf von <i>R</i>. Sie
-  können das hier selbst untersuchen! 
-<li> Wie wichtig Zufalls-Stichproben
+  sich die "Best-Fit"-Werte und der Zeitverlauf von <i>R</i>,
+<li> dass gesch&auml;tzte Werte wie <i>R=0.92</i>
+  ohne <span class="important">Fehlerintervalle</span>  
+  nahezu nichts 
+  aussagen und dass die Fehler sehr gro&szlig; werden, wenn man sich der
+  Gegenwart n&auml;hert. All das k&ouml;nnen Sie hier interaktiv untersuchen!
+</ul>
+
+Schlie&szlig;lich wird deutlich, wie wichtig Zufalls-Stichproben
  sind, um die unbekannte tats&auml;chliche Sterbewahrscheinlichkeit und den Ausma&szlig;
  der "Durchseuchung" (was f&uuml;r ein Wort!) abzusch&auml;tzen. In
  der aktuellen Phase kann n&auml;mlich nur das Verh&auml;ltnis
- <i>p<sub>D</sub>/p<sub>T</sub></i> aus der
- Covid-19 Sterblichkeit <i>p<sub>D</sub></i> und des Testanteils (Hellfeldes) 
-<i>p<sub>T</sub></i> gesch&auml;tzt werden, in Deutschland liegt es
- bei <i>p<sub>D</sub>/p<sub>T</sub></i>=4%, was bei einem Hellfeld von
+ aus der Zahl der
+ Covid-19 Toten und der positiv Getesteten gesch&auml;tzt werden, in Deutschland liegt es
+ bei etwa 4%, was bei einem Hellfeld von
  10% einer Sterbewahrscheinlichkeit von 0.4% entspr&auml;che. Die
  Kenntnis der <span class="important"> wahren Werte der
  Sterbewahrscheinlichkeit</span>  und der
  <span class="important">Durchseuchung</span> ist
  eminent wichtig als Grundlage politischer Entscheidungen.
-</ul>
+<br><br>
 
 <i>Wichtig:</i> Allen Covid-19-Modellen und Simulationen ist
 gemeinsam, dass sie <span class="important">keine Prognosen</span>
@@ -53,7 +60,7 @@ Zukunft, etwa folgender Art:
 <br><br>
 
 <center>
-<table width="70%">
+<table width="80%">
 <td>
 <i>wenn durch die Implementierung oder
 Unterlassung von Ma&szlig;nahmen oder durch das Wetter die
@@ -77,7 +84,7 @@ Lockdown-Ma&szlig;nahmen) dargestellt.
 den <a href="https://pomber.github.io/covid19/timeseries.json">t&auml;glich
     aktualisierten Beobachtungsdaten</a> weitgehend
   &uuml;bereinstimmen, vor allem die rote Linie (Simulation) mit den
-  roten Punkten(betestete Fallzahlen).
+  roten Punkten (Zahl der positiven Corona-Tests).
   Siehe auch das  <a href="https://github.com/pomber/covid19">Github
     Repository</a> dazu.
 <!--
@@ -87,16 +94,27 @@ Punkte in der Grafik f&uuml;r dokumentierte F&auml;lle
 bzw. Gestorbene) m&ouml;glichst gut &uuml;bereinstimmen. 
 -->
 
-<li> Der erste Regler für die Reproduktionszahl <i>R</i> in
-  verschiedenen Zeitr&auml;umen sind die wichtigsten. Alle zwei Wochen
-  wird die jeweils aktuelle Reproduktionsrate als grauer Text in die
-  Simulation eingezeichnet. Zum Simulationsstart "verschiebt sich der
-  Regler von selbst" gem&auml;&szlig; der an die Daten angepassten Werte. <span class="important"> Insbesondere
-  erkl&auml;rt in Deutschland ein seit dem 27.03.
-  konstanter <i>R</i>-Wert von 0.75  die
-  beobachteten Fallzahlen nahezu perfekt.</span> Sobald man den Regler
-  selbst verschiebt, ist die Reproduktionsrate "in des Nutzers Hand"
-  und die Startwerte werden &uuml;berschrieben.
+<li> Der erste Regler für die Reproduktionszahl <i>R</i> ohne jede
+  Herdenimmunit&auml;t ist der
+  wichtigste. Beim Start oder wenn man sp&auml;ter mit anderen
+  Einstellungen neu simuliert oder ein anderes Land
+  w&auml;hlt, wird automatisch die Reproduktionszahl in
+  Zwei-Wochen-Intervallen neu gesch&auml;tzt. Die jeweils gesch&auml;tzte 
+  Reproduktionsrate samt Fehlerintervall wird als grauer Text in die
+  Simulation eingezeichnet und der <i>R</i>Regler verschiebt sich wie
+  von Geisterhand von selbst. 
+
+ <span class="important"> Insbesondere
+  erkl&auml;rt in Deutschland ein seit dem 27.03. ein nahezu
+  konstanter <i>R</i>-Wert um 0.75  die
+  beobachteten Fallzahlen nahezu perfekt.</span>
+
+Sobald man diesen oder einen anderen
+  Regler selbst bedient, wird die Sch&auml;tzung samt Angabe der
+  Fehlerintervalle 
+  beendet und die angezeigten <i>R</i>-Werte entsprechen der eigenen
+  Aktion.
+
 </ul>
 
 F&uuml;r das
@@ -105,28 +123,42 @@ Stoppen und Wiederholen der Simulation gibt es drei Eskalationsstufen:
 <li> Mit 
 <img src="figs/buttonGo_small.png"
      style="width:3.5vmin;vertical-align:middle">
- kann man die Simulation vom
+ kann man die Simulation f&uuml;r eine Szenarienanalyse vom
   aktuellen Zeitpunkt aus fortf&uuml;hren und mit 
 <img src="figs/buttonStop3_small.png"
      style="width:3.5vmin;vertical-align:middle">
 wieder stoppen. 
-<li> Mit <img src="figs/buttonRestart_small.png"
+<li> Mit 
+<img src="figs/buttonRestart_small.png"
      style="width:3vmin;vertical-align:middle">
 startet man die Simulation vom Anfang an mit den gerade eingestellten
-     Parametern.
+     Parametern. Hat man nach dem letzten Reset oder der letzten L&auml;nderwahl
+     den <i>R</i>-Regler nicht ge&auml;ndert, wird die
+     Parametersch&auml;tzung wieder aktiviert und angezeigt.
+
 <li> Mit <img src="figs/buttonReset2_small.png"
      style="width:3vmin;vertical-align:middle">
 <!-- <span class="button">Reload</span>Reload</tt>-Funktion des Browsers <tt>-->
 f&uuml;hrt man den "Reset auf die Werkseinstellungen"
-    durch.
+    durch. Nur das eingestellte Land bleibt unver&auml;ndert.
 </ul>
-Nach jedem Stop oder auch w&auml;hrend der Simulation
-kann man die wichtigsten Simulationsparameter mittels der Schieber
-ver&auml;ndern. Mit dem anfangs mit <span class="button">
-  =>log. Darstellung</span> beschrifteten Button kann man die Darstellung
-jederzeit zwischen linear und logarithmisch umschalten. Mit der
+
+Die weiteren Bedienelemente der Simulation sind die folgenden:
+<ul>
+<li> Die <span class="button"> Schieberegler</span> f&uuml;r die
+  wichtigsten Modellparameter lassen sich bei gestoppter und auch bei
+  laufender Simulation bedienen,
+<li> der Button <span class="button"> Kalibriere neu!</span> wirft die
+  Sch&auml;tzung der Reproduktionsrate mit den gerade eingestellten
+  sonstigen Modellparametern neu an und startet die Simulation neu,</span>
+<li> der Button 
+<span class="button"> =>log. Darstellung</span> schaltet die Darstellung
+jederzeit zwischen linear und logarithmisch um,
+<li> mit der
 Optionsliste <span class="button">
-  Deutschland \/</span> kann man andere L&auml;nder einstellen 
+  Deutschland \/</span> kann man andere L&auml;nder einstellen.
+</ul>
+ 
 
 <h3> Beispiele </h3>
 <ol>
@@ -135,15 +167,105 @@ Optionsliste <span class="button">
 <img src="figs/buttonGo_small.png"
      style="width:3.5vmin;vertical-align:middle"> 
 und stoppen Sie die Simulation erneut im Juli: Die Infektionen
-lauen sich bei etwa 190 000 gemeldeten Infizierten tot, aber selbst
+l&auml;uft sich bei etwa 190 000 gemeldeten Infizierten und insgesamt
+     weniger als 
+     10 000 Covid-19 Opfern tot, aber selbst
 Anfang Juli gibt es noch etwa 10 000 <i>real</i> kranke Personen: Die
 Infektion ist noch lange nicht "ausgetrocknet"
+<br><br>
+<li> <b>Szenario "Laisser faire":</b> Alle Einschr&auml;nkungen werden
+  aufgehoben, alles ist wie in Vor-Coronazeiten. Dies k&ouml;nnte
+  z.B. einer Reproduktionsrate von 1.5 entsprechen (wie das
+  Grippevirus scheint auch das Coronavirus im Sommer weniger
+  infizierend zu wirken, deshalb nicht  z.B. <i>R=3</i>): Dr&uuml;cken Sie
+Reset <img src="figs/buttonReset2_small.png"
+     style="width:3vmin;vertical-align:middle">, 
+lassen die Simulation
+     bis zur Gegenwart laufen, verschieben den R-Regler auf 1.5 und
+     lassen mit <img src="figs/buttonGo_small.png"
+     style="width:3.5vmin;vertical-align:middle">  die Simulation etwa
+     4 Wochen weiter laufen: Zun&auml;chst geschieht 2 Wochen lang nahezu
+     nichts (genau deshalb sind auch die Sch&auml;tzfehler des letzten
+     R-Wertes so hoch!), ehe die Fallzahlen wieder verst&auml;rkt
+     hochgehen. Lassen Sie die Simulation nun bis Oktober weiterlaufen
+     und bet&auml;tigen Sie auch die <span class="button">
+  =>log. Darstellung</span>. Nun hat sich bei etwa 45 Millionen
+     infizierten Personen, von denen fast alle wieder gesund sind,
+     eine Herdenimmunit&auml;t aufgebaut. Eine weitere Erh&ouml;hung
+     von <i>R</i> (z.B. weil es Winter wird) bewirkt nahezu keinen
+     Effekt mehr. <span class="important"><i>Wichtig:</i></span> Das <i>R</i> in meinem Simulator
+     gibt die Reproduktionszahl <i>ohne jede Herdenimmunit&auml;t</i> an,
+     die Infiziertenkurve kann deshalb auch bei <i>R>1</i> abflachen.
+<br><br>
 
-<li> <b>Szenario "Laisser faire":</b>
+<li> <b>Szenario "&Auml;nderung des Infektionszeitraums oder der Testverz&ouml;gerung":</b> Der mit den
+  zweiten und dritten Regler einstellbare Infektionszeitraum ist neben
+  dem R-Wert der wichtigste Parameter der Infektionsdynamik. Wie
+  beeinflusst er die R-Sch&auml;tzung? Stellen Sie zun&auml;chst mit Reset
+<img src="figs/buttonReset2_small.png"
+     style="width:3vmin;vertical-align:middle">, 
+den Ausgangszustand her und merken sich die gesch&auml;tzten R-Werte und
+     ihre Fehlergrenzen. &Auml;ndern Sie nun den Zeitraum,
+     z.B. Ansteckungsstart 6 Tage statt 1 Tag nach der eigenen
+     Infektion und dr&uuml;cken Sie 
+  <span class="button"> Kalibriere neu!</span>: Je kleiner der
+  mittlere Ansteckungstag ist, desto n&auml;her sind die R-Sch&auml;tzungen
+  um 1, werden also bei schneller Ansteckung und/oder schnellen Tests und R<1 gr&ouml;&szlig;er, bei
+  R>1 (z.B. in Ru&szlig;land oder Indien) kleiner. <span class="important">
+  Die Tatsache, dass R>1 oder R<1   gesch&auml;tzt wird,
+  ist hingegen <i>robust</i></span>, also unempfindlich gegen&uuml;ber
+  &Auml;nderungen der angenommenen Simulationsdynamik. Eine &Auml;nderung
+  der Testverz&ouml;gerung (Test
+  nach ... Tagen) verschiebt im Wesentlichen nur die Zeitpunkte der R-sch&auml;tzungen.
+<br><br>
 
-<li> <b>Szenario "Fr&uuml;herer Test":</b>
+<li> <b>Szenario "&Auml;nderung der Testrate":</b> Stellen Sie zun&auml;chst mit Reset
+<img src="figs/buttonReset2_small.png"
+     style="width:3vmin;vertical-align:middle">, 
+den Ausgangszustand her. Wenn die Simulation in der Gegenwart
+     angelangt ist, verschieben Sie die Testrate von 10% auf 1% und
+     dr&uuml;cken Sie dann <img src="figs/buttonRestart_small.png"
+     style="width:3vmin;vertical-align:middle">. Obwohl die
+     Simulationsdynamik <i>nicht</i> ge&auml;ndert wurde, nur die Art,
+     wie gemessen wird, ist nun die simulierte rote Kurve viel zu
+     niedrig. Warum, wird klar, wenn Sie auf 
+<span class="button"> =>log. Darstellung</span>  umschalten. Da die
+    Simulation anfangs mit der richtigen Zahl an <i>positiv
+    Getesteten</i> startet, ist die anfangs simulierte <i>reale
+    Zahl</i> an Infizierten 10 mal so hoch wie zuvor und in der Gegenwart bereits der Beginn
+    einer Herdenimmunit&auml;t erreicht.  Nach  <span class="button">
+    Kalibriere neu!</span> stimmt die Kurve wieder, aber nun sind die
+    gesch&auml;tzten R-Werte h&ouml;her und zwar derart, dass
+    die <i>effektive Reproduktionsrate R(1-I)</i> mit I dem Anteil der
+    Immunen (siehe <a href="#model">die Modellbeschreibung</a>) gleich
+    ist.
+<br><br>
 
-<li> <b>Szenario "Zunehmende Testintensit&auml;t":</b>
+<li> <b>Szenario "zeitliche Erh&ouml;hung der Testrate":</b>
+Dieses wichtige Szenario zeigt, wie man allein durch eine zeitlich
+  ver&auml;nderliche Testrate zu
+  v&ouml;llige falsche Schlussfolgerungen kommen kann! Verschieben Sie
+  nach Reset  <img src="figs/buttonReset2_small.png"
+     style="width:3vmin;vertical-align:middle"> noch w&auml;hrend der
+  Simulation den <span class="button">Testrate-Regler</span>
+  allm&auml;hlich von 10% auf 20%: Die simulierten gemessenen Fallzahlen
+  sind nun h&ouml;her als die tats&auml;chlich gemessenen, obwohl sich an
+  der Infektionsdynamik <i>nichts</i> ge&auml;ndert hat! Reduzieren Sie
+  nun R um etwa 0.1 (z.B. von 0.75 auf 0.65), stellen die Testrate
+  wieder auf 10%, dr&uuml;cken <img src="figs/buttonRestart_small.png"
+     style="width:3vmin;vertical-align:middle"> und verschieben die
+  Testrate w&auml;hrend der Simulation wieder auf 20%. Nun sollten die
+  rote  Kurve wieder nahezu mit den roten atenpunkten
+  &uuml;bereinstimmen: <i>R</i> w&uuml;rde systematisch um 0.1 zu hoch
+  gesch&auml;tzt, wenn man eine tats&auml;chliche &Auml;nderung der Testrate
+  nicht ber&uuml;cksichtigte! Noch drastischer wird es z.B. bei den USA,
+  wenn man w&auml;hrend der Simulation die Testrate von 5% auf 20%
+  &auml;ndert: Dann ist die "echte" Reproduktionsrate um 0.9 und nicht
+  &uuml;ber 1 wie bei Annahme einer konstanten Testrate.
+
+
+
+
 
 </ol>
 
@@ -191,6 +313,8 @@ Gesamtheit, also Hell- und Dunkelfeld, beziehen.
 
 </ul>
 
+<a name="model"></a>
+
 <h3> Modell</h3>
 Simuliert wird ein Standard-Infektionsausbreitungsmodell:
 <ul>
@@ -198,26 +322,26 @@ Simuliert wird ein Standard-Infektionsausbreitungsmodell:
 <li> Jeder Infizierte steckt im Laufe seiner Krankheit
 <br><br>
 <center> 
-<i>R(t) (1-x*)</i>
+<i>R(t) (1-I)</i>
 </center>
 <br>
 andere Personen an. Hierbei bedeuten <i>R(t)</i>
-den durch verschiedene Ma&szlig;nahmen aber m&ouml;glicherweise auch durch
-das Wetter zeitlich ver&auml;nderlichen <strong>Reproduktionszahl ohne Immunität</strong>  und <i>x*</i>
+den durch verschiedene Ma&szlig;nahmen und/oder durch
+das Wetter zeitlich ver&auml;nderlichen <strong>Reproduktionszahl ohne Immunität</strong>  und <i>I</i>
 den <strong>Immunit&auml;tsanteil</strong>.
 
-<br><br><li> der Immunit&auml;tsanteil
+<br><br><li> Der Immunit&auml;tsanteil
 <center> 
-<i>x*=x+y+z</i>
+<i>I=x+y+z</i>
 </center>
 <br>
 wird gleich der 
  <strong>Durchseuchungsrate</strong> gesetzt, also gleich der Summe des
 Anteils <i>x</i> der gerade (auch symptomfrei) erkrankten Personen, des Anteils <i>y</i> der bereits
 wieder gesunden Personen und  des Anteils <i>z</i> der gestorben
-Personen. Es wird also davon ausgegangen, dass jeder Infizierte und
- Geheilte zu 100% immun ist und dass keine Impfungen verf&uuml;gbar sind,
- die <i>x*</i> weiter erh&ouml;hen w&uuml;rden. Alle Anteilswerte beziehen sich immer auf die Bev&ouml;lkerungszahl am
+Personen. Es wird also davon ausgegangen, dass jeder nur einmal
+ erkranken kann und dass keine Impfungen verf&uuml;gbar sind,
+ die <i>I</i> weiter erh&ouml;hen w&uuml;rden. Alle Anteilswerte beziehen sich immer auf die Bev&ouml;lkerungszahl am
   Anfang der Pandemie. Die Summe sonstiger Zuw&auml;chse oder Abnahmen
   der Bev&ouml;lkerung wird gleich null gesetzt.
 
@@ -260,10 +384,11 @@ in der logarithmischen Darstellung) zu gegebenen
 Zeitpunkt stark unterschiedlich! An die Testrate habe ich auch die
 wahre Sterblichkeit <i>p<sub>D</sub></i> gekoppelt, da die unbekannte
 tats&auml;chliche Sterbewahrscheinlichkeit sich zumindest anf&auml;nglich
-(geringe Immunit&auml;t) sich nur als Produkt 
-<i>p<sub>D</sub>p<sub>T</sub></i> manifestiert.
+(geringe Immunit&auml;t) nur als Verh&auml;ltnis
+<i>p<sub>D</sub>/p<sub>T</sub></i> <span class="blue"> (blaue
+  Kurve)</span> manifestiert. 
 
-<br><br><li> Der Test ist ideal, weist also weder <i>false positives</i>
+  <br><br><li> Der Test ist ideal, weist also weder <i>false positives</i>
 noch <i>false negatives</i> auf.
 
 <br><br><li> Getestet wird &tau;<sub>T</sub>&plusmn;2 Tage nach der Infektion.
@@ -317,7 +442,7 @@ Offensichtlich ergibt dies nur Sinn, wenn
 <li> und nicht zuletzt vermutlich durch warmes Wetter, wie jede Grippe.
 </ul>
 Nat&uuml;rlich wird die Epidemie auch durch sp&auml;ter verf&uuml;gbare
-Impfungen, d.h. externe Erh&ouml;hung von <i>x*</i>, ausgebremst.
+Impfungen, d.h. externe Erh&ouml;hung von <i>I</i>, ausgebremst.
 
 <br><br><li> <span class="important">Ansteckungsstart</span> 
 gleich 1 Tag bedeutet, bereits einen

@@ -56,7 +56,7 @@ const countryGerList={
 
 
 const fracDieInitList={
-    "Germany"       : 0.0044,
+    "Germany"       : 0.0048,
     "Austria"       : 0.0040,
     "Czechia"       : 0.0041,
     "France"        : 0.0040,
@@ -190,8 +190,8 @@ var dataGit_deathsCases=[];
 
 var fps=10;
 
-var tauRstartInit=1;   // active infectivity begins [days since infection]//1
-var tauRendInit=10;    // active infectivity ends [days since infection]//10
+var tauRstartInit=4;   // active infectivity begins [days since infection]//1
+var tauRendInit=12;    // active infectivity ends [days since infection]//10
 var tauTestInit=8;    // time delay [days] test-infection //10
 var pTestInit=0.1;     // initial percentage of tested infected persons //0.1
 
