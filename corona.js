@@ -126,7 +126,7 @@ const tauDieList={
 
 // needed as initialisation and if nonlin opt fmin not used
 
-const RtimeList={   // 0-1,1-3,3-5,... weeks after start
+var RtimeList={   // 0-1,1-3,3-5,... weeks after start
   "Germany"       : [1.05, 0.75, 0.75, 0.70],
   "Austria"       : [0.8,  0.62, 0.62],
   "Czechia"       : [0.90, 0.75, 0.75],
@@ -141,6 +141,27 @@ const RtimeList={   // 0-1,1-3,3-5,... weeks after start
   "Russia"        : [2.0,  1.8, 1.45, 1.4],
   "US"            : [1.3, 1.08, 1.00]
 }
+
+
+/*
+//#####################################################
+//!! make length of RtimeList elements depend on present date
+// does not work here since dataGit_imax still undefined
+// but nice example  of traversing over object elements
+// in function estimateR() everything there!
+
+var keys = Object.keys(RtimeList);
+var iwmax=Math.round(dataGit_imax/14);
+console.log("dataGit_imax=",dataGit_imax);
+for(var i = 0; i < keys.length;i++){
+  for(var iw=3; iw<Math.round(dataGit_imax/14); iw++){
+    RtimeList[keys[i]][iw]=1;
+  }
+  console.log("keys[i]=",keys[i]," RtimeList[keys[i]]=",RtimeList[keys[i]]);
+}
+//#####################################################
+*/
+
 
 var RsliderUsed=false;
 var otherSliderUsed=false;
@@ -637,7 +658,12 @@ function startup() {
 // =============================================================
 
 function estimateR(){
-  var Rguess=[1,1,1,1]; //!!!
+
+
+  var iwmax=Math.round((dataGit_imax+0)/14);
+  var Rguess=[];
+  for(var iw=0; iw<iwmax; iw++){Rguess[iw]=1;}
+
   sol2_SSEfunc=fmin.nelderMead(SSEfunc, Rguess);
   for(var j=0; j<Rguess.length; j++){
     Rtime[j]=sol2_SSEfunc.x[j];
@@ -646,8 +672,11 @@ function estimateR(){
   //console.log("check optimization by re-calculating sim with final R vals:")
   //SSEfunc(Rtime,null,true); //!!!
 
-  //console.log("\nestimateR(): country=",country,
-//	      "\n  estimated R values Rtime=",  Rtime);
+  if(true){
+    console.log("\nestimateR(): country=",country,
+		" dataGit_imax=",dataGit_imax,
+	        "\n  estimated R values Rtime=",  Rtime);
+  }
 }
 
 
