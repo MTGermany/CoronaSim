@@ -1,0 +1,73 @@
+1. Default
+==========
+
+* Wir starten die Simulation unter corona-simulation.de
+
+* Sie laeuft bis zur Gegenwart. Dabei werden die Reproduktionszahlen R
+  im zweiw\"ochentlichen Rhythmus an die Daten der registrierten
+  F\"alle angepasst
+
+* Anpassen hei\3t, die rote Kurve der simulierten Fallzahlen stimmt
+  m\"oglichst gut mit den Daten (rote Punkte) \"uberein
+
+* Als \"Okonometriker und Statistiker ist aber eine Zahl, und selbst
+  die ber\"uhmte Reproduktionszahl, nichts ohne
+  Fehlerschranken. Diese sind mit +/- angegeben und sind naturgem\"a\3
+  umso ungenauer, je n\"aher man an die Gegenwart kommt  
+
+
+2. Szenario "unver\"andert"
+===========================
+
+* Nun lasse ich die Simulation weiterlaufen [bis August], indem, ich auf "Go"
+  dr\"ucke. Dabei nehme ich den letzten R-Wert an. Die Infektion
+  stirbt aus. Bilanz: weniger als 200 000 registrierten F\"alle und
+  weniger als 10 000 Tote
+
+* Aber, das wusste angeblich schon Mark Twain: Prognosen sind
+  schwierig, vor allem, wenn sie die Zukunft betreffen". Wir sprechen
+  deshalb anstelle von Prognosen besser von Zukunfts-Szenarien, also
+  bedingten Projektionen in die Zukunft unter verschiedenen Annahmen
+
+3. Szenario zweite Winter-Welle
+===========================
+
+* Ich erh\"ohe nun im September die Reproduktionszahl auf 1.5, dann "Go"
+  => es tut sich lange nichts, erst im Dezember gibt es merklichen
+  Anstieg "Stop" [bei 250 000 Faellen]
+
+* Warum die Verz\"ogerung? Schauen wir mal hinter die Kulissen, indem
+  wir die "log Darstellung" waehlen.
+
+* Wir sehen nun die aktuell real infizierten Personen, wobei ich eine
+  Dunkelzifer von 90& angenommen habe. Dies ist eine der vielen
+  Annahmen! Sie war auf ueber einer Million, sank aber auf wenige
+  tausend (dies entspricht wenigen hundert aktiver Faelle) und muss
+  mehrere Monate lang wieder exponentiell wachsen, bis sie auf die
+  Beobachtungen durchschlaegt!
+
+* Machen wir nun einen neuen Lockdown, dauert es etwa 2 Wochen, bis
+  sich merklich was tut! Als eine der Annahmen habe ich n\"amlich auch
+  eine Verz\"ogerungszeit bei den Tests von 8 Tagen angenommen
+
+
+4. Szenario: Bedingte Prognosen bei anderen Annahmen
+===============================================
+
+z.B. Ansteckungsstart nach 1 Tag, Ende 5 tage, Messung nach 3 tagen,
+also alles schneller => "Kalibriere Neu" rote Kurve passt mit etwas
+anderen R-Werten, aber die gruenen und blauen Kurven passen schlechter
+
+5. Andere Laender
+=================
+
+* stabil: Schweiz
+
+* nach wie vor exponentiell: Indien: Gottseidank bin ich da noch
+  rausgekommen! 
+
+* linear: USA: R-wert R=1, Exponentielle Anstiegsrate proportional
+  ln(R)=0 => kein exponentieller, sondern konstante ahl der aktiven
+  und linearer verlauf der kumul. Faelle
+
+6. Viele weitere Simulationsmoeglichkeiten, siehe blauer Info-Button!
