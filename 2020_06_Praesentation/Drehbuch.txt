@@ -1,73 +1,98 @@
-1. Default
-==========
+0. Erklaerung ============
+
+* In diesem Beitrag erkl\"are ich anhand einer interaktiven Simulation der Coronavirus-Pandemie, was man mit Statistik, \"Okonometrie und math. Modellierung alles machen kann.
+
+* Unter corona strich simulation.de k\"onnen Sie selbst   interaktiv simulieren und eigene Szenarien entwerfen
+
+* Schauen wir uns zun\"achst einmal das math. Modell an. Ein   mathematisches Modell besteht aus Gleichungen, die im Computer   simuliert werden. Hinter den Gleichungen stehen Annahmen, die   nat\"urlich mehr oder weniger gut zutreffen k\"onnen.
+
+* Die Kunst des Statistikers und \"Okonometrikers ist es, ein gutes   Modell zu entwerfen
+
+[Infektionsdynamik]
+
+* Fangen wir mit einer anschaulichen Infektionsausbreitung an. Jede   Reihe repr\"asentiert die Bev\"olkerung zu einem gewissen Zeitpunkt
+
+[Infektionsdynamik, Folie 2]
+
+* Nun infizieren wir eine Person mit dem Coronavirus. Diese ist der   ber\"uhmte Patient Null
+
+[Reproduktionszahl R=2]
+
+* Zwei zentrale Modellparameter sind die Reproduktionszahl R und die   mittlere Dauer tau einer "Infektionsgeneration". Hier habe ich R=2   angenommen. Der Patient Null infiziert also zwei weitere Personen   innerhalb der Generationsdauer tau=5 Tage
+
+[Reproduktionszahl R=2, Folie 2]
+
+* In jeder Generation setzt sich das fort
+
+[Reproduktionszahl R=2, Folie 3]
+
+* aus den 2 Neuinfizierten werden nach jeweils tau=5 Tagen 4 und 8   Personen. Dies f\"uhrt zu exponentiellen Wachstum, das man in diesem   einfachen Fall sogar direkt angeben kann [Gleichung]
+
+[Reproduktionszahl R=2, Folie 4]
+
+* Aber sp\"atestens nach der 4. Generation ist im Worst Case jeder   infiziert, die Infektion kann nicht weiter wachsen. Was ist mit   Immunit\"at? Offensichtlich ist das naive Exponentialmodell zu   schlecht, da es einen entscheidenden Sachverhalt, die Immunit\"at,   nicht enth\"alt
+
+[Reproduktionszahl R=2 mit Immunit\"at, Folie 1]
+
+* Starten wir also neu mit Patient Null, der wie zuvor zwei infiziert,   aber selbst immun wird, dargestellt durch den Schutzschild
+
+[Reproduktionszahl R=2 mit Immunit\"at, Folie 2]
+
+* Das exponentielle Wachstum am Anfang ist unver\"andert, nur, dass   auch die Immunit\"at w\"achst. \"Ubrigens sind da Corona-Simulierer   ziemlich abgebr\"uht. Die Personen, die an Covid19 sterben, k\"onnen   ebenso wie die Immunen auch keinen mehr anstecken. Wir sind ja nicht   mehr im Pest-Mittelalter.
+
+[Reproduktionszahl R=2 mit Immunit\"at, Folie 3]
+
+* In der n\"achsten Generation zeigt sich nun in diesem Beispiel der   Effekt der Immunit\"at: Die Viren, die versuchen, eine bereits   immune Person anzustecken, prallen am Schutzschiuld ab, die   effektive Reproduktionszahl sinkt proportional zur   Durchseuchungsrate! Bei einem Anteil von 50% immunen Personen w\"are   sie z.B. von 2 auf 1 gesunken und die Zahl der aktiv infizierten   steigt nicht weiter an.
+
+[Reproduktionszahl R=2 mit Immunit\"at, Folie 4]
+
+* Bei weiterer Durchseuchung geht R unter 1 und die Infektion l\"auft   sich tot. Einige, aber deutlich weniger als 50%, bleiben uninfiziert
+
+[corona-simulation.de]
+
+* In meiner Corona-Simulation unter corona-simulation.de habe ich das   Modell verfeinert, den Ansteckungszeitpunkt in einen Zeitraum   verallgemeinert (2. und 3. Schieberegler) und auch die Tests   simuliert, insbesondere die Zeit von der Infektion bis zum Test und   die Testrate. Hier ist die Dunkelziffer 1-Testrate gleich 90%, in   Wirklichkeit gibt es also neben den 180 000 erfassten Faellen ueber   1.6 Millionen nicht erfasste Infizierte, die nat\"urlich auch immun sind.
+
+
+
+
+1. Default ==========
 
 * Wir starten die Simulation unter corona-simulation.de
 
-* Sie laeuft bis zur Gegenwart. Dabei werden die Reproduktionszahlen R
-  im zweiw\"ochentlichen Rhythmus an die Daten der registrierten
-  F\"alle angepasst
+* Sie laeuft bis zur Gegenwart. Dabei werden die Reproduktionszahlen R   im zweiw\"ochentlichen Rhythmus an die Daten der registrierten   F\"alle angepasst
 
-* Anpassen hei\3t, die rote Kurve der simulierten Fallzahlen stimmt
-  m\"oglichst gut mit den Daten (rote Punkte) \"uberein
+* Anpassen hei\3t, die rote Kurve der simulierten Fallzahlen stimmt   m\"oglichst gut mit den Daten (rote Punkte) \"uberein
 
-* Als \"Okonometriker und Statistiker ist aber eine Zahl, und selbst
-  die ber\"uhmte Reproduktionszahl, nichts ohne
-  Fehlerschranken. Diese sind mit +/- angegeben und sind naturgem\"a\3
-  umso ungenauer, je n\"aher man an die Gegenwart kommt  
+* Als \"Okonometriker und Statistiker ist aber eine Zahl, und selbst   die ber\"uhmte Reproduktionszahl, nichts ohne   Fehlerschranken. Diese sind mit +/- angegeben und sind naturgem\"a\3   umso ungenauer, je n\"aher man an die Gegenwart kommt
 
 
-2. Szenario "unver\"andert"
-===========================
+2. Szenario "unver\"andert" ===========================
 
-* Nun lasse ich die Simulation weiterlaufen [bis August], indem, ich auf "Go"
-  dr\"ucke. Dabei nehme ich den letzten R-Wert an. Die Infektion
-  stirbt aus. Bilanz: weniger als 200 000 registrierten F\"alle und
-  weniger als 10 000 Tote
+* Nun lasse ich die Simulation weiterlaufen [bis August], indem, ich auf "Go"   dr\"ucke. Dabei nehme ich den letzten R-Wert an. Die Infektion   stirbt aus. Bilanz: weniger als 200 000 registrierten F\"alle und   weniger als 10 000 Tote
 
-* Aber, das wusste angeblich schon Mark Twain: Prognosen sind
-  schwierig, vor allem, wenn sie die Zukunft betreffen". Wir sprechen
-  deshalb anstelle von Prognosen besser von Zukunfts-Szenarien, also
-  bedingten Projektionen in die Zukunft unter verschiedenen Annahmen
+* Aber, das wusste angeblich schon Mark Twain: Prognosen sind   schwierig, vor allem, wenn sie die Zukunft betreffen". Wir sprechen   deshalb anstelle von Prognosen besser von Zukunfts-Szenarien, also   bedingten Projektionen in die Zukunft unter verschiedenen Annahmen
 
-3. Szenario zweite Winter-Welle
-===========================
+3. Szenario zweite Winter-Welle ===========================
 
-* Ich erh\"ohe nun im September die Reproduktionszahl auf 1.5, dann "Go"
-  => es tut sich lange nichts, erst im Dezember gibt es merklichen
-  Anstieg "Stop" [bei 250 000 Faellen]
+* Ich erh\"ohe nun im September die Reproduktionszahl auf 1.5, dann "Go"   => es tut sich lange nichts, erst im Dezember gibt es merklichen   Anstieg "Stop" [bei 250 000 Faellen]
 
-* Warum die Verz\"ogerung? Schauen wir mal hinter die Kulissen, indem
-  wir die "log Darstellung" waehlen.
+* Warum die Verz\"ogerung? Schauen wir mal hinter die Kulissen, indem   wir die "log Darstellung" waehlen.
 
-* Wir sehen nun die aktuell real infizierten Personen, wobei ich eine
-  Dunkelzifer von 90& angenommen habe. Dies ist eine der vielen
-  Annahmen! Sie war auf ueber einer Million, sank aber auf wenige
-  tausend (dies entspricht wenigen hundert aktiver Faelle) und muss
-  mehrere Monate lang wieder exponentiell wachsen, bis sie auf die
-  Beobachtungen durchschlaegt!
+* Wir sehen nun die aktuell real infizierten Personen, wobei ich eine   Dunkelzifer von 90& angenommen habe. Dies ist eine der vielen   Annahmen! Sie war auf ueber einer Million, sank aber auf wenige   tausend (dies entspricht wenigen hundert aktiver Faelle) und muss   mehrere Monate lang wieder exponentiell wachsen, bis sie auf die   Beobachtungen durchschlaegt!
 
-* Machen wir nun einen neuen Lockdown, dauert es etwa 2 Wochen, bis
-  sich merklich was tut! Als eine der Annahmen habe ich n\"amlich auch
-  eine Verz\"ogerungszeit bei den Tests von 8 Tagen angenommen
+* Machen wir nun einen neuen Lockdown, dauert es etwa 2 Wochen, bis   sich merklich was tut! Als eine der Annahmen habe ich n\"amlich auch   eine Verz\"ogerungszeit bei den Tests von 8 Tagen angenommen
 
 
-4. Szenario: Bedingte Prognosen bei anderen Annahmen
-===============================================
+4. Szenario: Bedingte Prognosen bei anderen Annahmen ===============================================
 
-z.B. Ansteckungsstart nach 1 Tag, Ende 5 tage, Messung nach 3 tagen,
-also alles schneller => "Kalibriere Neu" rote Kurve passt mit etwas
-anderen R-Werten, aber die gruenen und blauen Kurven passen schlechter
+z.B. Ansteckungsstart nach 1 Tag, Ende 5 tage, Messung nach 3 tagen, also alles schneller => "Kalibriere Neu" rote Kurve passt mit etwas anderen R-Werten, aber die gruenen und blauen Kurven passen schlechter
 
-5. Andere Laender
-=================
+5. Andere Laender =================
 
 * stabil: Schweiz
 
-* nach wie vor exponentiell: Indien: Gottseidank bin ich da noch
-  rausgekommen! 
+* nach wie vor exponentiell: Indien: Gottseidank bin ich da noch   rausgekommen!
 
-* linear: USA: R-wert R=1, Exponentielle Anstiegsrate proportional
-  ln(R)=0 => kein exponentieller, sondern konstante ahl der aktiven
-  und linearer verlauf der kumul. Faelle
+* linear: USA: R-wert R=1, Exponentielle Anstiegsrate proportional   ln(R)=0 => kein exponentieller, sondern konstante ahl der aktiven   und linearer verlauf der kumul. Faelle
 
-6. Viele weitere Simulationsmoeglichkeiten, siehe blauer Info-Button!
+6. Viele weitere Simulationsmoeglichkeiten, siehe blauer Info-Button! 

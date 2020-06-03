@@ -16,6 +16,7 @@ data/*.json
 *.toc
 *.dvi
 *.save
+*.mkv
 
 ## Figure files (no longer)
 #*.fig
