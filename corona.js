@@ -18,6 +18,26 @@ var debugApple=false;
 
 var country="Germany"
 var countryGer="Deutschland"
+
+/* Date object: 
+ - Constructor e.g., date=new Date(2020,02,19); months start @ zero, days @ 1
+ - another Constructor date=new Date("2020-01-22")
+   Most stable/generic, but NOT "2020-1-22" (fails on apple)
+ - "present" constructor: new Date()
+ - get time in ms since 1970: date.getTime()
+ - difference in days Math.round((date1.getTime()-date2.getTime())/oneDay_ms)
+ - date.getFullYear() -> 2020
+ - date.getMonth() -> 1 (w/o leading zeroes=February)
+ - date.getDate() -> 22  (1-31)
+ - add 50 days: date.setDate(date.getDate() + 50);
+ - Operator >, < works as expected
+ - console.log(date) -> like "Wed Mar 25 2015 01:00:00 GMT+0100 (CET)"
+ - date.toDateString() -> Fri Jun 05 2020
+ - var options = {month: "short", day: "2-digit"};
+   date.toLocaleDateString("en-us",options) -> Jun 05;
+*/
+
+
 var dayStartMar=19;
 var startDay=new Date(2020,02,dayStartMar); // months start @ zero, days @ 1
 
@@ -125,7 +145,7 @@ const tauDieList={
 
 
 // needed as initialisation and if nonlin opt fmin not used
-
+// !!!
 var RtimeList={   // 0-1,1-3,3-5,... weeks after start
   "Germany"       : [1.05, 0.75, 0.75, 0.70],
   "Austria"       : [0.8,  0.62, 0.62],
@@ -340,13 +360,11 @@ function insertLeadingZeroes(dateStr){
 
 function initializeData(country) { 
   console.log("in initializeData(country)");
+  console.log(" Rtime.length=",Rtime.length);
   var data=dataGit[country];
   var dateInitStr=data[0]["date"];
-  dataGit_dateBegin=new Date(insertLeadingZeroes(dateInitStr));
-  dataGit_istart=Math.round(
-    (startDay.getTime() - dataGit_dateBegin.getTime() )/oneDay_ms);
 
-  // extremely heineous apple bug: 
+  // !!! extremely heineous apple date bug: 
   // cannot make use of date str such as 2020-1-22
 
   //console.log("new Date(\"2020-01-22\")=",new Date("2020-01-22"));
@@ -371,6 +389,12 @@ function initializeData(country) {
     }
   }
 
+  dataGit_dateBegin=new Date(insertLeadingZeroes(dateInitStr));
+  dataGit_istart=Math.round(
+    (startDay.getTime() - dataGit_dateBegin.getTime() )/oneDay_ms);
+  dataGit_imax=dataGit_cumCases.length-dataGit_istart;
+
+
   nxtStart=dataGit_cumCases[dataGit_istart]; 
 
   console.log(
@@ -390,12 +414,16 @@ function initializeData(country) {
 
   RsliderUsed=false;
   otherSliderUsed=false;
-  //console.log("before calibrate in initializeData(country)");
-  calibrate(); // !!! initializeData(country);
+  console.log("before calibrate in initializeData(country)");
+  console.log("in initializeData: Rtime.length=",Rtime.length);
+
+  calibrate(); //!!! determines Rtime.length
+  console.log("after calibrate in initializeData(country):",
+	      " Rtime.length=",Rtime.length);
 
 
  //##############################################################
- // !!! for inline nondynamic  testing: add testcode here
+ // !! for inline nondynamic  testing: add testcode here
  //##############################################################
 
   if(false){
@@ -404,6 +432,7 @@ function initializeData(country) {
   }
 
   console.log("end initializeData: country=",country);
+  console.log(" Rtime.length=",Rtime.length);
 
 } // initializeData(country);
 
@@ -503,10 +532,9 @@ function SSEfunc(R_arr,fR,logging) {
   // calculate SSE
 
   sse=0;
-  dataGit_imax=dataGit_cumCases.length-dataGit_istart;
+  dataGit_imax=dataGit_cumCases.length-dataGit_istart; 
 
   for(var i=1; i<dataGit_imax; i++){
-     //!!! i->i: otherwise not consistent with doSimulationStep
     var iweek=Math.floor(i/7); 
     var index=Math.min(Math.floor((iweek+1)/2),R_arr.length-1);
     var R_actual=R_arr[index];
@@ -519,7 +547,7 @@ function SSEfunc(R_arr,fR,logging) {
 		  " nxData=",nxData,
 		  " nxSim=",Math.round(nxSim));
     }
-    sse+=Math.pow(Math.log(nxData)-Math.log(nxSim),2); //!!! Math.log
+    sse+=Math.pow(Math.log(nxData)-Math.log(nxSim),2); //!! Math.log
   }
 
 
@@ -580,7 +608,7 @@ function startup() {
   // round because of daylight saving time complications
 
   itmaxinit = Math.round(
-    (present.getTime() - startDay.getTime())/(oneDay_ms));
+    (present.getTime() - startDay.getTime())/oneDay_ms);
   itmax=itmaxinit;
   //console.log("present=",present);
 
@@ -659,20 +687,31 @@ function startup() {
 
 function estimateR(){
 
+  /// !!! THIS determines number of calibration intervals
 
-  var iwmax=Math.round((dataGit_imax+0)/14);
+  var iwmax=Math.round((dataGit_imax-4)/14); 
   var Rguess=[];
   for(var iw=0; iw<iwmax; iw++){Rguess[iw]=1;}
 
-  sol2_SSEfunc=fmin.nelderMead(SSEfunc, Rguess);
+
+  //!!! fmin.nelderMead a bit sloppy; 
+  // optimze several times with Rguess=Ropt(previous step)
+
+  for(var ic=0; ic<1; ic++){ //!!! bloederweise HIER kein Effekt, unverstaendl
+    //console.log("ic=",ic," before nelderMead: Rguess=",Rguess);
+    sol2_SSEfunc=fmin.nelderMead(SSEfunc, Rguess);
+    //console.log("ic=",ic," after nelderMead: Rguess=",Rguess,
+//		" sol2_SSEfunc.x=",sol2_SSEfunc.x);
+  }
   for(var j=0; j<Rguess.length; j++){
     Rtime[j]=sol2_SSEfunc.x[j];
   }
+  //console.log("estimateR: Rguess=",Rguess,"\nRtime=",Rtime);
 
   //console.log("check optimization by re-calculating sim with final R vals:")
-  //SSEfunc(Rtime,null,true); //!!!
+  //SSEfunc(Rtime,null,true);
 
-  if(true){
+  if(false){
     console.log("\nestimateR(): country=",country,
 		" dataGit_imax=",dataGit_imax,
 	        "\n  estimated R values Rtime=",  Rtime);
@@ -687,12 +726,20 @@ function estimateR(){
 // =============================================================
 
 function calibrate(){
-  console.log(" in function calibrate(), country=",country);
-  // estimate R and possibly other parameters
- 
-  for(var ic=0; ic<10; ic++){
-    estimateR();
+  console.log(" in function calibrate(), country=",country,
+	      " Rtime.length=",Rtime.length);
+  // estimate R and possibly other parameters 
+  // (sloppiness of optimzation now treated in inner estimateR itself)
+  // !!! HIER Effekt, obwohl JEDESMAL mit guess 1,1,1,1,1,1 angefang. wird
+  // VOELLIG!!!! unverstaendlich
+
+  for(var ic=0; ic<10; ic++){ 
+    //console.log("in function  calibrate: outer ic=",ic," before estimateR()");
+    estimateR(); //!!! here Rtime.length set
+    //console.log("in function  calibrate: outer ic=",ic," after estimateR()");
   }
+  //console.log(" in function calibrate after estimateR: Rtime.length=",Rtime.length);
+
  //##############################################################
  //!Inductive statistics of the LSE estimator Rtime
 // Cov(Rtime)=2 V(epsilon) H^{-1}, H=Hessian of SSEfunc(Rtime)
@@ -777,7 +824,7 @@ function calibrate(){
     //console.log("i=",i," sigmaR_hist[i]=",sigmaR_hist[i]);
   }
 
-  if(false){ //!!!
+  if(false){ //!!
     console.log("Inductive statistics: Rtime.length=",Rtime.length,
 		" SSE=", SSEfunc(Rtime));
     console.log("\n gradient grad(SSE)=",grad,"\n");
@@ -825,7 +872,7 @@ function displayTypeCallback(){
 // do simulations and graphics
 // ###############################################################
 
-function myStartStopFunction(){ //!!! hier bloederweise Daten noch nicht da!!
+function myStartStopFunction(){ //!! hier bloederweise Daten noch nicht da!!
   console.log("in myStartStopFunction");
   clearInterval(myRun);
   //console.log("in myStartStopFunction: isStopped=",isStopped);
@@ -855,9 +902,8 @@ function selectDataCountry(){
   taumax=Math.max(tauDie,tauRecover)+tauAvg+1;
   console.log("country=",country);
   Rtime=RtimeList[country];
-  //var test=RtimeList["Germany"]; console.log("test=",test);
-  //console.log("RtimeList[\"Germany\"]=",RtimeList["Germany"]);
-  //console.log("RtimeList=",RtimeList, " Rtime=",Rtime);
+  console.log("selectDataCountry: country=",country,
+	      " Rtime.length=",Rtime.length); //!!!
   setSlider(slider_R0,  slider_R0Text,  Rtime[0].toFixed(2),"");
 
   //flagName=(country==="Germany") ? "flagSwitzerland.png" : "flagGermany.png";
@@ -928,12 +974,12 @@ function myResetFunction(){
 
 
 function simulationRun() {
-  if(useLiveData&&(it==0)){
+  if(false&&useLiveData&&(it==0)){
     console.log("Test:");
     for (var t=-5; t<=2; t++){
       console.log("t=",t," R0fun_time(t)=", R0fun_time(t));
     }
-    //corona.init(); // !!! now inside fetch promise!
+    //corona.init(); // !! now inside fetch promise!
 
   }
   doSimulationStep(); 
@@ -954,7 +1000,7 @@ function simulationRun() {
 
 function doSimulationStep(){
   if(false){console.log(" calling drawsim.updateOneDay: it=",it,
-		       " n0* arg corona.xt=",n0*corona.xt);} //!!!
+		       " n0* arg corona.xt=",n0*corona.xt);} 
   drawsim.updateOneDay(it, displayType, corona.xtot, corona.xt,
 		       corona.y, corona.yt, corona.z);
 
