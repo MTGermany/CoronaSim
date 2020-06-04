@@ -1,0 +1,90 @@
+
+Die ersten 5 Themen in ~/info/VideoBearbeitung.txt
+Video abspielen
+Video Format
+Screen recording
+cut videos
+merge videos
+Produktion, Video vom 2020-06-04
+
+Video abspielen
+===============
+
+mplayer
+
+time control: 
+  -> and <- arrows: +/- 10 s
+  UP and DOWN arrows: +/- 60 s
+  p pause
+  . step 1 frame forward (+pause if not paused)
+
+
+Video Format  (jun20)
+=====================
+
+Der Container .mkv ("Matroska") (Standard bei SimpleScreenRecorder)
+scheint ueberall vorhanden zu sein und 
+effektive kleine Files zu liefern
+
+Screen recording  (jun20)
+==========================
+
+SimpleScreenRecorder (Das Verh\"uterli-Icon)
+
+ - Standardeinstellung "Youtube" liefert sehr kleine, dennoch gute Videos
+
+ * Tasten-Shortcut fuer Aufnahme Start-Stop einstellbar, ich habe
+   Ctrl-V ("Video") genommen, da Ctrl-R ("Record" mit meiner Sim
+   Nebeneffekte hat 
+
+ * Mehrfach Ctrl-V fuer Start-Stop in einem File moeglich (neues File,
+   sobald "save" gedrueckt)
+
+ * ich habe meistens einstellbaren Fensterausschnitt gewaehlt
+    (beherscht mehrere Bildschirme, ich habe ctrl-Fenster auf Notebook
+    und Displayfenster auf grossen Bildschirm
+
+
+cut videos (jun20)
+=================
+
+avconv -i reference.mkv -vcodec copy -acodec copy -ss 0 -t 15 test1.mkv
+avconv -i reference.mkv -vcodec copy -acodec copy -ss 15 -t 15 test2.mkv
+
+* -ss start time, -t duration in s (err message if ss+t>input length
+   but video ok
+
+* BUG: Video nur enthalten, wenn duration mehr als 12.5 Sekunden,
+  sonst nur Audio
+
+* Andere Video Formate sollten auch gehen
+
+
+
+merge videos (jun20)
+======================
+
+sudo apt-get install mkvtoolnix mkvtoolnix-gui  -> contains mkvmerge
+mkvmerge -o testMerge.mkv test1.mkv +test2.mkv
+
+* perfekter ms-genauer Stitch, auch beim Audio! Bin verbluefft!
+
+* avconv mit concat ergibt bug (nur Audio oder gar nix)
+
+
+
+Produktion, Video vom 2020-06-04
+================================
+
+
+avconv -i treiber-video2b.mkv -vcodec copy -acodec copy -ss 0 -t 230\
+ treiber-video2bcut.mkv
+
+avconv -i treiber-video5a.mkv -vcodec copy -acodec copy -ss 0 -t 113\
+ treiber-video5acut.mkv
+
+mkvmerge -o treiber-video2.mkv\
+ treiber-video2a.mkv +treiber-video2bcut.mkv\
+ +treiber-video3.mkv +treiber-video4.mkv\
+ +treiber-video5acut.mkv +treiber-video5b.mkv
+)
