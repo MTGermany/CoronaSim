@@ -1390,26 +1390,37 @@ DrawSim.prototype.drawAxes=function(displayType){
 
  // define x axis label positions and text, time starts Mar 20
 
-  var itmaxCrit=60;
-  var itmaxCrit2=450;
-  var dFirstDay=(itmax<itmaxCrit) ? 23-dayStartMar//Mar 23 :
-    : (itmax<itmaxCrit2) ? 32-dayStartMar //Apr1
-    : 123-dayStartMar;   //Jul 1
-  var dDays=(itmax<itmaxCrit) ? 7
-    : (itmax<itmaxCrit2) ? 30.4 : 182.6;  // avg month has 30.4 days
-  var timeText=(itmax<itmaxCrit)
-    ? ["23.03", "30.03", "06.04", "13.04", "20.04", "27.04", 
-       "04.05", "11.05", "18.05"]
-    : (itmax<itmaxCrit2)
-    ? ["Apr","Mai","Jun", "Jul", "Aug", "Sep", "Okt", 
-       "Nov", "Dez", "Jan2021", "Feb", "Mar", "Apr","Mai","Jun", "Jul"]
-    : ["Jul 2020", "Jan 2021", "Jul 2021", "Jan 2022", "Jul 2022", 
-       "Jan 2023", "Jul 2023", "Jan 2024"];
+  var itmaxCrit=105;
+  var itmaxCrit2=210;
+  var timeTextW=[];
+  var timeText=[];
+  var days=[];
+  var timeRel=[]; // days relative to itmax
+  var options = {month: "short", day: "2-digit"};
+  //var year=startDay.getFullYear(); // no need; add year for whole January
+  var phi=40 * Math.PI/180.; // to rotate date display anticlockw. by phi
+  var cphi=Math.cos(phi);
+  var sphi=Math.sin(phi);
 
-  var timeRel=[];
-  for(var i=0; i<timeText.length; i++){
-    timeRel[i]=(dFirstDay+i*dDays)/(itmax); //!!
+  for(var iw=0; iw<Math.floor(itmax/7)+1; iw++){
+    var date=new Date(startDay.getTime()); // copy constructor
+    date.setDate(date.getDate() + iw*7); // set iw*7 days ahead
+    timeTextW[iw]=date.toLocaleDateString("en-us",options);
+    //timeTextW[iw]=date.toLocaleDateString("de",options);
+
+    if(date.getMonth()==0){timeTextW[iw]+=(", "+date.getFullYear());}
+
+    //console.log("DrawSim.drawAxes: iw=",iw," timeTextW[iw]=",timeTextW[iw]);
   }
+
+  var dweek=(itmax<itmaxCrit) ? 1 : (itmax<itmaxCrit2) ? 2 : 4;
+  var iwinit=(itmax<itmaxCrit) ? 0 : 1;
+  for(var itick=0; itick<Math.round(timeTextW.length/dweek); itick++){
+    days[itick]=7*(iwinit+dweek*itick);
+    timeText[itick]=timeTextW[iwinit+dweek*itick];
+    timeRel[itick]=days[itick]/(itmax);
+  }
+
 
   //define y axis label positions and text
 
@@ -1464,7 +1475,7 @@ DrawSim.prototype.drawAxes=function(displayType){
 
   ctx.strokeStyle="rgb(0,0,0)";
 
-  for(var ix=0; (ix<timeRel.length)&&(timeRel[ix]<0.96); ix++){
+  for(var ix=0; days[ix]<=itmax; ix++){
     this.drawGridLine("vertical", timeRel[ix]);
   }
 
@@ -1476,17 +1487,19 @@ DrawSim.prototype.drawAxes=function(displayType){
 
 
   // draw name+values x axis
+  //ctx.fillText("Zeit (Start "+dayStartMar+". Maerz 2020)",
+//	       this.xPix0+0.3*this.wPix, this.yPix0+3*textsize);
 
-  ctx.fillText("Zeit (Start "+dayStartMar+". Maerz 2020)",
-	       this.xPix0+0.3*this.wPix, this.yPix0+3*textsize);
-
-  var dxShift=(itmax<itmaxCrit) ? -1.1*textsize : 0;
-  for(var ix=0; (ix<timeRel.length)&&(timeRel[ix]<0.96); ix++){
-    ctx.fillText(timeText[ix],
-		 this.xPix0+timeRel[ix]*this.wPix+dxShift,
-		 this.yPix0+1.5*textsize);
+  var dxShift=(phi<0.01) ? -1.1*textsize : -2.4*cphi*textsize;
+  var dyShift=(1.5+2*sphi)*textsize;
+  //for(var ix=0; ix<timeRel.length; ix++){//!!
+  for(var ix=0; days[ix]<=itmax; ix++){
+    var xpix=this.xPix0+timeRel[ix]*this.wPix+dxShift;
+    var ypix=this.yPix0+dyShift;
+    ctx.setTransform(cphi,-sphi,+sphi,cphi,xpix,ypix);
+    ctx.fillText(timeText[ix],0,0);
   }
-
+  ctx.setTransform(1,0,0,1,0,0);
 
   // draw name+values y1 axis
 
@@ -1692,12 +1705,12 @@ DrawSim.prototype.updateOneDay=function(it,displayType,xtot,xt,y,yt,z){
     }
   }
 
-// drawing vertical separation lines and R estimates
+// drawing vertical separation lines; draw R estimates
 
 
   ctx.fillStyle="#888888";
   var x0=this.xPix0;
-  var y0=this.yPix0+0.4*this.hPix;
+  var y0=this.yPix0+0.3*this.hPix;
   var textsize=Math.min(0.030*canvas.width,0.045*canvas.height);
 
   ctx.setTransform(0,-1,1,0,x0+1.0*textsize,y0);
