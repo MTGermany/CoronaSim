@@ -3,7 +3,7 @@
 Source code for the macroscopic interactive Javascript simulation at
 [corona-simulation.de](https://corona-simulation.de). The aggregation
 level is one country. Several interesting countries such as Germany,
-Switzerland, Sweden, the US, and India can be chosen. For model details
+Switzerland, Sweden, the US, or India can be chosen. For model details
 and usage of the simulator including some examples see [the info page of corona-simulation.de](https://corona-simulation.de/info.html)
 
 ## Running the Simulation
