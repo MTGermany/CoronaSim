@@ -692,7 +692,7 @@ function estimateR(){
   var iwmax=Math.round((dataGit_imax-4)/14); 
   var Rguess=[];
   for(var iw=0; iw<iwmax; iw++){Rguess[iw]=1;}
-
+  Rguess[0]=3; //MT 2020-06: THIS alone fixed calibr errors in GB, India etc
 
   //!!! fmin.nelderMead a bit sloppy; 
   // optimze several times with Rguess=Ropt(previous step)
@@ -1318,9 +1318,16 @@ function DrawSim(){
   this.colLine[4]="rgb(0,0,0)";      //Dead
   this.colLine[5]="rgb(0,0,150)";       //FracDeadData
 
-  this.wLine=[2,5,2,5,5,5]; //line width [pix]
+  this.wLine=[1,2,1,2,2,2]; //line width [pix]
   this.isActive=[];   // which line is drawn
   this.setDisplayType(displayType);
+
+  // define text properties
+
+  this.sizemin=Math.min(canvas.width,1.25*canvas.height);
+  //this.textsize=Math.min(0.030*canvas.width,0.045*canvas.height);
+  this.textsize=(this.sizemin>600) ? 0.02*this.sizemin : 0.03*this.sizemin;
+  ctx.font = this.textsize+"px Arial";
 }
 
 
@@ -1455,15 +1462,6 @@ DrawSim.prototype.drawAxes=function(displayType){
 
 
 
- 
-  // define text properties
-
-  var textsize=Math.min(0.030*canvas.width,0.045*canvas.height);
-  //var textsize=0.035*Math.min(canvas.width, canvas.height);
-  ctx.font = textsize+"px Arial";
-
-
-
   // draw 3 px wide lines as coordinates
 
   ctx.fillStyle="rgb(0,0,0)";
@@ -1486,12 +1484,12 @@ DrawSim.prototype.drawAxes=function(displayType){
   ctx.stroke();
 
 
-  // draw name+values x axis
-  //ctx.fillText("Zeit (Start "+dayStartMar+". Maerz 2020)",
-//	       this.xPix0+0.3*this.wPix, this.yPix0+3*textsize);
+  // draw times
 
-  var dxShift=(phi<0.01) ? -1.1*textsize : -2.4*cphi*textsize;
-  var dyShift=(1.5+2*sphi)*textsize;
+  ctx.font = this.textsize+"px Arial";
+
+  var dxShift=(phi<0.01) ? -1.1*this.textsize : -2.4*cphi*this.textsize;
+  var dyShift=(1.5+2*sphi)*this.textsize;
   //for(var ix=0; ix<timeRel.length; ix++){//!!
   for(var ix=0; days[ix]<=itmax; ix++){
     var xpix=this.xPix0+timeRel[ix]*this.wPix+dxShift;
@@ -1509,14 +1507,14 @@ DrawSim.prototype.drawAxes=function(displayType){
   var yPix=(displayType==="lin")
     ? this.yPix0+0.01*this.hPix : this.yPix0+0.15*this.hPix;
   ctx.setTransform(0,-1,1,0,
-		   this.xPix0-3.0*textsize,yPix);
+		   this.xPix0-3.0*this.textsize,yPix);
   ctx.fillText(label_y,0,0);
   ctx.setTransform(1,0,0,1,0,0)
   for(var iy=ymin; iy<=ny; iy++){
     var valueStr=(displayType==="lin")  ? iy*dy : "10^"+iy;
     ctx.fillText(valueStr,
-		 this.xPix0-2.5*textsize,
-		 this.yPix0+(iy*dy-ymin)/(ymax-ymin)*this.hPix+0.5*textsize);
+		 this.xPix0-2.5*this.textsize,
+		 this.yPix0+(iy*dy-ymin)/(ymax-ymin)*this.hPix+0.5*this.textsize);
   }
 
   
@@ -1527,15 +1525,15 @@ DrawSim.prototype.drawAxes=function(displayType){
     var label_y2="Tote/bekannt Erkrankte [%]";
     ctx.fillStyle=this.colLine[5];
     ctx.setTransform(0,-1,1,0,
-		   this.xPixMax+3.0*textsize,this.yPix0+0.2*this.hPix);
+		   this.xPixMax+3.0*this.textsize,this.yPix0+0.2*this.hPix);
     ctx.fillText(label_y2,0,0);
     ctx.setTransform(1,0,0,1,0,0)
     for(var iy=ymin2; iy<=ny2; iy++){
       var valueStr= iy*dy2 
       ctx.fillText(valueStr,
-		  this.xPixMax+0.8*textsize,
+		  this.xPixMax+0.8*this.textsize,
 		  this.yPix0+(iy*dy2-ymin2)/(ymax2-ymin2)*this.hPix
-		   +0.5*textsize);
+		   +0.5*this.textsize);
     }
   }
 
@@ -1544,9 +1542,9 @@ DrawSim.prototype.drawAxes=function(displayType){
 
   // draw key
 
-  var yrelTop=(displayType==="lin") ? 0.96 : -4.5*(1.2*textsize/this.hPix);
+  var yrelTop=(displayType==="lin") ? 0.96 : -4.5*(1.2*this.textsize/this.hPix);
   var xrelLeft=(displayType==="lin") ? 0.02 : 0.60;
-  var dyrel=-1.2*textsize/this.hPix;
+  var dyrel=-1.2*this.textsize/this.hPix;
   var il=0;
   if(this.isActive[0]){
     ctx.fillStyle=this.colLine[0];
@@ -1705,35 +1703,40 @@ DrawSim.prototype.updateOneDay=function(it,displayType,xtot,xt,y,yt,z){
     }
   }
 
-// drawing vertical separation lines; draw R estimates
 
+  // drawing vertical separation lines; draw R estimates
 
   ctx.fillStyle="#888888";
   var x0=this.xPix0;
   var y0=this.yPix0+0.3*this.hPix;
-  var textsize=Math.min(0.030*canvas.width,0.045*canvas.height);
+  var textsizeR=1.5*this.textsize;
+  //var textsize=Math.min(0.030*canvas.width,0.045*canvas.height);
 
-  ctx.setTransform(0,-1,1,0,x0+1.0*textsize,y0);
+  ctx.setTransform(0,-1,1,0,x0+1.0*textsizeR,y0);
   var str_R="R="+R_hist[0].toFixed(2)
       +( (RsliderUsed||otherSliderUsed)
 	 ? "" : (" +/- "+sigmaR_hist[0].toFixed(2)));
+  ctx.font = textsizeR+"px Arial";
   ctx.fillText(str_R,0,0);
   ctx.setTransform(1,0,0,1,0,0);
+  console.log("draw R estimates: str_R=",str_R," x0+1.0*textsizeR=",x0+1.0*textsizeR," y0=",y0);
 
   for(var iw=1; iw<it/7; iw+=2){ // !! iw=1,3,5,7...
     var itR=7*iw;
     x0=this.xPix[itR];
     ctx.fillRect(x0-1,this.yPix0,3,this.hPix);
 
-    ctx.setTransform(0,-1,1,0,x0+1.0*textsize,y0);
+    ctx.setTransform(0,-1,1,0,x0+1.0*textsizeR,y0);
     str_R="R="+R_hist[itR].toFixed(2)
       +( (RsliderUsed||otherSliderUsed||(itR>=dataGit_imax))
 	 ? "" : (" +/- "+sigmaR_hist[itR].toFixed(2)));
     ctx.fillText(str_R,0,0);
     ctx.setTransform(1,0,0,1,0,0);
+    console.log("draw R estimates: str_R=",str_R," x0+1.0*textsizeR=",x0+1.0*textsizeR," y0=",y0," this.textsize=",this.textsize," textsizeR=",textsizeR);
   }
 
 
+  // plot data points
 
   if(this.isActive[1]){ // xt
     this.plotPoints(it, 1, dataGit_cumCases, displayType);
@@ -1824,7 +1827,7 @@ DrawSim.prototype.plotPoints=function(it,q,data_arr,displayType){
       var yrel=(y-yminDraw)/(ymaxDraw-yminDraw);
       var dataPix=this.yPix0+yrel*(this.yPixMax-this.yPix0);
       ctx.beginPath(); //!! crucial; otherwise latest col used for ALL
-      ctx.arc(this.xPix[itg],dataPix,0.010*sizemin, 0, 2 * Math.PI);
+      ctx.arc(this.xPix[itg],dataPix,0.005*sizemin, 0, 2 * Math.PI);
       ctx.fill();
     }
   }
