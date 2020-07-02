@@ -490,7 +490,11 @@ function R0fun_time(t){
 
 @param R_arr: array of R values: R_arr[0]: for days i<7,
                                  R_arr[j]: 14 days starting at i=7+(j-1)*14
-@param fR: numerical gradient of func with respect to R
+@param fR: optional numerical gradient of func with respect to R
+@param logging: optional logging switch
+
+NOTICE: fmin.nelderMead needs one-param SSEfunc SSEfunc(R_arr):
+        "sol2_SSEfunc=fmin.nelderMead(SSEfunc, Rguess);"
  ##############################################################*/
 
 function SSEfunc(R_arr,fR,logging) { 
@@ -509,6 +513,7 @@ function SSEfunc(R_arr,fR,logging) {
   var sse=0;
   // init handling of numerical gradient
 
+/*
   var eps=0.001;
   var Rp=[]; // R arg where the jth component is increased by epsilon
   var Rm=[]; // R arg where the jth component is decreased by epsilon
@@ -522,6 +527,7 @@ function SSEfunc(R_arr,fR,logging) {
     Rp[j][j]+=eps;
     Rm[j][j]-=eps;
   }
+*/
 
   // simulation init
 
@@ -700,9 +706,16 @@ function estimateR(){
   for(var ic=0; ic<1; ic++){ //!!! bloederweise HIER kein Effekt, unverstaendl
     //console.log("ic=",ic," before nelderMead: Rguess=",Rguess);
     sol2_SSEfunc=fmin.nelderMead(SSEfunc, Rguess);
+
+    //!!! MT 2020-07 misuse parameters to inject data tmin, tmax?
+    //!!! tmin=parameters.tmin etc with tmin,tmax global var used in SSEfunc
+
+    //sol2_SSEfunc=fmin.nelderMead(SSEfunc, Rguess, parameters);
+
     //console.log("ic=",ic," after nelderMead: Rguess=",Rguess,
-//		" sol2_SSEfunc.x=",sol2_SSEfunc.x);
+    //		" sol2_SSEfunc.x=",sol2_SSEfunc.x);
   }
+
   for(var j=0; j<Rguess.length; j++){
     Rtime[j]=sol2_SSEfunc.x[j];
   }
@@ -733,7 +746,8 @@ function calibrate(){
   // !!! HIER Effekt, obwohl JEDESMAL mit guess 1,1,1,1,1,1 angefang. wird
   // VOELLIG!!!! unverstaendlich
 
-  for(var ic=0; ic<10; ic++){ 
+  // MT 2020-07 bugix  ic<20 instead of ic<10 TEMPORARY!!!
+  for(var ic=0; ic<20; ic++){ //!!! separate into several indep calibr!!
     //console.log("in function  calibrate: outer ic=",ic," before estimateR()");
     estimateR(); //!!! here Rtime.length set
     //console.log("in function  calibrate: outer ic=",ic," after estimateR()");
