@@ -438,11 +438,11 @@ function initializeData(country) {
 
 
 //##############################################################
-// function for variable replicationrate R0 as a function of time
+// function for variable replication rate R as a function of time
 // t=tsim-date(2020-03-19) [days]
 //##############################################################
 
-function R0fun_time(t){
+function Rfun_time(t){
   var iPresent=dataGit_istart+t;
   var iTest    =iPresent+Math.round(tauTest);
   var iTestPrev=iPresent+Math.round(tauTest-0.5*(tauRstart+tauRend));
@@ -453,7 +453,7 @@ function R0fun_time(t){
 			  -dataGit_cumCases[iTestPrev-1]);
     var R=1.02*nxtNewnum/nxtNewdenom;
     if(false){
-      console.log("R0fun_time: t=",t," xtCum(iTest)=",dataGit_cumCases[iTest],
+      console.log("Rfun_time: t=",t," xtCum(iTest)=",dataGit_cumCases[iTest],
 		" xtCum(iTestPrev)=",dataGit_cumCases[iTestPrev],
 		" xtNewnum=",xtNewnum,
 		" xtNewdenom=",xtNewdenom,
@@ -464,7 +464,7 @@ function R0fun_time(t){
     // avoid too small R values if num 0
 
     if(Math.abs(nxtNewdenom)<1e-10){
-      //console.log("R0fun_time: t=",t," error: R factor infinity");
+      //console.log("Rfun_time: t=",t," error: R factor infinity");
       R=5;
     }
     R=Math.min(5, Math.max(0.2,R));
@@ -497,7 +497,7 @@ NOTICE: fmin.nelderMead needs one-param SSEfunc SSEfunc(R_arr):
         "sol2_SSEfunc=fmin.nelderMead(SSEfunc, Rguess);"
  ##############################################################*/
 
-function SSEfunc(R_arr,fR,logging) {
+function SSEfunc(R_arr, fR, logging) {
 
   //console.log("in SSE func: R_arr=",R_arr);
  
@@ -510,25 +510,11 @@ function SSEfunc(R_arr,fR,logging) {
   var sse=0;
   // init handling of numerical gradient
 
-/*
-  var eps=0.001;
-  var Rp=[]; // R arg where the jth component is increased by epsilon
-  var Rm=[]; // R arg where the jth component is decreased by epsilon
-  for (var j=0; j<R_arr.length; j++){
-    Rp[j]=[];
-    Rm[j]=[];
-    for(var k=0; k<R_arr.length; k++){
-      Rp[j][k]=R_arr[k];
-      Rm[j][k]=R_arr[k];
-    }
-    Rp[j][j]+=eps;
-    Rm[j][j]-=eps;
-  }
-*/
 
   // simulation init
 
   nxtStart=dataGit_cumCases[dataGit_istart];
+  if(true){Rtime[0]=R_arr[0];} //!!! Rtime[0] used in init?
   corona.init();
 
 
@@ -537,7 +523,7 @@ function SSEfunc(R_arr,fR,logging) {
   sse=0;
   dataGit_imax=dataGit_cumCases.length-dataGit_istart; 
 
-  for(var i=1; i<dataGit_imax; i++){
+  for(var i=1; i<dataGit_imax; i++){ //!!!
     var iweek=Math.floor(i/7); 
     var index=Math.min(Math.floor((iweek+1)/2),R_arr.length-1);
     var R_actual=R_arr[index];
@@ -554,9 +540,24 @@ function SSEfunc(R_arr,fR,logging) {
   }
 
 
+  /*
   // calculate the numerical gradient as side effect
   // only if gradient-based method. 
   // These fail here=>do not need to calc grad
+
+  var eps=0.001;
+  var Rp=[]; // R arg where the jth component is increased by epsilon
+  var Rm=[]; // R arg where the jth component is decreased by epsilon
+  for (var j=0; j<R_arr.length; j++){
+    Rp[j]=[];
+    Rm[j]=[];
+    for(var k=0; k<R_arr.length; k++){
+      Rp[j][k]=R_arr[k];
+      Rm[j][k]=R_arr[k];
+    }
+    Rp[j][j]+=eps;
+    Rm[j][j]-=eps;
+  }
 
   if(false){
    for (var j=0; j<R_arr.length; j++){
@@ -585,8 +586,10 @@ function SSEfunc(R_arr,fR,logging) {
     fR[j]/=2*eps;
    }
   }
-
   corona.init(); // reset corona to avoid side effects
+  */
+
+
   return sse;
 }
 
@@ -701,31 +704,23 @@ function estimateR(){
   Rguess[0]=3; //MT 2020-06: THIS alone fixed calibr errors in GB, India etc
   Rtime[0]=3; //MT 2020-06: THIS alone fixed calibr errors in GB, India etc
 
-  //!!! fmin.nelderMead a bit sloppy; 
-  // optimze several times with Rguess=Ropt(previous step)
+  //!!! fmin.nelderMead OK, was my bug!! need only two optimization
+  // rounds because of error estimation
 
   for(var j=0; j<Rguess.length; j++){
     console.log("iter 0 j=",j," Rguess[j]=",Rguess[j]);
   }
 
-  for(var ic=0; ic<4; ic++){ //!!!!
+  for(var ic=0; ic<2; ic++){ // Rguess will be autom updated if several rounds
     sol2_SSEfunc=fmin.nelderMead(SSEfunc, Rguess);
     console.log("\n\n\n");
-    //for(var j=0; j<Rguess.length; j++){
-    for(var j=0; j<1; j++){
+    for(var j=0; j<Rguess.length; j++){
       //Rtime[j]=sol2_SSEfunc.x[j];
       //Rguess[j]=sol2_SSEfunc.x[j];
-      //console.log("iter ",ic+1," j=",j," Rtime[j]=",Rtime[j],
-//		  " Rguess[j]=",Rguess[j]);
+      console.log("iter ",ic+1," j=",j," Rtime[j]=",Rtime[j],
+		  " Rguess[j]=",Rguess[j]);
     }
-    Rtime[3]=sol2_SSEfunc.x[3]; //!!!! falsch
-    Rtime[0]=sol2_SSEfunc.x[0]; //!!!! OK (wohl nahezu)
-    gieskanne=sol2_SSEfunc.x[0];//!!!! falsch
 
-    console.log("iter ",ic+1," sol2_SSEfunc.x=",sol2_SSEfunc.x);
-    //Rtime=sol2_SSEfunc.x; //!!!!
-    //Rguess=sol2_SSEfunc.x; //!!!!
-    console.log("iter ",ic+1," sol2_SSEfunc.x=",sol2_SSEfunc.x);
     console.log("Rguess=",Rguess," Rguess.length=",Rguess.length);
     console.log("Rtime=",Rtime);
     console.log("\n\n\n");
@@ -739,13 +734,11 @@ function estimateR(){
     //		" sol2_SSEfunc.x=",sol2_SSEfunc.x);
   }
 
+
   for(var j=0; j<Rguess.length; j++){
     Rtime[j]=sol2_SSEfunc.x[j];
   }
-  //console.log("estimateR: Rguess=",Rguess,"\nRtime=",Rtime);
 
-  //console.log("check optimization by re-calculating sim with final R vals:")
-  //SSEfunc(Rtime,null,true);
 
   if(false){
     console.log("\nestimateR(): country=",country,
@@ -764,18 +757,9 @@ function estimateR(){
 function calibrate(){
   console.log(" in function calibrate(), country=",country,
 	      " Rtime.length=",Rtime.length);
-  // estimate R and possibly other parameters 
-  // (sloppiness of optimzation now treated in inner estimateR itself)
-  // !!! HIER Effekt, obwohl JEDESMAL mit guess 1,1,1,1,1,1 angefang. wird
-  // VOELLIG!!!! unverstaendlich
 
-  // MT 2020-07 bugix  ic<20 instead of ic<10 TEMPORARY!!!
-  for(var ic=0; ic<1; ic++){ //!!! separate into several indep calibr!!
-    //console.log("in function  calibrate: outer ic=",ic," before estimateR()");
-    estimateR(); //!!! here Rtime.length set
-    //console.log("in function  calibrate: outer ic=",ic," after estimateR()");
-  }
-  //console.log(" in function calibrate after estimateR: Rtime.length=",Rtime.length);
+  estimateR(); //!!! here Rtime.length set
+
 
  //##############################################################
  //!Inductive statistics of the LSE estimator Rtime
@@ -1014,7 +998,7 @@ function simulationRun() {
   if(false&&useLiveData&&(it==0)){
     console.log("Test:");
     for (var t=-5; t<=2; t++){
-      console.log("t=",t," R0fun_time(t)=", R0fun_time(t));
+      console.log("t=",t," Rfun_time(t)=", Rfun_time(t));
     }
     //corona.init(); // !! now inside fetch promise!
 
@@ -1022,7 +1006,7 @@ function simulationRun() {
   doSimulationStep(); 
   //console.log("RsliderUsed=",RsliderUsed);
   if(!RsliderUsed){
-    setSlider(slider_R0, slider_R0Text, R0fun_time(it).toFixed(2),"");
+    setSlider(slider_R0, slider_R0Text, Rfun_time(it).toFixed(2),"");
   }
   if(it==itmaxinit+1){ 
     clearInterval(myRun);myStartStopFunction();
@@ -1042,7 +1026,7 @@ function doSimulationStep(){
 		       corona.y, corona.yt, corona.z);
 
 //!!! it->(it+1) because otherwise not consistent with "calculate SSE"
-  R_actual=(RsliderUsed&&(it+1>=7)) ? R0 : R0fun_time(it+1);
+  R_actual=(RsliderUsed&&(it+1>=7)) ? R0 : Rfun_time(it+1);
   R_hist[it]=R_actual;
   var logging=false;
   corona.updateOneDay(R_actual,logging); //!!!
@@ -1107,7 +1091,7 @@ CoronaSim.prototype.init=function(){
   // data-driven warmup
 
   for(t=-20; t<=0; t++){
-    var Rt=R0fun_time(t);
+    var Rt=Rfun_time(t);
     this.updateOneDay(Rt,false); //!!
     //this.updateOneDay(Rt,true); // logging=true
   }
