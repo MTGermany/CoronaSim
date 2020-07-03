@@ -475,7 +475,7 @@ function R0fun_time(t){
     var iweek=Math.floor(t/7);
     var nxt=dataGit_cumCases[iPresent];
     var index=Math.min(Math.floor((iweek+1)/2),Rtime.length-1);
-    return Rtime[index];
+    return Rtime[index]; //!!!! SOLUTION?????
   }
 
 }
@@ -497,18 +497,15 @@ NOTICE: fmin.nelderMead needs one-param SSEfunc SSEfunc(R_arr):
         "sol2_SSEfunc=fmin.nelderMead(SSEfunc, Rguess);"
  ##############################################################*/
 
-function SSEfunc(R_arr,fR,logging) { 
+function SSEfunc(R_arr,fR,logging) {
+
+  //console.log("in SSE func: R_arr=",R_arr);
+ 
   if( typeof fR === "undefined"){
     fR=[]; for(var j=0; j<R_arr.length; j++){fR[j]=0;}
     //console.log("inside: fR=",fR);
   }
   if( typeof logging === "undefined"){logging=false;}
-
-  //console.log("fR=",fR," logging=",logging);
-
-  //following obscure construction fails on some browsers 
-  // although template code 
-  //fR = fR || new Array(R_arr.length).fill(0); // crucial if fbeta missing!
 
   var sse=0;
   // init handling of numerical gradient
@@ -697,15 +694,41 @@ function estimateR(){
 
   var iwmax=Math.round((dataGit_imax-4)/14); 
   var Rguess=[];
-  for(var iw=0; iw<iwmax; iw++){Rguess[iw]=1;}
+  for(var iw=0; iw<iwmax; iw++){
+    Rguess[iw]=1;
+    Rtime[iw]=1;
+  }
   Rguess[0]=3; //MT 2020-06: THIS alone fixed calibr errors in GB, India etc
+  Rtime[0]=3; //MT 2020-06: THIS alone fixed calibr errors in GB, India etc
 
   //!!! fmin.nelderMead a bit sloppy; 
   // optimze several times with Rguess=Ropt(previous step)
 
-  for(var ic=0; ic<1; ic++){ //!!! bloederweise HIER kein Effekt, unverstaendl
-    //console.log("ic=",ic," before nelderMead: Rguess=",Rguess);
+  for(var j=0; j<Rguess.length; j++){
+    console.log("iter 0 j=",j," Rguess[j]=",Rguess[j]);
+  }
+
+  for(var ic=0; ic<4; ic++){ //!!!!
     sol2_SSEfunc=fmin.nelderMead(SSEfunc, Rguess);
+    console.log("\n\n\n");
+    //for(var j=0; j<Rguess.length; j++){
+    for(var j=0; j<1; j++){
+      //Rtime[j]=sol2_SSEfunc.x[j];
+      //Rguess[j]=sol2_SSEfunc.x[j];
+      //console.log("iter ",ic+1," j=",j," Rtime[j]=",Rtime[j],
+//		  " Rguess[j]=",Rguess[j]);
+    }
+    Rtime[3]=sol2_SSEfunc.x[3]; //!!!! falsch
+    Rtime[0]=sol2_SSEfunc.x[0]; //!!!! OK (wohl nahezu)
+    gieskanne=sol2_SSEfunc.x[0];//!!!! falsch
+
+    console.log("iter ",ic+1," sol2_SSEfunc.x=",sol2_SSEfunc.x);
+    //Rtime=sol2_SSEfunc.x; //!!!!
+    //Rguess=sol2_SSEfunc.x; //!!!!
+    console.log("iter ",ic+1," sol2_SSEfunc.x=",sol2_SSEfunc.x);
+    console.log("Rguess=",Rguess," Rguess.length=",Rguess.length);
+    console.log("Rtime=",Rtime);
+    console.log("\n\n\n");
 
     //!!! MT 2020-07 misuse parameters to inject data tmin, tmax?
     //!!! tmin=parameters.tmin etc with tmin,tmax global var used in SSEfunc
@@ -747,7 +770,7 @@ function calibrate(){
   // VOELLIG!!!! unverstaendlich
 
   // MT 2020-07 bugix  ic<20 instead of ic<10 TEMPORARY!!!
-  for(var ic=0; ic<20; ic++){ //!!! separate into several indep calibr!!
+  for(var ic=0; ic<1; ic++){ //!!! separate into several indep calibr!!
     //console.log("in function  calibrate: outer ic=",ic," before estimateR()");
     estimateR(); //!!! here Rtime.length set
     //console.log("in function  calibrate: outer ic=",ic," after estimateR()");
@@ -1733,7 +1756,7 @@ DrawSim.prototype.updateOneDay=function(it,displayType,xtot,xt,y,yt,z){
   ctx.font = textsizeR+"px Arial";
   ctx.fillText(str_R,0,0);
   ctx.setTransform(1,0,0,1,0,0);
-  console.log("draw R estimates: str_R=",str_R," x0+1.0*textsizeR=",x0+1.0*textsizeR," y0=",y0);
+  //console.log("draw R estimates: str_R=",str_R," x0+1.0*textsizeR=",x0+1.0*textsizeR," y0=",y0);
 
   for(var iw=1; iw<it/7; iw+=2){ // !! iw=1,3,5,7...
     var itR=7*iw;
@@ -1746,7 +1769,7 @@ DrawSim.prototype.updateOneDay=function(it,displayType,xtot,xt,y,yt,z){
 	 ? "" : (" +/- "+sigmaR_hist[itR].toFixed(2)));
     ctx.fillText(str_R,0,0);
     ctx.setTransform(1,0,0,1,0,0);
-    console.log("draw R estimates: str_R=",str_R," x0+1.0*textsizeR=",x0+1.0*textsizeR," y0=",y0," this.textsize=",this.textsize," textsizeR=",textsizeR);
+    //console.log("draw R estimates: str_R=",str_R," x0+1.0*textsizeR=",x0+1.0*textsizeR," y0=",y0," this.textsize=",this.textsize," textsizeR=",textsizeR);
   }
 
 
