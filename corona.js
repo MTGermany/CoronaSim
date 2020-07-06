@@ -1,3 +1,5 @@
+// TODO: split calibration interval (look at places with !!!)
+
 
 // useLiveData=true: Obtain github data "live" via the fetch command
 // Unfortunately, the fetch command is sometimes unstable
@@ -45,13 +47,42 @@ const ln10=Math.log(10);
 var displayType="lin"; // "lin" or "log"; consolidate with html
 
 
-// global operative simulation vars 
+
+// global time simulation vars (see also "data related global variables")
 
 var myRun;
 var isStopped=true
 var it=0;
 var itmaxinit;  // #days init simulation; to be determined by js Date() object
+                // itmaxinit=days(present-startDay)
 var itmax;      // can be >itmaxinit during interactive simulation
+
+var itmin_calib; // time interval (days) for calibration. The data interval 
+var itmax_calib; // dataGit_istart+1 ..dataGit_imax-1 for calibration
+                 // should be split if there are more than approx 
+                 // 20 weeks of data
+var iwmin_calib; // time interval (week/2-week intervals) for calibration
+var iwmax_calib; // !!! try to avoid by function calc_iw(idays)
+
+// data related global variables
+// fetch with https://pomber.github.io/covid19/timeseries.json
+// or load as a variable server-side (if useLiveData=false)
+
+var dataGit=[];
+var dataGit_dateBegin;
+
+var dataGit_istart; //!!! with respect to first recorded dataGit dataset 
+var dataGit_imax;  // !!! with respect to dayStartMar=dataGit_cumCases.length-dataGit_istart
+
+var dataGit_date=[];
+var dataGit_cumCases=[];
+var dataGit_cumDeaths=[];
+var dataGit_cumRecovered=[];
+var dataGit_deathsCases=[];
+
+
+
+// global geographic simulation vars 
 
 var n0=80.e6;  // #persons in Germany
 
@@ -144,51 +175,13 @@ const tauDieList={
 
 
 
-// needed as initialisation and if nonlin opt fmin not used
-// !!!
-var RtimeList={   // 0-1,1-3,3-5,... weeks after start
-  "Germany"       : [1.05, 0.75, 0.75, 0.70],
-  "Austria"       : [0.8,  0.62, 0.62],
-  "Czechia"       : [0.90, 0.75, 0.75],
-  "France"        : [1.10, 1.06, 0.65],
-  "United Kingdom": [1.60, 1.10, 0.99],
-  "Italy"         : [0.93, 0.90, 0.84],
-  "Poland"        : [1.62, 1.01, 0.97],
-  "Spain"         : [0.90, 0.89, 0.70],
-  "Sweden"        : [1.10, 1.20, 1.05, 1.00],
-  "Switzerland"   : [0.82, 0.82, 0.60, 0.40],
-  "India"         : [2.05, 1.47, 1.25],
-  "Russia"        : [2.0,  1.8, 1.45, 1.4],
-  "US"            : [1.3, 1.08, 1.00]
-}
-
-
-/*
-//#####################################################
-//!! make length of RtimeList elements depend on present date
-// does not work here since dataGit_imax still undefined
-// but nice example  of traversing over object elements
-// in function estimateR() everything there!
-
-var keys = Object.keys(RtimeList);
-var iwmax=Math.round(dataGit_imax/14);
-console.log("dataGit_imax=",dataGit_imax);
-for(var i = 0; i < keys.length;i++){
-  for(var iw=3; iw<Math.round(dataGit_imax/14); iw++){
-    RtimeList[keys[i]][iw]=1;
-  }
-  console.log("keys[i]=",keys[i]," RtimeList[keys[i]]=",RtimeList[keys[i]]);
-}
-//#####################################################
-*/
 
 
 var RsliderUsed=false;
 var otherSliderUsed=false;
-var Rtime=RtimeList["Germany"]; //!! need direct initialization 
-var R0=Rtime[0];          //!! init time dependent R
-var R_actual=R0;  // R0" controlled by slider, _actual: by data
-var R_hist=[]; R_hist[0]=R_actual;
+var R0=1.5;          //time dependent/interactive R for slider corona_gui.js
+var Rtime=[]; Rtime[0]=R0;
+var R_hist=[]; R_hist[0]=R0;
 var sigmaR_hist=[]; sigmaR_hist[0]=0; 
 
 var oneDay_ms=(1000 * 3600 * 24);
@@ -205,21 +198,6 @@ var data_cumDeaths=[];
 var data_deathsCases=[];
 
 
-// fetch with https://pomber.github.io/covid19/timeseries.json
-// or load as a variable server-side (if useLiveData=false)
-
-var dataGit=[];
-var dataGit_dateBegin;
-
-var dataGit_istart;
-var dataGit_imax;
-var dataGit_date=[];
-var dataGit_cumCases=[];
-var dataGit_cumDeaths=[];
-var dataGit_cumRecovered=[];
-var dataGit_deathsCases=[];
-
-
 
 
 
@@ -233,7 +211,7 @@ var fps=10;
 
 var tauRstartInit=4;   // active infectivity begins [days since infection]//1
 var tauRendInit=12;    // active infectivity ends [days since infection]//10
-var tauTestInit=8;    // time delay [days] test-infection //10
+var tauTestInit=8;    // time delay [days] test-infection //8
 var pTestInit=0.1;     // initial percentage of tested infected persons //0.1
 
 var tauRstart=tauRstartInit;
@@ -364,7 +342,7 @@ function initializeData(country) {
   var data=dataGit[country];
   var dateInitStr=data[0]["date"];
 
-  // !!! extremely heineous apple date bug: 
+  // !! extremely heineous apple date bug: 
   // cannot make use of date str such as 2020-1-22
 
   //console.log("new Date(\"2020-01-22\")=",new Date("2020-01-22"));
@@ -414,21 +392,17 @@ function initializeData(country) {
 
   RsliderUsed=false;
   otherSliderUsed=false;
-  console.log("before calibrate in initializeData(country)");
-  console.log("in initializeData: Rtime.length=",Rtime.length);
-
   calibrate(); //!!! determines Rtime.length
-  console.log("after calibrate in initializeData(country):",
-	      " Rtime.length=",Rtime.length);
 
 
  //##############################################################
  // !! for inline nondynamic  testing: add testcode here
  //##############################################################
 
-  if(false){
-    var testMatrix=[[-1, 2], [3, 1]];
-    console.log("testMatrix=",testMatrix[0],testMatrix[1], " math.inv(testMatrix)=",math.inv(testMatrix)[0],math.inv(testMatrix)[1]);
+  if(true){
+    Rguess= [1.8555828429026051, 0.6830523633876675, 0.6269836250678231, 0.695683771637065, 0.8262257735681733, 0.6956357378063327, 1.528364682075033, 0.7687901284239431];
+    console.log("Rguess=",Rguess,
+		" SSEfunc(Rguess,null,true)=",SSEfunc(Rguess,null,true));
   }
 
   console.log("end initializeData: country=",country);
@@ -447,7 +421,7 @@ function Rfun_time(t){
   var iTest    =iPresent+Math.round(tauTest);
   var iTestPrev=iPresent+Math.round(tauTest-0.5*(tauRstart+tauRend));
 
-  if(t<0){
+  if(t<=0){ //!!! R as relevant for period from dayStartMar-1 to dayStartMar
     var nxtNewnum  =1./2.*(dataGit_cumCases[iTest+1]-dataGit_cumCases[iTest-1]);
     var nxtNewdenom=1./2.*(dataGit_cumCases[iTestPrev+1]
 			  -dataGit_cumCases[iTestPrev-1]);
@@ -475,7 +449,7 @@ function Rfun_time(t){
     var iweek=Math.floor(t/7);
     var nxt=dataGit_cumCases[iPresent];
     var index=Math.min(Math.floor((iweek+1)/2),Rtime.length-1);
-    return Rtime[index]; //!!!! SOLUTION?????
+    return Rtime[index]; //!! Rtime is central array to keep actual R curve
   }
 
 }
@@ -492,6 +466,9 @@ function Rfun_time(t){
                                  R_arr[j]: 14 days starting at i=7+(j-1)*14
 @param fR: optional numerical gradient of func with respect to R
 @param logging: optional logging switch
+@global param (do not know how to inject params into func):
+@global iwmin_calib start of calibr intervals (week/2-week intervals)
+@global iwmax_calib end of calibr intervals (week/2-week intervals)
 
 NOTICE: fmin.nelderMead needs one-param SSEfunc SSEfunc(R_arr):
         "sol2_SSEfunc=fmin.nelderMead(SSEfunc, Rguess);"
@@ -500,7 +477,7 @@ NOTICE: fmin.nelderMead needs one-param SSEfunc SSEfunc(R_arr):
 function SSEfunc(R_arr, fR, logging) {
 
   //console.log("in SSE func: R_arr=",R_arr);
- 
+
   if( typeof fR === "undefined"){
     fR=[]; for(var j=0; j<R_arr.length; j++){fR[j]=0;}
     //console.log("inside: fR=",fR);
@@ -508,25 +485,31 @@ function SSEfunc(R_arr, fR, logging) {
   if( typeof logging === "undefined"){logging=false;}
 
   var sse=0;
-  // init handling of numerical gradient
-
 
   // simulation init
 
   nxtStart=dataGit_cumCases[dataGit_istart];
-  if(true){Rtime[0]=R_arr[0];} //!!! Rtime[0] used in init?
+  //if(iwmin==0){Rtime[0]=R_arr[0];} //!! geloest. War corona.init for it=0!!
   corona.init();
 
 
   // calculate SSE
 
   sse=0;
-  dataGit_imax=dataGit_cumCases.length-dataGit_istart; 
 
-  for(var i=1; i<dataGit_imax; i++){ //!!!
+  for(var i=1; i<dataGit_imax; i++){ //!!! change when make SSE depend on itmin itmax
     var iweek=Math.floor(i/7); 
     var index=Math.min(Math.floor((iweek+1)/2),R_arr.length-1);
     var R_actual=R_arr[index];
+    if(logging&&(i==1)){
+      var nxData=dataGit_cumCases[dataGit_istart+i-1];
+      var nxSim=n0*corona.xt;
+      console.log("SSEfunc: i=0=init",
+		  " R_actual=",R_actual.toFixed(2),
+		  " nxData=",nxData,
+		  " nxSim=",Math.round(nxSim),
+		  " nActiveTrueSim=",Math.round(n0*corona.xtot));
+    }
     corona.updateOneDay(R_actual);
     var nxData=dataGit_cumCases[dataGit_istart+i];
     var nxSim=n0*corona.xt;
@@ -534,10 +517,21 @@ function SSEfunc(R_arr, fR, logging) {
       console.log("SSEfunc: i=",i,
 		  " R_actual=",R_actual.toFixed(2),
 		  " nxData=",nxData,
-		  " nxSim=",Math.round(nxSim));
+		  " nxSim=",Math.round(nxSim),
+		  " nActiveTrueSim=",Math.round(n0*corona.xtot));
     }
     sse+=Math.pow(Math.log(nxData)-Math.log(nxSim),2); //!! Math.log
+
+
+  // MT 2020-07 penalize negative R or R near zero
+
+    var RlowLimit=0.2;
+    var prefact=1;
+    if(R_actual<RlowLimit){
+      sse += prefact*Math.pow(RlowLimit-R_actual,2);
+    }
   }
+
 
 
   /*
@@ -689,30 +683,38 @@ function startup() {
 // notice: fmin.conjugateGradient does not work here
 // => use simple nelderMead and do not need to calculate
 // num derivatives in func as side effect of SSEfunc
+// @global param (do not know how to inject params into func):
+// (1) itmin_calib start of calibr intervals (days since dayStartMar)
+// (2) itmax_calib end of calibr intervals (days since dayStartMar)
+// itmin_calib >=0
+// itmax_calib < dataGit_imax-dataGit_istart
 // =============================================================
 
 function estimateR(){
 
   /// !!! THIS determines number of calibration intervals
 
-  var iwmax=Math.round((dataGit_imax-4)/14); 
-  var Rguess=[];
-  for(var iw=0; iw<iwmax; iw++){
-    Rguess[iw]=1;
-    Rtime[iw]=1;
+  iwmin=Math.round(itmin_calib/14);
+  iwmax=Math.round((itmax_calib-4)/14); 
+  //var iwmax=Math.round((dataGit_imax-4)/14); 
+  //console.log("dataGit_imax=",dataGit_imax," dataGit_istart=",dataGit_istart);
+  var Rguess=[]; // 2-week interval w/resp to iwmin (Rtime w/respect to iw=0)
+  for(var iw=iwmin; iw<iwmax; iw++){
+    Rguess[iw-iwmin]=(iw==0) ? 3 : 1; // expect strong growth rate in first interval
   }
-  Rguess[0]=3; //MT 2020-06: THIS alone fixed calibr errors in GB, India etc
-  Rtime[0]=3; //MT 2020-06: THIS alone fixed calibr errors in GB, India etc
-
-  //!!! fmin.nelderMead OK, was my bug!! need only two optimization
-  // rounds because of error estimation
 
   for(var j=0; j<Rguess.length; j++){
-    console.log("iter 0 j=",j," Rguess[j]=",Rguess[j]);
+    console.log("iter 0 j+iwmin=",j+iwmin," Rguess[j]=",Rguess[j]);
   }
 
-  for(var ic=0; ic<2; ic++){ // Rguess will be autom updated if several rounds
+  for(var ic=0; ic<2; ic++){ // One round (ic<1) sometimes not enough
+
+
+    // ############# THE central estimation ###################
     sol2_SSEfunc=fmin.nelderMead(SSEfunc, Rguess);
+    // ########################################################
+
+
     console.log("\n\n\n");
     for(var j=0; j<Rguess.length; j++){
       //Rtime[j]=sol2_SSEfunc.x[j];
@@ -725,18 +727,14 @@ function estimateR(){
     console.log("Rtime=",Rtime);
     console.log("\n\n\n");
 
-    //!!! MT 2020-07 misuse parameters to inject data tmin, tmax?
-    //!!! tmin=parameters.tmin etc with tmin,tmax global var used in SSEfunc
 
-    //sol2_SSEfunc=fmin.nelderMead(SSEfunc, Rguess, parameters);
-
-    //console.log("ic=",ic," after nelderMead: Rguess=",Rguess,
-    //		" sol2_SSEfunc.x=",sol2_SSEfunc.x);
+    console.log("ic=",ic," after nelderMead: Rguess=",Rguess,
+    		" sol2_SSEfunc.x=",sol2_SSEfunc.x);
   }
 
 
   for(var j=0; j<Rguess.length; j++){
-    Rtime[j]=sol2_SSEfunc.x[j];
+    Rtime[j+iwmin]=sol2_SSEfunc.x[j];
   }
 
 
@@ -748,23 +746,32 @@ function estimateR(){
 }
 
 
-// =============================================================
-// do the complete inductive statistics
-// since fmin.nelderMead is a bit sloppy in estimateR, 
-// need to call it several times
-// =============================================================
+// =================================================
+// determines calibrated Rtime[] incl Rtime.length
+// =================================================
 
 function calibrate(){
-  console.log(" in function calibrate(), country=",country,
-	      " Rtime.length=",Rtime.length);
 
-  estimateR(); //!!! here Rtime.length set
+  console.log(" in function calibrate(), country=",country);
+
+  itmin_calib=1;  // !!! minimum of calibr interval 
+                  // (>=1 day since dayStartMar)
+  itmax_calib=dataGit_imax; // maximum of calibr interval
+                            // (dataGit_imax w/resp to dayStartMar!!)
 
 
- //##############################################################
- //!Inductive statistics of the LSE estimator Rtime
+  estimateR(); // determines calibrated Rtime[] /!!! here Rtime.length set
+
+  estimateErrorCovar(); // uses calibrated Rtime[]
+}
+
+
+//=======================================================
+//!Inductive statistics of the LSE estimator Rtime
 // Cov(Rtime)=2 V(epsilon) H^{-1}, H=Hessian of SSEfunc(Rtime)
- //##############################################################
+//=======================================================
+
+function estimateErrorCovar(){
 
   var dR=0.001;
   //var H=math.matrix(); // does not work
@@ -774,7 +781,6 @@ function calibrate(){
   for(var j=0; j<Rtime.length; j++){H[j]=[];}
   var Rp=[]; for(var j=0; j<Rtime.length; j++){Rp[j]=Rtime[j];}
   var Rm=[]; for(var j=0; j<Rtime.length; j++){Rm[j]=Rtime[j];}
-  var Rp=[]; for(var j=0; j<Rtime.length; j++){Rp[j]=Rtime[j];}
   var Rpp=[]; for(var j=0; j<Rtime.length; j++){Rpp[j]=Rtime[j];}
   var Rpm=[]; for(var j=0; j<Rtime.length; j++){Rpm[j]=Rtime[j];}
   var Rmp=[]; for(var j=0; j<Rtime.length; j++){Rmp[j]=Rtime[j];}
@@ -922,18 +928,17 @@ function selectDataCountry(){
   tauDie=parseFloat(tauDieList[country]);
   taumax=Math.max(tauDie,tauRecover)+tauAvg+1;
   console.log("country=",country);
-  Rtime=RtimeList[country];
   console.log("selectDataCountry: country=",country,
-	      " Rtime.length=",Rtime.length); //!!!
+	      " Rtime.length=",Rtime.length); 
   setSlider(slider_R0,  slider_R0Text,  Rtime[0].toFixed(2),"");
 
-  //flagName=(country==="Germany") ? "flagSwitzerland.png" : "flagGermany.png";
-  //document.getElementById("flag").src="figs/"+flagName;
   document.getElementById("title").innerHTML=
     "Simulation der Covid-19 Pandemie "+ countryGer;
+
   initializeData(country);
   myRestartFunction();
 } // selectDataCountry
+
 
 function myRestartFunction(){ 
   console.log("in myRestartFunction");
@@ -944,7 +949,7 @@ function myRestartFunction(){
   corona.init(); // because startup redefines CoronaSim() and data there here
 
   clearInterval(myRun);
-  it=0; //!!! only instance global it is reset to zero
+  it=0; //!!! only instance apart from init where global it is reset to zero 
 
   myRun=setInterval(simulationRun, 1000/fps);
 
@@ -1025,11 +1030,11 @@ function doSimulationStep(){
   drawsim.updateOneDay(it, displayType, corona.xtot, corona.xt,
 		       corona.y, corona.yt, corona.z);
 
-//!!! it->(it+1) because otherwise not consistent with "calculate SSE"
-  R_actual=(RsliderUsed&&(it+1>=7)) ? R0 : Rfun_time(it+1);
+  //!!! it->(it+1) because otherwise not consistent with "calculate SSE"
+  var R_actual=(RsliderUsed&&(it+1>=7)) ? R0 : Rfun_time(it+1);
   R_hist[it]=R_actual;
   var logging=false;
-  corona.updateOneDay(R_actual,logging); //!!!
+  corona.updateOneDay(R_actual,logging);
   it++;
 
 }
