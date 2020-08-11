@@ -1,0 +1,17 @@
+
+(*) Introduce test numbers => githubWithTests.json, also made by
+updateCoronaInput.sh; data structure has one {...} more since metadata
+(inhabitants etc) contained in githubWithTests.json and "data" is extra
+data element. Since original json is 22 MB long, must prepare
+server-sided -> not automatic  (test direct use in javascript of full
+file)
+
+
+(*) make moving display window
+
+(*) separate calibration into windows
+   upper interval end itmax_calib OK if lower itmin_calib=1
+
+(*) solve display bug: at start small display, after "calibrate" larger
+
+

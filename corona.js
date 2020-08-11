@@ -40,25 +40,29 @@ var countryGer="Deutschland"
 */
 
 
-var dayStartMar=19;
-var startDay=new Date(2020,02,dayStartMar); // months start @ zero, days @ 1
+
+// general global variables
 
 const ln10=Math.log(10);
 var displayType="lin"; // "lin" or "log"; consolidate with html
+var myRun;
+var isStopped=true
 
 
 
 // global time simulation vars (see also "data related global variables")
 
-var myRun;
-var isStopped=true
+var dayStartMar=19;
+var startDay=new Date(2020,02,dayStartMar); // months start @ zero, days @ 1
+
 var it=0;
 var itmaxinit;  // #days init simulation; to be determined by js Date() object
                 // itmaxinit=days(present-startDay)
 var itmax;      // can be >itmaxinit during interactive simulation
 
-var itmin_calib; // !!! global time interval (days) for calibration
-var itmax_calib; // in dataGit_istart+1 ..dataGit_imax-1 
+var itmin_calib; // !!! start calibr time interval w/resp to dayStartMar
+                 //     =^ dataGit_idataStart+1
+var itmax_calib; // !!! end calibr time interval =^ dataGit_imax-1 
                  // should be split if there are more than approx 
                  // 20 weeks of data
 
@@ -444,7 +448,8 @@ function Rfun_time(t){
 
     return R;
   }
-  else{
+
+  else{// regular
     var iweek=Math.floor(t/7);
     var nxt=dataGit_cumCases[iPresent];
     var index=Math.min(Math.floor((iweek+1)/2),Rtime.length-1);
@@ -473,7 +478,7 @@ NOTICE: fmin.nelderMead needs one-param SSEfunc SSEfunc(R_arr):
         "sol2_SSEfunc=fmin.nelderMead(SSEfunc, Rguess);"
  ##############################################################*/
 
-function SSEfunc(R_arr, fR, logging) {
+function SSEfunc(R_arr, fR, logging) { //!!!!! use separate R_array for optimization if not whole array optimized!!!!
 
   //console.log("in SSE func: R_arr=",R_arr);
 
@@ -483,26 +488,27 @@ function SSEfunc(R_arr, fR, logging) {
   }
   if( typeof logging === "undefined"){logging=false;}
 
-  var sse=0;
 
-  // simulation init
 
-  nxtStart=dataGit_cumCases[dataGit_idataStart];
-  //if(itmin_calib-1==0){Rtime[0]=R_arr[0];} //!! geloest. War corona.init for it=0!!
-  corona.init();
-
-  // calculate SSE
-
-  sse=0;
 
   // always full simulation time incl corona.init
   // !! [change possibly later including specialized corona.init(itime);] 
 
+
+  // simulation init
+
+  nxtStart=dataGit_cumCases[dataGit_idataStart];
+  corona.init(); // scales up/down to nxtStart at the last warmup step
+
+  // calculate SSE
+
+  var sse=0;
+
   for(var i=1; i<dataGit_imax; i++){
-    var inCalib=((i>=itmin_calib)&&(i<itmax_calib));
+    var inCalib=((i>=itmin_calib)&&(i<itmax_calib)); //!!!!
     var indexR=Math.min(getIndexCalib(i),Rtime.length-1);
     var indexCalib=Math.min(getIndexCalib(i)-getIndexCalib(itmin_calib),
-			    R_arr.length-1);
+			    R_arr.length-1); //!!!!
     var R_actual=(inCalib) ? R_arr[indexCalib] : Rtime[indexR];
 
     if(logging&&(i==1)){
@@ -528,7 +534,7 @@ function SSEfunc(R_arr, fR, logging) {
     }
 
 
-    if(inCalib){
+    if(inCalib){ //!!!
       sse+=Math.pow(Math.log(nxData)-Math.log(nxSim),2); //!! Math.log
     }
 
@@ -719,10 +725,10 @@ function calibrate(){
   /// set global variables itmin_calib, itmax_calib 
   // for calibration interval (itmin_calib>=1 day since dayStartMar) 
 
-  itmin_calib=1;               
-  //itmax_calib=60;  //!!!! klappt auch fuer weniger als itmax
-  itmax_calib=dataGit_imax;  // (dataGit_imax w/resp to dayStartMar!!)
-
+  itmin_calib=0;               
+  //itmax_calib=144;  //!!!! klappt auch fuer weniger als itmax
+  itmax_calib=dataGit_imax-1;  // (dataGit_imax w/resp to dayStartMar!!)
+                               // ! NaN variance if itmax_calib=dataGit_imax
   // !!! calibrate part of Rtime[] defined by itmin_calib, itmax_calib
 
   estimateR(); // determines calibrated Rtime[] /!!! here Rtime.length set, transfer setting from estimateR->calibrate
@@ -1411,12 +1417,13 @@ function DrawSim(){
   this.isActive=[];   // which line is drawn
   this.setDisplayType(displayType);
 
-  // define text properties
+  // init text properties (size of canvas may not definitely known hee!!)
 
   this.sizemin=Math.min(canvas.width,1.25*canvas.height);
   //this.textsize=Math.min(0.030*canvas.width,0.045*canvas.height);
   this.textsize=(this.sizemin>600) ? 0.02*this.sizemin : 0.03*this.sizemin;
   ctx.font = this.textsize+"px Arial";
+  console.log("DrawSim Cstr: this.textsize=",this.textsize," ctx.font=",ctx.font);
 }
 
 
@@ -1575,7 +1582,6 @@ DrawSim.prototype.drawAxes=function(displayType){
 
   // draw times
 
-  ctx.font = this.textsize+"px Arial";
 
   var dxShift=(phi<0.01) ? -1.1*this.textsize : -2.4*cphi*this.textsize;
   var dyShift=(1.5+2*sphi)*this.textsize;
@@ -1693,6 +1699,14 @@ DrawSim.prototype.drawAxes=function(displayType){
 DrawSim.prototype.updateOneDay=function(it,displayType,xtot,xt,y,yt,z){
 //######################################################################
 
+  // update  text properties 
+
+  this.sizemin=Math.min(canvas.width,1.25*canvas.height);
+  this.textsize=(this.sizemin>600) ? 0.02*this.sizemin : 0.03*this.sizemin;
+  this.textsizeR=1.5*this.textsize;
+
+  ctx.font = this.textsize+"px Arial";
+  //console.log("DrawSim.updateOneDay: this.textsize=",this.textsize," ctx.font=",ctx.font);
 
 
 
@@ -1798,31 +1812,30 @@ DrawSim.prototype.updateOneDay=function(it,displayType,xtot,xt,y,yt,z){
   ctx.fillStyle="#888888";
   var x0=this.xPix0;
   var y0=this.yPix0+0.3*this.hPix;
-  var textsizeR=1.5*this.textsize;
-  //var textsize=Math.min(0.030*canvas.width,0.045*canvas.height);
 
-  ctx.setTransform(0,-1,1,0,x0+1.0*textsizeR,y0);
+  ctx.setTransform(0,-1,1,0,x0+1.0*this.textsizeR,y0);
   var str_R="R="+R_hist[0].toFixed(2)
       +( (RsliderUsed||otherSliderUsed)
 	 ? "" : (" +/- "+sigmaR_hist[0].toFixed(2)));
-  ctx.font = textsizeR+"px Arial";
+  ctx.font = this.textsizeR+"px Arial";
+  //console.log("updateOneDay: this.textsizeR=",this.textsizeR," ctx.font=",ctx.font);
   ctx.fillText(str_R,0,0);
   ctx.setTransform(1,0,0,1,0,0);
-  //console.log("draw R estimates: str_R=",str_R," x0+1.0*textsizeR=",x0+1.0*textsizeR," y0=",y0);
 
   for(var iw=1; iw<it/7; iw+=2){ // !!! iw=1,3,5,7...
     var itR=7*iw;
     x0=this.xPix[itR];
     ctx.fillRect(x0-1,this.yPix0,3,this.hPix);
 
-    ctx.setTransform(0,-1,1,0,x0+1.0*textsizeR,y0);
+    ctx.setTransform(0,-1,1,0,x0+1.0*this.textsizeR,y0);
     str_R="R="+R_hist[itR].toFixed(2)
       +( (RsliderUsed||otherSliderUsed||(itR>=dataGit_imax))
 	 ? "" : (" +/- "+sigmaR_hist[itR].toFixed(2)));
     ctx.fillText(str_R,0,0);
     ctx.setTransform(1,0,0,1,0,0);
-    //console.log("draw R estimates: str_R=",str_R," x0+1.0*textsizeR=",x0+1.0*textsizeR," y0=",y0," this.textsize=",this.textsize," textsizeR=",textsizeR);
   }
+
+  ctx.font = this.textsize+"px Arial"; // revert font size
 
 
   // plot data points

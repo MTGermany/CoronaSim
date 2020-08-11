@@ -1,8 +1,60 @@
 #!/bin/bash
 
+#####################################################################
+# get data from the covid.ourworldindata website
+#####################################################################
+
+# first link recommended but does not allow wget
+#wget https://covid.ourworldindata.org/data/owid-covid-data.json
+wget https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/owid-covid-data.json --output-document=data/githubWithTests.json
+
+#cp data/githubWithTests_orig.json data/githubWithTests.json
+
+# delete irrelevant/redundant data lines
+
+perl -i -p -e 's/^.*new_.*\n//g' data/githubWithTests.json
+perl -i -p -e 's/^.*_per_.*\n//g' data/githubWithTests.json
+perl -i -p -e 's/^.*tests_units.*\n//g' data/githubWithTests.json
+perl -i -p -e 's/^.*stringency_index.*\n//g' data/githubWithTests.json
+
+# separate countries in lines: make a single line and use the pattern
+# "]    }," at the end of a countrie's entry to make one line per country
+
+
+perl -i -p -e 's/\n//g' data/githubWithTests.json # make a single line
+perl -i -p -e 's/\]    \}\,/\]    \},\n/g' data/githubWithTests.json
+
+# filter countries
+
+grep Germany data/githubWithTests.json > data/tmp.json
+grep Austria data/githubWithTests.json >> data/tmp.json
+grep Czech data/githubWithTests.json >> data/tmp.json
+grep France data/githubWithTests.json >> data/tmp.json
+grep "United Kingdom" data/githubWithTests.json >> data/tmp.json
+grep Italy data/githubWithTests.json >> data/tmp.json
+grep Poland data/githubWithTests.json >> data/tmp.json
+grep Spain data/githubWithTests.json >> data/tmp.json
+grep Sweden data/githubWithTests.json >> data/tmp.json
+grep Switzerland data/githubWithTests.json >> data/tmp.json
+grep India data/githubWithTests.json >> data/tmp.json
+grep Russia data/githubWithTests.json >> data/tmp.json
+grep USA data/githubWithTests.json >> data/tmp.json
+
+# add variable name and neceesary '  ' between rhs of var
+
+sed -e "1i\dataGitTests=\'\{" data/tmp.json > data/tmp2.json
+echo "}'" >> data/tmp2.json
+
+# remove new lines and last comma
+
+perl -i -p -e 's/\n//g' data/tmp2.json
+perl -i -p -e "s/\}\,\}/\}\}/g"  data/tmp2.json
+rm data/tmp.json
+mv data/tmp2.json data/githubWithTests.json
+# tail }        ]    }}'
 
 #####################################################################
-# get data from the github website
+# get data w/o test from another github website
 #####################################################################
 
 wget https://pomber.github.io/covid19/timeseries.json --output-document=data/github.json
@@ -41,6 +93,7 @@ perl -i -p -e "s/\]\,\}/\]\}/g"  data/tmp2.json
 rm data/tmp.json
 mv data/tmp2.json data/github.json
 
+# tail  }  ]}'
 upload2public_html.sh
 
 exit
