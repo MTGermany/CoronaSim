@@ -1,0 +1,23 @@
+itmin_calib           start calibr time interval w/resp to dayStartMar 
+                      >=0
+itmax_calib           end calibr time interval w/resp to dayStartMar 
+                      <dataGit_imax-1
+
+dataGit_idataStart+1  index of dataGit corresp. to itmin_calib
+
+dataGit_imax-1        number of dataGit entries after dataGit_idataStart
+dataGit_imax          number of dataGit entries >=dataGit_idataStart
+
+Rtime[]		      consolidated calibrated R; one element per 2
+                      weeks !!! consolidates 1 or >1 RtimeCalib[] intervals
+
+RtimeCalib[]          !!! NEW limited to itmin_calib... itmax_calib
+
+Rfun_time(t)	      corresponds to consolidated Rtime[]
+                      if t>0 and uses estimates from dataGit_cumCases if t<=0
+
+R_hist[]	      calibrated or user-defined R, daily basis
+                      !!! if calibrated R_hist[it]=Rfun_time(it+1)
+                      !!! try eliminate this increment-1 discrepancy!!!
+
+sigmaR_hist[]         calibrated error stddev (=0 if user-defined)

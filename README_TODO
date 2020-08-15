@@ -12,6 +12,6 @@ file)
 (*) separate calibration into windows
    upper interval end itmax_calib OK if lower itmin_calib=1
 
-(*) solve display bug: at start small display, after "calibrate" larger
+(*) DONE solve display bug: at start small display, after "calibrate" larger
 
 

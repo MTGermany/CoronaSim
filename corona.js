@@ -52,7 +52,7 @@ var isStopped=true
 
 // global time simulation vars (see also "data related global variables")
 
-var dayStartMar=19;
+var dayStartMar=20; //!!!
 var startDay=new Date(2020,02,dayStartMar); // months start @ zero, days @ 1
 
 var it=0;
@@ -416,7 +416,7 @@ function initializeData(country) {
 
 //##############################################################
 // function for variable replication rate R as a function of time
-// t=tsim-date(2020-03-19) [days]
+// t=tsim-date(2020-03-19) [days] from t to t+1
 //##############################################################
 
 function Rfun_time(t){
@@ -424,7 +424,7 @@ function Rfun_time(t){
   var iTest    =iPresent+Math.round(tauTest);
   var iTestPrev=iPresent+Math.round(tauTest-0.5*(tauRstart+tauRend));
 
-  if(t<=0){ //!!! R as relevant for period from dayStartMar-1 to dayStartMar
+  if(t<0){ //!!! direct estimate from data 
     var nxtNewnum  =1./2.*(dataGit_cumCases[iTest+1]-dataGit_cumCases[iTest-1]);
     var nxtNewdenom=1./2.*(dataGit_cumCases[iTestPrev+1]
 			  -dataGit_cumCases[iTestPrev-1]);
@@ -450,9 +450,8 @@ function Rfun_time(t){
   }
 
   else{// regular
-    var iweek=Math.floor(t/7);
-    var nxt=dataGit_cumCases[iPresent];
-    var index=Math.min(Math.floor((iweek+1)/2),Rtime.length-1);
+    //var iweek=Math.floor(t/7); //MT2020-08
+    var index=Math.min(getIndexCalib(t),Rtime.length-1); //MT2020-08
     return Rtime[index]; //!! Rtime is central array to keep actual R curve
   }
 
@@ -503,34 +502,44 @@ function SSEfunc(R_arr, fR, logging) { //!!!!! use separate R_array for optimiza
   // calculate SSE
 
   var sse=0;
+  if(logging){
+    var nxData=dataGit_cumCases[dataGit_idataStart+0];
+    console.log("SSEfunc: i=0, n0*corona.xt=",n0*corona.xt,
+		" nxData=",nxData);
+  }
 
-  for(var i=1; i<dataGit_imax; i++){
-    var inCalib=((i>=itmin_calib)&&(i<itmax_calib)); //!!!!
-    var indexR=Math.min(getIndexCalib(i),Rtime.length-1);
-    var indexCalib=Math.min(getIndexCalib(i)-getIndexCalib(itmin_calib),
+  for(var i=0; i<dataGit_imax-1; i++){
+    var it=i;
+
+    //!!!! itmin/max_calib refers to start of time step
+    // => itmin_calib>=0, itmax_calib<dataGit_imax-1
+
+    var inCalib=((it>=itmin_calib)&&(it<itmax_calib)); 
+    var indexR=Math.min(getIndexCalib(it),Rtime.length-1);
+    var indexCalib=Math.min(getIndexCalib(it)-getIndexCalib(itmin_calib),
 			    R_arr.length-1); //!!!!
     var R_actual=(inCalib) ? R_arr[indexCalib] : Rtime[indexR];
 
-    if(logging&&(i==1)){
-      var nxData=dataGit_cumCases[dataGit_idataStart+i-1];
+    if(logging&&false){
+      var nxData=dataGit_cumCases[dataGit_idataStart+it];
       var nxSim=n0*corona.xt;
-      console.log("SSEfunc: i=0=init",
+      console.log("SSEfunc before update: it=",it,
 		  " R_actual=",R_actual.toFixed(2),
 		  " nxData=",nxData,
 		  " nxSim=",Math.round(nxSim),
 		  " nActiveTrueSim=",Math.round(n0*corona.xtot));
     }
 
-    corona.updateOneDay(R_actual);
-    var nxData=dataGit_cumCases[dataGit_idataStart+i];
+    corona.updateOneDay(R_actual); it++;
+    var nxData=dataGit_cumCases[dataGit_idataStart+it]; // i+1 after update
     var nxSim=n0*corona.xt;
 
-    if(logging){ 
-      console.log("SSEfunc: i=",i,
-		  " R_actual=",R_actual.toFixed(2),
+    if(logging&&(i<60)){ 
+    //if(logging){ 
+      console.log("SSEfunc after update and it++: it=",it,
+		  " R_actual (it-1->it)=",R_actual.toFixed(2),
 		  " nxData=",nxData,
-		  " nxSim=",Math.round(nxSim),
-		  " nActiveTrueSim=",Math.round(n0*corona.xtot));
+		  " nxSim=",Math.round(nxSim));
     }
 
 
@@ -554,48 +563,7 @@ function SSEfunc(R_arr, fR, logging) { //!!!!! use separate R_array for optimiza
   // only if gradient-based method. 
   // These fail here=>do not need to calc grad
 
-  var eps=0.001;
-  var Rp=[]; // R arg where the jth component is increased by epsilon
-  var Rm=[]; // R arg where the jth component is decreased by epsilon
-  for (var j=0; j<R_arr.length; j++){
-    Rp[j]=[];
-    Rm[j]=[];
-    for(var k=0; k<R_arr.length; k++){
-      Rp[j][k]=R_arr[k];
-      Rm[j][k]=R_arr[k];
-    }
-    Rp[j][j]+=eps;
-    Rm[j][j]-=eps;
-  }
-
-  if(false){
-   for (var j=0; j<R_arr.length; j++){
-    fR[j]=0; // gradient
-    corona.init();
-    for(var i=1; i<dataGit_imax; i++){
-      var iweek=Math.floor(i/7);
-      var index=Math.min(Math.floor((iweek+1)/2),R_arr.length-1);
-      var R_actual=Rp[j][index];
-      corona.updateOneDay(R_actual);
-      var nxData=dataGit_cumCases[i];
-      var nxSim=n0*corona.xt;
-      fR[j]+=Math.pow(nxData-nxSim,2);
-    }
-
-    corona.init();
-    for(var i=1; i<dataGit_imax; i++){
-      var iweek=Math.floor(i/7);
-      var index=Math.min(Math.floor((iweek+1)/2),R_arr.length-1);
-      var R_actual=Rm[j][index];  // here difference: Rm instead of Rp
-      corona.updateOneDay(R_actual);
-      var nxData=dataGit_cumCases[i];
-      var nxSim=n0*corona.xt;
-      fR[j]-=Math.pow(nxData-nxSim,2); // difference: -= instead of +=
-    }
-    fR[j]/=2*eps;
-   }
-  }
-  corona.init(); // reset corona to avoid side effects
+ 
   */
 
 
@@ -702,15 +670,20 @@ function startup() {
 // determine the calibration period index based on the time index 
 // itime=time[days] - dayStartMar.
 // first week index 0, then increment every TWO weeks 
+// gives index of CONSOLIDATED calibrated Rtime[]
 // =============================================================
 
-function getIndexCalib(itime){
-  var iweek=Math.floor(itime/7);
-  return Math.floor((iweek+1)/2);
+function getIndexTimeFromCalib(ical){ // MT 2020-08
+  return 14*ical; //!!! only here changes of time interv of one calibr point
 }
 
+function getIndexCalib(itime){
+  return Math.floor(itime/getIndexTimeFromCalib(1));     // MT 2020-08
+}
+
+
 function getIndexCalibmax(itime){
-  return getIndexCalib(itime-7); // calib R for at least 7 days
+  return getIndexCalib(itime-10); //!!! calib R for at least xx days
 }
 
 
@@ -813,6 +786,11 @@ function estimateR(){
                 "\n  Rguess=", Rguess,
 	        "\n  estimated R values Rtime=", Rtime,
 		"");
+  }
+
+  if(true){
+    SSEfunc(Rguess,null,true);
+    //SSEfunc(Rguess);
   }
 }
 
@@ -958,7 +936,7 @@ function displayTypeCallback(){
   }
 
   drawsim.setDisplayType(displayType); // clear and draAxes in setDisplay..
-  drawsim.updateOneDay(it,displayType,corona.xtot,corona.xt,
+  drawsim.draw(it,displayType,corona.xtot,corona.xt,
 		       corona.y,corona.yt,corona.z); // !! ONLY to redraw lines
 }
 
@@ -1082,29 +1060,56 @@ function simulationRun() {
   if(!RsliderUsed){
     setSlider(slider_R0, slider_R0Text, Rfun_time(it).toFixed(2),"");
   }
-  if(it==itmaxinit+1){ 
+
+  // suffer one undefined at dataGit_cumCases 
+  // (doSimulationStep increments it so itmaxinit-2 would be correct)
+  // to get full sim curves (first plot then update 
+  // to get the initial point it=0) 
+
+  if(it==itmaxinit-1){ 
     clearInterval(myRun);myStartStopFunction();
   }
 }
 
 //#########################################
 // only called at main run, not warmup
-// need to plot first
+// !!! need to plot first
 // because warmup already produced start values for it=0
+// !!! 
 //#########################################
 
-function doSimulationStep(){
-  if(false){console.log(" calling drawsim.updateOneDay: it=",it,
-		       " n0* arg corona.xt=",n0*corona.xt);} 
-  drawsim.updateOneDay(it, displayType, corona.xtot, corona.xt,
-		       corona.y, corona.yt, corona.z);
+function doSimulationStep(){ //!!!
 
   //!!! it->(it+1) because otherwise not consistent with "calculate SSE"
-  var R_actual=(RsliderUsed&&(it+1>=7)) ? R0 : Rfun_time(it+1);
+  var R_actual=(RsliderUsed) ? R0 : Rfun_time(it);
   R_hist[it]=R_actual;
+
+  if(false){
+    console.log(" doSimulationStep before corona.update: it=",it,
+		"dataGit_cumCases[dataGit_idataStart+it]=",
+		dataGit_cumCases[dataGit_idataStart+it],
+		" n0*corona.xt=",(n0*corona.xt).toPrecision(6),
+		" R_actual=",R_actual.toPrecision(3));
+  }
+
+  // draw first to also draw it=0 state!
+
+
+  drawsim.draw(it, displayType, corona.xtot, corona.xt, // need R_hist
+		       corona.y, corona.yt, corona.z);
+ 
   var logging=false;
   corona.updateOneDay(R_actual,logging);
   it++;
+
+  if(true){
+    console.log(" doSimulationStep after corona.update: it=",it,
+		"dataGit_cumCases[dataGit_idataStart+it]=",
+		((it<itmaxinit-1) ? dataGit_cumCases[dataGit_idataStart+it]:"na"),
+		" n0*corona.xt=",(n0*corona.xt).toPrecision(6),
+		" R_actual (it-1->it)=",R_actual.toPrecision(3));
+  }
+
 
 }
 
@@ -1164,7 +1169,7 @@ CoronaSim.prototype.init=function(){
 
   // data-driven warmup
 
-  for(t=-20; t<=0; t++){
+  for(t=-20; t<0; t++){
     var Rt=Rfun_time(t);
     this.updateOneDay(Rt,false); //!!
     //this.updateOneDay(Rt,true); // logging=true
@@ -1191,6 +1196,8 @@ CoronaSim.prototype.init=function(){
   // reset it for start of proper simulation
 
   this.itcount=0;
+
+  //console.log("CoronaSim.init after warmup: n0*this.xt=",n0*this.xt);
 
 }
 
@@ -1267,6 +1274,7 @@ CoronaSim.prototype.updateOneDay=function(R,logging){
 
   this.pTestDay[it]=pTest; // needed to determine fraction of 
                       // recovered among the tested later on
+  //!!! sometimes this.pTestDay undefined!!!
 
   tauAvg//=5; //!!
   var dtau=Math.min(Math.floor(tauAvg/2),Math.round(tauTest));
@@ -1387,22 +1395,22 @@ function DrawSim(){
   this.hPix=this.yPixMax-this.yPix0;  //<0
 
   this.xPix=[];
-  this.yDataLin=[];
-  this.yDataLog=[];
+  this.ySimLin=[];
+  this.ySimLog=[];
 
-  this.yDataLin[0]=[];  // infected
-  this.yDataLin[1]=[];  // infected+positively tested
-  this.yDataLin[2]=[];  // reovered real
-  this.yDataLin[3]=[];  // reovered and tested before
-  this.yDataLin[4]=[];  // dead
-  this.yDataLin[5]=[];  // fraction dead/positively tested
+  this.ySimLin[0]=[];  // infected
+  this.ySimLin[1]=[];  // infected+positively tested
+  this.ySimLin[2]=[];  // reovered real
+  this.ySimLin[3]=[];  // reovered and tested before
+  this.ySimLin[4]=[];  // dead
+  this.ySimLin[5]=[];  // fraction dead/positively tested
 
-  this.yDataLog[0]=[];  // infected
-  this.yDataLog[1]=[];  // infected+positively tested
-  this.yDataLog[2]=[];  // reovered real
-  this.yDataLog[3]=[];  // reovered and tested before
-  this.yDataLog[4]=[];  // dead
-  this.yDataLog[5]=[];  // fraction dead/positively tested
+  this.ySimLog[0]=[];  // infected
+  this.ySimLog[1]=[];  // infected+positively tested
+  this.ySimLog[2]=[];  // reovered real
+  this.ySimLog[3]=[];  // reovered and tested before
+  this.ySimLog[4]=[];  // dead
+  this.ySimLog[5]=[];  // fraction dead/positively tested
 
 
   this.colLine=[];
@@ -1505,6 +1513,9 @@ DrawSim.prototype.drawAxes=function(displayType){
   var cphi=Math.cos(phi);
   var sphi=Math.sin(phi);
 
+
+  // calculate weekly date string array for every week after startDay
+
   for(var iw=0; iw<Math.floor(itmax/7)+1; iw++){
     var date=new Date(startDay.getTime()); // copy constructor
     date.setDate(date.getDate() + iw*7); // set iw*7 days ahead
@@ -1512,12 +1523,14 @@ DrawSim.prototype.drawAxes=function(displayType){
     //timeTextW[iw]=date.toLocaleDateString("de",options);
 
     if(date.getMonth()==0){timeTextW[iw]+=(", "+date.getFullYear());}
-
-    //console.log("DrawSim.drawAxes: iw=",iw," timeTextW[iw]=",timeTextW[iw]);
   }
 
+ 
+  // calculate actually used date string array 
+  // with variable tick intervals dweek
+
   var dweek=(itmax<itmaxCrit) ? 1 : (itmax<itmaxCrit2) ? 2 : 4;
-  var iwinit=(itmax<itmaxCrit) ? 0 : 1;
+  var iwinit=0; // MT 2020-08
   for(var itick=0; itick<Math.round(timeTextW.length/dweek); itick++){
     days[itick]=7*(iwinit+dweek*itick);
     timeText[itick]=timeTextW[iwinit+dweek*itick];
@@ -1580,8 +1593,7 @@ DrawSim.prototype.drawAxes=function(displayType){
   ctx.stroke();
 
 
-  // draw times
-
+  // draw date strings on x axis
 
   var dxShift=(phi<0.01) ? -1.1*this.textsize : -2.4*cphi*this.textsize;
   var dyShift=(1.5+2*sphi)*this.textsize;
@@ -1593,6 +1605,7 @@ DrawSim.prototype.drawAxes=function(displayType){
     ctx.fillText(timeText[ix],0,0);
   }
   ctx.setTransform(1,0,0,1,0,0);
+
 
   // draw name+values y1 axis
 
@@ -1688,6 +1701,9 @@ DrawSim.prototype.drawAxes=function(displayType){
 		 this.yPix0+(yrelTop-il*dyrel)*this.hPix);
   }
 
+
+// R values drawn in DrawSim.update
+
 }
 
 
@@ -1696,7 +1712,7 @@ DrawSim.prototype.drawAxes=function(displayType){
 // displayType in {"lin", "log"}
 
 //######################################################################
-DrawSim.prototype.updateOneDay=function(it,displayType,xtot,xt,y,yt,z){
+DrawSim.prototype.draw=function(it,displayType,xtot,xt,y,yt,z){
 //######################################################################
 
   // update  text properties 
@@ -1706,29 +1722,29 @@ DrawSim.prototype.updateOneDay=function(it,displayType,xtot,xt,y,yt,z){
   this.textsizeR=1.5*this.textsize;
 
   ctx.font = this.textsize+"px Arial";
-  //console.log("DrawSim.updateOneDay: this.textsize=",this.textsize," ctx.font=",ctx.font);
+  //console.log("DrawSim.draw: this.textsize=",this.textsize," ctx.font=",ctx.font);
 
 
 
   // transfer new data
 
-  this.yDataLin[0][it]=n0*xtot/this.unitPers;
-  this.yDataLin[1][it]=n0*xt/this.unitPers;
-  this.yDataLin[2][it]=n0*y/this.unitPers;
-  this.yDataLin[3][it]=n0*yt/this.unitPers;
-  this.yDataLin[4][it]=n0*z/this.unitPers;
-  this.yDataLin[5][it]=(xt>1e-12) ? 100*z/xt : 0; // yDataLin[5] "rel"[%] 
+  this.ySimLin[0][it]=n0*xtot/this.unitPers;
+  this.ySimLin[1][it]=n0*xt/this.unitPers;
+  this.ySimLin[2][it]=n0*y/this.unitPers;
+  this.ySimLin[3][it]=n0*yt/this.unitPers;
+  this.ySimLin[4][it]=n0*z/this.unitPers;
+  this.ySimLin[5][it]=(xt>1e-12) ? 100*z/xt : 0; // ySimLin[5] "rel"[%] 
 
-  this.yDataLog[0][it]=log10(n0*xtot); 
-  this.yDataLog[1][it]=log10(n0*xt);
-  this.yDataLog[2][it]=log10(n0*y);
-  this.yDataLog[3][it]=log10(n0*yt);
-  this.yDataLog[4][it]=log10(n0*z);
-  this.yDataLog[5][it]=(xt>1e-6) ? log10(100*z/xt) : 0;
+  this.ySimLog[0][it]=log10(n0*xtot); 
+  this.ySimLog[1][it]=log10(n0*xt);
+  this.ySimLog[2][it]=log10(n0*y);
+  this.ySimLog[3][it]=log10(n0*yt);
+  this.ySimLog[4][it]=log10(n0*z);
+  this.ySimLog[5][it]=(xt>1e-6) ? log10(100*z/xt) : 0;
 
-  if(false){console.log("DrawSim.updateOneDay: it=",it,
-			" this.yDataLin[1][it]=",this.yDataLin[1][it],
-			//" this.yDataLog[0][it]=",this.yDataLog[0][it],
+  if(false){console.log("DrawSim.draw: it=",it,
+			" this.ySimLin[1][it]=",this.ySimLin[1][it],
+			//" this.ySimLog[0][it]=",this.ySimLog[0][it],
 			"");}
 
 // test possible rescaling due to new data
@@ -1748,27 +1764,27 @@ DrawSim.prototype.updateOneDay=function(it,displayType,xtot,xt,y,yt,z){
   // need also to update ymax of display actually not used
 
   for(var q=0; q<5; q++){ 
-    if((this.isActiveLin[q])&&(this.yDataLin[q][it]>this.ymaxLin)){
-      this.ymaxLin=this.yDataLin[q][it];
+    if((this.isActiveLin[q])&&(this.ySimLin[q][it]>this.ymaxLin)){
+      this.ymaxLin=this.ySimLin[q][it];
       if(displayType==="lin"){erase=true;}
     }
 
-    if((this.isActiveLog[q])&&(this.yDataLog[q][it]>this.ymaxLog)){
-      this.ymaxLog=this.yDataLog[q][it];
+    if((this.isActiveLog[q])&&(this.ySimLog[q][it]>this.ymaxLog)){
+      this.ymaxLog=this.ySimLog[q][it];
       if (displayType==="log"){erase=true;}
     }
 
     if(false){
       console.log("it=",it," q=",q,
-		  " this.yDataLin[q][it]=",this.yDataLin[q][it],
+		  " this.ySimLin[q][it]=",this.ySimLin[q][it],
 		  " this.ymaxLin=",this.ymaxLin,
 		    " this.ymaxLog=",this.ymaxLog);
     }
     
   }
 
-  if(this.yDataLin[5][it]>this.ymaxPerc){ // yDataLin[5] =z/yt in percent
-    this.ymaxPerc=this.yDataLin[5][it];
+  if(this.ySimLin[5][it]>this.ymaxPerc){ // ySimLin[5] =z/yt in percent
+    this.ymaxPerc=this.ySimLin[5][it];
     erase=true;
   }
 
@@ -1818,16 +1834,16 @@ DrawSim.prototype.updateOneDay=function(it,displayType,xtot,xt,y,yt,z){
       +( (RsliderUsed||otherSliderUsed)
 	 ? "" : (" +/- "+sigmaR_hist[0].toFixed(2)));
   ctx.font = this.textsizeR+"px Arial";
-  //console.log("updateOneDay: this.textsizeR=",this.textsizeR," ctx.font=",ctx.font);
   ctx.fillText(str_R,0,0);
   ctx.setTransform(1,0,0,1,0,0);
 
-  for(var iw=1; iw<it/7; iw+=2){ // !!! iw=1,3,5,7...
-    var itR=7*iw;
+  for(var ical=0; ical<=getIndexCalib(it); ical++){ // !!! 
+    var itR=getIndexTimeFromCalib(ical);
     x0=this.xPix[itR];
     ctx.fillRect(x0-1,this.yPix0,3,this.hPix);
 
     ctx.setTransform(0,-1,1,0,x0+1.0*this.textsizeR,y0);
+    //console.log("drawSim.draw: it=",it," itR=",itR);
     str_R="R="+R_hist[itR].toFixed(2)
       +( (RsliderUsed||otherSliderUsed||(itR>=dataGit_imax))
 	 ? "" : (" +/- "+sigmaR_hist[itR].toFixed(2)));
@@ -1856,6 +1872,7 @@ DrawSim.prototype.updateOneDay=function(it,displayType,xtot,xt,y,yt,z){
     this.plotPoints(it, 5, dataGit_deathsCases, displayType); 
   }
 
+
 }
 
 
@@ -1863,7 +1880,7 @@ DrawSim.prototype.updateOneDay=function(it,displayType,xtot,xt,y,yt,z){
 DrawSim.prototype.drawCurve=function(it,q,displayType){
 //######################################################################
   //console.log("in DrawSim.drawCurve: q=",q," displayType=",displayType);
-  var data=(displayType==="log") ? this.yDataLog[q] : this.yDataLin[q];
+  var simdata=(displayType==="log") ? this.ySimLog[q] : this.ySimLin[q];
   var w=this.wLine[q]/2;
   var yminDraw=(displayType==="log") ? this.yminLog : this.yminLin;
   var ymaxDraw=(displayType==="log") ? this.ymaxLog : this.ymaxLin;
@@ -1871,29 +1888,37 @@ DrawSim.prototype.drawCurve=function(it,q,displayType){
 
   ctx.fillStyle=this.colLine[q];
 
-  for (var itg=0; itg<it; itg++){
-    if(false){console.log("q=",q," itg=",itg," data[itg]=",data[itg],
-			 " yminDraw=",yminDraw,
-			 " ymaxDraw=",ymaxDraw);}
-    if((itg>0)&&(data[itg]>=yminDraw) &&(data[itg]<=ymaxDraw)){
-      var yrel=(data[itg]-yminDraw)/(ymaxDraw-yminDraw);
-      var yrelOld=(data[itg-1]-yminDraw)/(ymaxDraw-yminDraw);
-      var dataPix=this.yPix0+yrel*(this.yPixMax-this.yPix0);
-      var dataPixOld=this.yPix0+yrelOld*(this.yPixMax-this.yPix0);
+  for (var itg=0; itg<=it; itg++){
+    if((itg>0)&&(simdata[itg]>=yminDraw) &&(simdata[itg]<=ymaxDraw)){
+      var yrel=(simdata[itg]-yminDraw)/(ymaxDraw-yminDraw);
+      var yrelOld=(simdata[itg-1]-yminDraw)/(ymaxDraw-yminDraw);
+      var simPix=this.yPix0+yrel*(this.yPixMax-this.yPix0);
+      var simPixOld=this.yPix0+yrelOld*(this.yPixMax-this.yPix0);
      // if(q==0){console.log("q=",q," yrel=",yrel);}
       ctx.beginPath(); //!! crucial; otherwise latest col used for ALL
-      var phi=Math.atan((dataPix-dataPixOld)/
+      var phi=Math.atan((simPix-simPixOld)/
 			(this.xPix[itg]-this.xPix[itg-1]));
       var cphi=Math.cos(phi);
       var sphi=Math.sin(phi);
-      ctx.moveTo(this.xPix[itg-1]-w*sphi, dataPixOld+w*cphi);
-      ctx.lineTo(this.xPix[itg-1]+w*sphi, dataPixOld-w*cphi);
-      ctx.lineTo(this.xPix[itg]+w*sphi,   dataPix-w*cphi);
-      ctx.lineTo(this.xPix[itg]-w*sphi,   dataPix+w*cphi);
+      ctx.moveTo(this.xPix[itg-1]-w*sphi, simPixOld+w*cphi);
+      ctx.lineTo(this.xPix[itg-1]+w*sphi, simPixOld-w*cphi);
+      ctx.lineTo(this.xPix[itg]+w*sphi,   simPix-w*cphi);
+      ctx.lineTo(this.xPix[itg]-w*sphi,   simPix+w*cphi);
       ctx.closePath();  // !! crucial, otherwise latest col used for ALL
       ctx.fill();
     }
   }
+
+  // debug
+
+  if(false){
+  //if( (q==1)&&(it<=20)){
+    var idata=dataGit_idataStart+it;
+    console.log("DrawSim.drawCurve: it=",it," quantity q=",q,
+		" simdata[it]=",simdata[it]);
+  }
+
+
 }
 
 
@@ -1923,9 +1948,6 @@ DrawSim.prototype.plotPoints=function(it,q,data_arr,displayType){
 
 
     if((itg>=0)&&(itg<=it)){
-      if(false){console.log("it=",it," i=",i," itg=",itg,
-			   " data_arr[i]=",data_arr[i]);}
-
       var yrel=(y-yminDraw)/(ymaxDraw-yminDraw);
       var dataPix=this.yPix0+yrel*(this.yPixMax-this.yPix0);
       ctx.beginPath(); //!! crucial; otherwise latest col used for ALL
@@ -1933,7 +1955,19 @@ DrawSim.prototype.plotPoints=function(it,q,data_arr,displayType){
       ctx.fill();
     }
   }
+
+  // debug
+
+  if(false){
+  //if( (q==1)&&(it<=20)){
+    var idata=dataGit_idataStart+it;
+    console.log("DrawSim.plotPoints: it=",it," idata=",idata,
+		" quantity q=",q," data_arr[idata]=",data_arr[idata]);
+  }
 }
+
+
+
 
 DrawSim.prototype.clear=function(){
   ctx.clearRect(0, 0, canvas.width, canvas.height);
