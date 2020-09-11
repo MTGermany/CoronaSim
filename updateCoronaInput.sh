@@ -5,10 +5,13 @@
 #####################################################################
 
 # first link recommended but does not allow wget
-#wget https://covid.ourworldindata.org/data/owid-covid-data.json
-wget https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/owid-covid-data.json --output-document=data/githubWithTests.json
+# wget https://covid.ourworldindata.org/data/owid-covid-data.json
 
-#cp data/githubWithTests_orig.json data/githubWithTests.json
+#wget https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/owid-covid-data.json --output-document=data/githubWithTests.json
+#cp data/githubWithTests.json data/githubWithTests_orig.json
+
+
+cp data/githubWithTests_orig.json data/githubWithTests.json
 
 # delete irrelevant/redundant data lines
 
@@ -27,31 +30,40 @@ perl -i -p -e 's/\]    \}\,/\]    \},\n/g' data/githubWithTests.json
 # filter countries
 
 grep Germany data/githubWithTests.json > data/tmp.json
-grep Austria data/githubWithTests.json >> data/tmp.json
-grep Czech data/githubWithTests.json >> data/tmp.json
-grep France data/githubWithTests.json >> data/tmp.json
-grep "United Kingdom" data/githubWithTests.json >> data/tmp.json
-grep Italy data/githubWithTests.json >> data/tmp.json
-grep Poland data/githubWithTests.json >> data/tmp.json
-grep Spain data/githubWithTests.json >> data/tmp.json
-grep Sweden data/githubWithTests.json >> data/tmp.json
-grep Switzerland data/githubWithTests.json >> data/tmp.json
-grep India data/githubWithTests.json >> data/tmp.json
-grep Russia data/githubWithTests.json >> data/tmp.json
-grep USA data/githubWithTests.json >> data/tmp.json
+ grep Austria data/githubWithTests.json >> data/tmp.json
+ grep Czech data/githubWithTests.json >> data/tmp.json
+ grep France data/githubWithTests.json >> data/tmp.json
+ grep "United Kingdom" data/githubWithTests.json >> data/tmp.json
+ grep Italy data/githubWithTests.json >> data/tmp.json
+ grep Poland data/githubWithTests.json >> data/tmp.json
+ grep Spain data/githubWithTests.json >> data/tmp.json
+ grep Sweden data/githubWithTests.json >> data/tmp.json
+ grep Switzerland data/githubWithTests.json >> data/tmp.json
+ grep India data/githubWithTests.json >> data/tmp.json
+ grep Russia data/githubWithTests.json >> data/tmp.json
+ grep USA data/githubWithTests.json >> data/tmp.json
 
 # add variable name and neceesary '  ' between rhs of var
 
-sed -e "1i\dataGitTests=\'\{" data/tmp.json > data/tmp2.json
+sed -e "1i\dataGitLocalTests=\'\{" data/tmp.json > data/tmp2.json
 echo "}'" >> data/tmp2.json
 
-# remove new lines and last comma
+# first remove newlines
 
 perl -i -p -e 's/\n//g' data/tmp2.json
-perl -i -p -e "s/\}\,\}/\}\}/g"  data/tmp2.json
+
+# remove commas before } and much space after {
+
+perl -i -p -e "s/\,(\s*)\}/\}/g"  data/tmp2.json
+perl -i -p -e "s/\{(\s*)/\{/g"  data/tmp2.json
+
+
+#perl -i -p -e 's/\n//g' data/tmp2.json
 rm data/tmp.json
 mv data/tmp2.json data/githubWithTests.json
 # tail }        ]    }}'
+
+exit
 
 #####################################################################
 # get data w/o test from another github website

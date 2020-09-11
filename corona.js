@@ -8,7 +8,8 @@
 // useLiveData=false: obtained data server-side 
 // via script updateCoronaInput.sh. Stable but need to upload once a day
 
-var useLiveData=true;  
+//var useLiveData=true;  
+var useLiveData=false;  
 
 // debugApple=true for debugging of devices w/o console (ipad) redirect
 // it to a html element using console-log-html.js
@@ -54,14 +55,17 @@ var isStopped=true
 
 var dayStartMar=20; //!!!
 var startDay=new Date(2020,02,dayStartMar); // months start @ zero, days @ 1
-
+var present=new Date();   // time object for present 
 var it=0;
-var itmaxinit;  // #days init simulation; to be determined by js Date() object
+var oneDay_ms=(1000 * 3600 * 24);
+var itmaxinit=Math.round(
+    (present.getTime() - startDay.getTime())/oneDay_ms); 
                 // itmaxinit=days(present-startDay)
-var itmax;      // can be >itmaxinit during interactive simulation
+                // round because of daylight saving time complications
+var itmax=itmaxinit; // can be >itmaxinit during interactive simulation
 
 var itmin_calib; // !!! start calibr time interval w/resp to dayStartMar
-                 //     =^ dataGit_idataStart+1
+                 //     = dataGit_idataStart+1
 var itmax_calib; // !!! end calibr time interval =^ dataGit_imax-1 
                  // should be split if there are more than approx 
                  // 20 weeks of data
@@ -82,7 +86,8 @@ var dataGit_cumDeaths=[];
 var dataGit_cumRecovered=[];
 var dataGit_deathsCases=[];
 
-
+// MT 2020-09
+var dataGitTests=[];
 
 // global geographic simulation vars 
 
@@ -187,7 +192,6 @@ var Rtime=[]; //!!! calibrated R; one element per 1-2 weeks
 var R_hist=[]; R_hist[0]=R0; // R from past interactions; one element per day
 var sigmaR_hist=[]; sigmaR_hist[0]=0; 
 
-var oneDay_ms=(1000 * 3600 * 24);
 
 
 // if use Europe opendata portal
@@ -309,17 +313,26 @@ function getGithubData() {
       });
   }
 
-  else{
+  else{ // use data from server (-> cron-job!)
     if(useLiveData){
       useLiveData=false;
       console.log("You are using an old Browser that does not understand Javascript's fetch");
     }
-    dataGit = JSON.parse(dataGitLocal);
+    dataGit = JSON.parse(dataGitLocal); // known since html->data/github.json
+    //dataGit = JSON.parse(dataGitLocalTests); // known since html->data/github.json
     console.log("useLiveData=false: dataGit=",dataGit);
     initializeData(country);
     //corona=new CoronaSim(); //!!
     corona.init();
   }
+
+// input data on number of tests always from server (-> cron-job!)
+// since original json file too big
+
+  dataGitTests = JSON.parse(dataGitLocalTests); // different name!!
+  console.log("dataGitTests=",dataGitTests);
+  console.log("dataGitTests.DEU.data[0].date=",dataGitTests.DEU.data[0].date);
+
 }
 
 // really malignous error: Apple cannot make date object out of yyyy-m-dd
@@ -534,8 +547,8 @@ function SSEfunc(R_arr, fR, logging) { //!!!!! use separate R_array for optimiza
     var nxData=dataGit_cumCases[dataGit_idataStart+it]; // i+1 after update
     var nxSim=n0*corona.xt;
 
-    if(logging&&(i<60)){ 
-    //if(logging){ 
+    //if(logging&&(i<60)){ 
+    if(false){ // 2020-09
       console.log("SSEfunc after update and it++: it=",it,
 		  " R_actual (it-1->it)=",R_actual.toFixed(2),
 		  " nxData=",nxData,
@@ -584,15 +597,12 @@ function startup() {
   // get present and difference to startDay
   // =============================================================
 
-  var present=new Date();
+  //present=new Date();
   //var present=new Date(2020,02,23); //!!
   
   // initialisation of itmaxinit; 
   // round because of daylight saving time complications
 
-  itmaxinit = Math.round(
-    (present.getTime() - startDay.getTime())/oneDay_ms);
-  itmax=itmaxinit;
   //console.log("present=",present);
 
 
@@ -762,9 +772,9 @@ function estimateR(){
 
     console.log("\n\n\n");
     for(var j=0; j<Rguess.length; j++){
-      console.log("iter ",ic+1," j=",j,
-		  " Rtime[j+indexcalibmin]=",Rtime[j+indexcalibmin],
-		  " Rguess[j]=",Rguess[j]);
+      //console.log("iter ",ic+1," j=",j, // 2020-09
+//		  " Rtime[j+indexcalibmin]=",Rtime[j+indexcalibmin],
+// 		  " Rguess[j]=",Rguess[j]);
     }
 
   }
@@ -803,6 +813,7 @@ function estimateR(){
 
 function estimateErrorCovar(){
 
+  console.log("in estimateErrorCovar(): itmax=",itmax);
   var indexcalibmin=getIndexCalib(itmin_calib);
   var indexcalibmax=getIndexCalibmax(itmax_calib);
   //console.log("indexcalibmax=",indexcalibmax);
@@ -896,6 +907,7 @@ function estimateErrorCovar(){
     var index=Math.min(getIndexCalib(i)-getIndexCalib(itmin_calib),
 		       Rtime_sigma.length-1);
     sigmaR_hist[i]=(incalib) ? Rtime_sigma[index] : 0;
+    //console.log("i=",i," sigmaR_hist[i]=",sigmaR_hist[i]);
   }
 
   if(false){ //!!
@@ -1846,7 +1858,8 @@ DrawSim.prototype.draw=function(it,displayType,xtot,xt,y,yt,z){
     //console.log("drawSim.draw: it=",it," itR=",itR);
     str_R="R="+R_hist[itR].toFixed(2)
       +( (RsliderUsed||otherSliderUsed||(itR>=dataGit_imax))
-	 ? "" : (" +/- "+sigmaR_hist[itR].toFixed(2)));
+     // +((true) // if sigma_R undefiuned
+	? "" : (" +/- "+sigmaR_hist[itR].toFixed(2)));
     ctx.fillText(str_R,0,0);
     ctx.setTransform(1,0,0,1,0,0);
   }
