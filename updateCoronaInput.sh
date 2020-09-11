@@ -57,6 +57,24 @@ perl -i -p -e 's/\n//g' data/tmp2.json
 perl -i -p -e "s/\,(\s*)\}/\}/g"  data/tmp2.json
 perl -i -p -e "s/\{(\s*)/\{/g"  data/tmp2.json
 
+# consolidate country names with other json file 
+# (need to do this here, because other json is fetched online)
+
+perl -i -p -e "s/DEU/Germany/g" data/tmp2.json
+perl -i -p -e "s/AUT/Austria/g" data/tmp2.json
+perl -i -p -e "s/CZE/Czechia/g" data/tmp2.json
+perl -i -p -e "s/FRA/France/g" data/tmp2.json
+perl -i -p -e "s/GBR/England/g" data/tmp2.json #cannot use space United Kingd
+perl -i -p -e "s/ITA/Italy/g" data/tmp2.json
+perl -i -p -e "s/POL/Poland/g" data/tmp2.json
+perl -i -p -e "s/ESP/Spain/g" data/tmp2.json
+perl -i -p -e "s/SWE/Sweden/g" data/tmp2.json
+perl -i -p -e "s/CHE/Switzerland/g" data/tmp2.json
+perl -i -p -e "s/IND/India/g" data/tmp2.json
+perl -i -p -e "s/RUS/Russia/g" data/tmp2.json
+perl -i -p -e "s/USA/US/g" data/tmp2.json
+
+
 
 #perl -i -p -e 's/\n//g' data/tmp2.json
 rm data/tmp.json

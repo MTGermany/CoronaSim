@@ -84,6 +84,7 @@ var dataGit_date=[];
 var dataGit_cumCases=[];
 var dataGit_cumDeaths=[];
 var dataGit_cumRecovered=[];
+var dataGit2_cumTests=[]; // other source, therefore dataGit2
 var dataGit_deathsCases=[];
 
 // MT 2020-09
@@ -194,17 +195,6 @@ var sigmaR_hist=[]; sigmaR_hist[0]=0;
 
 
 
-// if use Europe opendata portal
-
-var data_date_ddmmyyyy=[];
-var data_diff2start=[];
-var data_cases=[];
-var data_cumCases=[];
-var data_deaths=[];
-var data_cumDeaths=[];
-var data_deathsCases=[];
-
-
 
 
 
@@ -293,6 +283,18 @@ function getGithubData() {
     //ConsoleLogHTML.disconnect(); // Stop redirecting
   }
 
+
+  // input data on number of tests always from server (-> cron-job!)
+  // since original json file too big
+  // because of annoying undefined time order in fetch, set at beginnng!
+
+  dataGitTests = JSON.parse(dataGitLocalTests); // must be different name!!
+  console.log("dataGitTests=",dataGitTests);
+  console.log("dataGitTests.England.data[100]=",dataGitTests.England.data[100]);
+
+
+  // other data can be brought life by fetch on modern browsers
+
   if(useLiveData && !(typeof fetch === "undefined")){
 
     console.log("getGithubData(): fetch defined");
@@ -306,34 +308,30 @@ function getGithubData() {
       //.then((data1) => {
       .then(function(data1){
         dataGit=data1;
-       // console.log("dataGit=",dataGit);
-        //console.log("inner: dataGit[country]=",dataGit[country]);
-        initializeData(country);
+        console.log("in fetch function: dataGit=",dataGit);
+	console.log("end getGithubData(..) live alternative");
+        initializeData(country); //!! MUST remain inside; extremely annoying
         corona.init(); //!! only then ensured that data loaded! it=1 as result
       });
   }
 
-  else{ // use data from server (-> cron-job!)
+  // fallback: use also main data from server (-> cron-job!)
+
+  else{
     if(useLiveData){
       useLiveData=false;
       console.log("You are using an old Browser that does not understand Javascript's fetch");
     }
     dataGit = JSON.parse(dataGitLocal); // known since html->data/github.json
-    //dataGit = JSON.parse(dataGitLocalTests); // known since html->data/github.json
-    console.log("useLiveData=false: dataGit=",dataGit);
-    initializeData(country);
-    //corona=new CoronaSim(); //!!
-    corona.init();
+    console.log("useLiveData=false, get data from server: dataGit=",dataGit);
+    console.log("end getGithubData(..) non-live alternative");
+    initializeData(country); //!! MUST repeat because of annoying time order
+    corona.init(); 
   }
-
-// input data on number of tests always from server (-> cron-job!)
-// since original json file too big
-
-  dataGitTests = JSON.parse(dataGitLocalTests); // different name!!
-  console.log("dataGitTests=",dataGitTests);
-  console.log("dataGitTests.DEU.data[0].date=",dataGitTests.DEU.data[0].date);
-
 }
+
+
+
 
 // really malignous error: Apple cannot make date object out of yyyy-m-dd
 // e.g., 2020-1-22 as delivered by dataGit
@@ -353,10 +351,27 @@ function insertLeadingZeroes(dateStr){
 
 
 function initializeData(country) { 
-  console.log("in initializeData(country)");
+  var countryTests=(country==="United Kingdom") ? "England" : country;
+  console.log("in initializeData(country): country=",country,
+	      " countryTests=",countryTests);
   console.log(" Rtime.length=",Rtime.length);
+
+
+  // MT 2020-09  // [] access works ONLY for vars, . access ONLY for literals
+
   var data=dataGit[country];
   var dateInitStr=data[0]["date"];
+
+  var dataTests=dataGitTests[countryTests].data;
+  var dateInitTestStr=dataTests[0]["date"];
+  console.log("countryTests=",countryTests,
+	      " dataGitTests[countryTests]=",dataGitTests[countryTests]);
+  console.log("dateInitTestStr=",dateInitTestStr);
+
+  for(var it=120; it<165; it++){
+    console.log("dataTests[it]=",dataTests[it]);
+  }
+
 
   // !! extremely heineous apple date bug: 
   // cannot make use of date str such as 2020-1-22
@@ -367,13 +382,15 @@ function initializeData(country) {
   //console.log("dataGit_idataStart=",dataGit_idataStart);
 
 
+  // extract main data
+
   var itmaxData=data.length;
   for(var it=0; it<itmaxData; it++){
     dataGit_date[it]=data[it]["date"];
     dataGit_cumCases[it]=data[it]["confirmed"];
     dataGit_cumDeaths[it]=data[it]["deaths"];
     dataGit_cumRecovered[it]=data[it]["recovered"];
-    dataGit_deathsCases[it]=(data_cumCases[it]==0)
+    dataGit_deathsCases[it]=(dataGit_cumCases[it]==0)
       ? 0 : dataGit_cumDeaths[it]/dataGit_cumCases[it];
     if(false){
 	  console.log("it=",it," dataGit_date=",dataGit_date[it],
@@ -383,13 +400,69 @@ function initializeData(country) {
     }
   }
 
+
+  // extract test data (MT 2020-09)
+
+  var itmaxTests=dataTests.length;
+  for(var it=0; it<itmaxTests; it++){
+    dataGit2_cumTests[it]=dataTests[it].total_tests;
+    //console.log(dataTests[it]["date"],
+//		": dataGit2_cumTests=",dataGit2_cumTests[it]);
+  }
+
+  // only few days have new cumul data: interpolate them
+
+  var firstTestsRecorded=false;
+  var it_last=0; // it for last defined cumul #tests
+  for(var it=0; it<itmaxTests; it++){
+    if( !(typeof dataGit2_cumTests[it] === "undefined")){
+      var cumAct=dataGit2_cumTests[it];
+      if(firstTestsRecorded){
+	for(var i=it_last+1; i<it; i++){
+	  var cumLast=dataGit2_cumTests[it_last];
+	  dataGit2_cumTests[i]=cumLast+(i-it_last)/(it-it_last)
+	    *(cumAct-cumLast);
+	}
+      }
+      else{ // assume 14 days of tests before first reporting
+	var di=Math.min(it, 14); 
+	for(var i=it-di; i<it; i++){
+	  dataGit2_cumTests[i]=(1+(i-it)/di)*cumAct;
+	}
+	for(var i=0; i<it-di; i++){
+	  dataGit2_cumTests[i]=0;
+	}
+      }
+      it_last=it;
+      firstTestsRecorded=true;
+    }
+
+    if(it==itmaxTests-1){ // extrapolate
+      for(var i=it_last+1; i<itmaxTests; i++){
+	dataGit2_cumTests[i]=dataGit2_cumTests[it_last] + (i-it_last)
+	  * (dataGit2_cumTests[it_last]-dataGit2_cumTests[it_last-1]);
+      }
+    }
+
+  }
+
+  for(var it=0; it<itmaxTests; it++){
+    console.log(dataTests[it]["date"],
+		": dataGit2_cumTests=",dataGit2_cumTests[it]);
+  }
+
+
+
+  // define time shifts of start date of the two data sources to start date
+
   dataGit_dateBegin=new Date(insertLeadingZeroes(dateInitStr));
   dataGit_idataStart=Math.round(
     (startDay.getTime() - dataGit_dateBegin.getTime() )/oneDay_ms);
   dataGit_imax=dataGit_cumCases.length-dataGit_idataStart;
-
-
   nxtStart=dataGit_cumCases[dataGit_idataStart]; 
+
+
+  // testing
 
   console.log(
     " dataGit_idataStart=",dataGit_idataStart,
@@ -405,6 +478,8 @@ function initializeData(country) {
     "\n  nxtStart=",nxtStart,
     "\n"
   );
+
+
 
   RsliderUsed=false;
   otherSliderUsed=false;
