@@ -13,4 +13,4 @@ cp mathjs/* $target/mathjs
 chmod 604 `find $target -type f`
 chmod 701 `find $target -type d` 
 
-echo "copied simulation to $target use upload2ionos.sh there"
+echo "copied simulation to $target"
