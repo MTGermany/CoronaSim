@@ -7,8 +7,8 @@
 # first link recommended but does not allow wget
 # wget https://covid.ourworldindata.org/data/owid-covid-data.json
 
-#wget https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/owid-covid-data.json --output-document=data/githubWithTests.json
-#cp data/githubWithTests.json data/githubWithTests_orig.json
+wget https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/owid-covid-data.json --output-document=data/githubWithTests.json
+cp data/githubWithTests.json data/githubWithTests_orig.json
 
 
 cp data/githubWithTests_orig.json data/githubWithTests.json
@@ -81,7 +81,7 @@ rm data/tmp.json
 mv data/tmp2.json data/githubWithTests.json
 # tail }        ]    }}'
 
-exit
+#exit
 
 #####################################################################
 # get data w/o test from another github website
