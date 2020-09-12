@@ -78,7 +78,10 @@ var dataGit=[];
 var data_dateBegin;
 
 var data_idataStart; //!!! dataGit dataset index for dayStartMar
-var data_imax;  // !!! with respect to dayStartMar=data_cumCases.length-data_idataStart
+var data_imax;  // !!! with respect to dayStartMar=data.length-data_idataStart
+
+var data2_idataStart; // same for data2 containing the corona-test data
+var data2_imax;  
 
 var data_date=[];
 var data_cumCases=[];
@@ -372,9 +375,9 @@ function initializeData(country) {
  // define time shifts start date - start date of the two data sources 
 
   data_dateBegin=new Date(insertLeadingZeroes(dateInitStr));
-  data_idataStart=Math.round(
+  data_idataStart=Math.round( // absolute index
     (startDay.getTime() - data_dateBegin.getTime() )/oneDay_ms);
-  data_imax=data.length-data_idataStart;
+  data_imax=data.length-data_idataStart; // relative index
   nxtStart=data[data_idataStart]["confirmed"];
 
   data2_dateBegin=new Date(insertLeadingZeroes(dateInitStr2));
@@ -524,12 +527,12 @@ function initializeData(country) {
   }
 
 
-
+//!!!!
   //for(var it=0; it<itmaxData2; it++){
   for(var it=itmaxData2-5; it<itmaxData2; it++){
     console.log(data2[it]["date"],": it=",it,
 		" data2_cumCases=",Math.round(data2_cumCases[it]),
-		" data_cumCases=",Math.round(data_cumCases[it+itmaxData-itmaxData2]),
+		" data_cumCases=",Math.round(data_cumCases[it+data_idataStart-data2_idataStart]),
 		" data2_posRate=",data2_posRate[it].toPrecision(3),
 		" data2_cumTests=",Math.round(data2_cumTests[it]),
 		" data2_cumTestsCalc=", 
@@ -674,7 +677,7 @@ function SSEfunc(R_arr, fR, logging) { //!!!!! use separate R_array for optimiza
 		  " R_actual=",R_actual.toFixed(2),
 		  " nxData=",nxData,
 		  " nxSim=",Math.round(nxSim),
-		  " nActiveTrueSim=",Math.round(n0*corona.xtot));
+		  " nActiveTrueSim=",Math.round(n0*corona.xAct));
     }
 
     corona.updateOneDay(R_actual); it++;
@@ -1082,7 +1085,7 @@ function displayTypeCallback(){
   }
 
   drawsim.setDisplayType(displayType); // clear and draAxes in setDisplay..
-  drawsim.draw(it,displayType,corona.xtot,corona.xt,
+  drawsim.draw(it,displayType,corona.xAct,corona.xt,
 		       corona.y,corona.yt,corona.z); // !! ONLY to redraw lines
 }
 
@@ -1238,9 +1241,9 @@ function doSimulationStep(){ //!!!
 		" R_actual=",R_actual.toPrecision(3));
   }
 
-  // draw first to acorona.xtotohne);
-  drawsim.draw(it, displayType, corona.xtot, corona.xt, // need R_hist
-		       corona.y, corona.yt, corona.z, corona.xtotohne);
+
+  drawsim.draw(it, displayType, corona.xAct, corona.xt, // need R_hist
+		       corona.y, corona.yt, corona.z, corona.xyz);
  
   var logging=false;
   corona.updateOneDay(R_actual,logging);
@@ -1286,15 +1289,15 @@ function CoronaSim(){
 CoronaSim.prototype.init=function(){
 
   // start warmup at a very early phase
-  // !! start with n0*this.xtot>=1, otherwise infection dead
+  // !! start with n0*this.xAct>=1, otherwise infection dead
   // feature, not bug
 
-  // xtot: sum of "actually infected" (neither recoverd nor dead)
-  // xtotohne: cumulative sum of infected (incl recovered, dead)
+  // xAct: sum of "actually infected" (neither recovered nor dead)
+  // xyz: cumulative sum of infected (incl recovered, dead)
 
-  this.xtot=1.01/n0; 
-  this.xtotohne=1.01/n0; 
-  //console.log("init: n0=",n0," 0.99/n0=",0.99/n0," this.xtot=",this.xtot);
+  this.xAct=1.01/n0; 
+  this.xyz=1.01/n0; 
+  //console.log("init: n0=",n0," 0.99/n0=",0.99/n0," this.xAct=",this.xAct);
   this.xt=0; // fraction of positively tested persons/n0 as f(t)
   this.y=0;  // fraction recovered real as a function of time
   this.yt=0; // fraction recovered data
@@ -1311,7 +1314,7 @@ CoronaSim.prototype.init=function(){
     denom+=Math.exp(-r0*tau);
   }
   for(var tau=0; tau<taumax; tau++){
-    this.x[tau]=this.xtot*Math.exp(-r0*tau)/denom;
+    this.x[tau]=this.xAct*Math.exp(-r0*tau)/denom;
     this.xohne[tau]=this.x[tau];
     //console.log("init: this.x[tau]=",this.x[tau]);
   }
@@ -1331,8 +1334,8 @@ CoronaSim.prototype.init=function(){
   // exactly to data nxtStart
  
   var scaleDownFact=nxtStart/(n0*this.xt);
-  this.xtot     *= scaleDownFact;
-  this.xtotohne *= scaleDownFact;
+  this.xAct     *= scaleDownFact;
+  this.xyz *= scaleDownFact;
   this.xt       *= scaleDownFact;
   this.y        *= scaleDownFact;
   this.yt       *= scaleDownFact;
@@ -1367,8 +1370,8 @@ CoronaSim.prototype.updateOneDay=function(R,logging){
 
   if(logging){
     console.log("Corona.updateOneDay: it=",it," R=",R,
-		" this.xtot=",this.xtot.toPrecision(3),
-		" this.xtotohne=",this.xtotohne.toPrecision(3),
+		" this.xAct=",this.xAct.toPrecision(3),
+		" this.xyz=",this.xyz.toPrecision(3),
 		" this.xt=",this.xt.toPrecision(3),
 /*
 		"this.yt=",this.yt.toPrecision(3),
@@ -1402,15 +1405,15 @@ CoronaSim.prototype.updateOneDay=function(R,logging){
 
   this.x[0]=0;
   var f_R=1./(tauRend-tauRstart+1);
-  if(n0*this.xtot>=1){ // !! infection finally dead if xtot<1
+  if(n0*this.xAct>=1){ // !! infection finally dead if xAct<1
    for(var tau=tauRstart; tau<=tauRend; tau++){
     this.x[0]+=R*f_R*this.x[tau]
-      *(1-this.xtotohne);
+      *(1-this.xyz);
     if(false){
       console.log("Corona.updateOneDay: it=",it," tau=",tau.toPrecision(3),
 		" R*f_R=",R*f_R.toPrecision(3),
                 " this.x[tau]*(1-(x+y+z)=",
-		this.x[tau]*(1-(this.xtot+this.y+this.z)).toPrecision(3),
+		this.x[tau]*(1-(this.xAct+this.y+this.z)).toPrecision(3),
 		" this.x[0]=",this.x[0].toPrecision(3)
 		 );
     }
@@ -1425,7 +1428,7 @@ CoronaSim.prototype.updateOneDay=function(R,logging){
                       // recovered among the tested later on
   //!!! sometimes this.pTestDay undefined!!!
 
-  tauAvg//=5; //!!
+  tauAvg=5; //!!
   var dtau=Math.min(Math.floor(tauAvg/2),Math.round(tauTest));
  
 
@@ -1480,14 +1483,14 @@ CoronaSim.prototype.updateOneDay=function(R,logging){
 
 
   // sum up the profile of infected people
-  // xtot: sum of "actually infected" (neither recoverd nor dead)
-  // xtotohne: cumulative sum of infected (incl recovered, dead)
+  // xAct: sum of "actually infected" (neither recoverd nor dead)
+  // xyz: cumulative sum of infected (incl recovered, dead)
 
-  this.xtot=0;  
+  this.xAct=0;  
 
-  this.xtotohne+= this.x[0];
+  this.xyz+= this.x[0];
   for(var tau=0; tau<taumax; tau++){
-    this.xtot     += this.x[tau];
+    this.xAct     += this.x[tau];
   }
 
   this.itcount++;
@@ -1498,8 +1501,8 @@ CoronaSim.prototype.updateOneDay=function(R,logging){
     console.log("end CoronaSim.updateOneDay: this.itcount=",this.itcount,
 		" R=",R.toFixed(2),
 		" nxt=",Math.round(n0*this.xt),
-	//	" nxtot=",(n0*this.xtot).toPrecision(6),
-	//	" nxtotohne=",(n0*this.xtotohne).toPrecision(6),
+	//	" nxAct=",(n0*this.xAct).toPrecision(6),
+	//	" nxyz=",(n0*this.xyz).toPrecision(6),
 	//	" ny=",(n0*this.y).toPrecision(5),
 	//	" nyt=",(n0*this.yt).toPrecision(5),
 	//	" nz=",(n0*this.z).toPrecision(5),
@@ -1547,30 +1550,50 @@ function DrawSim(){
   this.ySimLin=[];
   this.ySimLog=[];
 
-  this.ySimLin[0]=[];  // actually infected
-  this.ySimLin[1]=[];  // infected+positively tested
-  this.ySimLin[2]=[];  // reovered real
-  this.ySimLin[3]=[];  // reovered and tested before
-  this.ySimLin[4]=[];  // dead
-  this.ySimLin[5]=[];  // fraction dead/positively tested
-  this.ySimLin[6]=[];  // cumulative infections incl recovery and death
 
-  this.ySimLog[0]=[];  // infected
-  this.ySimLog[1]=[];  // infected+positively tested
-  this.ySimLog[2]=[];  // reovered real
-  this.ySimLog[3]=[];  // reovered and tested before
-  this.ySimLog[4]=[];  // dead
-  this.ySimLog[5]=[];  // fraction dead/positively tested
-  this.ySimLog[6]=[];  // cumulative infections incl recovery and death
+  // always (data, sim, lin/log/act): 
+
+  // for displayType="lin" or "log"
+
+  // [0] => xAct=infected real actual
+  // [1] => xt=infected cases (=pos tested) cum
+  // [2] => y=recovered real cum
+  // [3] => yt=recovered cases cum
+  // [4] => z=dead (real=cases) cum
+  // [5] => z/xt  (ratio of cumulated quantities!)
+  // [6] => xyz=infected real cum (incl recovered, dead)
+
+  // for displayType="act" 
+
+  // (as of 2020-09, 
+  // no ySimLin or ySimLog variables; only for data => plotPoints)
+
+  // [6] => 
+
+  this.ySimLin[0]=[];  // xAct=infected real actual
+  this.ySimLin[1]=[];  
+  this.ySimLin[2]=[];  
+  this.ySimLin[3]=[]; 
+  this.ySimLin[4]=[]; 
+  this.ySimLin[5]=[]; 
+  this.ySimLin[6]=[]; 
+
+  this.ySimLog[0]=[];  
+  this.ySimLog[1]=[];  
+  this.ySimLog[2]=[]; 
+  this.ySimLog[3]=[]; 
+  this.ySimLog[4]=[]; 
+  this.ySimLog[5]=[]; 
+  this.ySimLog[6]=[]; 
 
 
   this.colLine=[];
-  this.colLine[0]="rgb(255,90,0)";   // infected
-  this.colLine[1]="rgb(233,0,0)";     //Tested
-  this.colLine[2]="rgb(60,255,40)"; //RecoveredReal
-  this.colLine[3]="rgb(0,150,40)";    //RecoveredData
-  this.colLine[4]="rgb(0,0,0)";      //Dead
-  this.colLine[5]="rgb(0,0,150)";       //FracDeadData
+  this.colLine[0]="rgb(255,90,0)";    // xAct=infected real actual
+  this.colLine[1]="rgb(233,0,0)";     // xt=infected cases (=pos tested) cum
+  this.colLine[2]="rgb(60,255,40)";   // y=recovered real cum
+  this.colLine[3]="rgb(0,150,40)";    // yt=recovered cases cum
+  this.colLine[4]="rgb(0,0,0)";       // z=dead real cum = dead cases cum
+  this.colLine[5]="rgb(0,0,150)";     // z/xt (ratio of cumulated quantities!)
 
   this.wLine=[1,2,1,2,2,2]; //line width [pix]
   this.isActive=[];   // which line is drawn
@@ -1863,7 +1886,7 @@ DrawSim.prototype.drawAxes=function(displayType){
 // displayType in {"lin", "log"}
 
 //######################################################################
-DrawSim.prototype.draw=function(it,displayType,xtot,xt,y,yt,z,xtotohne){
+DrawSim.prototype.draw=function(it,displayType,xAct,xt,y,yt,z,xyz){
 //######################################################################
 
   // update  text properties 
@@ -1879,17 +1902,25 @@ DrawSim.prototype.draw=function(it,displayType,xtot,xt,y,yt,z,xtotohne){
 
   // transfer new data
 
-  this.ySimLin[0][it]=n0*xtot/this.unitPers;
+  // [0] => xAct=infected real actual
+  // [1] => xt=infected cases (=pos tested) cum
+  // [2] => y=recovered real cum
+  // [3] => yt=recovered cases cum
+  // [4] => z=dead (real=cases) cum
+  // [5] => z/xt  (ratio of cumulated quantities!)
+  // [6] => xyz=infected real cum (incl recovered, dead)
+
+
+  this.ySimLin[0][it]=n0*xAct/this.unitPers;
   this.ySimLin[1][it]=n0*xt/this.unitPers;
   this.ySimLin[2][it]=n0*y/this.unitPers;
   this.ySimLin[3][it]=n0*yt/this.unitPers;
   this.ySimLin[4][it]=n0*z/this.unitPers;
-  this.ySimLin[5][it]=(xt>1e-12) ? 100*z/xt : 0; // ySimLin[5] "rel"[%] 
+  this.ySimLin[5][it]=(xt>1e-12) ? 100*z/xt : 0; 
+  this.ySimLin[6][it]=n0*xyz/this.unitPers;
 
-  //MT 2020-09 cumulative sum of infected (incl recovered, dead)
-  this.ySimLin[6][it]=n0*xtotohne;
 
-  this.ySimLog[0][it]=log10(n0*xtot); 
+  this.ySimLog[0][it]=log10(n0*xAct); 
   this.ySimLog[1][it]=log10(n0*xt);
   this.ySimLog[2][it]=log10(n0*y);
   this.ySimLog[3][it]=log10(n0*yt);
@@ -1942,7 +1973,7 @@ DrawSim.prototype.draw=function(it,displayType,xtot,xt,y,yt,z,xtotohne){
     erase=true;
   }
 
-  // take care of data=max in linear representation
+  // take care of data=max in linear representation and erase if rescaling
 
 
   if(displayType==="lin"){
@@ -2010,6 +2041,8 @@ DrawSim.prototype.draw=function(it,displayType,xtot,xt,y,yt,z,xtotohne){
 
 
   // plot data points
+  // [0]=x=xSimCum, not at plotPoints
+  // [2]=y=ySimCum, not at plotPoints
 
   if(this.isActive[1]){ // xt
     this.plotPoints(it, 1, data_cumCases, displayType);
@@ -2078,6 +2111,9 @@ DrawSim.prototype.drawCurve=function(it,q,displayType){
 
 
 // plot the data; q only for determining the corresponding color
+// uses the full data array and subtracts data_idataStart from index
+// => needs the data, not data2 format 
+// => add data2_idataStart-data_idataStart to index of data2 quantities
 
 //######################################################################
 DrawSim.prototype.plotPoints=function(it,q,data_arr,displayType){
