@@ -93,6 +93,19 @@ var data2_cumTestsCalc=[]; // calculated from posRate
 var data2_cumCases=[]; // #cases/#tests in last available period
 var data2_posRate=[]; // #cases/#tests in last available period
 
+// derived data in data time order
+
+var data_xtAct=[];
+var data_dn=[];
+var data_dx=[];
+var data_dxt=[];
+var data_dyt=[];
+var data_dz=[];
+var data_posRate=[];
+var data_cfr=[];
+var data_ifr=[];
+
+
 // MT 2020-09
 var dataGit2=[];
 
@@ -527,7 +540,77 @@ function initializeData(country) {
   }
 
 
-//!!!!
+  console.log("initializeData:");
+  // generate the dat arrays (in data, not data2 time order) to be plotted
+  // data_dx=estmation from data assuming 
+  // (1) time interval tauTest where test is positive for infected people
+  //     e.g. tauPos=7 from infection days 3-9 
+  //     (start day here not relevant) 
+  // (2) the probability that not tested people are infected factor gamma
+  //     of that for tested people
+  // (3) "Durchseuchung" <<1 (!!! change later if xyz/n0 implemented!
+  // (4) tests have certain alpha and beta errors
+
+  var di=data2_idataStart-data_idataStart; // translation data->data2 index
+  var tauPos=7;
+  var gamma=0.1;
+  var alpha=0;
+  var beta=0;
+  for(var i=0; i<itmaxData; i++){
+    data_dxt[i]=data_cumCases[i]-data_cumCases[i-1];
+    data_dyt[i]=data_cumRecovered[i]-data_cumRecovered[i-1];
+    data_dz[i]=data_cumDeaths[i]-data_cumDeaths[i-1];
+    data_xtAct[i]=data_cumCases[i]-data_cumRecovered[i]-data_cumDeaths[i];
+  }
+
+  // need new loop because of forward ref at cfr, ifr
+
+  for(var i=0; i<itmaxData; i++){
+    data_posRate[i]=data2_posRate[i+di];
+    //data_dn[i]=data2_cumTests[i+di]-data2_cumTests[i+di-1];
+    data_dn[i]=data_dxt[i]/data_posRate[i];
+    var dnTauPos=data2_cumTests[i+di]-data2_cumTests[i+di-tauPos];
+    var pit=(data2_posRate[i+di]-beta)/(1-alpha-beta); // prob infected|tested
+ 
+    // denom tauPos because not tested people have a period tauPos
+    // to be tested positive 
+    // (!!!if tauPos=7, also cancels out weekly pattern)
+
+    data_dx[i]=(pit*dnTauPos + gamma*pit*(n0-dnTauPos))/tauPos;
+
+    var dxTauPos=data_cumCases[i]-data_cumCases[i-tauPos];
+    var dxtTauPos=data_cumCases[i]-data_cumCases[i-tauPos];
+    var dztTauPos=data_cumDeaths[i]-data_cumDeaths[i-tauPos];
+
+    // tauPos=7 days average (!!! also cancels out weekly pattern)
+    data_cfr[i]=(data_cumDeaths[i+tauDie-tauTest]
+		 -data_cumDeaths[i+tauDie-tauTest-tauPos])/dxtTauPos;
+    data_ifr[i]=(data_cumDeaths[i+tauDie]
+		 -data_cumDeaths[i+tauDie-tauPos])/(tauPos*data_dx[i]);
+  }
+
+
+  for(var i=0; i<itmaxData; i++){
+    if(true){
+    //if((i>itmaxData-30)&&(i<itmaxData)){
+      console.log(
+	insertLeadingZeroes(data[i]["date"]),": iData=",i,
+	" data_xtAct=",Math.round(data_xtAct[i]),
+	" data_dn=",Math.round(data_dn[i]),
+	" data_dx=",Math.round(data_dx[i]),
+	" data_dxt=",Math.round(data_dxt[i]),
+	" data_dyt=",Math.round(data_dyt[i]),
+	" data_dz=",Math.round(data_dz[i]),
+	"\n             data_posRate=",data_posRate[i].toPrecision(3),
+	" data_dz[i+tauDie-tauTest]=",data_dz[i+tauDie-tauTest],
+	" data_dxt[i]=",data_dxt[i],
+	" data_cfr=",data_cfr[i].toPrecision(3),
+	" data_ifr=",data_ifr[i].toPrecision(3),
+	" ");
+    }
+  }
+
+
   //for(var it=0; it<itmaxData2; it++){
   for(var it=itmaxData2-5; it<itmaxData2; it++){
     console.log(data2[it]["date"],": it=",it,
@@ -1551,24 +1634,38 @@ function DrawSim(){
   this.ySimLog=[];
 
 
-  // always (data, sim, lin/log/act): 
+  // Reference quantities; always the same for 
+  // displayType in {"lin", "log", "act"}
+  // three categoriess: cumulative, actual/rates per day, relative
 
-  // for displayType="lin" or "log"
+  //  [0] => xAct=actual infected real sim
+  //  [1] => xt=cumulated infected data (=cases, pos tested) as simulated
+  //  [2] => y=cumulated recovered real sim
+  //  [3] => yt=cumulated recovered data as simulated
+  //  [4] => z=cumulated dead (real=data) as simulated
+  //  [5] => z/xt=cumulated cfr (cfr as ratio of cumulated quantities!)
 
-  // [0] => xAct=infected real actual
-  // [1] => xt=infected cases (=pos tested) cum
-  // [2] => y=recovered real cum
-  // [3] => yt=recovered cases cum
-  // [4] => z=dead (real=cases) cum
-  // [5] => z/xt  (ratio of cumulated quantities!)
-  // [6] => xyz=infected real cum (incl recovered, dead)
+  // NEW sim (for actual/rates per day, relative)
+  //!!! not yet implemented, new ySim* files
 
-  // for displayType="act" 
+  //  [6] => dxSim=daily number new infected real sim
+  //  [7] => dzSim=daily number new dead sim
+  //  [8] => ifrSim=infection fatality rate [dzSim(t+Td)/dxSim(t)]_avg
+  //  [9] => xyz/n0="Durchseuchungsrate" sim
+             // (xyz=cumulated infected real sim (incl recovered, dead)
 
-  // (as of 2020-09, 
-  // no ySimLin or ySimLog variables; only for data => plotPoints)
+  // NEW data (for actual/rates per day, relative)
 
-  // [6] => 
+  // [10] => xtAct=xt-yt-z=actual infected data
+  // [11] => dn=daily number of tests (positive or negative)
+  // [12] => dxData=daily number new infected real from data estimation
+  // [13] => dxt=daily number positive tests
+  // [14] => dyt=daily number of positive-tested recoveries
+  // [15] => dz=daily or daily number of deaths
+  // [16] => posRate (e.g. data2_posRate)=dxt/dn
+  // [17] => cfr=case fatality rate=dz(t+Td-Tt)/dxt(t)
+  // [18] => ifrData=infection fatality rate dz(t+Td)/dxData(t)
+
 
   this.ySimLin[0]=[];  // xAct=infected real actual
   this.ySimLin[1]=[];  
@@ -1669,7 +1766,7 @@ DrawSim.prototype.drawGridLine=function(type,xyrel){
 }
 
 
-// displayType in {"lin", "log"}
+// displayType in {"lin", "log", "act"}
 
 DrawSim.prototype.drawAxes=function(displayType){
 
@@ -1883,7 +1980,7 @@ DrawSim.prototype.drawAxes=function(displayType){
 
 
 
-// displayType in {"lin", "log"}
+// displayType in {"lin", "log", "act"}
 
 //######################################################################
 DrawSim.prototype.draw=function(it,displayType,xAct,xt,y,yt,z,xyz){
@@ -1902,13 +1999,13 @@ DrawSim.prototype.draw=function(it,displayType,xAct,xt,y,yt,z,xyz){
 
   // transfer new data
 
-  // [0] => xAct=infected real actual
-  // [1] => xt=infected cases (=pos tested) cum
-  // [2] => y=recovered real cum
-  // [3] => yt=recovered cases cum
-  // [4] => z=dead (real=cases) cum
-  // [5] => z/xt  (ratio of cumulated quantities!)
-  // [6] => xyz=infected real cum (incl recovered, dead)
+  //  [0] => xAct=actual infected real sim
+  //  [1] => xt=cumulated infected data (=cases, pos tested) as simulated
+  //  [2] => y=cumulated recovered real sim
+  //  [3] => yt=cumulated recovered data as simulated
+  //  [4] => z=cumulated dead (real=data) as simulated
+  //  [5] => z/xt=cumulated cfr (cfr as ratio of cumulated quantities!)
+  // ... (see "Reference quantities")
 
 
   this.ySimLin[0][it]=n0*xAct/this.unitPers;
@@ -1932,49 +2029,49 @@ DrawSim.prototype.draw=function(it,displayType,xAct,xt,y,yt,z,xyz){
 			//" this.ySimLog[0][it]=",this.ySimLog[0][it],
 			"");}
 
-// test possible rescaling due to new data
+//##########################################################
+// test possible rescaling due to new data on x and y axis 
+// and redraw if erase=true
+//##########################################################
 
   var erase=false;
+
+  // possible rescaling in x
 
   if(it>itmax){
     itmax=it;
     erase=true;
   }
-  // need to redefine x pixel coords if rescaling in x
 
-  for(var i=0; i<=itmax; i++){
+  for(var i=0; i<=itmax; i++){ // (re)define x pixel coords
     this.xPix[i]=this.xPix0+i*(this.xPixMax-this.xPix0)/(itmax);
   }
 
-  // need also to update ymax of display actually not used
+  // possible rescaling in y due to simulation development
+  // (need also to update ymax of display actually not used)
 
-  for(var q=0; q<5; q++){ 
-    if((this.isActiveLin[q])&&(this.ySimLin[q][it]>this.ymaxLin)){
-      this.ymaxLin=this.ySimLin[q][it];
-      if(displayType==="lin"){erase=true;}
+  if((displayType==="lin")||(displayType==="log")){
+
+    for(var q=0; q<5; q++){ 
+      if((this.isActiveLin[q])&&(this.ySimLin[q][it]>this.ymaxLin)){
+        this.ymaxLin=this.ySimLin[q][it];
+        if(displayType==="lin"){erase=true;}
+      }
+
+      if((this.isActiveLog[q])&&(this.ySimLog[q][it]>this.ymaxLog)){
+        this.ymaxLog=this.ySimLog[q][it];
+        if (displayType==="log"){erase=true;}
+      }
     }
 
-    if((this.isActiveLog[q])&&(this.ySimLog[q][it]>this.ymaxLog)){
-      this.ymaxLog=this.ySimLog[q][it];
-      if (displayType==="log"){erase=true;}
+    if(this.ySimLin[5][it]>this.ymaxPerc){ // ySimLin[5] =z/yt in percent
+      this.ymaxPerc=this.ySimLin[5][it];
+      erase=true;
     }
-
-    if(false){
-      console.log("it=",it," q=",q,
-		  " this.ySimLin[q][it]=",this.ySimLin[q][it],
-		  " this.ymaxLin=",this.ymaxLin,
-		    " this.ymaxLog=",this.ymaxLog);
-    }
-    
   }
 
-  if(this.ySimLin[5][it]>this.ymaxPerc){ // ySimLin[5] =z/yt in percent
-    this.ymaxPerc=this.ySimLin[5][it];
-    erase=true;
-  }
 
-  // take care of data=max in linear representation and erase if rescaling
-
+  // possible rescaling in y due to new data (never needed for log)
 
   if(displayType==="lin"){
     var i_dataGit=it+data_idataStart;
@@ -1992,14 +2089,18 @@ DrawSim.prototype.draw=function(it,displayType,xAct,xt,y,yt,z,xyz){
     }
   }
 
+  if(displayType==="act"){
+  }
+
 
   if(erase){
     this.clear();
     this.drawAxes(displayType);
   }
 
-
+  //#######################################
   // actual drawing of sim results
+  //#######################################
 
   for(var q=0; q<6; q++){
     if(this.isActive[q]){
@@ -2039,27 +2140,36 @@ DrawSim.prototype.draw=function(it,displayType,xAct,xt,y,yt,z,xyz){
 
   ctx.font = this.textsize+"px Arial"; // revert font size
 
+  //#######################################
+  // actual plotting of data points
+  //#######################################
 
-  // plot data points
-  // [0]=x=xSimCum, not at plotPoints
-  // [2]=y=ySimCum, not at plotPoints
+  if((displayType==="lin")||(displayType==="log")){
 
-  if(this.isActive[1]){ // xt
-    this.plotPoints(it, 1, data_cumCases, displayType);
+    // [0]=x=xSimCum, not at plotPoints
+    // [2]=y=ySimCum, not at plotPoints
+
+    if(this.isActive[1]){ // xt
+      this.plotPoints(it, 1, data_cumCases, displayType);
+    }
+
+    if(this.isActive[3]){ // yt
+      this.plotPoints(it, 3, data_cumRecovered, displayType);
+    }
+
+    if(this.isActive[4]){ // z
+      this.plotPoints(it, 4, data_cumDeaths, displayType); 
+    }
+
+    if(this.isActive[5]){ // z/xt
+      this.plotPoints(it, 5, data_deathsCases, displayType); 
+    }
   }
 
-  if(this.isActive[3]){ // yt
-    this.plotPoints(it, 3, data_cumRecovered, displayType);
-  }
 
-  if(this.isActive[4]){ // z
-    this.plotPoints(it, 4, data_cumDeaths, displayType); 
-  }
+  if(displayType==="act"){
 
-  if(this.isActive[5]){ // z/xt
-    this.plotPoints(it, 5, data_deathsCases, displayType); 
   }
-
 
 }
 
