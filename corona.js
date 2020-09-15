@@ -45,8 +45,13 @@ var countryGer="Deutschland"
 // general global variables
 
 const ln10=Math.log(10);
-//var displayType="lin"; // "lin", "log" or "act"; consolidate with html
-var displayType="act"; // !!!
+
+// 0=lin,1=log,2=cases,3=tests,4=rates 
+// consolidate with first option value of html!!
+
+var datatype=2; 
+
+
 var myRun;
 var isStopped=true
 
@@ -221,10 +226,10 @@ var sigmaR_hist=[]; sigmaR_hist[0]=0;
 
 // global simulation  parameters
 
+var fps=50;
 
 // (i) controlled by sliders (apart from R0)
 
-var fps=10;
 
 var tauRstartInit=4;   // active infectivity begins [days since infection]//1
 var tauRendInit=12;    // active infectivity ends [days since infection]//10
@@ -860,11 +865,15 @@ function startup() {
   yPixTop=rect.top;
 
   drawsim=new DrawSim();
+  console.log("after drawsim cstr: datatype=",datatype);
+  console.log(" drawsim.colLine[16]=",drawsim.colLine[16]);
+  console.log(" drawsim.kselect=",drawsim.kselect);
+  console.log(" drawsim.kselect[datatype]=",drawsim.kselect[datatype]);
 
   window.addEventListener("resize", canvas_resize);
   canvas_resize();
 
-  drawsim.setDisplayType(displayType);
+  drawsim.setDatatype(datatype);
 
   // =============================================================
   // Apple debug
@@ -1156,26 +1165,6 @@ function estimateErrorCovar(){
 
 
  
-//####################################################################
-
-function displayTypeCallback(){
-  if(displayType=="lin"){
-    displayType="log";
-    document.getElementById("buttonDisplayType").innerHTML
-      ="=> lineare Darstellung";
-  }
-  else{
-    displayType="lin";
-    document.getElementById("buttonDisplayType").innerHTML
-      ="=> log. Darstellung";
-  }
-
-  drawsim.setDisplayType(displayType); // clear and draAxes in setDisplay..
-  drawsim.draw(it,displayType,corona.xAct,corona.xt,
-		       corona.y,corona.yt,corona.z); // !! ONLY to redraw lines
-}
-
-
 
 // ###############################################################
 // do simulations and graphics
@@ -1197,10 +1186,8 @@ function myStartStopFunction(){ //!! hier bloederweise Daten noch nicht da!!
   }
 }
 
-function selectDataCountry(){ 
+function selectDataCountry(){ // callback html select box "countryData"
   console.log("\nin selectDataCountry()");
-
-
 
   country=document.getElementById("countries").value;
   countryGer=countryGerList[country];
@@ -1220,6 +1207,18 @@ function selectDataCountry(){
   initializeData(country);
   myRestartFunction();
 } // selectDataCountry
+
+ 
+
+function selectDataType(){ // callback html select box "dataTypeDiv"
+  console.log("in selectDataType");
+  datatype=document.getElementById("datatypes").value;
+
+
+  drawsim.setDatatype(datatype); // clear and draAxes in setDisplay..
+  drawsim.draw(it,datatype,corona.xAct,corona.xt,
+		       corona.y,corona.yt,corona.z); // !! also scales anew
+}
 
 
 function myRestartFunction(){ 
@@ -1328,18 +1327,20 @@ function doSimulationStep(){ //!!!
   }
 
 
-  drawsim.draw(it, displayType, corona.xAct, corona.xt, // need R_hist
+  drawsim.draw(it, datatype, corona.xAct, corona.xt, // need R_hist
 		       corona.y, corona.yt, corona.z, corona.xyz);
  
   var logging=false;
   corona.updateOneDay(R_actual,logging);
   it++;
 
-  if(false){
+  //if(false){
+  if(!((corona.yt>=0)&&(corona.yt<1))){// sometimes F... undefined sim. recovered
     console.log(" doSimulationStep after corona.update: it=",it,
 		"data_cumCases[data_idataStart+it]=",
 		((it<itmaxinit-1) ? data_cumCases[data_idataStart+it]:"na"),
 		" n0*corona.xt=",(n0*corona.xt).toPrecision(6),
+		" n0*corona.yt=",(n0*corona.yt).toPrecision(6),
 		" R_actual (it-1->it)=",R_actual.toPrecision(3));
   }
 
@@ -1677,19 +1678,11 @@ function DrawSim(){
   this.unitPers=1000;  // persons counted in multiples of unitPers
 
   this.itR0=-1; // it value where n0*xt first exceeds nxtR0 (init val)
-  this.yminLin=0;
-  this.ymaxLin=10; // unitPers=1000-> 10 corresp to 10 000 persons
-  this.yminAct=0; // unitPers=1000-> 10 corresp to 10 000 persons
-  this.ymaxAct=10; // unitPers=1000-> 10 corresp to 10 000 persons
-  this.yminPerc=0;
-  this.ymaxPerc=10;
-  this.yminLog=1;
+  this.yminType=[0,1,0,0,0];   // lin,log,act0,act1,act2
+  this.ymaxType=[10,7,10,10,10];   // lin,log,act0,act1,act2
+  this.ymaxPerc=20;
+  this.ymaxLin=11;
   this.ymaxLog=7;
-  this.nmin=10;      // if isplayType==="log", display for n>nmin cases
-
-  this.log10min=Math.log(this.nmin)/ln10;
-  this.log10max=Math.log(n0)/ln10;
-
   this.xPix0  =0.12*canvas.width;
   this.xPixMax=0.98*canvas.width;
   this.yPix0  =0.85*canvas.height;
@@ -1701,8 +1694,7 @@ function DrawSim(){
 
 
   // Reference quantities; always the same for 
-  // displayType in {"lin", "log", "act"}
-  // three categoriess: cumulative, actual/rates per day, relative
+  // datatype in {0=lin, 1=log, 2=cases, 3=tests, 4=relInfect}
 
   //  [0] => xAct=actual infected real sim
   //  [1] => xt=cumulated infected data (=cases, pos tested) as simulated
@@ -1711,8 +1703,7 @@ function DrawSim(){
   //  [4] => z=cumulated dead (real=data) as simulated
   //  [5] => z/xt=cumulated cfr (cfr as ratio of cumulated quantities!)
 
-  // NEW sim (for actual/rates per day, relative)
-  //!!! not yet implemented, new ySim* files
+  //!!! not yet implemented: new ySim* files
 
   //  [6] => dxSim=daily number new infected real sim
   //  [7] => dzSim=daily number new dead sim
@@ -1727,10 +1718,26 @@ function DrawSim(){
   // [12] => data_dx=daily number new infected real from data estimation
   // [13] => data_dxt=daily number positive tests
   // [14] => data_dyt=daily number of positive-tested recoveries
-  // [15] => data_dz=daily or daily number of deaths
+  // [15] => data_dz=daily number of deaths
   // [16] => data_posRate (e.g. data2_posRate)=dxt/dn
   // [17] => data_cfr=case fatality rate=dz(t+Td-Tt)/dxt(t)
   // [18] => data_ifr=infection fatality rate dz(t+Td)/dxData(t)
+
+  this.kselect=[];
+
+  this.kselect[0]=[1,2,3,4,5]; // use later!!
+  this.kselect[1]=[0,1,2,3,4]; // use later!!
+  this.kselect[2]=[13,15]; // positive cases, deaths     datatype=2="act0"
+  this.kselect[3]=[13,11]; // 11=number of tests, 13=cases   datatype=3="act1"
+  this.kselect[4]=[16,17,18]; // all relative quantities datatype=4="act2"
+
+  this.label_y_type=[countryGer+": Personenzahl (in Tausend)",
+	       countryGer+": Personenzahl",
+	       countryGer+": Personen pro Tag",
+	       countryGer+": taegliche Zahlen",
+	       countryGer+": Anteil [% oder Promille]"];
+
+  //!!! define here this.key_type ("Aktuell real infiz") "str_key"
 
 
   this.ySimLin=[];
@@ -1784,16 +1791,17 @@ function DrawSim(){
 
   this.wLine=[1,2,1,2,2,2]; //line width [pix]
   this.isActive=[];   // which line is drawn
-  this.setDisplayType(displayType);
+  //this.setDatatype(datatype); // datatype top-level global var
   this.sizemin=Math.min(canvas.width,1.25*canvas.height);
 
   // initialize data feed and fonts at drawSim/drawAxes since sometimes
   // data fetch not yet finished/canvas not yet sized at construction time
+    console.log("end drawsim cstr: datatype=",datatype," this.kselect=",this.kselect," this.kselect[datatype]=",this.kselect[datatype]);
 
 }
 
 
-DrawSim.prototype.setDisplayType=function(displayType){
+DrawSim.prototype.setDatatype=function(datatype){
   var displayDeadRecovered=( (country==="Germany")
 			     ||(country==="Austria")
 			     ||(country==="Czechia")
@@ -1804,22 +1812,16 @@ DrawSim.prototype.setDisplayType=function(displayType){
     : [true,true,false,false, false,false]
 
   this.isActiveLin=(displayDeadRecovered)
-    ? [false,true,false,true,true,true]
+    ? [false,true,false,true,true,false]
     : [false,true,false,false,false,false]
  
- // data type index= 10+index
 
-  //this.isActiveAct=[false,true,true,true,false,true,true,true,true];
-  this//.isActiveAct=[false,true,true,true,false,true,false,false,false];
-  this.isActiveAct=[false,false,false,false,false,false,true,true,true];
-  //this.isActiveAct=[true,true,true,true,true,true,false,false,false];
-  //this.isActiveAct=[true,true,true,false,false,false,false,false,false];
-
-  this.isActive=(displayType==="lin") ? this.isActiveLin : 
-    (displayType==="log") ? this.isActiveLog : this.isActiveAct;
+// this.isActive not used for the act* datatypes //!!! NICHT === bei ints
+  this.isActive=(datatype==0) ? this.isActiveLin : this.isActiveLog;
+ 
 
   this.xPix0  =0.12*canvas.width;
-  this.xPixMax=((displayDeadRecovered&&(displayType==="lin"))
+  this.xPixMax=((displayDeadRecovered&&(datatype==0))
 		? 0.90: 0.98) * canvas.width;
   this.yPix0  =0.85*canvas.height;
   this.yPixMax=0.02*canvas.height;
@@ -1827,7 +1829,7 @@ DrawSim.prototype.setDisplayType=function(displayType){
   this.hPix=this.yPixMax-this.yPix0;  //<0
 
   this.clear();
-  this.drawAxes(displayType);
+  this.drawAxes(datatype);
 }
 
 
@@ -1865,9 +1867,14 @@ DrawSim.prototype.drawGridLine=function(type,xyrel){
 }
 
 
-// displayType in {"lin", "log", "act"}
+// datatype in [0,4]
 
-DrawSim.prototype.drawAxes=function(displayType){
+DrawSim.prototype.drawAxes=function(datatype){
+
+
+ // console.log("drawsim.drawAxes: datatype=",datatype,
+//	      " this.kselect[datatype]=",this.kselect[datatype]);
+
 
   // update the font (drawAxes called at first drawing and after all 
   // canvas/display changes)
@@ -1875,8 +1882,8 @@ DrawSim.prototype.drawAxes=function(displayType){
   this.sizemin=Math.min(canvas.width,1.25*canvas.height);
   this.textsize=(this.sizemin>400) ? 0.03*this.sizemin : 0.04*this.sizemin;
   ctx.font = this.textsize+"px Arial"; 
-  console.log("DrawSim.drawAxes: this.sizemin=",this.sizemin,
-	        " this.textsize=",this.textsize," ctx.font=",ctx.font);
+  //console.log("DrawSim.drawAxes: this.sizemin=",this.sizemin,
+//	        " this.textsize=",this.textsize," ctx.font=",ctx.font);
 
  // define x axis label positions and text, time starts Mar 20
 
@@ -1917,13 +1924,16 @@ DrawSim.prototype.drawAxes=function(displayType){
   }
 
 
-  //define y axis label positions and text
+  //define y axis tick/label positions (in y, not pix)
 
-  var ymin=(displayType==="log") ? 1 : 0;
-  var ymax=(displayType==="lin") ? this.ymaxLin
-    : (displayType==="log") ? this.ymaxLog : this.ymaxAct;
+  var ymin=this.yminType[datatype];
+  var ymax=this.ymaxType[datatype];
+
+  //!!! try to eliminate this
+  if(datatype==0) {ymax=this.ymaxLin;}
+  if(datatype==1) {ymax=this.ymaxLog;}
   var dy=1; // always for log
-  if((displayType==="lin")||(displayType==="act")){
+  if(datatype!=1){// log
     var power10=Math.floor(log10(ymax));
     var multiplicator=Math.pow(10, power10);
     var ymaxRange01=ymax/multiplicator;
@@ -1936,29 +1946,32 @@ DrawSim.prototype.drawAxes=function(displayType){
   //console.log("drawAxes new: dy=",dy," ny=",ny);
 
 
- //define y2 axis label positions and text
+ //define y2 axis tick/label positions (in y, not pix)
 
   var ymin2=0;
   var ymax2=this.ymaxPerc;
   //var ymax2=Math.min(10,this.ymaxPerc);
-  if((displayType==="lin")&&(this.isActiveLin[5])){
+  if((datatype==0)&&(this.isActiveLin[5])){
     var power10=Math.floor(log10(ymax2));
     var multiplicator=Math.pow(10, power10);
     var ymaxRange02=ymax2/multiplicator;
     var dy2=(ymaxRange02<2) ? 0.2*multiplicator
         :(ymaxRange02<5) ? 0.5*multiplicator : multiplicator;
     var ny2=Math.floor(ymax2/dy2);
-    console.log("drawAxes new: dy2=",dy2," ny2=",ny2);
   }
 
 
 
   // draw 3 px wide lines as coordinates
 
-  ctx.fillStyle="rgb(0,0,0)";
-  ctx.fillRect(this.xPix0, this.yPix0-1, this.wPix, 3);
-  ctx.fillRect(this.xPix0-0, this.yPix0, 3, this.hPix);
+  var yPix0=(datatype==2) // mirrored graphics cases/deaths
+    ? 0.5*(this.yPix0+this.yPixMax) : this.yPix0;
+  // this.hPix remains
 
+  ctx.fillStyle="rgb(0,0,0)";
+  ctx.fillRect(this.xPix0, yPix0-1, this.wPix, 3);
+  ctx.fillRect(this.xPix0-0, this.yPix0, 3, this.hPix);// y axis always orig!
+  //console.log("datatype=",datatype," yPix0=",yPix0," hPix=",yPix0);
 
   // draw grid
 
@@ -1968,9 +1981,20 @@ DrawSim.prototype.drawAxes=function(displayType){
     this.drawGridLine("vertical", timeRel[ix]);
   }
 
-  for(var iy=1; iy<=ny; iy++){
-    this.drawGridLine("horizontal",iy*dy/(ymax-ymin));
+  // double mirrored graphics
+
+  if(datatype==2){ 
+    for(var iy=1; iy<=ny; iy++){
+      this.drawGridLine("horizontal",0.5*(1+iy*dy/(ymax-ymin)));
+      this.drawGridLine("horizontal",0.5*(1-iy*dy/(ymax-ymin)));
+    }
   }
+
+   else{ // normal graphics starting from bottom
+    for(var iy=1; iy<=ny; iy++){
+      this.drawGridLine("horizontal",iy*dy/(ymax-ymin));
+    }
+   }
 
   ctx.stroke();
 
@@ -1989,29 +2013,48 @@ DrawSim.prototype.drawAxes=function(displayType){
   ctx.setTransform(1,0,0,1,0,0);
 
 
-  // draw name+values y1 axis
+  // draw name+values strings on y1 axis
 
-  var label_y=(displayType=="lin")
-    ? countryGer+": Personenzahl (in Tausend)" : (displayType=="log")
-    ? countryGer+": Personenzahl" : countryGer+": Anteil [% oder Promille]";
 
-  var yPix=(displayType!=="log")
+  var label_y=this.label_y_type[datatype];
+  var yPix=(datatype!=1)
     ? this.yPix0+0.01*this.hPix : this.yPix0+0.15*this.hPix;
   ctx.setTransform(0,-1,1,0,
 		   this.xPix0-3.0*this.textsize,yPix);
   ctx.fillText(label_y,0,0);
-  ctx.setTransform(1,0,0,1,0,0)
-  for(var iy=ymin; iy<=ny; iy++){
-    var valueStr=(displayType!=="log")  ? iy*dy : "10^"+iy;
-    ctx.fillText(valueStr,
-		 this.xPix0-2.5*this.textsize,
-		 this.yPix0+(iy*dy-ymin)/(ymax-ymin)*this.hPix+0.5*this.textsize);
+  ctx.setTransform(1,0,0,1,0,0);
+
+  var hPix=(datatype!=2) ? this.hPix : 0.5*this.hPix;
+  // yPix0 already defined above
+
+  if(datatype!=2){ // normal graphics
+    for(var iy=0; iy<=ny; iy++){
+      var valueStr=(datatype!=1)  ? iy*dy : "10^"+iy;
+      ctx.fillText(valueStr,
+		   this.xPix0-2.5*this.textsize,
+		   yPix0+(iy*dy-ymin)/(ymax-ymin)*hPix+0.5*this.textsize);
+    }
+  }
+  else{// draw double mirrored graphics scaling 10:1
+    for(var iy=0; iy<=ny; iy++){
+      var valueStr=10*iy*dy;
+      ctx.fillText(valueStr,
+		   this.xPix0-2.5*this.textsize,
+		   yPix0+(iy*dy-ymin)/(ymax-ymin)*hPix+0.5*this.textsize);
+    }
+    for(var iy=1; iy<=ny; iy++){
+      var valueStr=iy*dy;
+      ctx.fillText(valueStr,
+		   this.xPix0-2.5*this.textsize,
+		   yPix0-(iy*dy-ymin)/(ymax-ymin)*hPix+0.5*this.textsize);
+    }
   }
 
-  
-  // draw name+values y2 axis if displayType="lin"
 
-  if((displayType!=="log")&&(this.isActiveLin[5])){
+  
+  // draw name+values y2 axis if datatype=0
+
+  if((datatype==0)&&(this.isActiveLin[5])){
 
     var label_y2="Tote/bekannt Erkrankte [%]";
     ctx.fillStyle=this.colLine[5];
@@ -2029,19 +2072,15 @@ DrawSim.prototype.drawAxes=function(displayType){
   }
 
   
-  
 
   // draw key
 
-  var yrelTop=(displayType==="log")
+  var yrelTop=(datatype==1) // 1=log
     ? -4.5*(1.2*this.textsize/this.hPix) : 0.96;
-  var xrelLeft=(displayType==="lin") ? 0.02
-    : (displayType==="log") ? 0.60
-   // : (displayType==="act") ? 0.25 : 0.60; //final, : =actRel
-    : (displayType==="act") ? 0.60 : 0.60;
+  var xrelLeft=(datatype==0) ? 0.02 : 0.60; 
   var dyrel=-1.2*this.textsize/this.hPix;
   
-  if((displayType==="lin")||(displayType==="log")){
+  if(datatype<2){
 
   var il=0;
   if(this.isActive[0]){
@@ -2054,7 +2093,7 @@ DrawSim.prototype.drawAxes=function(displayType){
 
   if(this.isActive[1]){
     ctx.fillStyle=this.colLine[1];
-    ctx.fillText("Erfasste infiz. Personen",
+    ctx.fillText("Erfasste infiz. Personen",//!!! simplify
 	         this.xPix0+xrelLeft*this.wPix,
 		 this.yPix0+(yrelTop-il*dyrel)*this.hPix);
     il++;
@@ -2095,27 +2134,25 @@ DrawSim.prototype.drawAxes=function(displayType){
 
   //MT 2020-09
 
-  if(displayType==="act"){
+  else{// datatype="act[0-2]"
     var str_key=["Aktiv Infiz. unter pos. Getesteten (in 1000)",
 		 "Tests pro Tag (in 1000)",
 		 "Real Neuinfizierte pro Tag (Schaetzung, in 1000)",
-		 "Positive Getestete pro Tag (in 100)",
+		 "Positive Getestete pro Tag",// fake, in data/10, in label*10
 		 "Genesene unter den positive Getesteten (in 100)",
 		 "Todesfaelle pro Tag",
 		 "Anteil positiver Tests [%]",
-		 "Case fatality rate cfr [%]",
-		 "Geschaetzte infection fatality rate ifr [Promille]"];
+		 "CFR (Case fatality rate) [%]",
+		 "IFR (Infection fatality rate) [Promille]"];
 
-    var il=0;
 
-    for(var k=0; k<9; k++){
-      if(this.isActive[k]){
-        ctx.fillStyle=this.colLine[10+k];
-	ctx.fillText(str_key[k],
+
+   for(var id=0; id<this.kselect[datatype].length; id++){
+      var k=this.kselect[datatype][id];
+      ctx.fillStyle=this.colLine[k];
+      ctx.fillText(str_key[k-10],
 	             this.xPix0+xrelLeft*this.wPix,
-		     this.yPix0+(yrelTop-il*dyrel)*this.hPix);
-	il++;
-      }
+		     this.yPix0+(yrelTop-id*dyrel)*this.hPix);
     }
   }
 
@@ -2126,11 +2163,9 @@ DrawSim.prototype.drawAxes=function(displayType){
 
 
 
-// displayType in {"lin", "log", "act"}
-// other arguments are only sim reults, not data points
 
 //######################################################################
-DrawSim.prototype.draw=function(it,displayType,xAct,xt,y,yt,z,xyz){
+DrawSim.prototype.draw=function(it,datatype,xAct,xt,y,yt,z,xyz){
 //######################################################################
 
   // update  text properties 
@@ -2169,15 +2204,18 @@ DrawSim.prototype.draw=function(it,displayType,xAct,xt,y,yt,z,xyz){
 
 
   // init data feed (may not yet loaded at construction time)
-  // and draw axes (later on only drawn if scaling or displayType changed)
+  // and draw axes (later on only drawn if scaling or datatype changed)
   // drawAxes also updates the font size
 
   if(it==0){
 
     this.clear();
-    this.drawAxes(displayType);
+    this.drawAxes(datatype);
 
-    kernel=[1/16,2/16,3/16,4/16,3/16,2/16,1/16];
+    //kernel=[1];
+    //kernel=[1/4,2/4,1/4];
+    kernel=[1/9,2/9,3/9,2/9,1/9];
+    //kernel=[1/16,2/16,3/16,4/16,3/16,2/16,1/16];
     //kernel=[1/25,2/25,3/25,4/25,5/25,4/25,3/25,2/25,1/25];
     console.log("kernel.length=",kernel.length);
     var dnSmooth=smooth(data_dn,kernel);
@@ -2193,8 +2231,8 @@ DrawSim.prototype.draw=function(it,displayType,xAct,xt,y,yt,z,xyz){
       this.yAct[10][i]=0.001*data_xtAct[i]; // by value assignment
       this.yAct[11][i]=0.001*dnSmooth[i];
       this.yAct[12][i]=0.001*data_dx[i];
-      this.yAct[13][i]=0.01*dxtSmooth[i];
-      this.yAct[14][i]=0.01*dytSmooth[i];
+      this.yAct[13][i]=0.1*dxtSmooth[i];
+      this.yAct[14][i]=0.1*dytSmooth[i];
       this.yAct[15][i]=1*dzSmooth[i];
       this.yAct[16][i]=100*posRateSmooth[i];
       this.yAct[17][i]=100*cfrSmooth[i];
@@ -2208,7 +2246,7 @@ DrawSim.prototype.draw=function(it,displayType,xAct,xt,y,yt,z,xyz){
 			"");}
 
 //##########################################################
-// check for possible rescaling due to new data on x and y axis 
+// check for possible scaling/rescaling due to new data on x and y axis 
 // and redraw if erase=true
 //##########################################################
 
@@ -2226,22 +2264,19 @@ DrawSim.prototype.draw=function(it,displayType,xAct,xt,y,yt,z,xyz){
     this.xPix[i]=this.xPix0+i*(this.xPixMax-this.xPix0)/(itmax);
   }
 
-  // (2) determine ymaxLin, tmaxLog, and 
-  // possible rescaling in y due to simulation development
-  // (need also to update ymax of display actually not used)
+  // (2) possible rescaling in y due to simulation development
+  // => determine/update ymaxLin, tmaxLog
+  // (need also to update if another datatype is presently used)
 
-  if((displayType==="lin")||(displayType==="log")){
-
-    for(var q=0; q<5; q++){ 
-      if((this.isActiveLin[q])&&(this.ySimLin[q][it]>this.ymaxLin)){
+  for(var q=0; q<5; q++){ 
+    if((this.isActiveLin[q])&&(this.ySimLin[q][it]>this.ymaxLin)){
         this.ymaxLin=this.ySimLin[q][it];
-        if(displayType==="lin"){erase=true;}
-      }
+        if(datatype==0){erase=true;}
+    }
 
-      if((this.isActiveLog[q])&&(this.ySimLog[q][it]>this.ymaxLog)){
+    if((this.isActiveLog[q])&&(this.ySimLog[q][it]>this.ymaxLog)){
         this.ymaxLog=this.ySimLog[q][it];
-        if (displayType==="log"){erase=true;}
-      }
+        if (datatype==1){erase=true;}
     }
 
     if(this.ySimLin[5][it]>this.ymaxPerc){ // ySimLin[5] =z/yt in percent
@@ -2251,78 +2286,93 @@ DrawSim.prototype.draw=function(it,displayType,xAct,xt,y,yt,z,xyz){
   }
 
 
-  // (3) possible rescaling in y due to new data (never needed for log)
+  // (3) possible rescaling in y due to new cumul. data (never needed for log)
+  // => update ymaxLin
   // only data_cumCases and 100*data_cumCfr are candidates
 
-  if(displayType==="lin"){
-    var i_dataGit=it+data_idataStart;
-    if(i_dataGit<data_cumCases.length){
 
-      if(data_cumCases[i_dataGit]>this.unitPers*this.ymaxLin){
-	this.ymaxLin=data_cumCases[i_dataGit]/this.unitPers;
+  var i=it+data_idataStart;
+  if(i<data_cumCases.length){
+
+      if(data_cumCases[i]>this.unitPers*this.ymaxLin){
+	this.ymaxLin=data_cumCases[i]/this.unitPers;
 	erase=true;
       }
 
-      if(100*data_cumCfr[i_dataGit]>this.ymaxPerc){
-	this.ymaxPerc=100*data_cumCfr[i_dataGit];
+      if(100*data_cumCfr[i]>this.ymaxPerc){
+	this.ymaxPerc=100*data_cumCfr[i];
 	erase=true;
       }
-    }
   }
 
-  //MT 2020-09
-
-  // (4) possible rescaling of y in the "actual" data view
+  // (4) possible rescaling of y in all "actual" data view options
   //     this.yAct[k] already has the right units (1000, 100,10, 1, % usw)
+ 
 
-  if(displayType==="act"){
-    var i=it+data_idataStart;
-    for(var k=10; k<19; k++){
-      if(this.isActive[k-10]){
-	if(Math.min(this.yAct[k][i], 20)>this.ymaxAct){
-	  this.ymaxAct=Math.min(this.yAct[k][i], 20);
+  i=it+data_idataStart;
+
+  for(var dtype=2; dtype<this.kselect.length;dtype++){ // simplify!!!
+    for (var j=0; j<this.kselect[dtype].length; j++){ 
+      var k=this.kselect[dtype][j];
+      if(Math.max(this.yAct[k][i], 10)>this.ymaxType[dtype]){
+	  this.ymaxType[dtype]=Math.max(this.yAct[k][i], 10);
 	  erase=true;
-	  //console.log("new maximum! k=",k," it=",it," iData=i=",i,
-	//	      " this.yAct[k][i]=",this.yAct[k][i]);
-	}
+	  //console.log("new maximum! it=",it, "k=",k," iData=i=",i,
+	//	      " dtype=",dtype," this.yAct[k][i]=",this.yAct[k][i]);
       }
     }
+
+    // restrict scaling of relative quantities to 20 [%]
+    this.ymaxType[4]=Math.min(this.ymaxType[4], 20);
+
+    // unify ymax for datatype 0 or 1 // !!! consolidate!!
+    this.ymaxType[0]=this.ymaxLin;
+    this.ymaxType[1]=this.ymaxLog;
+
   }
 
+  //console.log("draw: after scaling: it=",it);
+  //for (var dtype=0; dtype<this.kselect.length;dtype++){
+  //  console.log("dtype=",dtype," this.ymaxType[dtype]=",this.ymaxType[dtype]);
+  //}
 
   if(erase){
     this.clear();
-    this.drawAxes(displayType);
+    this.drawAxes(datatype);
   }
 
-  //#######################################
-  // actual drawing of (cumulative) sim results
-  //#######################################
+  //#############################################################
+  // actual drawing of (cumulative) sim results for datatype lin or log
+  //#############################################################
 
-  if(displayType!=="act"){
+
+  if(datatype<2){
+
     for(var q=0; q<6; q++){
+      //console.log("q=",q," this.isActive[q]=",this.isActive[q]);
+      var simdata=(datatype==1) ? this.ySimLog[q] : this.ySimLin[q];
       if(this.isActive[q]){
-        this.drawCurve(it,q,displayType);
+	console.log("drawCurve sim: datatype=",datatype," q=",q," simdata=",simdata);
+        this.drawCurve(it,q,simdata,datatype);
       }
     }
-  }
 
 
-  // drawing vertical separation lines; draw R estimates
+    // drawing vertical separation lines; draw R estimates
 
-  if(displayType!=="act"){
-  ctx.fillStyle="#888888";
-  var x0=this.xPix0;
-  var y0=this.yPix0+0.3*this.hPix;
 
-  ctx.setTransform(0,-1,1,0,x0+1.0*this.textsizeR,y0);
-  var str_R="R="+R_hist[0].toFixed(2)
+   ctx.fillStyle="#888888";
+   var x0=this.xPix0;
+   var y0=this.yPix0+0.3*this.hPix;
+
+   ctx.setTransform(0,-1,1,0,x0+1.0*this.textsizeR,y0);
+   var str_R="R="+R_hist[0].toFixed(2)
       +( (RsliderUsed||otherSliderUsed)
 	 ? "" : (" +/- "+sigmaR_hist[0].toFixed(2)));
-  ctx.fillText(str_R,0,0);
-  ctx.setTransform(1,0,0,1,0,0);
+   ctx.fillText(str_R,0,0);
+   ctx.setTransform(1,0,0,1,0,0);
 
-  for(var ical=0; ical<=getIndexCalib(it); ical++){ // !!! 
+   for(var ical=0; ical<=getIndexCalib(it); ical++){ // !!! 
     var itR=getIndexTimeFromCalib(ical);
     x0=this.xPix[itR];
     ctx.fillRect(x0-1,this.yPix0,3,this.hPix);
@@ -2335,45 +2385,58 @@ DrawSim.prototype.draw=function(it,displayType,xAct,xt,y,yt,z,xyz){
 	? "" : (" +/- "+sigmaR_hist[itR].toFixed(2)));
     ctx.fillText(str_R,0,0);
     ctx.setTransform(1,0,0,1,0,0);
-  }
+   }
   }
 
-  //#######################################
-  // actual plotting of cumulative data points
-  //#######################################
+  //#########################################################
+  // actual plotting of cumulative data points to sim for lin and log
+  //#########################################################
 
-  if((displayType==="lin")||(displayType==="log")){
+  if(datatype<2){
 
     // [0]=x=xSimCum, not at plotPoints
     // [2]=y=ySimCum, not at plotPoints
 
     if(this.isActive[1]){ // xt
-      this.plotPoints(it, 1, data_cumCases, displayType);
+      this.plotPoints(it, 1, data_cumCases, datatype);
     }
 
     if(this.isActive[3]){ // yt
-      this.plotPoints(it, 3, data_cumRecovered, displayType);
+      this.plotPoints(it, 3, data_cumRecovered, datatype);
     }
 
     if(this.isActive[4]){ // z
-      this.plotPoints(it, 4, data_cumDeaths, displayType); 
+      this.plotPoints(it, 4, data_cumDeaths, datatype); 
     }
 
     if(this.isActive[5]){ // z/xt
-      this.plotPoints(it, 5, data_cumCfr, displayType); 
+      this.plotPoints(it, 5, data_cumCfr, datatype); 
     }
   }
 
 
   //#######################################
-  // actual plotting of actual data points
+  // actual plotting of "actual data" points
   //#######################################
 
-  if(displayType==="act"){
-    for(var k=10; k<19; k++){
-      if(this.isActive[k-10]){
-	this.plotPoints(it, k, this.yAct[k], displayType);
-      }
+  //plotPoints(it,q,data_arr,datatype)
+  //plotBars(it,q,data_arr,datatype,half,downwards)
+
+  //if(datatype=="act1"){// cases/deaths
+  if(datatype==2){// "act0": cases/deaths
+    this.plotBars(it, 13, this.yAct[13], datatype,true,false);
+    this.plotBars(it, 15, this.yAct[15], datatype,true,true);
+  }
+
+  if(datatype==3){// 11=number of tests, 13=cases
+    this.plotBars(it, 13, this.yAct[13], datatype,false,false);
+    this.plotPoints(it, 11, this.yAct[11], datatype);
+  }
+
+  if(datatype>=3){
+    for(var ik=0; ik< this.kselect[datatype].length; ik++){
+      var k=this.kselect[datatype][ik];
+      this.plotPoints(it, k, this.yAct[k], datatype);
     }
   }
 
@@ -2381,24 +2444,25 @@ DrawSim.prototype.draw=function(it,displayType,xAct,xt,y,yt,z,xyz){
 
 
 //######################################################################
-DrawSim.prototype.drawCurve=function(it,q,displayType){
+DrawSim.prototype.drawCurve=function(it, q, data_arr, datatype){
 //######################################################################
-  //console.log("in DrawSim.drawCurve: q=",q," displayType=",displayType);
-  var simdata=(displayType==="log") ? this.ySimLog[q] : this.ySimLin[q];
+
   var w=this.wLine[q]/2;
-  var yminDraw=(displayType==="log") ? this.yminLog : this.yminLin;
-  var ymaxDraw=(displayType==="log") ? this.ymaxLog : this.ymaxLin;
-  if(q==5){yminDraw=this.yminPerc; ymaxDraw=this.ymaxPerc};
+
+  var yminDraw=this.yminType[datatype];
+  var ymaxDraw=this.ymaxType[datatype];
+  if((datatype==0)&&(q==5)){
+    yminDraw=this.yminPerc; ymaxDraw=this.ymaxPerc;
+  }
 
   ctx.fillStyle=this.colLine[q];
-
   for (var itg=0; itg<=it; itg++){
-    if((itg>0)&&(simdata[itg]>=yminDraw) &&(simdata[itg]<=ymaxDraw)){
-      var yrel=(simdata[itg]-yminDraw)/(ymaxDraw-yminDraw);
-      var yrelOld=(simdata[itg-1]-yminDraw)/(ymaxDraw-yminDraw);
+    if((itg>0)&&(data_arr[itg]>=yminDraw) &&(data_arr[itg]<=ymaxDraw)){
+      var yrel=(data_arr[itg]-yminDraw)/(ymaxDraw-yminDraw);
+      var yrelOld=(data_arr[itg-1]-yminDraw)/(ymaxDraw-yminDraw);
       var simPix=this.yPix0+yrel*(this.yPixMax-this.yPix0);
       var simPixOld=this.yPix0+yrelOld*(this.yPixMax-this.yPix0);
-     // if(q==0){console.log("q=",q," yrel=",yrel);}
+
       ctx.beginPath(); //!! crucial; otherwise latest col used for ALL
       var phi=Math.atan((simPix-simPixOld)/
 			(this.xPix[itg]-this.xPix[itg-1]));
@@ -2410,6 +2474,10 @@ DrawSim.prototype.drawCurve=function(it,q,displayType){
       ctx.lineTo(this.xPix[itg]-w*sphi,   simPix+w*cphi);
       ctx.closePath();  // !! crucial, otherwise latest col used for ALL
       ctx.fill();
+      if(itg==it){
+	//console.log("drawCurve: itg=it: data_arr[it]=",data_arr[it], "yrel=",yrel);
+      }
+
     }
   }
 
@@ -2419,7 +2487,7 @@ DrawSim.prototype.drawCurve=function(it,q,displayType){
   //if( (q==1)&&(it<=20)){
     var idata=data_idataStart+it;
     console.log("DrawSim.drawCurve: it=",it," quantity q=",q,
-		" simdata[it]=",simdata[it]);
+		" data_arr[it]=",data_arr[it]);
   }
 
 
@@ -2432,14 +2500,12 @@ DrawSim.prototype.drawCurve=function(it,q,displayType){
 // => add data2_idataStart-data_idataStart to index of data2 quantities
 
 //######################################################################
-DrawSim.prototype.plotPoints=function(it,q,data_arr,displayType){
+DrawSim.prototype.plotPoints=function(it,q,data_arr,datatype){
 //######################################################################
 
-  var yminDraw=(displayType==="log") ? this.yminLog
-    : (displayType==="lin") ? this.yminLin : this.yminAct;
-  var ymaxDraw=(displayType==="log") ? this.ymaxLog
-    : (displayType==="lin") ? this.ymaxLin : this.ymaxAct;
-  if((displayType==="lin")&&(q==5)){
+  var yminDraw=this.yminType[datatype];
+  var ymaxDraw=this.ymaxType[datatype];
+  if((datatype==0)&&(q==5)){
     yminDraw=this.yminPerc; ymaxDraw=this.ymaxPerc;
   }
 
@@ -2451,10 +2517,10 @@ DrawSim.prototype.plotPoints=function(it,q,data_arr,displayType){
     var itg=i-data_idataStart;
 
     // log 10 and, if lin, in 1000 =>*0.001, if perc *100, if act *1
-
-    var y=(displayType==="log") ? log10(data_arr[i])
-      : (displayType==="lin") ? data_arr[i]/this.unitPers : data_arr[i];
-    if(q==5){y=100*data_arr[i];}
+    //!!! eliminate!
+    var y=(datatype==1) ? log10(data_arr[i])
+      : (datatype==0) ? data_arr[i]/this.unitPers : data_arr[i];
+    if((datatype==0)&&(q==5)){y=100*data_arr[i];}
 
     // actual plotting
 
@@ -2464,6 +2530,56 @@ DrawSim.prototype.plotPoints=function(it,q,data_arr,displayType){
       ctx.beginPath(); //!! crucial; otherwise latest col used for ALL
       ctx.arc(this.xPix[itg],dataPix,0.008*sizemin, 0, 2 * Math.PI);
       ctx.fill();
+      //if(itg==it){console.log(" yrel=",yrel," dataPix=",dataPix);}
+    }
+  }
+
+}
+
+// if half is true, x axis on half height 
+// if down is true, bars are plotted downwards
+// to make plot with bars up and downwards pointing, select 
+// plot 1: half=true, up=true
+// plot 1: half=true, up=false
+
+//######################################################################
+DrawSim.prototype.plotBars=function(it,q,data_arr,datatype,half,downwards){
+//######################################################################
+
+  var yminDraw=this.yminType[datatype];
+  var ymaxDraw=this.ymaxType[datatype];
+  //console.log("drawsim.plotBars: ymaxDraw=", ymaxDraw);
+
+  // new settings for up/down plots
+
+  var yPix0=(half) ? 0.5*(this.yPix0+this.yPixMax)
+    : (downwards) ? this.yPixMax : this.yPix0;
+  var yPixMax=yPix0+((downwards) ? -1 : 1)*((half) ? 0.5 : 1)
+    *(this.yPixMax-this.yPix0);
+
+
+
+  // new settings for bars
+
+  var w=1*(this.xPix[1]-this.xPix[0]);
+
+  ctx.fillStyle=this.colLine[q];
+
+  for (var i=0; i<data_arr.length; i++){
+
+
+    var itg=i-data_idataStart;
+
+    // actual plotting
+
+    //if((itg>=0)&&(itg<=it)){ // here, i=0 bar covers y axis
+    if((itg>0)&&(itg<=it)){
+      var y=(datatype==1) ? log10(data_arr[i]) //!!! eliminate cases
+	: (datatype==0) ? data_arr[i]/this.unitPers : data_arr[i];
+      var yrel=(y-yminDraw)/(ymaxDraw-yminDraw);
+
+      var dataPix=yPix0+yrel*(yPixMax-yPix0);
+      ctx.fillRect(this.xPix[itg]-0.5*w, yPix0, w, (dataPix-yPix0));
       //if(itg==it){console.log(" yrel=",yrel," dataPix=",dataPix);}
     }
   }

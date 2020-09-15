@@ -56,6 +56,17 @@ Info
 </select>
 </div>
 
+<!-- consolidate with "var datatype" in corona.js-->
+<div id="dataTypeDiv">
+<label for="datatypes"></label>
+<select id="datatypes" onchange=selectDataType()> 
+  <option value="2">Daten: Faelle</option>
+  <option value="0">Simulation (lin)</option>
+  <option value="1">Simulation (log)</option>
+  <option value="3">Daten: Tests</option>
+  <option value="4">Infektionsraten</option>
+</select>
+</div>
 
 <!--
 <div id="countryData"><img id="flag" width="100%" 
@@ -205,11 +216,6 @@ Info
   Kalibriere neu!</button> 
 </div>
 
-<!-- consolidate with "var displayType" in corona.js-->
-<div id="displayTypeDiv">
-  <button id="buttonDisplayType" onclick="displayTypeCallback()">
-  => log. Darstellung</button> 
-</div>
 
 <!-- debug container replacing the console -->
 <!-- Comment following 3 lines out before uploading it ! -->

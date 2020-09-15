@@ -252,7 +252,7 @@ function canvas_resize(){
 
   if(hasChanged){sizemin=Math.min(canvas.width,canvas.height);}
 
-  if(drawsim!==null){drawsim.setDisplayType(displayType);}
+  if(drawsim!==null){drawsim.setDatatype(datatype);}
   //console.log("canvas_resize: new canvas dimensions ",
 //	      canvas.width," X ",canvas.height);
   //console.log("drawsim.hPix=",drawsim.hPix);
