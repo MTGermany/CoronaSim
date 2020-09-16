@@ -45,24 +45,16 @@ Info
   <option value="Poland">Polen</option>
   <option value="Sweden">Schweden</option>
   <option value="Switzerland">Schweiz</option>
-  <option value="Spain">Spanien</option>
-  <option value="Czechia">Tschechien</option>
- <!-- <option value="China">China</option>-->
-  <option value="India">Indien</option>
- <!-- <option value="Japan">Japan</option>-->
-  <option value="Russia">Ru&szlig;land</option>
- <!-- <option value="Turkey">T&uuml;rkei</option>-->
-  <option value="US">USA</option>
 </select>
 </div>
 
-<!-- consolidate with "var datatype" in corona.js-->
+<!-- consolidate first data line with "var windowP" in corona.js-->
 <div id="dataTypeDiv">
-<label for="datatypes"></label>
-<select id="datatypes" onchange=selectDataType()> 
-  <option value="2">Daten: Faelle</option>
+<label for="windows"></label>
+<select id="windows" onchange=selectWindow()> 
   <option value="0">Simulation (lin)</option>
   <option value="1">Simulation (log)</option>
+  <option value="2">Daten: Faelle</option>
   <option value="3">Daten: Tests</option>
   <option value="4">Infektionsraten</option>
 </select>

@@ -46,10 +46,9 @@ var countryGer="Deutschland"
 
 const ln10=Math.log(10);
 
-// 0=lin,1=log,2=cases,3=tests,4=rates 
-// consolidate with first option value of html!!
+// graphical window at start, 0=lin,1=log,2=cases,3=tests,4=rates 
 
-var pwindow=2; 
+var windowG=0; // consolidate with first option value of html!!
 
 
 var myRun;
@@ -865,15 +864,15 @@ function startup() {
   yPixTop=rect.top;
 
   drawsim=new DrawSim();
-  console.log("after drawsim cstr: pwindow=",pwindow);
+  console.log("after drawsim cstr: windowG=",windowG);
   console.log(" drawsim.colLine[16]=",drawsim.colLine[16]);
   console.log(" drawsim.kselect=",drawsim.kselect);
-  console.log(" drawsim.kselect[pwindow]=",drawsim.kselect[pwindow]);
+  console.log(" drawsim.kselect[windowG]=",drawsim.kselect[windowG]);
 
   window.addEventListener("resize", canvas_resize);
   canvas_resize();
 
-  drawsim.setWindow(pwindow);
+  drawsim.setWindow(windowG);
 
   // =============================================================
   // Apple debug
@@ -1210,13 +1209,16 @@ function selectDataCountry(){ // callback html select box "countryData"
 
  
 
-function selectWindow(){ // callback html select box "pwindowDiv"
+function selectWindow(){ // callback html select box "windowGDiv"
   console.log("in selectWindow");
-  pwindow=document.getElementById("pwindows").value;
+  windowG=document.getElementById("windows").value;
 
 
-  drawsim.setWindow(pwindow); // clear and draAxes in setDisplay..
-  drawsim.draw(it,pwindow,corona.xAct,corona.xt,
+  drawsim.setWindow(windowG); // clear and draAxes in setDisplay..
+  drawsim.transferSimData(it);
+
+  drawsim.drawSim(it);
+  drawsim.drawOld(it,windowG,corona.xAct,corona.xt,
 		       corona.y,corona.yt,corona.z); // !! also scales anew
 }
 
@@ -1326,11 +1328,12 @@ function doSimulationStep(){ //!!!
 		" R_actual=",R_actual.toPrecision(3));
   }
 
-
-  drawsim.draw(it, pwindow, corona.xAct, corona.xt, // need R_hist
+  //drawsim.transferSimData(it);
+  drawsim.drawSim(it);
+  drawsim.drawOld(it, windowG, corona.xAct, corona.xt, // need R_hist
 		       corona.y, corona.yt, corona.z, corona.xyz);
  
-  var logging=false;
+  var logging=false; //!!! test f... undefined corona.yt
   corona.updateOneDay(R_actual,logging);
   it++;
 
@@ -1455,11 +1458,14 @@ CoronaSim.prototype.init=function(){
 CoronaSim.prototype.updateOneDay=function(R,logging){ 
 
 
-  if(logging){
+  if(logging){  //filter needed because of called mult times in calibr!
+
+
     console.log("Corona.updateOneDay: it=",it," R=",R,
 		" this.xAct=",this.xAct.toPrecision(3),
 		" this.xyz=",this.xyz.toPrecision(3),
 		" this.xt=",this.xt.toPrecision(3),
+		" this.yt=",this.xt.toPrecision(3),
 /*
 		"this.yt=",this.yt.toPrecision(3),
 		"this.z=",this.z.toPrecision(3),
@@ -1582,17 +1588,19 @@ CoronaSim.prototype.updateOneDay=function(R,logging){
 
   this.itcount++;
 
-  // control output
+  // control output (it is undefined here!)
 
-  if(logging){
-    console.log("end CoronaSim.updateOneDay: this.itcount=",this.itcount,
+  if(logging){ // filter needed because called in calibration!
+
+    console.log("end CoronaSim.updateOneDay:",
+		" this.itcount=",this.itcount,
 		" R=",R.toFixed(2),
 		" nxt=",Math.round(n0*this.xt),
-	//	" nxAct=",(n0*this.xAct).toPrecision(6),
-	//	" nxyz=",(n0*this.xyz).toPrecision(6),
-	//	" ny=",(n0*this.y).toPrecision(5),
-	//	" nyt=",(n0*this.yt).toPrecision(5),
-	//	" nz=",(n0*this.z).toPrecision(5),
+		" nxAct=",(n0*this.xAct).toPrecision(6),
+		" nxyz=",(n0*this.xyz).toPrecision(6),
+		" ny=",(n0*this.y).toPrecision(5),
+		" nyt=",(n0*this.yt).toPrecision(5),
+		" nz=",(n0*this.z).toPrecision(5),
 		""
 	     );
   }
@@ -1694,7 +1702,7 @@ function DrawSim(){
 
 
   // Reference quantities; always the same for 
-  // pwindow in {0=lin, 1=log, 2=cases, 3=tests, 4=relInfect}
+  // windowG in {0=lin, 1=log, 2=cases, 3=tests, 4=relInfect}
 
   //  [0] => xAct=actual infected real sim
   //  [1] => xt=cumulated infected data (=cases, pos tested) as simulated
@@ -1723,9 +1731,7 @@ function DrawSim(){
   // [17] => data_cfr=case fatality rate=dz(t+Td-Tt)/dxt(t)
   // [18] => data_ifr=infection fatality rate dz(t+Td)/dxData(t)
 
-  // central info whichdata to plot how in which window
 
-  this.dataP=[];
 
   colInfected="rgb(255,90,0)";
   colCases="rgb(233,0,0)";
@@ -1738,10 +1744,15 @@ function DrawSim(){
   colIFR="rgb(127,127,127)";
 
 
+
+  // central conatiner for the graphics data
+
+  this.dataG=[];
+
 // window 0 (sim+data lin)
 
-  this.dataP[0]={key: "Insgesamt positiv Getestete (in 1000)",
-		 data:[],
+  this.dataG[0]={key: "Insgesamt positiv Getestete (in 1000)",
+		 data: [],
 		 type: 3, // 0=data dir (posCases),
                           // 1=solid deriv from data (CFR), 
                           // 2=more speculative derivation (IFR)
@@ -1753,70 +1764,71 @@ function DrawSim(){
 		 color:colCases
 		}
 
-  this.dataP[1]={key: "Insgesamt Genesene unter den Getesteten (in 1000)",
+  this.dataG[1]={key: "Insg. Genesene unter den Getesteten (in 1000)",data:[],
 		 type: 3, window:0, plottype: "lines", plotLog: false, 
 		 ytrafo: [0.001, false,false], color:colRecov};
 
-  this.dataP[2]={key: "Insgesamt Gestorbene (in 100)",
+  this.dataG[2]={key: "Insgesamt Gestorbene (in 100)", data: [],
 		 type: 3, window:0, plottype: "lines", plotLog: false, 
-		 ytrafo: [100, false,false], color:colDead};
+		 ytrafo: [0.01, false,false], color:colDead};
 
-  this.dataP[3]={key: "#Tote ges/#positiv getestet ges",
+  this.dataG[3]={key: "#Tote ges/#positiv getestet ges", data: [],
 		 type: 3, window:0, plottype: "lines", plotLog: false,
 		  ytrafo: [1, false,false], color:colPosrateCum};
 
 
 
-  this.dataP[4]={key: "Insgesamt positiv Getestete (in 1000)",
+  this.dataG[4]={key: "Insgesamt positiv Getestete (in 1000)",data: [],
 		 type: 0, window:0, plottype: "points", plotLog: false, 
 		 ytrafo: [0.001, false,false], color:colInfected};
 
-  this.dataP[5]={key: "Insgesamt Genesene unter den Getesteten (in 1000)",
+  this.dataG[5]={key: "Insg. Genesene unter den Getesteten (in 1000)",data:[],
 		 type: 0, window:0, plottype: "points", plotLog: false, 
-		 ytrafo: [1000, false,false], color:colRecovCases};
+		 ytrafo: [0.001, false,false], color:colRecovCases};
 
-  this.dataP[6]={key: "Insgesamt Gestorbene (in 100)",
+  this.dataG[6]={key: "Insgesamt Gestorbene (in 100)", data: [],
+		 type: 3, window:0, plottype: "lines", plotLog: false,
 		 type: 0, window:0, plottype: "points", plotLog: false, 
 		 ytrafo: [0.01, false,false], color:colDead};
 
-  this.dataP[7]={key: "#Tote ges/#positiv getestet ges",
+  this.dataG[7]={key: "#Tote ges/#positiv getestet ges", data: [],
 		 type: 0, window:0, plottype: "points", plotLog: false,
 		  ytrafo: [1, false,false], color:colPosrateCum};
 
   // window 1 (sim+data log)
 
 
-  this.dataP[8]={key: "Aktuell real infizierte Personen",
+  this.dataG[8]={key: "Aktuell real infizierte Personen", data: [],
 		 type: 4, window:1, plottype: "lines", plotLog: true, 
 		 ytrafo: [1, false,false], color:colInfected};
 
-  this.dataP[9]={key: "Insgesamt positiv Getestete",
+  this.dataG[9]={key: "Insgesamt positiv Getestete", data: [],
 		 type: 3, window:1, plottype: "lines", plotLog: true, 
 		 ytrafo: [1, false,false], color:colCases};
 
-  this.dataP[10]={key: "Insgesamt Genesene unter allen Personen",
+  this.dataG[10]={key: "Insgesamt Genesene unter allen Personen", data: [],
 		  type: 4, window:1, plottype: "lines", plotLog: true, 
 		  ytrafo: [1, false,false], color:colRecov};
 
-  this.dataP[11]={key: "Insgesamt Genesene unter den Getesteten",
+  this.dataG[11]={key: "Insgesamt Genesene unter den Getesteten", data: [],
 		  type: 3, window:1, plottype: "lines", plotLog: true, 
 		  ytrafo: [1, false,false], color: colRecovCases};
 
-  this.dataP[12]={key: "Insgesamt Gestorbene",
+  this.dataG[12]={key: "Insgesamt Gestorbene", data: [],
 		  type: 3, window:1, plottype: "lines", plotLog: true, 
 		  ytrafo: [1, false,false], color:colDead};
 
 
 
-  this.dataP[13]={key: "Insgesamt positiv Getestete",
+  this.dataG[13]={key: "Insgesamt positiv Getestete", data: [],
 		 type: 0, window:1, plottype: "points", plotLog: true, 
 		 ytrafo: [1, false,false], color:colCases};
 
-  this.dataP[14]={key: "Insgesamt Genesene unter den Getesteten",
+  this.dataG[14]={key: "Insgesamt Genesene unter den Getesteten", data: [],
 		  type: 0, window:1, plottype: "points", plotLog: true, 
 		  ytrafo: [1, false,false], color: colRecovCases};
 
-  this.dataP[15]={key: "Insgesamt Gestorbene",
+  this.dataG[15]={key: "Insgesamt Gestorbene", data: [],
 		  type: 0, window:1, plottype: "points", plotLog: true, 
 		  ytrafo: [1, false,false], color:colDead};
 
@@ -1825,11 +1837,11 @@ function DrawSim(){
   // window 2: mirrored bar chart cases vs dead persons
   // ytrafo=[scalefact, half, mirrored]
 
-  this.dataP[16]={key: "Positiv Getestete pro Tag",
+  this.dataG[16]={key: "Positiv Getestete pro Tag", data: [],
 		 type: 0, window:2, plottype: "bars", plotLog: false, 
 		 ytrafo: [1, true,false], color:colCases};
 
-  this.dataP[17]={key: "Gestorbene pro Tag",
+  this.dataG[17]={key: "Gestorbene pro Tag", data: [],
 		 type: 0, window:2, plottype: "bars", plotLog: false, 
 		 ytrafo: [1, true,true], color:colDead};
 
@@ -1838,26 +1850,26 @@ function DrawSim(){
   // window 3: mirrored bar chart cases vs dead persons
   // ytrafo=[scalefact, half, mirrored]
 
-  this.dataP[18]={key: "Positiv Getestete pro Tag",
+  this.dataG[18]={key: "Positiv Getestete pro Tag", data: [],
 		 type: 0, window:3, plottype: "bars", plotLog: false, 
-		 ytrafo: [100, false,false], color:colCases};
+		 ytrafo: [1, false,false], color:colCases};
 
-  this.dataP[19]={key: "Tests pro Tag (in 100)",
+  this.dataG[19]={key: "Tests pro Tag (in 100)", data: [],
 		 type: 0, window:3, plottype: "points", plotLog: false, 
-		 ytrafo: [100, false,false], color:colDead};
+		 ytrafo: [0.01, false,false], color:colDead};
 
 
   // window 4: infection ratios
 
-  this.dataP[20]={key: "Anteil positiver Tests [%]",
+  this.dataG[20]={key: "Anteil positiver Tests [%]", data: [],
 		 type: 0, window:4, plottype: "points", plotLog: false, 
 		 ytrafo: [100, false,false], color:colPosrate};
 
-  this.dataP[21]={key: "CFR (Case fatality rate) [%]",
+  this.dataG[21]={key: "CFR (Case fatality rate) [%]", data: [],
 		 type: 1, window:4, plottype: "points", plotLog: false, 
 		 ytrafo: [100, false,false], color:colCFR};
 
-  this.dataP[22]={key: "IFR (Infection fatality rate) [Promille]",
+  this.dataG[22]={key: "IFR (Infection fatality rate) [Promille]", data: [],
 		 type: 2, window:4, plottype: "points", plotLog: false, 
 		 ytrafo: [100, false,false], color:colIFR};
 
@@ -1868,7 +1880,7 @@ function DrawSim(){
 
   //this.qselect[0]=[0,1,2,3,4,5,6,7];
   this.qselect[0]=[0,1,2,4,5,6];  // without cum posRate
-  this.qselect[1]=[8,8,10,11,12,13,14,15];
+  this.qselect[1]=[8,9,10,11,12,13,14,15];
   this.qselect[2]=[16,17];
   this.qselect[3]=[18,19];
   this.qselect[4]=[20,21,22];
@@ -1884,17 +1896,17 @@ function DrawSim(){
 
   // initialize data feed and fonts at drawSim/drawAxes since sometimes
   // data fetch not yet finished/canvas not yet sized at construction time
-    console.log("end drawsim cstr: pwindow=",pwindow);
 
+  console.log("end drawsim cstr: windowG=",windowG);
 
 
   this.kselect=[];//old
 
   this.kselect[0]=[1,2,3,4,5]; // use later!!
   this.kselect[1]=[0,1,2,3,4]; // use later!!
-  this.kselect[2]=[13,15]; // positive cases, deaths     pwindow=2="act0"
-  this.kselect[3]=[13,11]; // 11=number of tests, 13=cases   pwindow=3="act1"
-  this.kselect[4]=[16,17,18]; // all relative quantities pwindow=4="act2"
+  this.kselect[2]=[13,15]; // positive cases, deaths     windowG=2="act0"
+  this.kselect[3]=[13,11]; // 11=number of tests, 13=cases   windowG=3="act1"
+  this.kselect[4]=[16,17,18]; // all relative quantities windowG=4="act2"
 
   //!!! define here this.key_type ("Aktuell real infiz") "str_key"
 
@@ -1928,6 +1940,8 @@ function DrawSim(){
   // since not defined at construction
 
 //old
+
+
   this.colLine=[];
   this.colLine[0]="rgb(255,90,0)";    // xAct=infected real actual
   this.colLine[1]="rgb(233,0,0)";     // xt=infected cases (=pos tested) cum
@@ -1946,6 +1960,7 @@ function DrawSim(){
   this.colLine[17]="rgb(100,0,180)";      // cfr
   this.colLine[18]="rgb(127,127,127)";    // data_ifr
 
+
 // old
   this.wLine=[1,2,1,2,2,2]; //line width [pix]
   this.isActive=[];   // which line is drawn
@@ -1954,27 +1969,21 @@ function DrawSim(){
 }
 
 
-DrawSim.prototype.setWindow=function(pwindow){
-  var displayDeadRecovered=( (country==="Germany")
+DrawSim.prototype.setWindow=function(windowG){
+  var displayRecovered=( (country==="Germany")
 			     ||(country==="Austria")
 			     ||(country==="Czechia")
 			     ||(country==="Switzerland")
 			     ||(country==="India"));
-  this.isActiveLog=(displayDeadRecovered)
-    ? [true,true,true,true,true,false]
-    : [true,true,false,false, false,false]
 
-  this.isActiveLin=(displayDeadRecovered)
-    ? [false,true,false,true,true,false]
-    : [false,true,false,false,false,false]
- 
+  if(displayRecovered){
+    this.qselect[0]=[0,4];
+    this.qselect[1]=[8,9,10,12,14,15];
+  }
 
-// this.isActive not used for the act* pwindows //!!! NICHT === bei ints
-  this.isActive=(pwindow==0) ? this.isActiveLin : this.isActiveLog;
- 
 
   this.xPix0  =0.12*canvas.width;
-  this.xPixMax=((displayDeadRecovered&&(pwindow==0))
+  this.xPixMax=((displayRecovered&&(windowG==0))
 		? 0.90: 0.98) * canvas.width;
   this.yPix0  =0.85*canvas.height;
   this.yPixMax=0.02*canvas.height;
@@ -1982,7 +1991,22 @@ DrawSim.prototype.setWindow=function(pwindow){
   this.hPix=this.yPixMax-this.yPix0;  //<0
 
   this.clear();
-  this.drawAxes(pwindow);
+  this.drawAxes(windowG);
+//old
+
+  if(displayRecovered)
+  this.isActiveLog=(displayRecovered)
+    ? [true,true,true,true,true,false]
+    : [true,true,false,false, false,false]
+
+  this.isActiveLin=(displayRecovered)
+    ? [false,true,false,true,true,false]
+    : [false,true,false,false,false,false]
+ 
+//old
+// this.isActive not used for the act* windowGs //!!! NICHT === bei ints
+  this.isActive=(windowG==0) ? this.isActiveLin : this.isActiveLog;
+ 
 }
 
 
@@ -2020,13 +2044,9 @@ DrawSim.prototype.drawGridLine=function(type,xyrel){
 }
 
 
-// pwindow in [0,4]
+// windowG in [0,4]
 
-DrawSim.prototype.drawAxes=function(pwindow){
-
-
- // console.log("drawsim.drawAxes: pwindow=",pwindow,
-//	      " this.kselect[pwindow]=",this.kselect[pwindow]);
+DrawSim.prototype.drawAxes=function(windowG){
 
 
   // update the font (drawAxes called at first drawing and after all 
@@ -2035,10 +2055,10 @@ DrawSim.prototype.drawAxes=function(pwindow){
   this.sizemin=Math.min(canvas.width,1.25*canvas.height);
   this.textsize=(this.sizemin>400) ? 0.03*this.sizemin : 0.04*this.sizemin;
   ctx.font = this.textsize+"px Arial"; 
-  //console.log("DrawSim.drawAxes: this.sizemin=",this.sizemin,
-//	        " this.textsize=",this.textsize," ctx.font=",ctx.font);
 
- // define x axis label positions and text, time starts Mar 20
+
+
+  // define x axis label positions and strings, time starts Mar 20
 
   var itmaxCrit=105;
   var itmaxCrit2=210;
@@ -2052,7 +2072,6 @@ DrawSim.prototype.drawAxes=function(pwindow){
   var cphi=Math.cos(phi);
   var sphi=Math.sin(phi);
 
-
   // calculate weekly date string array for every week after startDay
 
   for(var iw=0; iw<Math.floor(itmax/7)+1; iw++){
@@ -2064,8 +2083,7 @@ DrawSim.prototype.drawAxes=function(pwindow){
     if(date.getMonth()==0){timeTextW[iw]+=(", "+date.getFullYear());}
   }
 
- 
-  // calculate actually used date string array 
+  // calculate  x axis ticks/labels by selecting from string array
   // with variable tick intervals dweek
 
   var dweek=(itmax<itmaxCrit) ? 1 : (itmax<itmaxCrit2) ? 2 : 4;
@@ -2077,16 +2095,18 @@ DrawSim.prototype.drawAxes=function(pwindow){
   }
 
 
-  //define y axis tick/label positions (in y, not pix)
 
-  var ymin=this.yminType[pwindow];
-  var ymax=this.ymaxType[pwindow];
+  //define y axis tick/label positions (in y, not pix)
+  // actual label not defined here, from this.label_y_window[windowG]
+
+  var ymin=this.yminType[windowG];
+  var ymax=this.ymaxType[windowG];
 
   //!!! try to eliminate this
-  if(pwindow==0) {ymax=this.ymaxLin;}
-  if(pwindow==1) {ymax=this.ymaxLog;}
+  if(windowG==0) {ymax=this.ymaxLin;}
+  if(windowG==1) {ymax=this.ymaxLog;}
   var dy=1; // always for log
-  if(pwindow!=1){// log
+  if(windowG!=1){// log
     var power10=Math.floor(log10(ymax));
     var multiplicator=Math.pow(10, power10);
     var ymaxRange01=ymax/multiplicator;
@@ -2099,12 +2119,13 @@ DrawSim.prototype.drawAxes=function(pwindow){
   //console.log("drawAxes new: dy=",dy," ny=",ny);
 
 
- //define y2 axis tick/label positions (in y, not pix)
-
+/*
+ //define y2 axis tick/label positions (in y, not pix)//!!old?
+//!!!this.isActiveLin[5] undefined
   var ymin2=0;
   var ymax2=this.ymaxPerc;
   //var ymax2=Math.min(10,this.ymaxPerc);
-  if((pwindow==0)&&(this.isActiveLin[5])){
+  if((windowG==0)&&(this.isActiveLin[5])){
     var power10=Math.floor(log10(ymax2));
     var multiplicator=Math.pow(10, power10);
     var ymaxRange02=ymax2/multiplicator;
@@ -2112,19 +2133,22 @@ DrawSim.prototype.drawAxes=function(pwindow){
         :(ymaxRange02<5) ? 0.5*multiplicator : multiplicator;
     var ny2=Math.floor(ymax2/dy2);
   }
-
+*/
 
 
   // draw 3 px wide lines as coordinates
+  // remaining hack: mirrored graphics cases/deaths: yPix0,hPix w/o "this"
 
-  var yPix0=(pwindow==2) // mirrored graphics cases/deaths
+  var yPix0=(windowG==2) 
     ? 0.5*(this.yPix0+this.yPixMax) : this.yPix0;
-  // this.hPix remains
+  var hPix=(windowG!=2) ? this.hPix : 0.5*this.hPix;
 
   ctx.fillStyle="rgb(0,0,0)";
   ctx.fillRect(this.xPix0, yPix0-1, this.wPix, 3);
   ctx.fillRect(this.xPix0-0, this.yPix0, 3, this.hPix);// y axis always orig!
-  //console.log("pwindow=",pwindow," yPix0=",yPix0," hPix=",yPix0);
+  //console.log("windowG=",windowG," yPix0=",yPix0," hPix=",yPix0);
+
+
 
   // draw grid
 
@@ -2134,30 +2158,27 @@ DrawSim.prototype.drawAxes=function(pwindow){
     this.drawGridLine("vertical", timeRel[ix]);
   }
 
-  // double mirrored graphics
-
-  if(pwindow==2){ 
+  if(windowG!=2){
+    for(var iy=1; iy<=ny; iy++){
+      this.drawGridLine("horizontal",iy*dy/(ymax-ymin));
+    }
+  }
+  else{ // double mirrored graphics, direct hack, remains
     for(var iy=1; iy<=ny; iy++){
       this.drawGridLine("horizontal",0.5*(1+iy*dy/(ymax-ymin)));
       this.drawGridLine("horizontal",0.5*(1-iy*dy/(ymax-ymin)));
     }
   }
 
-   else{ // normal graphics starting from bottom
-    for(var iy=1; iy<=ny; iy++){
-      this.drawGridLine("horizontal",iy*dy/(ymax-ymin));
-    }
-   }
-
   ctx.stroke();
+
 
 
   // draw date strings on x axis
 
   var dxShift=(phi<0.01) ? -1.1*this.textsize : -2.4*cphi*this.textsize;
   var dyShift=(1.5+2*sphi)*this.textsize;
-  //for(var ix=0; ix<timeRel.length; ix++){//!!
-  for(var ix=0; days[ix]<=itmax; ix++){
+   for(var ix=0; days[ix]<=itmax; ix++){
     var xpix=this.xPix0+timeRel[ix]*this.wPix+dxShift;
     var ypix=this.yPix0+dyShift;
     ctx.setTransform(cphi,-sphi,+sphi,cphi,xpix,ypix);
@@ -2166,29 +2187,33 @@ DrawSim.prototype.drawAxes=function(pwindow){
   ctx.setTransform(1,0,0,1,0,0);
 
 
+
+
   // draw name+values strings on y1 axis
 
-
-  var label_y=this.label_y_window[pwindow];
-  var yPix=(pwindow!=1)
+  var label_y=this.label_y_window[windowG];
+  var yPix=(windowG!=1)
     ? this.yPix0+0.01*this.hPix : this.yPix0+0.15*this.hPix;
   ctx.setTransform(0,-1,1,0,
 		   this.xPix0-3.0*this.textsize,yPix);
   ctx.fillText(label_y,0,0);
   ctx.setTransform(1,0,0,1,0,0);
 
-  var hPix=(pwindow!=2) ? this.hPix : 0.5*this.hPix;
-  // yPix0 already defined above
+  // normal graphics
 
-  if(pwindow!=2){ // normal graphics
+  if(windowG!=2){ 
     for(var iy=0; iy<=ny; iy++){
-      var valueStr=(pwindow!=1)  ? iy*dy : "10^"+iy;
+      var valueStr=(windowG!=1)  ? iy*dy : "10^"+iy;
       ctx.fillText(valueStr,
 		   this.xPix0-2.5*this.textsize,
 		   yPix0+(iy*dy-ymin)/(ymax-ymin)*hPix+0.5*this.textsize);
     }
   }
-  else{// draw double mirrored graphics scaling 10:1
+
+// draw double mirrored graphics scaling 10:1 
+// hack remains: yPix0,hPix instead of this.yPix0, this.hPix
+
+  else{
     for(var iy=0; iy<=ny; iy++){
       var valueStr=10*iy*dy;
       ctx.fillText(valueStr,
@@ -2204,10 +2229,11 @@ DrawSim.prototype.drawAxes=function(pwindow){
   }
 
 
-  
-  // draw name+values y2 axis if pwindow=0
 
-  if((pwindow==0)&&(this.isActiveLin[5])){
+  // draw name+value strings on y2 axis // !! still old
+
+/*
+  if((windowG==0)&&(this.isActiveLin[5])){//!!!this.isActiveLin[5] undefined
 
     var label_y2="Tote/bekannt Erkrankte [%]";
     ctx.fillStyle=this.colLine[5];
@@ -2223,91 +2249,24 @@ DrawSim.prototype.drawAxes=function(pwindow){
 		   +0.5*this.textsize);
     }
   }
+*/
 
   
-
   // draw key
 
-  var yrelTop=(pwindow==1) // 1=log
+  var yrelTop=(windowG==1) // 1=log
     ? -4.5*(1.2*this.textsize/this.hPix) : 0.96;
-  var xrelLeft=(pwindow==0) ? 0.02 : 0.60; 
+  var xrelLeft=(windowG==0) ? 0.02 : 0.60; 
   var dyrel=-1.2*this.textsize/this.hPix;
   
-  if(pwindow<2){
-
-  var il=0;
-  if(this.isActive[0]){
-    ctx.fillStyle=this.colLine[0];
-    ctx.fillText("Aktuell real infizierte Personen",
+  for (var iq=0; iq<this.qselect[windowG].length; iq++){
+    var q=this.qselect[windowG][iq];
+    ctx.fillStyle=this.dataG[q].color;
+    ctx.fillText(this.dataG[q].key,
 	         this.xPix0+xrelLeft*this.wPix,
-		 this.yPix0+(yrelTop-il*dyrel)*this.hPix);
-    il++;
+		 this.yPix0+(yrelTop-iq*dyrel)*this.hPix);
   }
 
-  if(this.isActive[1]){
-    ctx.fillStyle=this.colLine[1];
-    ctx.fillText("Erfasste infiz. Personen",//!!! simplify
-	         this.xPix0+xrelLeft*this.wPix,
-		 this.yPix0+(yrelTop-il*dyrel)*this.hPix);
-    il++;
-  }
-
-  if(this.isActive[2]){
-    ctx.fillStyle=this.colLine[2];
-    ctx.fillText("Genesene Personen (real)",
-	         this.xPix0+xrelLeft*this.wPix,
-		 this.yPix0+(yrelTop-il*dyrel)*this.hPix);
-    il++;
-  }
-
-  if(this.isActive[3]){
-    ctx.fillStyle=this.colLine[3];
-    ctx.fillText("Erfasste genesene Personen",
-	       this.xPix0+xrelLeft*this.wPix,
-		 this.yPix0+(yrelTop-il*dyrel)*this.hPix);
-    il++;
-  }
-
-  if(this.isActive[4]){
-    ctx.fillStyle=this.colLine[4];
-    ctx.fillText("Gestorbene Personen",
-		 this.xPix0+xrelLeft*this.wPix,
-		 this.yPix0+(yrelTop-il*dyrel)*this.hPix);
-    il++;
-  } 
-
-  if(this.isActive[5]){
-    ctx.fillStyle=this.colLine[5];
-    ctx.fillText("#Tote/#positiv getestet",
-	         this.xPix0+xrelLeft*this.wPix,
-		 this.yPix0+(yrelTop-il*dyrel)*this.hPix);
-  }
-  }
-
-
-  //MT 2020-09
-
-  else{// pwindow="act[0-2]"
-    var str_key=["Aktiv Infiz. unter pos. Getesteten (in 1000)",
-		 "Tests pro Tag (in 1000)",
-		 "Real Neuinfizierte pro Tag (Schaetzung, in 1000)",
-		 "Positive Getestete pro Tag",// fake, in data/10, in label*10
-		 "Genesene unter den positive Getesteten (in 100)",
-		 "Todesfaelle pro Tag",
-		 "Anteil positiver Tests [%]",
-		 "CFR (Case fatality rate) [%]",
-		 "IFR (Infection fatality rate) [Promille]"];
-
-
-
-   for(var id=0; id<this.kselect[pwindow].length; id++){
-      var k=this.kselect[pwindow][id];
-      ctx.fillStyle=this.colLine[k];
-      ctx.fillText(str_key[k-10],
-	             this.xPix0+xrelLeft*this.wPix,
-		     this.yPix0+(yrelTop-id*dyrel)*this.hPix);
-    }
-  }
 
 // R values drawn directly in draw in simulation part
 
@@ -2315,11 +2274,219 @@ DrawSim.prototype.drawAxes=function(pwindow){
 
 
 
+// transfer all coronaSim data directly  
+// to graphics data container this.dataG[q] with types 3 or 4
+// called every simulation step: corona.xAct etc are scalars!
+
+//######################################################################
+DrawSim.prototype.transferSimData=function(it){
+//######################################################################
+
+  //console.log("transferSimData: it=",it," n0*corona.xt=",
+//	      n0*corona.xt," n0*corona.yt=",n0*corona.yt);
+  this.dataG[0].data[it]=n0*corona.xt;
+  this.dataG[1].data[it]=n0*corona.yt;
+  this.dataG[2].data[it]=n0*corona.z;
+  this.dataG[3].data[it]=n0*corona.z/corona.xt
+  this.dataG[8].data[it]=log10(n0*corona.xAct);
+  this.dataG[9].data[it]=log10(n0*corona.xt);
+  this.dataG[10].data[it]=log10(n0*corona.y);
+  this.dataG[11].data[it]=log10(n0*corona.yt);
+  this.dataG[12].data[it]=log10(n0*corona.z);
+
+  if(false){
+    console.log("\n\nDrawSim.transferSimData");
+    for(var q=0; q<this.dataG.length; q++){
+      if(this.dataG[q].type>=3){
+	data=this.dataG[q].data;
+	console.log(
+	  this.dataG[q].key,
+	  ": q=",q,"\ndata.length=", data.length,
+	  " data[0]=", data[0],
+	  " data[data.length-1]=",data[data.length-1]);
+      }
+    }
+  }
+
+}
+
+
+// transfer of all measured data 
+// to graphics data container this.dataG[q] with types 0-2
+// called only once at the beginning!
 
 
 //######################################################################
-DrawSim.prototype.draw=function(it,pwindow,xAct,xt,y,yt,z,xyz){
+DrawSim.prototype.transferRecordedData=function(){
 //######################################################################
+
+// windows 0,1
+
+  this.dataG[4].data=data_cumCases;  // by reference
+  this.dataG[5].data=data_cumRecovered;
+  this.dataG[6].data=data_cumDeaths;
+  this.dataG[7].data=data_cumCfr;
+ 
+  for(var i=0; i<data_cumCases.length; i++){ // by value because of log10:
+    this.dataG[13].data[i]=log10(data_cumCases[i]);
+    this.dataG[14].data[i]=log10(data_cumRecovered[i]);
+    this.dataG[15].data[i]=log10(data_cumDeaths[i]);
+  }
+
+
+  // windows 2-4
+
+    //kernel=[1];
+    //kernel=[1/4,2/4,1/4];
+  kernel=[1/9,2/9,3/9,2/9,1/9];
+    //kernel=[1/16,2/16,3/16,4/16,3/16,2/16,1/16];
+    //kernel=[1/25,2/25,3/25,4/25,5/25,4/25,3/25,2/25,1/25];
+
+  var dnSmooth=smooth(data_dn,kernel);
+    //var dnSmooth=avgArithm(data_dn,7);
+  var dxtSmooth=smooth(data_dxt,kernel);
+  // var dytSmooth=smooth(data_dyt,kernel); // often no useful data
+  var dzSmooth=smooth(data_dz,kernel);
+  var posRateSmooth=smooth(data_posRate,kernel);
+  var cfrSmooth=smooth(data_cfr,kernel);
+  var ifrSmooth=smooth(data_ifr,kernel);
+  //console.log("cfrSmooth=",cfrSmooth," ifrSmooth=",ifrSmooth);//arrays!
+  
+
+  this.dataG[16].data=dxtSmooth; // by reference
+  this.dataG[17].data=dzSmooth; 
+
+  this.dataG[18].data=dxtSmooth; // the same as [16]
+  this.dataG[19].data=dnSmooth; 
+
+  this.dataG[20].data=posRateSmooth;
+  this.dataG[21].data=cfrSmooth;
+  this.dataG[22].data=ifrSmooth;
+
+  if(false){
+    console.log("\n\nDrawSim.transferRecordedData:");
+    for(var q=0; q<this.dataG.length; q++){
+      if(this.dataG[q].type<3){
+	data=this.dataG[q].data;
+	half=Math.round(data.length/2-1);
+	console.log(
+	  this.dataG[q].key,
+	  ": q=",q,"\ndata.length=", data.length,
+	  " data[0]=", data[0],
+	  " data[half]=", data[half],
+	  " data[data.length-1]=",data[data.length-1]);
+      }
+    }
+  }
+
+}
+
+//######################################################################
+DrawSim.prototype.checkRescaling=function(it){
+//######################################################################
+
+  //console.log("in checkRescaling: it=",it);
+  var erase=false;
+
+
+  // (1) possible rescaling in x
+
+  if(it>itmax){
+    itmax=it;
+    for(var i=0; i<=itmax; i++){ 
+      this.xPix[i]=this.xPix0+i*(this.xPixMax-this.xPix0)/(itmax);
+    }
+    erase=true;
+  }
+
+  // (2) possible rescaling in y for all the graph windows
+
+  for(var iw=0; iw<5; iw++){ //windows
+    for(iq=0; iq<this.qselect[iw].length; iq++){ // quantity selector
+      var q=this.qselect[iw][iq];
+      var data=this.dataG[q].data;
+      var i=(this.dataG[q].type<3) ? it+data_idataStart : it;
+      var scaling=this.dataG[q].ytrafo[0];
+      var type=this.dataG[q].type;
+      var value=data[i]*scaling;
+
+      if(value>this.ymaxType[iw]){
+	this.ymaxType[iw]=value;
+	erase=true;
+	if(true){
+	  console.log(
+	    "checkRescaling: new maximum! it=",it, "window iw=",iw,
+	    " quantity q=",q," i=",i,
+	    " type=",((type<3) ? "data" : "sim"),
+	    " scaling=",scaling,
+	    "\nbefore restrictions: this.ymaxType[iw]=",this.ymaxType[iw]
+	  );
+	}
+      }
+
+    }
+  }
+
+ // (3) restrict scalings for some windows
+
+  this.ymaxType[4]=Math.min(this.ymaxType[4], 20); // rel quant. <=20 %
+  this.ymaxType[0]=Math.max(this.ymaxType[0], 10); // abs lin to 20
+
+  // (4) do actions
+
+  if(erase){
+    this.clear();
+    this.drawAxes(windowG);
+  }
+
+
+}// DrawSim.checkRescaling=
+
+
+//######################################################################
+DrawSim.prototype.drawREstimate=function(it){
+//######################################################################
+
+  console.log("in DrawSim.drawREstimate: it=",it);
+
+  ctx.fillStyle="#888888";// vertical period separation lines
+  var x0=this.xPix0;
+  var y0=this.yPix0+0.3*this.hPix;
+
+  ctx.setTransform(0,-1,1,0,x0+1.0*this.textsizeR,y0);
+  var str_R="R="+R_hist[0].toFixed(2)
+      +( (RsliderUsed||otherSliderUsed)
+	 ? "" : (" +/- "+sigmaR_hist[0].toFixed(2)));
+  ctx.fillText(str_R,0,0);
+  ctx.setTransform(1,0,0,1,0,0);
+
+  for(var ical=0; ical<=getIndexCalib(it); ical++){ // !!! 
+    var itR=getIndexTimeFromCalib(ical);
+    x0=this.xPix[itR];
+    ctx.fillRect(x0-1,this.yPix0,3,this.hPix);
+
+    ctx.setTransform(0,-1,1,0,x0+1.0*this.textsizeR,y0);
+    //console.log("drawSim.draw: it=",it," itR=",itR);
+    str_R="R="+R_hist[itR].toFixed(2)
+      +( (RsliderUsed||otherSliderUsed||(itR>=data_imax))
+     // +((true) // if sigma_R undefiuned
+	? "" : (" +/- "+sigmaR_hist[itR].toFixed(2)));
+
+    console.log("str_R=",str_R,
+		" x0+1.0*this.textsizeR=",x0+1.0*this.textsizeR," y0=",y0);
+
+    ctx.fillText(str_R,0,0);
+    ctx.setTransform(1,0,0,1,0,0);
+  }
+}
+
+
+
+
+//######################################################################
+DrawSim.prototype.drawSim=function(it,q){
+//######################################################################
+
 
   // update  text properties 
 
@@ -2327,8 +2494,66 @@ DrawSim.prototype.draw=function(it,pwindow,xAct,xt,y,yt,z,xyz){
   this.textsize=(this.sizemin>600) ? 0.02*this.sizemin : 0.03*this.sizemin;
   this.textsizeR=1.5*this.textsize;
 
-  // transfer new data
 
+
+  // initialize: transfer new data and redraw whole graphics
+
+  this.transferSimData(it);
+  console.log("\n\nin DrawSim.drawSim: it=",it);
+  this.transferRecordedData(); // use it outside later on!
+ 
+  if(it==0){
+    this.transferRecordedData();// possibly use it outside later on!
+    this.clear();
+    this.drawAxes(windowG);
+  }
+
+
+
+  // check for possible scaling/rescaling due to new data on x and y axis 
+  // and redraw if needed (local erase=true)
+
+  this.checkRescaling(it);
+
+
+
+  // draw R estimates for simulation windows
+
+  if(windowG<2){
+    this.drawREstimate(it);
+  }
+
+
+  // draw simulations and data for all windows
+
+  // filter scaling, drawCurves with line thickness,
+  //  plotPoints with point types , plotBars by parsing this.dataG[q]
+
+  for(var iw=0; iw<5; iw++){ //windows
+    for(iq=0; iq<this.qselect[iw].length; iq++){ // quantity selector
+      var q=this.qselect[iw][iq];
+      var data=this.dataG[q].data;
+      var i=(this.dataG[q].type<3) ? it+data_idataStart : it;
+      var scaling=this.dataG[q].ytrafo[0];
+      var type=this.dataG[q].type;
+      var value=data[i]*scaling;
+// plot
+
+    }
+  }
+
+}
+
+
+
+//######################################################################
+DrawSim.prototype.drawOld=function(it,windowG,xAct,xt,y,yt,z,xyz){
+//######################################################################
+
+
+
+
+// old
   //  [0] => xAct=actual infected real sim
   //  [1] => xt=cumulated infected data (=cases, pos tested) as simulated
   //  [2] => y=cumulated recovered real sim
@@ -2357,13 +2582,13 @@ DrawSim.prototype.draw=function(it,pwindow,xAct,xt,y,yt,z,xyz){
 
 
   // init data feed (may not yet loaded at construction time)
-  // and draw axes (later on only drawn if scaling or pwindow changed)
+  // and draw axes (later on only drawn if scaling or windowG changed)
   // drawAxes also updates the font size
 
+//!!! replace by this.transferRecordedData();
   if(it==0){
-
     this.clear();
-    this.drawAxes(pwindow);
+    this.drawAxes(windowG);
 
     //kernel=[1];
     //kernel=[1/4,2/4,1/4];
@@ -2419,17 +2644,17 @@ DrawSim.prototype.draw=function(it,pwindow,xAct,xt,y,yt,z,xyz){
 
   // (2) possible rescaling in y due to simulation development
   // => determine/update ymaxLin, tmaxLog
-  // (need also to update if another pwindow is presently used)
+  // (need also to update if another windowG is presently used)
 
   for(var q=0; q<5; q++){ 
     if((this.isActiveLin[q])&&(this.ySimLin[q][it]>this.ymaxLin)){
         this.ymaxLin=this.ySimLin[q][it];
-        if(pwindow==0){erase=true;}
+        if(windowG==0){erase=true;}
     }
 
     if((this.isActiveLog[q])&&(this.ySimLog[q][it]>this.ymaxLog)){
         this.ymaxLog=this.ySimLog[q][it];
-        if (pwindow==1){erase=true;}
+        if (windowG==1){erase=true;}
     }
 
     if(this.ySimLin[5][it]>this.ymaxPerc){ // ySimLin[5] =z/yt in percent
@@ -2478,7 +2703,7 @@ DrawSim.prototype.draw=function(it,pwindow,xAct,xt,y,yt,z,xyz){
     // restrict scaling of relative quantities to 20 [%]
     this.ymaxType[4]=Math.min(this.ymaxType[4], 20);
 
-    // unify ymax for pwindow 0 or 1 // !!! consolidate!!
+    // unify ymax for windowG 0 or 1 // !!! consolidate!!
     this.ymaxType[0]=this.ymaxLin;
     this.ymaxType[1]=this.ymaxLog;
 
@@ -2491,22 +2716,23 @@ DrawSim.prototype.draw=function(it,pwindow,xAct,xt,y,yt,z,xyz){
 
   if(erase){
     this.clear();
-    this.drawAxes(pwindow);
+    this.drawAxes(windowG);
   }
 
   //#############################################################
-  // actual drawing of (cumulative) sim results for pwindow lin or log
+  // actual drawing of (cumulative) sim results for windowG lin or log
   //#############################################################
 
 
-  if(pwindow<2){
+  if(windowG<2){
 
     for(var q=0; q<6; q++){
       //console.log("q=",q," this.isActive[q]=",this.isActive[q]);
-      var simdata=(pwindow==1) ? this.ySimLog[q] : this.ySimLin[q];
-      if(this.isActive[q]){
-	console.log("drawCurve sim: pwindow=",pwindow," q=",q," simdata=",simdata);
-        this.drawCurve(it,q,simdata,pwindow);
+      var simdata=(windowG==1) ? this.ySimLog[q] : this.ySimLin[q];
+      if(false){
+      //if(this.isActive[q]){
+	console.log("drawCurve sim: windowG=",windowG," q=",q," simdata=",simdata);
+        this.drawCurve(it,q,simdata,windowG);
       }
     }
 
@@ -2514,7 +2740,7 @@ DrawSim.prototype.draw=function(it,pwindow,xAct,xt,y,yt,z,xyz){
     // drawing vertical separation lines; draw R estimates
 
 
-   ctx.fillStyle="#888888";
+   ctx.fillStyle="#888888"; // vertical period separation lines
    var x0=this.xPix0;
    var y0=this.yPix0+0.3*this.hPix;
 
@@ -2539,31 +2765,32 @@ DrawSim.prototype.draw=function(it,pwindow,xAct,xt,y,yt,z,xyz){
     ctx.fillText(str_R,0,0);
     ctx.setTransform(1,0,0,1,0,0);
    }
+
   }
 
   //#########################################################
   // actual plotting of cumulative data points to sim for lin and log
   //#########################################################
 
-  if(pwindow<2){
+  if(windowG<2){
 
     // [0]=x=xSimCum, not at plotPoints
     // [2]=y=ySimCum, not at plotPoints
 
     if(this.isActive[1]){ // xt
-      this.plotPoints(it, 1, data_cumCases, pwindow);
+      this.plotPoints(it, 1, data_cumCases, windowG);
     }
 
     if(this.isActive[3]){ // yt
-      this.plotPoints(it, 3, data_cumRecovered, pwindow);
+      this.plotPoints(it, 3, data_cumRecovered, windowG);
     }
 
     if(this.isActive[4]){ // z
-      this.plotPoints(it, 4, data_cumDeaths, pwindow); 
+      this.plotPoints(it, 4, data_cumDeaths, windowG); 
     }
 
     if(this.isActive[5]){ // z/xt
-      this.plotPoints(it, 5, data_cumCfr, pwindow); 
+      this.plotPoints(it, 5, data_cumCfr, windowG); 
     }
   }
 
@@ -2572,24 +2799,24 @@ DrawSim.prototype.draw=function(it,pwindow,xAct,xt,y,yt,z,xyz){
   // actual plotting of "actual data" points
   //#######################################
 
-  //plotPoints(it,q,data_arr,pwindow)
-  //plotBars(it,q,data_arr,pwindow,half,downwards)
+  //plotPoints(it,q,data_arr,windowG)
+  //plotBars(it,q,data_arr,windowG,half,downwards)
 
-  //if(pwindow=="act1"){// cases/deaths
-  if(pwindow==2){// "act0": cases/deaths
-    this.plotBars(it, 13, this.yAct[13], pwindow,true,false);
-    this.plotBars(it, 15, this.yAct[15], pwindow,true,true);
+  //if(windowG=="act1"){// cases/deaths
+  if(windowG==2){// "act0": cases/deaths
+    this.plotBars(it, 13, this.yAct[13], windowG,true,false);
+    this.plotBars(it, 15, this.yAct[15], windowG,true,true);
   }
 
-  if(pwindow==3){// 11=number of tests, 13=cases
-    this.plotBars(it, 13, this.yAct[13], pwindow,false,false);
-    this.plotPoints(it, 11, this.yAct[11], pwindow);
+  if(windowG==3){// 11=number of tests, 13=cases
+    this.plotBars(it, 13, this.yAct[13], windowG,false,false);
+    this.plotPoints(it, 11, this.yAct[11], windowG);
   }
 
-  if(pwindow>=3){
-    for(var ik=0; ik< this.kselect[pwindow].length; ik++){
-      var k=this.kselect[pwindow][ik];
-      this.plotPoints(it, k, this.yAct[k], pwindow);
+  if(windowG>=3){
+    for(var ik=0; ik< this.kselect[windowG].length; ik++){
+      var k=this.kselect[windowG][ik];
+      this.plotPoints(it, k, this.yAct[k], windowG);
     }
   }
 
@@ -2597,14 +2824,14 @@ DrawSim.prototype.draw=function(it,pwindow,xAct,xt,y,yt,z,xyz){
 
 
 //######################################################################
-DrawSim.prototype.drawCurve=function(it, q, data_arr, pwindow){
+DrawSim.prototype.drawCurve=function(it, q, data_arr, windowG){
 //######################################################################
 
   var w=this.wLine[q]/2;  //!!! old replace in arglist
 
-  var yminDraw=this.yminType[pwindow];
-  var ymaxDraw=this.ymaxType[pwindow];
-  if((pwindow==0)&&(q==5)){
+  var yminDraw=this.yminType[windowG];
+  var ymaxDraw=this.ymaxType[windowG];
+  if((windowG==0)&&(q==5)){
     yminDraw=this.yminPerc; ymaxDraw=this.ymaxPerc;
   }
 
@@ -2653,12 +2880,12 @@ DrawSim.prototype.drawCurve=function(it, q, data_arr, pwindow){
 // => add data2_idataStart-data_idataStart to index of data2 quantities
 
 //######################################################################
-DrawSim.prototype.plotPoints=function(it,q,data_arr,pwindow){
+DrawSim.prototype.plotPoints=function(it,q,data_arr,windowG){
 //######################################################################
 
-  var yminDraw=this.yminType[pwindow];
-  var ymaxDraw=this.ymaxType[pwindow];
-  if((pwindow==0)&&(q==5)){
+  var yminDraw=this.yminType[windowG];
+  var ymaxDraw=this.ymaxType[windowG];
+  if((windowG==0)&&(q==5)){
     yminDraw=this.yminPerc; ymaxDraw=this.ymaxPerc;
   }
 
@@ -2671,9 +2898,9 @@ DrawSim.prototype.plotPoints=function(it,q,data_arr,pwindow){
 
     // log 10 and, if lin, in 1000 =>*0.001, if perc *100, if act *1
     //!!! eliminate!
-    var y=(pwindow==1) ? log10(data_arr[i])
-      : (pwindow==0) ? data_arr[i]/this.unitPers : data_arr[i];
-    if((pwindow==0)&&(q==5)){y=100*data_arr[i];}
+    var y=(windowG==1) ? log10(data_arr[i])
+      : (windowG==0) ? data_arr[i]/this.unitPers : data_arr[i];
+    if((windowG==0)&&(q==5)){y=100*data_arr[i];}
 
     // actual plotting
 
@@ -2696,11 +2923,11 @@ DrawSim.prototype.plotPoints=function(it,q,data_arr,pwindow){
 // plot 1: half=true, up=false
 
 //######################################################################
-DrawSim.prototype.plotBars=function(it,q,data_arr,pwindow,half,downwards){
+DrawSim.prototype.plotBars=function(it,q,data_arr,windowG,half,downwards){
 //######################################################################
 
-  var yminDraw=this.yminType[pwindow];
-  var ymaxDraw=this.ymaxType[pwindow];
+  var yminDraw=this.yminType[windowG];
+  var ymaxDraw=this.ymaxType[windowG];
   //console.log("drawsim.plotBars: ymaxDraw=", ymaxDraw);
 
   // new settings for up/down plots
@@ -2727,8 +2954,8 @@ DrawSim.prototype.plotBars=function(it,q,data_arr,pwindow,half,downwards){
 
     //if((itg>=0)&&(itg<=it)){ // here, i=0 bar covers y axis
     if((itg>0)&&(itg<=it)){
-      var y=(pwindow==1) ? log10(data_arr[i]) //!!! eliminate cases
-	: (pwindow==0) ? data_arr[i]/this.unitPers : data_arr[i];
+      var y=(windowG==1) ? log10(data_arr[i]) //!!! eliminate cases
+	: (windowG==0) ? data_arr[i]/this.unitPers : data_arr[i];
       var yrel=(y-yminDraw)/(ymaxDraw-yminDraw);
 
       var dataPix=yPix0+yrel*(yPixMax-yPix0);
