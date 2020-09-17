@@ -1218,8 +1218,8 @@ function selectWindow(){ // callback html select box "windowGDiv"
   drawsim.transferSimData(it);
 
   drawsim.drawSim(it);
-  drawsim.drawOld(it,windowG,corona.xAct,corona.xt,
-		       corona.y,corona.yt,corona.z); // !! also scales anew
+  //drawsim.drawOld(it,windowG,corona.xAct,corona.xt,
+//		       corona.y,corona.yt,corona.z); // !! also scales anew
 }
 
 
@@ -1330,8 +1330,8 @@ function doSimulationStep(){ //!!!
 
   //drawsim.transferSimData(it);
   drawsim.drawSim(it);
-  drawsim.drawOld(it, windowG, corona.xAct, corona.xt, // need R_hist
-		       corona.y, corona.yt, corona.z, corona.xyz);
+  //drawsim.drawOld(it, windowG, corona.xAct, corona.xt, // need R_hist
+//		       corona.y, corona.yt, corona.z, corona.xyz);
  
   var logging=false; //!!! test f... undefined corona.yt
   corona.updateOneDay(R_actual,logging);
@@ -2536,13 +2536,46 @@ DrawSim.prototype.drawSim=function(it,q){
       var i=(this.dataG[q].type<3) ? it+data_idataStart : it;
       var scaling=this.dataG[q].ytrafo[0];
       var type=this.dataG[q].type;
-      var value=data[i]*scaling;
-// plot
+      var plottype=this.dataG[q].plottype;
+      var wLine=(type==3) ? 0.015*this.sizemin
+	:(type==4) ? 0.075*this.sizemin :  0.05*this.sizemin;
+      var color=this.dataG[q].color;
+      var rightWindow=(this.dataG[q].window==windowG);
+      if(true){
+      //if(rightWindow){
+	console.log("\ndrawSim: i=",i," windowG=",windowG,
+		    " window=",this.dataG[q].window,
+		    " rightWindow=",rightWindow,
+		    " q=",q," type=",type,
+		    " plottype=",plottype,
+		    " scaling=",scaling," wline=",wLine);
+      }
+
+      // draw some data (the simulations) as lines/curves
+
+      if(rightWindow && (this.dataG[q].plottype=="lines")){
+	console.log("before drawCurve");
+	this.drawCurve(it, data, scaling, wLine, color, windowG);
+      }
+
+      // plot some data as points
+
+      if(rightWindow && (this.dataG[q].plottype=="points")){
+
+      }
+
+      // plot some data as bars
+
+      if(rightWindow && (this.dataG[q].plottype=="bars")){
+
+      }
+
+
 
     }
   }
 
-}
+} //DrawSim.drawSim
 
 
 
@@ -2824,22 +2857,28 @@ DrawSim.prototype.drawOld=function(it,windowG,xAct,xt,y,yt,z,xyz){
 
 
 //######################################################################
-DrawSim.prototype.drawCurve=function(it, q, data_arr, windowG){
+DrawSim.prototype.drawCurve=function(it, data_arr, scaling, 
+				     wLine, color, windowG){
 //######################################################################
-
-  var w=this.wLine[q]/2;  //!!! old replace in arglist
 
   var yminDraw=this.yminType[windowG];
   var ymaxDraw=this.ymaxType[windowG];
-  if((windowG==0)&&(q==5)){
+
+  // !! check if I want to retain this
+
+  //if((windowG==0)&&(q==5)){ 
+  if(false){
     yminDraw=this.yminPerc; ymaxDraw=this.ymaxPerc;
   }
 
-  ctx.fillStyle=this.colLine[q];
+  var value=data_arr[itg]*scaling;
+  var value_old=data_arr[itg-1]*scaling;
+
+  ctx.fillStyle=color;
   for (var itg=0; itg<=it; itg++){
-    if((itg>0)&&(data_arr[itg]>=yminDraw) &&(data_arr[itg]<=ymaxDraw)){
-      var yrel=(data_arr[itg]-yminDraw)/(ymaxDraw-yminDraw);
-      var yrelOld=(data_arr[itg-1]-yminDraw)/(ymaxDraw-yminDraw);
+    if((itg>0)&&(value>=yminDraw) &&(value<=ymaxDraw)){
+      var yrel=(value-yminDraw)/(ymaxDraw-yminDraw);
+      var yrelOld=(valueOld-yminDraw)/(ymaxDraw-yminDraw);
       var simPix=this.yPix0+yrel*(this.yPixMax-this.yPix0);
       var simPixOld=this.yPix0+yrelOld*(this.yPixMax-this.yPix0);
 
@@ -2848,10 +2887,10 @@ DrawSim.prototype.drawCurve=function(it, q, data_arr, windowG){
 			(this.xPix[itg]-this.xPix[itg-1]));
       var cphi=Math.cos(phi);
       var sphi=Math.sin(phi);
-      ctx.moveTo(this.xPix[itg-1]-w*sphi, simPixOld+w*cphi);
-      ctx.lineTo(this.xPix[itg-1]+w*sphi, simPixOld-w*cphi);
-      ctx.lineTo(this.xPix[itg]+w*sphi,   simPix-w*cphi);
-      ctx.lineTo(this.xPix[itg]-w*sphi,   simPix+w*cphi);
+      ctx.moveTo(this.xPix[itg-1]-wLine*sphi, simPixOld+wLine*cphi);
+      ctx.lineTo(this.xPix[itg-1]+wLine*sphi, simPixOld-wLine*cphi);
+      ctx.lineTo(this.xPix[itg]+wLine*sphi,   simPix-wLine*cphi);
+      ctx.lineTo(this.xPix[itg]-wLine*sphi,   simPix+wLine*cphi);
       ctx.closePath();  // !! crucial, otherwise latest col used for ALL
       ctx.fill();
       if(itg==it){
