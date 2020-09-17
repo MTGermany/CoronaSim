@@ -598,8 +598,10 @@ function initializeData(country) {
   }
 
 
-  for(var i=0; i<itmaxData; i++){
-    if(false){
+  if(true){
+    console.log("");
+    //for(var i=0; i<itmaxData; i++){
+    for(var i=itmaxData-5; i<itmaxData; i++){
     //if((i>itmaxData-30)&&(i<itmaxData)){
       console.log(
 	insertLeadingZeroes(data[i]["date"]),": iData=",i,
@@ -619,14 +621,17 @@ function initializeData(country) {
 
 
   //for(var it=0; it<itmaxData2; it++){
-  for(var it=itmaxData2-5; it<itmaxData2; it++){
-    console.log(data2[it]["date"],": it=",it,
+  if(true){
+    for(var it=itmaxData2-5; it<itmaxData2; it++){
+      console.log("");
+      console.log(data2[it]["date"],": it=",it,
 		" data2_cumCases=",Math.round(data2_cumCases[it]),
 		" data_cumCases=",Math.round(data_cumCases[it+data_idataStart-data2_idataStart]),
 		" data2_posRate=",data2_posRate[it].toPrecision(3),
 		" data2_cumTests=",Math.round(data2_cumTests[it]),
 		" data2_cumTestsCalc=", 
 		Math.round(data2_cumTestsCalc[it]) );
+    }
   }
 
 
@@ -1181,7 +1186,7 @@ function myStartStopFunction(){ //!! hier bloederweise Daten noch nicht da!!
 }
 
 function selectDataCountry(){ // callback html select box "countryData"
-  console.log("\nin selectDataCountry()");
+  console.log("\nin selectDataCountry(): itmax=",itmaxinit);
   itmax=itmaxinit;
   country=document.getElementById("countries").value;
   countryGer=countryGerList[country];
@@ -1221,7 +1226,7 @@ function selectWindow(){ // callback html select box "windowGDiv"
 
 
 function myRestartFunction(){ 
-  console.log("in myRestartFunction");
+  console.log("in myRestartFunction: itmax=",itmaxinit);
   itmax=itmaxinit;
   ctx.clearRect(0, 0, canvas.width, canvas.height)
   fracDie=fracDieInit*pTest/pTestInit;
@@ -1302,6 +1307,7 @@ function simulationRun() {
   // to get the initial point it=0) 
 
   if(it==itmaxinit-1){ 
+    console.log("before clearInterval: it=",it);
     clearInterval(myRun);myStartStopFunction();
   }
 }
@@ -1681,7 +1687,8 @@ function DrawSim(){
   this.ymaxPerc=20;
   this.ymaxLin=11;
   this.ymaxLog=7;
-  this.xPix0  =0.12*canvas.width;
+
+  this.xPix0  =0.12*canvas.width; // must update this block later on!!
   this.xPixMax=0.98*canvas.width;
   this.yPix0  =0.85*canvas.height;
   this.yPixMax=0.02*canvas.height;
@@ -1874,15 +1881,15 @@ DrawSim.prototype.setWindow=function(windowG){
     this.qselect[1]=[8,9,10,12,14,15];
   }
 
-
+  // must update canvas boundaries since canvas may be resized
   this.xPix0  =0.12*canvas.width;
-  this.xPixMax=((displayRecovered&&(windowG==0))
-		? 0.90: 0.98) * canvas.width;
+  this.xPixMax=0.98*canvas.width;
   this.yPix0  =0.85*canvas.height;
   this.yPixMax=0.02*canvas.height;
   this.wPix=this.xPixMax-this.xPix0;
   this.hPix=this.yPixMax-this.yPix0;  //<0
-  //console.log("drawsim.setWindow: this.xPixMax=",this.xPixMax);
+
+
   this.clear();
   this.drawAxes(windowG);
 
