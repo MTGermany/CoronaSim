@@ -335,7 +335,7 @@ function getGithubData() {
         console.log("in fetch function: dataGit=",dataGit);
 	console.log("end getGithubData(..) live alternative");
         initializeData(country); //!! MUST remain inside; extremely annoying
-        corona.init(); //!! only then ensured that data loaded! it=1 as result
+        corona.init(0); //!! only then ensured that data loaded! it=1 as result
       });
   }
 
@@ -350,7 +350,7 @@ function getGithubData() {
     console.log("useLiveData=false, get data from server: dataGit=",dataGit);
     console.log("end getGithubData(..) non-live alternative");
     initializeData(country); //!! MUST repeat because of annoying time order
-    corona.init(); 
+    corona.init(0); 
   }
 }
 
@@ -396,7 +396,6 @@ function initializeData(country) {
   data_idataStart=Math.round( // absolute index
     (startDay.getTime() - data_dateBegin.getTime() )/oneDay_ms);
   data_imax=data.length-data_idataStart; // relative index
-  nxtStart=data[data_idataStart]["confirmed"];
 
   data2_dateBegin=new Date(insertLeadingZeroes(dateInitStr2));
   data2_idataStart=Math.round(
@@ -406,17 +405,21 @@ function initializeData(country) {
 
   // testing the overall structure
 
-  console.log(
-    "dateInitStr=",dateInitStr, "dateInitStr2=",dateInitStr2,
-    "\n data_idataStart=",data_idataStart,
-    "  data2_idataStart=",data2_idataStart,
-    "\n data.length=",data.length," data2.length=",data2.length,
-    "\n data[data_idataStart][\"date\"]=",data[data_idataStart]["date"],
-    "\n data2[data2_idataStart][\"date\"]=",data2[data2_idataStart]["date"],
-    "\n data_imax=",data_imax," data2_imax=",data2_imax,
-    "\n nxtStart=",nxtStart,
-    "\n"
-  );
+  if(true){
+    var nxtStart=data[data_idataStart]["confirmed"];
+
+    console.log(
+      "dateInitStr=",dateInitStr, "dateInitStr2=",dateInitStr2,
+      "\n data_idataStart=",data_idataStart,
+      "  data2_idataStart=",data2_idataStart,
+      "\n data.length=",data.length," data2.length=",data2.length,
+      "\n data[data_idataStart][\"date\"]=",data[data_idataStart]["date"],
+      "\n data2[data2_idataStart][\"date\"]=",data2[data2_idataStart]["date"],
+      "\n data_imax=",data_imax," data2_imax=",data2_imax,
+      "\n nxtStart=",nxtStart,
+      "\n"
+    );
+  }
 
 
 
@@ -647,14 +650,39 @@ function initializeData(country) {
  // !! for inline nondynamic  testing: add testcode here
  //##############################################################
 
-  if(false){
-    Rguess= [1.8555828429026051, 0.6830523633876675, 0.6269836250678231, 0.695683771637065, 0.8262257735681733, 0.6956357378063327, 1.528364682075033, 0.7687901284239431];
-    console.log("Rguess=",Rguess,
-		" SSEfunc(Rguess,null,true)=",SSEfunc(Rguess,null,true));
-  }
+  if(true){
+    var Rtest=[0.9485972290755083, 0.579953251679159, 0.7226759352548395, 0.7014451815219522, 0.8074914584533439, 1.2476826711037865, 0.8196206675854572, 1.2297994838996873, 1.1199730711576068, 1.5872223560093257, 1.0573596644821395, 1.044553507363983, 1.2235760917721668];
 
-  console.log("end initializeData: country=",country);
-  console.log(" Rtime.length=",Rtime.length);
+// 14 days later
+    var Rtest14=[0.579953251679159, 0.7226759352548395, 0.7014451815219522, 0.8074914584533439, 1.2476826711037865, 0.8196206675854572, 1.2297994838996873, 1.1199730711576068, 1.5872223560093257, 1.0573596644821395, 1.044553507363983, 1.2235760917721668];
+
+// 28 days later
+    var Rtest28=[0.7226759352548395, 0.7014451815219522, 0.8074914584533439, 1.2476826711037865, 0.8196206675854572, 1.2297994838996873, 1.1199730711576068, 1.5872223560093257, 1.0573596644821395, 1.044553507363983, 1.2235760917721668];
+
+// 56 days later
+    var Rtest56=[0.8074914584533439, 1.2476826711037865, 0.8196206675854572, 1.2297994838996873, 1.1199730711576068, 1.5872223560093257, 1.0573596644821395, 1.044553507363983, 1.2235760917721668];
+
+    console.log("\n\ninline nondy. Testing: Rtest=",Rtest);
+    var sse=SSEfunc(Rtest,null,true,0);
+    console.log(" SSEfunc(Rtest,null,true,0)=",sse);
+
+    console.log("\n\nRtest14=",Rtest14);
+    var sse14=SSEfunc(Rtest14,null,true,14);
+    console.log(" SSEfunc(Rtest14,null,true,14)=",sse14);
+
+    console.log("\n\nRtest28=",Rtest28);
+    var sse28=SSEfunc(Rtest28,null,true,28);
+    console.log(" SSEfunc(Rtest28,null,true,28)=",sse28);
+
+    console.log("\n\nRtest56=",Rtest56);
+    var sse56=SSEfunc(Rtest56,null,true,56);
+    console.log(" SSEfunc(Rtest56,null,true,56)=",sse56);
+
+    console.log("end initializeData: country=",country);
+    //alert('stopped simulation with alert');
+    //setTimeout(function(){  alert('hello');}, 3000);  
+    //alert('hi');
+  }
 
 } // initializeData(country);
 
@@ -711,8 +739,9 @@ function Rfun_time(t){
  gradient fbeta needed only for conjugateGradient
 
 @param R_arr: array of R values: R_arr[0]: for days i<7,
-                                 R_arr[j]: 14 days starting at i=7+(j-1)*14
+                                 R_arr[j]: 14 days starting at i=j*14
 @param fR: optional numerical gradient of func with respect to R
+   (provide void if not used to not confuse the fmin.nelderMead method)
 @param logging: optional logging switch
 @global param (do not know how to inject params into func):
 @global itmin_calib start of calibr intervals (days since dayStartMar)
@@ -722,74 +751,67 @@ NOTICE: fmin.nelderMead needs one-param SSEfunc SSEfunc(R_arr):
         "sol2_SSEfunc=fmin.nelderMead(SSEfunc, Rguess);"
  ##############################################################*/
 
-function SSEfunc(R_arr, fR, logging) { //!!!!! use separate R_array for optimization if not whole array optimized!!!!
+ //!!!!! use separate array R_arr instead of global array Rtime
+ // for optimization if not whole array optimized.
 
-  //console.log("in SSE func: R_arr=",R_arr);
+ // Rtime => used in Rfun_time(t)=Rfun_time(it) if it>=0
+ //                  Rfun_time(t) data driven if t<0
+
+function SSEfunc(Rarr, fR, logging, itStart) {
+
+  //console.log("in SSE func: Rarr=",Rarr);
 
   if( typeof fR === "undefined"){
-    fR=[]; for(var j=0; j<R_arr.length; j++){fR[j]=0;}
+    fR=[]; for(var j=0; j<Rarr.length; j++){fR[j]=0;}
     //console.log("inside: fR=",fR);
   }
   if( typeof logging === "undefined"){logging=false;}
+  if( typeof itStart === "undefined"){itStart=0;}
+  var idataStart=data_idataStart+itStart;
 
 
-
-
-  // always full simulation time incl corona.init
-  // !! [change possibly later including specialized corona.init(itime);] 
-
+  if(logging){console.log("SSEfunc: itStart=",itStart);}
 
   // simulation init
 
-  nxtStart=data_cumCases[data_idataStart];
-  corona.init(); // scales up/down to nxtStart at the last warmup step
+  var nxtStart=data_cumCases[idataStart];
+  corona.init(itStart); // scales up/down to nxtStart at the last warmup step
 
   // calculate SSE
 
   var sse=0;
   if(logging){
-    var nxData=data_cumCases[data_idataStart+0];
     console.log("SSEfunc: i=0, n0*corona.xt=",n0*corona.xt,
-		" nxData=",nxData);
+		" data: nxtStart=",nxtStart);
   }
 
-  for(var i=0; i<data_imax-1; i++){
-    var it=i;
+  if(logging){console.log("Rtime=",Rtime);}
+  for(var it=itStart; it<data_imax-1; it++){
 
-    //!!!! itmin/max_calib refers to start of time step
-    // => itmin_calib>=0, itmax_calib<data_imax-1
-
-    var inCalib=((it>=itmin_calib)&&(it<itmax_calib)); 
-    var indexR=Math.min(getIndexCalib(it),Rtime.length-1);
+    //var inCalib=((it>=itmin_calib)&&(it<itmax_calib)); //!!!
+    var inCalib=true;
+    var indexRarr=Math.min(getIndexCalib(it-itStart),Rarr.length-1);
+    var indexRtime=Math.min(getIndexCalib(it),Rtime.length-1);
     var indexCalib=Math.min(getIndexCalib(it)-getIndexCalib(itmin_calib),
-			    R_arr.length-1); //!!!!
-    var R_actual=(inCalib) ? R_arr[indexCalib] : Rtime[indexR];
+			    Rarr.length-1); //!!!!
+    var R_actual=(inCalib) ? Rarr[indexRarr] : Rtime[indexRtime];
 
-    if(logging&&false){
-      var nxData=data_cumCases[data_idataStart+it];
-      var nxSim=n0*corona.xt;
+    var nxtData=data_cumCases[data_idataStart+it];
+    var nxtSim=n0*corona.xt;
+    if(logging&&(it<itStart+20)){
       console.log("SSEfunc before update: it=",it,
 		  " R_actual=",R_actual.toFixed(2),
-		  " nxData=",nxData,
-		  " nxSim=",Math.round(nxSim),
-		  " nActiveTrueSim=",Math.round(n0*corona.xAct));
+		  " Rarr[indexRarr]=",Rarr[indexRarr].toFixed(2),
+		  " Rtime[indexRtime]=",Rtime[indexRtime].toFixed(2),
+		  " nxtData=",nxtData,
+		  " nxtSim=",Math.round(nxtSim)
+		 );
     }
 
-    corona.updateOneDay(R_actual); it++;
-    var nxData=data_cumCases[data_idataStart+it]; // i+1 after update
-    var nxSim=n0*corona.xt;
-
-    //if(logging&&(i<60)){ 
-    if(false){ // 2020-09
-      console.log("SSEfunc after update and it++: it=",it,
-		  " R_actual (it-1->it)=",R_actual.toFixed(2),
-		  " nxData=",nxData,
-		  " nxSim=",Math.round(nxSim));
-    }
-
+    corona.updateOneDay(R_actual); 
 
     if(inCalib){ //!!!
-      sse+=Math.pow(Math.log(nxData)-Math.log(nxSim),2); //!! Math.log
+      sse+=Math.pow(Math.log(nxtData)-Math.log(nxtSim),2); //!! Math.log
     }
 
   // MT 2020-07 penalize negative R or R near zero
@@ -855,7 +877,7 @@ function startup() {
 
   corona=new CoronaSim();
 
-  if(!useLiveData){corona.init();} // !! now inside fetch promise
+  if(!useLiveData){corona.init(0);} // !! now inside fetch promise
 
 
   // =============================================================
@@ -1232,7 +1254,7 @@ function myRestartFunction(){
   fracDie=fracDieInit*pTest/pTestInit;
   //console.log("restart: fracDie=",fracDie);
   startup();
-  corona.init(); // because startup redefines CoronaSim() and data there here
+  corona.init(0); // because startup redefines CoronaSim() and data there here
 
 
   clearInterval(myRun);
@@ -1292,7 +1314,7 @@ function simulationRun() {
     for (var t=-5; t<=2; t++){
       console.log("t=",t," Rfun_time(t)=", Rfun_time(t));
     }
-    //corona.init(); // !! now inside fetch promise!
+    //corona.init(0);
 
   }
   doSimulationStep(); 
@@ -1379,7 +1401,13 @@ function CoronaSim(){
 
 
 
-CoronaSim.prototype.init=function(){
+CoronaSim.prototype.init=function(itStart){
+
+  var idataStart=data_idataStart+itStart;
+  var nxtStart=data_cumCases[idataStart]; // target number of cum cases at iStart
+
+  //if(itStart==14){nxtStart=88611;} // only test!!!
+
 
   // start warmup at a very early phase
   // !! start with n0*this.xAct>=1, otherwise infection dead
@@ -1414,10 +1442,9 @@ CoronaSim.prototype.init=function(){
 
   // data-driven warmup
 
-  for(t=-20; t<0; t++){
-    var Rt=Rfun_time(t);
+  for(var it=-20; it<itStart; it++){
+    var Rt=Rfun_time(it);
     this.updateOneDay(Rt,false); //!! do not use true!!because of calibr
-    //this.updateOneDay(Rt,true); // logging=true
   }
 
 
@@ -1638,7 +1665,8 @@ function smooth(arr, kernel){
     return arr;
   }
 
-  var smooth=[]; for(var i=0; i<arr.length; i++){smooth[i]=0;}
+  var smooth=[]; 
+  for(var i=0; i<arr.length; i++){smooth[i]=0;}
   var half=Math.round((kernel.length-1)/2);
   for(var i=half; i<arr.length-half; i++){
     for(var di=-half; di<=half; di++){
@@ -1650,21 +1678,60 @@ function smooth(arr, kernel){
     }
   }
 
-  // linear extrapol at boundaries
-  for(var i=0; i<half; i++){
-    var gradient=(smooth[2*half]-smooth[half])/half;
-    smooth[i]=smooth[half]+(i-half)*gradient;
-  }
-  for(var i=arr.length-half; i<arr.length; i++){
-    var gradient=(smooth[arr.length-half-1]-smooth[arr.length-2*half-1])/half;
-    smooth[i]=smooth[arr.length-half-1]+(i-(arr.length-half-1))*gradient;
-  }
-  if(false){
-    console.log("in avgArithm: half=",half);
-    for(var i=0; i<half+4; i++){
-      console.log("i=",i," arr[i]=",arr[i]," smooth[i]=",smooth[i]);
+  // upper boundary treatment (lower not relevant)
+
+  for(var i=0; i<half; i++){smooth[i]=arr[i];} // lower boundary not relevant
+
+  var applySmoothingToUpper=true;
+
+  // additive saison decomposition since sometimes zeroes in the data
+  if(applySmoothingToUpper){// assume 7d period
+
+    var n=arr.length;
+    var trendLen=3; // 3 periods (in this application, data always available)
+    //console.log("\nsmoothUpper: ");
+    //for(var i=n-10; i<n; i++){console.log("i=",i," arr[i]=",arr[i]);}
+
+
+    var T=[]; // trend
+    var S=[]; // period-7 saison characteristics
+
+    // trend
+
+    for(var i=n-3-7*trendLen; i<n-3; i++){ // 3, not half
+      T[i]=0;
+      for(var j=i-3; j<=i+3; j++){
+	T[i]+=arr[j]/7;
+      }
+      //console.log("i=",i," n=",n," arr[i]=",arr[i]," T[i]=",T[i]);
+    }
+
+    // saison characteristics
+
+    for(var k=0; k<7; k++){S[k]=0;}
+    for(var i=n-3-7*trendLen; i<n-3; i++){
+      k=i%7;
+      S[k] += (arr[i]-T[i])/trendLen;
+    }
+    //for(var k=0; k<7; k++){console.log("k=",k, " e^S[k]=",Math.exp(S[k]));}
+
+    // extrapolation: saison*trend
+
+    var ilast=arr.length-Math.max(half,3)-1;
+    for(var i=arr.length-half; i<arr.length; i++){
+      
+      T[i]=T[ilast]+(i-ilast)*(T[ilast]-T[ilast-7])/7;
+      smooth[i]=T[i]+S[i%7];
     }
   }
+ 
+  else{ // just take raw data
+    for(var i=arr.length-half; i<arr.length; i++){smooth[i]=arr[i];}
+  }
+
+  //for(var i=arr.length-21; i<arr.length; i++){
+  //  console.log("i=",i," arr[i]=",arr[i]," smooth[i]=",smooth[i]); }
+
   return smooth;
 }
 
@@ -2234,8 +2301,10 @@ DrawSim.prototype.transferRecordedData=function(){
     //kernel=[1/16,2/16,3/16,4/16,3/16,2/16,1/16];
     //kernel=[1/25,2/25,3/25,4/25,5/25,4/25,3/25,2/25,1/25];
 
+  console.log("dnSmooth...");
   var dnSmooth=smooth(data_dn,kernel);
     //var dnSmooth=avgArithm(data_dn,7);
+  console.log("dxtSmoot...");
   var dxtSmooth=smooth(data_dxt,kernel);
   // var dytSmooth=smooth(data_dyt,kernel); // often no useful data
   var dzSmooth=smooth(data_dz,kernel);
@@ -2382,6 +2451,7 @@ DrawSim.prototype.drawREstimate=function(it){
 DrawSim.prototype.drawSim=function(it,q){
 //######################################################################
 
+  //console.log("\n\nin DrawSim.drawSim: it=",it);
 
   // update  text properties 
 
@@ -2394,11 +2464,9 @@ DrawSim.prototype.drawSim=function(it,q){
   // initialize: transfer new data and redraw whole graphics
 
   this.transferSimData(it);
-  //console.log("\n\nin DrawSim.drawSim: it=",it);
-  this.transferRecordedData(); // use it outside later on!
+  if(it==0){this.transferRecordedData()}; 
  
   if(it==0){
-    this.transferRecordedData();// possibly use it outside later on!
     this.clear();
     this.drawAxes(windowG);
   }
