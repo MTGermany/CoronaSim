@@ -1025,9 +1025,8 @@ function estimateR(){
 		"");
   }
 
-  if(true){
-    SSEfunc(Rguess,null,true);
-    //SSEfunc(Rguess);
+  if(false){
+    SSEfunc(Rguess,null,true); // logging of SSEfunc
   }
 }
 
@@ -1200,7 +1199,9 @@ function selectDataCountry(){ // callback html select box "countryData"
     "Simulation der Covid-19 Pandemie "+ countryGer;
 
   initializeData(country);
-  myResetFunction();
+  myCalibrateFunction(); // THIS addition solved annoying err "corona.yt=NaN"
+                         // if several sequential conditions were satisfied
+  myRestartFunction();
 } // selectDataCountry
 
  
@@ -1326,17 +1327,15 @@ function doSimulationStep(){ //!!!
 		" R_actual=",R_actual.toPrecision(3));
   }
 
-  //drawsim.transferSimData(it);
   drawsim.drawSim(it);
-  //drawsim.drawOld(it, windowG, corona.xAct, corona.xt, // need R_hist
-//		       corona.y, corona.yt, corona.z, corona.xyz);
  
-  var logging=(it<3); //!!! test f... undefined corona.yt
+  var logging=false;  //!!! test corona.update outside of calibr
+  //var logging=(it<3);
   corona.updateOneDay(R_actual,logging);
   it++;
 
   //if(false){
-  if(logging&&(!((corona.yt>=0)&&(corona.yt<1)))){// sometimes F... undefined sim. recovered
+  if(logging){
     console.log(" doSimulationStep after corona.update: it=",it,
 		"data_cumCases[data_idataStart+it]=",
 		((it<itmaxinit-1) ? data_cumCases[data_idataStart+it]:"na"),
@@ -1563,23 +1562,7 @@ CoronaSim.prototype.updateOneDay=function(R,logging){
   this.z   += dzsum;
   this.y   += dysum;
   var dayTested=Math.max(0,it-Math.round(tauRecover-tauTest));
-
-  if(logging){console.log(
-    "before:  dayTested=",dayTested," this.pTestDay[dayTested]=",this.pTestDay[dayTested]," dysum=",dysum," this.yt=",this.yt);
-	  }
-  //!!! quick hack since this.yt=NaN  if  
-  // (1) other country (e.g. england) run till the end
-  // (2) chose another country
-  //if(!((corona.yt>=0)&&(corona.yt<1))){this.yt=0;}
-
-
   this.yt  +=(this.pTestDay[dayTested]-fracDie)/(1-fracDie)*dysum;
-  if(logging){console.log("after: this.yt=",this.yt);}
-
-
-
-  //console.log("it=",it," xt=",this.xt," dysum=",dysum," dzsum=",dzsum);
-
 
 
   // sum up the profile of infected people
