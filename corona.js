@@ -441,6 +441,15 @@ function initializeData(country) {
   }
 
 
+  // !!! check what changes 
+  // if smoothing data_cumCases, the objective to calibrate
+
+  if(false){
+    kernel=[1/9,2/9,3/9,2/9,1/9];
+    var data_cumCasesSmooth=smooth(data_cumCases,kernel);
+    data_cumCases=data_cumCasesSmooth;
+  }
+
   // extract test data (MT 2020-09)
 
   var itmaxData2=data2.length;
@@ -601,7 +610,7 @@ function initializeData(country) {
   }
 
 
-  if(true){
+  if(false){
     console.log("");
     //for(var i=0; i<itmaxData; i++){
     for(var i=itmaxData-5; i<itmaxData; i++){
@@ -614,7 +623,6 @@ function initializeData(country) {
 	" data_dxt=",Math.round(data_dxt[i]),
 	" data_dyt=",Math.round(data_dyt[i]),
 	" data_dz=",Math.round(data_dz[i]),
-//	"\n             data_posRate=",data_posRate[i].toPrecision(3),
 	"\n             data_posRate=",data_posRate[i],
 	" data_cfr=",data_cfr[i].toPrecision(3),
 	" data_ifr=",data_ifr[i].toPrecision(3),
@@ -623,13 +631,14 @@ function initializeData(country) {
   }
 
 
-  //for(var it=0; it<itmaxData2; it++){
-  if(true){
+
+  if(false){
     for(var it=itmaxData2-5; it<itmaxData2; it++){
+      var it2=it+data_idataStart-data2_idataStart;
       console.log("");
       console.log(data2[it]["date"],": it=",it,
 		" data2_cumCases=",Math.round(data2_cumCases[it]),
-		" data_cumCases=",Math.round(data_cumCases[it+data_idataStart-data2_idataStart]),
+		" data_cumCases=",Math.round(data_cumCases[it2]),
 		" data2_posRate=",data2_posRate[it].toPrecision(3),
 		" data2_cumTests=",Math.round(data2_cumTests[it]),
 		" data2_cumTestsCalc=", 
@@ -648,7 +657,8 @@ function initializeData(country) {
   // args set global vars itmin_calib, itmax_calib 
   // needed to control fmin.nelderMead
 
-  calibrate(); 
+  calibrate(); // in initializeData(country);
+
 
 
  //##############################################################
@@ -753,10 +763,15 @@ function Rfun_time(t){
 
 @param R_arr: array of R values: R_arr[0]: for days i<7,
                                  R_arr[j]: 14 days starting at i=j*14
-@param fR: optional numerical gradient of func with respect to R
+@param fR: numerical gradient of func with respect to R
    (provide void if not used to not confuse the fmin.nelderMead method)
-@param logging: optional logging switch
+
+@param_opt logging: optional logging switch (default false inside nelderMead)
+@param_opt itStart: optional start to override itmin_calib
+@param_opt itMax: optional end to override itmax_calib
+
 @global param (do not know how to inject params into func):
+@global data_cumCases: the data to fit, (it=0) corresp (idata=data_idataStart)
 @global itmin_calib start of calibr intervals (days since dayStartMar)
 @global itmax_calib end of calibr intervals (days since dayStartMar)
 
@@ -794,15 +809,15 @@ function SSEfunc(Rarr, fR, logging, itStart, itMax) {
   // and scales up/down to nxtStart at itStart
 
   var nxtStart=data_cumCases[idataStart];
-  //corona.init(itStart, logging); 
-  corona.init(itStart, false); 
+  corona.init(itStart, logging); 
+  //corona.init(itStart, false); 
 
   // calculate SSE
 
   var sse=0;
   if(logging){
-    console.log("SSEfunc: i=0, n0*corona.xt=",n0*corona.xt,
-		" data: nxtStart=",nxtStart);
+    console.log("SSEfunc: i=0, nxt=n0*corona.xt=",n0*corona.xt,
+		" data: nxtStart=",nxtStart," nyt=",n0*corona.yt);
   }
 
   if(logging){console.log("Rtime=",Rtime);}
@@ -818,16 +833,18 @@ function SSEfunc(Rarr, fR, logging, itStart, itMax) {
 
     var nxtData=data_cumCases[data_idataStart+it];
     var nxtSim=n0*corona.xt;
-    //if(logging&&((it<itStart+10)||(it>itMax-10))){
-    if(logging&&true){
+    if(logging&&((it<itStart+5)||(it>itMax-5))){
+    //if(logging&&true){
     //if(logging&&false){
       console.log("SSEfunc before update: it=",it,
 		  " R_actual=",R_actual.toFixed(2),
 		  " Rarr[indexRarr]=",Rarr[indexRarr].toFixed(2),
 		  " Rtime[indexRtime]=",Rtime[indexRtime].toFixed(2),
 		  " nxtData=",nxtData,
-		  " nxtSim=",Math.round(nxtSim)
-		 );
+		  " nxtSim=",Math.round(nxtSim),
+		  " nytSim=",Math.round(n0*corona.yt),
+		  "");
+
     }
 
     corona.updateOneDay(R_actual); 
@@ -995,11 +1012,12 @@ function calibrate(){
     indexcalibmax=getIndexCalibmax(itmax_c);// *max: >=10d cal intv
     Rcalib=[]; // init
     for(var indexcalib=indexcalibmin; indexcalib<=indexcalibmax; indexcalib++){
-      Rcalib[indexcalib-indexcalibmin]=(indexcalib==0) ? 3 : 1; 
+      Rcalib[indexcalib-indexcalibmin]=(indexcalib==0) ? 1.2 : 1; //!!
     }
     estimateR(itmin_c, itmax_c, Rcalib); // also transfers Rcalib to Rtime
-    estimateErrorCovar(itmin_c, itmax_c, Rcalib); // uses calibrated Rtime[]
+    estimateErrorCovar_Rhist_sigmaRhist(itmin_c, itmax_c, Rtime); 
   }
+
 
   else{ // !! finally works, one day of work!!
     itmin_c=0; 
@@ -1008,10 +1026,9 @@ function calibrate(){
     indexcalibmax=getIndexCalibmax(itmax_c);// *max: >=10d cal intv
     Rcalib=[]; // init
     for(var indexcalib=indexcalibmin; indexcalib<=indexcalibmax; indexcalib++){
-      Rcalib[indexcalib-indexcalibmin]=(indexcalib==0) ? 3 : 1; 
+      Rcalib[indexcalib-indexcalibmin]=(indexcalib==0) ? 1.2 : 1; 
     }
     estimateR(itmin_c, itmax_c, Rcalib); // also transfers Rcalib to Rtime
-    estimateErrorCovar(itmin_c, itmax_c, Rcalib); // uses calibrated Rtime[]
 
     itmin_c=42; 
     itmax_c=data_itmax-1;
@@ -1019,14 +1036,21 @@ function calibrate(){
     indexcalibmax=getIndexCalibmax(itmax_c);// *max: >=10d cal intv
     Rcalib=[]; // init
     for(var indexcalib=indexcalibmin; indexcalib<=indexcalibmax; indexcalib++){
-      Rcalib[indexcalib-indexcalibmin]=(indexcalib==0) ? 3 : 1; 
+      Rcalib[indexcalib-indexcalibmin]=(indexcalib==0) ? 1.2 : 1; 
     }
     estimateR(itmin_c, itmax_c, Rcalib); // also transfers Rcalib to Rtime
-    estimateErrorCovar(itmin_c, itmax_c, Rcalib); // uses calibrated Rtime[]
+
+
+    estimateErrorCovar_Rhist_sigmaRhist(0, data_itmax-1, Rtime); // uses calibrated Rtime[]
   }
 
 
-  if(true){
+
+
+  var logging=false;
+  //var logging=true;
+
+  if(logging){
     console.log("leaving calibrate: final synthesized R values+fit quality:");
     SSEfunc(Rtime,null,true,0,data_itmax);
     console.log("Rtime=", Rtime);
@@ -1043,11 +1067,16 @@ function calibrate(){
 // notice: fmin.conjugateGradient does not work here
 // => use simple nelderMead and do not need to calculate
 // num derivatives in func as side effect of SSEfunc
-// @global param (do not know how to inject params into func):
-// (1) itmin_calib start of calibr intervals (days since dayStartMar)
-// (2) itmax_calib end of calibr intervals (days since dayStartMar)
+// @global (do not know how to inject params into func):
+// @global data_cumCases: the data to fit, 
+//                        (it=0) corresp (idata=data_idataStart)
+// @param  Rcalib input and result of estimateR
+// @param  itmin_c, itmax_c sets global itmin_calib, itmax_calib
+// @global itmin_calib start of calibr intervals (days since dayStartMar)
+// @global itmax_calib end of calibr intervals (days since dayStartMar)
 // itmin_calib >=0
 // itmax_calib < data_itmax-data_idataStart
+// controlled by parameter itmin_c, itmax_c
 // =============================================================
 
 function estimateR(itmin_c, itmax_c, Rcalib){
@@ -1099,9 +1128,12 @@ function estimateR(itmin_c, itmax_c, Rcalib){
 //=======================================================
 //!Inductive statistics of the LSE estimator Rcalib
 // Cov(Rcalib)=2 V(epsilon) H^{-1}, H=Hessian of SSEfunc(Rcalib)
+// also calculates daily values of R and sigmaR from 0 ... itmax
+// !! secondary calculation;
+// typically only used at the end with Rcalib=global Rtime
 //=======================================================
 
-function estimateErrorCovar(itmin_c, itmax_c, Rcalib){
+function estimateErrorCovar_Rhist_sigmaRhist(itmin_c, itmax_c, Rcalib){
   var log=false;
 
   if(log){console.log("in estimateErrorCovar(): Rcalib=",Rcalib);}
@@ -1180,22 +1212,34 @@ function estimateErrorCovar(itmin_c, itmax_c, Rcalib){
 
 
   // calculate one-sigma estimation errors (every 2 weeks)
-  // and transfer to global sigmaR_hist[] (every day)
 
   var sigmaR=[];
   for(var j=0; j<Rcalib.length; j++){
     sigmaR[j]=Math.sqrt(2*vareps*Hinv[j][j]);
   }
 
-  for(var it=itmin_c; it<itmax_c; it++){//
-    var j=Math.floor(Math.min( (it-itmin_c)/getIndexTimeFromCalib(1),
-			       Rcalib.length));
+
+
+
+  // transfer R and sigma 
+  // to global daily R_hist[] and sigmaR_hist[] p to present 
+  // (extrapolate constant if needed, e.g. data not up-to-date)
+  // getIndexTimeFromCalib(1) typically 14 (days)
+
+  for(var it=itmin_c; it<itmaxinit; it++){//
+    var j=Math.min(Math.floor( (it-itmin_c)/getIndexTimeFromCalib(1)),
+		   Rcalib.length-1);
     sigmaR_hist[it]=sigmaR[j];
-    if(log){console.log("it=",it," j=",j," sigmaR_hist[it]=", sigmaR_hist[it]);}
+    R_hist[it]=Rcalib[j];
+    if(log){console.log("it=",it," j=",j,
+			" sigmaR_hist[it]=", sigmaR_hist[it]);}
   }
 
 
-} // estimateErrorCovar()
+
+
+
+} // estimateErrorCovar_Rhist_sigmaRhist
 
 
  
@@ -1239,7 +1283,8 @@ function selectDataCountry(){ // callback html select box "countryData"
     "Simulation der Covid-19 Pandemie "+ countryGer;
 
   initializeData(country);
-  myCalibrateFunction(); // THIS addition solved annoying err "corona.yt=NaN"
+
+  //myCalibrateFunction(); // THIS addition solved annoying err "corona.yt=NaN"
                          // if several sequential conditions were satisfied
   myRestartFunction();
 } // selectDataCountry
@@ -1250,8 +1295,8 @@ function selectWindow(){ // callback html select box "windowGDiv"
   console.log("in selectWindow");
   windowG=document.getElementById("windows").value;
 
-
   drawsim.setWindow(windowG); // clear and draAxes in setDisplay..
+
   drawsim.transferSimData(it);
 
   drawsim.drawSim(it);
@@ -1376,12 +1421,11 @@ function doSimulationStep(){
 
   //if(false){
   if(logging){
-    console.log(" doSimulationStep after corona.update: it=",it,
+    console.log(" doSimulationStep after corona.update and it++: it=",it,
 		"data_cumCases[data_idataStart+it]=",
 		((it<itmaxinit-1) ? data_cumCases[data_idataStart+it]:"na"),
-		" n0*corona.xt=",(n0*corona.xt).toPrecision(6),
-		" n0*corona.yt=",(n0*corona.yt).toPrecision(6),
-		" R_actual (it-1->it)=",R_actual.toPrecision(3));
+		" nxt=",Math.round(n0*corona.xt),
+		" nyt=",Math.round(n0*corona.yt));
   }
 
 
@@ -1409,7 +1453,6 @@ function CoronaSim(){
   this.x=[]; // age struture of fraction infected at given timestep
   this.xohne=[]; // age structure without deleting by recover,death 
                  // (!!needed for correct recovery rate and balance x,y,z!)
-  this.itcount=0;
 }
 
 
@@ -1449,7 +1492,6 @@ CoronaSim.prototype.init=function(itStart,logging){
   //var it0=Math.max(-21, itStart-28); // it BEFORE warmup
   var it0=-21; // it BEFORE warmup
 
-
   // xAct: sum of "actually infected" this.x[tau] (neither rec. nor dead)
   // xyz: cumulative sum of infected (incl recovered, dead)
   this.xAct=10/n0; // must be >1, otherwise eliminated
@@ -1484,14 +1526,16 @@ CoronaSim.prototype.init=function(itStart,logging){
 
   // data-driven warmup
 
-  for(var it=it0; it<itStart; it++){
+  for(it=it0; it<itStart; it++){ //!!! it reset (do NOT use var!)
     var Rt=Rfun_time(it);
     if(logging){console.log("corona.init warmup before update: it=",it,
 			    " pTest=",pTest,
 			    " R=",Rt.toFixed(2),
 			    " nx=",n0*this.xAct,
-			    " nxt=",n0*this.xt);}
-    this.updateOneDay(Rt,false); //!! do not use true!!because of calibr
+			    " nxt=",n0*this.xt,
+			    " nyt=",n0*this.yt,
+			    "");}
+    this.updateOneDay(Rt,logging); //!! do not use true!!because of calibr
   }
 
 
@@ -1514,7 +1558,6 @@ CoronaSim.prototype.init=function(itStart,logging){
 
   // reset it for start of proper simulation
 
-  this.itcount=0;
 
   if(logging){console.log("CoronaSim.init after warmup: n0*this.xt=",n0*this.xt);}
 
@@ -1542,14 +1585,13 @@ CoronaSim.prototype.updateOneDay=function(R,logging){
   if(logging){  //filter needed because of called mult times in calibr!
 
 
-    console.log("Enter Corona.updateOneDay: it=",it," R=",R,
+    console.log("Enter CoronaSim.updateOneDay: it=",it," R=",R.toPrecision(2),
 		" this.xAct=",this.xAct.toPrecision(3),
 		" this.xyz=",this.xyz.toPrecision(3),
-		" this.xt=",this.xt.toPrecision(3),
-		" this.yt=",this.yt.toPrecision(3),
+		" nxt=n0*this.xt=",Math.round(n0*this.xt),
+		" nyt=n0*this.yt=",Math.round(n0*this.yt),
 /*
-		"this.yt=",this.yt.toPrecision(3),
-		"this.z=",this.z.toPrecision(3),
+		" this.z=",this.z.toPrecision(3),
 		"\n  this.x[tauDie-1]=",this.x[tauDie-1].toPrecision(3),
 		"\n  this.x[tauDie]=",this.x[tauDie].toPrecision(3),
 		"\n  this.x[tauDie+1]=",this.x[tauDie+1].toPrecision(3),
@@ -1638,6 +1680,11 @@ CoronaSim.prototype.updateOneDay=function(R,logging){
   this.z   += dzsum;
   this.y   += dysum;
   var dayTested=Math.max(0,it-Math.round(tauRecover-tauTest));
+  if(false){
+  //if(logging){
+    console.log("dayTested=",dayTested,
+		" this.pTestDay[dayTested]=",this.pTestDay[dayTested]);
+  }
   this.yt  +=(this.pTestDay[dayTested]-fracDie)/(1-fracDie)*dysum;
 
 
@@ -1653,15 +1700,13 @@ CoronaSim.prototype.updateOneDay=function(R,logging){
     this.xAct     += this.x[tau];
   }
 
-  this.itcount++;
-
   // control output (it is undefined here!)
 
   if(logging){ // filter needed because called in calibration!
 
     console.log("end CoronaSim.updateOneDay:",
-		" this.itcount=",this.itcount,
-		" R=",R.toFixed(2),
+		"  it=",it,
+		" R=",R.toPrecision(2),
 		" nxt=",Math.round(n0*this.xt),
 		" nxAct=",(n0*this.xAct).toPrecision(6),
 		" nxyz=",(n0*this.xyz).toPrecision(6),
@@ -2470,19 +2515,27 @@ DrawSim.prototype.drawREstimate=function(it){
   ctx.fillText(str_R,0,0);
   ctx.setTransform(1,0,0,1,0,0);
 
-  for(var ical=0; ical<=getIndexCalib(it); ical++){ 
+  for(var ical=0; ical<=getIndexCalib(it); ical++){ //!!!
     var itR=getIndexTimeFromCalib(ical);
     x0=this.xPix[itR];
     ctx.fillRect(x0-1,this.yPix0,3,this.hPix);
 
     ctx.setTransform(0,-1,1,0,x0+1.0*this.textsizeR,y0);
-    //console.log("drawSim.draw: it=",it," itR=",itR);
+    if(false){
+      console.log("drawSim.draw: it=",it," itR=",itR,
+		" R_hist.length=",R_hist.length,
+		" sigmaR_hist.length=",sigmaR_hist.length,
+		" itmaxinit=",itmaxinit,
+		" R_hist[itR]=",R_hist[itR],
+		" sigmaR_hist[itR]=",sigmaR_hist[itR],
+		"");
+    }
     str_R="R="+R_hist[itR].toFixed(2)
       +( (RsliderUsed||otherSliderUsed||(itR>=data_itmax))
      // +((true) // if sigma_R undefiuned
 	? "" : (" +/- "+sigmaR_hist[itR].toFixed(2)));
 
-
+ 
     ctx.fillText(str_R,0,0);
     ctx.setTransform(1,0,0,1,0,0);
   }
