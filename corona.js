@@ -1,5 +1,3 @@
-// TODO: split calibration interval (look at places with !!!)
-
 
 // useLiveData=true: Obtain github data "live" via the fetch command
 // Unfortunately, the fetch command is sometimes unstable
@@ -58,7 +56,7 @@ var isStopped=true
 
 // global time simulation vars (see also "data related global variables")
 
-var dayStartMar=20; //!!!
+var dayStartMar=20; //!! you can also exceed 31, date obj initializer takes it
 var startDay=new Date(2020,02,dayStartMar); // months start @ zero, days @ 1
 var present=new Date();   // time object for present 
 var it=0;
@@ -71,7 +69,7 @@ var itmax=itmaxinit; // can be >itmaxinit during interactive simulation
 
 var itmin_calib; // !!! start calibr time interval w/resp to dayStartMar
                  //     = dataGit_idataStart+1
-var itmax_calib; // !!! end calibr time interval =^ data_imax-1 
+var itmax_calib; // !!! end calibr time interval =^ data_itmax-1 
                  // should be split if there are more than approx 
                  // 20 weeks of data
 
@@ -82,11 +80,11 @@ var itmax_calib; // !!! end calibr time interval =^ data_imax-1
 var dataGit=[];
 var data_dateBegin;
 
-var data_idataStart; //!!! dataGit dataset index for dayStartMar
-var data_imax;  // !!! with respect to dayStartMar=data.length-data_idataStart
+var data_idataStart; //!! dataGit dataset index for dayStartMar
+var data_itmax;  // !! with respect to dayStartMar=data.length-data_idataStart
 
 var data2_idataStart; // same for data2 containing the corona-test data
-var data2_imax;  
+var data2_itmax;  
 
 var data_date=[];
 var data_cumCases=[];
@@ -137,21 +135,22 @@ const countryGerList={
     "US": "USA"
 }
 
-
+// will be only relevant if "xyz no longer <<1 ("Durchseuchung")
+// will be later changed to fracDie=fracDieInit*pTest/pTestInit;
 const fracDieInitList={
-    "Germany"       : 0.0048,
-    "Austria"       : 0.0040,
-    "Czechia"       : 0.0041,
-    "France"        : 0.0040,
-    "United Kingdom": 0.0040,
-    "Italy"         : 0.0040,
-    "Poland"        : 0.0040,
-    "Spain"         : 0.0040,
-    "Sweden"        : 0.0040,
-    "Switzerland"   : 0.0055,
-    "India"         : 0.0085,
-    "Russia"        : 0.0040,
-    "US"            : 0.0040
+    "Germany"       : fact*0.0048,
+    "Austria"       : fact*0.0040,
+    "Czechia"       : fact*0.0041,
+    "France"        : fact*0.0040,
+    "United Kingdom": fact*0.0040,
+    "Italy"         : fact*0.0040,
+    "Poland"        : fact*0.0040,
+    "Spain"         : fact*0.0040,
+    "Sweden"        : fact*0.0040,
+    "Switzerland"   : fact*0.0055,
+    "India"         : fact*0.0085,
+    "Russia"        : fact*0.0040,
+    "US"            : fact*0.0040
 }
 
 
@@ -211,10 +210,10 @@ const tauDieList={
 
 var RsliderUsed=false;
 var otherSliderUsed=false;
-var R0=1.42;       // init interactive R for slider corona_gui.js (overridden)
-var Rtime=[]; //!!! calibrated R; one element per 1-2 weeks
-              // initialize in function startup() (then data available)
-var R_hist=[]; R_hist[0]=R0; // R from past interactions; one element per day
+var R0=1.42;    // init interactive R for slider corona_gui.js (overridden)
+var Rtime=[];   // !!! calibrated R; one element PER 2 WEEKS
+                // initialize in function startup() (then data available)
+var R_hist=[]; R_hist[0]=R0; // one element PER DAY
 var sigmaR_hist=[]; sigmaR_hist[0]=0; 
 
 
@@ -266,7 +265,7 @@ var sizemin=0;
 
 
 // ##############################################################
-// !!! test fetch method: w/o addtl cronjob/script
+// !! test fetch method: w/o addtl cronjob/script
 // directly from https://pomber.github.io/covid19/timeseries.json
 //
 // called ONLY in the html <body onload="..."> callback
@@ -395,12 +394,12 @@ function initializeData(country) {
   data_dateBegin=new Date(insertLeadingZeroes(dateInitStr));
   data_idataStart=Math.round( // absolute index
     (startDay.getTime() - data_dateBegin.getTime() )/oneDay_ms);
-  data_imax=data.length-data_idataStart; // relative index
+  data_itmax=data.length-data_idataStart; // relative index
 
   data2_dateBegin=new Date(insertLeadingZeroes(dateInitStr2));
   data2_idataStart=Math.round(
     (startDay.getTime() - data2_dateBegin.getTime() )/oneDay_ms);
-  data2_imax=data2.length-data2_idataStart;
+  data2_itmax=data2.length-data2_idataStart;
 
 
   // testing the overall structure
@@ -415,7 +414,7 @@ function initializeData(country) {
       "\n data.length=",data.length," data2.length=",data2.length,
       "\n data[data_idataStart][\"date\"]=",data[data_idataStart]["date"],
       "\n data2[data2_idataStart][\"date\"]=",data2[data2_idataStart]["date"],
-      "\n data_imax=",data_imax," data2_imax=",data2_imax,
+      "\n data_itmax=",data_itmax," data2_itmax=",data2_itmax,
       "\n nxtStart=",nxtStart,
       "\n"
     );
@@ -548,15 +547,16 @@ function initializeData(country) {
   }
 
 
-  console.log("initializeData:");
-  // generate the dat arrays (in data, not data2 time order) to be plotted
+  console.log("initializeData:");  // inside initializeData(country);
+
+  // generate the data arrays (in data, not data2 time order) to be plotted
   // data_dx=estmation from data assuming 
   // (1) time interval tauTest where test is positive for infected people
   //     e.g. tauPos=7 from infection days 3-9 
   //     (start day here not relevant) 
   // (2) the probability that not tested people are infected factor gamma
   //     of that for tested people
-  // (3) "Durchseuchung" <<1 (!!! change later if xyz/n0 implemented!
+  // (3) "Durchseuchung" <<1 (!! change later if xyz/n0 implemented!
   // (4) tests have certain alpha and beta errors
 
   var di=data2_idataStart-data_idataStart; // translation data->data2 index
@@ -585,7 +585,7 @@ function initializeData(country) {
  
     // denom tauPos because not tested people have a period tauPos
     // to be tested positive 
-    // (!!!if tauPos=7, also cancels out weekly pattern)
+    // (!! if tauPos=7, also cancels out weekly pattern)
 
     data_dx[i]=(pit*dnTauPos + gamma*pit*(n0-dnTauPos))/tauPos;
 
@@ -593,7 +593,7 @@ function initializeData(country) {
 
     var dztTauPos=Math.max(data_cumDeaths[i]-data_cumDeaths[i-tauPos],0.);
 
-    // tauPos=7 days average (!!! also cancels out weekly pattern)
+    // if tauPos=7 days average  cancels out weekly pattern
     data_cfr[i]=Math.max(data_cumDeaths[i+tauDie-tauTest]
 		 -data_cumDeaths[i+tauDie-tauTest-tauPos],0.)/dxtTauPos;
     data_ifr[i]=Math.max(data_cumDeaths[i+tauDie]
@@ -637,20 +637,25 @@ function initializeData(country) {
     }
   }
 
-
-
- 
-
   RsliderUsed=false;
   otherSliderUsed=false;
-  calibrate(); //!!! determines Rtime.length
+
+
+ //##############################################################
+// calibrate
+ //##############################################################
+
+  // args set global vars itmin_calib, itmax_calib 
+  // needed to control fmin.nelderMead
+
+  calibrate(); 
 
 
  //##############################################################
  // !! for inline nondynamic  testing: add testcode here
  //##############################################################
 
-  if(true){
+  if(false){
     var Rtest=[0.9485972290755083, 0.579953251679159, 0.7226759352548395, 0.7014451815219522, 0.8074914584533439, 1.2476826711037865, 0.8196206675854572, 1.2297994838996873, 1.1199730711576068, 1.5872223560093257, 1.0573596644821395, 1.044553507363983, 1.2235760917721668];
 
 // 14 days later
@@ -664,21 +669,23 @@ function initializeData(country) {
 
     console.log("\n\ninline nondy. Testing: Rtest=",Rtest);
     var sse=SSEfunc(Rtest,null,true,0);
-    console.log(" SSEfunc(Rtest,null,true,0)=",sse);
+    console.log("\nSSEfunc(Rtest,null,true,0)=",sse);
 
     console.log("\n\nRtest14=",Rtest14);
     var sse14=SSEfunc(Rtest14,null,true,14);
-    console.log(" SSEfunc(Rtest14,null,true,14)=",sse14);
+    console.log("\nSSEfunc(Rtest14,null,true,14)=",sse14);
 
     console.log("\n\nRtest28=",Rtest28);
     var sse28=SSEfunc(Rtest28,null,true,28);
-    console.log(" SSEfunc(Rtest28,null,true,28)=",sse28);
+    console.log("\nSSEfunc(Rtest28,null,true,28)=",sse28);
 
     console.log("\n\nRtest56=",Rtest56);
     var sse56=SSEfunc(Rtest56,null,true,56);
-    console.log(" SSEfunc(Rtest56,null,true,56)=",sse56);
+    console.log("\nSSEfunc(Rtest56,null,true,56)=",sse56);
+    var sse56cut=SSEfunc(Rtest56,null,true,56,itmax-28);
+    console.log("\nSSEfunc(Rtest56,null,true,56,itmax-28)=",sse56cut);
 
-    console.log("end initializeData: country=",country);
+    console.log("\nend initializeData: country=",country);
     //alert('stopped simulation with alert');
     //setTimeout(function(){  alert('hello');}, 3000);  
     //alert('hi');
@@ -697,11 +704,14 @@ function Rfun_time(t){
   var iTest    =iPresent+Math.round(tauTest);
   var iTestPrev=iPresent+Math.round(tauTest-0.5*(tauRstart+tauRend));
 
-  if(t<0){ //!!! direct estimate from data 
+  if(t<0){ // direct estimate from data 
     var nxtNewnum  =1./2.*(data_cumCases[iTest+1]-data_cumCases[iTest-1]);
     var nxtNewdenom=1./2.*(data_cumCases[iTestPrev+1]
 			  -data_cumCases[iTestPrev-1]);
-    var R=1.02*nxtNewnum/nxtNewdenom;
+
+    // no data if iTestPrev<0
+    var R=(iTestPrev<0) ? 3 : 1.02*nxtNewnum/nxtNewdenom;
+
     if(false){
       console.log("Rfun_time: t=",t," xtCum(iTest)=",data_cumCases[iTest],
 		" xtCum(iTestPrev)=",data_cumCases[iTestPrev],
@@ -728,7 +738,10 @@ function Rfun_time(t){
     return Rtime[index]; //!! Rtime is central array to keep actual R curve
   }
 
-}
+} //Rfun_time
+
+
+
 
 /*##############################################################
  objective function for fitting the two-weekly reproduction rate 
@@ -751,13 +764,13 @@ NOTICE: fmin.nelderMead needs one-param SSEfunc SSEfunc(R_arr):
         "sol2_SSEfunc=fmin.nelderMead(SSEfunc, Rguess);"
  ##############################################################*/
 
- //!!!!! use separate array R_arr instead of global array Rtime
+ //!! use separate array Rarr instead of global array Rtime
  // for optimization if not whole array optimized.
 
  // Rtime => used in Rfun_time(t)=Rfun_time(it) if it>=0
  //                  Rfun_time(t) data driven if t<0
 
-function SSEfunc(Rarr, fR, logging, itStart) {
+function SSEfunc(Rarr, fR, logging, itStart, itMax) {
 
   //console.log("in SSE func: Rarr=",Rarr);
 
@@ -766,16 +779,23 @@ function SSEfunc(Rarr, fR, logging, itStart) {
     //console.log("inside: fR=",fR);
   }
   if( typeof logging === "undefined"){logging=false;}
-  if( typeof itStart === "undefined"){itStart=0;}
+  if( typeof itStart === "undefined"){itStart=itmin_calib;}
+  if( typeof itMax === "undefined"){itMax=itmax_calib;}
+
   var idataStart=data_idataStart+itStart;
 
 
-  if(logging){console.log("SSEfunc: itStart=",itStart);}
+  //if(true){console.log("SSEfunc: itStart=",itStart,
+  if(logging){console.log("SSEfunc: itStart=",itStart,
+			  " itMax=",itMax,
+			  " data_itmax=",data_itmax," itmax=",itmax);}
 
-  // simulation init
+  // simulation init get right structure of this.x[] 
+  // and scales up/down to nxtStart at itStart
 
   var nxtStart=data_cumCases[idataStart];
-  corona.init(itStart); // scales up/down to nxtStart at the last warmup step
+  //corona.init(itStart, logging); 
+  corona.init(itStart, false); 
 
   // calculate SSE
 
@@ -786,19 +806,21 @@ function SSEfunc(Rarr, fR, logging, itStart) {
   }
 
   if(logging){console.log("Rtime=",Rtime);}
-  for(var it=itStart; it<data_imax-1; it++){
+  for(var it=itStart; it<itMax; it++){
 
-    //var inCalib=((it>=itmin_calib)&&(it<itmax_calib)); //!!!
-    var inCalib=true;
+    var inCalib=((it>=itmin_calib)&&(it<itmax_calib)); 
+    //var inCalib=true;
     var indexRarr=Math.min(getIndexCalib(it-itStart),Rarr.length-1);
     var indexRtime=Math.min(getIndexCalib(it),Rtime.length-1);
     var indexCalib=Math.min(getIndexCalib(it)-getIndexCalib(itmin_calib),
-			    Rarr.length-1); //!!!!
+			    Rarr.length-1);
     var R_actual=(inCalib) ? Rarr[indexRarr] : Rtime[indexRtime];
 
     var nxtData=data_cumCases[data_idataStart+it];
     var nxtSim=n0*corona.xt;
-    if(logging&&(it<itStart+20)){
+    //if(logging&&((it<itStart+10)||(it>itMax-10))){
+    if(logging&&true){
+    //if(logging&&false){
       console.log("SSEfunc before update: it=",it,
 		  " R_actual=",R_actual.toFixed(2),
 		  " Rarr[indexRarr]=",Rarr[indexRarr].toFixed(2),
@@ -810,7 +832,7 @@ function SSEfunc(Rarr, fR, logging, itStart) {
 
     corona.updateOneDay(R_actual); 
 
-    if(inCalib){ //!!!
+    if(inCalib){ //!!
       sse+=Math.pow(Math.log(nxtData)-Math.log(nxtSim),2); //!! Math.log
     }
 
@@ -833,7 +855,8 @@ function SSEfunc(Rarr, fR, logging, itStart) {
  
   */
 
-
+  //if(true){console.log("SSEfunc: returning SSE=",sse);}
+  if(logging){console.log("SSEfunc: returning SSE=",sse);}
   return sse;
 }
 
@@ -863,7 +886,7 @@ function startup() {
   // initialize R estimation result (particularly length) if still undefined
 
   if( typeof Rtime[0] === "undefined"){
-    Rtime[0]=3; //!!! start with high reproduction rate in first week 
+    Rtime[0]=3; // start with high reproduction rate in first week 
     for(var index=1; index<=getIndexCalibmax(itmaxinit); index++){
       Rtime[index]=1;
     }
@@ -938,49 +961,78 @@ function startup() {
 // =============================================================
 
 function getIndexTimeFromCalib(ical){ // MT 2020-08
-  return 14*ical; //!!! only here changes of time interv of one calibr point
+  return 14*ical; //!! only here changes of time interv of one calibr point
 }
 
 function getIndexCalib(itime){
   return Math.floor(itime/getIndexTimeFromCalib(1));     // MT 2020-08
 }
 
-
+// last calibration interval must have at least 10 days
 function getIndexCalibmax(itime){
-  return getIndexCalib(itime-10); //!!! calib R for at least xx days
+  return getIndexCalib(itime-10); 
 }
 
 
 // =================================================
 // determines calibrated Rtime[]
+// HERE inside calibrate() the control!
 // =================================================
 
 function calibrate(){
 
-  console.log(" in function calibrate(), country=",country);
 
-  /// set global variables itmin_calib, itmax_calib 
-  // for calibration interval (itmin_calib>=1 day since dayStartMar) 
+  var Rcalib=[]; 
+  var itmin_c=0;            // basis
+  var itmax_c=data_itmax-1; //basis
 
-  itmin_calib=0;               
-  //itmax_calib=144;  //!!!! klappt auch fuer weniger als itmax
-  itmax_calib=data_imax-1;  // (data_imax w/resp to dayStartMar!!)
-                               // ! NaN variance if itmax_calib=data_imax
-  // !!! calibrate part of Rtime[] defined by itmin_calib, itmax_calib
+  var calibrateOnce=true;
 
-  estimateR(); // determines calibrated Rtime[] /!!! here Rtime.length set, transfer setting from estimateR->calibrate
+  if(calibrateOnce){ //worse SSE but better fit near the end
+    itmin_c=0;            
+    itmax_c=data_itmax-1; 
+    indexcalibmin=getIndexCalib(itmin_c);
+    indexcalibmax=getIndexCalibmax(itmax_c);// *max: >=10d cal intv
+    Rcalib=[]; // init
+    for(var indexcalib=indexcalibmin; indexcalib<=indexcalibmax; indexcalib++){
+      Rcalib[indexcalib-indexcalibmin]=(indexcalib==0) ? 3 : 1; 
+    }
+    estimateR(itmin_c, itmax_c, Rcalib); // also transfers Rcalib to Rtime
+    estimateErrorCovar(itmin_c, itmax_c, Rcalib); // uses calibrated Rtime[]
+  }
 
-  estimateErrorCovar(); // uses calibrated Rtime[]
+  else{ // !! finally works, one day of work!!
+    itmin_c=0; 
+    itmax_c=42;
+    indexcalibmin=getIndexCalib(itmin_c);
+    indexcalibmax=getIndexCalibmax(itmax_c);// *max: >=10d cal intv
+    Rcalib=[]; // init
+    for(var indexcalib=indexcalibmin; indexcalib<=indexcalibmax; indexcalib++){
+      Rcalib[indexcalib-indexcalibmin]=(indexcalib==0) ? 3 : 1; 
+    }
+    estimateR(itmin_c, itmax_c, Rcalib); // also transfers Rcalib to Rtime
+    estimateErrorCovar(itmin_c, itmax_c, Rcalib); // uses calibrated Rtime[]
 
-//!!!! zweites Kalib-Intervall klappt noch nicht, obwohl calibr anscheinend OK
+    itmin_c=42; 
+    itmax_c=data_itmax-1;
+    indexcalibmin=getIndexCalib(itmin_c);
+    indexcalibmax=getIndexCalibmax(itmax_c);// *max: >=10d cal intv
+    Rcalib=[]; // init
+    for(var indexcalib=indexcalibmin; indexcalib<=indexcalibmax; indexcalib++){
+      Rcalib[indexcalib-indexcalibmin]=(indexcalib==0) ? 3 : 1; 
+    }
+    estimateR(itmin_c, itmax_c, Rcalib); // also transfers Rcalib to Rtime
+    estimateErrorCovar(itmin_c, itmax_c, Rcalib); // uses calibrated Rtime[]
+  }
 
-/*
-  itmin_calib=61;               
-  itmax_calib=data_imax;
-  estimateR();
-  estimateErrorCovar();
-*/
-}
+
+  if(true){
+    console.log("leaving calibrate: final synthesized R values+fit quality:");
+    SSEfunc(Rtime,null,true,0,data_itmax);
+    console.log("Rtime=", Rtime);
+  }
+
+}//calibrate()
 
 
 
@@ -995,139 +1047,123 @@ function calibrate(){
 // (1) itmin_calib start of calibr intervals (days since dayStartMar)
 // (2) itmax_calib end of calibr intervals (days since dayStartMar)
 // itmin_calib >=0
-// itmax_calib < data_imax-data_idataStart
+// itmax_calib < data_itmax-data_idataStart
 // =============================================================
 
-function estimateR(){
+function estimateR(itmin_c, itmax_c, Rcalib){
 
-  /// !!! THIS determines number of calibration intervals
- // need at least 7 days for calibr interval
+  var indexcalibmin=getIndexCalib(itmin_c);
+  var indexcalibmax=getIndexCalibmax(itmax_c);// *max: >=10d cal intv
 
-  var indexcalibmin=getIndexCalib(itmin_calib);
-  var indexcalibmax=getIndexCalibmax(itmax_calib);
+  // set global variables itmin_calib, itmax_calib needed for 
+  // fmin.nelderMead
 
-  // define and initialize Rguess[]
-  // (expect strong growth rate in first interval)
+  itmin_calib=itmin_c;
+  itmax_calib=itmax_c;
 
-  var Rguess=[]; 
-  for(var indexcalib=indexcalibmin; indexcalib<=indexcalibmax; indexcalib++){
-    Rguess[indexcalib-indexcalibmin]=(indexcalib==0) ? 3 : 1; 
-  }
 
+  console.log("\n\nestimateR: after initializing: Rcalib=",Rcalib);
 
   for(var ic=0; ic<2; ic++){ // One round (ic<1) sometimes not enough
 
 
     // ##############################################################
     // THE central estimation with global vars itmin/max_calib
-    sol2_SSEfunc=fmin.nelderMead(SSEfunc, Rguess);
+    sol2_SSEfunc=fmin.nelderMead(SSEfunc, Rcalib);
     // ##############################################################
 
+    //console.log("\nafter iter ",ic+1,": Rcalib=",Rcalib);
+ 
+ }
 
-    console.log("\n\n\n");
-    for(var j=0; j<Rguess.length; j++){
-      //console.log("iter ",ic+1," j=",j, // 2020-09
-//		  " Rtime[j+indexcalibmin]=",Rtime[j+indexcalibmin],
-// 		  " Rguess[j]=",Rguess[j]);
-    }
+  // copy tp global R table Rtime
 
-  }
-
-
-  for(var j=0; j<Rguess.length; j++){
+  for(var j=0; j<Rcalib.length; j++){
     Rtime[j+indexcalibmin]=sol2_SSEfunc.x[j];
   }
 
 
-
-  if(true){
-    console.log("\nafter estimateR(): country=",country,
-	//	" data_imax=",data_imax,
-		"\n itmin_calib=",itmin_calib," itmax_calib=",itmax_calib,
-                " indexcalibmin=", indexcalibmin,
-	        "\n  estimated R in calibr interval sol2_SSEfunc.x=",
-		sol2_SSEfunc.x,
-                "\n  Rguess=", Rguess,
-	        "\n  estimated R values Rtime=", Rtime,
-		"");
-  }
-
+ 
   if(false){
-    SSEfunc(Rguess,null,true); // logging of SSEfunc
+    SSEfunc(Rcalib,null,true); // logging of SSEfunc
   }
-}
+
+
+  console.log("\n\nleaving estimateR: Rcalib=", Rcalib,
+	      "\n\nRtime=", Rtime,"\n");
+
+} // estimateR
 
 
 
 //=======================================================
-//!Inductive statistics of the LSE estimator Rtime
-// Cov(Rtime)=2 V(epsilon) H^{-1}, H=Hessian of SSEfunc(Rtime)
+//!Inductive statistics of the LSE estimator Rcalib
+// Cov(Rcalib)=2 V(epsilon) H^{-1}, H=Hessian of SSEfunc(Rcalib)
 //=======================================================
 
-function estimateErrorCovar(){
+function estimateErrorCovar(itmin_c, itmax_c, Rcalib){
+  var log=false;
 
-  console.log("in estimateErrorCovar(): itmax=",itmax);
-  var indexcalibmin=getIndexCalib(itmin_calib);
-  var indexcalibmax=getIndexCalibmax(itmax_calib);
-  //console.log("indexcalibmax=",indexcalibmax);
+  if(log){console.log("in estimateErrorCovar(): Rcalib=",Rcalib);}
+
+  var indexcalibmin=getIndexCalib(itmin_c);
+  var indexcalibmax=getIndexCalibmax(itmax_c);// *max: >=10d cal intv
+
 
   var H=[]; // Hessian of actively estimated R elements
   for(var j=0; j<indexcalibmax+1-indexcalibmin; j++){H[j]=[];}
 
-  var dR=0.001;
+  var dR=0.000001;
 
 
 
-  var Rp=[]; for(var j=0; j<Rtime.length; j++){Rp[j]=Rtime[j];}
-  var Rm=[]; for(var j=0; j<Rtime.length; j++){Rm[j]=Rtime[j];}
-  var Rpp=[]; for(var j=0; j<Rtime.length; j++){Rpp[j]=Rtime[j];}
-  var Rpm=[]; for(var j=0; j<Rtime.length; j++){Rpm[j]=Rtime[j];}
-  var Rmp=[]; for(var j=0; j<Rtime.length; j++){Rmp[j]=Rtime[j];}
-  var Rmm=[]; for(var j=0; j<Rtime.length; j++){Rmm[j]=Rtime[j];}
+  var Rp=[]; for(var j=0; j<Rcalib.length; j++){Rp[j]=Rcalib[j];}
+  var Rm=[]; for(var j=0; j<Rcalib.length; j++){Rm[j]=Rcalib[j];}
+  var Rpp=[]; for(var j=0; j<Rcalib.length; j++){Rpp[j]=Rcalib[j];}
+  var Rpm=[]; for(var j=0; j<Rcalib.length; j++){Rpm[j]=Rcalib[j];}
+  var Rmp=[]; for(var j=0; j<Rcalib.length; j++){Rmp[j]=Rcalib[j];}
+  var Rmm=[]; for(var j=0; j<Rcalib.length; j++){Rmm[j]=Rcalib[j];}
 
-  // !!! select calibration interval
+  // select calibration interval
 
   // diagonal
 
-  //for(var j=0; j<Rtime.length; j++){
-  for(var j=indexcalibmin; j<=indexcalibmax; j++){ //!!!
+  for(var j=0; j<Rcalib.length; j++){
+
     Rp[j]+=dR;
     Rm[j]-=dR;
-    H[j-indexcalibmin][j-indexcalibmin]
-      =(SSEfunc(Rp)-2*SSEfunc(Rtime)+SSEfunc(Rm))/(dR*dR);
-    if(false){console.log("\n j=",j," Rtime=",Rtime,"\n Rp=",Rp,"\n Rm=",Rm,
+    H[j][j]
+      =(SSEfunc(Rp)-2*SSEfunc(Rcalib)+SSEfunc(Rm))/(dR*dR);
+    if(log){console.log("\n j=",j," Rcalib=",Rcalib,"\n Rp=",Rp,"\n Rm=",Rm,
 			 "\n SSEfunc(Rp)=   ",SSEfunc(Rp),
-			 "\n SSEfunc(Rtime)=",SSEfunc(Rtime),
+			 "\n SSEfunc(Rcalib)=",SSEfunc(Rcalib),
 			 "\n SSEfunc(Rm)=   ",SSEfunc(Rm),
 			 "");}
     // revert for further use
 
-    Rp[j]=Rtime[j];
-    Rm[j]=Rtime[j];
+    Rp[j]=Rcalib[j];
+    Rm[j]=Rcalib[j];
   }
 
   // upper-diagonal
 
-  //for(var j=0; j<Rtime.length; j++){
-   // for(var k=j; k<Rtime.length; k++){
-  for(var j=indexcalibmin; j<=indexcalibmax; j++){
-    for(var k=j; k<=indexcalibmax; k++){
+  for(var j=0; j<Rcalib.length; j++){
+    for(var k=j; k<Rcalib.length; k++){
       Rpp[j]+=dR; Rpp[k]+=dR; 
       Rpm[j]+=dR; Rpm[k]-=dR; 
       Rmp[j]-=dR; Rmp[k]+=dR; 
       Rmm[j]-=dR; Rmm[k]-=dR; 
-      H[j-indexcalibmin][k-indexcalibmin]
+      H[j][k]
 	=(SSEfunc(Rpp)-SSEfunc(Rpm)-SSEfunc(Rmp)+SSEfunc(Rpp))/(4*dR*dR);
-      Rpp[j]=Rtime[j]; Rpp[k]=Rtime[k]; 
-      Rpm[j]=Rtime[j]; Rpm[k]=Rtime[k]; 
-      Rmp[j]=Rtime[j]; Rmp[k]=Rtime[k]; 
-      Rmm[j]=Rtime[j]; Rmm[k]=Rtime[k]; 
+      Rpp[j]=Rcalib[j]; Rpp[k]=Rcalib[k]; 
+      Rpm[j]=Rcalib[j]; Rpm[k]=Rcalib[k]; 
+      Rmp[j]=Rcalib[j]; Rmp[k]=Rcalib[k]; 
+      Rmm[j]=Rcalib[j]; Rmm[k]=Rcalib[k]; 
     }
   }
 
   // lower-diagonal
 
-  //for(var j=1; j<Rtime.length; j++){
   for(var j=0; j<H.length; j++){
     for(var k=0; k<j; k++){
       H[j][k]=H[k][j];
@@ -1140,48 +1176,25 @@ function estimateErrorCovar(){
 
   // variance of random term epsilon assuming epsilon \sim i.i.d.
 
-  //var vareps=SSEfunc(Rtime)/(data_imax-Rtime.length);
-  var vareps=SSEfunc(Rtime)/(itmax_calib-itmin_calib-H.length); //!!!
+  var vareps=SSEfunc(Rcalib)/(itmax_calib-itmin_calib-H.length);
 
 
-  // one-sigma estimation errors of parameters Rtime[j] (every 2 weeks a new)
+  // calculate one-sigma estimation errors (every 2 weeks)
+  // and transfer to global sigmaR_hist[] (every day)
 
-  var Rtime_sigma=[];
-  //for(var j=0; j<Rtime.length; j++){
-  for(var j=0; j<indexcalibmax+1-indexcalibmin; j++){//!!!
-    Rtime_sigma[j]=Math.sqrt(2*vareps*Hinv[j][j]);
+  var sigmaR=[];
+  for(var j=0; j<Rcalib.length; j++){
+    sigmaR[j]=Math.sqrt(2*vareps*Hinv[j][j]);
   }
 
-  // global one-sigma estimation errors sigmaR_hist of daily time series of R
-  // always for it=0...itmax
-
-  for(var i=0; i<itmax; i++){//
-    var incalib=((i>=itmin_calib)&&(i<itmax_calib));
-    var index=Math.min(getIndexCalib(i)-getIndexCalib(itmin_calib),
-		       Rtime_sigma.length-1);
-    sigmaR_hist[i]=(incalib) ? Rtime_sigma[index] : 0;
-    //console.log("i=",i," sigmaR_hist[i]=",sigmaR_hist[i]);
+  for(var it=itmin_c; it<itmax_c; it++){//
+    var j=Math.floor(Math.min( (it-itmin_c)/getIndexTimeFromCalib(1),
+			       Rcalib.length));
+    sigmaR_hist[it]=sigmaR[j];
+    if(log){console.log("it=",it," j=",j," sigmaR_hist[it]=", sigmaR_hist[it]);}
   }
 
-  if(false){ //!!
-    console.log("Inductive statistics: Rtime.length=",Rtime.length,
-		" SSE=", SSEfunc(Rtime));
-    //console.log("\n gradient grad(SSE)=",grad,"\n");
 
-    for (var j=0; j<Rtime.length; j++){
-      console.log(" row of Hessian=",j," H[j]=",H[j]);
-    }
-    console.log("\n");
-    for (var j=0; j<Rtime.length; j++){
-      console.log(" row of inverse Hessian=",j," Hinv[j]=",Hinv[j]);
-    }
-    console.log("\nEstimates with One-sigma estimation errors:");
-    for (var j=0; j<Rtime.length; j++){
-      console.log("j=",j," Rtime[j]=",Rtime[j].toFixed(2)," +/- ",
-		  Rtime_sigma[j].toFixed(2));
-    }
-
-  }
 } // estimateErrorCovar()
 
 
@@ -1336,12 +1349,11 @@ function simulationRun() {
 
 //#########################################
 // only called at main run, not warmup
-// !!! need to plot first
+// !! need to plot first
 // because warmup already produced start values for it=0
-// !!! 
 //#########################################
 
-function doSimulationStep(){ //!!!
+function doSimulationStep(){
 
   //!!! it->(it+1) because otherwise not consistent with "calculate SSE"
   var R_actual=(RsliderUsed) ? R0 : Rfun_time(it);
@@ -1357,7 +1369,7 @@ function doSimulationStep(){ //!!!
 
   drawsim.drawSim(it);
  
-  var logging=false;  //!!! test corona.update outside of calibr
+  var logging=false;  // doSimulationStep: logging "allowed"
   //var logging=(it<3);
   corona.updateOneDay(R_actual,logging);
   it++;
@@ -1395,31 +1407,56 @@ function log10(x){return Math.log(x)/ln10;}
 function CoronaSim(){
   //console.log("CoronaSim created");
   this.x=[]; // age struture of fraction infected at given timestep
-  this.xohne=[]; // age structure without deleting by recover,death
+  this.xohne=[]; // age structure without deleting by recover,death 
+                 // (!!needed for correct recovery rate and balance x,y,z!)
   this.itcount=0;
 }
 
 
 
-CoronaSim.prototype.init=function(itStart){
+CoronaSim.prototype.init=function(itStart,logging){
+
+  if( typeof logging === "undefined"){logging=false;}
 
   var idataStart=data_idataStart+itStart;
   var nxtStart=data_cumCases[idataStart]; // target number of cum cases at iStart
 
-  //if(itStart==14){nxtStart=88611;} // only test!!!
+  //var idata0=data_idataStart+it0;
+
 
 
   // start warmup at a very early phase
   // !! start with n0*this.xAct>=1, otherwise infection dead
   // feature, not bug
 
-  // xAct: sum of "actually infected" (neither recovered nor dead)
-  // xyz: cumulative sum of infected (incl recovered, dead)
+  //##############################################################
+  // !! it BEFORE warmup. Becaue this.xt is cumulative 
+  // but this.xAct and this.x[] is not, need ALWAYS to start
+  // at the very beginning also for large itStart
+  // unless following is saved at it=itStart:
 
-  this.xAct=1.01/n0; 
-  this.xyz=1.01/n0; 
-  //console.log("init: n0=",n0," 0.99/n0=",0.99/n0," this.xAct=",this.xAct);
-  this.xt=0; // fraction of positively tested persons/n0 as f(t)
+  // (1) this.x[] (this.xAct=sum(this.x[])
+  // (2) this.y, this.z  (in contrast to x[] and xAct cumulative, 
+  //                      => need to save as well 
+  //                      although not contained in dynamics)
+  // (3) this.xyz (cumulated this.x[0] + this.y + this.z, IN dynamics (sat.)
+  //               canNOT be derived from the other quantities
+  // (4) this.xt, this.yt (outside dynamics 
+  //                       but needed for calibr, at least xt)
+  //##############################################################
+
+
+  //var it0=Math.max(-21, itStart-28); // it BEFORE warmup
+  var it0=-21; // it BEFORE warmup
+
+
+  // xAct: sum of "actually infected" this.x[tau] (neither rec. nor dead)
+  // xyz: cumulative sum of infected (incl recovered, dead)
+  this.xAct=10/n0; // must be >1, otherwise eliminated
+  this.xyz =this.xAct;
+  this.xt  =0; // fraction of positively tested persons/n0 as f(t)
+  //this.xt  =pTest*this.xyz; // fraction of positively tested persons/n0 as f(t)
+
   this.y=0;  // fraction recovered real as a function of time
   this.yt=0; // fraction recovered data
   this.z=0;  // fraction dead (real=data)
@@ -1427,23 +1464,33 @@ CoronaSim.prototype.init=function(itStart){
   for(var i=0; i<100; i++){ // just initialisation for the first few steps
     this.pTestDay[i]=pTest;
   }
-  // init infection-age profile this.x[tau] with exponential
 
-  var r0=0.3; // initial exponential rate per day  (don't confuse r0 with R0)
+  // init infection-age profile this.x[tau] with exponential
+  // initial exponential rate r0 per day  (don't confuse r0 with R0)
+
+  var tauR=0.5*(tauRstart+tauRend)// middle period for one repro cycle
+  var r0=Math.log(Rfun_time(it0))/tauR;  // init reprod rate by stable Rfun_*
   var denom=0;
+
   for(var tau=0; tau<taumax; tau++){
     denom+=Math.exp(-r0*tau);
   }
   for(var tau=0; tau<taumax; tau++){
     this.x[tau]=this.xAct*Math.exp(-r0*tau)/denom;
     this.xohne[tau]=this.x[tau];
-    //console.log("init: this.x[tau]=",this.x[tau]);
+    if(logging){console.log("init: it0=",it0," R0=",Rfun_time(it0),
+			    " r0=",r0," this.x[tau]=",this.x[tau]);}
   }
 
   // data-driven warmup
 
-  for(var it=-20; it<itStart; it++){
+  for(var it=it0; it<itStart; it++){
     var Rt=Rfun_time(it);
+    if(logging){console.log("corona.init warmup before update: it=",it,
+			    " pTest=",pTest,
+			    " R=",Rt.toFixed(2),
+			    " nx=",n0*this.xAct,
+			    " nxt=",n0*this.xt);}
     this.updateOneDay(Rt,false); //!! do not use true!!because of calibr
   }
 
@@ -1455,7 +1502,7 @@ CoronaSim.prototype.init=function(itStart){
  
   var scaleDownFact=nxtStart/(n0*this.xt);
   this.xAct     *= scaleDownFact;
-  this.xyz *= scaleDownFact;
+  this.xyz      *= scaleDownFact;
   this.xt       *= scaleDownFact;
   this.y        *= scaleDownFact;
   this.yt       *= scaleDownFact;
@@ -1469,9 +1516,13 @@ CoronaSim.prototype.init=function(itStart){
 
   this.itcount=0;
 
-  //console.log("CoronaSim.init after warmup: n0*this.xt=",n0*this.xt);
+  if(logging){console.log("CoronaSim.init after warmup: n0*this.xt=",n0*this.xt);}
 
-}
+}//init
+
+
+
+
 
 //#################################################################
 // central update step  ("o" means convolution)
@@ -1500,11 +1551,8 @@ CoronaSim.prototype.updateOneDay=function(R,logging){
 		"this.yt=",this.yt.toPrecision(3),
 		"this.z=",this.z.toPrecision(3),
 		"\n  this.x[tauDie-1]=",this.x[tauDie-1].toPrecision(3),
-		" this.xohne[tauDie-1]=",this.xohne[tauDie-1].toPrecision(3),
 		"\n  this.x[tauDie]=",this.x[tauDie].toPrecision(3),
-		" this.xohne[tauDie]=",this.xohne[tauDie].toPrecision(3),
 		"\n  this.x[tauDie+1]=",this.x[tauDie+1].toPrecision(3),
-		" this.xohne[tauDie+1]=",this.xohne[tauDie+1].toPrecision(3),
 		"\n  this.x[tauRecover-1]=",this.x[tauRecover-1].toPrecision(3),
 		"\n  this.x[tauRecover]=",this.x[tauRecover].toPrecision(3),
 		"\n  this.x[tauRecover+1]=",this.x[tauRecover+1].toPrecision(3),
@@ -1545,11 +1593,11 @@ CoronaSim.prototype.updateOneDay=function(R,logging){
   this.xohne[0]=this.x[0];
 
 
-  // test people 
+  // test people (in updateOneDay)
 
   this.pTestDay[it]=pTest; // needed to determine fraction of 
-                      // recovered among the tested later on
-  //!!! sometimes this.pTestDay undefined!!!
+                           // recovered among the tested later on
+                           // sometimes this.pTestDay undefined !!
 
   tauAvg=5; //!!
   var dtau=Math.min(Math.floor(tauAvg/2),Math.round(tauTest));
@@ -1557,11 +1605,7 @@ CoronaSim.prototype.updateOneDay=function(R,logging){
 
   var f_T=1./(2*dtau+1);
   for(var tau=tauTest-dtau; tau<=tauTest+dtau; tau++){
-    this.xt += pTest*f_T*this.xohne[tau];
-    if(false&&(it%20==0)){
-      console.log("\ntest: it=",it," tau=",tau," x[tau]=",this.xohne[tau],
-		  "this.xt=",this.xt);
-    }
+    this.xt += pTest*f_T*this.xohne[tau]; 
   }
 
   // let people die or recover
@@ -1580,15 +1624,14 @@ CoronaSim.prototype.updateOneDay=function(R,logging){
 
   for(var tau=tauDie-dtau; tau<=tauDie+dtau; tau++){
     var tauH=Math.min(it,tau);
-    //dz[tau-tauDie+dtau]=fracDie*f_D*this.xold[tauH][0];
-    dz[tau-tauDie+dtau]=fracDie*f_D*this.xohne[tau];
+    dz[tau-tauDie+dtau]=fracDie*f_D*this.xohne[tau]; //!! here xohne crucial
     dzsum+=dz[tau-tauDie+dtau];
     this.x[tau] -=dz[tau-tauDie+dtau];
   }
 
   for(var tau=tauRecover-dtau; tau<=tauRecover+dtau; tau++){
     var tauH=Math.min(it,tau);
-    dy[tau-tauRecover+dtau]=(1-fracDie)*f_Rec*this.xohne[tau];
+    dy[tau-tauRecover+dtau]=(1-fracDie)*f_Rec*this.xohne[tau]; //!!
     dysum+=dy[tau-tauRecover+dtau];
     this.x[tau] -=dy[tau-tauRecover+dtau];
   }
@@ -1602,9 +1645,10 @@ CoronaSim.prototype.updateOneDay=function(R,logging){
   // xAct: sum of "actually infected" (neither recoverd nor dead)
   // xyz: cumulative sum of infected (incl recovered, dead)
 
-  this.xAct=0;  
 
   this.xyz+= this.x[0];
+
+  this.xAct=0;  
   for(var tau=0; tau<taumax; tau++){
     this.xAct     += this.x[tau];
   }
@@ -2072,7 +2116,7 @@ DrawSim.prototype.drawAxes=function(windowG){
 
 /*
  //define y2 axis tick/label positions (in y, not pix)//!!old?
-//!!!this.isActiveLin[5] undefined
+//!!this.isActiveLin[5] undefined
   var ymin2=0;
   var ymax2=this.ymaxPerc;
   //var ymax2=Math.min(10,this.ymaxPerc);
@@ -2183,7 +2227,7 @@ DrawSim.prototype.drawAxes=function(windowG){
   // draw name+value strings on y2 axis // !! still old
 
 /*
-  if((windowG==0)&&(this.isActiveLin[5])){//!!!this.isActiveLin[5] undefined
+  if((windowG==0)&&(this.isActiveLin[5])){//!!this.isActiveLin[5] undefined
 
     var label_y2="Tote/bekannt Erkrankte [%]";
     ctx.fillStyle=this.colLine[5];
@@ -2426,7 +2470,7 @@ DrawSim.prototype.drawREstimate=function(it){
   ctx.fillText(str_R,0,0);
   ctx.setTransform(1,0,0,1,0,0);
 
-  for(var ical=0; ical<=getIndexCalib(it); ical++){ // !!! 
+  for(var ical=0; ical<=getIndexCalib(it); ical++){ 
     var itR=getIndexTimeFromCalib(ical);
     x0=this.xPix[itR];
     ctx.fillRect(x0-1,this.yPix0,3,this.hPix);
@@ -2434,7 +2478,7 @@ DrawSim.prototype.drawREstimate=function(it){
     ctx.setTransform(0,-1,1,0,x0+1.0*this.textsizeR,y0);
     //console.log("drawSim.draw: it=",it," itR=",itR);
     str_R="R="+R_hist[itR].toFixed(2)
-      +( (RsliderUsed||otherSliderUsed||(itR>=data_imax))
+      +( (RsliderUsed||otherSliderUsed||(itR>=data_itmax))
      // +((true) // if sigma_R undefiuned
 	? "" : (" +/- "+sigmaR_hist[itR].toFixed(2)));
 
