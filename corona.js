@@ -138,19 +138,19 @@ const countryGerList={
 // will be only relevant if "xyz no longer <<1 ("Durchseuchung")
 // will be later changed to fracDie=fracDieInit*pTest/pTestInit;
 const fracDieInitList={
-    "Germany"       : fact*0.0048,
-    "Austria"       : fact*0.0040,
-    "Czechia"       : fact*0.0041,
-    "France"        : fact*0.0040,
-    "United Kingdom": fact*0.0040,
-    "Italy"         : fact*0.0040,
-    "Poland"        : fact*0.0040,
-    "Spain"         : fact*0.0040,
-    "Sweden"        : fact*0.0040,
-    "Switzerland"   : fact*0.0055,
-    "India"         : fact*0.0085,
-    "Russia"        : fact*0.0040,
-    "US"            : fact*0.0040
+    "Germany"       : 0.0048,
+    "Austria"       : 0.0040,
+    "Czechia"       : 0.0041,
+    "France"        : 0.0040,
+    "United Kingdom": 0.0040,
+    "Italy"         : 0.0040,
+    "Poland"        : 0.0040,
+    "Spain"         : 0.0040,
+    "Sweden"        : 0.0040,
+    "Switzerland"   : 0.0055,
+    "India"         : 0.0085,
+    "Russia"        : 0.0040,
+    "US"            : 0.0040
 }
 
 
@@ -986,7 +986,7 @@ function calibrate(){
   var itmin_c=0;            // basis
   var itmax_c=data_itmax-1; //basis
 
-  var calibrateOnce=true;
+  var calibrateOnce=true; //!!!
 
   if(calibrateOnce){ //worse SSE but better fit near the end
     itmin_c=0;            
