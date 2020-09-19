@@ -1090,19 +1090,39 @@ function estimateR(itmin_c, itmax_c, Rcalib){
   itmax_calib=itmax_c;
 
 
-  console.log("\n\nestimateR: after initializing: Rcalib=",Rcalib);
+  console.log("\n\nestimateR: after initializing: Rcalib=",Rcalib,
+	      " before fmin.nelderMead");
 
-  for(var ic=0; ic<2; ic++){ // One round (ic<1) sometimes not enough
+  /** ##############################################################
+  THE central estimation 
+  - global control vars itmin_calib,itmax_calib
+  - global data variable data_cumCases to fit to by minimizing SSEfunc
+  - input/output Rcalib
+  - One round (ic<1 instead of ic<2) sometimes not enough
 
+  !!! unresolved speed issue at some firefox browsers (4% market chare):
+  at startup, SSEfunc takes factor 50 longer than later on
+  - tested with 1000 iterations in separate loop 
+    to eliminate uncertainties by fmin.nelderMead (needs about 5000 it)
+  - Something  to do with not yet loaded data_cumCases from fetch?
+    Probably since later on both SSEfunc and the separate test fast
+  - Did not check (certainly is the cause) 
+    since it's not worth the effort to try ressolve this
+    due to utterly nondeterministic behaviour of fetch and only 
+    relates to 4% market share
+  ############################################################## */
 
-    // ##############################################################
-    // THE central estimation with global vars itmin/max_calib
+  for(var ic=0; ic<2; ic++){
+
+    //##############################################################
     sol2_SSEfunc=fmin.nelderMead(SSEfunc, Rcalib);
-    // ##############################################################
-
+    //##############################################################
     //console.log("\nafter iter ",ic+1,": Rcalib=",Rcalib);
- 
- }
+
+  }
+
+
+
 
   // copy tp global R table Rtime
 
@@ -1502,7 +1522,7 @@ CoronaSim.prototype.init=function(itStart,logging){
   this.yt=0; // fraction recovered data
   this.z=0;  // fraction dead (real=data)
   this.pTestDay=[]; // fraction of tested infected at day t
-  for(var i=0; i<100; i++){ // just initialisation for the first few steps
+  for(var i=0; i<500; i++){ // just initialisation for the first few steps
     this.pTestDay[i]=pTest;
   }
 
