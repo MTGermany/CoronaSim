@@ -1511,7 +1511,7 @@ CoronaSim.prototype.init=function(itStart,logging){
 
   var tauR=0.5*(tauRstart+tauRend)// middle period for one repro cycle
   var r0=Math.log(Rfun_time(it0))/tauR;  // init reprod rate by stable Rfun_*
-  var denom=0;
+  var denom=0; 
 
   for(var tau=0; tau<taumax; tau++){
     denom+=Math.exp(-r0*tau);
