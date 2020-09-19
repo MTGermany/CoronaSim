@@ -166,47 +166,36 @@ a:hover {
   z-index: 3; /* the higher the integer, the more on top */
 }
 
-#calibrateDiv{ /* normal landscape */
-  position: absolute;
-  top:     10vh; 
-  right:   2vmin;
-  z-index: 3; 
-}
-
 
 #countryData{ /* normal landscape */
   position: absolute;
-  top:     15vh; 
+  top:     10vh; 
   right:   2vmin;
   z-index: 4; # the higher the more on top
 }
 
 #dataTypeDiv{  /*mobile, landscape */
   position: absolute;
-  top:     20vh; 
+  top:     15vh; 
   right:   2vmin;
   z-index: 4; 
 }
 
-#introArea{ /* introducionary remarks on the simulation */
+#calibrateDiv{ /* normal landscape */
   position: absolute;
-  top:   9vh;  /* 6 for the title, 24 for the sliders */
-  left:   2vw;
-  width:  40vw;
-  height: 19vh;
-  background-color: rgb(222,222,255);
-  margin-right: 0vw;
-  margin-left: 0vw;
-  z-index: 1; # the higher the more on top
+  top:     20vh; 
+  right:   2vmin;
+  z-index: 3; 
 }
+
 
 
 #sliders{ 
   position: absolute;
-  top:   8.5vh; 
-  left:   15vw;
-  width:  70vw;
-  height:  19vh;
+  top:   9vh; 
+  left:   10vw;
+  width:  65vw;
+  height:  16vh;
   background-color: rgb(222,255,222);
   margin-right: 0vw;
   margin-left: 0vw;
@@ -215,10 +204,10 @@ a:hover {
 
 #contents{ /* contains the canvas */
   position: absolute;
-  top:   30vh;  /* 6 for the title, 24 for the sliders */
+  top:   27vh;  /* 6 for the title, 24 for the sliders */
   left:   2vw;
   width:  96vw;
-  height: 68vh;
+  height: 66vh;
   background-color: rgb(255,255,255);
   margin-right: 0vw;
   margin-left: 0vw;
@@ -227,19 +216,23 @@ a:hover {
 
 #info{ /* top middle of the canvas */
   position: absolute;
-  top:   31vh;  /* 6 for the title, 24 for the sliders */
-  left:   55vw;
-  width:  15vmin;
-  height: 6vmin;
+  top:   28vh;  /* 6 for the title, 24 for the sliders */
+  right:   3vw;
   z-index: 2; # the higher the more on top
 }
 
-#impressum{ /* right bottom of the canvas */
+#impressum{ 
   position: absolute;
-  top:   94vh;  /* 6 for the title, 24 for the sliders */
+  bottom:   1.5vh;  /* 6 for the title, 24 for the sliders */
   right:   2vw;
-  width:  15vmin;
-  height: 6vmin;
+  z-index: 2; # the higher the more on top
+}
+
+#home{ 
+  position: absolute;
+  bottom:   1.5vh;
+  left:   45vw;
+
   z-index: 2; # the higher the more on top
 }
 
@@ -304,6 +297,22 @@ input[type=range]::-webkit-slider-thumb {
 
 }
 
+/*#########################################################*/
+/* normalscreen portrait overrides (geht nicht nested!)
+/*#########################################################*/
+
+@media screen and (max-aspect-ratio: 1/1){ 
+#header{
+  position: absolute;
+  top:   -1.5vmin;
+  left:  4vmin;
+  width: 50vmin;
+}
+}
+
+#sliders{      /* normal portrait */
+  left:   2vw;
+}
 
 
 /*#########################################################*/
@@ -311,14 +320,25 @@ input[type=range]::-webkit-slider-thumb {
 /*#########################################################*/
 
 
-@media screen and (max-height: 600px) and (min-aspect-ratio: 1/1), /*6/5*/
+@media screen and (max-height: 600px) and (min-aspect-ratio: 1/1), 
 screen and (max-width: 600px) and (min-aspect-ratio: 1/1),
 screen and (min-resolution: 1.5dppx) and (min-aspect-ratio: 1/1){
 
 #header{ /*mobile, landscape */
-  left:    4vmin;
-  width:   20vmin;
+  top:   -1.5vmin;
+  left:    5vmin;
+  width:   35vmin;
+  z-index: 4;
 }
+
+#sliders{     /*mobile, landscape */
+  position: absolute;
+  top:   1.5vh; 
+  background-color: rgb(255,255,255);
+  left:   20vw;
+  width:  55vw;
+}
+
 
 #startStopDiv{  /*mobile, landscape */
   right:   26vmin;
@@ -339,59 +359,53 @@ screen and (min-resolution: 1.5dppx) and (min-aspect-ratio: 1/1){
 }
 
 
-#calibrateDiv{ /*mobile landscape */
-  position: absolute;
-  top:     11vh; 
-  right:   2vmin;
-  z-index: 3; 
-}
-
 #countryData{ /* mobile landscape */
   position: absolute;
-  top:     17vh; 
+  top:     10vh; 
   right:   2vmin;
   z-index: 4; # the higher the more on top
 }
 
 #dataTypeDiv{ /* linear or logarithmic */
   position: absolute;
-  top:     23vh; 
+  top:     15vh; 
   right:   2vmin;
-  z-index: 3; /* the higher the integer, the more on top */
-}
-
-
-
-#sliders{     /*mobile, landscape */
-  position: absolute;
-  top:   1.5vh; 
-  background-color: rgb(255,255,255);
-  left:   20vw;
-  width:  65vw;
+  z-index: 4; /* the higher the integer, the more on top */
 }
 
 
 #contents{    /*mobile, landscape */
   position: absolute;
-  top:   28vh; 
-  left:   5vw;
-  width:  90vw;
-  height: 68vh;
+  top:   21vh; 
+  left:   2vw;
+  width:  96vw;
+  height: 72vh;
 }
 
-#info{ /* top middle of the canvas */
+#info{ 
   position: absolute;
-  top:   29vh;  /* 6 for the title, 24 for the sliders */
-  left:   55vw;
-  width:  15vmin;
+  top:   21vh;  /* 6 for the title, 24 for the sliders */
+  right:   3vw;
+  z-index: 4; 
 }
 
+
+#calibrateDiv{     /*mobile landscape */
+  top:      auto;  /*removes the top property */
+  bottom:   1vh; 
+  left:    2vw;
+}
+#home{ 
+  position: absolute;
+  bottom:   1vh; 
+  left:   45vw;
+}
 #impressum{ 
   position: absolute;
-  top:   92vh;  /* 6 for the title, 24 for the sliders */
-  right:   6vw;
-  width:  15vmin;
+  bottom:   1vh; 
+  right:   2vw;
 }
+
 
 
 }
@@ -433,85 +447,86 @@ input[type=range]::-webkit-slider-thumb {
 
 
 #header{
-  top:     0vmin;
-  left:   10vmin;
-  width:  60vmin;
+  top:     -0.5vmin;
+  left:   5vmin;
+  width:  50vmin;
 }
 
 #startStopDiv{  /*mobile, portrait */
-  top:     0.5vmin;
+  top:     1.5vmin;
   right:   26vmin;
   height:  11vmin;
   width:   11vmin;
 }
 
 #restartDiv{/*mobile, portrait */
-  top:     1vmin;
+  top:     2vmin;
   right:   14vmin;
   height:  10vmin;
   width:   10vmin;
 }
 
 #resetDiv{
-  top:     1vmin;
+  top:     2vmin;
   right:   2vmin;
   height:  10vmin;
   width:   10vmin;
-}
-
-#calibrateDiv{ /*mobile portrait */
-  position: absolute;
-  top:     11vmin; 
-  right:   2vmin;
-  z-index: 3; 
 }
 
 
 
 #sliders{     /*mobile, portrait */
   position: absolute;
-  top:   16vmin; 
+  top:   14vmin; 
   background-color: rgb(255,255,255);
-  left:   5vmin;
-  width:  93vmin;
+  left:   2vmin;
+  width:  96vmin;
   height: 20vmin;
 }
 
 
 #contents{           /*mobile, portrait */
   position: absolute;
-  top:   42vmin;  
-  left:  2vmin;
+  top:   38vmin;  
+  left:  2vw;
   width:  96vmin;
-  height: 55vh;
+  height: 90vmin;
 }
 
-#info{ /* top middle of the canvas */
+#info{ 
   position: absolute;
-  top:   42vmin;  
-  left:   55vw;
-  width:  15vmin;
-}
-
-
-#impressum{ /* top middle of the canvas */
-  position: absolute;
-  top:   calc(42vmin + 56vh);    
-  right:   2vw;
-  width:  15vmin;
+  top:   39vmin;  /* 6 for the title, 24 for the sliders */
+  right:   3vw;
+  z-index: 4; 
 }
 
 #countryData{ /*mobile, portrait */
-  top:   calc(42vmin + 56vh);
-  width: 40vw;
-  left:   40vw;
+  top:   130vmin;
+  left:  2vmin;
 }
 
 #dataTypeDiv{  /*mobile, portrait */
-  position: absolute;
-  top:   calc(42vmin + 62vh); 
-  left:   40vw;
+  top:   130vmin;
+  left:  38vmin;
 }
+
+#calibrateDiv{ /*mobile portrait */
+  top:   130vmin;
+  right:  2vmin;
+
+}
+
+
+#home{ 
+  top:   136vmin;
+  left:  2vmin;
+}
+
+#impressum{ /*mobile, portrait */
+  top:   136vmin;
+  right:  2vmin;
+}
+
 
 
 }  /*smartphone and max-aspect-ratio: 1/1*/

@@ -257,9 +257,12 @@ var ctx;
 var xPixLeft,yPixTop;
 var xPix,yPix;
 var xPixOld, yPixOld;
-var sizemin=0;
+var sizeminViewport;
+var sizeminCanvas;
 
-
+var textsize=14;
+var hasChanged=false;
+var isSmartphone=false;
 
 
 
@@ -911,7 +914,7 @@ function startup() {
  
 
   // =============================================================
-  // initialize CoronaSim
+  // initialize CoronaSim (no effect of order with graphics)
   // =============================================================
 
   corona=new CoronaSim();
@@ -919,22 +922,25 @@ function startup() {
   if(!useLiveData){corona.init(0);} // !! now inside fetch promise
 
 
+
   // =============================================================
   // initialize graphics
   // =============================================================
+
+
+  window.addEventListener("resize", canvas_resize);
 
   canvas = document.getElementById("myCanvas");
   ctx = canvas.getContext("2d");
   var rect = canvas.getBoundingClientRect();
   xPixLeft=rect.left;
   yPixTop=rect.top;
-
   drawsim=new DrawSim();
 
-  window.addEventListener("resize", canvas_resize);
   canvas_resize();
 
   drawsim.setWindow(windowG);
+
 
   // =============================================================
   // Apple debug
@@ -1863,14 +1869,9 @@ function DrawSim(){
   this.ymaxLin=11;
   this.ymaxLog=7;
 
-  this.xPix0  =0.12*canvas.width; // must update this block later on!!
-  this.xPixMax=0.98*canvas.width;
-  this.yPix0  =0.85*canvas.height;
-  this.yPixMax=0.02*canvas.height;
-  this.wPix=this.xPixMax-this.xPix0;
-  this.hPix=this.yPixMax-this.yPix0;  //<0
 
-  this.xPix=[];
+
+  this.xPix=[]; // this.xPix0 etc defined in drawSim method
 
 
  
@@ -2034,7 +2035,6 @@ function DrawSim(){
 	       countryGer+": taegliche Zahlen",
 	       countryGer+": Anteil [% oder Promille]"];
 
-  this.sizemin=Math.min(canvas.width,1.25*canvas.height);
 
   // initialize data feed and fonts at drawSim/drawAxes since sometimes
   // data fetch not yet finished/canvas not yet sized at construction time
@@ -2056,13 +2056,6 @@ DrawSim.prototype.setWindow=function(windowG){
     this.qselect[1]=[8,9,10,12,14,15];
   }
 
-  // must update canvas boundaries since canvas may be resized
-  this.xPix0  =0.12*canvas.width;
-  this.xPixMax=0.98*canvas.width;
-  this.yPix0  =0.85*canvas.height;
-  this.yPixMax=0.02*canvas.height;
-  this.wPix=this.xPixMax-this.xPix0;
-  this.hPix=this.yPixMax-this.yPix0;  //<0
 
 
   this.clear();
@@ -2113,9 +2106,7 @@ DrawSim.prototype.drawAxes=function(windowG){
   // update the font (drawAxes called at first drawing and after all 
   // canvas/display changes)
 
-  this.sizemin=Math.min(canvas.width,1.25*canvas.height);
-  this.textsize=(this.sizemin>400) ? 0.03*this.sizemin : 0.04*this.sizemin;
-  ctx.font = this.textsize+"px Arial"; 
+  ctx.font = textsize+"px Arial"; 
 
 
 
@@ -2234,8 +2225,8 @@ DrawSim.prototype.drawAxes=function(windowG){
 
   // draw date strings on x axis
 
-  var dxShift=(phi<0.01) ? -1.1*this.textsize : -2.4*cphi*this.textsize;
-  var dyShift=(1.5+2*sphi)*this.textsize;
+  var dxShift=(phi<0.01) ? -1.1*textsize : -2.4*cphi*textsize;
+  var dyShift=(1.5+2*sphi)*textsize;
    for(var ix=0; days[ix]<=itmax; ix++){
     var xpix=this.xPix0+timeRel[ix]*this.wPix+dxShift;
     var ypix=this.yPix0+dyShift;
@@ -2253,7 +2244,7 @@ DrawSim.prototype.drawAxes=function(windowG){
   var yPix=(windowG!=1)
     ? this.yPix0+0.01*this.hPix : this.yPix0+0.15*this.hPix;
   ctx.setTransform(0,-1,1,0,
-		   this.xPix0-3.0*this.textsize,yPix);
+		   this.xPix0-3.0*textsize,yPix);
   ctx.fillText(label_y,0,0);
   ctx.setTransform(1,0,0,1,0,0);
 
@@ -2263,8 +2254,8 @@ DrawSim.prototype.drawAxes=function(windowG){
     for(var iy=0; iy<=ny; iy++){
       var valueStr=(windowG!=1)  ? iy*dy : "10^"+iy;
       ctx.fillText(valueStr,
-		   this.xPix0-2.5*this.textsize,
-		   yPix0+(iy*dy-ymin)/(ymax-ymin)*hPix+0.5*this.textsize);
+		   this.xPix0-2.5*textsize,
+		   yPix0+(iy*dy-ymin)/(ymax-ymin)*hPix+0.5*textsize);
     }
   }
 
@@ -2275,14 +2266,14 @@ DrawSim.prototype.drawAxes=function(windowG){
     for(var iy=0; iy<=ny; iy++){
       var valueStr=10*iy*dy;
       ctx.fillText(valueStr,
-		   this.xPix0-2.5*this.textsize,
-		   yPix0+(iy*dy-ymin)/(ymax-ymin)*hPix+0.5*this.textsize);
+		   this.xPix0-2.5*textsize,
+		   yPix0+(iy*dy-ymin)/(ymax-ymin)*hPix+0.5*textsize);
     }
     for(var iy=1; iy<=ny; iy++){
       var valueStr=iy*dy;
       ctx.fillText(valueStr,
-		   this.xPix0-2.5*this.textsize,
-		   yPix0-(iy*dy-ymin)/(ymax-ymin)*hPix+0.5*this.textsize);
+		   this.xPix0-2.5*textsize,
+		   yPix0-(iy*dy-ymin)/(ymax-ymin)*hPix+0.5*textsize);
     }
   }
 
@@ -2296,15 +2287,15 @@ DrawSim.prototype.drawAxes=function(windowG){
     var label_y2="Tote/bekannt Erkrankte [%]";
     ctx.fillStyle=this.colLine[5];
     ctx.setTransform(0,-1,1,0,
-		   this.xPixMax+3.0*this.textsize,this.yPix0+0.2*this.hPix);
+		   this.xPixMax+3.0*textsize,this.yPix0+0.2*this.hPix);
     ctx.fillText(label_y2,0,0);
     ctx.setTransform(1,0,0,1,0,0)
     for(var iy=ymin2; iy<=ny2; iy++){
       var valueStr= iy*dy2 
       ctx.fillText(valueStr,
-		  this.xPixMax+0.8*this.textsize,
+		  this.xPixMax+0.8*textsize,
 		  this.yPix0+(iy*dy2-ymin2)/(ymax2-ymin2)*this.hPix
-		   +0.5*this.textsize);
+		   +0.5*textsize);
     }
   }
 */
@@ -2313,9 +2304,9 @@ DrawSim.prototype.drawAxes=function(windowG){
   // draw key
 
   var yrelTop=(windowG==1) // 1=log
-    ? -4.5*(1.2*this.textsize/this.hPix) : 0.96;
-  var xrelLeft=(windowG==0) ? 0.02 : 0.60; 
-  var dyrel=-1.2*this.textsize/this.hPix;
+    ? -4.5*(1.2*textsize/this.hPix) : 0.95;
+  var xrelLeft=(windowG==0) ? 0.02 : 0.40; 
+  var dyrel=-1.2*textsize/this.hPix;
   var ikey=0;
 
   for (var iq=0; iq<this.qselect[windowG].length; iq++){
@@ -2409,12 +2400,10 @@ DrawSim.prototype.transferRecordedData=function(){
     //kernel=[1/16,2/16,3/16,4/16,3/16,2/16,1/16];
     //kernel=[1/25,2/25,3/25,4/25,5/25,4/25,3/25,2/25,1/25];
 
-  console.log("dnSmooth...");
   var dnSmooth=smooth(data_dn,kernel);
     //var dnSmooth=avgArithm(data_dn,7);
-  console.log("dxtSmoot...");
   var dxtSmooth=smooth(data_dxt,kernel);
-  // var dytSmooth=smooth(data_dyt,kernel); // often no useful data
+  // var dytSmooth=smooth(data_dyt,kernel); // dy often no useful data
   var dzSmooth=smooth(data_dz,kernel);
   var posRateSmooth=smooth(data_posRate,kernel);
   var cfrSmooth=smooth(data_cfr,kernel);
@@ -2527,7 +2516,7 @@ DrawSim.prototype.drawREstimate=function(it){
   var x0=this.xPix0;
   var y0=this.yPix0+0.3*this.hPix;
 
-  ctx.setTransform(0,-1,1,0,x0+1.0*this.textsizeR,y0);
+  ctx.setTransform(0,-1,1,0,x0+1.0*textsizeR,y0);
   var str_R="R="+R_hist[0].toFixed(2)
       +( (RsliderUsed||otherSliderUsed)
 	 ? "" : (" +/- "+sigmaR_hist[0].toFixed(2)));
@@ -2539,7 +2528,7 @@ DrawSim.prototype.drawREstimate=function(it){
     x0=this.xPix[itR];
     ctx.fillRect(x0-1,this.yPix0,3,this.hPix);
 
-    ctx.setTransform(0,-1,1,0,x0+1.0*this.textsizeR,y0);
+    ctx.setTransform(0,-1,1,0,x0+1.0*textsizeR,y0);
     if(false){
       console.log("drawSim.draw: it=",it," itR=",itR,
 		" R_hist.length=",R_hist.length,
@@ -2567,22 +2556,34 @@ DrawSim.prototype.drawREstimate=function(it){
 DrawSim.prototype.drawSim=function(it,q){
 //######################################################################
 
-  //console.log("\n\nin DrawSim.drawSim: it=",it);
-
-  // update  text properties 
-
-  this.sizemin=Math.min(canvas.width,1.25*canvas.height);
-  this.textsize=(this.sizemin>600) ? 0.02*this.sizemin : 0.03*this.sizemin;
-  this.textsizeR=1.5*this.textsize;
+  console.log("\n\nin DrawSim.drawSim: it=",it," textsize=",textsize);
 
 
+  // global vars canvas.width, canvas.height,
+  // viewport.width, viewport.height
+  // textsize, textsizeR (for the R values) set by 
+  // canvas_gui.canvas_resize()
+
+  // must update canvas boundaries since canvas may be resized
+
+  if(hasChanged){
+    this.xPix0=0.12*canvas.width;
+    this.xPixMax=0.98*canvas.width;
+    this.yPix0=(isSmartphone) ? 0.85*canvas.height : 0.90*canvas.height;
+    this.yPixMax=0.02*canvas.height;
+    this.wPix=this.xPixMax-this.xPix0;
+    this.hPix=this.yPixMax-this.yPix0;  //<0
+    for(var i=0; i<=itmax; i++){
+      this.xPix[i]=this.xPix0+i*(this.xPixMax-this.xPix0)/itmax;
+    }
+  }
 
   // initialize: transfer new data and redraw whole graphics
 
   this.transferSimData(it);
   if(it==0){this.transferRecordedData()}; 
  
-  if(it==0){
+  if((it==0)||hasChanged){
     this.clear();
     this.drawAxes(windowG);
   }
@@ -2618,9 +2619,9 @@ DrawSim.prototype.drawSim=function(it,q){
     var scaling=this.dataG[q].ytrafo[0];
     var type=this.dataG[q].type;
     var plottype=this.dataG[q].plottype;
-    var wLine=(type==3) ? 0.003*this.sizemin
-	:(type==4) ? 0.0015*this.sizemin :  0.001*this.sizemin;
-    wLine=Math.max(wLine,1);
+    var wLine=(type==3) ? 0.003*sizeminCanvas
+	:(type==4) ? 0.002*sizeminCanvas :  0.00012*sizeminCanvas;
+    wLine=Math.max(wLine,0.5);
     var color=this.dataG[q].color;
     var pointType=type;
     var actValue=scaling*this.dataG[q].data[i];
@@ -2761,14 +2762,14 @@ DrawSim.prototype.plotPoints=function(it, iDataStart, data_arr, scaling,
     if((i>0)&&(value>=yminDraw) &&(value<=ymaxDraw)){
       var yrel=(value-yminDraw)/(ymaxDraw-yminDraw);
       var yPix=this.yPix0+yrel*(this.yPixMax-this.yPix0);
-      var r=Math.max(0.008*sizemin, 1);
+      var r=Math.max(0.006*sizeminCanvas, 1);
       if(pointType==0){
         ctx.beginPath(); //!! crucial; otherwise latest col used for ALL
         ctx.arc(this.xPix[ig], yPix, r, 0, 2 * Math.PI);
         ctx.fill();
       }
       else{
-	var r=Math.max(0.008*sizemin, 1);
+	var r=Math.max(0.006*sizeminCanvas, 1);
         ctx.beginPath(); //!! crucial; otherwise latest col used for ALL
         ctx.moveTo(this.xPix[ig]-r,yPix-r);
         ctx.lineTo(this.xPix[ig]-r,yPix+r);

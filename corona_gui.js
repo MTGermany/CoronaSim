@@ -230,13 +230,25 @@ function onmouseenterCallback(event){
 // at init and as response to changes
 // !! canvas has strange properties/DOS when initialized relatively vw vh
 // document.getElementById("contents") always works
+
+  // response to changed viewport/window sizes: canvas_gui.canvas_resize()
+  // called at resize events 
+  // because activated by window.addEventListener("resize", canvas_resize);
+
+  // some DOS, only thing that works is canvas, 
+  // need to get viewport indirectly
+  // sets global variables 
+  // - canvas.width, canvas.height
+  // - viewport.width, viewport.height
+  // - textsize, textsizeR (for the R values)
 //###############################################################
 
-function canvas_resize(){
-  var hasChanged=false;
+var viewport={width: 200, height: 200}
 
-  // canvasWindow is element determined by css #contents{...} spec
-  // it contains the actual canvas
+function canvas_resize(){
+  hasChanged=false;
+
+  // actual canvas
 
   var canvasWindow=document.getElementById("contents");
 
@@ -250,12 +262,50 @@ function canvas_resize(){
     canvas.height  = canvasWindow.clientHeight;
   }
 
-  if(hasChanged){sizemin=Math.min(canvas.width,canvas.height);}
 
-  if(drawsim!==null){drawsim.setWindow(windowG);}//!!!
-  //console.log("canvas_resize: new canvas dimensions ",
-//	      canvas.width," X ",canvas.height);
-  //console.log("drawsim.hPix=",drawsim.hPix);
-}
+
+ // regardless of hasChanged=true 
+
+  // viewport; consolidate with css media queries
+  // (1) normal: both sides of viewport >= 600px
+  // (2) smartphone default: at least one side <600px
+  // (3) smartphone portrait: aspect ratio <1:1
+
+  vw=window.innerWidth; // document.documentElement.clientWidth
+  vh=window.innerHeight;
+  sizeminCanvas=Math.min(canvas.width,canvas.height);
+  sizeminWindow=Math.min(vw,vh); // "viewport" is standard object, not useful
+
+  isSmartphone=(sizeminWindow<600);
+
+  textsize=(isSmartphone) ? 0.03*sizeminWindow : 0.02*sizeminWindow;
+  textsizeR=1.5*textsize;
+  console.log("canvas_gui.canvas_resize():",
+		" isSmartphone=",isSmartphone,
+		" canvas.width=",canvas.width,
+		" canvas.height=",canvas.height,
+		" textsize=",textsize,
+		" textsizeR=",textsizeR);
+
+  console.log("document.documentElement.clientHeight=",
+	      document.documentElement.clientHeight,
+	      "nnwindow.innerHeight=",window.innerHeight,
+	      "\ncanvasWindow.clientHeight=",canvasWindow.clientHeight);
+
+
+  // update dependent graphics elements
+
+  // must update canvas boundaries since canvas may be resized
+  drawsim.xPix0  =0.12*canvas.width;
+  drawsim.xPixMax=0.98*canvas.width;
+  drawsim.yPix0  =0.85*canvas.height;
+  drawsim.yPixMax=0.02*canvas.height;
+  drawsim.wPix=drawsim.xPixMax-drawsim.xPix0;
+  drawsim.hPix=drawsim.yPixMax-drawsim.yPix0;  //<0
+
+  if(drawsim!==null){drawsim.drawSim(it);}//!! draw after resize
+
+
+ }
 
 
