@@ -6,7 +6,8 @@
 // useLiveData=false: obtained data server-side 
 // via script updateCoronaInput.sh. Stable but need to upload once a day
 
-var useLiveData=false;  //!!! will be changed by upload script, 2 versions
+var useLiveData=true;  //!!!
+//var useLiveData=false;  //!!!
 
 // debugApple=true for debugging of devices w/o console (ipad) redirect
 // it to a html element using console-log-html.js
