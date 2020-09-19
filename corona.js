@@ -264,6 +264,8 @@ var textsize=14;
 var hasChanged=false;
 var isSmartphone=false;
 
+corona=new CoronaSim();
+
 
 
 // ##############################################################
@@ -289,8 +291,9 @@ var isSmartphone=false;
 
 //called ONLY in the <body onload> and toggleData event
 function getGithubData() {
-  console.log("in getGithubData");
-  corona=new CoronaSim(); //!!
+  var log=false;
+  if(log) console.log("in getGithubData");
+  //corona=new CoronaSim(); //!!
 
   if(debugApple){
     console.log("in ConsoleLogHTML");
@@ -314,6 +317,7 @@ function getGithubData() {
   // because of annoying undefined time order in fetch, set at beginnng!
 
   dataGit2 = JSON.parse(dataGitLocalTests); // must be different name!!
+
   console.log("dataGit2=",dataGit2);
   console.log("dataGit2.England.data[100]=",dataGit2.England.data[100]);
 
@@ -1143,8 +1147,8 @@ function estimateR(itmin_c, itmax_c, Rcalib){
   }
 
 
-  console.log("\n\nleaving estimateR: Rcalib=", Rcalib,
-	      "\n\nRtime=", Rtime,"\n");
+  //console.log("\n\nleaving estimateR: Rcalib=", Rcalib,
+//	      "\n\nRtime=", Rtime,"\n");
 
 } // estimateR
 
@@ -2556,7 +2560,7 @@ DrawSim.prototype.drawREstimate=function(it){
 DrawSim.prototype.drawSim=function(it,q){
 //######################################################################
 
-  console.log("\n\nin DrawSim.drawSim: it=",it," textsize=",textsize);
+ // console.log("\n\nin DrawSim.drawSim: it=",it," textsize=",textsize);
 
 
   // global vars canvas.width, canvas.height,

@@ -50,6 +50,8 @@ td{
 
 .orange{color:#E60;}
 
+.lila{color:#70A;}
+
 .green{color:#090;}
 
 .lightgreen{color:#0F0;}
@@ -63,6 +65,10 @@ td{
 
 .bggraysimple {  background-color:#CCC;
   font-weight:bold;
+}
+
+.italic {
+  font-style: italic;
 }
 
 
@@ -406,9 +412,35 @@ screen and (min-resolution: 1.5dppx) and (min-aspect-ratio: 1/1){
   right:   2vw;
 }
 
+}
+
+/*#########################################################*/
+/* addtl smartphone very landscape settings (Samsung etc)
+/*#########################################################*/
+
+@media screen and (max-height: 600px) and (min-aspect-ratio: 5/3), 
+screen and (max-width: 600px) and (min-aspect-ratio: 5/3),
+screen and (min-resolution: 1.5dppx) and (min-aspect-ratio: 5/3){
+
+
+
+#countryData{ /* mobile very landscape */
+  position: absolute;
+  top:     14vh; 
+  right:   30vmin;
+  z-index: 4; # the higher the more on top
+}
+
+#dataTypeDiv{ 
+  position: absolute;
+  top:     14vh; 
+  right:   2vmin;
+  z-index: 4;   /* mobile very landscape */
+}
 
 
 }
+
 
 /*#########################################################*/
 /* addtl smartphone portrait settings (geht NICHT nested!)
@@ -500,14 +532,19 @@ input[type=range]::-webkit-slider-thumb {
   z-index: 4; 
 }
 
-#countryData{ /*mobile, portrait */
+#dataTypeDiv{ 
   top:   130vmin;
   left:  2vmin;
 }
 
-#dataTypeDiv{  /*mobile, portrait */
+#countryData{ /*mobile, portrait */
+  top:   136vmin;
+  left:  2vmin;
+}
+
+#home{  /*mobile, portrait */
   top:   130vmin;
-  left:  38vmin;
+  left:  44vmin;
 }
 
 #calibrateDiv{ /*mobile portrait */
@@ -517,10 +554,6 @@ input[type=range]::-webkit-slider-thumb {
 }
 
 
-#home{ 
-  top:   136vmin;
-  left:  2vmin;
-}
 
 #impressum{ /*mobile, portrait */
   top:   136vmin;

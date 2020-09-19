@@ -280,6 +280,7 @@ function canvas_resize(){
 
   textsize=(isSmartphone) ? 0.03*sizeminWindow : 0.02*sizeminWindow;
   textsizeR=1.5*textsize;
+  if(false){
   console.log("canvas_gui.canvas_resize():",
 		" isSmartphone=",isSmartphone,
 		" canvas.width=",canvas.width,
@@ -291,7 +292,7 @@ function canvas_resize(){
 	      document.documentElement.clientHeight,
 	      "nnwindow.innerHeight=",window.innerHeight,
 	      "\ncanvasWindow.clientHeight=",canvasWindow.clientHeight);
-
+  }
 
   // update dependent graphics elements
 

@@ -17,8 +17,8 @@
 <h1> Information zur Simulation der Coronavirus Covid-19 Pandemie</h1>
 
 <h3> Motivation</h3>
-
-Diese <a href="index.html">interaktive Simulation</a> soll folgendes verdeutlichen:
+ 
+Diese <a href="index.html">interaktive Simulation und Datenvisualisierung</a> soll folgendes verdeutlichen:
 <ul>
 <li> Wie verz&ouml;gert sich Ma&szlig;nahmen zur Isolation oder auch
   anders verursachte &Auml;nderungen der Infektionsrate auf die
@@ -29,7 +29,8 @@ Diese <a href="index.html">interaktive Simulation</a> soll folgendes verdeutlich
 <li> wie schwierig die <span class="important">
   Reproduktionszahl <i>R</i></span>  und ihr
   zeitlicher Verlauf zu sch&auml;tzen ist: Je nach den Werten der
-  anderen Parametern wie Zeitraum oder Häufigkeit der Tests ändern
+  anderen Parameter wie Peride der
+  Ansteckbarkeit, mittlerer Testzeitpunkt sowie Testh\"aufigkeit ändern
   sich die "Best-Fit"-Werte und der Zeitverlauf von <i>R</i>,
 <li> dass gesch&auml;tzte Werte wie <i>R=0.92</i>
   ohne <span class="important">Fehlerintervalle</span>  
@@ -38,19 +39,102 @@ Diese <a href="index.html">interaktive Simulation</a> soll folgendes verdeutlich
   Gegenwart n&auml;hert. All das k&ouml;nnen Sie hier interaktiv untersuchen!
 </ul>
 
-Schlie&szlig;lich wird deutlich, wie wichtig Zufalls-Stichproben
- sind, um die unbekannte tats&auml;chliche Sterbewahrscheinlichkeit und den Ausma&szlig;
+<p class="italic"> <span class="lila">Update Sptember 2020: </span> Obiger Text wurde im April 2020
+  formuliert. Nun dringt es langsam ins Bewusstsein, wie stark die
+  Testrate die Beurteilung der Lage verzerren kann. Allein durch
+  Erh\"ohung der Testh\"aufigkeit wird  der beim RKI
+  berechnete R-Wert erh\"oht, was offensichtlich widersinnig ist. </span></p>
+
+<h3> Definitionen</h3>
+ 
+Wichtig ist es, Folgendes zu unterscheiden:
+
+
+<ul>
+<li> <span class="important">
+  Reproduktionszahl <i>R</i></span>: Wie viele Menschen ein
+  Infizierter im Mittel ansteckt. Manchmal wird noch zwischen  
+<i>R<sub>0</sub></i> (Ansteckungszahl bei Durchseuchung Null) und dem
+tats\"achlichen, z.B. vom RKI herausgegebenen R-Wert
+unterschieden. </i> In der Simulation sind immer
+die <i>R<sub>0</sub></i>-Werte angegeben</i>
+
+<li> <span class="important"> Durchseuchung  <i>X</i></span>: Der
+  Anteil aller bisher Infizierten (nicht symptomatisch Erkrankten!) in
+  der Bev\"olkerung, unabh\"angig vom Ausgang (aktuell infiziert,
+  genesen oder tot)
+
+<li> <span class="important"> Immunit\"atsgrad  <i>I</i></span>:
+  Wenn alle Infizierten immun werden und keine Impfung verf\"ugbar
+  ist, ist <i>I=X</i>, bei Teilimmunit\"at sinkt <i>I</i>, mit
+  Impfungen steigt er
+
+<li> <span class="important"> Infektionsrate <i>x</i></span>: Zahl
+  der Neuinfizierten in einem gewissen Zeitraum &Delta;t. Falls
+  Doppelinfektionen ausgeschlossen werden, g\"alte bei einer
+  Bev\"olkerungszahl <i>n</i>
+<br><center>
+<i>x(t)=n [ X(t)-X(t-&Delta;t) ]</i>
+</center><br>
+
+<li> <span class="important"> Testrate <i>n<sub>t</sub></i></span>: Zahl der
+    Tests (egal ob positiv oder nicht) pro Tag oder Woche 
+
+<li> <span class="important"> Positivanteil  <i>X<sub>t</sub></i></span>: Der
+  Anteil aller bisher positiv Getesteten 
+  in der Bev\"olkerung. Dieser ist <i> nicht</i> gleich <i>X</i>, denn
+<ul>
+<li> nicht jeder Infizierte wird getestet (Dunkelfeld). Ferner sind die Tests
+  nicht zu 100% <span class="important"> sensitiv </span> (Fehler erster Art, <i>false negatives</i>),
+<li> nicht jeder positiv Getestete ist infiziert, denn die Tests haben eine
+  nichtperfekte <span class="important"> Spezifizit\"at </span>
+  (Fehler zweiter Art, <i>false 
+  positives</i>)
+</ul>
+
+
+<li> <span class="important"> Positivrate <i>x<sub>t</sub></i></span>:
+  Zahl der positiven Testergebnisse im Zeitraum &Delta;t. Falls jeder
+  h\"ochstens einmal getestet w\"urde, g\"alte 
+<br><br><center>
+<i>x<sub>t</sub>(t)=n [X<sub>t</sub>(t)-X<sub>t</sub>(t-&Delta;t)]</i>
+</center><br>
+
+<li> <span class="important"> <i>Y</i>, <i>Y<sub>t</sub></i> und <i>y<sub>t</sub></i></span>:
+Anteilswert an Genesenen in der Bev\"olkerung sowie der Anteilswert
+  und die Rate an Genesenen, welche vorher positiv getestet
+  wurden. Dies ist tricky: Sind symptomfrei positiv Getestete
+  zum Testzeitpunkt bereits genesen oder nicht? Die entsprechenden Daten sind deshalb
+  h\"aufig nicht konsistent/brauchbar.
+
+<li><span class="important"> Case  fatality rate (CFR) </span>:
+Anteil der positiv Getesteten, die schlie\3lich <i> urs\"achlich</i>  an
+    Covid-19 sterben
+</ul>
+
+
+ Ausma&szlig;
  der "Durchseuchung" (was f&uuml;r ein Wort!) abzusch&auml;tzen. In
  der aktuellen Phase kann n&auml;mlich nur das Verh&auml;ltnis
  aus der Zahl der
- Covid-19 Toten und der positiv Getesteten gesch&auml;tzt werden, in Deutschland liegt es
- bei etwa 4%, was bei einem Hellfeld von
+ Covid-19 Toten und der positiv Getesteten gesch&auml;tzt werden, die
+ sogenannte <span class="important"> case
+    fatality rate (CFR) </span>. In Deutschland liegt sie (Stand Mai 2020)
+ bei etwa 4-5%, was bei einem Hellfeldanteil von
  10% einer Sterbewahrscheinlichkeit von 0.4% entspr&auml;che. Die
  Kenntnis der <span class="important"> wahren Werte der
  Sterbewahrscheinlichkeit</span>  und der
  <span class="important">Durchseuchung</span> ist
  eminent wichtig als Grundlage politischer Entscheidungen.
-<br><br>
+<br>
+Der Hellfeldanteil ist leider unbekannt:
+<ul> 
+<li> 
+<p class="italic"> <span class="lila">Update 2020-09: </span> 
+Nun liegt der Positiv-Anteil, die sog. <span class="important"> case
+    fatality rate (CFR) </span> um 1%, und man k\"onnte bei einem
+  Hellfeld von weiterhin 10% auf eine <span class="important"> infection
+    fatality rate (IFR) </span> von 1 &permil; schlie\3en.</p>
 
 <i>Wichtig:</i> Allen Covid-19-Modellen und Simulationen ist
 gemeinsam, dass sie <span class="important">keine Prognosen</span>
