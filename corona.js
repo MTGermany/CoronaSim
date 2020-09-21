@@ -668,44 +668,25 @@ function initializeData(country) {
 
 
  //##############################################################
- // !! for inline nondynamic  testing: add testcode here
+ // !! for inline nondynamic testing: add testcode here
  //##############################################################
 
-  if(false){
-    var Rtest=[0.9485972290755083, 0.579953251679159, 0.7226759352548395, 0.7014451815219522, 0.8074914584533439, 1.2476826711037865, 0.8196206675854572, 1.2297994838996873, 1.1199730711576068, 1.5872223560093257, 1.0573596644821395, 1.044553507363983, 1.2235760917721668];
-
-// 14 days later
-    var Rtest14=[0.579953251679159, 0.7226759352548395, 0.7014451815219522, 0.8074914584533439, 1.2476826711037865, 0.8196206675854572, 1.2297994838996873, 1.1199730711576068, 1.5872223560093257, 1.0573596644821395, 1.044553507363983, 1.2235760917721668];
-
-// 28 days later
-    var Rtest28=[0.7226759352548395, 0.7014451815219522, 0.8074914584533439, 1.2476826711037865, 0.8196206675854572, 1.2297994838996873, 1.1199730711576068, 1.5872223560093257, 1.0573596644821395, 1.044553507363983, 1.2235760917721668];
-
-// 56 days later
-    var Rtest56=[0.8074914584533439, 1.2476826711037865, 0.8196206675854572, 1.2297994838996873, 1.1199730711576068, 1.5872223560093257, 1.0573596644821395, 1.044553507363983, 1.2235760917721668];
-
+  if(true){
+    var Rtest=[1,1,1,1,1];
+    var useInitSnap=false;
+    var itstart=0;
+    var itend=56;
     console.log("\n\ninline nondy. Testing: Rtest=",Rtest);
-    var sse=SSEfunc(Rtest,null,true,0);
-    console.log("\nSSEfunc(Rtest,null,true,0)=",sse);
-
-    console.log("\n\nRtest14=",Rtest14);
-    var sse14=SSEfunc(Rtest14,null,true,14);
-    console.log("\nSSEfunc(Rtest14,null,true,14)=",sse14);
-
-    console.log("\n\nRtest28=",Rtest28);
-    var sse28=SSEfunc(Rtest28,null,true,28);
-    console.log("\nSSEfunc(Rtest28,null,true,28)=",sse28);
-
-    console.log("\n\nRtest56=",Rtest56);
-    var sse56=SSEfunc(Rtest56,null,true,56);
-    console.log("\nSSEfunc(Rtest56,null,true,56)=",sse56);
-    var sse56cut=SSEfunc(Rtest56,null,true,56,itmax-28);
-    console.log("\nSSEfunc(Rtest56,null,true,56,itmax-28)=",sse56cut);
-
-    console.log("\nend initializeData: country=",country);
+    console.log("calling  SSEfunc(Rtest,null,true,0,56,42,useInitSnap)");
+    var sse=SSEfunc(Rtest,null,true,0,56,42,useInitSnap);
+    console.log("sse=",sse);
     //alert('stopped simulation with alert');
     //setTimeout(function(){  alert('hello');}, 3000);  
     //alert('hi');
   }
+
+
+  console.log("\nend initializeData: country=",country);
 
 } // initializeData(country);
 
@@ -791,94 +772,98 @@ NOTICE: fmin.nelderMead needs one-param SSEfunc SSEfunc(R_arr):
  // Rtime => used in Rfun_time(t)=Rfun_time(it) if it>=0
  //                  Rfun_time(t) data driven if t<0
 
-function SSEfunc(Rarr, fR, logging, itStart, itMax) {
-
-  //console.log("in SSE func: Rarr=",Rarr);
-
+function SSEfunc(Rarr, fR, logging, itStart, itMax, itSnap, useInitSnap) {
+  var takeSnapshot=false;
   if( typeof fR === "undefined"){
     fR=[]; for(var j=0; j<Rarr.length; j++){fR[j]=0;}
     //console.log("inside: fR=",fR);
   }
   if( typeof logging === "undefined"){logging=false;}
-  if( typeof itStart === "undefined"){itStart=itmin_calib;}
-  if( typeof itMax === "undefined"){itMax=itmax_calib;}
+  if( typeof itStart === "undefined"){itStart=0;}
+  if( typeof itMax === "undefined"){itMax=data_itmax-1;;}
+  if( typeof useInitSnap === "undefined"){useInitSnap=false;}
+  if( typeof itSnap === "undefined"){takeSnapshot=false;}
+  else{takeSnapshot=true;}
 
-  var idataStart=data_idataStart+itStart;
 
-
-  //if(true){console.log("SSEfunc: itStart=",itStart,
-  if(logging){console.log("SSEfunc: itStart=",itStart,
-			  " itMax=",itMax,
-			  " data_itmax=",data_itmax," itmax=",itmax);}
-
-  // simulation init get right structure of this.x[] 
-  // and scales up/down to nxtStart at itStart
-
-  var nxtStart=data_cumCases[idataStart];
-  corona.init(itStart, logging); 
-  //corona.init(itStart, false); 
-
-  // calculate SSE
-
-  var sse=0;
   if(logging){
-    console.log("SSEfunc: i=0, nxt=n0*corona.xt=",n0*corona.xt,
-		" data: nxtStart=",nxtStart," nyt=",n0*corona.yt);
+    console.log("in SSE func: Rarr=",Rarr,
+		" itStart=",itStart," itMax=",itMax,
+		" itSnap=",itSnap," useInitSnap=",useInitSnap,
+		" data_itmax=",data_itmax," itmax=",itmax);
   }
 
-  if(logging){console.log("Rtime=",Rtime);}
+
+
+  // SSEfunc: start corona simulation, either set init state
+  // data-driven from scratch
+  // or use a snapshhot taken earlier
+
+  var nxtStart=data_cumCases[data_idataStart];
+
+  if(useInitSnap){ // !! snapshot must be taken at itStart!
+    if(!corona.snapAvailable){
+      console.log("SSE: error: ",
+		  " snapshot initialization requested but not available");
+      return(" SSE failed!");
+    }
+    corona.setStateFromSnapshot();
+  }
+
+  else{
+    //corona.init(itStart, logging); 
+    corona.init(itStart, false); 
+  }
+
+
+  // SSEfunc: calculate SSE
+
+  if(logging){
+    console.log("SSEfunc: start calculating SSE: Rarr=",Rarr,
+		" itStart=",itStart, " nxt=n0*corona.xt=",n0*corona.xt,
+		" data: nxtStart=",nxtStart," nyt=",n0*corona.yt,"\n\n");
+  }
+
+  var sse=0;
   for(var it=itStart; it<itMax; it++){
 
-    var inCalib=((it>=itmin_calib)&&(it<itmax_calib)); 
-    //var inCalib=true;
     var indexRarr=Math.min(getIndexCalib(it-itStart),Rarr.length-1);
-    var indexRtime=Math.min(getIndexCalib(it),Rtime.length-1);
     var indexCalib=Math.min(getIndexCalib(it)-getIndexCalib(itmin_calib),
 			    Rarr.length-1);
-    var R_actual=(inCalib) ? Rarr[indexRarr] : Rtime[indexRtime];
-
+    var R_actual= Rarr[indexRarr]; //!!! only Rarr used in SSEfunc, 
+                                   // not global Rtime
     var nxtData=data_cumCases[data_idataStart+it];
     var nxtSim=n0*corona.xt;
-    if(logging&&((it<itStart+5)||(it>itMax-5))){
-    //if(logging&&true){
-    //if(logging&&false){
-      console.log("SSEfunc before update: it=",it,
-		  " R_actual=",R_actual.toFixed(2),
-		  " Rarr[indexRarr]=",Rarr[indexRarr].toFixed(2),
-		  " Rtime[indexRtime]=",Rtime[indexRtime].toFixed(2),
-		  " nxtData=",nxtData,
-		  " nxtSim=",Math.round(nxtSim),
-		  " nytSim=",Math.round(n0*corona.yt),
-		  "");
+    corona.updateOneDay(R_actual, it, logging); // in SSE
+    if(it==itSnap){corona.takeSnapshot();}
+    sse+=Math.pow(Math.log(nxtData)-Math.log(nxtSim),2); //!! Math.log
 
-    }
-
-    corona.updateOneDay(R_actual); 
-
-    if(inCalib){ //!!
-      sse+=Math.pow(Math.log(nxtData)-Math.log(nxtSim),2); //!! Math.log
-    }
-
-  // MT 2020-07 penalize negative R or R near zero
-
-    var RlowLimit=0.2;
+    var RlowLimit=0.2;  // penalize negative R or R near zero
     var prefact=1;
     if(R_actual<RlowLimit){
       sse += prefact*Math.pow(RlowLimit-R_actual,2);
     }
+
+    //if(logging&&((it<itStart+5))){
+    //if(logging&&((it<itStart+5)||(it>itMax-5))){
+    if(logging&&true){
+    //if(logging&&false){
+
+      console.log("SSEfunc before update: it=",it," itSnap=",itSnap,
+		  " R_actual=",R_actual.toFixed(2),
+		  " Rarr[indexRarr]=",Rarr[indexRarr].toFixed(2),
+		  " nxtData=",nxtData,
+		  " nxtSim=",Math.round(nxtSim),
+		  " nytSim=",Math.round(n0*corona.yt),
+		  " snapshot=",corona.snapshot);
+    }
+
   }
 
-
-
-  /*
   // calculate the numerical gradient as side effect
   // only if gradient-based method. 
-  // These fail here=>do not need to calc grad
 
- 
-  */
 
-  //if(true){console.log("SSEfunc: returning SSE=",sse);}
   if(logging){console.log("SSEfunc: returning SSE=",sse);}
   return sse;
 }
@@ -1003,6 +988,7 @@ function getIndexCalibmax(itime){
 // =================================================
 // determines calibrated Rtime[]
 // HERE inside calibrate() the control!
+// location for inline nondynamic testing: search for these words
 // =================================================
 
 function calibrate(){
@@ -1445,7 +1431,7 @@ function doSimulationStep(){
  
   var logging=false;  // doSimulationStep: logging "allowed"
   //var logging=(it<3);
-  corona.updateOneDay(R_actual,logging);
+  corona.updateOneDay(R_actual,it,logging); // in doSimulationStep
   it++;
 
   //if(false){
@@ -1482,6 +1468,7 @@ function CoronaSim(){
   this.x=[]; // age struture of fraction infected at given timestep
   this.xohne=[]; // age structure without deleting by recover,death 
                  // (!!needed for correct recovery rate and balance x,y,z!)
+  this.snapAvailable=false; // initially, no snapshot of the state exists
 }
 
 
@@ -1492,8 +1479,6 @@ CoronaSim.prototype.init=function(itStart,logging){
 
   var idataStart=data_idataStart+itStart;
   var nxtStart=data_cumCases[idataStart]; // target number of cum cases at iStart
-
-  //var idata0=data_idataStart+it0;
 
 
 
@@ -1555,16 +1540,16 @@ CoronaSim.prototype.init=function(itStart,logging){
 
   // data-driven warmup
 
-  for(it=it0; it<itStart; it++){ //!!! it reset (do NOT use var!)
-    var Rt=Rfun_time(it);
-    if(logging){console.log("corona.init warmup before update: it=",it,
+  for(var its=it0; its<itStart; its++){ 
+    var Rt=Rfun_time(its);
+    if(logging){console.log("corona.init warmup before update: its=",its,
 			    " pTest=",pTest,
 			    " R=",Rt.toFixed(2),
 			    " nx=",n0*this.xAct,
 			    " nxt=",n0*this.xt,
 			    " nyt=",n0*this.yt,
 			    "");}
-    this.updateOneDay(Rt,logging); //!! do not use true!!because of calibr
+    this.updateOneDay(Rt,its,logging); // in CoronaSim, data-driven warmup
   }
 
 
@@ -1595,6 +1580,55 @@ CoronaSim.prototype.init=function(itStart,logging){
 
 
 
+//#################################################################
+  // save/set complete state (take snapshot of all the variables needed
+  // to resume the simulation at a given timestep later on:
+
+  // (1) this.x[] (this.xAct=sum(this.x[]),
+  // (2) this.y, this.z  (in contrast to x[] and xAct cumulative, 
+  //                      => need to save as well 
+  //                      although not contained in dynamics)
+  // (3) this.xyz (cumulated this.x[0] IN dynamics (herd immunity fraction)
+  //               canNOT be derived from the other quantities
+  // (4) this.xt, this.yt (outside dynamics 
+  //                       but needed for calibr, at least xt)
+  // called by SSEfunc which is also in control of the time itsnap for it
+//#################################################################
+
+CoronaSim.prototype.takeSnapshot=function(){
+  this.snapAvailable=true;
+  this.snapshot={
+    x:    [],
+    xAct: this.xAct,
+    y:    this.y,
+    z:    this.z,
+    xyz:  this.xyz,
+    xt:   this.xt,
+    yt:   this.yt
+  }
+
+  for(var tau=0; tau<taumax; tau++){ // copy by value
+    this.snapshot.x[tau]=this.x[tau];
+  }
+}
+
+
+
+CoronaSim.prototype.setStateFromSnapshot=function(){
+  for(var tau=0; tau<taumax; tau++){
+    this.x[tau]=snapshot.x[tau];
+  }
+  this.xAct=this.snapshot.xAct;
+  this.y   =this.snapshot.y;
+  this.z   =this.snapshot.y;
+  this.xyz =this.snapshot.xyz;
+  this.xt  =this.snapshot.xt;
+  this.yt  =this.snapshot.yt;
+}
+
+
+
+
 
 //#################################################################
 // central update step  ("o" means convolution)
@@ -1608,7 +1642,9 @@ CoronaSim.prototype.init=function(itStart,logging){
 
 //#################################################################
 
-CoronaSim.prototype.updateOneDay=function(R,logging){ 
+CoronaSim.prototype.updateOneDay=function(R,it,logging){ 
+
+  if( typeof logging === "undefined"){logging=false;}
 
 
   if(logging){  //filter needed because of called mult times in calibr!
