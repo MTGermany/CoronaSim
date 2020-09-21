@@ -1015,15 +1015,17 @@ function calibrate(){
 
     var log=false;
     var nCalibIntervals=7; // multiples of 14 days
-    var nOverlap=1;
+    var nOverlap=1;        // multiples of 14 days (=1 is best!)
+    var ditOverlap=(nOverlap>0) ? 14*nOverlap : 1;
     var dn=nCalibIntervals-nOverlap;
     var nPeriods=Math.round((data_itmax-1)/(14*dn));
     if(log){console.log("nPeriods=",nPeriods,
 		" itmax_c(nPeriods-1)=",
 			14*((nPeriods-1)*dn+nCalibIntervals));}
     for(var ip=0; ip<nPeriods; ip++){
-      itmin_c=14*ip*dn;
-      itmax_c=itmin_c+14*nCalibIntervals;
+      itmin_c=(ip==0) ? 0 : itsnap; //14*ip*dn;
+      //itmax_c=itmin_c+14*nCalibIntervals;
+      itmax_c=14*(ip*dn+1*nCalibIntervals); // THIS is fixed, not itmin_c/snap
       if(ip==nPeriods-1){itmax_c=data_itmax-1;}
 
       itmin_calib=itmin_c; // global variables for the minimal SSE function
@@ -1043,7 +1045,7 @@ function calibrate(){
       if(log)
       console.log("\n\n\n\ncalibration: period ip=",ip,
 		  "itmin_c=",itmin_c," itmax_c=",itmax_c,
-		  " itsnap=",itmax_c-14*nOverlap-1,
+		  " itsnap=",itmax_c-14*nOverlap,
 		  " useInitSnap=",useInitSnap);
 
       var sse=SSEfunc(Rcalib,null,false,itmin_c,itmax_c,-1,useInitSnap);
@@ -1059,7 +1061,8 @@ function calibrate(){
 
       // calculate snapshot for init of next period
 
-      var itsnap=itmax_c-14*nOverlap-1; 
+      var itsnap=Math.min(itmax_c-14*nOverlap, itmax_c-1); //!!
+      //var itsnap=itmax_c-14*nOverlap-1; 
       SSEfunc(Rcalib,null,false,itmin_c,itmax_c,itsnap,useInitSnap);
       if(log) console.log(" snapshot for initialiation in next period:",
 		  corona.snapshot);
@@ -1069,7 +1072,7 @@ function calibrate(){
     // at the end, calculate estimation errors
 
     useInitSnap=false; //!!!
-    itsnap=14*(1*dn)-1; //first snapshot to compare with
+    itsnap=14*dn; //first snapshot to compare with
     SSEfunc(Rtime,null,log,0, data_itmax-1,itsnap,useInitSnap);
     if(log) console.log("corona.snapshot=",corona.snapshot);
 
