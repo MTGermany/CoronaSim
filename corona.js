@@ -66,11 +66,12 @@ var itmaxinit=Math.round(
                 // round because of daylight saving time complications
 var itmax=itmaxinit; // can be >itmaxinit during interactive simulation
 
-var itmin_calib; // !!! start calibr time interval w/resp to dayStartMar
+var itmin_calib; // !!! needed global var! start calibr time interval w/resp to dayStartMar
                  //     = dataGit_idataStart+1
-var itmax_calib; // !!! end calibr time interval =^ data_itmax-1 
+var itmax_calib; // !!! needed global var! end calibr time interval =^ data_itmax-1 
                  // should be split if there are more than approx 
                  // 20 weeks of data
+var useInitSnap;
 
 // data related global variables
 // fetch with https://pomber.github.io/covid19/timeseries.json
@@ -667,24 +668,6 @@ function initializeData(country) {
 
 
 
- //##############################################################
- // !! for inline nondynamic testing: add testcode here
- //##############################################################
-
-  if(true){
-    var Rtest=[1,1,1,1,1];
-    var useInitSnap=false;
-    var itstart=0;
-    var itend=56;
-    console.log("\n\ninline nondy. Testing: Rtest=",Rtest);
-    console.log("calling  SSEfunc(Rtest,null,true,0,56,42,useInitSnap)");
-    var sse=SSEfunc(Rtest,null,true,0,56,42,useInitSnap);
-    console.log("sse=",sse);
-    //alert('stopped simulation with alert');
-    //setTimeout(function(){  alert('hello');}, 3000);  
-    //alert('hi');
-  }
-
 
   console.log("\nend initializeData: country=",country);
 
@@ -772,24 +755,27 @@ NOTICE: fmin.nelderMead needs one-param SSEfunc SSEfunc(R_arr):
  // Rtime => used in Rfun_time(t)=Rfun_time(it) if it>=0
  //                  Rfun_time(t) data driven if t<0
 
-function SSEfunc(Rarr, fR, logging, itStart, itMax, itSnap, useInitSnap) {
-  var takeSnapshot=false;
+function SSEfunc(Rarr, fR, logging, itStartInp, itMaxInp, 
+		 itSnapInp, useInitSnapInp) {
   if( typeof fR === "undefined"){
     fR=[]; for(var j=0; j<Rarr.length; j++){fR[j]=0;}
     //console.log("inside: fR=",fR);
   }
   if( typeof logging === "undefined"){logging=false;}
-  if( typeof itStart === "undefined"){itStart=0;}
-  if( typeof itMax === "undefined"){itMax=data_itmax-1;;}
-  if( typeof useInitSnap === "undefined"){useInitSnap=false;}
-  if( typeof itSnap === "undefined"){takeSnapshot=false;}
-  else{takeSnapshot=true;}
+  var itStart=( typeof itStartInp === "undefined") ? itmin_calib : itStartInp;
+  var itMax=( typeof itMaxInp === "undefined") ? itmax_calib : itMaxInp;
+  var itSnap=( typeof itSnapInp === "undefined") ? -1 : itSnapInp;
+  takeSnapshot=( typeof itSnapInp === "undefined") ? false : true;
+
+  //if( typeof useInitSnapInp === "undefined"){// leave at global state
 
 
   if(logging){
-    console.log("in SSE func: Rarr=",Rarr,
+    console.log("in SSE func:",
+	//	" Rarr=",Rarr, "\n",
 		" itStart=",itStart," itMax=",itMax,
-		" itSnap=",itSnap," useInitSnap=",useInitSnap,
+		" itSnap=",itSnap," takeSnapshot=",takeSnapshot,
+		" useInitSnap=",useInitSnap,
 		" data_itmax=",data_itmax," itmax=",itmax);
   }
 
@@ -807,19 +793,25 @@ function SSEfunc(Rarr, fR, logging, itStart, itMax, itSnap, useInitSnap) {
 		  " snapshot initialization requested but not available");
       return(" SSE failed!");
     }
+    if(logging){
+      console.log("SSEfunc; initializing with corona.snapshot: corona.snapshot.it=",corona.snapshot.it);
+    }
     corona.setStateFromSnapshot();
   }
 
   else{
+    if(logging){console.log("SSEfunc; initializing from scratch with data");}
     //corona.init(itStart, logging); 
     corona.init(itStart, false); 
   }
+  
+  
+  // SSEfunc: calculate SSE 
 
-
-  // SSEfunc: calculate SSE
-
-  if(logging){
-    console.log("SSEfunc: start calculating SSE: Rarr=",Rarr,
+  //if(logging){ //!! always filter logging!!
+  if(logging&&false){ //!! always filter logging!!
+    console.log("SSEfunc: start calculating SSE:",//" Rarr=",Rarr,
+		" takeSnapshot=",takeSnapshot,
 		" itStart=",itStart, " nxt=n0*corona.xt=",n0*corona.xt,
 		" data: nxtStart=",nxtStart," nyt=",n0*corona.yt,"\n\n");
   }
@@ -834,8 +826,10 @@ function SSEfunc(Rarr, fR, logging, itStart, itMax, itSnap, useInitSnap) {
                                    // not global Rtime
     var nxtData=data_cumCases[data_idataStart+it];
     var nxtSim=n0*corona.xt;
-    corona.updateOneDay(R_actual, it, logging); // in SSE
-    if(it==itSnap){corona.takeSnapshot();}
+
+    if(it==itSnap){corona.takeSnapshot(itSnap);} //BEFORE corona.updateOneDay
+    //corona.updateOneDay(R_actual, it, false); // in SSE
+    corona.updateOneDay(R_actual, it, logging); // in SSE never logging=true!
     sse+=Math.pow(Math.log(nxtData)-Math.log(nxtSim),2); //!! Math.log
 
     var RlowLimit=0.2;  // penalize negative R or R near zero
@@ -844,19 +838,20 @@ function SSEfunc(Rarr, fR, logging, itStart, itMax, itSnap, useInitSnap) {
       sse += prefact*Math.pow(RlowLimit-R_actual,2);
     }
 
-    //if(logging&&((it<itStart+5))){
-    //if(logging&&((it<itStart+5)||(it>itMax-5))){
-    if(logging&&true){
-    //if(logging&&false){
+    //if(logging&&(it>=82)&&(it<90)){
+    //if(logging&&true){
+    if(logging&&false){
 
       console.log("SSEfunc before update: it=",it," itSnap=",itSnap,
 		  " R_actual=",R_actual.toFixed(2),
 		  " Rarr[indexRarr]=",Rarr[indexRarr].toFixed(2),
 		  " nxtData=",nxtData,
 		  " nxtSim=",Math.round(nxtSim),
+		  " dsse=",
 		  " nytSim=",Math.round(n0*corona.yt),
-		  " snapshot=",corona.snapshot);
-    }
+		 // " dsse=",Math.pow(Math.log(nxtData)-Math.log(nxtSim),2),
+		 "");
+    }	 
 
   }
 
@@ -864,7 +859,9 @@ function SSEfunc(Rarr, fR, logging, itStart, itMax, itSnap, useInitSnap) {
   // only if gradient-based method. 
 
 
-  if(logging){console.log("SSEfunc: returning SSE=",sse);}
+  if(logging){console.log("SSEfunc: returning SSE=",sse,
+			 // "\nfor Rarr=",Rarr,
+			  "");}
   return sse;
 }
 
@@ -998,60 +995,185 @@ function calibrate(){
   var itmin_c=0;            // basis
   var itmax_c=data_itmax-1; //basis
 
-  var calibrateOnce=true; //!!!
+  var calibrateOnce=false; //!!!
 
   if(calibrateOnce){ //worse SSE but better fit near the end
     itmin_c=0;            
     itmax_c=data_itmax-1; 
-    indexcalibmin=getIndexCalib(itmin_c);
-    indexcalibmax=getIndexCalibmax(itmax_c);// *max: >=10d cal intv
+    icalibmin=getIndexCalib(itmin_c);
+    icalibmax=getIndexCalibmax(itmax_c);// *max: >=10d cal intv
     Rcalib=[]; // init
-    for(var indexcalib=indexcalibmin; indexcalib<=indexcalibmax; indexcalib++){
-      Rcalib[indexcalib-indexcalibmin]=(indexcalib==0) ? 1.2 : 1; //!!
+    for(var icalib=icalibmin; icalib<=icalibmax; icalib++){
+      Rcalib[icalib-icalibmin]=(icalib==0) ? 1.2 : 1; //!!
     }
     estimateR(itmin_c, itmax_c, Rcalib); // also transfers Rcalib to Rtime
     estimateErrorCovar_Rhist_sigmaRhist(itmin_c, itmax_c, Rtime); 
   }
 
 
-  else{ // !! finally works, one day of work!!
-    itmin_c=0; 
-    itmax_c=42;
-    indexcalibmin=getIndexCalib(itmin_c);
-    indexcalibmax=getIndexCalibmax(itmax_c);// *max: >=10d cal intv
+  else{ //!!!
+
+    var log=false;
+    var nCalibIntervals=7; // multiples of 14 days
+    var nOverlap=1;
+    var dn=nCalibIntervals-nOverlap;
+    var nPeriods=Math.round((data_itmax-1)/(14*dn));
+    if(log){console.log("nPeriods=",nPeriods,
+		" itmax_c(nPeriods-1)=",
+			14*((nPeriods-1)*dn+nCalibIntervals));}
+    for(var ip=0; ip<nPeriods; ip++){
+      itmin_c=14*ip*dn;
+      itmax_c=itmin_c+14*nCalibIntervals;
+      if(ip==nPeriods-1){itmax_c=data_itmax-1;}
+
+      itmin_calib=itmin_c; // global variables for the minimal SSE function
+      itmax_calib=itmax_c;
+      useInitSnap=(ip>0); 
+      var takeSnapshot=false; // taken separately at the end of a period
+
+     // get starting R
+
+      icalibmin=getIndexCalib(itmin_c);
+      icalibmax=getIndexCalibmax(itmax_c);
+      Rcalib=[];
+      for(var icalib=icalibmin; icalib<=icalibmax; icalib++){
+        Rcalib[icalib-icalibmin]=(icalib==0) ? 1.2 : 1; 
+      }
+
+      if(log)
+      console.log("\n\n\n\ncalibration: period ip=",ip,
+		  "itmin_c=",itmin_c," itmax_c=",itmax_c,
+		  " itsnap=",itmax_c-14*nOverlap-1,
+		  " useInitSnap=",useInitSnap);
+
+      var sse=SSEfunc(Rcalib,null,false,itmin_c,itmax_c,-1,useInitSnap);
+      if(log) console.log("\nFull specified SSEfun: sse=",sse);
+
+      var sseNull=SSEfunc(Rcalib,null,false);
+      if(log) console.log("Minimal SSEfun needed for estimate: sseNull=",sseNull);
+
+      // estimate 
+
+      estimateR(itmin_c, itmax_c, Rcalib);
+      estimateErrorCovar_Rhist_sigmaRhist(itmin_c, itmax_c, Rcalib);//per period!
+
+      // calculate snapshot for init of next period
+
+      var itsnap=itmax_c-14*nOverlap-1; 
+      SSEfunc(Rcalib,null,false,itmin_c,itmax_c,itsnap,useInitSnap);
+      if(log) console.log(" snapshot for initialiation in next period:",
+		  corona.snapshot);
+    }
+
+
+    // at the end, calculate estimation errors
+
+    useInitSnap=false; //!!!
+    itsnap=14*(1*dn)-1; //first snapshot to compare with
+    SSEfunc(Rtime,null,log,0, data_itmax-1,itsnap,useInitSnap);
+    if(log) console.log("corona.snapshot=",corona.snapshot);
+
+  } // multiple periods
+
+
+
+
+/*
+
+    icalibmin=getIndexCalib(itmin_c);
+    icalibmax=getIndexCalibmax(itmax_c);// *max: >=10d cal intv
     Rcalib=[]; // init
-    for(var indexcalib=indexcalibmin; indexcalib<=indexcalibmax; indexcalib++){
-      Rcalib[indexcalib-indexcalibmin]=(indexcalib==0) ? 1.2 : 1; 
+    for(var icalib=icalibmin; icalib<=icalibmax; icalib++){
+      Rcalib[icalib-icalibmin]=(icalib==0) ? 1.2 : 1; 
     }
     estimateR(itmin_c, itmax_c, Rcalib); // also transfers Rcalib to Rtime
+    estimateErrorCovar_Rhist_sigmaRhist(itmin_c, itmax_c, Rtime); 
 
-    itmin_c=42; 
-    itmax_c=data_itmax-1;
-    indexcalibmin=getIndexCalib(itmin_c);
-    indexcalibmax=getIndexCalibmax(itmax_c);// *max: >=10d cal intv
-    Rcalib=[]; // init
-    for(var indexcalib=indexcalibmin; indexcalib<=indexcalibmax; indexcalib++){
-      Rcalib[indexcalib-indexcalibmin]=(indexcalib==0) ? 1.2 : 1; 
+    // take snapshot by once caling SSE with appropr parameters
+    var sse=SSEfunc(Rtime,null,true,itmin_c,itmax_c,itsnap,useInitSnap);
+    console.log("\nEnd first calibr: itmin_c=",itmin_c," itmax_c=",itmax_c," sse=",sse,"\n\n\n");
+    //console.log(" corona.snapshot=",corona.snapshot);
+
+    // Test SSE for new interal with "ideal" init"
+
+    if(false){
+      useInitSnap=true;
+      itmin_c=itsnap; // from last snapshot
+      itmax_c=data_itmax-1;
+      itmin_calib=itmin_c;
+      itmax_calib=itmax_c;
+      itsnap=itmax_c-14; // for next calibration if applicable
+
+      // get starting R
+
+      icalibmin=getIndexCalib(itmin_c);
+      icalibmax=getIndexCalibmax(itmax_c);
+      Rcalib=[];
+      for(var icalib=icalibmin; icalib<=icalibmax; icalib++){
+        Rcalib[icalib-icalibmin]=(icalib==0) ? 1.2 : 1; 
+      }
+
+      // test with fixed R taken from COMPLETE calibration earlier
+
+      if(false){
+        for(var icalib=icalibmin; icalib<=icalibmax; icalib++){
+          Rcalib[icalib-icalibmin]=Rtime[icalib];
+	}
+        var sse2=SSEfunc(Rcalib,null,true,itmin_c,itmax_c,false,useInitSnap);
+        var sseNull=SSEfunc(Rcalib,null,true);
+        console.log("itmin_calib=",itmin_calib);
+        console.log("sse2=",sse2," sseNull=",sseNull);
+      }
+      
+ 
+      estimateR(itmin_c, itmax_c, Rcalib);
+
     }
-    estimateR(itmin_c, itmax_c, Rcalib); // also transfers Rcalib to Rtime
-
-
-    estimateErrorCovar_Rhist_sigmaRhist(0, data_itmax-1, Rtime); // uses calibrated Rtime[]
   }
+  */
 
 
 
 
+
+
+  //#####################################################
+
+
+  //var logging=false;
   var logging=false;
-  //var logging=true;
-
+  sse=SSEfunc(Rtime,null,logging,0,data_itmax);
   if(logging){
-    console.log("leaving calibrate: final synthesized R values+fit quality:");
+    console.log("leaving calibrate(): final synthesized R values+fit quality:");
     SSEfunc(Rtime,null,true,0,data_itmax);
     console.log("Rtime=", Rtime);
   }
+  else{
+    console.log(" leaving calibrate(): sse=",sse);
+  }
 
-}//calibrate()
+
+ //##############################################################
+ // !! for inline nondynamic testing: add testcode here
+ //##############################################################
+
+  if(false){
+    var Rtest=[1,1,1,1,1];
+    useInitSnap=false;
+    var itstart=0;
+    var itend=56;
+    console.log("\n\ninline nondy. Testing: Rtest=",Rtest);
+    console.log("calling  SSEfunc(Rtest,null,true,0,56,42,useInitSnap)");
+    var sse=SSEfunc(Rtest,null,true,0,56,42,useInitSnap);
+    console.log("Test: sse=",sse);
+    alert('stopped simulation with alert');
+    //setTimeout(function(){  alert('hello');}, 3000);  
+    //alert('hi');
+  }
+
+    //alert('stopped simulation with alert');
+}
+//calibrate()
 
 
 
@@ -1076,8 +1198,8 @@ function calibrate(){
 
 function estimateR(itmin_c, itmax_c, Rcalib){
 
-  var indexcalibmin=getIndexCalib(itmin_c);
-  var indexcalibmax=getIndexCalibmax(itmax_c);// *max: >=10d cal intv
+  var icalibmin=getIndexCalib(itmin_c);
+  var icalibmax=getIndexCalibmax(itmax_c);// *max: >=10d cal intv
 
   // set global variables itmin_calib, itmax_calib needed for 
   // fmin.nelderMead
@@ -1087,6 +1209,7 @@ function estimateR(itmin_c, itmax_c, Rcalib){
 
 
   console.log("\n\nestimateR: after initializing: Rcalib=",Rcalib,
+	      " itmin_c=",itmin_c, " itmax_c=",itmax_c,
 	      " before fmin.nelderMead");
 
   /** ##############################################################
@@ -1116,15 +1239,17 @@ function estimateR(itmin_c, itmax_c, Rcalib){
     //console.log("\nafter iter ",ic+1,": Rcalib=",Rcalib);
 
   }
-
+  console.log("estimateR: after fmin.nelderMead: Rcalib=",Rcalib);
 
 
 
   // copy tp global R table Rtime
 
+  //console.log("estimateR before new transfer: Rtime=",Rtime);
   for(var j=0; j<Rcalib.length; j++){
-    Rtime[j+indexcalibmin]=sol2_SSEfunc.x[j];
+    Rtime[j+icalibmin]=sol2_SSEfunc.x[j];
   }
+  //console.log("estimateR after new transfer: Rtime=",Rtime);
 
 
  
@@ -1149,16 +1274,16 @@ function estimateR(itmin_c, itmax_c, Rcalib){
 //=======================================================
 
 function estimateErrorCovar_Rhist_sigmaRhist(itmin_c, itmax_c, Rcalib){
+
+  //console.log("in estimateErrorCovar(): Rcalib=",Rcalib);
+
   var log=false;
-
-  if(log){console.log("in estimateErrorCovar(): Rcalib=",Rcalib);}
-
-  var indexcalibmin=getIndexCalib(itmin_c);
-  var indexcalibmax=getIndexCalibmax(itmax_c);// *max: >=10d cal intv
+  var icalibmin=getIndexCalib(itmin_c);
+  var icalibmax=getIndexCalibmax(itmax_c);// *max: >=10d cal intv
 
 
   var H=[]; // Hessian of actively estimated R elements
-  for(var j=0; j<indexcalibmax+1-indexcalibmin; j++){H[j]=[];}
+  for(var j=0; j<icalibmax+1-icalibmin; j++){H[j]=[];}
 
   var dR=0.000001;
 
@@ -1595,10 +1720,12 @@ CoronaSim.prototype.init=function(itStart,logging){
   // called by SSEfunc which is also in control of the time itsnap for it
 //#################################################################
 
-CoronaSim.prototype.takeSnapshot=function(){
+CoronaSim.prototype.takeSnapshot=function(it){
   this.snapAvailable=true;
   this.snapshot={
+    it:   it,
     x:    [],
+    xohne:[],
     xAct: this.xAct,
     y:    this.y,
     z:    this.z,
@@ -1609,21 +1736,55 @@ CoronaSim.prototype.takeSnapshot=function(){
 
   for(var tau=0; tau<taumax; tau++){ // copy by value
     this.snapshot.x[tau]=this.x[tau];
+    this.snapshot.xohne[tau]=this.xohne[tau];
   }
+
+  if(false){
+    console.log(
+      "corona.takeSnapshot: this.snapshot.it=",this.snapshot.it,
+      "\n  this.snapshot.xAct=",this.snapshot.xAct.toPrecision(3),
+      "\n  this.snapshot.xt=",this.snapshot.xt.toPrecision(3),
+      "\n  this.snapshot.y=",this.snapshot.y.toPrecision(3),
+      "\n  this.snapshot.yt=",this.snapshot.yt.toPrecision(3),
+      "\n  this.snapshot.z=",this.snapshot.z.toPrecision(3),
+      "\n  this.snapshot.xyz=",this.snapshot.xyz.toPrecision(3),
+      "\n  this.snapshot.x[tauDie]=",this.snapshot.x[tauDie].toPrecision(3),
+      "\n  this.snapshot.xohne[tauDie]=",this.snapshot.xohne[tauDie].toPrecision(3),
+      "");
+  }
+
 }
 
 
 
 CoronaSim.prototype.setStateFromSnapshot=function(){
+  this.snapshot.it;
   for(var tau=0; tau<taumax; tau++){
-    this.x[tau]=snapshot.x[tau];
+    this.x[tau]=this.snapshot.x[tau];
+    this.xohne[tau]=this.snapshot.xohne[tau];
   }
   this.xAct=this.snapshot.xAct;
   this.y   =this.snapshot.y;
-  this.z   =this.snapshot.y;
+  this.z   =this.snapshot.z;
   this.xyz =this.snapshot.xyz;
   this.xt  =this.snapshot.xt;
   this.yt  =this.snapshot.yt;
+  if(false){
+    console.log(
+      "corona.setStateFromSnapshot: this.snapshot.it=",this.snapshot.it,
+      "\n  this.xAct=",this.xAct.toPrecision(3),
+      "\n  this.xt=",this.xt.toPrecision(3),
+      "\n  this.y=",this.y.toPrecision(3),
+      "\n  this.yt=",this.yt.toPrecision(3),
+      "\n  this.z=",this.z.toPrecision(3),
+      "\n  this.xyz=",this.xyz.toPrecision(3),
+      "\n  this.x[tauDie]=",this.x[tauDie].toPrecision(3),
+      "\n  this.xohne[tauDie]=",this.xohne[tauDie].toPrecision(3),
+      "");
+
+    if(false) console.log("corona.setStateFromSnapshot: this.x=",this.x);
+
+  }
 }
 
 
@@ -1646,27 +1807,26 @@ CoronaSim.prototype.updateOneDay=function(R,it,logging){
 
   if( typeof logging === "undefined"){logging=false;}
 
+  logging=logging&&(it>=83)&&(it<86);
+  logging=false;
 
-  if(logging){  //filter needed because of called mult times in calibr!
-
-
-    console.log("Enter CoronaSim.updateOneDay: it=",it," R=",R.toPrecision(2),
-		" this.xAct=",this.xAct.toPrecision(3),
-		" this.xyz=",this.xyz.toPrecision(3),
-		" nxt=n0*this.xt=",Math.round(n0*this.xt),
-		" nyt=n0*this.yt=",Math.round(n0*this.yt),
-/*
-		" this.z=",this.z.toPrecision(3),
-		"\n  this.x[tauDie-1]=",this.x[tauDie-1].toPrecision(3),
-		"\n  this.x[tauDie]=",this.x[tauDie].toPrecision(3),
-		"\n  this.x[tauDie+1]=",this.x[tauDie+1].toPrecision(3),
-		"\n  this.x[tauRecover-1]=",this.x[tauRecover-1].toPrecision(3),
-		"\n  this.x[tauRecover]=",this.x[tauRecover].toPrecision(3),
-		"\n  this.x[tauRecover+1]=",this.x[tauRecover+1].toPrecision(3),
-		"\n  this.xt/pTest-this.y-this.z=",
-		(this.xt/pTest-this.y-this.z).toPrecision(3),
-*/
-		"");
+  //if(logging){  //filter needed because of called mult times in calibr!
+  if(logging){
+    console.log(
+      "Enter CoronaSim.updateOneDay: it=",it," R=",R.toPrecision(2),
+      " this.xAct=",this.xAct.toPrecision(3),
+      " this.xyz=",this.xyz.toPrecision(3),
+      " this.y=",this.y.toPrecision(3),
+      " this.z=",this.z.toPrecision(3),
+	//	" nxt=n0*this.xt=",Math.round(n0*this.xt),
+	//	" nyt=n0*this.yt=",Math.round(n0*this.yt),
+      "\n  this.x[tauDie-1]=",this.x[tauDie-1].toPrecision(3),
+      "\n  this.x[tauDie]=",this.x[tauDie].toPrecision(3),
+      "\n  this.x[tauDie+1]=",this.x[tauDie+1].toPrecision(3),
+      "\n  this.x[tauRecover-1]=",this.x[tauRecover-1].toPrecision(3),
+      "\n  this.x[tauRecover]=",this.x[tauRecover].toPrecision(3),
+      "\n  this.x[tauRecover+1]=",this.x[tauRecover+1].toPrecision(3),
+      "");
   }
 
 
@@ -1769,17 +1929,24 @@ CoronaSim.prototype.updateOneDay=function(R,it,logging){
 
   if(logging){ // filter needed because called in calibration!
 
-    console.log("end CoronaSim.updateOneDay:",
-		"  it=",it,
-		" R=",R.toPrecision(2),
-		" nxt=",Math.round(n0*this.xt),
-		" nxAct=",(n0*this.xAct).toPrecision(6),
-		" nxyz=",(n0*this.xyz).toPrecision(6),
-		" ny=",(n0*this.y).toPrecision(5),
-		" nyt=",(n0*this.yt).toPrecision(5),
-		" nz=",(n0*this.z).toPrecision(5),
-		""
-	     );
+    console.log(
+      "end CoronaSim.updateOneDay: it=",it," R=",R.toPrecision(2),
+      " this.xAct=",this.xAct.toPrecision(3),
+      " this.xyz=",this.xyz.toPrecision(3),
+      " this.y=",this.y.toPrecision(3),
+      " this.z=",this.z.toPrecision(3),
+	//	" nxt=n0*this.xt=",Math.round(n0*this.xt),
+	//	" nyt=n0*this.yt=",Math.round(n0*this.yt),
+      "\n  this.x[tauDie-1]=",this.x[tauDie-1].toPrecision(3),
+      "    this.xohne[tauDie-1]=",this.xohne[tauDie-1].toPrecision(3),
+      "\n  this.x[tauDie]=",this.x[tauDie].toPrecision(3),
+      "    this.xohne[tauDie]=",this.xohne[tauDie].toPrecision(3),
+      "\n  this.x[tauDie+1]=",this.x[tauDie+1].toPrecision(3),
+      "    this.xohne[tauDie+1]=",this.xohne[tauDie+1].toPrecision(3),
+      "\n  this.x[tauRecover-1]=",this.x[tauRecover-1].toPrecision(3),
+      "\n  this.x[tauRecover]=",this.x[tauRecover].toPrecision(3),
+      "\n  this.x[tauRecover+1]=",this.x[tauRecover+1].toPrecision(3),
+      "");
   }
 
 
