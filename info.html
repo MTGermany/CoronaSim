@@ -16,7 +16,13 @@
 
 <h1> Information zur Simulation der Coronavirus Covid-19 Pandemie</h1>
 
-<h3> Motivation</h3>
+<ol>
+<li><a href="#motiv">Motivation</a>
+<li><a href="#defs">Definitionen</a>
+<li><a href="#problem">Was ist das Problem?</a>
+</ol>
+
+<h3 id="motiv"> Motivation</h3>
  
 Diese <a href="index.html">interaktive Simulation und Datenvisualisierung</a> soll folgendes verdeutlichen:
 <ul>
@@ -30,7 +36,7 @@ Diese <a href="index.html">interaktive Simulation und Datenvisualisierung</a> so
   Reproduktionszahl <i>R</i></span>  und ihr
   zeitlicher Verlauf zu sch&auml;tzen ist: Je nach den Werten der
   anderen Parameter wie Peride der
-  Ansteckbarkeit, mittlerer Testzeitpunkt sowie Testh\"aufigkeit ändern
+  Ansteckbarkeit, mittlerer Testzeitpunkt sowie Testh&auml;ufigkeit ändern
   sich die "Best-Fit"-Werte und der Zeitverlauf von <i>R</i>,
 <li> dass gesch&auml;tzte Werte wie <i>R=0.92</i>
   ohne <span class="important">Fehlerintervalle</span>  
@@ -40,12 +46,15 @@ Diese <a href="index.html">interaktive Simulation und Datenvisualisierung</a> so
 </ul>
 
 <p class="italic"> <span class="lila">Update Sptember 2020: </span> Obiger Text wurde im April 2020
-  formuliert. Nun dringt es langsam ins Bewusstsein, wie stark die
-  Testrate die Beurteilung der Lage verzerren kann. Allein durch
-  Erh\"ohung der Testh\"aufigkeit wird  der beim RKI
-  berechnete R-Wert erh\"oht, was offensichtlich widersinnig ist. </span></p>
+  formuliert. Nun dringen die obigen Bemerkungen  langsam ins
+  allgemeine Bewusstsein, insbesodere die Verzerrung der
+  wahrgenommenen Lage durch Erh&ouml;hung der 
+  Testrate: Der vom RKI
+  berechnete R-Wert h&auml;ngt von der Testrate und ihrer Ver&auml;nderung
+  ab, was offensichtlich widersinnig ist. </span></p>
 
-<h3> Definitionen</h3>
+
+<h3 id="defs"> Definitionen</h3>
  
 Wichtig ist es, Folgendes zu unterscheiden:
 
@@ -55,24 +64,24 @@ Wichtig ist es, Folgendes zu unterscheiden:
   Reproduktionszahl <i>R</i></span>: Wie viele Menschen ein
   Infizierter im Mittel ansteckt. Manchmal wird noch zwischen  
 <i>R<sub>0</sub></i> (Ansteckungszahl bei Durchseuchung Null) und dem
-tats\"achlichen, z.B. vom RKI herausgegebenen R-Wert
+tats&auml;chlichen, z.B. vom RKI herausgegebenen R-Wert
 unterschieden. </i> In der Simulation sind immer
 die <i>R<sub>0</sub></i>-Werte angegeben</i>
 
 <li> <span class="important"> Durchseuchung  <i>X</i></span>: Der
   Anteil aller bisher Infizierten (nicht symptomatisch Erkrankten!) in
-  der Bev\"olkerung, unabh\"angig vom Ausgang (aktuell infiziert,
+  der Bev&ouml;lkerung, unabh&auml;ngig vom Ausgang (aktuell infiziert,
   genesen oder tot)
 
-<li> <span class="important"> Immunit\"atsgrad  <i>I</i></span>:
-  Wenn alle Infizierten immun werden und keine Impfung verf\"ugbar
-  ist, ist <i>I=X</i>, bei Teilimmunit\"at sinkt <i>I</i>, mit
+<li> <span class="important"> Immunit&auml;tsgrad  <i>I</i></span>:
+  Wenn alle Infizierten immun werden und keine Impfung verf&uuml;gbar
+  ist, ist <i>I=X</i>, bei Teilimmunit&auml;t sinkt <i>I</i>, mit
   Impfungen steigt er
 
 <li> <span class="important"> Infektionsrate <i>x</i></span>: Zahl
   der Neuinfizierten in einem gewissen Zeitraum &Delta;t. Falls
-  Doppelinfektionen ausgeschlossen werden, g\"alte bei einer
-  Bev\"olkerungszahl <i>n</i>
+  Doppelinfektionen ausgeschlossen werden, g&auml;lte bei einer
+  Bev&ouml;lkerungszahl <i>n</i>
 <br><center>
 <i>x(t)=n [ X(t)-X(t-&Delta;t) ]</i>
 </center><br>
@@ -80,14 +89,14 @@ die <i>R<sub>0</sub></i>-Werte angegeben</i>
 <li> <span class="important"> Testrate <i>n<sub>t</sub></i></span>: Zahl der
     Tests (egal ob positiv oder nicht) pro Tag oder Woche 
 
-<li> <span class="important"> Positivanteil  <i>X<sub>t</sub></i></span>: Der
+<li> <span class="important"> Bev&ouml;lkerungs-Positivanteil  <i>X<sub>t</sub></i></span>: Der
   Anteil aller bisher positiv Getesteten 
-  in der Bev\"olkerung. Dieser ist <i> nicht</i> gleich <i>X</i>, denn
+  in der Bev&ouml;lkerung. Dieser ist <i> nicht</i> gleich <i>X</i>, denn
 <ul>
 <li> nicht jeder Infizierte wird getestet (Dunkelfeld). Ferner sind die Tests
   nicht zu 100% <span class="important"> sensitiv </span> (Fehler erster Art, <i>false negatives</i>),
 <li> nicht jeder positiv Getestete ist infiziert, denn die Tests haben eine
-  nichtperfekte <span class="important"> Spezifizit\"at </span>
+  nichtperfekte <span class="important"> Spezifizit&auml;t </span>
   (Fehler zweiter Art, <i>false 
   positives</i>)
 </ul>
@@ -95,46 +104,98 @@ die <i>R<sub>0</sub></i>-Werte angegeben</i>
 
 <li> <span class="important"> Positivrate <i>x<sub>t</sub></i></span>:
   Zahl der positiven Testergebnisse im Zeitraum &Delta;t. Falls jeder
-  h\"ochstens einmal getestet w\"urde, g\"alte 
+  h&ouml;chstens einmal getestet w&uuml;rde, g&auml;lte 
 <br><br><center>
 <i>x<sub>t</sub>(t)=n [X<sub>t</sub>(t)-X<sub>t</sub>(t-&Delta;t)]</i>
 </center><br>
 
+
+<li> <span class="important"> Test-Positivanteil 
+<i>p<sub>t</sub>=x<sub>t</sub>/n<sub>t</sub></i></span>:
+  Anteil der positiven Tests unter allen Tests
+
+
 <li> <span class="important"> <i>Y</i>, <i>Y<sub>t</sub></i> und <i>y<sub>t</sub></i></span>:
-Anteilswert an Genesenen in der Bev\"olkerung sowie der Anteilswert
+Anteilswert an Genesenen in der Bev&ouml;lkerung sowie der Anteilswert
   und die Rate an Genesenen, welche vorher positiv getestet
   wurden. Dies ist tricky: Sind symptomfrei positiv Getestete
   zum Testzeitpunkt bereits genesen oder nicht? Die entsprechenden Daten sind deshalb
-  h\"aufig nicht konsistent/brauchbar.
+  h&auml;ufig nicht konsistent/brauchbar.
 
-<li><span class="important"> Case  fatality rate (CFR) </span>:
-Anteil der positiv Getesteten, die schlie\3lich <i> urs\"achlich</i>  an
+<li> <span class="important"> Anteil der an Covid-19 gestorbenen
+    Personen in der Bev&ouml;lkerung <i>Z=Z_t</i></span> sowie 
+<i>z<sub>t</sub>(t)=n
+  [Z<sub>t</sub>(t)-Z<sub>t</sub>(t-&Delta;t)]</i>. Hier gehe ich
+  davon aus, dass jeder Covid-19-Todesfall fr&uuml;her oder sp&auml;ter
+  getestet wurde, sodass das die einzige reale bekannte Gr&ouml;&szlig;e ist.
+
+
+<li><span class="important"> Case fatality rate (CFR) </span>:
+Anteil der positiv Getesteten, die schlie&szlig;lich <i> urs&auml;chlich</i>  an
+    Covid-19 sterben
+
+<li><span class="important"> Infection fatality rate (IFR) </span>:
+Anteil der Infizierten, die schlie&szlig;lich <i> urs&auml;chlich</i>  an
     Covid-19 sterben
 </ul>
 
 
- Ausma&szlig;
- der "Durchseuchung" (was f&uuml;r ein Wort!) abzusch&auml;tzen. In
- der aktuellen Phase kann n&auml;mlich nur das Verh&auml;ltnis
- aus der Zahl der
- Covid-19 Toten und der positiv Getesteten gesch&auml;tzt werden, die
- sogenannte <span class="important"> case
-    fatality rate (CFR) </span>. In Deutschland liegt sie (Stand Mai 2020)
- bei etwa 4-5%, was bei einem Hellfeldanteil von
- 10% einer Sterbewahrscheinlichkeit von 0.4% entspr&auml;che. Die
- Kenntnis der <span class="important"> wahren Werte der
- Sterbewahrscheinlichkeit</span>  und der
- <span class="important">Durchseuchung</span> ist
- eminent wichtig als Grundlage politischer Entscheidungen.
+<h3 id="problem">Was ist das Problem?</h3>
+
+ Mit wenig Ungenauigkeit bekannt sind die prim&auml;r
+ver&ouml;ffentlichte
+Gr&ouml;&szlig;en <i>x<sub>t</sub></i>,  <i>y<sub>t</sub></i>,  <i>z<sub>t</sub></i> 
+sowie <i>n<sub>t</sub></i>. Daraus k&ouml;nnen alle Gr&ouml;&szlig;en mit
+Subskript "t" sowie die CFR ohne gro&szlig;e systematische Fehler
+abgeleitet werden. 
+Allrdings will man zur Beurteilung des  weiteren Infektionsverlauf und
+  davon abh&auml;ngige politische Entscheidungen die <i>realen</i>
+Gr&ouml;&szlig;en wissen, also die ohne "t". Dummerweise
+  sind allein die Todesf&auml;lle <i>Z</i> bzw. <i>z</i> angen&auml;hert
+  bekannt. F&uuml;r die wichtigsten drei Gr&ouml;&szlig;en ist jedoch nicht mal
+  die Gr&ouml;&szlig;enordnung bekannt:
+<ul>
+<li> Die IFR gibt an, wie schlimm die Seuche f&uuml;r den Einzelnen ist,
+<li> die Infektionsrate <i>x</i>, wie schlimm sie gegenw&auml;rtig f&uuml;r die
+  Volkswirtschaft ist,
+<li> die Durchseuchung <i>X</i> bzw. der Immunit&auml;tsgrad <i>I</i>,
+  wie weit sie fortgeschritten ist, d.h. wie die Lage f&uuml;r die
+  Volkswirtschaft in Zukunft sein wird.
+</ul>
+Warum ist das trotz aller Tests so unbekannt?
+ Um IFR und <i>x</i> und damit das kumulierte <X> abzusch&auml;tzen,
+ ben&ouml;tigt man 
+den <span class="important">Dunkelfeldanteil <i>D</i></span>: Dann
+ k&ouml;nnte man zumindest einige Wochen verz&ouml;gert die Gr&ouml;&szlig;en durch 
+<br><br>
+
+<center>
+<i>x=1/(1-D) x<sub>t</sub></i>, &nbsp; &nbsp;
+ IFR=<i>(1-D)</i> CFR
+</center>
 <br>
-Der Hellfeldanteil ist leider unbekannt:
-<ul> 
-<li> 
+
+ sch&auml;tzen: Bei
+perfekten Tests gilt <i>D=X<sub>t</sub>X</i>, ansonsten
+  kann <i>D</i> gr&ouml;&szlig;er oder kleiner sein. Nun ist nicht einmal 
+  <i>X<sub>t</sub></i>/<i>X</i> angen&auml;hert bekannt, insbesondere
+  kann diese Gr&ouml;&szlig;e nicht durch den
+  Test-Positivanteil <i>p<sub>t</sub></i> gesch&auml;tzt werden, da ein
+  Auswahleffekt vorliegt: Leute mit Symptomen werden wahrscheinlicher
+  getestet.
+Perfekte Tests und eine gro&szlig;e Zufalls-Stichprobe
+  w&auml;ren n&ouml;tig, um <i>x</i> (perfekte PCR-Tests) bzw  <i>X</i>
+  (perfekte Antik&ouml;rpertest f&uuml;r die vergangenen + perfekte
+  PCR-Tests f&uuml;r die aktuellen Infektionen) unverzerrt abzusch&auml;tzen!
+
+<h3>Wie kann die Simulation dabei helfen?</h3>
+
 <p class="italic"> <span class="lila">Update 2020-09: </span> 
 Nun liegt der Positiv-Anteil, die sog. <span class="important"> case
-    fatality rate (CFR) </span> um 1%, und man k\"onnte bei einem
+    fatality rate (CFR) </span> um 1%, und man k&ouml;nnte bei einem
   Hellfeld von weiterhin 10% auf eine <span class="important"> infection
-    fatality rate (IFR) </span> von 1 &permil; schlie\3en.</p>
+    fatality rate (IFR) </span> von 1 &permil; schlie&szlig;en.</p>
+
 
 <i>Wichtig:</i> Allen Covid-19-Modellen und Simulationen ist
 gemeinsam, dass sie <span class="important">keine Prognosen</span>
