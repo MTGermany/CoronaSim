@@ -43,6 +43,7 @@ var countryGer="Deutschland"
 
 const ln10=Math.log(10);
 
+
 // graphical window at start, 0=lin,1=log,2=cases,3=tests,4=rates 
 
 var windowG=0; // consolidate with first option value of html!!
@@ -448,14 +449,6 @@ function initializeData(country) {
   }
 
 
-  // !!! check what changes 
-  // if smoothing data_cumCases, the objective to calibrate
-
-  if(false){
-    kernel=[1/9,2/9,3/9,2/9,1/9];
-    var data_cumCasesSmooth=smooth(data_cumCases,kernel);
-    data_cumCases=data_cumCasesSmooth;
-  }
 
   // extract test data (MT 2020-09)
 
@@ -617,7 +610,78 @@ function initializeData(country) {
   }
 
 
+
+
+  // !! Adjust data_cumCases to the number of positive cases
+  // reference: average test rate in the first week after startday
+  // data_cumCases[data_idataStart] and before unchanged
+
+  var data_cumCasesAdj=[];
+  for(var i=0; i<data_idataStart+1; i++){
+    data_cumCasesAdj[i]=data_cumCases[i];
+  }
+
+  var data_dnRef=0; // rference test rate in the first week after startday
+  for(var it=0; it<7; it++){
+    data_dnRef+=data_dn[data_idataStart+it]/7;
+  }
+
+  for(var i=data_idataStart+1; i<data_cumCases.length; i++){
+    var adjFactor=data_dnRef/data_dn[i];
+    data_cumCasesAdj[i]=data_cumCasesAdj[i-1]+data_dxt[i]*adjFactor;
+  }
+
+
+
+  // ###############################################
+  // !!! check some changes in the objective data_cumCases for calibration
+
+  // smooth
+
   if(false){
+    //kernel=[1/9,2/9,3/9,2/9,1/9];
+    kernel=[1/7,1/7,1/7,1/7,1/7,1/7,1/7];
+    var data_cumCasesSmooth=smooth(data_cumCases,kernel);
+    data_cumCases=data_cumCasesSmooth;
+  }
+
+  // !!! use cumulated number adjusted to the test frequency
+
+  if(false){
+    for(var i=0; i<data_cumCases.length; i++){
+      data_cumCases[i]=data_cumCasesAdj[i];
+    }
+  }
+
+
+  // ###############################################
+ /* (1) insert button "Beruecksichtige Testhaeufigkeit" <->"Rohdaten"
+     (2) action Testhaeufigkeit: data_cumCases[i]=data_cumCasesAdj+Neukalibr
+         var adaptCases=true (wie button "Neukalibrierung")
+     (3) Lasse in Grafik Geheilten und Totenzahl weg
+     (4) Slider Testrate zappelt hin und her propto adjFactor
+  5 Button nur aktiv falls in Sim-Modifunction myFunction() {
+  var x = document.getElementById("myDIV");
+  if (x.style.display === "none") {
+    x.style.display = "block";
+  } else {
+    x.style.display = "none";
+  }
+}
+
+
+(6) Simulationsergebnisse xt auch in windowG==2 und 3 zeichnen, Xt von 0,1
+    diffenenzieren, bei adaptCases==true mit adjFactor zappeln lassen
+
+*/
+  // ###############################################
+
+
+
+  // ###############################################
+  // debug
+
+  if(true){
     console.log("");
     //for(var i=0; i<itmaxData; i++){
     for(var i=itmaxData-5; i<itmaxData; i++){
@@ -1644,7 +1708,7 @@ CoronaSim.prototype.init=function(itStart,logging){
   this.y=0;  // fraction recovered real as a function of time
   this.yt=0; // fraction recovered data
   this.z=0;  // fraction dead (real=data)
-  this.pTestDay=[]; // fraction of tested infected at day t
+  this.pTestDay=[]; // fraction of tested among the new infected
   for(var i=0; i<500; i++){ // just initialisation for the first few steps
     this.pTestDay[i]=pTest;
   }
@@ -2379,22 +2443,6 @@ DrawSim.prototype.drawAxes=function(windowG){
   //console.log("drawAxes new: dy=",dy," ny=",ny);
 
 
-/*
- //define y2 axis tick/label positions (in y, not pix)//!!old?
-//!!this.isActiveLin[5] undefined
-  var ymin2=0;
-  var ymax2=this.ymaxPerc;
-  //var ymax2=Math.min(10,this.ymaxPerc);
-  if((windowG==0)&&(this.isActiveLin[5])){
-    var power10=Math.floor(log10(ymax2));
-    var multiplicator=Math.pow(10, power10);
-    var ymaxRange02=ymax2/multiplicator;
-    var dy2=(ymaxRange02<2) ? 0.2*multiplicator
-        :(ymaxRange02<5) ? 0.5*multiplicator : multiplicator;
-    var ny2=Math.floor(ymax2/dy2);
-  }
-*/
-
 
   // draw 3 px wide lines as coordinates
   // remaining hack: mirrored graphics cases/deaths: yPix0,hPix w/o "this"
@@ -2489,26 +2537,6 @@ DrawSim.prototype.drawAxes=function(windowG){
 
 
 
-  // draw name+value strings on y2 axis // !! still old
-
-/*
-  if((windowG==0)&&(this.isActiveLin[5])){//!!this.isActiveLin[5] undefined
-
-    var label_y2="Tote/bekannt Erkrankte [%]";
-    ctx.fillStyle=this.colLine[5];
-    ctx.setTransform(0,-1,1,0,
-		   this.xPixMax+3.0*textsize,this.yPix0+0.2*this.hPix);
-    ctx.fillText(label_y2,0,0);
-    ctx.setTransform(1,0,0,1,0,0)
-    for(var iy=ymin2; iy<=ny2; iy++){
-      var valueStr= iy*dy2 
-      ctx.fillText(valueStr,
-		  this.xPixMax+0.8*textsize,
-		  this.yPix0+(iy*dy2-ymin2)/(ymax2-ymin2)*this.hPix
-		   +0.5*textsize);
-    }
-  }
-*/
 
   
   // draw key

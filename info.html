@@ -35,14 +35,15 @@ Diese <a href="index.html">interaktive Simulation und Datenvisualisierung</a> so
 <li> wie schwierig die <span class="important">
   Reproduktionszahl <i>R</i></span>  und ihr
   zeitlicher Verlauf zu sch&auml;tzen ist: Je nach den Werten der
-  anderen Parameter wie Peride der
+  anderen Parameter wie Peridode der
   Ansteckbarkeit, mittlerer Testzeitpunkt sowie Testh&auml;ufigkeit ändern
   sich die "Best-Fit"-Werte und der Zeitverlauf von <i>R</i>,
-<li> dass gesch&auml;tzte Werte wie <i>R=0.92</i>
+<!--<li> dass gesch&auml;tzte Werte wie <i>R=0.92</i>
   ohne <span class="important">Fehlerintervalle</span>  
   nahezu nichts 
   aussagen und dass die Fehler sehr gro&szlig; werden, wenn man sich der
   Gegenwart n&auml;hert. All das k&ouml;nnen Sie hier interaktiv untersuchen!
+-->
 </ul>
 
 <p class="italic"> <span class="lila">Update Sptember 2020: </span> Obiger Text wurde im April 2020
@@ -50,22 +51,25 @@ Diese <a href="index.html">interaktive Simulation und Datenvisualisierung</a> so
   allgemeine Bewusstsein, insbesodere die Verzerrung der
   wahrgenommenen Lage durch Erh&ouml;hung der 
   Testrate: Der vom RKI
-  berechnete R-Wert h&auml;ngt von der Testrate und ihrer Ver&auml;nderung
+  berechnete R-Wert, der eigentlich ein intrinsischer Parameter der
+  Infektionsdynamik sein sollte, h&auml;ngt von der Testrate und ihrer Ver&auml;nderung
   ab, was offensichtlich widersinnig ist. </span></p>
 
 
 <h3 id="defs"> Definitionen</h3>
  
-Wichtig ist es, Folgendes zu unterscheiden:
+Um die Simulation und die allgemeine Corona-Problematik zu verstehen,
+ist es wichtig, Folgendes zu unterscheiden:
 
 
 <ul>
 <li> <span class="important">
   Reproduktionszahl <i>R</i></span>: Wie viele Menschen ein
-  Infizierter im Mittel ansteckt. Manchmal wird noch zwischen  
+  Infizierter im Mittel ansteckt. Manchmal wird noch zwischen dem
+  Modellparameter  
 <i>R<sub>0</sub></i> (Ansteckungszahl bei Durchseuchung Null) und dem
-tats&auml;chlichen, z.B. vom RKI herausgegebenen R-Wert
-unterschieden. </i> In der Simulation sind immer
+tats&auml;chlichen, sich aus der Dynamik ergebenden R-Wert
+mit Immunit\"atsgrad >0 unterschieden. </i> In der Simulation sind immer
 die <i>R<sub>0</sub></i>-Werte angegeben</i>
 
 <li> <span class="important"> Durchseuchung  <i>X</i></span>: Der
@@ -79,12 +83,18 @@ die <i>R<sub>0</sub></i>-Werte angegeben</i>
   Impfungen steigt er
 
 <li> <span class="important"> Infektionsrate <i>x</i></span>: Zahl
-  der Neuinfizierten in einem gewissen Zeitraum &Delta;t. Falls
-  Doppelinfektionen ausgeschlossen werden, g&auml;lte bei einer
-  Bev&ouml;lkerungszahl <i>n</i>
+  der Neuinfizierten in einem gewissen Zeitraum &Delta;t. Bei
+  Ausschluss von
+  Doppelinfektionen gilt bei einer
+  Bev&ouml;lkerungszahl <i>n</i><br>
+
 <br><center>
 <i>x(t)=n [ X(t)-X(t-&Delta;t) ]</i>
 </center><br>
+
+Ist  &Delta;t gleich der Dauer einer aktiven Infektion (bis zur
+Genesung oder Tod, 3-4 Wochen) , stellt <i>x</i> die Zahl der aktiv
+Infizierten dar.
 
 <li> <span class="important"> Testrate <i>n<sub>t</sub></i></span>: Zahl der
     Tests (egal ob positiv oder nicht) pro Tag oder Woche 
@@ -112,27 +122,30 @@ die <i>R<sub>0</sub></i>-Werte angegeben</i>
 
 <li> <span class="important"> Test-Positivanteil 
 <i>p<sub>t</sub>=x<sub>t</sub>/n<sub>t</sub></i></span>:
-  Anteil der positiven Tests unter allen Tests
+  Anteil der positiven Tests unter allen Tests im betreffenden Zeitraum
 
 
 <li> <span class="important"> <i>Y</i>, <i>Y<sub>t</sub></i> und <i>y<sub>t</sub></i></span>:
 Anteilswert an Genesenen in der Bev&ouml;lkerung sowie der Anteilswert
   und die Rate an Genesenen, welche vorher positiv getestet
   wurden. Dies ist tricky: Sind symptomfrei positiv Getestete
-  zum Testzeitpunkt bereits genesen oder nicht? Die entsprechenden Daten sind deshalb
-  h&auml;ufig nicht konsistent/brauchbar.
+  zum Testzeitpunkt bereits genesen oder nicht? Die entsprechenden
+  Daten sind deshalb in vielen L\"andern
+   nicht konsistent/brauchbar.
 
 <li> <span class="important"> Anteil der an Covid-19 gestorbenen
     Personen in der Bev&ouml;lkerung <i>Z=Z_t</i></span> sowie 
 <i>z<sub>t</sub>(t)=n
   [Z<sub>t</sub>(t)-Z<sub>t</sub>(t-&Delta;t)]</i>. Hier gehe ich
   davon aus, dass jeder Covid-19-Todesfall fr&uuml;her oder sp&auml;ter
-  getestet wurde, sodass das die einzige reale bekannte Gr&ouml;&szlig;e ist.
+  getestet wurde, sodass dies unter allen realen Gr\"o\3en die einzige  bekannte ist
 
 
 <li><span class="important"> Case fatality rate (CFR) </span>:
 Anteil der positiv Getesteten, die schlie&szlig;lich <i> urs&auml;chlich</i>  an
-    Covid-19 sterben
+    Covid-19 sterben.
+<span class="italic"> <span class="lila">Update 2020-09: </span> 
+Die CFR liegt nun um 1%, anfangs war sie etwa 4%</span>
 
 <li><span class="important"> Infection fatality rate (IFR) </span>:
 Anteil der Infizierten, die schlie&szlig;lich <i> urs&auml;chlich</i>  an
@@ -148,7 +161,7 @@ Gr&ouml;&szlig;en <i>x<sub>t</sub></i>,  <i>y<sub>t</sub></i>,  <i>z<sub>t</sub>
 sowie <i>n<sub>t</sub></i>. Daraus k&ouml;nnen alle Gr&ouml;&szlig;en mit
 Subskript "t" sowie die CFR ohne gro&szlig;e systematische Fehler
 abgeleitet werden. 
-Allrdings will man zur Beurteilung des  weiteren Infektionsverlauf und
+Allerdings will man zur Beurteilung des  weiteren Infektionsverlauf und
   davon abh&auml;ngige politische Entscheidungen die <i>realen</i>
 Gr&ouml;&szlig;en wissen, also die ohne "t". Dummerweise
   sind allein die Todesf&auml;lle <i>Z</i> bzw. <i>z</i> angen&auml;hert
@@ -163,7 +176,7 @@ Gr&ouml;&szlig;en wissen, also die ohne "t". Dummerweise
   Volkswirtschaft in Zukunft sein wird.
 </ul>
 Warum ist das trotz aller Tests so unbekannt?
- Um IFR und <i>x</i> und damit das kumulierte <X> abzusch&auml;tzen,
+ Um die IFR und <i>x</i> und damit das kumulierte <X> abzusch&auml;tzen,
  ben&ouml;tigt man 
 den <span class="important">Dunkelfeldanteil <i>D</i></span>: Dann
  k&ouml;nnte man zumindest einige Wochen verz&ouml;gert die Gr&ouml;&szlig;en durch 
@@ -176,7 +189,7 @@ den <span class="important">Dunkelfeldanteil <i>D</i></span>: Dann
 <br>
 
  sch&auml;tzen: Bei
-perfekten Tests gilt <i>D=X<sub>t</sub>X</i>, ansonsten
+perfekten Tests gilt <i>D=X<sub>t</sub>/X</i>, ansonsten
   kann <i>D</i> gr&ouml;&szlig;er oder kleiner sein. Nun ist nicht einmal 
   <i>X<sub>t</sub></i>/<i>X</i> angen&auml;hert bekannt, insbesondere
   kann diese Gr&ouml;&szlig;e nicht durch den
@@ -190,14 +203,8 @@ Perfekte Tests und eine gro&szlig;e Zufalls-Stichprobe
 
 <h3>Wie kann die Simulation dabei helfen?</h3>
 
-<p class="italic"> <span class="lila">Update 2020-09: </span> 
-Nun liegt der Positiv-Anteil, die sog. <span class="important"> case
-    fatality rate (CFR) </span> um 1%, und man k&ouml;nnte bei einem
-  Hellfeld von weiterhin 10% auf eine <span class="important"> infection
-    fatality rate (IFR) </span> von 1 &permil; schlie&szlig;en.</p>
 
-
-<i>Wichtig:</i> Allen Covid-19-Modellen und Simulationen ist
+Allen Covid-19-Modellen und Simulationen ist
 gemeinsam, dass sie <span class="important">keine Prognosen</span>
 erm&ouml;glichen. Sehr wohl m&ouml;glich ist aber
 eine <i>Szenarienanalyse</i>, also eine bedingte Projektion in die
@@ -207,13 +214,14 @@ Zukunft, etwa folgender Art:
 <center>
 <table width="80%">
 <td>
-<i>wenn durch die Implementierung oder
+<i>"wenn zum Zeitpunkt T<sub>1</sub> durch die Implementierung oder
 Unterlassung von Ma&szlig;nahmen oder durch das Wetter die
-Reproduktionsrate  <i>R</i>
-den Wert X<sub>1</sub> erreicht, der Infektionszeitraum zwischen X<sub>2</sub> und X<sub>3</sub> liegt,
-und wie bisher getestet und medizinisch behandelt wird, dann wird es
-zum Zeitpunkt Y eine Zahl Z<sub>1</sub> +/- &Delta;Z<sub>1</sub> an bekannten Infektionen
-und eine Zahl Z<sub>2</sub> +/- &Delta;Z<sub>2</sub> an Covid-19-Toten geben</i></td>
+Reproduktionsrate  einen gewssen Wert <i>R</i>
+erreicht, der Infektionszeitraum zwischen 3 und 7 Tagen nach der
+  Infektion liegt, dopplt so viel
+getestet und wie bisher medizinisch behandelt wird (gleiche IFR), dann wird es
+im Zeitraum  <i>&Delta; t<sub>1</sub></i>  eine Zahl x<sub>t</sub> an neuen
+  Positivtests sowie <i>x</i> reale Neuinfektionen geben sowie im Zeitraum  <i>&Delta; t<sub>2</sub></i> eine Zahl<i>z</i> an Covid-19-Toten"</i></td>
 </table>
 </center>
  
