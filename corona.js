@@ -67,9 +67,9 @@ var itmaxinit=Math.round(
                 // round because of daylight saving time complications
 var itmax=itmaxinit; // can be >itmaxinit during interactive simulation
 
-var itmin_calib; // !!! needed global var! start calibr time interval w/resp to dayStartMar
+var itmin_calib; // start calibr time interval w/resp to dayStartMar
                  //     = dataGit_idataStart+1
-var itmax_calib; // !!! needed global var! end calibr time interval =^ data_itmax-1 
+var itmax_calib; //  end calibr time interval =^ data_itmax-1 
                  // should be split if there are more than approx 
                  // 20 weeks of data
 var useInitSnap;
@@ -190,7 +190,7 @@ const tauRecoverList={
 }
 
 const tauDieList={
-    "Germany"       : 21,
+    "Germany"       : 25, //21
     "Austria"       : 22,
     "Czechia"       : 24,
     "France"        : 21,
@@ -239,11 +239,11 @@ var tauRstart=tauRstartInit;
 var tauRend=tauRendInit;  
 var pTest=pTestInit;       // percentage of tested infected persons 
 var tauTest=tauTestInit;
-var tauAvg=5;      // smoothing interval for tauTest,tauDie,tauRecover
+var tauAvg=5;      // smoothing interval (uneven!) for tauTest,tauDie,tauRecover
 
 // (ii) not controlled
 
-var fracDieInit=0.0047;  // fracDie for initial setting of pTest
+var fracDieInit=0.0038;  // !!!fracDie for initial setting of pTest 0.0047
 var fracDie=fracDieInit; // will be set to fracDieInit*pTest/pTestInit 
                         // at restart but NOT during simulation
 var tauDie=21;      // time from infection to death in fracDie cases
@@ -252,6 +252,23 @@ var tauSymptoms=7;  // incubation time
 
 var taumax=Math.max(tauDie,tauRecover)+tauAvg+1;
  
+// (iii) additional variables for simulating influence of tests
+// positives n*dxt per day (n0=#inhabitants):
+// dxt=pTest(dn)*dx*(1-alpha)+dn/n0*(1-n0*dx/nt0)*beta, dx=candidate infected
+//    =dn/nt0   *dx*(1-alpha)+dn/n0*(1-n0*dx/nt0)*beta
+
+
+var useNew=true; // if true, use influence of tests: rate, alpha,beta
+var fracDieFinal=1.0*fracDieInit;
+var itReduceBegin=10;
+var tauReduce=80; // about 2*tauDie
+var data_dnRef=0; // reference test rate: avg of first observed week
+var nt0;          //global testrate for testing 100% infected
+var alpha=0.0; // alpha error of test (false negative)
+var beta=0.004; // beta error (false positive) after double testing
+// if in Germany beta>0.006, n_falsePos can be > nPositive => contradict
+// => formally, matrix not invertible
+
 // global graphical vars
 
 var canvas;
@@ -610,33 +627,17 @@ function initializeData(country) {
   }
 
 
+  // needed for taking into account test rate
 
-
-  // !! Adjust data_cumCases to the number of positive cases
-  // reference: average test rate in the first week after startday
-  // data_cumCases[data_idataStart] and before unchanged
-
-  var data_cumCasesAdj=[];
-  for(var i=0; i<data_idataStart+1; i++){
-    data_cumCasesAdj[i]=data_cumCases[i];
-  }
-
-  var data_dnRef=0; // rference test rate in the first week after startday
+  data_dnRef=0; // global reference test rate: avg of first observed week
   for(var it=0; it<7; it++){
     data_dnRef+=data_dn[data_idataStart+it]/7;
   }
-
-  for(var i=data_idataStart+1; i<data_cumCases.length; i++){
-    var adjFactor=data_dnRef/data_dn[i];
-    data_cumCasesAdj[i]=data_cumCasesAdj[i-1]+data_dxt[i]*adjFactor;
-  }
+  nt0=data_dnRef/pTestInit; //global testrate for testing 100% infected
 
 
 
-  // ###############################################
-  // !!! check some changes in the objective data_cumCases for calibration
-
-  // smooth
+  // check smoothing the objective data_cumCases for calibration
 
   if(false){
     //kernel=[1/9,2/9,3/9,2/9,1/9];
@@ -645,13 +646,6 @@ function initializeData(country) {
     data_cumCases=data_cumCasesSmooth;
   }
 
-  // !!! use cumulated number adjusted to the test frequency
-
-  if(false){
-    for(var i=0; i<data_cumCases.length; i++){
-      data_cumCases[i]=data_cumCasesAdj[i];
-    }
-  }
 
 
   // ###############################################
@@ -893,6 +887,7 @@ function SSEfunc(Rarr, fR, logging, itStartInp, itMaxInp,
 
     if(it==itSnap){corona.takeSnapshot(itSnap);} //BEFORE corona.updateOneDay
     //corona.updateOneDay(R_actual, it, false); // in SSE
+    if(logging){console.log("before updateOneDay: logging=",logging);}
     corona.updateOneDay(R_actual, it, logging); // in SSE never logging=true!
     sse+=Math.pow(Math.log(nxtData)-Math.log(nxtSim),2); //!! Math.log
 
@@ -904,7 +899,7 @@ function SSEfunc(Rarr, fR, logging, itStartInp, itMaxInp,
 
     //if(logging&&(it>=82)&&(it<90)){
     //if(logging&&true){
-    if(logging&&false){
+    if(logging&&true){
 
       console.log("SSEfunc before update: it=",it," itSnap=",itSnap,
 		  " R_actual=",R_actual.toFixed(2),
@@ -1145,61 +1140,6 @@ function calibrate(){
 
 
 
-/*
-
-    icalibmin=getIndexCalib(itmin_c);
-    icalibmax=getIndexCalibmax(itmax_c);// *max: >=10d cal intv
-    Rcalib=[]; // init
-    for(var icalib=icalibmin; icalib<=icalibmax; icalib++){
-      Rcalib[icalib-icalibmin]=(icalib==0) ? 1.2 : 1; 
-    }
-    estimateR(itmin_c, itmax_c, Rcalib); // also transfers Rcalib to Rtime
-    estimateErrorCovar_Rhist_sigmaRhist(itmin_c, itmax_c, Rtime); 
-
-    // take snapshot by once caling SSE with appropr parameters
-    var sse=SSEfunc(Rtime,null,true,itmin_c,itmax_c,itsnap,useInitSnap);
-    console.log("\nEnd first calibr: itmin_c=",itmin_c," itmax_c=",itmax_c," sse=",sse,"\n\n\n");
-    //console.log(" corona.snapshot=",corona.snapshot);
-
-    // Test SSE for new interal with "ideal" init"
-
-    if(false){
-      useInitSnap=true;
-      itmin_c=itsnap; // from last snapshot
-      itmax_c=data_itmax-1;
-      itmin_calib=itmin_c;
-      itmax_calib=itmax_c;
-      itsnap=itmax_c-14; // for next calibration if applicable
-
-      // get starting R
-
-      icalibmin=getIndexCalib(itmin_c);
-      icalibmax=getIndexCalibmax(itmax_c);
-      Rcalib=[];
-      for(var icalib=icalibmin; icalib<=icalibmax; icalib++){
-        Rcalib[icalib-icalibmin]=(icalib==0) ? 1.2 : 1; 
-      }
-
-      // test with fixed R taken from COMPLETE calibration earlier
-
-      if(false){
-        for(var icalib=icalibmin; icalib<=icalibmax; icalib++){
-          Rcalib[icalib-icalibmin]=Rtime[icalib];
-	}
-        var sse2=SSEfunc(Rcalib,null,true,itmin_c,itmax_c,false,useInitSnap);
-        var sseNull=SSEfunc(Rcalib,null,true);
-        console.log("itmin_calib=",itmin_calib);
-        console.log("sse2=",sse2," sseNull=",sseNull);
-      }
-      
- 
-      estimateR(itmin_c, itmax_c, Rcalib);
-
-    }
-  }
-  */
-
-
 
 
 
@@ -1207,8 +1147,8 @@ function calibrate(){
   //#####################################################
 
 
-  //var logging=false;
-  var logging=false;
+  //var logging=false;  //calibrate()
+  var logging=true;
   sse=SSEfunc(Rtime,null,logging,0,data_itmax);
   if(logging){
     console.log("leaving calibrate(): final synthesized R values+fit quality:");
@@ -1723,7 +1663,7 @@ CoronaSim.prototype.init=function(itStart,logging){
   for(var tau=0; tau<taumax; tau++){
     denom+=Math.exp(-r0*tau);
   }
-  for(var tau=0; tau<taumax; tau++){
+  for(var tau=0; tau<taumax; tau++){ // in init
     this.x[tau]=this.xAct*Math.exp(-r0*tau)/denom;
     this.xohne[tau]=this.x[tau];
     if(logging){console.log("init: it0=",it0," R0=",Rfun_time(it0),
@@ -1873,12 +1813,16 @@ CoronaSim.prototype.setStateFromSnapshot=function(){
 CoronaSim.prototype.updateOneDay=function(R,it,logging){ 
 
   if( typeof logging === "undefined"){logging=false;}
+  //logging=logging&&(it>=83)&&(it<86);//!!
+  //logging=false; //!!
 
-  logging=logging&&(it>=83)&&(it<86);
-  logging=false;
+
+  var useNewLoc=useNew&&(it>0); // see details at section "Test people"
+
+
 
   //if(logging){  //filter needed because of called mult times in calibr!
-  if(logging){
+  if(logging&&false){
     console.log(
       "Enter CoronaSim.updateOneDay: it=",it," R=",R.toPrecision(2),
       " this.xAct=",this.xAct.toPrecision(3),
@@ -1898,7 +1842,11 @@ CoronaSim.prototype.updateOneDay=function(R,it,logging){
 
 
 
-  // shift age profile of already infected by one
+  // ###############################################
+  // updateOneDay: Do the true dynamics
+  // ###############################################
+
+  // (1) shift age profile of already infected by one
 
   for(var tau=taumax-1; tau>0; tau--){
     this.x[tau]=this.x[tau-1];
@@ -1906,83 +1854,60 @@ CoronaSim.prototype.updateOneDay=function(R,it,logging){
   }
 
 
-  // infect new people
+  // true dynamics (2): infect new people
 
   this.x[0]=0;
   var f_R=1./(tauRend-tauRstart+1);
   if(n0*this.xAct>=1){ // !! infection finally dead if xAct<1
-   for(var tau=tauRstart; tau<=tauRend; tau++){
-    this.x[0]+=R*f_R*this.x[tau]
-      *(1-this.xyz);
-    if(false){
-      console.log("Corona.updateOneDay: it=",it," tau=",tau.toPrecision(3),
-		" R*f_R=",R*f_R.toPrecision(3),
-                " this.x[tau]*(1-(x+y+z)=",
-		this.x[tau]*(1-(this.xAct+this.y+this.z)).toPrecision(3),
-		" this.x[0]=",this.x[0].toPrecision(3)
-		 );
+    for(var tau=tauRstart; tau<=tauRend; tau++){
+      this.x[0]+=R*f_R*this.x[tau]*(1-this.xyz);
     }
-   }
   }
   this.xohne[0]=this.x[0];
 
 
-  // test people (in updateOneDay)
 
-  this.pTestDay[it]=pTest; // needed to determine fraction of 
-                           // recovered among the tested later on
-                           // sometimes this.pTestDay undefined !!
-
-  tauAvg=5; //!!
-  var dtau=Math.min(Math.floor(tauAvg/2),Math.round(tauTest));
+  // true dynamics (3): let people die or recover
+  // smooth  over tauAvg days
  
-
-  var f_T=1./(2*dtau+1);
-  for(var tau=tauTest-dtau; tau<=tauTest+dtau; tau++){
-    this.xt += pTest*f_T*this.xohne[tau]; 
+  if(useNewLoc){//!!! new: calculate predetermined fracDie overriding p slider
+    fracDie=(it<itReduceBegin) ? fracDieInit
+      : (it<itReduceBegin+tauReduce) 
+      ? fracDieInit+(it-itReduceBegin)/tauReduce*(fracDieFinal-fracDieInit)
+      : fracDieFinal;
+  }
+  else{// old
+    fracDie=fracDieInit;
   }
 
-  // let people die or recover
-  // smooth dying and recovery infection age over tauAvg days
-  // !! attention of order: change x[tau] last to keep consistency
 
-  //tauAvg=5; //!!
-  var dtau=Math.floor(tauAvg/2);
-
-  var dz=[];
-  var dy=[];
-  var dzsum=0;
-  var dysum=0;
+  var dtau=Math.floor(tauAvg/2); // tauAvg is global uneven variable, e.g.=5
   var f_D=1./tauAvg;
   var f_Rec=1./tauAvg;
 
+  var dzsum=0;
+  var dysum=0;
+
+
+
   for(var tau=tauDie-dtau; tau<=tauDie+dtau; tau++){
-    var tauH=Math.min(it,tau);
-    dz[tau-tauDie+dtau]=fracDie*f_D*this.xohne[tau]; //!! here xohne crucial
-    dzsum+=dz[tau-tauDie+dtau];
-    this.x[tau] -=dz[tau-tauDie+dtau];
+    var dz=fracDie*f_D*this.xohne[tau]; //!! here xohne crucial
+    dzsum+=dz;
+    this.x[tau] -=dz; // xohne remains unsubtracted
   }
 
   for(var tau=tauRecover-dtau; tau<=tauRecover+dtau; tau++){
-    var tauH=Math.min(it,tau);
-    dy[tau-tauRecover+dtau]=(1-fracDie)*f_Rec*this.xohne[tau]; //!!
-    dysum+=dy[tau-tauRecover+dtau];
-    this.x[tau] -=dy[tau-tauRecover+dtau];
+    var dy=(1-fracDie)*f_Rec*this.xohne[tau]; //!! here xohne crucial
+    dysum+=dy;
+    this.x[tau] -=dy; // xohne remains unsubtracted
   }
   this.z   += dzsum;
   this.y   += dysum;
-  var dayTested=Math.max(0,it-Math.round(tauRecover-tauTest));
-  if(false){
-  //if(logging){
-    console.log("dayTested=",dayTested,
-		" this.pTestDay[dayTested]=",this.pTestDay[dayTested]);
-  }
-  this.yt  +=(this.pTestDay[dayTested]-fracDie)/(1-fracDie)*dysum;
 
 
-  // sum up the profile of infected people
-  // xAct: sum of "actually infected" (neither recoverd nor dead)
-  // xyz: cumulative sum of infected (incl recovered, dead)
+  // (4) sum up the profile of infected people
+  // xAct: relative sum of "actually infected" (neither recoverd nor dead)
+  // xyz: relative cumulative sum of infected (incl recovered, dead)
 
 
   this.xyz+= this.x[0];
@@ -1992,9 +1917,59 @@ CoronaSim.prototype.updateOneDay=function(R,it,logging){
     this.xAct     += this.x[tau];
   }
 
+
+
+  //#####################################################
+  // Test people (in updateOneDay)
+  //#####################################################
+
+  // !!! new: use xt propto nt, global nt0 defined in initializeData(country)
+  // overriding dynamic slider controlled pTest
+
+  // var useNewLoc defined at beginning of this method
+
+  var idata=it+data_idataStart;
+  var pTestNew=data_dn[idata]/nt0;
+  this.pTestDay[it]=(useNewLoc) ? pTestNew : pTest; // needed to determine yt
+
+  // new positive tests added to cumulative this.xt
+  // test time uniformly distributed over infection age, width global tauAvg
+
+  var dtau=Math.min(Math.floor(tauAvg/2),Math.round(tauTest));
+  var f_T=1./(2*dtau+1);
+
+  for(var tau=tauTest-dtau; tau<=tauTest+dtau; tau++){
+    this.xt += (useNewLoc)
+      ? pTestNew*f_T*this.xohne[tau]*(1-alpha)
+      : pTest*f_T*this.xohne[tau];
+  }
+  if(useNewLoc){ // consider beta error outside tau loop
+    this.xt += data_dn[idata]/n0*(1-n0*this.xohne[tauTest]/nt0)*beta;
+  }
+
+  if(logging){
+    console.log("updateOneDay: pos tests: it=",it,
+		" pTestNew=",pTestNew,
+		" data_dn[idata]=",Math.round(data_dn[idata]),
+		" (1-n0*this.xohne[tau]/nt0)=",(1-n0*this.xohne[tauTest]/nt0),
+		" dnInfected=", 
+		Math.round(n0*pTestNew*this.xohne[tauTest]*(1-alpha)),
+		" dnFalsePositive=",
+		Math.round(data_dn[idata]*(1-n0*this.xohne[tauTest]/nt0)*beta));
+  }
+
+
+  // tested recoveries
+
+  var dayTested=Math.max(0,it-Math.round(tauRecover-tauTest));
+  this.yt  +=(this.pTestDay[dayTested]-fracDie)/(1-fracDie)*dysum;
+  
+ 
+
+
   // control output (it is undefined here!)
 
-  if(logging){ // filter needed because called in calibration!
+  if(logging&&false){ // filter needed because called in calibration!
 
     console.log(
       "end CoronaSim.updateOneDay: it=",it," R=",R.toPrecision(2),
@@ -2761,7 +2736,7 @@ DrawSim.prototype.drawREstimate=function(it){
   ctx.fillText(str_R,0,0);
   ctx.setTransform(1,0,0,1,0,0);
 
-  for(var ical=0; ical<=getIndexCalib(it); ical++){ //!!!
+  for(var ical=0; ical<=getIndexCalib(it); ical++){ 
     var itR=getIndexTimeFromCalib(ical);
     x0=this.xPix[itR];
     ctx.fillRect(x0-1,this.yPix0,3,this.hPix);
