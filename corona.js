@@ -56,7 +56,7 @@ var isStopped=true
 
 // global time simulation vars (see also "data related global variables")
 
-var dayStartMar=20; //!! you can also exceed 31, date obj initializer takes it
+var dayStartMar=20; //!! 20 you can also exceed 31, date initializer takes it
 var startDay=new Date(2020,02,dayStartMar); // months start @ zero, days @ 1
 var present=new Date();   // time object for present 
 var it=0;
@@ -67,12 +67,18 @@ var itmaxinit=Math.round(
                 // round because of daylight saving time complications
 var itmax=itmaxinit; // can be >itmaxinit during interactive simulation
 
+
+// calibration related variables
+
+var calibrInterval=21; //!! calibration time interval [days] for one R value
 var itmin_calib; // start calibr time interval w/resp to dayStartMar
                  //     = dataGit_idataStart+1
 var itmax_calib; //  end calibr time interval =^ data_itmax-1 
                  // should be split if there are more than approx 
                  // 20 weeks of data
 var useInitSnap;
+var firstRfixed=false; //if first R element firstR is fixed !!!
+var firstR=0;
 
 // data related global variables
 // fetch with https://pomber.github.io/covid19/timeseries.json
@@ -230,6 +236,8 @@ var fps=50;
 // (i) controlled by sliders (apart from R0)
 
 
+var useNew=true; // if true, use influence of tests: rate, alpha,beta
+
 var tauRstartInit=4;   // active infectivity begins [days since infection]//1
 var tauRendInit=12;    // active infectivity ends [days since infection]//10
 var tauTestInit=8;    // time delay [days] test-infection //8
@@ -243,29 +251,27 @@ var tauAvg=5;      // smoothing interval (uneven!) for tauTest,tauDie,tauRecover
 
 // (ii) not controlled
 
-var fracDieInit=0.0038;  // !!!fracDie for initial setting of pTest 0.0047
+var fracDieInit=0.0037;  // !!!fracDie for initial setting of pTest 0.0047
 var fracDie=fracDieInit; // will be set to fracDieInit*pTest/pTestInit 
                         // at restart but NOT during simulation
-var tauDie=21;      // time from infection to death in fracDie cases
-var tauRecover=25; // time from infection to full recovery
+var fracDieFinal=0.2*fracDieInit;
+var itReduceBegin=10;
+var tauReduce=210; // about 2*tauDie
+
+var tauDie=18;      // time from infection to death in fracDie cases
+var tauRecover=16; // time from infection to full recovery
 var tauSymptoms=7;  // incubation time 
 
 var taumax=Math.max(tauDie,tauRecover)+tauAvg+1;
  
-// (iii) additional variables for simulating influence of tests
-// positives n*dxt per day (n0=#inhabitants):
-// dxt=pTest(dn)*dx*(1-alpha)+dn/n0*(1-n0*dx/nt0)*beta, dx=candidate infected
-//    =dn/nt0   *dx*(1-alpha)+dn/n0*(1-n0*dx/nt0)*beta
 
+// (iii) additional variables for simulating influence of tests, pTest=dn/nt0
+//       dxt=dn/nt0 *dx*(1-alpha)+dn/n0*(1-n0*dx/nt0)*beta
 
-var useNew=true; // if true, use influence of tests: rate, alpha,beta
-var fracDieFinal=1.0*fracDieInit;
-var itReduceBegin=10;
-var tauReduce=80; // about 2*tauDie
 var data_dnRef=0; // reference test rate: avg of first observed week
 var nt0;          //global testrate for testing 100% infected
-var alpha=0.0; // alpha error of test (false negative)
-var beta=0.004; // beta error (false positive) after double testing
+var alpha=0.02; // alpha error of test (false negative)
+var beta=0.003; // beta error (false positive) after double testing
 // if in Germany beta>0.006, n_falsePos can be > nPositive => contradict
 // => formally, matrix not invertible
 
@@ -587,9 +593,7 @@ function initializeData(country) {
 
   var di=data2_idataStart-data_idataStart; // translation data->data2 index
   var tauPos=7;
-  var gamma=0.05;
-  var alpha=0;
-  var beta=0;
+  var gamma=0.05; //!!! eliminate/consolidate
 
 
   for(var i=0; i<itmaxData; i++){
@@ -734,15 +738,16 @@ function initializeData(country) {
 
 //##############################################################
 // function for variable replication rate R as a function of time
-// t=tsim-date(2020-03-19) [days] from t to t+1
+// t=tsim-dateStart [days] from t to t+1
+// global vars bool firstRfixed and firstR for managing overlap!!!
 //##############################################################
 
-function Rfun_time(t){
-  var iPresent=data_idataStart+t;
+function Rfun_time(Rarr, it){
+  var iPresent=data_idataStart+it;
   var iTest    =iPresent+Math.round(tauTest);
   var iTestPrev=iPresent+Math.round(tauTest-0.5*(tauRstart+tauRend));
 
-  if(t<0){ // direct estimate from data 
+  if(it<0){ // direct estimate from data 
     var nxtNewnum  =1./2.*(data_cumCases[iTest+1]-data_cumCases[iTest-1]);
     var nxtNewdenom=1./2.*(data_cumCases[iTestPrev+1]
 			  -data_cumCases[iTestPrev-1]);
@@ -751,7 +756,82 @@ function Rfun_time(t){
     var R=(iTestPrev<0) ? 3 : 1.02*nxtNewnum/nxtNewdenom;
 
     if(false){
-      console.log("Rfun_time: t=",t," xtCum(iTest)=",data_cumCases[iTest],
+      console.log("Rfun_time: t=",it," xtCum(iTest)=",data_cumCases[iTest],
+		" xtCum(iTestPrev)=",data_cumCases[iTestPrev],
+		" xtNewnum=",xtNewnum,
+		" xtNewdenom=",xtNewdenom,
+		"");
+    }
+
+    // !! deflect infinity, NaN etc and too large R values if denom 0
+    // avoid too small R values if num 0
+
+    if(Math.abs(nxtNewdenom)<1e-10){
+      //console.log("Rfun_time: t=",t," error: R factor infinity");
+      R=5;
+    }
+    R=Math.min(5, Math.max(0.2,R));
+
+    return R;
+  }
+
+
+  else{// regular
+    //return Rarr[index];    //steps
+    var R;                   // linear interpolation
+    if(firstRfixed){
+      var indexWanted=Math.floor(it/calibrInterval)-1;
+      var index=Math.min(indexWanted, Rarr.length-1);
+      var indexPlus=Math.min(indexWanted+1, Rarr.length-1);
+      var relRest=(it-calibrInterval*index)/calibrInterval-1;
+      var Rlower=(indexWanted<0) ? firstR : Rarr[index];
+      R= (1-relRest)*Rlower+relRest*Rarr[indexPlus];
+    }
+    else{
+      var indexWanted=Math.floor(it/calibrInterval);
+      var index=Math.min(indexWanted, Rarr.length-1);
+      var indexPlus=Math.min(indexWanted+1, Rarr.length-1);
+      var relRest=(it-calibrInterval*index)/calibrInterval;
+      R= (1-relRest)*Rarr[index]+relRest*Rarr[indexPlus]; 
+    }
+    return R;
+  }
+}//Rfun_time
+
+
+/*
+  else{// regular
+    var indexWanted=Math.floor(it/calibrInterval);
+    var index=Math.min(indexWanted, Rarr.length-1);
+    var indexPlus=Math.min(indexWanted+1, Rarr.length-1);
+    var relRest=(it-calibrInterval*index)/calibrInterval;
+
+    //return Rarr[index];                                     //steps
+    return (1-relRest)*Rarr[index]+relRest*Rarr[indexPlus]; // lin intp
+  }
+*/
+
+
+
+
+
+
+function Rfuntest_time(Rarr, it){
+
+  var iPresent=data_idataStart+it;
+  var iTest    =iPresent+Math.round(tauTest);
+  var iTestPrev=iPresent+Math.round(tauTest-0.5*(tauRstart+tauRend));
+
+  if(it<0){ // direct estimate from data 
+    var nxtNewnum  =1./2.*(data_cumCases[iTest+1]-data_cumCases[iTest-1]);
+    var nxtNewdenom=1./2.*(data_cumCases[iTestPrev+1]
+			  -data_cumCases[iTestPrev-1]);
+
+    // no data if iTestPrev<0
+    var R=(iTestPrev<0) ? 3 : 1.02*nxtNewnum/nxtNewdenom;
+
+    if(false){
+      console.log("Rfun_time: t=",it," xtCum(iTest)=",data_cumCases[iTest],
 		" xtCum(iTestPrev)=",data_cumCases[iTestPrev],
 		" xtNewnum=",xtNewnum,
 		" xtNewdenom=",xtNewdenom,
@@ -771,12 +851,33 @@ function Rfun_time(t){
   }
 
   else{// regular
-    //var iweek=Math.floor(t/7); //MT2020-08
-    var index=Math.min(getIndexCalib(t),Rtime.length-1); //MT2020-08
-    return Rtime[index]; //!! Rtime is central array to keep actual R curve
-  }
+    //return Rarr[index];    //steps
+    var R;                   // linear interpolation
+    if(firstRfixed){
+      var indexWanted=Math.floor(it/calibrInterval)-1;
+      var index=Math.min(indexWanted, Rarr.length-1);
+      var indexPlus=Math.min(indexWanted+1, Rarr.length-1);
+      var relRest=(it-calibrInterval*index)/calibrInterval-1;
+      var Rlower=(indexWanted<0) ? firstR : Rarr[index];
+      R= (1-relRest)*Rlower+relRest*Rarr[indexPlus];
+    }
+    else{
+      var indexWanted=Math.floor(it/calibrInterval);
+      var index=Math.min(indexWanted, Rarr.length-1);
+      var indexPlus=Math.min(indexWanted+1, Rarr.length-1);
+      var relRest=(it-calibrInterval*index)/calibrInterval;
+      R= (1-relRest)*Rarr[index]+relRest*Rarr[indexPlus]; 
+    }
 
-} //Rfun_time
+    if(false){
+  console.log("Rfuntest: Rarr=",Rarr," it=",it," firstRfixed=",firstRfixed,
+		" firstR=",firstR," index=",index," indexPlus=",indexPlus,
+		" relRest=",relRest,
+		"");
+    }
+    return R;
+  }
+} //Rfuntest_time
 
 
 
@@ -802,7 +903,7 @@ function Rfun_time(t){
 @global data_cumCases: the data to fit, (it=0) corresp (idata=data_idataStart)
 @global itmin_calib start of calibr intervals (days since dayStartMar)
 @global itmax_calib end of calibr intervals (days since dayStartMar)
-
+@global useInitSnap
 NOTICE: fmin.nelderMead needs one-param SSEfunc SSEfunc(R_arr):
         "sol2_SSEfunc=fmin.nelderMead(SSEfunc, Rguess);"
  ##############################################################*/
@@ -824,9 +925,9 @@ function SSEfunc(Rarr, fR, logging, itStartInp, itMaxInp,
   var itMax=( typeof itMaxInp === "undefined") ? itmax_calib : itMaxInp;
   var itSnap=( typeof itSnapInp === "undefined") ? -1 : itSnapInp;
   takeSnapshot=( typeof itSnapInp === "undefined") ? false : true;
-
-  //if( typeof useInitSnapInp === "undefined"){// leave at global state
-
+  if( !(typeof useInitSnapInp === "undefined")){
+    useInitSnap=useInitSnapInp;
+  } // otherwise leave at global state
 
   if(logging){
     console.log("in SSE func:",
@@ -877,17 +978,13 @@ function SSEfunc(Rarr, fR, logging, itStartInp, itMaxInp,
   var sse=0;
   for(var it=itStart; it<itMax; it++){
 
-    var indexRarr=Math.min(getIndexCalib(it-itStart),Rarr.length-1);
-    var indexCalib=Math.min(getIndexCalib(it)-getIndexCalib(itmin_calib),
-			    Rarr.length-1);
-    var R_actual= Rarr[indexRarr]; //!!! only Rarr used in SSEfunc, 
+    var R_actual= Rfun_time(Rarr,it-itStart); //!!! only Rarr used in SSEfunc, 
                                    // not global Rtime
     var nxtData=data_cumCases[data_idataStart+it];
     var nxtSim=n0*corona.xt;
 
     if(it==itSnap){corona.takeSnapshot(itSnap);} //BEFORE corona.updateOneDay
     //corona.updateOneDay(R_actual, it, false); // in SSE
-    if(logging){console.log("before updateOneDay: logging=",logging);}
     corona.updateOneDay(R_actual, it, logging); // in SSE never logging=true!
     sse+=Math.pow(Math.log(nxtData)-Math.log(nxtSim),2); //!! Math.log
 
@@ -899,7 +996,7 @@ function SSEfunc(Rarr, fR, logging, itStartInp, itMaxInp,
 
     //if(logging&&(it>=82)&&(it<90)){
     //if(logging&&true){
-    if(logging&&true){
+    if(logging&&false){
 
       console.log("SSEfunc before update: it=",it," itSnap=",itSnap,
 		  " R_actual=",R_actual.toFixed(2),
@@ -1028,16 +1125,16 @@ function startup() {
 // =============================================================
 
 function getIndexTimeFromCalib(ical){ // MT 2020-08
-  return 14*ical; //!! only here changes of time interv of one calibr point
+  return calibrInterval*ical; 
 }
 
 function getIndexCalib(itime){
-  return Math.floor(itime/getIndexTimeFromCalib(1));     // MT 2020-08
+  return Math.floor(itime/calibrInterval);     // MT 2020-08
 }
 
-// last calibration interval must have at least 10 days
+// last calibration interval must have at least 16 days
 function getIndexCalibmax(itime){
-  return getIndexCalib(itime-10); 
+  return getIndexCalib(itime-16); 
 }
 
 
@@ -1069,72 +1166,118 @@ function calibrate(){
     estimateErrorCovar_Rhist_sigmaRhist(itmin_c, itmax_c, Rtime); 
   }
 
+//[0.7320677707416183, 0.7300327691457142, 0.5700521707385785, 1.185954238863542, 0.7879465569009609, 1.1349723689623068, fx: 0.006086285857380058]
+
+//[0.6911954730973333, 1.2798055172390908, 1.0692039847077297, 1.0033591515858074]
+
+//0.7320725920544027, 0.7300259731777763, 0.5700553413950524, 1.185960953352032, 0.6911919246597971, 1.2797997678313293, 1.0692164744054398, 1.003356477634356]
+
 
   else{ //!!!
 
     var log=false;
-    var nCalibIntervals=7; // multiples of 14 days
-    var nOverlap=1;        // multiples of 14 days (=1 is best!)
-    var ditOverlap=(nOverlap>0) ? 14*nOverlap : 1;
+    var nCalibIntervals=6; // multiples of calibrInterval
+    var nOverlap=2;        // multiples of calibrInterval (=1 for stepwise 
+                           // R interpol, =2 for linear interpolation
     var dn=nCalibIntervals-nOverlap;
-    var nPeriods=Math.round((data_itmax-1)/(14*dn));
-    if(log){console.log("nPeriods=",nPeriods,
-		" itmax_c(nPeriods-1)=",
-			14*((nPeriods-1)*dn+nCalibIntervals));}
+    var nPeriods=Math.round((data_itmax-1)/(calibrInterval*dn));
+
+    var ditOverlap=nOverlap*calibrInterval;
+ 
     for(var ip=0; ip<nPeriods; ip++){
-      itmin_c=(ip==0) ? 0 : itsnap; //14*ip*dn;
-      //itmax_c=itmin_c+14*nCalibIntervals;
-      itmax_c=14*(ip*dn+1*nCalibIntervals); // THIS is fixed, not itmin_c/snap
+      itmin_c=calibrInterval*ip*dn; //=past itsnap
+      itmax_c=itmin_c+calibrInterval*nCalibIntervals;
       if(ip==nPeriods-1){itmax_c=data_itmax-1;}
 
-      itmin_calib=itmin_c; // global variables for the minimal SSE function
+      // global variables for the minimum SSE function
+      itmin_calib=itmin_c;
       itmax_calib=itmax_c;
       useInitSnap=(ip>0); 
       var takeSnapshot=false; // taken separately at the end of a period
 
-     // get starting R
+     // get initial R estimate
 
       icalibmin=getIndexCalib(itmin_c);
       icalibmax=getIndexCalibmax(itmax_c);
+      firstRfixed=(ip>0); // gloal variable for Rfun
+      if(ip>0){ //!! first R value fixed
+        icalibmax--;
+        firstR=Rtime[ip*dn];
+      } 
       Rcalib=[];
       for(var icalib=icalibmin; icalib<=icalibmax; icalib++){
-        Rcalib[icalib-icalibmin]=(icalib==0) ? 1.2 : 1; 
+        Rcalib[icalib-icalibmin]=1; 
       }
 
+
       if(log)
-      console.log("\n\n\n\ncalibration: period ip=",ip,
+	console.log("\n\n\n\ncalibrate: period ip=",ip," dn=",dn,
 		  "itmin_c=",itmin_c," itmax_c=",itmax_c,
-		  " itsnap=",itmax_c-14*nOverlap,
 		  " useInitSnap=",useInitSnap);
 
-      var sse=SSEfunc(Rcalib,null,false,itmin_c,itmax_c,-1,useInitSnap);
-      if(log) console.log("\nFull specified SSEfun: sse=",sse);
+      // check if stripped SSEfunc used for nelderMead calculates correctly 
 
-      var sseNull=SSEfunc(Rcalib,null,false);
-      if(log) console.log("Minimal SSEfun needed for estimate: sseNull=",sseNull);
+      if(false&&log){ 
+        var sse=SSEfunc(Rcalib,null,false,itmin_c,itmax_c,-1,useInitSnap);
+        console.log("\nFull specified SSEfun: sse=",sse);
+ 
+        var sseNull=SSEfunc(Rcalib,null,false);
+        console.log("Minimal SSEfun needed for estimate: sseNull=",sseNull);
+      }
+
+
 
       // estimate 
 
-      estimateR(itmin_c, itmax_c, Rcalib);
+      estimateR(itmin_c, itmax_c, Rcalib);  // also transfers Rcalib to Rtime
       estimateErrorCovar_Rhist_sigmaRhist(itmin_c, itmax_c, Rcalib);//per period!
 
       // calculate snapshot for init of next period
 
-      var itsnap=Math.min(itmax_c-14*nOverlap, itmax_c-1); //!!
-      //var itsnap=itmax_c-14*nOverlap-1; 
+      var itsnap=Math.min(calibrInterval*dn*(ip+1), itmax_c-1); //!!
       SSEfunc(Rcalib,null,false,itmin_c,itmax_c,itsnap,useInitSnap);
       if(log) console.log(" snapshot for initialiation in next period:",
 		  corona.snapshot);
+    }// end calibration proper
+
+
+    firstRfixed=false; // for the whole simulation use all R values in Rfun_time
+    useInitSnap=false; 
+
+    //test whole calibration
+
+    if(false&&log){
+      itsnap=calibrInterval*dn; //first snapshot to compare with
+      SSEfunc(Rtime,null,log,0, data_itmax-1,itsnap,useInitSnap);
+      console.log("corona.snapshot=",corona.snapshot);
     }
 
 
-    // at the end, calculate estimation errors
+    // tests
+    if(false){
+      var Rarr0=[1,3,2,4,3,0];
+      var Rarr1=          [5,4,6];
+      var  Rtot=[1,3,2,4,3,5,4,6];
 
-    useInitSnap=false; //!!!
-    itsnap=14*dn; //first snapshot to compare with
-    SSEfunc(Rtime,null,log,0, data_itmax-1,itsnap,useInitSnap);
-    if(log) console.log("corona.snapshot=",corona.snapshot);
 
+      console.log("dn=",dn);
+      for (var it=0; it<data_itmax-1; it++){
+        firstRfixed=false;
+        var R0=Rfuntest_time(Rarr0,it);
+        var R2=Rfuntest_time(Rtot,it);
+        firstRfixed=true; firstR=Rarr0[4];
+        var R1=Rfuntest_time(Rarr1,it-dn*calibrInterval);
+        firstRfixed=false;
+
+	console.log("it=",it,
+		    " R0=", R0.toPrecision(3),
+		    " R1=", R1.toPrecision(3),
+		    " R2=", R2.toPrecision(3),
+		   "");
+      };
+    } //test
+
+ 
   } // multiple periods
 
 
@@ -1201,6 +1344,8 @@ function calibrate(){
 // itmin_calib >=0
 // itmax_calib < data_itmax-data_idataStart
 // controlled by parameter itmin_c, itmax_c
+
+// also transfers Rcalib to Rtime
 // =============================================================
 
 function estimateR(itmin_c, itmax_c, Rcalib){
@@ -1215,9 +1360,10 @@ function estimateR(itmin_c, itmax_c, Rcalib){
   itmax_calib=itmax_c;
 
 
-  console.log("\n\nestimateR: after initializing: Rcalib=",Rcalib,
-	      " itmin_c=",itmin_c, " itmax_c=",itmax_c,
-	      " before fmin.nelderMead");
+  if(false){console.log("\n\nestimateR: after initializing: Rcalib=",Rcalib,
+			" itmin_c=",itmin_c, " itmax_c=",itmax_c,
+			" before fmin.nelderMead");}
+	   
 
   /** ##############################################################
   THE central estimation 
@@ -1246,14 +1392,17 @@ function estimateR(itmin_c, itmax_c, Rcalib){
     //console.log("\nafter iter ",ic+1,": Rcalib=",Rcalib);
 
   }
-  console.log("estimateR: after fmin.nelderMead: Rcalib=",Rcalib);
+  //console.log("estimateR: after fmin.nelderMead: Rcalib=",Rcalib);
 
 
 
   // copy tp global R table Rtime
 
   //console.log("estimateR before new transfer: Rtime=",Rtime);
-  for(var j=0; j<Rcalib.length; j++){
+  if(firstRfixed) for(var j=0; j<Rcalib.length; j++){ //!!!
+    Rtime[j+1+icalibmin]=sol2_SSEfunc.x[j];
+  }
+  else for(var j=0; j<Rcalib.length; j++){ // normal
     Rtime[j+icalibmin]=sol2_SSEfunc.x[j];
   }
   //console.log("estimateR after new transfer: Rtime=",Rtime);
@@ -1282,17 +1431,19 @@ function estimateR(itmin_c, itmax_c, Rcalib){
 
 function estimateErrorCovar_Rhist_sigmaRhist(itmin_c, itmax_c, Rcalib){
 
-  //console.log("in estimateErrorCovar(): Rcalib=",Rcalib);
-
   var log=false;
+
+  if(log){console.log("entering estimateErrorCovar(): Rcalib=",Rcalib,
+		       " firstRfixed=",firstRfixed," firstR=",firstR);}
+
   var icalibmin=getIndexCalib(itmin_c);
   var icalibmax=getIndexCalibmax(itmax_c);// *max: >=10d cal intv
 
 
   var H=[]; // Hessian of actively estimated R elements
-  for(var j=0; j<icalibmax+1-icalibmin; j++){H[j]=[];}
+  for(var j=0; j<Rcalib.length; j++){H[j]=[];}
 
-  var dR=0.000001;
+  var dR=0.001;
 
 
 
@@ -1313,7 +1464,8 @@ function estimateErrorCovar_Rhist_sigmaRhist(itmin_c, itmax_c, Rcalib){
     Rm[j]-=dR;
     H[j][j]
       =(SSEfunc(Rp)-2*SSEfunc(Rcalib)+SSEfunc(Rm))/(dR*dR);
-    if(log){console.log("\n j=",j," Rcalib=",Rcalib,"\n Rp=",Rp,"\n Rm=",Rm,
+    if(log){console.log("\n j=",j," Rcalib=",Rcalib,
+			"\n           Rp=",Rp,"\n           Rm=",Rm,
 			 "\n SSEfunc(Rp)=   ",SSEfunc(Rp),
 			 "\n SSEfunc(Rcalib)=",SSEfunc(Rcalib),
 			 "\n SSEfunc(Rm)=   ",SSEfunc(Rm),
@@ -1349,6 +1501,13 @@ function estimateErrorCovar_Rhist_sigmaRhist(itmin_c, itmax_c, Rcalib){
     }
   }
 
+  if(log){
+    console.log("before inverting: Rcalib.length=",Rcalib.length);
+    for(var j=0; j<H.length; j++){
+      console.log(" j=",j," H[j]=",H[j]);
+    }
+  }
+
   // inverse Hessian
 
   var Hinv=math.inv(H);
@@ -1371,14 +1530,14 @@ function estimateErrorCovar_Rhist_sigmaRhist(itmin_c, itmax_c, Rcalib){
   // transfer R and sigma 
   // to global daily R_hist[] and sigmaR_hist[] p to present 
   // (extrapolate constant if needed, e.g. data not up-to-date)
-  // getIndexTimeFromCalib(1) typically 14 (days)
+  // getIndexTimeFromCalib(1) typically calibrInterval days)
 
   for(var it=itmin_c; it<itmaxinit; it++){//
-    var j=Math.min(Math.floor( (it-itmin_c)/getIndexTimeFromCalib(1)),
+    var j=Math.min(Math.floor( (it-itmin_c)/calibrInterval),
 		   Rcalib.length-1);
     sigmaR_hist[it]=sigmaR[j];
     R_hist[it]=Rcalib[j];
-    if(log){console.log("it=",it," j=",j,
+    if(log&&false){console.log("it=",it," j=",j,
 			" sigmaR_hist[it]=", sigmaR_hist[it]);}
   }
 
@@ -1446,7 +1605,7 @@ function selectWindow(){ // callback html select box "windowGDiv"
 
   drawsim.transferSimData(it);
 
-  drawsim.drawSim(it);
+  drawsim.draw(it);
   //drawsim.drawOld(it,windowG,corona.xAct,corona.xt,
 //		       corona.y,corona.yt,corona.z); // !! also scales anew
 }
@@ -1514,18 +1673,11 @@ function myResetFunction(){
 
 
 function simulationRun() {
-  if(false&&useLiveData&&(it==0)){
-    console.log("Test:");
-    for (var t=-5; t<=2; t++){
-      console.log("t=",t," Rfun_time(t)=", Rfun_time(t));
-    }
-    //corona.init(0);
 
-  }
   doSimulationStep(); 
   //console.log("RsliderUsed=",RsliderUsed);
   if(!RsliderUsed){
-    setSlider(slider_R0, slider_R0Text, Rfun_time(it).toFixed(2),"");
+    setSlider(slider_R0, slider_R0Text, Rfun_time(Rtime,it).toFixed(2),"");
   }
 
   // suffer one undefined at data_cumCases 
@@ -1548,7 +1700,7 @@ function simulationRun() {
 function doSimulationStep(){
 
   //!!! it->(it+1) because otherwise not consistent with "calculate SSE"
-  var R_actual=(RsliderUsed) ? R0 : Rfun_time(it);
+  var R_actual=(RsliderUsed) ? R0 : Rfun_time(Rtime,it);
   R_hist[it]=R_actual;
 
   if(false){
@@ -1559,7 +1711,7 @@ function doSimulationStep(){
 		" R_actual=",R_actual.toPrecision(3));
   }
 
-  drawsim.drawSim(it);
+  drawsim.draw(it);
  
   var logging=false;  // doSimulationStep: logging "allowed"
   //var logging=(it<3);
@@ -1646,18 +1798,18 @@ CoronaSim.prototype.init=function(itStart,logging){
   //this.xt  =pTest*this.xyz; // fraction of positively tested persons/n0 as f(t)
 
   this.y=0;  // fraction recovered real as a function of time
-  this.yt=0; // fraction recovered data
+  //this.yt=0; // fraction recovered data
   this.z=0;  // fraction dead (real=data)
-  this.pTestDay=[]; // fraction of tested among the new infected
-  for(var i=0; i<500; i++){ // just initialisation for the first few steps
-    this.pTestDay[i]=pTest;
-  }
+  //this.pTestDay=[]; // fraction of tested among the new infected
+  //for(var i=0; i<500; i++){ // just initialisation for the first few steps
+   // this.pTestDay[i]=pTest;
+ // }
 
   // init infection-age profile this.x[tau] with exponential
   // initial exponential rate r0 per day  (don't confuse r0 with R0)
 
   var tauR=0.5*(tauRstart+tauRend)// middle period for one repro cycle
-  var r0=Math.log(Rfun_time(it0))/tauR;  // init reprod rate by stable Rfun_*
+  var r0=Math.log(Rfun_time(Rtime,it0))/tauR;  // init reprod rate by stable Rfun_*
   var denom=0; 
 
   for(var tau=0; tau<taumax; tau++){
@@ -1666,20 +1818,19 @@ CoronaSim.prototype.init=function(itStart,logging){
   for(var tau=0; tau<taumax; tau++){ // in init
     this.x[tau]=this.xAct*Math.exp(-r0*tau)/denom;
     this.xohne[tau]=this.x[tau];
-    if(logging){console.log("init: it0=",it0," R0=",Rfun_time(it0),
+    if(logging){console.log("init: it0=",it0," R0=",Rfun_time(Rtime,it0),
 			    " r0=",r0," this.x[tau]=",this.x[tau]);}
   }
 
   // data-driven warmup
 
   for(var its=it0; its<itStart; its++){ 
-    var Rt=Rfun_time(its);
+    var Rt=Rfun_time(Rtime,its);
     if(logging){console.log("corona.init warmup before update: its=",its,
 			    " pTest=",pTest,
 			    " R=",Rt.toFixed(2),
 			    " nx=",n0*this.xAct,
 			    " nxt=",n0*this.xt,
-			    " nyt=",n0*this.yt,
 			    "");}
     this.updateOneDay(Rt,its,logging); // in CoronaSim, data-driven warmup
   }
@@ -1695,7 +1846,6 @@ CoronaSim.prototype.init=function(itStart,logging){
   this.xyz      *= scaleDownFact;
   this.xt       *= scaleDownFact;
   this.y        *= scaleDownFact;
-  this.yt       *= scaleDownFact;
   this.z        *= scaleDownFact;
   for(var tau=0; tau<taumax; tau++){
     this.x[tau]     *= scaleDownFact;
@@ -1737,8 +1887,7 @@ CoronaSim.prototype.takeSnapshot=function(it){
     y:    this.y,
     z:    this.z,
     xyz:  this.xyz,
-    xt:   this.xt,
-    yt:   this.yt
+    xt:   this.xt
   }
 
   for(var tau=0; tau<taumax; tau++){ // copy by value
@@ -1752,7 +1901,6 @@ CoronaSim.prototype.takeSnapshot=function(it){
       "\n  this.snapshot.xAct=",this.snapshot.xAct.toPrecision(3),
       "\n  this.snapshot.xt=",this.snapshot.xt.toPrecision(3),
       "\n  this.snapshot.y=",this.snapshot.y.toPrecision(3),
-      "\n  this.snapshot.yt=",this.snapshot.yt.toPrecision(3),
       "\n  this.snapshot.z=",this.snapshot.z.toPrecision(3),
       "\n  this.snapshot.xyz=",this.snapshot.xyz.toPrecision(3),
       "\n  this.snapshot.x[tauDie]=",this.snapshot.x[tauDie].toPrecision(3),
@@ -1775,14 +1923,12 @@ CoronaSim.prototype.setStateFromSnapshot=function(){
   this.z   =this.snapshot.z;
   this.xyz =this.snapshot.xyz;
   this.xt  =this.snapshot.xt;
-  this.yt  =this.snapshot.yt;
   if(false){
     console.log(
       "corona.setStateFromSnapshot: this.snapshot.it=",this.snapshot.it,
       "\n  this.xAct=",this.xAct.toPrecision(3),
       "\n  this.xt=",this.xt.toPrecision(3),
       "\n  this.y=",this.y.toPrecision(3),
-      "\n  this.yt=",this.yt.toPrecision(3),
       "\n  this.z=",this.z.toPrecision(3),
       "\n  this.xyz=",this.xyz.toPrecision(3),
       "\n  this.x[tauDie]=",this.x[tauDie].toPrecision(3),
@@ -1830,7 +1976,6 @@ CoronaSim.prototype.updateOneDay=function(R,it,logging){
       " this.y=",this.y.toPrecision(3),
       " this.z=",this.z.toPrecision(3),
 	//	" nxt=n0*this.xt=",Math.round(n0*this.xt),
-	//	" nyt=n0*this.yt=",Math.round(n0*this.yt),
       "\n  this.x[tauDie-1]=",this.x[tauDie-1].toPrecision(3),
       "\n  this.x[tauDie]=",this.x[tauDie].toPrecision(3),
       "\n  this.x[tauDie+1]=",this.x[tauDie+1].toPrecision(3),
@@ -1930,7 +2075,6 @@ CoronaSim.prototype.updateOneDay=function(R,it,logging){
 
   var idata=it+data_idataStart;
   var pTestNew=data_dn[idata]/nt0;
-  this.pTestDay[it]=(useNewLoc) ? pTestNew : pTest; // needed to determine yt
 
   // new positive tests added to cumulative this.xt
   // test time uniformly distributed over infection age, width global tauAvg
@@ -1943,11 +2087,15 @@ CoronaSim.prototype.updateOneDay=function(R,it,logging){
       ? pTestNew*f_T*this.xohne[tau]*(1-alpha)
       : pTest*f_T*this.xohne[tau];
   }
-  if(useNewLoc){ // consider beta error outside tau loop
-    this.xt += data_dn[idata]/n0*(1-n0*this.xohne[tauTest]/nt0)*beta;
-  }
 
-  if(logging){
+  // add beta error outside tau loop
+
+  this.xtFalse=(useNewLoc) 
+    ? data_dn[idata]/n0*(1-n0*this.xohne[tauTest]/nt0)*beta : 0;
+  this.xt += this.xtFalse;
+
+
+  if(logging&&true){
     console.log("updateOneDay: pos tests: it=",it,
 		" pTestNew=",pTestNew,
 		" data_dn[idata]=",Math.round(data_dn[idata]),
@@ -1959,10 +2107,14 @@ CoronaSim.prototype.updateOneDay=function(R,it,logging){
   }
 
 
-  // tested recoveries
+  // tested recoveries (now, do simply difference tested(past)-deaths(act)
+  // at graphics stage (following works well w/o beta error)
 
-  var dayTested=Math.max(0,it-Math.round(tauRecover-tauTest));
-  this.yt  +=(this.pTestDay[dayTested]-fracDie)/(1-fracDie)*dysum;
+  //this.pTestDay[it]=(useNewLoc) ? pTestNew : pTest;
+  //var dayTested=Math.max(0,it-Math.round(tauRecover-tauTest));
+  // this.yt  +=(this.pTestDay[dayTested]-fracDie)/(1-fracDie)*dysum
+
+
   
  
 
@@ -1978,16 +2130,15 @@ CoronaSim.prototype.updateOneDay=function(R,it,logging){
       " this.y=",this.y.toPrecision(3),
       " this.z=",this.z.toPrecision(3),
 	//	" nxt=n0*this.xt=",Math.round(n0*this.xt),
-	//	" nyt=n0*this.yt=",Math.round(n0*this.yt),
-      "\n  this.x[tauDie-1]=",this.x[tauDie-1].toPrecision(3),
-      "    this.xohne[tauDie-1]=",this.xohne[tauDie-1].toPrecision(3),
-      "\n  this.x[tauDie]=",this.x[tauDie].toPrecision(3),
-      "    this.xohne[tauDie]=",this.xohne[tauDie].toPrecision(3),
-      "\n  this.x[tauDie+1]=",this.x[tauDie+1].toPrecision(3),
-      "    this.xohne[tauDie+1]=",this.xohne[tauDie+1].toPrecision(3),
-      "\n  this.x[tauRecover-1]=",this.x[tauRecover-1].toPrecision(3),
-      "\n  this.x[tauRecover]=",this.x[tauRecover].toPrecision(3),
-      "\n  this.x[tauRecover+1]=",this.x[tauRecover+1].toPrecision(3),
+      //"\n  this.x[tauDie-1]=",this.x[tauDie-1].toPrecision(3),
+      //"    this.xohne[tauDie-1]=",this.xohne[tauDie-1].toPrecision(3),
+      //"\n  this.x[tauDie]=",this.x[tauDie].toPrecision(3),
+      //"    this.xohne[tauDie]=",this.xohne[tauDie].toPrecision(3),
+      //"\n  this.x[tauDie+1]=",this.x[tauDie+1].toPrecision(3),
+      //"    this.xohne[tauDie+1]=",this.xohne[tauDie+1].toPrecision(3),
+     // "\n  this.x[tauRecover-1]=",this.x[tauRecover-1].toPrecision(3),
+      //"\n  this.x[tauRecover]=",this.x[tauRecover].toPrecision(3),
+      //"\n  this.x[tauRecover+1]=",this.x[tauRecover+1].toPrecision(3),
       "");
   }
 
@@ -2107,7 +2258,7 @@ function smooth(arr, kernel){
 
 function DrawSim(){
 
-  //console.log("drawSim created");
+  //console.log("DrawSim created");
 
   this.unitPers=1000;  // persons counted in multiples of unitPers
 
@@ -2124,9 +2275,11 @@ function DrawSim(){
 
 
  
-  colInfected="rgb(255,90,0)";
+  colInfected="rgb(255,150,0)";
+  colInfectedTot="rgb(0,0,220)";
   colTests="rgb(0,0,210)";
-  colCases="rgb(233,0,0)";
+  colCases="rgb(220,0,0)";
+  colFalsePos="rgb(0,230,0)";
   colRecov="rgb(60,255,40)";
   colRecovCases="rgb(0,150,40)";
   colDead="rgb(0,0,0)";  
@@ -2140,6 +2293,7 @@ function DrawSim(){
   // central conatiner for the graphics data
 
   this.dataG=[];
+  this.xtPast=0; // needed to derive yt from balance since no longer calc.
 
 // window 0 (sim+data lin)
 
@@ -2227,15 +2381,17 @@ function DrawSim(){
 
 
   // window 2: mirrored bar chart cases vs dead persons
-  // ytrafo=[scalefact, half, mirrored]
+  // ytrafo=[scalefact, half, mirrored] 
 
   this.dataG[16]={key: "Positiv Getestete pro Tag", data: [],
 		 type: 0, window:2, plottype: "bars", plotLog: false, 
-		 ytrafo: [0.1, true,false], color:colCases};
+		 ytrafo: [0.1, true,false], color:colCases}; // real: scale*10
 
   this.dataG[17]={key: "Gestorbene pro Tag", data: [],
 		 type: 0, window:2, plottype: "bars", plotLog: false, 
 		 ytrafo: [1, true,true], color:colDead};
+
+  // + new data at bottom
 
 
 
@@ -2266,15 +2422,38 @@ function DrawSim(){
 		 ytrafo: [100, false,false], color:colIFR};
 
 
+  // new curves/lines/bars
+
+  this.dataG[23]={key: "Simulierte Neuinfizierte pro Tag (in 10)", data: [],
+		 type: 4, window:2, plottype: "lines", plotLog: false, 
+		 ytrafo: [0.01, true,false], color:colInfected};// real: scale*10
+
+  this.dataG[24]={key: "Simulierte Neuinfizierte pro Tag (in 10)", data: [],
+		 type: 4, window:3, plottype: "lines", plotLog: false, 
+		 ytrafo: [0.1, false,false], color:colInfected};
+
+  this.dataG[25]={key: "Simulierte Durchseuchung", data: [],
+		 type: 4, window:1, plottype: "lines", plotLog: true, 
+		 ytrafo: [1, false,false], color:colInfectedTot};
+
+
+  this.dataG[26]={key: "Simulierte False Positive pro Tag", data: [],
+		 //type: 4, window:3, plottype: "bars", plotLog: false, 
+		 type: 4, window:3, plottype: "lines", plotLog: false, 
+		 ytrafo: [1, false,false], color:colFalsePos};
+
+
+
+
 // quantity selector for the different display windows
 
   this.qselect=[];
 
   //this.qselect[0]=[0,1,2,3,4,5,6,7];
   this.qselect[0]=[0,1,2,4,5,6];  // without cum posRate
-  this.qselect[1]=[8,9,10,11,12,13,14,15];
-  this.qselect[2]=[16,17];
-  this.qselect[3]=[18,19];
+  this.qselect[1]=[8,9,12,13,15,25];
+  this.qselect[2]=[16,17,23];
+  this.qselect[3]=[18,19,24,26];
   this.qselect[4]=[20,21,22];
 
 
@@ -2302,7 +2481,6 @@ DrawSim.prototype.setWindow=function(windowG){
 
   if(!displayRecovered){
     this.qselect[0]=[0,4];
-    this.qselect[1]=[8,9,10,12,14,15];
   }
 
 
@@ -2553,17 +2731,25 @@ DrawSim.prototype.drawAxes=function(windowG){
 DrawSim.prototype.transferSimData=function(it){
 //######################################################################
 
-  //console.log("transferSimData: it=",it," n0*corona.xt=",
-//	      n0*corona.xt," n0*corona.yt=",n0*corona.yt);
   this.dataG[0].data[it]=n0*corona.xt;
-  this.dataG[1].data[it]=n0*corona.yt;
   this.dataG[2].data[it]=n0*corona.z;
   this.dataG[3].data[it]=n0*corona.z/corona.xt
   this.dataG[8].data[it]=log10(n0*corona.xAct);
   this.dataG[9].data[it]=log10(n0*corona.xt);
   this.dataG[10].data[it]=log10(n0*corona.y);
-  this.dataG[11].data[it]=log10(n0*corona.yt);
   this.dataG[12].data[it]=log10(n0*corona.z);
+  this.dataG[23].data[it]=n0*corona.x[0]; // x[0]=infected at infection age 0
+  this.dataG[24].data=this.dataG[23].data;
+  this.dataG[25].data[it]=log10(n0*corona.xyz); // "Durchseuchung"
+  this.dataG[26].data[it]=n0*corona.xtFalse; // number of false positives
+
+  // get yt  from balance xt past, zt=z
+  var itPast=it-tauRecover;
+  var nxtPast=(it<tauRecover)
+    ? data_cumCases[it-tauRecover+data_idataStart]
+    : this.dataG[0].data[itPast];
+  this.dataG[1].data[it]=nxtPast-n0*corona.z; // balance past infected-deaths
+  this.dataG[11].data[it]=log10(this.dataG[1].data[it]);
 
   if(false){
     console.log("\n\nDrawSim.transferSimData");
@@ -2766,10 +2952,10 @@ DrawSim.prototype.drawREstimate=function(it){
 
 
 //######################################################################
-DrawSim.prototype.drawSim=function(it,q){
+DrawSim.prototype.draw=function(it,q){
 //######################################################################
 
- // console.log("\n\nin DrawSim.drawSim: it=",it," textsize=",textsize);
+ // console.log("\n\nin DrawSim.draw: it=",it," textsize=",textsize);
 
 
   // global vars canvas.width, canvas.height,
@@ -2810,12 +2996,6 @@ DrawSim.prototype.drawSim=function(it,q){
 
 
 
-  // draw R estimates for simulation windows
-
-  if(windowG<2){
-    this.drawREstimate(it);
-  }
-
 
   // draw simulations and data for all windows
 
@@ -2823,77 +3003,93 @@ DrawSim.prototype.drawSim=function(it,q){
   //  plotPoints with point types , plotBars by parsing this.dataG[q]
 
   // qselect: quantity selector for windowG
-  //console.log("\ndrawSim: it=",it," this.ymaxType=",this.ymaxType);
+  //console.log("\ndraw: it=",it," this.ymaxType=",this.ymaxType);
 
   for(var iq =0; iq<this.qselect[windowG].length; iq++){ 
     var q=this.qselect[windowG][iq];
     var data=this.dataG[q].data;
     var i=(this.dataG[q].type<3) ? it+data_idataStart : it;
     var scaling=this.dataG[q].ytrafo[0];
+    var half=this.dataG[q].ytrafo[1];
+    var downwards=this.dataG[q].ytrafo[2];
     var type=this.dataG[q].type;
     var plottype=this.dataG[q].plottype;
     var wLine=(type==3) ? 0.003*sizeminCanvas
-	:(type==4) ? 0.002*sizeminCanvas :  0.00012*sizeminCanvas;
+	:(type==4) ? 0.006*sizeminCanvas :  0.00012*sizeminCanvas;
     wLine=Math.max(wLine,0.5);
     var color=this.dataG[q].color;
     var pointType=type;
     var actValue=scaling*this.dataG[q].data[i];
     if(false){
-      console.log("drawSim: it=",it," i=",i,
-		    " windowG=",windowG,
-		    " q=",q," type=",type,
-		    " plottype=",plottype," wline=",wLine,
-		    " scaling=",scaling," actValue=",actValue);
+    //if(it==20){
+      console.log("draw: it=",it," i=",i,
+		  " windowG=",windowG,
+		  " q=",q," type=",type,
+		  " scaling=",scaling," half=",half," downwardsw=",downwards,
+		  " plottype=",plottype," wline=",wLine,
+		  " actValue=",actValue);
     }
 
       // draw some data (the simulations) as lines/curves
 
     if(this.dataG[q].plottype=="lines"){
       this.drawCurve(it, 0, data, 
-		     scaling, wLine, color, windowG);
+		     scaling,half,downwards, wLine, color, windowG);
     }
 
       // plot some data as points
 
     if(this.dataG[q].plottype=="points"){
       this.plotPoints(it, data_idataStart, data, 
-		      scaling, pointType, color, windowG);
+		      scaling,half,downwards, pointType, color, windowG);
     }
 
       // plot some data as bars
 
     if(this.dataG[q].plottype=="bars"){
-      var half=((q==16)||(q==17));
-      var downwards=(q==17);
-      this.plotBars(it, data_idataStart, data, 
-		      scaling, half,downwards, color, windowG);
+      var istart=(this.dataG[q].type>2) ? 0 : data_idataStart;
+      this.plotBars(it, istart, data,  
+		    scaling,half,downwards,color, windowG);
 
     }
+
+  // draw R estimates for windows qith simulations
+
+  if(windowG<3){
+    this.drawREstimate(it);
+  }
 
 
   }
 
-} //DrawSim.drawSim
+} //DrawSim.draw
 
 
 
 
 
 //######################################################################
-DrawSim.prototype.drawCurve=function(it, iDataStart, data_arr, scaling, 
+DrawSim.prototype.drawCurve=function(it, iDataStart, data_arr,
+				     scaling, half, downwards,
 				     wLine, color, windowG){
 //######################################################################
 
   var yminDraw=this.yminType[windowG];
   var ymaxDraw=this.ymaxType[windowG];
 
-  // !! check if I want to retain this
+  // new settings for up/down plots
 
-  //if((windowG==0)&&(q==5)){ 
-  if(false){
-    yminDraw=this.yminPerc; ymaxDraw=this.ymaxPerc;
+  var yPix0=(half) ? 0.5*(this.yPix0+this.yPixMax)
+    : (downwards) ? this.yPixMax : this.yPix0;
+  var yPixMax=yPix0+((downwards) ? -1 : 1)*((half) ? 0.5 : 1)
+    *(this.yPixMax-this.yPix0);
+
+  if(half){
+    console.log("drawCurve: half=",half," downwards=",downwards,
+  		" yPix0=",yPix0," yPixMax=",yPixMax);
   }
 
+ 
   ctx.fillStyle=color;
   for (var ig=0; ig<=it; ig++){
     var i=iDataStart+ig; // i=iData
@@ -2902,8 +3098,8 @@ DrawSim.prototype.drawCurve=function(it, iDataStart, data_arr, scaling,
       var valueOld=data_arr[i-1]*scaling;
       var yrel=(value-yminDraw)/(ymaxDraw-yminDraw);
       var yrelOld=(valueOld-yminDraw)/(ymaxDraw-yminDraw);
-      var yPix=this.yPix0+yrel*(this.yPixMax-this.yPix0);
-      var yPixOld=this.yPix0+yrelOld*(this.yPixMax-this.yPix0);
+      var yPix=yPix0+yrel*(yPixMax-yPix0);
+      var yPixOld=yPix0+yrelOld*(yPixMax-yPix0);
 
       var phi=Math.atan((yPix-yPixOld)/
 			(this.xPix[ig]-this.xPix[ig-1]));
@@ -2960,21 +3156,29 @@ DrawSim.prototype.drawCurve=function(it, iDataStart, data_arr, scaling,
 // => add data2_idataStart-data_idataStart to index of data2 quantities
 
 //######################################################################
-DrawSim.prototype.plotPoints=function(it, iDataStart, data_arr, scaling, 
+DrawSim.prototype.plotPoints=function(it, iDataStart, data_arr, 
+				      scaling, half, downwards,
 				      pointType, color, windowG){
 //######################################################################
 
   var yminDraw=this.yminType[windowG];
   var ymaxDraw=this.ymaxType[windowG];
 
-  ctx.fillStyle=color;
 
+  // new settings for up/down plots
+
+  var yPix0=(half) ? 0.5*(this.yPix0+this.yPixMax)
+    : (downwards) ? this.yPixMax : this.yPix0;
+  var yPixMax=yPix0+((downwards) ? -1 : 1)*((half) ? 0.5 : 1)
+    *(this.yPixMax-this.yPix0);
+
+  ctx.fillStyle=color;
   for (var ig=0; ig<=it; ig++){ 
     var i=iDataStart+ig; // i=iData
     var value=data_arr[i]*scaling;
     if((i>0)&&(value>=yminDraw) &&(value<=ymaxDraw)){
       var yrel=(value-yminDraw)/(ymaxDraw-yminDraw);
-      var yPix=this.yPix0+yrel*(this.yPixMax-this.yPix0);
+      var yPix=yPix0+yrel*(yPixMax-yPix0);
       var r=Math.max(0.006*sizeminCanvas, 1);
       if(pointType==0){
         ctx.beginPath(); //!! crucial; otherwise latest col used for ALL
@@ -3006,7 +3210,6 @@ DrawSim.prototype.plotPoints=function(it, iDataStart, data_arr, scaling,
 	arg2=[this.xPix[ig]+r,yPix+r];
 	arg3=[this.xPix[ig]+r,yPix-r];
 	arg4=[this.xPix[ig]-r,yPix-r];
-	console.log("plotPoints, it=",it);
 	console.log("ctx.moveTo",arg0,
 		    "\n  ctx.lineTo",arg1,
 		    "\n  ctx.lineTo",arg2,
@@ -3015,7 +3218,6 @@ DrawSim.prototype.plotPoints=function(it, iDataStart, data_arr, scaling,
       }
     }
   }
-
 }
 
 

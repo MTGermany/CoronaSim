@@ -304,7 +304,7 @@ function canvas_resize(){
   drawsim.wPix=drawsim.xPixMax-drawsim.xPix0;
   drawsim.hPix=drawsim.yPixMax-drawsim.yPix0;  //<0
 
-  if(drawsim!==null){drawsim.drawSim(it);}//!! draw after resize
+  if(drawsim!==null){drawsim.draw(it);}//!! draw after resize
 
 
  }
