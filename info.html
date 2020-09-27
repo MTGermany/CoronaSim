@@ -20,6 +20,13 @@
 <li><a href="#motiv">Motivation</a>
 <li><a href="#defs">Definitionen</a>
 <li><a href="#problem">Was ist das Problem?</a>
+<li><a href="#help">Wie kann die Simulation dabei helfen?</a>
+<li><a href="#sim">Simulationsablauf und Bedienung</a>
+<li><a href="#examples">Beispiele</a>
+<li><a href="#quant">Simulierte Gr&ouml;&szlig;en im Detail</a>
+<li><a href="#model">Modell</a>
+<li><a href="#data">Modell der Datenerhebung</a>
+
 </ol>
 
 <h3 id="motiv"> Motivation</h3>
@@ -69,7 +76,7 @@ ist es wichtig, Folgendes zu unterscheiden:
   Modellparameter  
 <i>R<sub>0</sub></i> (Ansteckungszahl bei Durchseuchung Null) und dem
 tats&auml;chlichen, sich aus der Dynamik ergebenden R-Wert
-mit Immunit\"atsgrad >0 unterschieden. </i> In der Simulation sind immer
+mit Immunit&auml;tsgrad >0 unterschieden. </i> In der Simulation sind immer
 die <i>R<sub>0</sub></i>-Werte angegeben</i>
 
 <li> <span class="important"> Durchseuchung  <i>X</i></span>: Der
@@ -93,8 +100,9 @@ die <i>R<sub>0</sub></i>-Werte angegeben</i>
 </center><br>
 
 Ist  &Delta;t gleich der Dauer einer aktiven Infektion (bis zur
-Genesung oder Tod, 3-4 Wochen) , stellt <i>x</i> die Zahl der aktiv
-Infizierten dar.
+Genesung oder Tod, etwa 3 Wochen) , stellt <i>x</i> die Zahl der aktiv
+Infizierten dar und <i>x/n</i> die
+sogenannte  <span class="important"> Pr&auml;valenz</i> 
 
 <li> <span class="important"> Testrate <i>n<sub>t</sub></i></span>: Zahl der
     Tests (egal ob positiv oder nicht) pro Tag oder Woche 
@@ -130,7 +138,7 @@ Anteilswert an Genesenen in der Bev&ouml;lkerung sowie der Anteilswert
   und die Rate an Genesenen, welche vorher positiv getestet
   wurden. Dies ist tricky: Sind symptomfrei positiv Getestete
   zum Testzeitpunkt bereits genesen oder nicht? Die entsprechenden
-  Daten sind deshalb in vielen L\"andern
+  Daten sind deshalb in vielen L&auml;ndern
    nicht konsistent/brauchbar.
 
 <li> <span class="important"> Anteil der an Covid-19 gestorbenen
@@ -138,7 +146,7 @@ Anteilswert an Genesenen in der Bev&ouml;lkerung sowie der Anteilswert
 <i>z<sub>t</sub>(t)=n
   [Z<sub>t</sub>(t)-Z<sub>t</sub>(t-&Delta;t)]</i>. Hier gehe ich
   davon aus, dass jeder Covid-19-Todesfall fr&uuml;her oder sp&auml;ter
-  getestet wurde, sodass dies unter allen realen Gr\"o\3en die einzige  bekannte ist
+  getestet wurde, sodass dies unter allen realen Gr&ouml;&szlig;en die einzige  bekannte ist
 
 
 <li><span class="important"> Case fatality rate (CFR) </span>:
@@ -178,30 +186,65 @@ Gr&ouml;&szlig;en wissen, also die ohne "t". Dummerweise
 Warum ist das trotz aller Tests so unbekannt?
  Um die IFR und <i>x</i> und damit das kumulierte <X> abzusch&auml;tzen,
  ben&ouml;tigt man 
-den <span class="important">Dunkelfeldanteil <i>D</i></span>: Dann
- k&ouml;nnte man zumindest einige Wochen verz&ouml;gert die Gr&ouml;&szlig;en durch 
+den <span class="important">Hellfeldanteil <i>D</i></span>, also den
+ Anteil aller Infizierten, die auch getestet werden. Falls
+ zus&auml;tzlich die Tests perfekt sind, 
+ k&ouml;nnte man zumindest einige Wochen verz&ouml;gert die realen
+ Gr&ouml;&szlig;en (ohne Subskript 't') durch 
 <br><br>
 
 <center>
-<i>x=1/(1-D) x<sub>t</sub></i>, &nbsp; &nbsp;
- IFR=<i>(1-D)</i> CFR
+<i>x= x<sub>t</sub>/H</i>, &nbsp; &nbsp;
+ IFR=<i>H</i> CFR  &nbsp; &nbsp; usw.
 </center>
 <br>
 
- sch&auml;tzen: Bei
-perfekten Tests gilt <i>D=X<sub>t</sub>/X</i>, ansonsten
-  kann <i>D</i> gr&ouml;&szlig;er oder kleiner sein. Nun ist nicht einmal 
-  <i>X<sub>t</sub></i>/<i>X</i> angen&auml;hert bekannt, insbesondere
-  kann diese Gr&ouml;&szlig;e nicht durch den
-  Test-Positivanteil <i>p<sub>t</sub></i> gesch&auml;tzt werden, da ein
+ sch&auml;tzen. Leider sind weder die Tests perfekt noch bekannt,
+ welcher Anteil der Infizierten getestet wird. In der Simulation mache
+ ich folgende Annahmen:
+<ul>
+<li>
+<b><i> Abh&auml;ngigkeit von der Testrate:</i></b>  Offensichtlich werden
+  umso mehr Infizierte erwischt, je mehr getestet wird. Aber dies geht
+  nicht linear mit <i>n<sub>t</sub></i>, da ein
   Auswahleffekt vorliegt: Leute mit Symptomen werden wahrscheinlicher
-  getestet.
-Perfekte Tests und eine gro&szlig;e Zufalls-Stichprobe
+  getestet und Massentests an Symptomfreien kommen erst zum Schluss
+  dran. Ich nehme daher eine wurzelf&ouml;rmige Abh&auml;ngigkeit an, bei
+  der alle Infizierten getestet werden, wenn  die Testrate
+  <i>n<sub>t</sub></i> gleich
+<center>
+<i>n<sub>t</sub><sup>max</sup>=n<sub>0</sub></i>/Woche
+</center>
+ ist, also alle in jeder Woche
+(in etwa der Ansteckungszeitraum) einmal  durchgetestet werden.<br><br>
+
+<li> <b><i> Testfehler: </i></b> Ich nehme eine
+<ul>
+<li> <span class="important"> Sensitivit&auml;tsfehler &alpha;=2%</span> an,
+  d.h. aktiv Infizierte werden f&auml;lschlicherweise negativ getestet,
+  sowie (wichtiger!) eine
+<li> <span class="important"> Spezifizit&auml;tsfehler &beta;=0.3%</span> an. Dies gibt
+		  die <i>False-Positive</i>-Rate an, also die
+		  Wahrscheinlichkeit faf&uuml;r, dass gesunde Personen
+		  (ggf. auch bei einem Nachtest) positiv getestet werden.
+</ul>
+Offensichtlich kann bei einer geringen 
+  Pr&auml;valenz der Fehler &beta; nicht/kaum  gr&ouml;&szlig;er
+  werden als der 
+Positivanteil 
+<i>p<sub>t</sub>=x<sub>t</sub>/n<sub>t</sub></i> bei den Tests: In diesem
+Falle w&auml;ren alle "Infizierten" in Wirklichkeit <i>false positives</i>!
+</ul>
+
+<!--Perfekte Tests und eine gro&szlig;e Zufalls-Stichprobe
   w&auml;ren n&ouml;tig, um <i>x</i> (perfekte PCR-Tests) bzw  <i>X</i>
   (perfekte Antik&ouml;rpertest f&uuml;r die vergangenen + perfekte
-  PCR-Tests f&uuml;r die aktuellen Infektionen) unverzerrt abzusch&auml;tzen!
+  PCR-Tests f&uuml;r die aktuellen Infektionen) unverzerrt
+  abzusch&auml;tzen!-->
 
-<h3>Wie kann die Simulation dabei helfen?</h3>
+
+
+<h3 id="help">Wie kann die Simulation dabei helfen?</h3>
 
 
 Allen Covid-19-Modellen und Simulationen ist
@@ -225,12 +268,12 @@ im Zeitraum  <i>&Delta; t<sub>1</sub></i>  eine Zahl x<sub>t</sub> an neuen
 </table>
 </center>
  
-<h3> Simulationsablauf und Bedienung</h3>
+<h3 id="sim"> Simulationsablauf und Bedienung</h3>
 
 Gezeigt wird anf&auml;nglich die Situation in Deutschland, es sind aber
 auch andere L&auml;nder einstellbar. Bei Aufruf der Seite wird
 zun&auml;chst vom Auftreten der ersten F&auml;lle bis zur Gegenwart
-simuliert und die Simulation ab 19.03 (erste ernsthafte
+simuliert und die Simulation ab 20.03 (erste ernsthafte
 Lockdown-Ma&szlig;nahmen) dargestellt. 
 <ul>
 <li> Die Parameter sind dabei je nach Land so eingestellt, dass sie mit
@@ -254,14 +297,13 @@ bzw. Gestorbene) m&ouml;glichst gut &uuml;bereinstimmen.
   w&auml;hlt, wird automatisch die Reproduktionszahl in
   Zwei-Wochen-Intervallen neu gesch&auml;tzt. Die jeweils gesch&auml;tzte 
   Reproduktionsrate samt Fehlerintervall wird als grauer Text in die
-  Simulation eingezeichnet und der <i>R</i>Regler verschiebt sich wie
+  Simulation eingezeichnet und der <i>R</i>-Regler verschiebt sich wie
   von Geisterhand von selbst. 
-
+<!--
  <span class="important"> Insbesondere
   erkl&auml;rt in Deutschland ein seit dem 27.03. ein nahezu
   konstanter <i>R</i>-Wert um 0.70  die
-  beobachteten Fallzahlen nahezu perfekt.</span>
-
+  beobachteten Fallzahlen nahezu perfekt.</span>-->
 Sobald man diesen oder einen anderen
   Regler selbst bedient, wird die Sch&auml;tzung samt Angabe der
   Fehlerintervalle 
@@ -313,7 +355,7 @@ Optionsliste <span class="button">
 </ul>
  
 
-<h3> Beispiele </h3>
+<h3 id="examples"> Beispiele </h3>
 <ol>
 <li> <b>Szenario "Unver&auml;ndert": </b>Dr&uuml;cken Sie nach dem Stopp der
       Simulation auf 
@@ -422,7 +464,7 @@ Dieses wichtige Szenario zeigt, wie man allein durch eine zeitlich
 
 </ol>
 
-<h3> Simulierte Gr&ouml;&szlig;en</h3>
+<h3 id="quant"> Simulierte Gr&ouml;&szlig;en im Detail</h3>
 
 Alle "dicken" Kurven sind auf das Hellfeld, also auf die getesteten
 Personen bezogen, w&auml;hrend die d&uuml;nnen Kurven (nur in der
@@ -466,9 +508,9 @@ Gesamtheit, also Hell- und Dunkelfeld, beziehen.
 
 </ul>
 
-<a name="model"></a>
 
-<h3> Modell</h3>
+
+<h3 id="model"> Modell</h3>
 Simuliert wird ein Standard-Infektionsausbreitungsmodell:
 <ul>
 
@@ -516,7 +558,7 @@ Personen. Es wird also davon ausgegangen, dass jeder nur einmal
 </ul>
 
 
-<h3>Modell der Datenerhebung</h3>
+<h3 id="data">Modell der Datenerhebung</h3>
 
 <span class="important">Dies betrachte ich als <i>Unique Selling
     Point</i> meines Simulators</span>

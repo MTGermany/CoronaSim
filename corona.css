@@ -15,8 +15,12 @@ body{
   margin: 2px;
   padding: 0;
   font-family: 'helvetica', sans-serif;
+  font-size: 2.5vmin;
+
                  /*font-size: 14px;*/
-  font-size: calc(12px + 1vmin);
+ /* font-size: calc(12px + 1vmin);*/
+/*  font-size: 16px;*/ /*DOS*/
+
   /*text-align: center;*/
   color: #404050;   /* text color */
   background-color: #FFFFFF;
@@ -145,6 +149,7 @@ a:hover {
   color: #c00;
 }
 
+
 #startStopDiv{
   position: absolute;
   top:     0.0vh; 
@@ -194,6 +199,13 @@ a:hover {
   z-index: 3; 
 }
 
+#testnumberDiv{
+  position: absolute;
+  top:     10vh; 
+  right:   30vmin;
+  width:   12vmin;
+  z-index: 3; /* the higher the integer, the more on top */
+}
 
 
 #sliders{ 
@@ -307,19 +319,26 @@ input[type=range]::-webkit-slider-thumb {
 /* normalscreen portrait overrides (geht nicht nested!)
 /*#########################################################*/
 
-@media screen and (max-aspect-ratio: 1/1){ 
+@media screen and (max-aspect-ratio: 7/5){ 
 #header{
   position: absolute;
   top:   -1.5vmin;
   left:  4vmin;
   width: 50vmin;
 }
+
+
+#testnumberDiv{
+  top:     1vh; 
+  right:   35vmin;
 }
+
+
 
 #sliders{      /* normal portrait */
   left:   2vw;
 }
-
+}
 
 /*#########################################################*/
 /* addtl smartphone landscape settings (geht nicht nested!)
@@ -395,21 +414,41 @@ screen and (min-resolution: 1.5dppx) and (min-aspect-ratio: 1/1){
   z-index: 4; 
 }
 
+/*mobile landscape */
+
+#testnumberDiv{ 
+  position: absolute;
+  top:    94vh;  /*BUG!! DOS if saying top: auto, bottom: something!!!*/
+  right: auto;
+  left:   25vw; 
+  width:   40vw; 
+  z-index: 4; /* BUG: muss immer neu gesetzt werden!!*/
+
+}
 
 #calibrateDiv{     /*mobile landscape */
-  top:      auto;  /*removes the top property */
+  top:      auto;  /*bugfix: removes the top property */
   bottom:   1vh; 
   left:    2vw;
+  width: auto;
 }
+
+
 #home{ 
-  position: absolute;
+  position: absolute;  /*mobile landscape */
   bottom:   1vh; 
-  left:   45vw;
+  left:     auto; 
+  right:   20vw;
+  width: auto;
+  z-index: 4; /* BUG: muss immer neu gesetzt werden!!*/
 }
+
 #impressum{ 
   position: absolute;
   bottom:   1vh; 
   right:   2vw;
+  width: auto;
+  z-index: 4; /* BUG: muss immer neu gesetzt werden!!*/
 }
 
 }
@@ -542,18 +581,24 @@ input[type=range]::-webkit-slider-thumb {
   left:  2vmin;
 }
 
-#home{  /*mobile, portrait */
+#calibrateDiv{  /*mobile, portrait */
   top:   130vmin;
   left:  44vmin;
 }
 
-#calibrateDiv{ /*mobile portrait */
-  top:   130vmin;
-  right:  2vmin;
-
+#testnumberDiv{
+  top:   136vmin;
+  left:  44vmin;
 }
 
 
+#home{ /*mobile portrait */
+  bottom: auto;
+  top:   130vmin;
+  left:  auto;
+  right:  2vmin;
+  z-index: 4;  
+}
 
 #impressum{ /*mobile, portrait */
   top:   136vmin;

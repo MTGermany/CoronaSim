@@ -133,6 +133,8 @@ setSlider(slider_pTest, slider_pTestText, 100*pTest, " %");
 
 slider_pTest.oninput = function() {
   otherSliderUsed=true;
+  testSliderUsed=true;
+  includeInfluenceTestNumber=false;
   slider_pTestText.innerHTML = "&nbsp;"+this.value+" %";
   var pTestold=pTest;
   pTest=parseFloat(this.value/100.);

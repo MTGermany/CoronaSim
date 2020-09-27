@@ -68,17 +68,7 @@ var itmaxinit=Math.round(
 var itmax=itmaxinit; // can be >itmaxinit during interactive simulation
 
 
-// calibration related variables
 
-var calibrInterval=21; //!! calibration time interval [days] for one R value
-var itmin_calib; // start calibr time interval w/resp to dayStartMar
-                 //     = dataGit_idataStart+1
-var itmax_calib; //  end calibr time interval =^ data_itmax-1 
-                 // should be split if there are more than approx 
-                 // 20 weeks of data
-var useInitSnap;
-var firstRfixed=false; //if first R element firstR is fixed !!!
-var firstR=0;
 
 // data related global variables
 // fetch with https://pomber.github.io/covid19/timeseries.json
@@ -221,6 +211,8 @@ const tauRecoverList={
 
 var RsliderUsed=false;
 var otherSliderUsed=false;
+var testSliderUsed=false;
+
 var R0=1.42;    // init interactive R for slider corona_gui.js (overridden)
 var Rtime=[];   // !! calibrated R; one element PER 2 WEEKS
                 // initialize in function initialize() (then data available)
@@ -240,9 +232,11 @@ var fps=50;
 // (i) controlled by sliders/control elements (apart from R0)
 
 
-var pTestInit=0.1;     // P(Tested|infected)  if !f(#tests) assumed
-var pTestModelMin=0.04;   // if calculated by sqrt-model
+var pTestInit=0.08;     // P(Tested|infected)  if !f(#tests) assumed
+var pTestModelMin=0.04;   // if calculated by sqrt- or propto model
+
 var includeInfluenceTestNumber=true; // if true, pTest =f(#tests)
+var useSqrtModel=true; // whether use sqrt or linear dependence 
 
 var tauRstartInit=4;   // active infectivity begins [days since infection]//1
 var tauRendInit=12;    // active infectivity ends [days since infection]//10
@@ -280,7 +274,29 @@ var beta=0.003; // beta error (false positive) after double testing
 // if in Germany beta>0.006, n_falsePos can be > nPositive => contradict
 // => formally, matrix not invertible
 
-// global graphical vars
+
+// (iv) calibration related parameters/variables
+
+const calibrInterval=14; //!! calibration time interval [days] for one R value
+const calibrMinDays=6; // do not calibrate remaining period smaller
+var itmin_calib; // start calibr time interval w/resp to dayStartMar
+                 //     = dataGit_idataStart+1
+var itmax_calib; //  end calibr time interval =^ data_itmax-1 
+                 // should be split if there are more than approx 
+                 // 20 weeks of data
+
+
+const calibrateOnce=false; // following variables only relevant if false
+const nCalibIntervals=5; // multiples of calibrInterval, >=30/calibrInterval
+const nOverlap=1;        // multiples of calibrInterval, >=1
+var useInitSnap;
+var firstRfixed=false; //if first R element firstR is fixed !!!
+var firstR=0;
+
+
+
+
+// (v) global graphical vars
 
 var canvas;
 var ctx;
@@ -636,19 +652,34 @@ function initializeData(country) {
     data_ifr[i]=Math.max(data_cumDeaths[i+tauDie]
 		 -data_cumDeaths[i+tauDie-tauPos],0.)/(tauPos*data_dx);
 
-    // !!! sqrt-like "Hellfeld" model: 
-    // assume 100% "Hellfeld" ifP(tested|new infected) if all n0 persons
+
+
+    // !!! prooportional or  sqrt-like "Hellfeld" model: 
+    // sqrt: assume 100% "Hellfeld" ifP(tested|new infected) if all n0 persons
     // are  tested within "infectiosity period" of assumed 7 days
+    // linear: assume 100% if 10% are tested as above
+
 
     if((data_dn[i]>0)&&(data_dn[i]<1e11)){
-      var pModel=Math.sqrt(7*data_dn[i]/n0);
+      if(useSqrtModel){ // global var
+        var pModel=Math.sqrt(7*data_dn[i]/n0);
 
-      data_pTestModel[i]=pTestModelMin
+        data_pTestModel[i]=pTestModelMin
 	*Math.sqrt(1+Math.pow(pModel/pTestModelMin,2));
-      data_pTestModel[i]=Math.min(data_pTestModel[i],1);
+        data_pTestModel[i]=Math.min(data_pTestModel[i],1);
+      }
+      else{// use proportional model
+	var pModel=10*7*data_dn[i]/n0;
+	data_pTestModel[i]=Math.max(pTestModelMin,Math.min(1,pModel));
+      }
     }
-    else{data_pTestModel[i]= pTestModelMin;}
-    //console.log("i=",i," data_pTestModel[i]=",data_pTestModel[i]);
+
+    else{// no dn data
+      data_pTestModel[i]= pTestModelMin;
+    }
+
+    console.log("it=",i-data_idataStart," useSqrtModel=",useSqrtModel,
+		" data_pTestModel[i]=",data_pTestModel[i]);
   }
 
   // ####################################################
@@ -1047,13 +1078,17 @@ function SSEfunc(Rarr, fR, logging, itStartInp, itMaxInp,
     var nxtData=data_cumCases[data_idataStart+it+1];  // sim from it to it+1
     sse+=Math.pow(Math.log(nxtData)-Math.log(nxtSim),2); //!! Math.log
 
-    // additionally penalize negative R or R near zero
+    // additionally penalty for negative R or R near zero
 
-    var RlowLimit=0.2;  
-    var prefact=1;
+    var RlowLimit=0.4;  
+    var prefact=0.001;
     if(R_actual<RlowLimit){
       sse += prefact*Math.pow(RlowLimit-R_actual,2);
     }
+
+    // additionally penalty for extreme R //!!! prefact <0.0001
+    prefact=0.000001;
+    sse += prefact*Math.pow(1-R_actual,2);
 
     if(logging&&(it<5)){
     //if(logging&&true){
@@ -1183,7 +1218,7 @@ function getIndexCalib(itime){
 
 // last calibration interval must have at least 16 days
 function getIndexCalibmax(itime){
-  return getIndexCalib(itime-16); 
+  return getIndexCalib(itime-calibrMinDays); 
 }
 
 
@@ -1200,9 +1235,8 @@ function calibrate(){
   var itmin_c=0;            // basis
   var itmax_c=data_itmax-1; //basis
 
-  var calibrateOnce=false; //!!!
 
-  if(calibrateOnce){ //worse SSE but better fit near the end
+  if(calibrateOnce){ // global param
     itmin_c=0;            
     itmax_c=data_itmax-1; 
     icalibmin=getIndexCalib(itmin_c);
@@ -1215,21 +1249,14 @@ function calibrate(){
     estimateErrorCovar_Rhist_sigmaRhist(itmin_c, itmax_c, Rtime); 
   }
 
-//[0.7320677707416183, 0.7300327691457142, 0.5700521707385785, 1.185954238863542, 0.7879465569009609, 1.1349723689623068, fx: 0.006086285857380058]
 
-//[0.6911954730973333, 1.2798055172390908, 1.0692039847077297, 1.0033591515858074]
+  else{ // calibrate in multiple steps
 
-//0.7320725920544027, 0.7300259731777763, 0.5700553413950524, 1.185960953352032, 0.6911919246597971, 1.2797997678313293, 1.0692164744054398, 1.003356477634356]
+    var logging=true;
 
 
-  else{ //!!!
-
-    var log=false;
-    var nCalibIntervals=5; // multiples of calibrInterval
-    var nOverlap=1;        // multiples of calibrInterval (=1 for stepwise 
-                           // R interpol, =2 for linear interpolation
     var dn=nCalibIntervals-nOverlap;
-    var nPeriods=Math.round((data_itmax-1)/(calibrInterval*dn));
+    var nPeriods=Math.round((data_itmax-1-calibrMinDays)/(calibrInterval*dn));
 
     var ditOverlap=nOverlap*calibrInterval;
  
@@ -1248,57 +1275,71 @@ function calibrate(){
      // get initial R estimate
 
       icalibmin=getIndexCalib(itmin_c);
-      icalibmax=getIndexCalibmax(itmax_c);
-      firstRfixed=(ip>0); // gloal variable for Rfun
-      if(ip>0){ //!! first R value fixed
-        icalibmax--;
-        firstR=Rtime[ip*dn];
-      } 
-      Rcalib=[];
-      for(var icalib=icalibmin; icalib<=icalibmax; icalib++){
-        Rcalib[icalib-icalibmin]=1; 
-      }
+      icalibmax=(ip==nPeriods-1) 
+	? getIndexCalibmax(itmax_c) : getIndexCalib(itmax_c);
 
 
-      if(log)
+      // the follow condition to be false can happen because getIndexCalibmax
+      // can return lower index than getIndexCalib because of minimum days
+      // to be calibrated
+
+
+      if(icalibmax>icalibmin){  // not >= since cond. icalibmax-- inside
+        firstRfixed=(ip>0); // gloal variable for Rfun
+        if(ip>0){ //!! first R value fixed
+          icalibmax--;
+          firstR=Rtime[ip*dn];
+        } 
+        Rcalib=[];
+        for(var icalib=icalibmin; icalib<=icalibmax; icalib++){
+          Rcalib[icalib-icalibmin]=1; 
+        }
+
+
+        if(logging)
 	console.log("\n\n\n\ncalibrate: period ip=",ip," dn=",dn,
 		  "itmin_c=",itmin_c," itmax_c=",itmax_c,
-		  " useInitSnap=",useInitSnap);
+		    " icalibmin=",icalibmin," icalibmax=",icalibmax,
+		    " data_itmax-1=",data_itmax-1,
+		    " useInitSnap=",useInitSnap,
+		    "\nRcalib=",Rcalib);
 
       // check if stripped SSEfunc used for nelderMead calculates correctly 
 
-      if(false&&log){ 
-        var sse=SSEfunc(Rcalib,null,false,itmin_c,itmax_c,-1,useInitSnap);
-        console.log("\nFull specified SSEfun: sse=",sse);
+        if(true&&logging){ 
+          var sse=SSEfunc(Rcalib,null,false,itmin_c,itmax_c,-1,useInitSnap);
+          console.log("\nFull specified SSEfun: sse=",sse);
  
-        var sseNull=SSEfunc(Rcalib,null,false);
-        console.log("Minimal SSEfun needed for estimate: sseNull=",sseNull);
-      }
+          var sseNull=SSEfunc(Rcalib,null,false);
+          console.log("Minimal SSEfun needed for estimate: sseNull=",sseNull);
+        }
 
 
 
-      // estimate 
+        // estimate 
 
-      estimateR(itmin_c, itmax_c, Rcalib);  // also transfers Rcalib to Rtime
-      estimateErrorCovar_Rhist_sigmaRhist(itmin_c, itmax_c, Rcalib);//per period!
+        estimateR(itmin_c, itmax_c, Rcalib);  // also Rcalib -> Rtime
+        if(logging){console.log("before covar: Rcalib=",Rcalib);}
+        estimateErrorCovar_Rhist_sigmaRhist(itmin_c, itmax_c, Rcalib);
 
-      // calculate snapshot for init of next period
+        // calculate snapshot for init of next period
 
-      var itsnap=Math.min(calibrInterval*dn*(ip+1), itmax_c-1); //!!
-      SSEfunc(Rcalib,null,false,itmin_c,itmax_c,itsnap,useInitSnap);
-      if(log) console.log(" snapshot for initialiation in next period:",
+        var itsnap=Math.min(calibrInterval*dn*(ip+1), itmax_c-1); //!!
+        SSEfunc(Rcalib,null,false,itmin_c,itmax_c,itsnap,useInitSnap);
+        if(logging) console.log(" snapshot for initialiation in next period:",
 		  corona.snapshot);
-    }// end calibration proper
+      }
+    }// end calibration proper (several calibr steps)
 
 
-    firstRfixed=false; // for the whole simulation use all R values in Rfun_time
+    firstRfixed=false; // for the whole simulation use all R values in Rtime
     useInitSnap=false; 
 
     //test whole calibration
 
-    if(false&&log){
+    if(false&&logging){
       itsnap=calibrInterval*dn; //first snapshot to compare with
-      SSEfunc(Rtime,null,log,0, data_itmax-1,itsnap,useInitSnap);
+      SSEfunc(Rtime,null,logging,0, data_itmax-1,itsnap,useInitSnap);
       console.log("corona.snapshot=",corona.snapshot);
     }
 
@@ -1615,6 +1656,31 @@ function myStartStopFunction(){ //!! hier bloederweise Daten noch nicht da!!
   }
 }
 
+
+function toggleTestnumber(){ // callback html "testnumber"
+  //clearInterval(myRun);
+
+  if(includeInfluenceTestNumber){
+    includeInfluenceTestNumber=false;
+    document.getElementById("testnumber").innerHTML
+      ="Beruecksichtige Testhaeufigkeit";
+        //myRun=setInterval(simulationRun, 1000/fps);
+  }
+  else{
+    includeInfluenceTestNumber=true;
+    document.getElementById("testnumber").innerHTML
+      ="Ignoriere Testhaeufigkeit";
+  }
+
+  pTest=parseFloat(slider_pTest.value)/100;
+  myCalibrateFunction();
+  console.log("leaving toggleTestnumber: includeInfluenceTestNumber=",
+	      includeInfluenceTestNumber,
+	      " pTest=",pTest);
+}
+
+
+
 function selectDataCountry(){ // callback html select box "countryData"
   console.log("\nin selectDataCountry(): itmax=",itmaxinit);
   itmax=itmaxinit;
@@ -1657,6 +1723,7 @@ function selectWindow(){ // callback html select box "windowGDiv"
 }
 
 
+
 function myRestartFunction(){ 
   console.log("in myRestartFunction: itmax=itmaxinit=",itmaxinit);
   initialize();
@@ -1685,6 +1752,7 @@ function myRestartFunction(){
 function myCalibrateFunction(){ 
   RsliderUsed=false;
   otherSliderUsed=false;
+  testSliderUsed=false;
   calibrate();
   myRestartFunction();
 }
@@ -1698,6 +1766,7 @@ function myResetFunction(){
   console.log("in myResetFunction");
   RsliderUsed=false;
   otherSliderUsed=false;
+  testSliderUsed=false;
 
   tauRstart=tauRstartInit;
   setSlider(slider_tauRstart, slider_tauRstartText,
@@ -1725,6 +1794,11 @@ function simulationRun() {
   //console.log("RsliderUsed=",RsliderUsed);
   if(!RsliderUsed){
     setSlider(slider_R0, slider_R0Text, Rfun_time(Rtime,it).toFixed(2),"");
+  }
+  console.log("testSliderUsed=",testSliderUsed);
+  if((!testSliderUsed)&&includeInfluenceTestNumber){
+    console.log("hier");
+    setSlider(slider_pTest, slider_pTestText, Math.round(100*pTest), " %");
   }
 
   // suffer one undefined at data_cumCases 
@@ -2360,11 +2434,13 @@ function DrawSim(){
 
  
   colInfected="rgb(255,150,0)";
+  colInfectedWin3="rgb(255,170,0)";
   colInfectedTot="rgb(0,0,220)";
   colTests="rgb(0,0,210)";
-  colCases="rgb(220,0,0)";
+  colCases="rgb(245,10,0)";
+  colCasesBars="rgb(220,0,0)";
   colSimCases="rgb(100,0,0)";
-  colFalsePos="rgb(0,230,0)";
+  colFalsePos="rgb(0,220,0)";
   colRecov="rgb(60,255,40)";
   colRecovCases="rgb(0,150,40)";
   colDead="rgb(0,0,0)";  
@@ -2470,7 +2546,7 @@ function DrawSim(){
 
   this.dataG[16]={key: "Positiv Getestete pro Tag", data: [],
 		 type: 0, window:2, plottype: "bars", plotLog: false, 
-		 ytrafo: [0.1, true,false], color:colCases}; // real: scale*10
+		 ytrafo: [0.1, true,false], color:colCasesBars}; // real: scale*10
 
   this.dataG[17]={key: "Gestorbene pro Tag", data: [],
 		 type: 0, window:2, plottype: "bars", plotLog: false, 
@@ -2485,7 +2561,7 @@ function DrawSim(){
 
   this.dataG[18]={key: "Positiv Getestete pro Tag", data: [],
 		 type: 0, window:3, plottype: "bars", plotLog: false, 
-		 ytrafo: [1, false,false], color:colCases};
+		 ytrafo: [1, false,false], color:colCasesBars};
 
   this.dataG[19]={key: "Tests pro Tag (in 100)", data: [],
 		 type: 0, window:3, plottype: "points", plotLog: false, 
@@ -2511,11 +2587,11 @@ function DrawSim(){
 
   this.dataG[23]={key: "Simulierte Neuinfizierte pro Tag (in 10)", data: [],
 		 type: 4, window:2, plottype: "lines", plotLog: false, 
-		 ytrafo: [0.01, true,false], color:colInfected};// real: scale*10
+		 ytrafo: [0.01, true,false], color:colInfectedWin3};// real: scale*10
 
   this.dataG[24]={key: "Simulierte Neuinfizierte pro Tag (in 10)", data: [],
 		 type: 4, window:3, plottype: "lines", plotLog: false, 
-		 ytrafo: [0.1, false,false], color:colInfected};
+		 ytrafo: [0.1, false,false], color:colInfectedWin3};
 
   this.dataG[25]={key: "Simulierte Durchseuchung", data: [],
 		 type: 4, window:1, plottype: "lines", plotLog: true, 
@@ -3101,8 +3177,8 @@ DrawSim.prototype.draw=function(it,q){
     var downwards=this.dataG[q].ytrafo[2];
     var type=this.dataG[q].type;
     var plottype=this.dataG[q].plottype;
-    var wLine=(type==3) ? 0.003*sizeminCanvas
-	:(type==4) ? 0.004*sizeminCanvas :  0.00012*sizeminCanvas;
+    var wLine=(type==3) ? 0.002*sizeminCanvas
+	:(type==4) ? 0.003*sizeminCanvas :  0.001*sizeminCanvas;
     wLine=Math.max(wLine,0.5);
     var color=this.dataG[q].color;
     var pointType=type;
@@ -3337,7 +3413,7 @@ DrawSim.prototype.plotBars=function(it, iDataStart, data_arr, scaling,
   		" yPix0=",yPix0," yPixMax=",yPixMax);
   }
 
-  var w=1*(this.xPix[1]-this.xPix[0]);
+  var w=1.0*(this.xPix[1]-this.xPix[0]);
 
   ctx.fillStyle=color;
 
