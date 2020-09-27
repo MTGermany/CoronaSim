@@ -20,12 +20,13 @@
 <li><a href="#motiv">Motivation</a>
 <li><a href="#defs">Definitionen</a>
 <li><a href="#problem">Was ist das Problem?</a>
+<li><a href="#data">Daten</a>
 <li><a href="#help">Wie kann die Simulation dabei helfen?</a>
 <li><a href="#sim">Simulationsablauf und Bedienung</a>
 <li><a href="#examples">Beispiele</a>
 <li><a href="#quant">Simulierte Gr&ouml;&szlig;en im Detail</a>
 <li><a href="#model">Modell</a>
-<li><a href="#data">Modell der Datenerhebung</a>
+<li><a href="#dataModel">Modell der Datenerhebung</a>
 
 </ol>
 
@@ -216,7 +217,9 @@ den <span class="important">Hellfeldanteil <i>D</i></span>, also den
 <i>n<sub>t</sub><sup>max</sup>=n<sub>0</sub></i>/Woche
 </center>
  ist, also alle in jeder Woche
-(in etwa der Ansteckungszeitraum) einmal  durchgetestet werden.<br><br>
+(in etwa der Ansteckungszeitraum) einmal  durchgetestet werden. In
+der Simulation kann man die Abh&auml;ngigkeit auch abstellen und das
+Hellfeld direkt durch einnen Schieberegler einstellen.<br><br>
 
 <li> <b><i> Testfehler: </i></b> Ich nehme eine
 <ul>
@@ -234,6 +237,11 @@ Offensichtlich kann bei einer geringen
 Positivanteil 
 <i>p<sub>t</sub>=x<sub>t</sub>/n<sub>t</sub></i> bei den Tests: In diesem
 Falle w&auml;ren alle "Infizierten" in Wirklichkeit <i>false positives</i>!
+<br><br>
+
+<li> <b><i> Todesf&auml;lle durch (nicht mit!) Covid 19: </i></b>
+Hier nehme ich im Gegensatz zum Infiziertenstatus  ein 100%-iges
+  Hellfeld an.
 </ul>
 
 <!--Perfekte Tests und eine gro&szlig;e Zufalls-Stichprobe
@@ -242,6 +250,31 @@ Falle w&auml;ren alle "Infizierten" in Wirklichkeit <i>false positives</i>!
   PCR-Tests f&uuml;r die aktuellen Infektionen) unverzerrt
   abzusch&auml;tzen!-->
 
+
+
+<h3 id="data">Daten</h3>
+Es werden zwei allgemein zug&auml;ngliche Datenquellen verwendet:
+<ol>
+<li>
+  T&auml;glich
+    aktualisierte, kompakte <a href="https://pomber.github.io/covid19/timeseries.json">Zeitreihen,
+  synthetisiert von Rodrigo Pombo</a>,
+  die direkt live geladen werden. 
+<li> Weitergehende, ebenfalls t&auml;glich
+    aktualisierte
+  <a href="https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/owid-covid-data.json">Daten
+  des Our World in Data (OWiD)</a>,
+	   welche auch Informationen &uuml;ber die Testh&auml;ufigkeiten
+  enthalten. Diese Datenquelle ist aber zu gro&szlig;, um sie life zu
+  laden. Sie wird deshalb serverseitig extrahiert, um nur die
+  relevanten Informationen laden zu m&uuml;ssen.
+</ol>
+<!--
+<a href="https://data.europa.eu/euodp/en/data/dataset/covid-19-coronavirus-data">beobachteten
+  Infektionsdaten des EU Open Data Portal</a> (rote und schwarze
+Punkte in der Grafik f&uuml;r dokumentierte F&auml;lle
+bzw. Gestorbene) m&ouml;glichst gut &uuml;bereinstimmen. 
+-->
 
 
 <h3 id="help">Wie kann die Simulation dabei helfen?</h3>
@@ -264,52 +297,43 @@ erreicht, der Infektionszeitraum zwischen 3 und 7 Tagen nach der
   Infektion liegt, dopplt so viel
 getestet und wie bisher medizinisch behandelt wird (gleiche IFR), dann wird es
 im Zeitraum  <i>&Delta; t<sub>1</sub></i>  eine Zahl x<sub>t</sub> an neuen
-  Positivtests sowie <i>x</i> reale Neuinfektionen geben sowie im Zeitraum  <i>&Delta; t<sub>2</sub></i> eine Zahl<i>z</i> an Covid-19-Toten"</i></td>
+  Positivtests sowie <i>x</i> reale Neuinfektionen geben sowie im
+  Zeitraum  <i>&Delta; t<sub>2</sub></i> 
+eine Zahl <i>z</i> an Covid-19-Toten" </i></td>
 </table>
 </center>
  
 <h3 id="sim"> Simulationsablauf und Bedienung</h3>
 
-Gezeigt wird anf&auml;nglich die Situation in Deutschland, es sind aber
-auch andere L&auml;nder einstellbar. Bei Aufruf der Seite wird
-zun&auml;chst vom Auftreten der ersten F&auml;lle bis zur Gegenwart
+Gezeigt wird anf&auml;nglich die Situation in Deutschland, und zwar
+die Ansicht "Tests". Es sind aber
+auch noch 12 andere L&auml;nder und vier weitere Ansichten
+einstellbar. Bei Aufruf der Seite wird die Simulation zun&auml;chst
+bez&uuml;glich der Reproduktionsrate kalibriert (gefittet) und 
+vom Auftreten der ersten F&auml;lle bis zur Gegenwart
 simuliert und die Simulation ab 20.03 (erste ernsthafte
 Lockdown-Ma&szlig;nahmen) dargestellt. 
 <ul>
-<li> Die Parameter sind dabei je nach Land so eingestellt, dass sie mit
-den <a href="https://pomber.github.io/covid19/timeseries.json">t&auml;glich
-    aktualisierten Beobachtungsdaten</a> weitgehend
-  &uuml;bereinstimmen, vor allem die rote Linie (Simulation) mit den
-  roten Punkten (Zahl der positiven Corona-Tests).
-  Siehe auch das  <a href="https://github.com/pomber/covid19">Github
-    Repository</a> dazu.
-<!--
-<a href="https://data.europa.eu/euodp/en/data/dataset/covid-19-coronavirus-data">beobachteten
-  Infektionsdaten des EU Open Data Portal</a> (rote und schwarze
-Punkte in der Grafik f&uuml;r dokumentierte F&auml;lle
-bzw. Gestorbene) m&ouml;glichst gut &uuml;bereinstimmen. 
--->
+<li> Die Regler f&uuml;r die Reproduktionsrate <i>R</i> und des
+  Hellfeldes "zappeln" hin und her, weil sie im Vorfeld kalibriert
+  bzw. gem&auml;&szlig; dem obigen Quadratwurzel-Modell von der gemessenen
+  Testrate abh&auml;ngen
 
-<li> Der erste Regler für die Reproduktionszahl <i>R</i> ohne jede
-  Herdenimmunit&auml;t ist der
-  wichtigste. Beim Start oder wenn man sp&auml;ter mit anderen
-  Einstellungen neu simuliert oder ein anderes Land
-  w&auml;hlt, wird automatisch die Reproduktionszahl in
-  Zwei-Wochen-Intervallen neu gesch&auml;tzt. Die jeweils gesch&auml;tzte 
+<li> Die jeweils gesch&auml;tzte 
   Reproduktionsrate samt Fehlerintervall wird als grauer Text in die
-  Simulation eingezeichnet und der <i>R</i>-Regler verschiebt sich wie
-  von Geisterhand von selbst. 
+  Simulation eingezeichnet. 
+
 <!--
  <span class="important"> Insbesondere
   erkl&auml;rt in Deutschland ein seit dem 27.03. ein nahezu
   konstanter <i>R</i>-Wert um 0.70  die
   beobachteten Fallzahlen nahezu perfekt.</span>-->
-Sobald man diesen oder einen anderen
+
+<li> Sobald man diesen oder einen anderen
   Regler selbst bedient, wird die Sch&auml;tzung samt Angabe der
   Fehlerintervalle 
   beendet und die angezeigten <i>R</i>-Werte entsprechen der eigenen
-  Aktion.
-
+  Aktion. Selbiges gilt auch f&uuml;r den Hellfeldregler.
 </ul>
 
 F&uuml;r das
@@ -340,20 +364,68 @@ f&uuml;hrt man den "Reset auf die Werkseinstellungen"
 
 Die weiteren Bedienelemente der Simulation sind die folgenden:
 <ul>
-<li> Die <span class="button"> Schieberegler</span> f&uuml;r die
+<li> <span class="button"> L&auml;nderwahl</span> 12 weitere
+  interessante L&auml;nder sind w&auml;hlbar<br><br>
+
+<li> <span class="button"> Wahl der Ansicht</span>
+<ul>
+<li> <i>Test-Ansicht</i>(Standardeinstellung): Gezeigt sind
+   die t&auml;gliche Testh&auml;ufigkeit und Positivenzahl. Ferner die <i>simulierte</i> Positivenzahl (stimmt
+  fast mit der berichteten &uuml;berein, denn darauf ist das Modell
+  kalibriert) sowie die nicht beobachtbare <i>modellierte</i> tats&auml;chliche
+  Neuinfektionsrate und (bei angenommenem &beta;=0.3%) die Zahl
+  der <i>false positives</i>. Man beachte die Multiplikatoren 1,10 und
+   100, damit alle Daten auf eine Grafik passen!
+<li> <i> Lineare Simulationsansicht</i>. Hier sieht man den
+&Uuml;bereinstimmungsgrad der Simulation mit den <i>kumulierten</i> Bobachtungsdaten
+<li> <i> Logarithmische Simulationsansicht</i>.
+Hier sieht man zus&auml;tzlich die simulierten nichtbeobachtbaren Gr&ouml;&szlig;en "Zahl der
+  aktiv Infizierten" und "Durchseuchung".
+<li><i>Daten-Ansicht</i> Abgesehen von der simulierten
+  Neuinfektionszahl die reine Empirie: Zahl der positiven Tests und,
+  10-fach vergr&ouml;&szlig;ert, die Zahl der Covid-19 Todesf&auml;lle
+<li> <i>Infektionsraten-Ansicht</i>Neben den allein aus den Daten
+  extrahierbaren relativen Gr&ouml;&szlig;en "Positivanteil" und <i>case fatality
+  rate</i>(CFR) wird auch die nur simulierbare  <i>infection fatality
+  rate</i>(IFR) geplottet.
+</ul><br>
+
+<li> <span class="button"> Kalibriere neu!</span> Dreht man an den Reglern
+oder w&auml;hlt ein konstantes Hellfeld,
+ist die Simulation bez&uuml;glich der Reproduktionsraten nicht mehr an
+die Positivenzahl gefittet, da das Modell auch andere Faktoren
+hat. Hier kann man mit den aktuellen Einstellungen <i>R</i> neu
+  fitten.<br><br>
+
+<li> <span class="button"> Ber&uuml;cksichtige
+Testh&auml;ufigkeit</span> Schaltet zwischen dem obigen
+Quadratwurzelmodell f&uuml;r das Hellfeld und einem konstanten durch den
+Schieberegler einstellbaren Wert  hin und her.<br><br>
+
+ <li>Die <span class="button"> Schieberegler</span> f&uuml;r die
   wichtigsten Modellparameter lassen sich bei gestoppter und auch bei
-  laufender Simulation bedienen,
-<li> der Button <span class="button"> Kalibriere neu!</span> wirft die
-  Sch&auml;tzung der Reproduktionsrate mit den gerade eingestellten
-  sonstigen Modellparametern neu an und startet die Simulation neu,</span>
-<li> der Button 
-<span class="button"> =>log. Darstellung</span> schaltet die Darstellung
-jederzeit zwischen linear und logarithmisch um,
-<li> mit der
-Optionsliste <span class="button">
-  Deutschland \/</span> kann man andere L&auml;nder einstellen.
+  laufender Simulation bedienen.<br><br>
+
+<li>  Der erste <span class="button">Regler für die
+   Reproduktionszahl <i>R</i></span> ohne jede 
+   Herdenimmunit&auml;t ist der
+  wichtigste. Sobald man ihn bedient, ist die anf&auml;ngliche
+  Sch&auml;tzung nicht mehr aktiv.<br><br>
+
+<li> Die Regler <span class="button">Ansteckungsstart</span> und 
+<span class="button">Ansteckungsende</span> machen den
+Ansteckungszeitraum, bezogen auf den eigenen Infektionszeitpunkt einstellbar
+<br><br>
+
+<li> Im Gegensatz dazu lassen sich mit den Reglern
+ <span class="button">Test nach ...</span>
+ und <span class="button">Hellfeld</span> zusammen mit den
+ Button <span class="button"> Ber&uuml;cksichtige 
+Testh&auml;ufigkeit</span> Annahmen &uuml;ber die Tests im
+ Sinne einer Szenarienanalyse &auml;ndern.
+
 </ul>
- 
+ <br>
 
 <h3 id="examples"> Beispiele </h3>
 <ol>
@@ -527,13 +599,13 @@ den <strong>Immunit&auml;tsanteil</strong>.
 
 <br><br><li> Der Immunit&auml;tsanteil
 <center> 
-<i>I=x+y+z</i>
+<i>I=X</i>
 </center>
 <br>
 wird gleich der 
  <strong>Durchseuchungsrate</strong> gesetzt, also gleich der Summe des
-Anteils <i>x</i> der gerade (auch symptomfrei) erkrankten Personen, des Anteils <i>y</i> der bereits
-wieder gesunden Personen und  des Anteils <i>z</i> der gestorben
+Anteils  der gerade (auch symptomfrei) erkrankten Personen, des Anteils <i>Y</i> aller bereits
+wieder gesundeten Personen und  des Anteils <i>Z</i> der gestorbenen
 Personen. Es wird also davon ausgegangen, dass jeder nur einmal
  erkranken kann und dass keine Impfungen verf&uuml;gbar sind,
  die <i>I</i> weiter erh&ouml;hen w&uuml;rden. Alle Anteilswerte beziehen sich immer auf die Bev&ouml;lkerungszahl am
@@ -541,24 +613,25 @@ Personen. Es wird also davon ausgegangen, dass jeder nur einmal
   der Bev&ouml;lkerung wird gleich null gesetzt.
 
 
-<br><br><li> Die Ansteckung geschieht gleichverteilt innerhalb eines einstellbaren
-  <strong>Infektionsalters</strong>. Der Einfachheit halber ist die
+<br><br><li> Die Ansteckung geschieht gleichverteilt innerhalb einer
+    mit Schiebereglern einstellbaren Spanne des
+  <strong>Infektionsalters</strong>&tau;. Der Einfachheit halber ist die
   Ansteckungsverteilung unabh&auml;ngig vom Alter und von der Existenz
   oder Schwere der Symptome.
 
 <br><br><li> Die Infizierten sterben im Laufe der Krankheit mit der
-  <strong>wahren Sterblichkeit</strong> <i>p<sub>D</sub></i>, und zwar
+  <strong>wahren Sterblichkeit</strong> <i>IFR</i>, und zwar
   gleichverteilt nach
   &tau;<sub>D</sub>&plusmn;2 Tagen
 
-<br><br><li> Mit der Komplement&auml;rwahrscheinlichkeit <i>(1-p<sub>D</sub>)</i> erholen sich die Infizierten, und zwar
+<br><br><li> Mit der Komplement&auml;rwahrscheinlichkeit <i>(1-IFR)</i> erholen sich die Infizierten, und zwar
   gleichverteilt
   &tau;<sub>Rec</sub>&plusmn;2 Tage nach der Infektion. 
 
 </ul>
 
 
-<h3 id="data">Modell der Datenerhebung</h3>
+<h3 id="dataModel">Modell der Datenerhebung</h3>
 
 <span class="important">Dies betrachte ich als <i>Unique Selling
     Point</i> meines Simulators</span>
