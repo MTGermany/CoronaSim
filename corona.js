@@ -277,18 +277,18 @@ var beta=0.003; // beta error (false positive) after double testing
 
 // (iv) calibration related parameters/variables
 
-const calibrInterval=14; //!! calibration time interval [days] for one R value
-const calibrMinDays=6; // do not calibrate remaining period smaller
 var itmin_calib; // start calibr time interval w/resp to dayStartMar
                  //     = dataGit_idataStart+1
 var itmax_calib; //  end calibr time interval =^ data_itmax-1 
                  // should be split if there are more than approx 
                  // 20 weeks of data
 
-
+const calibInterval=14; //!! calibration time interval [days] for one R value
+const calibAddtlDaysLast=7; // do not calibrate remaining period smaller
 const calibrateOnce=false; // following variables only relevant if false
-const nCalibIntervals=5; // multiples of calibrInterval, >=30/calibrInterval
-const nOverlap=1;        // multiples of calibrInterval, >=1
+const nCalibIntervals=5; // multiples of calibInterval, >=30/calibInterval
+const nOverlap=1;        // multiples of calibInterval, 
+                         // >=max(1,floor(calibAddtlDaysLast/calibInterval)
 var useInitSnap;
 var firstRfixed=false; //if first R element firstR is fixed !!!
 var firstR=0;
@@ -678,8 +678,8 @@ function initializeData(country) {
       data_pTestModel[i]= pTestModelMin;
     }
 
-    console.log("it=",i-data_idataStart," useSqrtModel=",useSqrtModel,
-		" data_pTestModel[i]=",data_pTestModel[i]);
+    //console.log("it=",i-data_idataStart," useSqrtModel=",useSqrtModel,
+//		" data_pTestModel[i]=",data_pTestModel[i]);
   }
 
   // ####################################################
@@ -861,18 +861,18 @@ function Rfun_time(Rarr, it){
     //return Rarr[index];    //steps
     var R;                   // linear interpolation
     if(firstRfixed){
-      var indexWanted=Math.floor(it/calibrInterval)-1;
+      var indexWanted=Math.floor(it/calibInterval)-1;
       var index=Math.min(indexWanted, Rarr.length-1);
       var indexPlus=Math.min(indexWanted+1, Rarr.length-1);
-      var relRest=(it-calibrInterval*index)/calibrInterval-1;
+      var relRest=(it-calibInterval*index)/calibInterval-1;
       var Rlower=(indexWanted<0) ? firstR : Rarr[index];
       R= (1-relRest)*Rlower+relRest*Rarr[indexPlus];
     }
     else{
-      var indexWanted=Math.floor(it/calibrInterval);
+      var indexWanted=Math.floor(it/calibInterval);
       var index=Math.min(indexWanted, Rarr.length-1);
       var indexPlus=Math.min(indexWanted+1, Rarr.length-1);
-      var relRest=(it-calibrInterval*index)/calibrInterval;
+      var relRest=(it-calibInterval*index)/calibInterval;
       R= (1-relRest)*Rarr[index]+relRest*Rarr[indexPlus]; 
     }
     return R;
@@ -882,10 +882,10 @@ function Rfun_time(Rarr, it){
 
 /*
   else{// regular
-    var indexWanted=Math.floor(it/calibrInterval);
+    var indexWanted=Math.floor(it/calibInterval);
     var index=Math.min(indexWanted, Rarr.length-1);
     var indexPlus=Math.min(indexWanted+1, Rarr.length-1);
-    var relRest=(it-calibrInterval*index)/calibrInterval;
+    var relRest=(it-calibInterval*index)/calibInterval;
 
     //return Rarr[index];                                     //steps
     return (1-relRest)*Rarr[index]+relRest*Rarr[indexPlus]; // lin intp
@@ -894,71 +894,17 @@ function Rfun_time(Rarr, it){
 
 
 
+function IFRfun_time(IFRarr, it){
 
+  var indexWanted=Math.floor(it/calibInterval);
+  var index=Math.min(indexWanted, IFRarr.length-1);
+  var indexPlus=Math.min(indexWanted+1, IFRarr.length-1);
+  var relRest=(it-calibInterval*index)/calibInterval;
+  IFR= (1-relRest)*IFRarr[index]+relRest*IFRarr[indexPlus];
+  return IFR;
 
+}//IFRfun_time
 
-function Rfuntest_time(Rarr, it){
-
-  var iPresent=data_idataStart+it;
-  var iTest    =iPresent+Math.round(tauTest);
-  var iTestPrev=iPresent+Math.round(tauTest-0.5*(tauRstart+tauRend));
-
-  if(it<0){ // direct estimate from data 
-    var nxtNewnum  =1./2.*(data_cumCases[iTest+1]-data_cumCases[iTest-1]);
-    var nxtNewdenom=1./2.*(data_cumCases[iTestPrev+1]
-			  -data_cumCases[iTestPrev-1]);
-
-    // no data if iTestPrev<0
-    var R=(iTestPrev<0) ? 3 : 1.02*nxtNewnum/nxtNewdenom;
-
-    if(false){
-      console.log("Rfun_time: t=",it," xtCum(iTest)=",data_cumCases[iTest],
-		" xtCum(iTestPrev)=",data_cumCases[iTestPrev],
-		" xtNewnum=",xtNewnum,
-		" xtNewdenom=",xtNewdenom,
-		"");
-    }
-
-    // !! deflect infinity, NaN etc and too large R values if denom 0
-    // avoid too small R values if num 0
-
-    if(Math.abs(nxtNewdenom)<1e-10){
-      //console.log("Rfun_time: t=",t," error: R factor infinity");
-      R=5;
-    }
-    R=Math.min(5, Math.max(0.2,R));
-
-    return R;
-  }
-
-  else{// regular
-    //return Rarr[index];    //steps
-    var R;                   // linear interpolation
-    if(firstRfixed){
-      var indexWanted=Math.floor(it/calibrInterval)-1;
-      var index=Math.min(indexWanted, Rarr.length-1);
-      var indexPlus=Math.min(indexWanted+1, Rarr.length-1);
-      var relRest=(it-calibrInterval*index)/calibrInterval-1;
-      var Rlower=(indexWanted<0) ? firstR : Rarr[index];
-      R= (1-relRest)*Rlower+relRest*Rarr[indexPlus];
-    }
-    else{
-      var indexWanted=Math.floor(it/calibrInterval);
-      var index=Math.min(indexWanted, Rarr.length-1);
-      var indexPlus=Math.min(indexWanted+1, Rarr.length-1);
-      var relRest=(it-calibrInterval*index)/calibrInterval;
-      R= (1-relRest)*Rarr[index]+relRest*Rarr[indexPlus]; 
-    }
-
-    if(false){
-  console.log("Rfuntest: Rarr=",Rarr," it=",it," firstRfixed=",firstRfixed,
-		" firstR=",firstR," index=",index," indexPlus=",indexPlus,
-		" relRest=",relRest,
-		"");
-    }
-    return R;
-  }
-} //Rfuntest_time
 
 
 
@@ -982,8 +928,8 @@ function Rfuntest_time(Rarr, it){
 
 @global param (do not know how to inject params into func):
 @global data_cumCases: the data to fit, (it=0) corresp (idata=data_idataStart)
-@global itmin_calib start of calibr intervals (days since dayStartMar)
-@global itmax_calib end of calibr intervals (days since dayStartMar)
+@global itmin_calib start of calib intervals (days since dayStartMar)
+@global itmax_calib end of calib intervals (days since dayStartMar)
 @global useInitSnap
 NOTICE: fmin.nelderMead needs one-param SSEfunc SSEfunc(R_arr):
         "sol2_SSEfunc=fmin.nelderMead(SSEfunc, Rguess);"
@@ -1027,8 +973,7 @@ function SSEfunc(Rarr, fR, logging, itStartInp, itMaxInp,
   // data-driven from scratch
   // or use a snapshhot taken earlier
 
-  var nxtStart=data_cumCases[data_idataStart];
-
+ 
   if(useInitSnap){ // !! snapshot must be taken at itStart!
     if(!corona.snapAvailable){
       console.log("SSE: error: ",
@@ -1052,6 +997,7 @@ function SSEfunc(Rarr, fR, logging, itStartInp, itMaxInp,
 
   //if(logging){ //!! always filter logging!!
   if(logging&&true){ //!! always filter logging!!
+    var nxtStart=data_cumCases[data_idataStart];
     console.log("SSEfunc: start calculating SSE:",//" Rarr=",Rarr,
 		" takeSnapshot=",takeSnapshot,
 		" itStart=",itStart,
@@ -1074,8 +1020,18 @@ function SSEfunc(Rarr, fR, logging, itStartInp, itMaxInp,
 
     // increment SSE
 
-    var nxtSim=n0*corona.xt;
-    var nxtData=data_cumCases[data_idataStart+it+1];  // sim from it to it+1
+    //  !!! GoF function log(cumulative cases)
+
+    //var nxtSim=n0*corona.xt;
+    //var nxtData=data_cumCases[data_idataStart+it+1];  // sim from it to it+1
+
+    //  !!! GoF function log(new cases)
+
+    var nxtSim=n0*corona.dxt;
+    var nxtData=data_dxt[data_idataStart+it+1];  // sim from it to it+1
+
+
+
     sse+=Math.pow(Math.log(nxtData)-Math.log(nxtSim),2); //!! Math.log
 
     // additionally penalty for negative R or R near zero
@@ -1090,14 +1046,15 @@ function SSEfunc(Rarr, fR, logging, itStartInp, itMaxInp,
     prefact=0.000001;
     sse += prefact*Math.pow(1-R_actual,2);
 
-    if(logging&&(it<5)){
+    //if(logging&&(it<5)){
     //if(logging&&true){
-    //if(logging&&false){
+    if(logging&&false){
 
       console.log("SSEfunc after update: it=",it," itSnap=",itSnap,
 		  " R_actual=",R_actual.toFixed(2),
 		  " nxtData=",nxtData,
 		  " nxtSim=",Math.round(nxtSim),
+		  " dnxSim=",Math.round(n0*corona.x[0]),
 		  //" dsse=",Math.pow(Math.log(nxtData)-Math.log(nxtSim),2),
 		 "");
     }	 
@@ -1209,16 +1166,16 @@ function initialize() {
 // =============================================================
 
 function getIndexTimeFromCalib(ical){ // MT 2020-08
-  return calibrInterval*ical; 
+  return calibInterval*ical; 
 }
 
 function getIndexCalib(itime){
-  return Math.floor(itime/calibrInterval);     // MT 2020-08
+  return Math.floor(itime/calibInterval);     // MT 2020-08
 }
 
 // last calibration interval must have at least 16 days
 function getIndexCalibmax(itime){
-  return getIndexCalib(itime-calibrMinDays); 
+  return getIndexCalib(itime-calibAddtlDaysLast); 
 }
 
 
@@ -1249,20 +1206,23 @@ function calibrate(){
     estimateErrorCovar_Rhist_sigmaRhist(itmin_c, itmax_c, Rtime); 
   }
 
+  // ############################################################
+  // calibrate in multiple steps
+  // ############################################################
 
-  else{ // calibrate in multiple steps
+  else{ 
 
     var logging=true;
 
 
     var dn=nCalibIntervals-nOverlap;
-    var nPeriods=Math.round((data_itmax-1-calibrMinDays)/(calibrInterval*dn));
+    var nPeriods=Math.round((data_itmax-1-calibAddtlDaysLast)/(calibInterval*dn));
 
-    var ditOverlap=nOverlap*calibrInterval;
+    var ditOverlap=nOverlap*calibInterval;
  
     for(var ip=0; ip<nPeriods; ip++){
-      itmin_c=calibrInterval*ip*dn; //=past itsnap
-      itmax_c=itmin_c+calibrInterval*nCalibIntervals;
+      itmin_c=calibInterval*ip*dn; //=past itsnap
+      itmax_c=itmin_c+calibInterval*nCalibIntervals;
       //step it calculates to it+1 and SSE needs data at it+1, hence itmax-1
       if(ip==nPeriods-1){itmax_c=data_itmax-1;}
 
@@ -1276,7 +1236,8 @@ function calibrate(){
 
       icalibmin=getIndexCalib(itmin_c);
       icalibmax=(ip==nPeriods-1) 
-	? getIndexCalibmax(itmax_c) : getIndexCalib(itmax_c);
+//	? getIndexCalibmax(itmax_c) : getIndexCalib(itmax_c);
+	? getIndexCalibmax(itmax_c) : getIndexCalibmax(itmax_c);//!!!
 
 
       // the follow condition to be false can happen because getIndexCalibmax
@@ -1306,7 +1267,7 @@ function calibrate(){
 
       // check if stripped SSEfunc used for nelderMead calculates correctly 
 
-        if(true&&logging){ 
+        if(false&&logging){ 
           var sse=SSEfunc(Rcalib,null,false,itmin_c,itmax_c,-1,useInitSnap);
           console.log("\nFull specified SSEfun: sse=",sse);
  
@@ -1324,7 +1285,7 @@ function calibrate(){
 
         // calculate snapshot for init of next period
 
-        var itsnap=Math.min(calibrInterval*dn*(ip+1), itmax_c-1); //!!
+        var itsnap=Math.min(calibInterval*dn*(ip+1), itmax_c-1); //!!
         SSEfunc(Rcalib,null,false,itmin_c,itmax_c,itsnap,useInitSnap);
         if(logging) console.log(" snapshot for initialiation in next period:",
 		  corona.snapshot);
@@ -1337,50 +1298,17 @@ function calibrate(){
 
     //test whole calibration
 
+    //if(true&&logging){
     if(false&&logging){
-      itsnap=calibrInterval*dn; //first snapshot to compare with
+
+      itsnap=calibInterval*dn; //first snapshot to compare with
       SSEfunc(Rtime,null,logging,0, data_itmax-1,itsnap,useInitSnap);
       console.log("corona.snapshot=",corona.snapshot);
     }
 
+  } // calbrate R with multiple periods
 
-    // tests
-    if(false){
-      var Rarr0=[1,3,2,4,3,0];
-      var Rarr1=          [5,4,6];
-      var  Rtot=[1,3,2,4,3,5,4,6];
-
-
-      console.log("dn=",dn);
-      for (var it=0; it<data_itmax-1; it++){
-        firstRfixed=false;
-        var R0=Rfuntest_time(Rarr0,it);
-        var R2=Rfuntest_time(Rtot,it);
-        firstRfixed=true; firstR=Rarr0[4];
-        var R1=Rfuntest_time(Rarr1,it-dn*calibrInterval);
-        firstRfixed=false;
-
-	console.log("it=",it,
-		    " R0=", R0.toPrecision(3),
-		    " R1=", R1.toPrecision(3),
-		    " R2=", R2.toPrecision(3),
-		   "");
-      };
-    } //test
-
- 
-  } // multiple periods
-
-
-
-
-
-
-
-
-  //#####################################################
-
-  var logging=true;  //calibrate()
+  var logging=false;  //calibrate()
   //var logging=true;
   sse=SSEfunc(Rtime,null,logging,0,data_itmax-1); // -1 because it: it->it+1
   console.log("leaving calibrate():",
@@ -1388,6 +1316,50 @@ function calibrate(){
 	      "\n fit quality sse=",sse);
   
 
+  // calibrate IFR=fracDie
+
+  console.log("\n\ncalibrating IFR ...");
+    
+  var logging=true;
+  var dn=2;
+  var nPeriods=Math.round((data_itmax)/(calibInterval*dn));
+ 
+  for(var ip=1; ip<2; ip++){
+ 
+    IFRcalib=[];
+    for(var j=0; j<dn; j++){IFRcalib[j]=0.001;}
+
+    itmin_c=calibInterval*ip*dn;
+    itmax_c=Math.min(itmin_c+calibInterval*dn,data_itmax-1);
+
+    itmin_calib=itmin_c; // global variables for the SSE function
+    itmax_calib=itmax_c;
+
+    icalibmin=getIndexCalib(itmin_c);
+    icalibmax=getIndexCalib(itmax_c);
+    if(logging){
+	console.log("\n\n\n\ncalibrate: period ip=",ip," dn=",dn,
+		  "itmin_c=",itmin_c," itmax_c=",itmax_c,
+		    " icalibmin=",icalibmin," icalibmax=",icalibmax,
+		    "\nIFRcalib=",IFRcalib);
+    }
+
+
+     // check SSE func
+    if(true&&logging){
+      var sse=SSEfuncIFR(IFRcalib,null,true,itmin_c,itmax_c);
+      console.log("\nFull specified SSEfuncIFR: sse=",sse);
+ 
+      var sseNull=SSEfuncIFR(IFRcalib,null,false);
+      console.log("Minimal SSEfuncIFR needed for estimate: sseNull=",sseNull);
+    }
+  } // loop IFR calibration
+
+
+
+  //#####################################################
+
+ 
 
  //##############################################################
  // !! for inline nondynamic testing: add testcode here
@@ -1470,7 +1442,7 @@ function estimateR(itmin_c, itmax_c, Rcalib){
     relates to 4% market share
   ############################################################## */
 
-  for(var ic=0; ic<2; ic++){
+  for(var ic=0; ic<1; ic++){ //!!! 2
 
     //##############################################################
     sol2_SSEfunc=fmin.nelderMead(SSEfunc, Rcalib);
@@ -1616,10 +1588,10 @@ function estimateErrorCovar_Rhist_sigmaRhist(itmin_c, itmax_c, Rcalib){
   // transfer R and sigma 
   // to global daily R_hist[] and sigmaR_hist[] p to present 
   // (extrapolate constant if needed, e.g. data not up-to-date)
-  // getIndexTimeFromCalib(1) typically calibrInterval days)
+  // getIndexTimeFromCalib(1) typically calibInterval days)
 
   for(var it=itmin_c; it<itmaxinit; it++){//
-    var j=Math.min(Math.floor( (it-itmin_c)/calibrInterval),
+    var j=Math.min(Math.floor( (it-itmin_c)/calibInterval),
 		   Rcalib.length-1);
     sigmaR_hist[it]=sigmaR[j];
     R_hist[it]=Rcalib[j];
@@ -1634,7 +1606,90 @@ function estimateErrorCovar_Rhist_sigmaRhist(itmin_c, itmax_c, Rcalib){
 } // estimateErrorCovar_Rhist_sigmaRhist
 
 
+
+  /** ##############################################################
+estimate the infection fatality rate (IFR)
+in contrast to estimateR easy and only dependent on, 
+not interacting with, estimateR. (the numbe rof deaths is included in the 
+herd immunity xyzTot: more deaths<->less healed<->xyzTot
+############################################################## */
+
+
+function estimateIFR(itmin_c, itmax_c, IFRcalib){
+
+  var icalibmin=getIndexCalib(itmin_c);
+  var icalibmax=getIndexCalibmax(itmax_c);
+
+  itmin_calib=itmin_c; // global variables needed for obj function
+  itmax_calib=itmax_c; // passed to nelderMead
+
+  //##############################################################
+  sol2_SSEfuncIFR=fmin.nelderMead(SSEfuncIFR, IFRcalib);
+  //##############################################################
+
+
+  // copy to global IFR table IFRtime
+
+  for(var j=0; j<IFRcalib.length; j++){ 
+    IFRtime[j+icalibmin]=sol2_SSEfuncIFR.x[j];
+  }
  
+} // estimateIFR
+
+
+// ###############################################################
+// calculate log(SSE(IFR)) as GoF of the IFR calibration
+// ###############################################################
+
+
+function SSEfuncIFR(IFRarr, grad, logging, itStartInp, itMaxInp) {
+  if( typeof grad === "undefined"){
+    grad=[]; for(var j=0; j<IFRarr.length; j++){grad[j]=0;}
+  }
+  if( typeof logging === "undefined"){logging=false;}
+  var itStart=( typeof itStartInp === "undefined") ? itmin_calib : itStartInp;
+  var itMax=( typeof itMaxInp === "undefined") ? itmax_calib : itMaxInp;
+
+  if(logging){
+    console.log("\nEntering SSEfuncIFR:",
+		" itStart=",itStart," itMax=",itMax,
+		" data_itmax=",data_itmax," itmax=",itmax,
+		"");
+  }
+
+  // init with (it=) null, not itStart, to have exactly the same
+  // simulation as after finsihed R calibration  
+
+  corona.init(0, logging); 
+
+  var sse=0;
+  for(var it=0; it<itMax; it++){
+
+    // simulate
+
+    fracDie= IFRfun_time(IFRarr,it-itStart); // global var for updateOneDay
+    var R_actual= Rfun_time(Rtime,it); //use finished R calibration!
+    corona.updateOneDay(R_actual, it, logging); // in SSE never logging=true!
+
+    //  !!! GoF function new deaths (no log because of zero values)
+
+    if(it>=itStart){
+      var nSim=n0*corona.dz;
+      var nData=data_cumDeaths[data_idataStart+it+1]  
+        -data_cumDeaths[data_idataStart+it];
+
+      //  !!! GoF function cum deaths (no log because of zero values)
+
+      //var nSim=n0*corona.z;
+      //var nData=data_cumDeaths[data_idataStart+it+1]; 
+
+      sse+=Math.pow(nData-nSim,2);
+    }
+  }
+  return sse;
+}
+
+
 
 // ###############################################################
 // do simulations and graphics
@@ -1795,9 +1850,8 @@ function simulationRun() {
   if(!RsliderUsed){
     setSlider(slider_R0, slider_R0Text, Rfun_time(Rtime,it).toFixed(2),"");
   }
-  console.log("testSliderUsed=",testSliderUsed);
+
   if((!testSliderUsed)&&includeInfluenceTestNumber){
-    console.log("hier");
     setSlider(slider_pTest, slider_pTestText, Math.round(100*pTest), " %");
   }
 
@@ -1890,7 +1944,7 @@ CoronaSim.prototype.init=function(itStart,logging){
   if( typeof logging === "undefined"){logging=false;}
 
   var idataStart=data_idataStart+itStart;
-  var nxtStart=data_cumCases[idataStart]; // target number of cum cases at iStart
+  var nxtStart=data_cumCases[idataStart]; // target number of cum cases at iStart=^ local variable idataStart
 
 
 
@@ -2160,6 +2214,9 @@ CoronaSim.prototype.updateOneDay=function(R,it,logging){
   // true dynamics (3): let people die or recover
   // smooth  over tauAvg days
  
+  //!!! fracDie now externally calibrated
+
+/*
   if(includeInfluenceTestNumber){
     var factor
       = Math.max(fracDieFactor, 
@@ -2170,7 +2227,7 @@ CoronaSim.prototype.updateOneDay=function(R,it,logging){
     }
   }
   else{fracDie=fracDieInit;}
-
+*/
 
 
   var dtau=Math.floor(tauAvg/2); // tauAvg is global uneven variable, e.g.=5
