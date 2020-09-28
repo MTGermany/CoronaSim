@@ -899,8 +899,11 @@ function IFRfun_time(IFRarr, it){
   var indexWanted=Math.floor(it/calibInterval);
   var index=Math.min(indexWanted, IFRarr.length-1);
   var indexPlus=Math.min(indexWanted+1, IFRarr.length-1);
+  index=Math.max(index,0);
+  indexPlus=Math.max(indexPlus,0);
   var relRest=(it-calibInterval*index)/calibInterval;
   IFR= (1-relRest)*IFRarr[index]+relRest*IFRarr[indexPlus];
+  //console.log("fracDie: IFRarr=",IFRarr," it=",it," index=",index," indexPlus=",indexPlus);
   return IFR;
 
 }//IFRfun_time
@@ -1015,20 +1018,20 @@ function SSEfunc(Rarr, fR, logging, itStartInp, itMaxInp,
 
     // simulate
 
-    var R_actual= Rfun_time(Rarr,it-itStart); //only Rarr used in SSEfunc
+    var R_actual= Rfun_time(Rarr,it-itStart); //!!!only Rarr used in SSEfunc
     corona.updateOneDay(R_actual, it, logging); // in SSE never logging=true!
 
     // increment SSE
 
     //  !!! GoF function log(cumulative cases)
 
-    //var nxtSim=n0*corona.xt;
-    //var nxtData=data_cumCases[data_idataStart+it+1];  // sim from it to it+1
+    var nxtSim=n0*corona.xt;
+    var nxtData=data_cumCases[data_idataStart+it+1];  // sim from it to it+1
 
-    //  !!! GoF function log(new cases)
+    //  !!! GoF function log(new cases) !! not useful since drift @ cumulated
 
-    var nxtSim=n0*corona.dxt;
-    var nxtData=data_dxt[data_idataStart+it+1];  // sim from it to it+1
+    //var nxtSim=n0*corona.dxt;
+    //var nxtData=data_dxt[data_idataStart+it+1];  // sim from it to it+1
 
 
 
@@ -1315,7 +1318,7 @@ function calibrate(){
 	      "\n final R values=",Rtime,
 	      "\n fit quality sse=",sse);
   
-
+  //############################################################
   // calibrate IFR=fracDie
 
   console.log("\n\ncalibrating IFR ...");
@@ -1666,18 +1669,24 @@ function SSEfuncIFR(IFRarr, grad, logging, itStartInp, itMaxInp) {
   for(var it=0; it<itMax; it++){
 
     // simulate
+    // variable IFR: IFRarr, not -time and it-itStart
+    // fixed already calibrated R: IFRtime and it, not it-itStart
 
-    fracDie= IFRfun_time(IFRarr,it-itStart); // global var for updateOneDay
-    var R_actual= Rfun_time(Rtime,it); //use finished R calibration!
+    fracDie= IFRfun_time(IFRarr,it-itStart);
+    var R_actual= Rfun_time(Rtime,it);
     corona.updateOneDay(R_actual, it, logging); // in SSE never logging=true!
-
-    //  !!! GoF function new deaths (no log because of zero values)
+    if(logging){console.log("it=",it," fracDie=",fracDie,
+			    " R_actual=",R_actual," ndz=",n0*corona.dz,
+			    " ndx=",n0*corona.x[0],
+			    " nxt=",n0*corona.xt);}
 
     if(it>=itStart){
+
+    //  !!! GoF function new deaths (no log because of zero values)
       var nSim=n0*corona.dz;
       var nData=data_cumDeaths[data_idataStart+it+1]  
         -data_cumDeaths[data_idataStart+it];
-
+      if(logging){console.log("it=",it," nSim=",nSim," nData=",nData);}
       //  !!! GoF function cum deaths (no log because of zero values)
 
       //var nSim=n0*corona.z;
@@ -2234,15 +2243,15 @@ CoronaSim.prototype.updateOneDay=function(R,it,logging){
   var f_D=1./tauAvg;
   var f_Rec=1./tauAvg;
 
-  var dzsum=0;
+  this.dz=0;
   var dysum=0;
 
 
 
   for(var tau=tauDie-dtau; tau<=tauDie+dtau; tau++){
-    var dz=fracDie*f_D*this.xohne[tau]; //!! here xohne crucial
-    dzsum+=dz;
-    this.x[tau] -=dz; // xohne remains unsubtracted
+    var dztau=fracDie*f_D*this.xohne[tau]; //!! here xohne crucial
+    this.dz+=dztau;
+    this.x[tau] -=dztau; // xohne remains unsubtracted
   }
 
   for(var tau=tauRecover-dtau; tau<=tauRecover+dtau; tau++){
@@ -2250,7 +2259,7 @@ CoronaSim.prototype.updateOneDay=function(R,it,logging){
     dysum+=dy;
     this.x[tau] -=dy; // xohne remains unsubtracted
   }
-  this.z   += dzsum;
+  this.z   += this.dz;
   this.y   += dysum;
 
 
