@@ -55,8 +55,9 @@ var isStopped=true
 
 
 // global time simulation vars (see also "data related global variables")
+// dayinit
 
-var dayStartMar=20; //!! 20 you can also exceed 31, date initializer takes it
+var dayStartMar=8; //!! 20 you can also exceed 31, date initializer takes it
 var startDay=new Date(2020,02,dayStartMar); // months start @ zero, days @ 1
 var present=new Date();   // time object for present 
 var it=0;
@@ -171,15 +172,15 @@ const fracDieInitList={
 
 
 const tauDieList={
-    "Germany"       : 21, //21
-    "Austria"       : 21,
-    "Czechia"       : 21,
-    "France"        : 21,
-    "United Kingdom": 21,
-    "Italy"         : 11,
-    "Poland"        : 21,
-    "Spain"         : 21,
-    "Sweden"        : 21,
+    "Germany"       : 19, //19
+    "Austria"       : 19,
+    "Czechia"       : 19,
+    "France"        : 19,
+    "United Kingdom": 19,
+    "Italy"         : 19,
+    "Poland"        : 19,
+    "Spain"         : 19,
+    "Sweden"        : 19,
     "Switzerland"   : 19,
     "India"         : 17,
     "Russia"        : 17,
@@ -286,7 +287,7 @@ var itmax_calib; //  end calibr time interval =^ data_itmax-1
                  // 20 weeks of data
 
 const calibInterval=14; //!! calibration time interval [days] for one R value
-const calibAddtlDaysLast=7; // do not calibrate remaining period smaller
+const calibAddtlDaysLast=14; // do not calibrate remaining period smaller
 const calibrateOnce=false; // following variables only relevant if false
 const nCalibIntervals=5; // multiples of calibInterval, >=30/calibInterval
 const nOverlap=1;        // multiples of calibInterval, 
@@ -406,7 +407,6 @@ function getGithubData() {
     fracDie=IFRfun_time(betaIFRinit,-20); // use IFR start array for init()
     corona.init(0); 
     myRestartFunction();
-    //myStartStopFunction();
   }
 } // getGithubData
 
@@ -1650,10 +1650,10 @@ function SSEfuncIFR(beta, grad, logging) {
     if(logging){console.log("it=",it," nSim=",nSim," nData=",nData);}
     sseIFR+=Math.pow(nData-nSim,2);
 
-    // penalty for IFR<=0
+    // penalty for IFR<=0 //!!
 
     var IFRmin=5e-4;
-    var penalty0=100*nData;
+    var penalty0=1000*nData;
     if(fracDie<IFRmin){
       sseIFR += penalty0*Math.pow((IFRmin-fracDie)/fracDie,2);
     }
@@ -3145,13 +3145,16 @@ DrawSim.prototype.drawREstimate=function(it){
 		" sigmaR_hist[itR]=",sigmaR_hist[itR],
 		"");
     }
-    var str_R="R="+R_hist[itR].toFixed(2)
+    var str_R="R  ="+R_hist[itR].toFixed(2)
       //+( (RsliderUsed||otherSliderUsed||(itR>=data_itmax))
       +((true) // if plotting  w/o "+/- stddev
 	? "" : (" +/- "+sigmaR_hist[itR].toFixed(2)));
 
  
     ctx.fillText(str_R,0,0);
+    ctx.font = (Math.round(0.7*textsizeR))+"px Arial"; 
+    ctx.fillText("0",0.8*textsizeR,0.4*textsizeR);
+    ctx.font = textsizeR+"px Arial"; 
     ctx.setTransform(1,0,0,1,0,0);
   }
 }

@@ -43,9 +43,8 @@ Diese <a href="index.html">interaktive Simulation und Datenvisualisierung</a> so
 <li> wie schwierig die <span class="important">
   Reproduktionszahl <i>R</i></span>  und ihr
   zeitlicher Verlauf zu sch&auml;tzen ist: Je nach den Werten der
-  anderen Parameter wie Peridode der
-  Ansteckbarkeit, mittlerer Testzeitpunkt sowie Testh&auml;ufigkeit ändern
-  sich die "Best-Fit"-Werte und der Zeitverlauf von <i>R</i>,
+  anderen Parameter wie Periode der
+  Ansteckbarkeit, mittlerer Testzeitpunkt sowie Testh&auml;ufigkeit.
 <!--<li> dass gesch&auml;tzte Werte wie <i>R=0.92</i>
   ohne <span class="important">Fehlerintervalle</span>  
   nahezu nichts 
@@ -55,8 +54,8 @@ Diese <a href="index.html">interaktive Simulation und Datenvisualisierung</a> so
 </ul>
 
 <p class="italic"> <span class="lila">Update Sptember 2020: </span> Obiger Text wurde im April 2020
-  formuliert. Nun dringen die obigen Bemerkungen  langsam ins
-  allgemeine Bewusstsein, insbesodere die Verzerrung der
+  formuliert. Nun dringen die dort gemachten Bemerkungen  langsam ins
+  allgemeine Bewusstsein, insbesondere die Verzerrung der
   wahrgenommenen Lage durch Erh&ouml;hung der 
   Testrate: Der vom RKI
   berechnete R-Wert, der eigentlich ein intrinsischer Parameter der
@@ -72,7 +71,7 @@ ist es wichtig, Folgendes zu unterscheiden:
 
 <ul>
 <li> <span class="important">
-  Reproduktionszahl <i>R</i></span>: Wie viele Menschen ein
+  Reproduktionszahl <i>R</i> bzw. <i>R<sub>0</sub></i> </span>: Wie viele Menschen ein
   Infizierter im Mittel ansteckt. Manchmal wird noch zwischen dem
   Modellparameter  
 <i>R<sub>0</sub></i> (Ansteckungszahl bei Durchseuchung Null) und dem
@@ -83,7 +82,7 @@ die <i>R<sub>0</sub></i>-Werte angegeben</i>
 <li> <span class="important"> Durchseuchung  <i>X</i></span>: Der
   Anteil aller bisher Infizierten (nicht symptomatisch Erkrankten!) in
   der Bev&ouml;lkerung, unabh&auml;ngig vom Ausgang (aktuell infiziert,
-  genesen oder tot)
+  genesen oder gestorben)
 
 <li> <span class="important"> Immunit&auml;tsgrad  <i>I</i></span>:
   Wenn alle Infizierten immun werden und keine Impfung verf&uuml;gbar
@@ -106,7 +105,7 @@ Infizierten dar und <i>x/n</i> die
 sogenannte  <span class="important"> Pr&auml;valenz</i> 
 
 <li> <span class="important"> Testrate <i>n<sub>t</sub></i></span>: Zahl der
-    Tests (egal ob positiv oder nicht) pro Tag oder Woche 
+    Tests (egal ob positiv oder nicht) pro Zeitraum &Delta;t (Tag oder Woche) 
 
 <li> <span class="important"> Bev&ouml;lkerungs-Positivanteil  <i>X<sub>t</sub></i></span>: Der
   Anteil aller bisher positiv Getesteten 
@@ -136,36 +135,41 @@ sogenannte  <span class="important"> Pr&auml;valenz</i>
 
 <li> <span class="important"> <i>Y</i>, <i>Y<sub>t</sub></i> und <i>y<sub>t</sub></i></span>:
 Anteilswert an Genesenen in der Bev&ouml;lkerung sowie der Anteilswert
-  und die Rate an Genesenen, welche vorher positiv getestet
-  wurden. Dies ist tricky: Sind symptomfrei positiv Getestete
-  zum Testzeitpunkt bereits genesen oder nicht? Die entsprechenden
+  und die Rate an Genesenen, <i>welche vorher positiv getestet
+  wurden</i>. Dies ist tricky: Sind etwa symptomfrei positiv Getestete
+  zum Testzeitpunkt bereits genesen oder nicht? Oder sind sie es, wenn sie
+  nicht mehr ansteckend sind? Die entsprechenden
   Daten sind deshalb in vielen L&auml;ndern
-   nicht konsistent/brauchbar.
+   nicht konsistent/brauchbar und f&uuml;r uns zum
+  Verst&auml;ndnis auch nicht n&ouml;tig
 
 <li> <span class="important"> Anteil der an Covid-19 gestorbenen
     Personen in der Bev&ouml;lkerung <i>Z=Z_t</i></span> sowie 
 <i>z<sub>t</sub>(t)=n
   [Z<sub>t</sub>(t)-Z<sub>t</sub>(t-&Delta;t)]</i>. Hier gehe ich
   davon aus, dass jeder Covid-19-Todesfall fr&uuml;her oder sp&auml;ter
-  getestet wurde, sodass dies unter allen realen Gr&ouml;&szlig;en die einzige  bekannte ist
+  getestet wurde, sodass dies <i>unter allen realen Gr&ouml;&szlig;en die einzige  bekannte ist</i>
 
 
 <li><span class="important"> Case fatality rate (CFR) </span>:
 Anteil der positiv Getesteten, die schlie&szlig;lich <i> urs&auml;chlich</i>  an
     Covid-19 sterben.
 <span class="italic"> <span class="lila">Update 2020-09: </span> 
-Die CFR liegt nun um 1%, anfangs war sie etwa 4%</span>
+Die CFR liegt nun um 1%, anfangs war sie etwa 4%, siehe die
+  "Infektionsraten"-Ansicht der Visualisierung</span>
 
 <li><span class="important"> Infection fatality rate (IFR) </span>:
 Anteil der Infizierten, die schlie&szlig;lich <i> urs&auml;chlich</i>  an
-    Covid-19 sterben
+    Covid-19 sterben. Naturgem&auml;&szlig; ikanndiese Gr&ouml;&szlig;e, ebenso wie die
+  CFR, nur verz&ouml;gert um die typischen Krankheitsperiode von 3 Wochen
+  gemessen werden.
 </ul>
 
 
 <h3 id="problem">Was ist das Problem?</h3>
 
  Mit wenig Ungenauigkeit bekannt sind die prim&auml;r
-ver&ouml;ffentlichte
+ver&ouml;ffentlichten
 Gr&ouml;&szlig;en <i>x<sub>t</sub></i>,  <i>y<sub>t</sub></i>,  <i>z<sub>t</sub></i> 
 sowie <i>n<sub>t</sub></i>. Daraus k&ouml;nnen alle Gr&ouml;&szlig;en mit
 Subskript "t" sowie die CFR ohne gro&szlig;e systematische Fehler
@@ -174,23 +178,28 @@ Allerdings will man zur Beurteilung des  weiteren Infektionsverlauf und
   davon abh&auml;ngige politische Entscheidungen die <i>realen</i>
 Gr&ouml;&szlig;en wissen, also die ohne "t". Dummerweise
   sind allein die Todesf&auml;lle <i>Z</i> bzw. <i>z</i> angen&auml;hert
-  bekannt. F&uuml;r die wichtigsten drei Gr&ouml;&szlig;en ist jedoch nicht mal
+  bekannt. F&uuml;r die wichtigsten vier Gr&ouml;&szlig;en ist
+abgesehen von <i>R</i> jedoch nicht mal
   die Gr&ouml;&szlig;enordnung bekannt:
 <ul>
-<li> Die IFR gibt an, wie schlimm die Seuche f&uuml;r den Einzelnen ist,
-<li> die Infektionsrate <i>x</i>, wie schlimm sie gegenw&auml;rtig f&uuml;r die
+<li> Die Reproduktionszahl <i>R<sub>0</sub></i>
+  bzw <i>R=R<sub>0</sub>(1-I)</i> gibt die aktuelle
+  Dynamik an (<i>R</i> ist <i>nicht</i> das Verh&auml;ltnis zweier
+  Positivraten, wie aus den obigen Definitionen klar werden sollte!),
+<li> die IFR gibt an, wie schlimm die Seuche f&uuml;r den Einzelnen ist,
+<li> die Infektionsrate <i>x</i> multipliziert mit der IFR, wie schlimm sie gegenw&auml;rtig f&uuml;r die
   Volkswirtschaft ist,
 <li> die Durchseuchung <i>X</i> bzw. der Immunit&auml;tsgrad <i>I</i>,
   wie weit sie fortgeschritten ist, d.h. wie die Lage f&uuml;r die
   Volkswirtschaft in Zukunft sein wird.
 </ul>
-Warum ist das trotz aller Tests so unbekannt?
- Um die IFR und <i>x</i> und damit das kumulierte <X> abzusch&auml;tzen,
+Warum sind diese Gr&ouml;&szlig;en trotz aller Tests unbekannt?
+ Um die IFR und <i>x</i> und damit das kumulierte <i>X</i> abzusch&auml;tzen,
  ben&ouml;tigt man 
-den <span class="important">Hellfeldanteil <i>D</i></span>, also den
+den <span class="important">Hellfeldanteil <i>H</i></span>, also den
  Anteil aller Infizierten, die auch getestet werden. Falls
  zus&auml;tzlich die Tests perfekt sind, 
- k&ouml;nnte man zumindest einige Wochen verz&ouml;gert die realen
+ k&ouml;nnte man zumindest einige Wochen verz&ouml;gert (s.o.) die realen
  Gr&ouml;&szlig;en (ohne Subskript 't') durch 
 <br><br>
 
@@ -202,16 +211,19 @@ den <span class="important">Hellfeldanteil <i>D</i></span>, also den
 
  sch&auml;tzen. Leider sind weder die Tests perfekt noch bekannt,
  welcher Anteil der Infizierten getestet wird. In der Simulation mache
- ich folgende Annahmen:
-<ul>
+ ich bez&uuml;glich der Tests  folgende
+ Annahmen <a href="#model">(Modell-Annahmen weiter unten)</a>:
+
+<ul id="hellfeld">
 <li>
-<b><i> Abh&auml;ngigkeit von der Testrate:</i></b>  Offensichtlich werden
+<b><i> Abh&auml;ngigkeit des Hellfeldes von der Testrate:</i></b>
+  Offensichtlich werden 
   umso mehr Infizierte erwischt, je mehr getestet wird. Aber dies geht
-  nicht linear mit <i>n<sub>t</sub></i>, da ein
+  nicht linear mit der Testrate <i>n<sub>t</sub></i>, da ein
   Auswahleffekt vorliegt: Leute mit Symptomen werden wahrscheinlicher
   getestet und Massentests an Symptomfreien kommen erst zum Schluss
   dran. Ich nehme daher eine wurzelf&ouml;rmige Abh&auml;ngigkeit an, bei
-  der alle Infizierten getestet werden, wenn  die Testrate
+  der alle Infizierten getestet werden (<i>H</i>=1), wenn  die Testrate
   <i>n<sub>t</sub></i> gleich
 <center>
 <i>n<sub>t</sub><sup>max</sup>=n<sub>0</sub></i>/Woche
@@ -228,15 +240,16 @@ Hellfeld direkt durch einnen Schieberegler einstellen.<br><br>
   sowie (wichtiger!) eine
 <li> <span class="important"> Spezifizit&auml;tsfehler &beta;=0.3%</span> an. Dies gibt
 		  die <i>False-Positive</i>-Rate an, also die
-		  Wahrscheinlichkeit faf&uuml;r, dass gesunde Personen
+		  Wahrscheinlichkeit daf&uuml;r, dass gesunde Personen
 		  (ggf. auch bei einem Nachtest) positiv getestet werden.
 </ul>
-Offensichtlich kann bei einer geringen 
-  Pr&auml;valenz der Fehler &beta; nicht/kaum  gr&ouml;&szlig;er
-  werden als der 
-Positivanteil 
-<i>p<sub>t</sub>=x<sub>t</sub>/n<sub>t</sub></i> bei den Tests: In diesem
-Falle w&auml;ren alle "Infizierten" in Wirklichkeit <i>false positives</i>!
+<br>
+Fatal daran ist, dass man bei einer geringen 
+  Pr&auml;valenz <i>x/n</i>  &uuml;berproportional 
+ viele <i>false Positives</i>
+  erh&auml;lt, weit mehr als der Anteil &beta;. Bei Zufalls-Massentests erh&auml;lt man man sogar mehr
+  <i>false Positives</i> als echte Infizierte, wann immer der
+  &beta;-Fehler gr&ouml;&szlig;er als die Pr&auml;valenz ist!
 <br><br>
 
 <li> <b><i> Todesf&auml;lle durch (nicht mit!) Covid 19: </i></b>
@@ -259,14 +272,16 @@ Es werden zwei allgemein zug&auml;ngliche Datenquellen verwendet:
   T&auml;glich
     aktualisierte, kompakte <a href="https://pomber.github.io/covid19/timeseries.json">Zeitreihen,
   synthetisiert von Rodrigo Pombo</a>,
-  die direkt live geladen werden. 
-<li> Weitergehende, ebenfalls t&auml;glich
-    aktualisierte
-  <a href="https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/owid-covid-data.json">Daten
-  des Our World in Data (OWiD)</a>,
+  die direkt live geladen werden,
+
+<li> weitergehende, ebenfalls t&auml;glich
+    aktualisierte Daten des
+  <a href="https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/owid-covid-data.json">
+	   Our World in Data (OWiD) Projekts</a>,
 	   welche auch Informationen &uuml;ber die Testh&auml;ufigkeiten
   enthalten. Diese Datenquelle ist aber zu gro&szlig;, um sie life zu
-  laden. Sie wird deshalb serverseitig extrahiert, um nur die
+  laden. Sie wird deshalb serverseitig extrahiert und Redundanzen
+	   eliminiert, um nur die 
   relevanten Informationen laden zu m&uuml;ssen.
 </ol>
 <!--
@@ -280,7 +295,8 @@ bzw. Gestorbene) m&ouml;glichst gut &uuml;bereinstimmen.
 <h3 id="help">Wie kann die Simulation dabei helfen?</h3>
 
 
-Allen Covid-19-Modellen und Simulationen ist
+Allen Covid-19-Modellen und Simulationen (und &uuml;brigens auch allen
+Klimamodellen und deren Simulationen) ist
 gemeinsam, dass sie <span class="important">keine Prognosen</span>
 erm&ouml;glichen. Sehr wohl m&ouml;glich ist aber
 eine <i>Szenarienanalyse</i>, also eine bedingte Projektion in die
@@ -292,48 +308,68 @@ Zukunft, etwa folgender Art:
 <td>
 <i>"wenn zum Zeitpunkt T<sub>1</sub> durch die Implementierung oder
 Unterlassung von Ma&szlig;nahmen oder durch das Wetter die
-Reproduktionsrate  einen gewssen Wert <i>R</i>
-erreicht, der Infektionszeitraum zwischen 3 und 7 Tagen nach der
+Reproduktionszahl <i>R<sub>0</sub></i> einen gewissen Wert 
+erreicht, die Durchseuchung <i>X</i> so und so ist, der Infektionszeitraum zwischen 3 und 7 Tagen nach der
   Infektion liegt, dopplt so viel
-getestet und wie bisher medizinisch behandelt wird (gleiche IFR), dann wird es
-im Zeitraum  <i>&Delta; t<sub>1</sub></i>  eine Zahl x<sub>t</sub> an neuen
+getestet (<i>n<sub>t</sub></i> verdoppelt) und wie bisher medizinisch behandelt wird (gleiche IFR), dann wird es
+in Woche <i>&Delta; t<sub>2</sub></i>  eine Zahl x<sub>t</sub> an neuen
   Positivtests sowie <i>x</i> reale Neuinfektionen geben sowie im
-  Zeitraum  <i>&Delta; t<sub>2</sub></i> 
+  Zeitraum  <i>&Delta; t<sub>3</sub></i> 
 eine Zahl <i>z</i> an Covid-19-Toten" </i></td>
 </table>
 </center>
  
 <h3 id="sim"> Simulationsablauf und Bedienung</h3>
 
-Gezeigt wird anf&auml;nglich die Situation in Deutschland, und zwar
-die Ansicht "Tests". Es sind aber
-auch noch 12 andere L&auml;nder und vier weitere Ansichten
-einstellbar. Bei Aufruf der Seite wird die Simulation zun&auml;chst
-bez&uuml;glich der Reproduktionsrate kalibriert (gefittet) und 
-vom Auftreten der ersten F&auml;lle bis zur Gegenwart
-simuliert und die Simulation ab 20.03 (erste ernsthafte
-Lockdown-Ma&szlig;nahmen) dargestellt. 
+Gezeigt wird anf&auml;nglich die Situation in Deutschland bis zur
+     Gegenwart (mit <img src="figs/buttonGo_small.png"
+     style="width:3.5vmin;vertical-align:middle"> kann man dann weiter
+     simulieren), und zwar
+die Ansicht "Simulation (lin)", also Simulationsergebnisse und
+hinterlegte Daten der kumulierten Gr&ouml;&szlig;en in linearer Skalierung. Es sind aber
+auch noch 
 <ul>
-<li> Die Regler f&uuml;r die Reproduktionsrate <i>R</i> und des
-  Hellfeldes "zappeln" hin und her, weil sie im Vorfeld kalibriert
-  bzw. gem&auml;&szlig; dem obigen Quadratwurzel-Modell von der gemessenen
-  Testrate abh&auml;ngen
+<li>
+zw&ouml;lf andere L&auml;nder und 
+<li> vier weitere Ansichten (Simulation in logarithmischer
+  Darstellung, t&auml;gliche Fallzahlen-Ansicht, Test-Ansicht und
+  Infektionsraten)
+</ul>  
+einstellbar. Bei Aufruf der Seite wird die Simulation zun&auml;chst
+bez&uuml;glich der zweiw&ouml;chentlichen Reproduktionszahl anhand der
+kumulierten Positivenzahlen <i>X<sub>t</sub></i> sowie bez&uuml;glich der
+IFR in f&uuml;nf Perioden anhand der kumulierten Todesfallzahlen
+"kalibriert" 0</(gefittet), indem die Fehlerquadrate minimiert
+werden. Die Simulation startet am 8. M&auml;rz, also etwa eine Woche vor den
+ersten 
+Lockdown-Ma&szlig;nahmen. 
+<ul>
+<li> Die Regler f&uuml;r die  Reproduktionsrate <i>R<sub>0</sub></i> und des
+  Hellfeldes "zappeln" nach Ma&szlig;gabe des Fit-Ergebnisses bzw. des
+  obigen <a href="#hellfeld">Quadratwurzel-Modells</a> hin und
+  her. Die gefittete IFR ist in 
+  der Infektionsratenansicht einsehbar.
 
-<li> Die jeweils gesch&auml;tzte 
-  Reproduktionsrate samt Fehlerintervall wird als grauer Text in die
+<li> Die jeweils gesch&auml;tzte Reproduktionsrate 
+<!--samt Fehlerintervall-->
+ wird als grauer Text auch in die
   Simulation eingezeichnet. 
 
 <!--
  <span class="important"> Insbesondere
   erkl&auml;rt in Deutschland ein seit dem 27.03. ein nahezu
-  konstanter <i>R</i>-Wert um 0.70  die
+  konstanter <i>R<sub>0</sub></i>-Wert um 0.70  die
   beobachteten Fallzahlen nahezu perfekt.</span>-->
 
-<li> Sobald man diesen oder einen anderen
-  Regler selbst bedient, wird die Sch&auml;tzung samt Angabe der
-  Fehlerintervalle 
-  beendet und die angezeigten <i>R</i>-Werte entsprechen der eigenen
-  Aktion. Selbiges gilt auch f&uuml;r den Hellfeldregler.
+<li> Sobald man diesen oder den Hellfeldregler selbst bedient,  wird
+  die Sch&auml;tzung 
+  beendet und die angezeigten <i>R<sub>0</sub></i>-Werte entsprechen
+  der eigenen 
+  Aktion. Nat&uuml;rlich werden dann i.A. die simulierte und real gemachte
+  Positivzahlen nicht mehr &uuml;bereinstimmen. Dies gilt nat&uuml;rlich
+  auch, wenn man andere Regler bedient: In beiden F&auml;llen kann man dann
+  neu kalibrieren, um die f&uuml;r die neuen Einstellungen am besten
+  passenden <i>R<sub>0</sub></i>- und IFR-Werte zu erhalten.
 </ul>
 
 F&uuml;r das
@@ -352,7 +388,7 @@ wieder stoppen.
      style="width:3vmin;vertical-align:middle">
 startet man die Simulation vom Anfang an mit den gerade eingestellten
      Parametern. Hat man nach dem letzten Reset oder der letzten L&auml;nderwahl
-     den <i>R</i>-Regler nicht ge&auml;ndert, wird die
+     den <i>R<sub>0</sub></i>-Regler nicht ge&auml;ndert, wird die
      Parametersch&auml;tzung wieder aktiviert und angezeigt.
 
 <li> Mit <img src="figs/buttonReset2_small.png"
@@ -367,26 +403,49 @@ Die weiteren Bedienelemente der Simulation sind die folgenden:
 <li> <span class="button"> L&auml;nderwahl</span> 12 weitere
   interessante L&auml;nder sind w&auml;hlbar<br><br>
 
-<li> <span class="button"> Wahl der Ansicht</span>
+<li><b> Wahl der Ansicht</b>
 <ul>
-<li> <i>Test-Ansicht</i>(Standardeinstellung): Gezeigt sind
-   die t&auml;gliche Testh&auml;ufigkeit und Positivenzahl. Ferner die <i>simulierte</i> Positivenzahl (stimmt
-  fast mit der berichteten &uuml;berein, denn darauf ist das Modell
-  kalibriert) sowie die nicht beobachtbare <i>modellierte</i> tats&auml;chliche
-  Neuinfektionsrate und (bei angenommenem &beta;=0.3%) die Zahl
-  der <i>false positives</i>. Man beachte die Multiplikatoren 1,10 und
-   100, damit alle Daten auf eine Grafik passen!
-<li> <i> Lineare Simulationsansicht</i>. Hier sieht man den
-&Uuml;bereinstimmungsgrad der Simulation mit den <i>kumulierten</i> Bobachtungsdaten
-<li> <i> Logarithmische Simulationsansicht</i>.
+<li> <span class="button"> Simulation (lin)</span> Standardeinstellung:  Hier sieht man den
+&Uuml;bereinstimmungsgrad der Simulation der <i>kumulierten</i>
+  Positivzahlen und Todesf&auml;lle mit den Bobachtungsdaten. Man beachte
+  die unterschiedliche Skalierung durch die Multiplikatore 100
+  (Todesf&auml;lle) und 1000 (Testpositive). F&uuml;r manche L&auml;nder wird
+  auch die Zahl der Genesenen gezeigt, diese Gr&ouml;&szlig;e ist aber, wie
+  bereits erw&auml;hnt, h&auml;ufig nicht gut definiert und inkonsistent.
+<br><br>
+
+<li> <span class="button">  Logarithmische Simulationsansicht</span>.
 Hier sieht man zus&auml;tzlich die simulierten nichtbeobachtbaren Gr&ouml;&szlig;en "Zahl der
-  aktiv Infizierten" und "Durchseuchung".
-<li><i>Daten-Ansicht</i> Abgesehen von der simulierten
-  Neuinfektionszahl die reine Empirie: Zahl der positiven Tests und,
-  10-fach vergr&ouml;&szlig;ert, die Zahl der Covid-19 Todesf&auml;lle
-<li> <i>Infektionsraten-Ansicht</i>Neben den allein aus den Daten
+  aktiv Infizierten" und "Durchseuchung".  <br><br>
+
+<li> <span class="button"> Daten: Faelle</span> Hier sind im Gegensatz
+  zu den ersten beiden Ansichten die  t&auml;glichen anstelle der
+  kumulierten Daten gezeigt: Beobachtete Zahl der
+  Positiv-F&auml;lle" und Zahl der Todesf&auml;lle" im Vergleich zur
+  Simulation. Man beachte,
+  dass die simulierten Neuinfektionen um eine Gr&ouml;&szlig;enordnung
+  gr&ouml;&szlig;er sind als die positiv getesteten und zeitlich
+  vorauseilen, vor allem wenn man den Regler "Test nach ..." auf hohe
+  Werte stellt.  <br><br>
+
+
+<li> <span class="button"> Daten: Tests </span>Hier liegt der Fokus
+  auf die Tests und deren Unzul&auml;nglichkeiten: Die realen
+  Infektionsf&auml;lle sind bei den Standardparametern um eine
+  Gr&ouml;&szlig;enordnung gr&ouml;&szlig;er als die beobachteten und eilen letzteren
+  voraus. Man sieht auch, dass aufgrund der steigenden Testrate (blaue
+  Punkte) die Zahl der Positivf&auml;lle im Vergleich zu den 
+  Realf&auml;llen zunimmt, zumindest, wenn man
+  das <a href="#hellfeld">Quadratwurzelmodell</a> nicht ausschaltet
+  (<span class="button">Ignoriere
+  Testh&auml;ufigkeit</span>). Schlie&szlig;lich wird  die Zahl der simulierten <i>false
+  Positives</i> bei einem Beta-Fehler &beta;=0.3% gezeigt. Man beachte die Multiplikatoren 1,10 und
+   100, damit alle Daten auf eine Grafik passen!<br><br>
+
+
+<li> <span class="button"> Infektionsraten-Ansicht</span>Neben den allein aus den Daten
   extrahierbaren relativen Gr&ouml;&szlig;en "Positivanteil" und <i>case fatality
-  rate</i>(CFR) wird auch die nur simulierbare  <i>infection fatality
+  rate</i>(CFR) wird hier  die gefittete  <i>infection fatality
   rate</i>(IFR) geplottet.
 </ul><br>
 
@@ -394,7 +453,7 @@ Hier sieht man zus&auml;tzlich die simulierten nichtbeobachtbaren Gr&ouml;&szlig
 oder w&auml;hlt ein konstantes Hellfeld,
 ist die Simulation bez&uuml;glich der Reproduktionsraten nicht mehr an
 die Positivenzahl gefittet, da das Modell auch andere Faktoren
-hat. Hier kann man mit den aktuellen Einstellungen <i>R</i> neu
+hat. Hier kann man mit den aktuellen Einstellungen <i>R<sub>0</sub></i> neu
   fitten.<br><br>
 
 <li> <span class="button"> Ber&uuml;cksichtige
@@ -407,7 +466,7 @@ Schieberegler einstellbaren Wert  hin und her.<br><br>
   laufender Simulation bedienen.<br><br>
 
 <li>  Der erste <span class="button">Regler für die
-   Reproduktionszahl <i>R</i></span> ohne jede 
+   Reproduktionszahl <i>R<sub>0</sub></i></span> ohne jede 
    Herdenimmunit&auml;t ist der
   wichtigste. Sobald man ihn bedient, ist die anf&auml;ngliche
   Sch&auml;tzung nicht mehr aktiv.<br><br>
@@ -433,14 +492,33 @@ Testh&auml;ufigkeit</span> Annahmen &uuml;ber die Tests im
       Simulation auf 
 <img src="figs/buttonGo_small.png"
      style="width:3.5vmin;vertical-align:middle"> 
-und stoppen Sie die Simulation erneut im Juli: Die Infektionen
-l&auml;uft sich bei etwa 190 000 gemeldeten Infizierten und insgesamt
-     weniger als 
-     10 000 Covid-19 Opfern tot, aber selbst
-Anfang Juli gibt es noch etwa 10 000 <i>real</i> kranke Personen: Die
-Infektion ist noch lange nicht "ausgetrocknet"
-<br><br>
-<li> <b>Szenario "Laisser faire":</b> Alle Einschr&auml;nkungen werden
+und stoppen Sie die Simulation nach einigen Monaten bzw. wenn im Falle
+     von <i>R<sub>0</sub></i> > 1 die
+     Infektionsspitze erreicht ist.
+
+<br><br><li> <b>Szenario "Sensitivit&auml;tsanalyse
+    bez&uuml;glich <i>R<sub>0</sub></i>": </b> Lassen Sie die Simulation
+    mit <img src="figs/buttonRestart_small.png"
+     style="width:3vmin;vertical-align:middle"> neu laufen bis zur
+    Gegenwart, ver&auml;ndern Sie nun den R-Wert um einen kleinen
+    Betrag, z.B. von 1.15 auf 1.05 und lasen Sie die Simulation mit  <img src="figs/buttonGo_small.png"
+     style="width:3.5vmin;vertical-align:middle"> weiterlaufen. Sie
+    werden ganz andere Ergebnisse erhalten, z.B. in Deutschland eine
+    Abnahme der Neuinfektionen und kaum noch Todesf&auml;lle (Hinweis:
+    Auch wenn <i>R<sub>0</sub></i> > 1 ist, k&ouml;nnen die t&auml;gliche
+    Fallzahlen nach unten gehen, wenn eine hinreichende Durchseuchung
+    <i>I</i> erreicht ist so dass <i><i>R<sub>0</sub>-1 < I </i></i>
+    (logarithmische Ansicht: Die simulierte Durchseuchung ist etwa 3
+    Millionen, also etwa 4%).
+<span class="important"> Schlussfolgerung: Einzig mit dem
+  gesch&auml;tzten R-Wert weiterzusimulieren ist komplett unseri&ouml;s</span>, da
+  Unsicherheiten in R von 0.1 zu um den Faktor 10 unterschiedlichen
+  Peaks f&uuml;hren k&ouml;nne! Eine Aussage wie "zu Weihnachten wird es 19
+  600 F&auml;lle pro Tag geben" l&auml;sst auf mangelndes Modellvers&auml;ndnis
+  (oder eine Agenda) schlie&szlig;en!
+
+
+<br><br><li> <b>Szenario "Lockdown":</b> Alle Einschr&auml;nkungen werden
   aufgehoben, alles ist wie in Vor-Coronazeiten. Dies k&ouml;nnte
   z.B. einer Reproduktionsrate von 1.5 entsprechen (wie das
   Grippevirus scheint auch das Coronavirus im Sommer weniger
@@ -459,8 +537,8 @@ lassen die Simulation
   =>log. Darstellung</span>. Nun hat sich bei etwa 45 Millionen
      infizierten Personen, von denen fast alle wieder gesund sind,
      eine Herdenimmunit&auml;t aufgebaut. Eine weitere Erh&ouml;hung
-     von <i>R</i> (z.B. weil es Winter wird) bewirkt nahezu keinen
-     Effekt mehr. <span class="important"><i>Wichtig:</i></span> Das <i>R</i> in meinem Simulator
+     von <i>R<sub>0</sub></i> (z.B. weil es Winter wird) bewirkt nahezu keinen
+     Effekt mehr. <span class="important"><i>Wichtig:</i></span> Das <i>R<sub>0</sub></i> in meinem Simulator
      gibt die Reproduktionszahl <i>ohne jede Herdenimmunit&auml;t</i> an,
      die Infiziertenkurve kann deshalb auch bei <i>R>1</i> abflachen.
 <br><br>
@@ -477,9 +555,9 @@ den Ausgangszustand her und merken sich die gesch&auml;tzten R-Werte und
      Infektion und dr&uuml;cken Sie 
   <span class="button"> Kalibriere neu!</span>: Je kleiner der
   mittlere Ansteckungstag ist, desto n&auml;her sind die R-Sch&auml;tzungen
-  um 1, werden also bei schneller Ansteckung und/oder schnellen Tests und R<1 gr&ouml;&szlig;er, bei
+  um 1, werden also bei schneller Ansteckung und/oder schnellen Tests und R<sub>0</sub><1 gr&ouml;&szlig;er, bei
   R>1 (z.B. in Ru&szlig;land oder Indien) kleiner. <span class="important">
-  Die Tatsache, dass R>1 oder R<1   gesch&auml;tzt wird,
+  Die Tatsache, dass R>1 oder R<sub>0</sub><1   gesch&auml;tzt wird,
   ist hingegen <i>robust</i></span>, also unempfindlich gegen&uuml;ber
   &Auml;nderungen der angenommenen Simulationsdynamik. Eine &Auml;nderung
   der Testverz&ouml;gerung (Test
@@ -523,7 +601,7 @@ Dieses wichtige Szenario zeigt, wie man allein durch eine zeitlich
      style="width:3vmin;vertical-align:middle"> und verschieben die
   Testrate w&auml;hrend der Simulation wieder auf 20%. Nun sollten die
   rote  Kurve wieder nahezu mit den roten atenpunkten
-  &uuml;bereinstimmen: <i>R</i> w&uuml;rde systematisch um 0.1 zu hoch
+  &uuml;bereinstimmen: <i>R<sub>0</sub></i> w&uuml;rde systematisch um 0.1 zu hoch
   gesch&auml;tzt, wenn man eine tats&auml;chliche &Auml;nderung der Testrate
   nicht ber&uuml;cksichtigte! Noch drastischer wird es z.B. bei den USA,
   wenn man w&auml;hrend der Simulation die Testrate von 5% auf 20%
@@ -556,11 +634,6 @@ Gesamtheit, also Hell- und Dunkelfeld, beziehen.
     simulierte Zahl der 
     infizierten und wieder gesundeten Personen im Hellfeld.
 
-<li> <span class="blue"> Blaue dicke Kurve und Punkte:</span> Anteil der an Covid19 gestorbenen Personen
-    unter allen positiv 
-    getesteten, also Quotient der schwarzen und der roten
-    Kurve
-    (nur in der linearen Darstellung, rechte Skala)
 
 <li> <span class="orange"> Orange d&uuml;nne Kurve:</span> Reale Anzahl der <em>aktuell
       erkrankten</em> Personen, wie sie die Simulation impliziert (nur
@@ -620,7 +693,7 @@ Personen. Es wird also davon ausgegangen, dass jeder nur einmal
   oder Schwere der Symptome.
 
 <br><br><li> Die Infizierten sterben im Laufe der Krankheit mit der
-  <strong>wahren Sterblichkeit</strong> <i>IFR</i>, und zwar
+  <strong>wahren Sterblichkeit</strong> <i>IFR<sub>0</sub></i>, und zwar
   gleichverteilt nach
   &tau;<sub>D</sub>&plusmn;2 Tagen
 
@@ -689,9 +762,9 @@ Offensichtlich ergibt dies nur Sinn, wenn
 <h4> (1) Vom Nutzer beeinflussbare Werte</h4>
 
 <ul>
-<li><span class="important">Reproduktionszahl <i>R</i>. </span> 
+<li><span class="important">Reproduktionszahl <i>R<sub>0</sub></i>. </span> 
 <strong>Dies  ist der 
-  wichtigste der politisch beeinflussbaren Parameter</strong>. <i>R</i>-Werte  &lt; 1 f&uuml;hren zu
+  wichtigste der politisch beeinflussbaren Parameter</strong>. <i>R<sub>0</sub></i>-Werte  &lt; 1 f&uuml;hren zu
   einer exponentiellen Abnahme an Neuinfektionen, 
   <i>R &gt; 1</i> 
  anfangs zu einer exponentiellen Zunahme an Neuinfektionen,
@@ -702,7 +775,7 @@ Offensichtlich ergibt dies nur Sinn, wenn
  Gesundeten. 
 <br><br>
 
-<i>R</i> wird reduziert durch
+<i>R<sub>0</sub></i> wird reduziert durch
 <ul>
 <li> Isolation nach dem Schrotschussverfahren (wie im April 2020)
 <li> gezielte Isolation Einzelner nach positiver Testung: Je geringer
