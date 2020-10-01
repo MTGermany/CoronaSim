@@ -676,7 +676,7 @@ function initializeData(country) {
         data_pTestModel[i]=Math.min(data_pTestModel[i],1);
       }
       else{// use proportional model
-	var pModel=10*7*data_dn[i]/n0;
+	var pModel=10*7*data_dn[i]/n0; //!!! still used???
 	data_pTestModel[i]=Math.max(pTestModelMin,Math.min(1,pModel));
       }
     }
@@ -1312,8 +1312,8 @@ function calibrate(){
 
   } // calbrate R with multiple periods
 
-  var logging=false;  //calibrate()
-  //var logging=true;
+  //var logging=false;  //calibrate()
+  var logging=false;
   sse=SSEfunc(Rtime,null,logging,0,data_itmax-1); // -1 because it: it->it+1
   console.log("leaving calibrate():",
 	      "\n final R values=",Rtime,
@@ -1817,6 +1817,10 @@ function myResetFunction(){
   RsliderUsed=false;
   otherSliderUsed=false;
   testSliderUsed=false;
+  includeInfluenceTestNumber=true;
+
+  document.getElementById("testnumber").innerHTML
+      ="Ignoriere Testhaeufigkeit";  
 
   tauRstart=tauRstartInit;
   setSlider(slider_tauRstart, slider_tauRstartText,
@@ -1895,6 +1899,14 @@ function doSimulationStep(){
 
   corona.updateOneDay(R_actual,it,logging); // in doSimulationStep
   it++;
+
+  if(false){
+    var idata=data_idataStart+it; // not "+1+" since after it++
+    console.log(" it=",it,
+		" pTest=",pTest.toPrecision(3),
+		" dnxtFalse=",Math.round(n0*corona.dxtFalse),
+		" data_dxt[idata]=",data_dxt[idata]);
+  }
 
   if(false){// doSimulationStep: logging "allowed"
   //if(true){// doSimulationStep: logging "allowed"
@@ -2296,13 +2308,40 @@ CoronaSim.prototype.updateOneDay=function(R,it,logging){
   // add beta error outside tau loop (the test gets dn-pTest*n0*this.xohne
   // noninfected people ) and increment cumulative this.xt
 
-
   if(it>=0){// do not use absolute data such as data_dn in warmup!
     var dn=(idata<data_dn.length) 
       ? data_dn[idata] : dn_weeklyPattern[(idata-data_pTestModel.length)%7];
-    this.dxtFalse=(dn/n0 - pTest*this.xohne[tauTest])*beta;
-    this.dxt+=this.dxtFalse; 
-    if(idata>=data_dn.length){this.dxtFalse=NaN;} //to prevent plotting
+
+
+    if(includeInfluenceTestNumber){ 
+      this.dxtFalse=(dn/n0 - pTest*this.xohne[tauTest])*beta; //!!!
+    }
+
+    else{ // prob tree nt with p infected->1-alpha pos, alpha neg
+           // 1-p ot infected, beta ->pos, 1-beta->neg
+      var p=7*this.dxt/(n0*pTest); // comes from sqrt model
+      var dn=n0*pTest*pTest/7.;
+      this.dxtFalse=dn/n0*(1-p)*beta;
+      if(idata<data_dn.length){//avoid more false positive than data
+        this.dxtFalse=Math.min(this.dxtFalse,0.742*data_dxt[idata]/n0);
+      }
+      if(logging){console.log("no*this.dxtFalse=",
+			      Math.round(n0*this.dxtFalse));
+		 }
+    }
+
+    if(idata==data_dn.length-1){// save relative value of false positives
+      this.falseTrueRatio=this.dxtFalse/this.dxt;
+    }
+ 
+    //this.dxt still only true pos.; define this.dxtFalse before this!
+
+    if(idata>=data_dn.length){
+      this.dxtFalse=this.falseTrueRatio*this.dxt; 
+    }
+    this.dxt+=this.dxtFalse;
+
+    //if(idata>=data_dn.length){this.dxtFalse=NaN;} //to prevent plotting
   }
 
   this.xt += this.dxt;
@@ -2324,13 +2363,14 @@ CoronaSim.prototype.updateOneDay=function(R,it,logging){
 
   // control output (it is undefined here!)
 
-  if(logging&&false){ // filter needed because called in calibration!
+  if(logging&&true){ // filter needed because called in calibration!
 
     console.log(
       "end CoronaSim.updateOneDay: it=",it," R=",R.toPrecision(2),
       " this.xAct=",this.xAct.toPrecision(3),
       " this.xyz=",this.xyz.toPrecision(3),
-      " this.y=",this.y.toPrecision(3),
+      " pTest=",pTest.toPrecision(3),
+     // " this.y=",this.y.toPrecision(3),
       " this.z=",this.z.toPrecision(3),
 	//	" nxt=n0*this.xt=",Math.round(n0*this.xt),
       //"\n  this.x[tauDie-1]=",this.x[tauDie-1].toPrecision(3),
@@ -2484,7 +2524,7 @@ function DrawSim(){
   colTests="rgb(0,0,210)";
   colCases="rgb(245,10,0)";
   colCasesBars="rgb(220,0,0)";
-  colSimCases="rgb(100,0,0)";
+  colSimCases="rgb(140,0,0)";
   colFalsePos="rgb(0,220,0)";
   colRecov="rgb(60,255,40)";
   colRecovCases="rgb(0,150,40)";

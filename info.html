@@ -24,7 +24,6 @@
 <li><a href="#help">Wie kann die Simulation dabei helfen?</a>
 <li><a href="#sim">Simulationsablauf und Bedienung</a>
 <li><a href="#examples">Beispiele</a>
-<li><a href="#quant">Simulierte Gr&ouml;&szlig;en im Detail</a>
 <li><a href="#model">Modell</a>
 <li><a href="#dataModel">Modell der Datenerhebung</a>
 
@@ -504,168 +503,122 @@ und stoppen Sie die Simulation nach einigen Monaten bzw. wenn im Falle
     Betrag, z.B. von 1.15 auf 1.05 und lasen Sie die Simulation mit  <img src="figs/buttonGo_small.png"
      style="width:3.5vmin;vertical-align:middle"> weiterlaufen. Sie
     werden ganz andere Ergebnisse erhalten, z.B. in Deutschland eine
-    Abnahme der Neuinfektionen und kaum noch Todesf&auml;lle (Hinweis:
+    Abnahme der Neuinfektionen und kaum noch
+    Todesf&auml;lle. &Uuml;brigens: 
     Auch wenn <i>R<sub>0</sub></i> > 1 ist, k&ouml;nnen die t&auml;gliche
     Fallzahlen nach unten gehen, wenn eine hinreichende Durchseuchung
     <i>I</i> erreicht ist so dass <i><i>R<sub>0</sub>-1 < I </i></i>
-    (logarithmische Ansicht: Die simulierte Durchseuchung ist etwa 3
+    (logarithmische Ansicht: Die simulierte Durchseuchung ist z Zt etwa 3
     Millionen, also etwa 4%).
 <span class="important"> Schlussfolgerung: Einzig mit dem
   gesch&auml;tzten R-Wert weiterzusimulieren ist komplett unseri&ouml;s</span>, da
   Unsicherheiten in R von 0.1 zu um den Faktor 10 unterschiedlichen
-  Peaks f&uuml;hren k&ouml;nne! Eine Aussage wie "zu Weihnachten wird es 19
+  Peaks f&uuml;hren k&ouml;nnen. Eine Aussage wie "zu Weihnachten wird es 19
   600 F&auml;lle pro Tag geben" l&auml;sst auf mangelndes Modellvers&auml;ndnis
   (oder eine Agenda) schlie&szlig;en!
 
 
-<br><br><li> <b>Szenario "Lockdown":</b> Alle Einschr&auml;nkungen werden
-  aufgehoben, alles ist wie in Vor-Coronazeiten. Dies k&ouml;nnte
-  z.B. einer Reproduktionsrate von 1.5 entsprechen (wie das
-  Grippevirus scheint auch das Coronavirus im Sommer weniger
-  infizierend zu wirken, deshalb nicht  z.B. <i>R=3</i>): Dr&uuml;cken Sie
-Reset <img src="figs/buttonReset2_small.png"
-     style="width:3vmin;vertical-align:middle">, 
-lassen die Simulation
-     bis zur Gegenwart laufen, verschieben den R-Regler auf 1.5 und
-     lassen mit <img src="figs/buttonGo_small.png"
-     style="width:3.5vmin;vertical-align:middle">  die Simulation etwa
-     4 Wochen weiter laufen: Zun&auml;chst geschieht 2 Wochen lang nahezu
-     nichts (genau deshalb sind auch die Sch&auml;tzfehler des letzten
-     R-Wertes so hoch!), ehe die Fallzahlen wieder verst&auml;rkt
-     hochgehen. Lassen Sie die Simulation nun bis Oktober weiterlaufen
-     und bet&auml;tigen Sie auch die <span class="button">
-  =>log. Darstellung</span>. Nun hat sich bei etwa 45 Millionen
-     infizierten Personen, von denen fast alle wieder gesund sind,
-     eine Herdenimmunit&auml;t aufgebaut. Eine weitere Erh&ouml;hung
-     von <i>R<sub>0</sub></i> (z.B. weil es Winter wird) bewirkt nahezu keinen
-     Effekt mehr. <span class="important"><i>Wichtig:</i></span> Das <i>R<sub>0</sub></i> in meinem Simulator
-     gibt die Reproduktionszahl <i>ohne jede Herdenimmunit&auml;t</i> an,
-     die Infiziertenkurve kann deshalb auch bei <i>R>1</i> abflachen.
-<br><br>
+<br><br><li> <b>Szenario "Lockdown":</b> Am besten die lineare
+  Simulationsansicht oder <span class="button">Daten: Tests</span>
+  w&auml;hlen und 
+  mit <span class="button">Kalibriere neu!</span> die R-Werte neu bis
+  zur Gegenwart fitten. Dann, als Folge der Lockdown-Ma&szlig;nahme, den
+  R-Wert deutlich unter 1, z.B. 0.8, schieben und
+  weitersimulieren. W&auml;hrend die <i> tats&auml;chlichen</i>
+  Nuinfektionen sofort sinken (Test-Ansicht), folgen
+  die <i>gemessenen</i> positiven Fallzahlen zun&auml;chst eine Woche den
+  bisherigen Trend, ehe auch sie sinken. In der
+  kumulativen <span class="button">Simulation (lin)</span> Ansicht, in
+  der nur simulierte Messungen gezeigt werden, erkennt man eine Woche
+  lang &uuml;berhaupt keine Wirkung.  Wie die Situation <i>wirklich</i>
+  aussieht, erkennt man in der <span class="button">Simulation
+  (log)</span> Ansicht: Insbesondere f&auml;llt die tats&auml;chliche
+  Neuinfektionsrate geradlinig nach unten, was einem exponentiellen
+  Abfall enstpricht. <br><br>
 
-<li> <b>Szenario "&Auml;nderung des Infektionszeitraums oder der Testverz&ouml;gerung":</b> Der mit den
+
+<li> <b>Szenario "Sensitivit&auml;tsanalyse: &Auml;nderung des Infektionszeitraums oder der Testverz&ouml;gerung":</b> Der mit den
   zweiten und dritten Regler einstellbare Infektionszeitraum ist neben
   dem R-Wert der wichtigste Parameter der Infektionsdynamik. Wie
   beeinflusst er die R-Sch&auml;tzung? Stellen Sie zun&auml;chst mit Reset
 <img src="figs/buttonReset2_small.png"
      style="width:3vmin;vertical-align:middle">, 
-den Ausgangszustand her und merken sich die gesch&auml;tzten R-Werte und
-     ihre Fehlergrenzen. &Auml;ndern Sie nun den Zeitraum,
+den Ausgangszustand her und merken sich die gesch&auml;tzten R-Werte. &Auml;ndern Sie nun den Zeitraum,
      z.B. Ansteckungsstart 6 Tage statt 1 Tag nach der eigenen
      Infektion und dr&uuml;cken Sie 
   <span class="button"> Kalibriere neu!</span>: Je kleiner der
   mittlere Ansteckungstag ist, desto n&auml;her sind die R-Sch&auml;tzungen
-  um 1, werden also bei schneller Ansteckung und/oder schnellen Tests und R<sub>0</sub><1 gr&ouml;&szlig;er, bei
-  R>1 (z.B. in Ru&szlig;land oder Indien) kleiner. <span class="important">
-  Die Tatsache, dass R>1 oder R<sub>0</sub><1   gesch&auml;tzt wird,
-  ist hingegen <i>robust</i></span>, also unempfindlich gegen&uuml;ber
-  &Auml;nderungen der angenommenen Simulationsdynamik. Eine &Auml;nderung
-  der Testverz&ouml;gerung (Test
-  nach ... Tagen) verschiebt im Wesentlichen nur die Zeitpunkte der R-sch&auml;tzungen.
+  um 1, die Ereignisse "R-Werte oberhalb 1" bzw "unterhalb" sind aber
+  robust. Auch die Prognose "Unver&auml;ndert" (einfach
+  weitersimulieren in der Ansicht "Tests") &auml;ndert sich, oft aber
+  erstaunlich wenig. <span class="important">Hier sieht man deutlich,
+  dass die aus den 
+  Daten gesch&auml;tzten R-Werte weit von den realen Werten der
+  Infektionsdynamik entfernt sein k&ouml;nnen und zwar sowohl
+  von <i>R<sub>0</sub></i> (mittlere Zahl der Ansteckungen pro Person ohne
+  Immunit&auml;t) als auch von <i>R</i> (mit Teilimmunit&auml;t)</span>
 <br><br>
 
 <li> <b>Szenario "&Auml;nderung der Testrate":</b> Stellen Sie zun&auml;chst mit Reset
 <img src="figs/buttonReset2_small.png"
      style="width:3vmin;vertical-align:middle">, 
-den Ausgangszustand her. Wenn die Simulation in der Gegenwart
-     angelangt ist, verschieben Sie die Testrate von 10% auf 1% und
-     dr&uuml;cken Sie dann <img src="figs/buttonRestart_small.png"
-     style="width:3vmin;vertical-align:middle">. Obwohl die
-     Simulationsdynamik <i>nicht</i> ge&auml;ndert wurde, nur die Art,
-     wie gemessen wird, ist nun die simulierte rote Kurve viel zu
-     niedrig. Warum, wird klar, wenn Sie auf 
-<span class="button"> =>log. Darstellung</span>  umschalten. Da die
-    Simulation anfangs mit der richtigen Zahl an <i>positiv
-    Getesteten</i> startet, ist die anfangs simulierte <i>reale
-    Zahl</i> an Infizierten 10 mal so hoch wie zuvor und in der Gegenwart bereits der Beginn
-    einer Herdenimmunit&auml;t erreicht.  Nach  <span class="button">
-    Kalibriere neu!</span> stimmt die Kurve wieder, aber nun sind die
-    gesch&auml;tzten R-Werte h&ouml;her und zwar derart, dass
-    die <i>effektive Reproduktionsrate R(1-I)</i> mit I dem Anteil der
-    Immunen (siehe <a href="#model">die Modellbeschreibung</a>) gleich
-    ist.
-<br><br>
+den Ausgangszustand her, verschieben Sie den
+     <span class="button"Hellfeld</span>R-Regler</span> auf das Maximum und
+     kalibrieren Sie neu. In der
+     Ansicht <span class="button">Simulation (lin)</span> sehen Sie
+     nichts, da dort nur (reale oder simulierte) Beobachtungen zu
+     sehen sind und die Simulationsparameter, inbesondere die R-Werte, an
+     die neue angenommene Situation angepasst wurden. Was sich
+     wirklich &auml;ndert, sehen Sie in den anderen Ansichten,
+     insbesondere ist nun die reale Infektionszahl niedriger. Das
+     bedeutet aber auch, in der Zukunftsprojektion werden h&ouml;here
+     Testergebnisse simuliert. <br><br>
+Setzen Sie nun den Hellfeldregler auf den minimlen Wert und
+     kalibrieren neu. Sie sehen zum Schluss best&uuml;rzend
+     hohe <i>R<sub>0</sub></i>-Werte. Dennoch wird eine
+     Weitersimulation in der Projektion "unver&auml;ndert" zwar noch
+     einmal einen Peak an positiven F&auml;llen liefern, aber kaum noch
+     Todesf&auml;lle: Die Durchseuchung war in diesem Szenario n&auml;mlich
+     im Oktober schon bei etwa 15 Millionen, also fast 20%
+<span class="important"> Die Szenarien
+     und Projektionen h&auml;ngen also stark vom angenommenen Hellfeld
+     ab!</span> 
 
-<li> <b>Szenario "zeitliche Erh&ouml;hung der Testrate":</b>
+<br><br><li> <b>Szenario "dynmische Erh&ouml;hung der Testrate":</b>
 Dieses wichtige Szenario zeigt, wie man allein durch eine zeitlich
   ver&auml;nderliche Testrate zu
-  v&ouml;llige falsche Schlussfolgerungen kommen kann! Verschieben Sie
-  nach Reset  <img src="figs/buttonReset2_small.png"
-     style="width:3vmin;vertical-align:middle"> noch w&auml;hrend der
-  Simulation den <span class="button">Testrate-Regler</span>
-  allm&auml;hlich von 10% auf 20%: Die simulierten gemessenen Fallzahlen
-  sind nun h&ouml;her als die tats&auml;chlich gemessenen, obwohl sich an
-  der Infektionsdynamik <i>nichts</i> ge&auml;ndert hat! Reduzieren Sie
-  nun R um etwa 0.1 (z.B. von 0.70 auf 0.60), stellen die Testrate
-  wieder auf 10%, dr&uuml;cken <img src="figs/buttonRestart_small.png"
-     style="width:3vmin;vertical-align:middle"> und verschieben die
-  Testrate w&auml;hrend der Simulation wieder auf 20%. Nun sollten die
-  rote  Kurve wieder nahezu mit den roten atenpunkten
-  &uuml;bereinstimmen: <i>R<sub>0</sub></i> w&uuml;rde systematisch um 0.1 zu hoch
-  gesch&auml;tzt, wenn man eine tats&auml;chliche &Auml;nderung der Testrate
-  nicht ber&uuml;cksichtigte! Noch drastischer wird es z.B. bei den USA,
-  wenn man w&auml;hrend der Simulation die Testrate von 5% auf 20%
-  &auml;ndert: Dann ist die "echte" Reproduktionsrate um 0.9 und nicht
-  &uuml;ber 1 wie bei Annahme einer konstanten Testrate.
-
-
+  v&ouml;llige falsche Schlussfolgerungen kommen kann! Stellen Sie das
+      Hellfeld auf mittlere Werte (durch Nutzung des Reglers wird die
+      automatische Testzahlkorrektur ausgeschaltet) und kalibrieren
+      Sie neu. Erh&ouml;hen oder erniedrigen Sie nun <i> w&auml;hrend der
+	Simulation</i> in der Ansicht <span
+      class="button">Simulation (lin)</span> das Hellfeld und sehen
+      Sie, was passiert! Im Gegensatz zu &auml;ndert sich am <i> realem</i>
+	Infektionsgeschehen nichts (andere Ansichten).
 
 
 
 </ol>
 
-<h3 id="quant"> Simulierte Gr&ouml;&szlig;en im Detail</h3>
-
-Alle "dicken" Kurven sind auf das Hellfeld, also auf die getesteten
-Personen bezogen, w&auml;hrend die d&uuml;nnen Kurven (nur in der
-logarithmischen Darstellung) auf die sich aus der Simulation ergebende
-Gesamtheit, also Hell- und Dunkelfeld, beziehen.
-
-<ul>
-
-<li> <span class="red">Rote dicke Kurve:</span> Zahl
-  der <em>erfassten</em> positiv getesteten Personen in der
-  Simulation. Die zugeh&ouml;rigen <a href="https://pomber.github.io/covid19/timeseries.json">Daten</a> sind als <span class="red">rote Punkte</span> dar&uuml;ber geplottet.
-
-<li> Schwarze dicke Kurve und schwarze Punkte: Analoges f&uuml;r
-  die <em>erfasste</em> Anzahl an Covid19-Toten.
-
-<li> <span class="green">Gr&uuml;ne dicke Kurve und Punkte:</span>
-    simulierte Zahl der 
-    infizierten und wieder gesundeten Personen im Hellfeld.
-
-
-<li> <span class="orange"> Orange d&uuml;nne Kurve:</span> Reale Anzahl der <em>aktuell
-      erkrankten</em> Personen, wie sie die Simulation impliziert (nur
-      in der logarithmischen Darstellung).
-    
-<li> <span class="lightgreen"> Gr&uuml;ne d&uuml;nne Kurve:</span>
- Reale Anzahl der <em>aktuell
-      wieder gesundeten</em> Personen, wie sie die Simulation
-      impliziert (nur
-      in der logarithmischen Darstellung). 
-</ul>
-<em>Hinweis:</em> Da bei den Todesf&auml;llen kein Dunkelfeld angenommen
-      wurde, gibt es keine d&uuml;nne schwarze Kurve.
-    
-
-
-
-</ul>
 
 
 
 <h3 id="model"> Modell</h3>
-Simuliert wird ein Standard-Infektionsausbreitungsmodell:
+Simuliert wird ein makroskopisches
+Standard-Infektionsausbreitungsmodell, was dem 
+<a href="https://de.wikipedia.org/wiki/SEIR-Modell">SEIR-Modell</a>
+&auml;hnlich ist, aber Latenzen wie zwischen
+Ansteckung und Infektiosit&auml;t explizit durch Delay-Terme statt durch
+gew&ouml;hnliche Differentialgleichungen beschreibt:
 <ul>
 
 <li> Jeder Infizierte steckt im Laufe seiner Krankheit
 <br><br>
 <center> 
-<i>R(t) (1-I)</i>
+<i>R(t)=R<sub>0</sub>(t) (1-I)</i>
 </center>
 <br>
-andere Personen an. Hierbei bedeuten <i>R(t)</i>
+andere Personen an. Hierbei bedeuten <i>R<sub>0</sub>(t)</i>
 den durch verschiedene Ma&szlig;nahmen und/oder durch
 das Wetter zeitlich ver&auml;nderlichen <strong>Reproduktionszahl ohne Immunität</strong>  und <i>I</i>
 den <strong>Immunit&auml;tsanteil</strong>.
@@ -688,12 +641,12 @@ Personen. Es wird also davon ausgegangen, dass jeder nur einmal
 
 <br><br><li> Die Ansteckung geschieht gleichverteilt innerhalb einer
     mit Schiebereglern einstellbaren Spanne des
-  <strong>Infektionsalters</strong>&tau;. Der Einfachheit halber ist die
+  <strong>Infektionsalters &tau;</strong>. Der Einfachheit halber ist die
   Ansteckungsverteilung unabh&auml;ngig vom Alter und von der Existenz
   oder Schwere der Symptome.
 
 <br><br><li> Die Infizierten sterben im Laufe der Krankheit mit der
-  <strong>wahren Sterblichkeit</strong> <i>IFR<sub>0</sub></i>, und zwar
+  <strong>wahren Sterblichkeit</strong> <i>IFR</i>, und zwar
   gleichverteilt nach
   &tau;<sub>D</sub>&plusmn;2 Tagen
 
@@ -709,42 +662,67 @@ Personen. Es wird also davon ausgegangen, dass jeder nur einmal
 <span class="important">Dies betrachte ich als <i>Unique Selling
     Point</i> meines Simulators</span>
 <ul>
-<li> Getestet wird ein durch die <strong>Testrate</strong>
-  <i>p<sub>T</sub></i> einstellbarer Anteil an 
-  (auch symptomfrei) erkrankten Personen. Die zus&auml;tzlich
-  durchgef&uuml;hrten Tests an gesunden Personen, die sich als nicht
-  angesteckt erweisen, tauchen hier nicht auf (sie sind aber wichtig
-  zur Sch&auml;tzung des Modellparameters der wahre
-  Sterblichkeit <i>p<sub>D</sub></i>).
-<br><br>
-<span class="important">Wichtig:</span> Die Simulation wird so
-initialisiert/initial parametrisiert, dass die <em>beobachteten</em>,
-nicht aber die <em>tats&auml;chlichen</em> Fallzahlen vorgegeben sind. Je
-nach Testrate sind dir tats&auml;chlichen Fallzahlen (d&uuml;nne Linien
-in der logarithmischen Darstellung) zu gegebenen
-Zeitpunkt stark unterschiedlich! An die Testrate habe ich auch die
-wahre Sterblichkeit <i>p<sub>D</sub></i> gekoppelt, da die unbekannte
-tats&auml;chliche Sterbewahrscheinlichkeit sich zumindest anf&auml;nglich
-(geringe Immunit&auml;t) nur als Verh&auml;ltnis
-<i>p<sub>D</sub>/p<sub>T</sub></i> <span class="blue"> (blaue
-  Kurve)</span> manifestiert. 
+<li> Getestet wird ein durch das  <span class="important"> Hellfeld <i>H</i></span>
+  charakterisierter Anteil an 
+  (auch symptomfrei) real erkrankten Personen. Dazu gibt es im
+  Simulator zwei M&ouml;glichkeiten der Modellierung:
+<ol> 
+<li> datengetrieben durch die Anzahl <i>n<sub>t</sub></i> an t&auml;glichen
+Tests durch
 
-  <br><br><li> Der Test ist ideal, weist also weder <i>false positives</i>
-noch <i>false negatives</i> auf.
+<br><br><center>
+<i>H</i>=sqrt(<i>7n<sub>t</sub> /n<sub>0</sub></i>)
+</center><br>
+
+Hier steckt die Annahme dahinter, dass bei einer w&ouml;chentlichen
+Volltestung aller <i>n<sub>0</sub></i> Personen das Hellfeld 100% ist
+und bei geringerer Testung zun&auml;chst die Verdachtsf&auml;lle getestet
+werden
+<li> direkt durch den Schieberegler. Dann ergibt sich die Zahl der
+  Tests implizit durch Umkehrung der obige Formel
+</ul>
+
+
+<br><br><li> Der Test hat eine <span class="important"> Sensitivit&auml;t
+  von 1-&alpha;</span>  mit
+  &alpha;=2% und eine <span class="important"> Spezifizit&auml;t von
+  1-&beta; </span> mit der <i>false
+  Positive Rates</i> (&beta;-Fehler) &beta;=0.3%
+Dadurch ergibt sich nach dem Satz von Bayes eine Wahrscheinlichkeit
+  daf&uuml;r, dass ein Test positiv ausf&auml;llt, von 
+
+<br><br><center>
+P(positiv)=p(1-&alpha;)+(1-p) &beta; &nbsp; &nbsp; &nbsp; &nbsp;
+p=H n<sub>x</sub> / n<sub>t</sub>,
+</center><br>
+
+wobei <i>p</i> der wahre Anteil an Infizierten unter den Testpersonen
+ist und n<sub>x</sub> die wahre Zahl der testrelevanten
+Infizierten. Die
+Positivenzahl <i>x<sub>t</sub>=n<sub>t</sub>P(positiv)</i> ist dann
+letztendlich die zu fittende Gr&ouml;&szlig;e.
 
 <br><br><li> Getestet wird &tau;<sub>T</sub>&plusmn;2 Tage nach der Infektion.
 
 <br><br><li> Wird die Testrate w&auml;hrend der Simulation ver&auml;ndert,
   bezieht sich dies nur auf neue Tests. Wird beispielsweise zum
-  Zeitpunkt <i>t</i> die Testrate von 10% auf 20% erh&ouml;ht,
-  werden die vor dem Zeitpunkt <i>t-&tau;<sub>T</sub>-2</i> Infizierten zu
-  10% (positiv) getestet, die nach dem
-  Zeitpunkt <i>t-&tau;<sub>T</sub>+2</i> zu 20% und die dazwischen linear
-  ansteigend zwischen 10% und 20% 
+  Zeitpunkt <i>t</i> das Hellfeld von 10% auf 20% erh&ouml;ht, ist
+  dies nur f&uuml;r die danach getesteten relevant. 
 
 <br><br><li> Bei den Toten ist die Dunkelziffer gleich null, d.h. jeder an Covid19
   Gestorbene wird entweder w&auml;hrend der Krankheit oder danach durch Autopsie
-  getestet. Durch Konsistenzbetrachtung im Flie&szlig;gleichgewicht oder am
+  getestet.
+</ul>
+
+<hr>
+<a href="impressum.html">Impressum</a>
+
+
+  </body>
+</html>
+
+
+<!-- Durch Konsistenzbetrachtung im Flie&szlig;gleichgewicht oder am
   Ende der Epidemie ergibt sich daraus der Anteil
   der <strong>dokumentiert Gesundeten</strong> unter allen Getesteten
   f&uuml;r jeden Infektionstag getrennt zu 
@@ -756,8 +734,11 @@ noch <i>false negatives</i> auf.
 <br>
 Offensichtlich ergibt dies nur Sinn, wenn 
 <i>p<sub>T</sub> &gt; p<sub>D</sub></i>
-</ul>
+-->
 
+
+
+<!--
 <h3>Parameter</h3>
 <h4> (1) Vom Nutzer beeinflussbare Werte</h4>
 
@@ -810,12 +791,6 @@ Auch wenn die
     Infizierten. <strong>Beeinflussbar! </strong>
 </strong> 
 
-<!--
-<br><br><li><span class="important">Sim-Geschwindigkeit</span>:
-    Beeinflusst nur die Geschwindigkeit der Simulation in Tagen pro Sekunde, nicht aber die
-    dargestellte Dynamik.
--->
-</ul>
 
 
 
@@ -856,11 +831,7 @@ von <tt>corona.js</tt>
   Javascript <tt>tauRecover</tt> von der Infektion bis zur Genesung
 
 </ul>
-<hr>
-<a href="impressum.html">Impressum</a>
+-->
 
-
-  </body>
-</html>
 
 

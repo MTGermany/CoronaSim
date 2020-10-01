@@ -139,6 +139,8 @@ slider_pTest.oninput = function() {
   var pTestold=pTest;
   pTest=parseFloat(this.value/100.);
   //console.log("slider4 callback: pTest="+pTest);
+  document.getElementById("testnumber").innerHTML
+      ="Beruecksichtige Testhaeufigkeit";
 }
 
 

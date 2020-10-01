@@ -60,8 +60,8 @@ Info
 <select id="windows" onchange=selectWindow()> 
   <option value="0">Simulation (lin)</option>
   <option value="1">Simulation (log)</option>
-  <option value="3">Daten: Tests</option>
   <option value="2">Daten: Faelle</option>
+  <option value="3">Daten: Tests</option>
   <option value="4">Infektionsraten</option>
 </select>
 </div>
@@ -146,7 +146,7 @@ Dr. Treiber
 -->
 
   <tr>
-    <td> <span class="important">Reproduktionszahl R</span></td>
+    <td> <span class="important">Reproduktionszahl R<sub>0</sub></span></td>
     <td> <input id="slider_R0" type="range" 
                 min="0" max="2" step="0.01"></td> 
     <td> <div id="slider_R0Text"></div> </td>
@@ -178,7 +178,7 @@ Dr. Treiber
     <td> Hellfeld &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; 
          &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; </td>
     <td> <input id="slider_pTest" type="range" 
-                min="0" max="20" step="0.1"></td>  <!-- value in js -->
+                min="2" max="20" step="0.1"></td>  <!-- value in js -->
     <td> <div id="slider_pTestText"></div> </td>
   </tr>
 
