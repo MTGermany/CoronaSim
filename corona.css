@@ -185,7 +185,7 @@ a:hover {
   z-index: 4; # the higher the more on top
 }
 
-#dataTypeDiv{  /*mobile, landscape */
+#dataTypeDiv{  /*normal, landscape */
   position: absolute;
   top:     15vh; 
   right:   2vmin;
@@ -391,7 +391,7 @@ screen and (min-resolution: 1.5dppx) and (min-aspect-ratio: 1/1){
   z-index: 4; # the higher the more on top
 }
 
-#dataTypeDiv{ /* linear or logarithmic */
+#dataTypeDiv{ /* 6 viewing windows */
   position: absolute;
   top:     15vh; 
   right:   2vmin;
@@ -466,7 +466,7 @@ screen and (min-resolution: 1.5dppx) and (min-aspect-ratio: 5/3){
 #countryData{ /* mobile very landscape */
   position: absolute;
   top:     14vh; 
-  right:   30vmin;
+  right:   35vmin;
   z-index: 4; # the higher the more on top
 }
 

@@ -45,8 +45,12 @@ const ln10=Math.log(10);
 
 
 // graphical window at start, 0=lin,1=log,2=cases,3=tests,4=rates 
+// new window: 
+// (1) define qselect[window] by selecting from drawsim.dataG[], 
+// (2) update initialisator of drawsim.yminType[], *ymax*: "this.yminType=["
+// (3) check various "windowG==", "windowG!=", "windowG<" etc conditions
 
-var windowG=0; // consolidate with first option value of html!!
+var windowG=5; // consolidate with first option value of html!!
 
 
 var myRun;
@@ -286,11 +290,11 @@ var itmax_calib; //  end calibr time interval =^ data_itmax-1
                  // should be split if there are more than approx 
                  // 20 weeks of data
 
-const calibInterval=14; //!! calibration time interval [days] for one R value
+const calibInterval=7; //!! calibration time interval [days] for one R value
 const calibAddtlDaysLast=14; // do not calibrate remaining period smaller
 const calibrateOnce=false; // following variables only relevant if false
 const nCalibIntervals=5; // multiples of calibInterval, >=30/calibInterval
-const nOverlap=1;        // multiples of calibInterval, 
+const nOverlap=3;        // multiples of calibInterval, 
                          // >=max(1,floor(calibAddtlDaysLast/calibInterval)
 var useInitSnap;
 var firstRfixed=false; //if first R element firstR is fixed @ calibr 
@@ -1203,7 +1207,11 @@ function calibrate(){
     for(var icalib=icalibmin; icalib<=icalibmax; icalib++){
       Rcalib[icalib-icalibmin]=(icalib==0) ? 1.2 : 1; //!!
     }
+       
+    //#####################################
     estimateR(itmin_c, itmax_c, Rcalib); // also transfers Rcalib to Rtime
+    //#####################################
+
     estimateErrorCovar_Rhist_sigmaRhist(itmin_c, itmax_c, Rtime); 
   }
 
@@ -1283,7 +1291,9 @@ function calibrate(){
 
         // estimate 
 
+       //#####################################
         estimateR(itmin_c, itmax_c, Rcalib);  // also Rcalib -> Rtime
+       //#####################################
         if(logging){console.log("before covar: Rcalib=",Rcalib);}
         estimateErrorCovar_Rhist_sigmaRhist(itmin_c, itmax_c, Rcalib);
 
@@ -1438,7 +1448,7 @@ function estimateR(itmin_c, itmax_c, Rcalib){
     relates to 4% market share
   ############################################################## */
 
-  for(var ic=0; ic<1; ic++){ //!! 1 or 2
+  for(var ic=0; ic<2; ic++){ //!! 1 or 2
 
     //##############################################################
     sol2_SSEfunc=fmin.nelderMead(SSEfunc, Rcalib);
@@ -2506,8 +2516,8 @@ function DrawSim(){
   this.unitPers=1000;  // persons counted in multiples of unitPers
 
   this.itR0=-1; // it value where n0*xt first exceeds nxtR0 (init val)
-  this.yminType=[0,1,0,0,0];   // lin,log,act0,act1,act2
-  this.ymaxType=[10,7,10,10,10];   // lin,log,act0,act1,act2
+  this.yminType=[0,1,0,0,0,0];   // lin,log,act0,act1,act2
+  this.ymaxType=[10,7,10,10,10,10];   // lin,log,act0,act1,act2
   this.ymaxPerc=20;
   this.ymaxLin=11;
   this.ymaxLog=7;
@@ -2523,7 +2533,7 @@ function DrawSim(){
   colInfectedTot="rgb(0,0,220)";
   colTests="rgb(0,0,210)";
   colCases="rgb(245,10,0)";
-  colCasesBars="rgb(220,0,0)";
+  colCasesBars="rgb(255,50,0)";
   colSimCases="rgb(140,0,0)";
   colFalsePos="rgb(0,220,0)";
   colRecov="rgb(60,255,40)";
@@ -2695,6 +2705,12 @@ function DrawSim(){
 		 type: 4, window:2, plottype: "lines", plotLog: false, 
 		 ytrafo: [1, true,true], color:colDeadSim};
 
+// other scaling as [27]
+
+  this.dataG[29]={key: "Simulierte Test-Positive pro Tag", data: [],
+		 type: 3, window:3, plottype: "lines", plotLog: false, 
+		 ytrafo: [0.1, true,false], color:colSimCases};
+
 
 
 
@@ -2708,13 +2724,16 @@ function DrawSim(){
   this.qselect[2]=[16,17,23,28];
   this.qselect[3]=[18,19,24,26,27];
   this.qselect[4]=[20,21,22];
+  this.qselect[5]=[16,17,28,29];
 
 
   this.label_y_window=[countryGer+": Personenzahl (in Tausend)",
-	       countryGer+": Personenzahl",
-	       countryGer+": Personen pro Tag",
-	       countryGer+": taegliche Zahlen",
-	       countryGer+": Anteil [% oder Promille]"];
+		       countryGer+": Personenzahl",
+		       countryGer+": Personen pro Tag",
+		       countryGer+": taegliche Zahlen",
+		       countryGer+": Anteil [% oder Promille]",
+		       countryGer+": Personen pro Tag"
+];
 
 
   // initialize data feed and fonts at drawSim/drawAxes since sometimes
@@ -2846,16 +2865,16 @@ DrawSim.prototype.drawAxes=function(windowG){
 
   var ny=Math.floor(ymax/dy);
   var iymin=1; // should work both for lin and log
-  //console.log("drawAxes new: dy=",dy," ny=",ny);
+  if(it<5){console.log("in drawAxes: dy=",dy," ny=",ny);}
 
 
 
   // draw 3 px wide lines as coordinates
   // remaining hack: mirrored graphics cases/deaths: yPix0,hPix w/o "this"
 
-  var yPix0=(windowG==2) 
+  var yPix0=((windowG==2)||(windowG==5)) 
     ? 0.5*(this.yPix0+this.yPixMax) : this.yPix0;
-  var hPix=(windowG!=2) ? this.hPix : 0.5*this.hPix;
+  var hPix=((windowG==2)||(windowG==5)) ? 0.5*this.hPix : this.hPix;
 
   ctx.fillStyle="rgb(0,0,0)";
   ctx.fillRect(this.xPix0, yPix0-1.5, this.wPix, 3);
@@ -2871,7 +2890,7 @@ DrawSim.prototype.drawAxes=function(windowG){
     this.drawGridLine("vertical", timeRel[ix]);
   }
 
-  if(windowG!=2){
+  if((windowG!=2)&&(windowG!=5)){
     for(var iy=1; iy<=ny; iy++){
       this.drawGridLine("horizontal",iy*dy/(ymax-ymin));
     }
@@ -2914,9 +2933,10 @@ DrawSim.prototype.drawAxes=function(windowG){
 
   // normal graphics
 
-  if(windowG!=2){ 
+  if((windowG!=2)&&(windowG!=5)){ 
     for(var iy=0; iy<=ny; iy++){
       var valueStr=(windowG!=1)  ? iy*dy : "10^"+iy;
+      //console.log("valueStr=",valueStr);
       ctx.fillText(valueStr,
 		   this.xPix0-2.5*textsize,
 		   yPix0+(iy*dy-ymin)/(ymax-ymin)*hPix+0.5*textsize);
@@ -2969,6 +2989,14 @@ DrawSim.prototype.drawAxes=function(windowG){
     }
   }
 
+  if(true){// draw "Durchseuchung"
+    var Xperc=Math.round(1000*corona.xyz)/10;
+    ctx.fillStyle="rgb(0,0,0)";
+    ctx.fillText("Durchseuchung X="+(Xperc.toFixed(1))+"%",
+		 this.xPix0+xrelLeft*this.wPix,
+		 this.yPix0+(yrelTop-(ikey+1)*dyrel)*this.hPix);
+  }
+
 
 // R values drawn directly in draw in simulation part
 
@@ -2998,7 +3026,8 @@ DrawSim.prototype.transferSimData=function(it){
   this.dataG[26].data[it]=n0*corona.dxtFalse; // sim number of false positives
   this.dataG[27].data[it]=n0*corona.dxt; // sim number of positive tests
   this.dataG[28].data[it]=n0*corona.dz; // sim number of deaths per day
-
+  this.dataG[29].data[it]=n0*corona.dxt; // sim number of positive tests
+                                         // other scaling
 
   // get yt  from balance xt past, zt=z
   var itPast=it-tauRecover;
@@ -3118,7 +3147,7 @@ DrawSim.prototype.checkRescaling=function(it){
 
   // (2) possible rescaling in y for all the graph windows
 
-  for(var iw=0; iw<5; iw++){ //windows
+  for(var iw=0; iw<this.qselect.length; iw++){ //windows
     for(iq=0; iq<this.qselect[iw].length; iq++){ // quantity selector
       var q=this.qselect[iw][iq];
       var data=this.dataG[q].data;
@@ -3271,13 +3300,13 @@ DrawSim.prototype.draw=function(it,q){
     var color=this.dataG[q].color;
     var pointType=type;
     var actValue=scaling*this.dataG[q].data[i];
-    if(false){
-    //if(it==20){
+    //if(true){
+    if(it<5){
       console.log("draw: it=",it," i=",i,
 		  " windowG=",windowG,
-		  " q=",q," type=",type,
+		  " q=",q,//" type=",type,
 		  " scaling=",scaling," half=",half," downwardsw=",downwards,
-		  " plottype=",plottype," wline=",wLine,
+		  " plottype=",plottype,//" wline=",wLine,
 		  " actValue=",actValue);
     }
 
@@ -3303,12 +3332,12 @@ DrawSim.prototype.draw=function(it,q){
 		    scaling,half,downwards,color, windowG);
 
     }
-
+  
   // draw R estimates for windows qith simulations
-
-  if(windowG<3){
-    this.drawREstimate(it);
-  }
+  
+    if((windowG<3)||(windowG==5)){
+      this.drawREstimate(it);
+    }
 
 
   }
