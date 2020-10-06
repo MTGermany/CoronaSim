@@ -18,10 +18,10 @@
 
 <ol>
 <li><a href="#motiv">Motivation</a>
+<li><a href="#help">Wie kann die Simulation dabei helfen?</a>
 <li><a href="#defs">Definitionen</a>
 <li><a href="#problem">Was ist das Problem?</a>
 <li><a href="#data">Daten</a>
-<li><a href="#help">Wie kann die Simulation dabei helfen?</a>
 <li><a href="#sim">Simulationsablauf und Bedienung</a>
 <li><a href="#examples">Beispiele</a>
 <li><a href="#model">Modell</a>
@@ -44,6 +44,7 @@ Diese <a href="index.html">interaktive Simulation und Datenvisualisierung</a> so
   zeitlicher Verlauf zu sch&auml;tzen ist: Je nach den Werten der
   anderen Parameter wie Periode der
   Ansteckbarkeit, mittlerer Testzeitpunkt sowie Testh&auml;ufigkeit.
+<li> Wie sensitiv Prognosen von den gemachten Annahmen abh&auml;ngen.
 <!--<li> dass gesch&auml;tzte Werte wie <i>R=0.92</i>
   ohne <span class="important">Fehlerintervalle</span>  
   nahezu nichts 
@@ -62,6 +63,47 @@ Diese <a href="index.html">interaktive Simulation und Datenvisualisierung</a> so
   ab, was offensichtlich widersinnig ist. </span></p>
 
 
+<h3 id="help">Wie kann die Simulation dabei helfen?</h3>
+
+
+Allen Covid-19-Modellen und Simulationen (und &uuml;brigens auch allen
+Klimamodellen und deren Simulationen) ist
+gemeinsam, dass sie <span class="important">keine Prognosen</span>
+erm&ouml;glichen. Sehr wohl m&ouml;glich ist aber
+eine <i>Szenarienanalyse</i>, also eine bedingte Projektion in die
+Zukunft, etwa folgender Art:
+<br><br>
+
+<center>
+<table width="80%">
+<td>
+<i>"wenn zum Zeitpunkt T durch die Implementierung oder
+Unterlassung von Ma&szlig;nahmen oder durch das Wetter die
+Reproduktionszahl <i>R<sub>0</sub></i> einen gewissen Wert 
+erreicht, die Durchseuchung <i>X</i> so und so ist, der Infektionszeitraum zwischen 3 und 7 Tagen nach der
+  Infektion liegt, dopplt so viel
+getestet und wie bisher medizinisch behandelt wird
+  (gleiche <i>infection fatality rate</i>), dann wird es
+in Woche A  eine Zahl B an neuen
+  Positivtests sowie C reale Neuinfektionen geben sowie in Woche
+ D eine Zahl E an Covid-19-Toten." </i></td>
+</table>
+</center>
+<br>
+
+<p id="MarcTwain">Um es (angeblich) mit Mark Twain zu sagen:</p>
+<br>
+
+<center><i>Prognosen sind schwierig,<br>vor allem, wenn sie die Zukunft
+  betreffen.</i>
+</center><br><br>
+
+Dennoch kann die Simulation wichtige Hinweise geben, wie zu handeln
+ist und vor allem welche 
+Untersuchungen wichtig w&auml;ren: Wie hoch ist die Durchseuchung bzw die
+Dunkelziffer?, wie hoch
+sind die Testfehler der verschiedenen Tests?
+ 
 <h3 id="defs"> Definitionen</h3>
  
 Um die Simulation und die allgemeine Corona-Problematik zu verstehen,
@@ -303,41 +345,6 @@ bzw. Gestorbene) m&ouml;glichst gut &uuml;bereinstimmen.
 -->
 
 
-<h3 id="help">Wie kann die Simulation dabei helfen?</h3>
-
-
-Allen Covid-19-Modellen und Simulationen (und &uuml;brigens auch allen
-Klimamodellen und deren Simulationen) ist
-gemeinsam, dass sie <span class="important">keine Prognosen</span>
-erm&ouml;glichen. Sehr wohl m&ouml;glich ist aber
-eine <i>Szenarienanalyse</i>, also eine bedingte Projektion in die
-Zukunft, etwa folgender Art:
-<br><br>
-
-<center>
-<table width="80%">
-<td>
-<i>"wenn zum Zeitpunkt T<sub>1</sub> durch die Implementierung oder
-Unterlassung von Ma&szlig;nahmen oder durch das Wetter die
-Reproduktionszahl <i>R<sub>0</sub></i> einen gewissen Wert 
-erreicht, die Durchseuchung <i>X</i> so und so ist, der Infektionszeitraum zwischen 3 und 7 Tagen nach der
-  Infektion liegt, dopplt so viel
-getestet (<i>n<sub>t</sub></i> verdoppelt) und wie bisher medizinisch behandelt wird (gleiche IFR), dann wird es
-in Woche <i>&Delta; t<sub>2</sub></i>  eine Zahl x<sub>t</sub> an neuen
-  Positivtests sowie <i>x</i> reale Neuinfektionen geben sowie im
-  Zeitraum  <i>&Delta; t<sub>3</sub></i> 
-eine Zahl <i>z</i> an Covid-19-Toten." </i></td>
-</table>
-</center>
-<br>
-
-<p id="MarcTwain">Um es (angeblich) mit Mark Twain zu sagen:</p>
-<br>
-
-<center><i>Prognosen sind schwierig,<br>vor allem, wenn sie die Zukunft
-  betreffen.</i>
-</center><br><br>
- 
 <h3 id="sim"> Simulationsablauf und Bedienung</h3>
 
 Gezeigt wird anf&auml;nglich die Situation in Deutschland bis zur
