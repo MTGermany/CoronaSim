@@ -1322,6 +1322,12 @@ function calibrate(){
 
   } // calbrate R with multiple periods
 
+
+  // !!! limit last R entry to 1.35 because strange things can happen if
+  // not all data are completely up to date
+  
+  Rtime[Rtime.length-1]=Math.min(Rtime[Rtime.length-1], 1.34);
+  
   //var logging=false;  //calibrate()
   var logging=false;
   sse=SSEfunc(Rtime,null,logging,0,data_itmax-1); // -1 because it: it->it+1
