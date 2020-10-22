@@ -1326,7 +1326,7 @@ function calibrate(){
   // !!! limit last R entry to 1.35 because strange things can happen if
   // not all data are completely up to date
   
-  Rtime[Rtime.length-1]=Math.min(Rtime[Rtime.length-1], 1.34);
+  Rtime[Rtime.length-1]=Math.min(Rtime[Rtime.length-1], 1.32);
   
   //var logging=false;  //calibrate()
   var logging=false;
