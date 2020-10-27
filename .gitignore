@@ -4,7 +4,7 @@ fmin/src
 
 *.swp
 *.zip
-data/*.json
+data/*
 
 ## Core latex/pdflatex auxiliary files:
 *.aux

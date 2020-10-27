@@ -3225,10 +3225,11 @@ DrawSim.prototype.drawREstimate=function(it){
       +((true) // if plotting  w/o "+/- stddev
 	? "" : (" +/- "+sigmaR_hist[itR].toFixed(2)));
 
- 
-    ctx.fillText(str_R,0,0);
-    ctx.font = (Math.round(0.7*textsizeR))+"px Arial"; 
-    ctx.fillText("0",0.8*textsizeR,0.4*textsizeR);
+    if(ical%2==0){
+      ctx.fillText(str_R,0,0);
+      ctx.font = (Math.round(0.7*textsizeR))+"px Arial"; 
+      ctx.fillText("0",0.8*textsizeR,0.4*textsizeR);
+    }
     ctx.font = textsizeR+"px Arial"; 
     ctx.setTransform(1,0,0,1,0,0);
   }
@@ -3339,7 +3340,7 @@ DrawSim.prototype.draw=function(it,q){
 
     }
   
-  // draw R estimates for windows qith simulations
+  // draw R0 estimates for windows qith simulations
   
     if((windowG<3)||(windowG==5)){
       this.drawREstimate(it);
