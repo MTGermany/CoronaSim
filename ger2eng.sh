@@ -44,6 +44,7 @@ perl -i -p -e 's/Test nach/Test after/g' index_eng.html
 perl -i -p -e 's/Hellfeld/Percentage reported/g' index_eng.html
 perl -i -p -e 's/Kalibriere neu\!/Re-calibrate\!/g' index_eng.html
 perl -i -p -e 's/corona\.js/corona_eng\.js/g' index_eng.html
+perl -i -p -e 's/corona_gui\.js/corona_gui_eng\.js/g' index_eng.html
 
 perl -i -p -e 's/Ignoriere Testhaeufigkeit/Ignore \#tests/g' index_eng.html corona_eng.js corona_gui_eng.js
 perl -i -p -e 's/Beruecksichtige Testhaeufigkeit/Include \#tests/g' index_eng.html corona_eng.js corona_gui_eng.js
@@ -76,7 +77,8 @@ perl -i -p -e 's/oder/or/g' corona_eng.js
 
 perl -i -p -e 's/Durchseuchung/Contamination/g' corona_eng.js
 perl -i -p -e 's/Aktuelles/Actual/g' corona_eng.js
-perl -i -p -e 's/Tage/days/g' corona_eng.js corona_gui_eng.js
+perl -i -p -e 's/Tagen/days/g' corona_eng.js corona_gui_eng.js index_eng.html
+perl -i -p -e 's/Tage/days/g' corona_eng.js corona_gui_eng.js index_eng.html
 perl -i -p -e 's/pro Tag/per day/g' corona_eng.js corona_gui_eng.js
 perl -i -p -e 's/Tag/day/g' corona_eng.js corona_gui_eng.js
 perl -i -p -e 's/Simulierte/Simulated/g' corona_eng.js

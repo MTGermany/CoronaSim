@@ -2764,7 +2764,7 @@ DrawSim.prototype.setWindow=function(windowG){
 
 
   this.clear();
-  this.drawAxes(windowG);
+  //this.drawAxes(windowG);
 
 }
 
@@ -3196,7 +3196,7 @@ DrawSim.prototype.checkRescaling=function(it){
 
   if(erase){
     this.clear();
-    this.drawAxes(windowG);
+    //this.drawAxes(windowG);
   }
 
   //console.log("leaving checkRescaling: this.ymaxType=",this.ymaxType);
@@ -3283,11 +3283,6 @@ DrawSim.prototype.draw=function(it,q){
   this.transferSimData(it);
   if(it==0){this.transferRecordedData()}; 
  
-  if((it==0)||hasChanged){
-    this.clear();
-    this.drawAxes(windowG);
-  }
-
 
 
   // check for possible scaling/rescaling due to new data on x and y axis 
@@ -3296,6 +3291,12 @@ DrawSim.prototype.draw=function(it,q){
   this.checkRescaling(it);
 
 
+  // draw axes 
+
+  if((it==0)||hasChanged){
+    this.clear();
+    //this.drawAxes(windowG);
+  }
 
 
   // draw simulations and data for all windows
@@ -3354,14 +3355,19 @@ DrawSim.prototype.draw=function(it,q){
 
     }
   
+
+
+
+  } // loop over all quantities to be drawn
+
+
   // draw R0 estimates for windows qith simulations
   
-    if((windowG==2)||(windowG==5)){
+  if((windowG==2)||(windowG==5)){
       this.drawREstimate(it);
-    }
-
-
   }
+
+  this.drawAxes(windowG);  // at the end to have grid+labels at top layer
 
 } //DrawSim.draw
 
