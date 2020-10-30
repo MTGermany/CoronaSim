@@ -6,6 +6,12 @@ fmin/src
 *.zip
 data/*
 
+## generated files
+
+corona_eng.js
+corona_gui_eng.js
+index_eng.html
+
 ## Core latex/pdflatex auxiliary files:
 *.aux
 *.lof

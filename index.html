@@ -3,7 +3,7 @@
 
 
 <head>
-<title>Simulation der Coronavirus Covid-19 Pandemie</title> 
+<title>Simulation der Covid-19 Pandemie</title> 
 <meta charset="UTF-8">
 
 <meta name="description" content="Javascript simulation">
@@ -216,6 +216,10 @@ Dr. Treiber
      src="figs/buttonReset2_small.png" onclick="myResetFunction()"/>
 </div>
 
+<div id="flagDiv"><img id="flag" height="100%" 
+     src="figs/flagUSA.png" onclick="myRedirectEng()"/>
+</div>
+
 <div id="calibrateDiv">
   <button id="buttonCalibrate" onclick="myCalibrateFunction()">
   Kalibriere neu!</button> 
@@ -243,10 +247,11 @@ Dr. Treiber
 <script src="fmin/fmin.min.js"></script>
 <script type="application/javascript" src="console-log-html.min.js"></script>
 
+<script type="text/javascript" src="redirect.js"></script> 
+
 <!-- NOT application/json also if some consoles want this! not running-->
 <script type="text/javascript" src="data/github.json"></script>
 <script type="text/javascript" src="data/githubWithTests.json"></script>
 <script type="text/javascript" src="corona.js"></script> 
 <script type="text/javascript" src="corona_gui.js"></script> 
-
 </html>

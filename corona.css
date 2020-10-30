@@ -153,27 +153,36 @@ a:hover {
 #startStopDiv{
   position: absolute;
   top:     0.0vh; 
-  right:   20vmin;
-  height:  8vmin;
-  width:   8vmin;
+  right:   24vmin;
+  height:  7vmin;
+  width:   7vmin;
   z-index: 3; /* the higher the integer, the more on top */
 }
 
 #restartDiv{
   position: absolute;
   top:     0.5vh; 
-  right:   11vmin;
-  height:  7vmin;
-  width:   7vmin;
+  right:   18vmin;
+  height:  6vmin;
+  width:   6vmin;
   z-index: 3; /* the higher the integer, the more on top */
 }
 
 #resetDiv{
   position: absolute;
   top:     0.5vh; 
-  right:   2vmin;
-  height:  7vmin;
-  width:   7vmin;
+  right:   12vmin;
+  height:  6vmin;
+  width:   6vmin;
+  z-index: 3; /* the higher the integer, the more on top */
+}
+
+#flagDiv{
+  position: absolute;
+  top:     1vh; 
+  right:   4vmin;
+  height:  5vmin;
+  width:   6vmin;
   z-index: 3; /* the higher the integer, the more on top */
 }
 
@@ -366,21 +375,28 @@ screen and (min-resolution: 1.5dppx) and (min-aspect-ratio: 1/1){
 
 
 #startStopDiv{  /*mobile, landscape */
-  right:   26vmin;
+  right:   30vmin;
   height:  9vmin;
   width:   9vmin;
 }
 
 #restartDiv{
-  right:   14vmin;
+  right:   21vmin;
   height:  8vmin;
   width:   8vmin;
 }
 
 #resetDiv{ /*mobile, landscape */
-  right:   2vmin;
+  right:   12vmin;
   height:  8vmin;
   width:   8vmin;
+}
+
+#flagDiv{ /*mobile, landscape */
+  top:   2vmin;
+  right:   5vmin;
+  height:  5vmin;
+  width:   5vmin;
 }
 
 
@@ -525,23 +541,30 @@ input[type=range]::-webkit-slider-thumb {
 
 #startStopDiv{  /*mobile, portrait */
   top:     1.5vmin;
-  right:   26vmin;
+  right:   33vmin;
   height:  9vmin;
   width:   9vmin;
 }
 
 #restartDiv{/*mobile, portrait */
   top:     2vmin;
-  right:   14vmin;
+  right:   24vmin;
   height:  8vmin;
   width:   8vmin;
 }
 
 #resetDiv{
   top:     2vmin;
-  right:   2vmin;
+  right:   15vmin;
   height:  8vmin;
   width:   8vmin;
+}
+
+#flagDiv{
+  top:     3vmin;
+  right:   6vmin;
+  height:  5vmin;
+  width:   5vmin;
 }
 
 

@@ -2,7 +2,11 @@
 
 target=$HOME/public_html/CoronaSim
 
-# make 2 versions live (normal) and nonlive
+# make Engl version by script
+
+ger2eng.sh
+
+# make 2 German versions live (normal) and nonlive
 
 
 cp corona.js tmp.js
@@ -14,7 +18,7 @@ cp tmp.js $target/corona.js
 cp index.html indexNonlive.html
 perl -i -p -e 's/corona\.js/coronaNonlive\.js/g' indexNonlive.html
 
-cp corona_gui.js console-log-html.min.js $target
+cp redirect.js corona_gui.js corona_gui_eng.js corona_eng.js console-log-html.min.js $target
 cp -r *.html *.css figs $target
 # cp data/coronaWorldwide.json data/github.json $target/data
 cp data/githubWithTests.json data/github.json $target/data
