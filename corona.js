@@ -242,7 +242,7 @@ var fps=50;
 // (i) controlled by sliders/control elements (apart from R0)
 
 
-var pTestInit=0.08;     // P(Tested|infected)  if !f(#tests) assumed
+var pTestInit=0.1;     // P(Tested|infected)  if !f(#tests) assumed
 var pTestModelMin=0.04;   // if calculated by sqrt- or propto model
 
 var includeInfluenceTestNumber=true; // if true, pTest =f(#tests)
@@ -666,7 +666,7 @@ function initializeData(country) {
 
 
 
-    //  prooportional or  sqrt-like "Hellfeld" model: 
+    //  proportional or  sqrt-like "Hellfeld" model: 
     // sqrt: assume 100% "Hellfeld" ifP(tested|new infected) if all n0 persons
     // are  tested within "infectiosity period" of assumed 7 days
     // linear: assume 100% if 10% are tested as above
@@ -674,8 +674,13 @@ function initializeData(country) {
 
     if((data_dn[i]>0)&&(data_dn[i]<1e11)){
       if(useSqrtModel){ // global var
-        var pModel=Math.sqrt(7*data_dn[i]/n0);
 
+	// the sqrt model
+	
+        var pModel=Math.sqrt(7*data_dn[i]/n0);  
+
+	// corrections if very vew tests (only at beginning)
+	
         data_pTestModel[i]=pTestModelMin
 	*Math.sqrt(1+Math.pow(pModel/pTestModelMin,2));
         data_pTestModel[i]=Math.min(data_pTestModel[i],1);
@@ -687,7 +692,7 @@ function initializeData(country) {
     }
 
     else{// no dn data
-      data_pTestModel[i]= pTestModelMin;
+      data_pTestModel[i]= pTestInit; //MT 2020-11 change from pTestModelMin
     }
 
     //console.log("it=",i-data_idataStart," useSqrtModel=",useSqrtModel,
@@ -711,7 +716,7 @@ function initializeData(country) {
   var avg1=[];
   for(var k=0; k<3; k++){// up to three weeks back
     avg0[k]=0; avg1[k]=0;
-    for(var is=0; is<7; is++){
+    for(var is=0; is<7; is++){ // is always =6 at itmaxData-1 //!!!
       avg0[k] += data_pTestModel[itmaxData-21+7*k+is]/7;
       avg1[k] += data_dn[itmaxData-21+7*k+is]/7;
     }
@@ -726,9 +731,15 @@ function initializeData(country) {
     }
     pTest_weeklyPattern[is]=avg0[2]+season0[is];
     dn_weeklyPattern[is]=avg1[2]+season1[is];
-    if(false){console.log("is=",is," season0[is]=",season0[is],
-		" season1[is]=",season1[is],
-		" pTest_weeklyPattern[is]=",pTest_weeklyPattern[is]);
+
+    //!!!!
+    if(true){console.log("is=",is,
+			 //" pTest: season0[is]=",season0[is],
+			 " pTest_weeklyPattern[is]=",
+			 pTest_weeklyPattern[is].toPrecision(3),
+			// "\nTest number dn: season1[is]=",season1[is],
+			 " dn_weeklyPattern[is]=",
+			 dn_weeklyPattern[is].toFixed(0));
 	     }
   }
 
@@ -772,22 +783,22 @@ function initializeData(country) {
 
 
   // ###############################################
-  // debug
-
+  // debug; saisonal is always=6 at itmaxData-1
   if(true){
     console.log("");
     //for(var i=0; i<itmaxData; i++){
-    for(var i=data_idataStart-5; i<=data_idataStart; i++){
-    //for(var i=itmaxData-5; i<itmaxData; i++){
+    //for(var i=data_idataStart-5; i<=data_idataStart; i++){
+    for(var i=itmaxData-21; i<itmaxData; i++){ //!!!!
     //if((i>itmaxData-30)&&(i<itmaxData)){
       console.log(
 	insertLeadingZeroes(data[i]["date"]),": iData=",i,
+	" is=",(70000+i-itmaxData)%7,
 	" data_dn=",Math.round(data_dn[i]),
 	" data_dxt=",Math.round(data_dxt[i]),
 	" data_dyt=",Math.round(data_dyt[i]),
 	" data_dz=",Math.round(data_dz[i]),
-	"\n             data_posRate=",data_posRate[i],
-	" data_cfr=",data_cfr[i].toPrecision(3),
+	//"\n             data_posRate=",data_posRate[i],
+	//" data_cfr=",data_cfr[i].toPrecision(3),
 	" ");
     }
   }
@@ -1082,7 +1093,7 @@ function SSEfunc(Rarr, fR, logging, itStartInp, itMaxInp,
 //called in the html  <body onload> event and by myRestartFunction()
 
 function initialize() {
-  console.log("in initialize");
+  //console.log("in initialize");
   // =============================================================
   // get present and difference to startDay
   // =============================================================
@@ -1101,9 +1112,8 @@ function initialize() {
   if( typeof Rtime[0] === "undefined"){
     Rtime[0]=3; // start with high reproduction rate in first week 
     for(var index=1; index<=getIndexCalibmax(itmaxinit); index++){
-      Rtime[index]=1;
+      Rtime[index]=1.010101;
     }
-    
   }
  
 
@@ -1323,19 +1333,55 @@ function calibrate(){
 
   } // calbrate R with multiple periods
 
+  //!!!! QUICK HACK for some F...... reason Rtime SOMETIMES
+  // has one superfluous element on web with SAME model and data as locally;
+  // reset this superfluous element to last value
+  
+  if(Rtime.length>getIndexCalibmax(itmaxinit)){
+    console.log("\nCalibration: Warning: Rtime.length=",Rtime.length,
+		" getIndexCalibmax(itmaxinit)=",getIndexCalibmax(itmaxinit),
+		"\nquick hack: reset strange superfluous element(s)",
+		" of Rtime to last regular element ",
+		Rtime[getIndexCalibmax(itmaxinit)-1]);
+    for(var ir=getIndexCalibmax(itmaxinit); ir<Rtime.length; ir++){
+      Rtime[ir]=Rtime[getIndexCalibmax(itmaxinit)-1];
+    }
+  }
+  
 
-  // !!! limit last R entry to 1.35 because strange things can happen if
+  // !!!! Systematic endpoint calibr bias => decrease last R by 0.1
+  // see quick hack above
+  
+  for(var ir=getIndexCalibmax(itmaxinit)-1; ir<Rtime.length; ir++){
+    Rtime[ir] -=0.05;
+  }
+
+   // !!! limit last R entry to 1.35 because strange things can happen if
   // not all data are completely up to date
   
   Rtime[Rtime.length-1]=Math.min(Rtime[Rtime.length-1], 1.49);
+
   
   //var logging=false;  //calibrate()
   var logging=false;
   sse=SSEfunc(Rtime,null,logging,0,data_itmax-1); // -1 because it: it->it+1
-  console.log("leaving calibrate():",
+  console.log("leaving calibrate(): Rtime.length=",Rtime.length,
 	      "\n final R values=",Rtime,
 	      "\n fit quality sse=",sse);
-  
+  console.log("itmaxinit=",itmaxinit,
+	      " getIndexCalibmax(itmaxinit)",getIndexCalibmax(itmaxinit));
+  if(true){
+    for(var i=data_date.length-42; i<data_date.length; i++){ //!!!!
+      var it=i-data_idataStart;
+      console.log(
+	insertLeadingZeroes(data_date[i]),": iData=",i,
+	" R0=",Rfun_time(Rtime,it).toFixed(2),
+	" is=",(70000+i-data_date.length)%7,
+	" data_dn=",Math.round(data_dn[i]),
+	" ");
+    }
+  }
+
 
 
    /** ##############################################################
@@ -1792,7 +1838,7 @@ function selectWindow(){ // callback html select box "windowGDiv"
 
 
 function myRestartFunction(){ 
-  console.log("in myRestartFunction: itmax=itmaxinit=",itmaxinit);
+  //console.log("in myRestartFunction: itmax=itmaxinit=",itmaxinit);
   initialize();
   itmax=itmaxinit;
   it=0; //!!! only instance apart from init where global it is reset to zero 
@@ -1802,7 +1848,7 @@ function myRestartFunction(){
   corona.init(0,false); // because initialize redefines CoronaSim()
 
   clearInterval(myRun);
-  console.log("myRestartFunction: itmax=",itmax);
+  //console.log("myRestartFunction: itmax=",itmax);
   drawsim.checkRescaling(it); //  sometimes bug x scaling not reset
 
   myRun=setInterval(simulationRun, 1000/fps);
@@ -2745,7 +2791,7 @@ function DrawSim(){
   // initialize data feed and fonts at drawSim/drawAxes since sometimes
   // data fetch not yet finished/canvas not yet sized at construction time
 
-  console.log("end drawsim cstr: windowG=",windowG);
+  //console.log("end drawsim cstr: windowG=",windowG);
  
 }
 
