@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="de">
+
+
+<head>
+<title>Simulation der Covid-19 Pandemie</title> 
+<meta charset="UTF-8">
+
+<meta name="description" content="Javascript simulation">
+<meta name="keywords" content="Simulation, Covid19, Corona">
+
+<link href="styleSliders.css" rel="stylesheet" type="text/css" />
+<link href="corona.css" rel="stylesheet" type="text/css" />
+<link rel="icon" type="image/webp"  href="figs/corona.webp">
+
+</head>
+
+<!-- ########################################################### -->
+<!-- ########################################################### -->
+
+<body lang="de" onload="getGithubData(); initialize()"> 
+
+<div id="header"> 
+<h1 id="title">Simulation der Covid-19 Pandemie Deutschland</h1>
+</div>
+
+
+<div id="info"> 
+ <a href="info.html">
+   <img src="figs/infoBlue.png"  style="width:6vmin;vertical-align:middle"> 
+Info
+ </a>
+</div>
+
+<!-- select id should be the same as the "for" attribute  of label -->
+
+
+<div id="countryData">
+<label for="countries"></label>
+<select id="countries" onchange=selectDataCountry()> 
+  <option value="Germany">Deutschland</option>
+  <option value="Austria">&Ouml;sterreich</option>
+  <option value="Czechia">Tschechien</option>
+  <option value="France">Frankreich</option>
+  <option value="United Kingdom">England</option>
+  <option value="Italy">Italien</option>
+  <option value="Poland">Polen</option>
+  <option value="Spain">Spanien</option>
+  <option value="Sweden">Schweden</option>
+  <option value="Switzerland">Schweiz</option>
+  <option value="India">Indien</option>
+  <option value="Russia">Russland</option>
+  <option value="US">USA</option>
+</select>
+</div>
+
+<!-- consolidate first data line with "var windowG" in corona.js-->
+<div id="dataTypeDiv">
+<label for="windows"></label>
+<select id="windows" onchange=selectWindow()> 
+  <option value="5">F&auml;lle</option>
+  <option value="0">kumulierte F&auml;lle</option>
+  <option value="1">Simulation (log)</option>
+  <option value="2">F&auml;lle vs. Infizierte</option>
+  <option value="3">Daten: Tests</option>
+  <option value="4">Infektionsraten</option>
+</select>
+</div>
+
+
+<div id="impressum"> 
+ <button onclick="window.location.href = 'impressum.html' ">
+Impressum
+</button>
+</div>
+
+<div id="home">  
+ <button onclick="window.location.href = 'https://mtreiber.de' ">
+Dr. Treiber
+</button>
+<!--<a href="https://mtreiber.de">Home Dr. Treiber</a>-->
+</div>
+
+
+<!-- ######################################################## -->
+<!-- canvas size in pixels only init since init with vw/vh strange results-->
+
+<div id="contents"> 
+  <canvas id="myCanvas" width="300px" height="300px" 
+          onmousemove="onmousemoveCallback(event)"
+          onmouseout="onmouseoutCallback(event)"
+          onmouseenter="onmouseenterCallback(event)"
+          onclick="onclickCallback(event)"
+          onmousedown="onmousedownCallback(event)"
+          onmouseup="onmouseupCallback()" 
+          style="border:1px solid #d3d3d3;">
+   >
+
+    <!-- no onmousedragged-->
+
+    Your browser does not support the HTML5 canvas tag.
+  </canvas>
+</div>
+
+<!-- ######################################################## -->
+
+<!--
+<div id="sliderTimewarp">
+<center>
+<table id="slidersTable" border="0" cellspacing="1" cellpadding="0" >
+  <tr>
+    <td> Sim-Geschwindigkeit</td>
+    <td> <input id="slider_fps" type="range" 
+                min="1" max="30" step="1"></td> 
+    <td> <div id="slider_fpsText"></div> </td>
+  </tr>
+</table>
+</center>
+</div>
+-->
+
+
+<div id="sliders">
+<center>
+
+<table id="slidersTable" border="0" cellspacing="1" cellpadding="0" >
+
+<!-- attribute "value" not given, set in js-->
+
+<!--
+  <tr>
+    <td> Infektionsrate R<sub>30%</sub></td>
+    <td> <input id="slider_R03" type="range" 
+                min="0" max="4" step="0.01"></td> 
+    <td> <div id="slider_R03Text"></div> </td>
+  </tr>
+-->
+
+<!--
+  <tr>
+    <td> <span class="important">
+         Reproduktionszahl R<sub>start</sub></span></td>
+    <td> <input id="slider_R04" type="range" 
+                min="0" max="4" step="0.01"></td> 
+    <td> <div id="slider_R04Text"></div> </td>
+  </tr>
+-->
+
+  <tr>
+    <td> <span class="important">Reproduktionszahl R<sub>0</sub></span></td>
+    <td> <input id="slider_R0" type="range" 
+                min="0" max="2" step="0.01"></td> 
+    <td> <div id="slider_R0Text"></div> </td>
+  </tr>
+
+  <tr>
+    <td> Ansteckungsstart </td>
+    <td> <input id="slider_tauRstart" type="range" 
+                min="1" max="10" step="1"></td>   <!-- value in js -->
+    <td> <div id="slider_tauRstartText"></div> </td>
+  </tr>
+
+  <tr>
+    <td> Ansteckungsende</td>
+    <td> <input id="slider_tauRend" type="range" 
+                min="4" max="20" step="1"></td>   <!-- value in js -->
+    <td> <div id="slider_tauRendText"></div> </td>
+  </tr>
+
+
+  <tr>
+    <td> Test nach </td>
+    <td> <input id="slider_tauTest" type="range" 
+                min="1" max="20" step="1"></td>  <!-- value in js -->
+    <td> <div id="slider_tauTestText"></div> </td>
+  </tr>
+
+  <tr>
+    <td> Hellfeld &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; 
+         &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; </td>
+    <td> <input id="slider_pTest" type="range" 
+                min="2" max="20" step="0.1"></td>  <!-- value in js -->
+    <td> <div id="slider_pTestText"></div> </td>
+  </tr>
+
+<!--
+  <tr>
+    <td> Sim-Geschwindigkeit</td>
+    <td> <input id="slider_fps" type="range" 
+                min="1" max="30" step="1"></td> 
+    <td> <div id="slider_fpsText"></div> </td>
+  </tr>
+-->
+
+</table>
+
+</center>
+</div>
+
+<!-- ######################################################## -->
+
+<div id="testnumberDiv"> 
+ <button id="testnumber" onclick="toggleTestnumber()">
+ Ignoriere Testhaeufigkeit</button>
+</div>
+
+<div id="startStopDiv"><img id="startStop" width="100%" 
+     src="figs/buttonGo_small.png" onclick="myStartStopFunction()"/>
+</div>
+
+<div id="restartDiv"><img id="restart" width="100%" 
+     src="figs/buttonRestart_small.png" onclick="myRestartFunction()"/>
+</div>
+
+<div id="resetDiv"><img id="reset" height="100%" 
+     src="figs/buttonReset2_small.png" onclick="myResetFunction()"/>
+</div>
+
+<div id="flagDiv"><img id="flag" height="100%" 
+     src="figs/flagUSA.png" onclick="myRedirectEng()"/>
+</div>
+
+<div id="calibrateDiv">
+  <button id="buttonCalibrate" onclick="myCalibrateFunction()">
+  Kalibriere neu!</button> 
+</div>
+
+
+<!-- debug container replacing the console -->
+<!-- Comment following 3 lines out before uploading it ! -->
+<!-- and set corona.js -> debugApple=false; -->
+
+<!--
+<div id="logDiv">
+<ul id="myULContainer"></ul> 
+</div>
+-->
+
+
+</body>
+
+<!-- ######################################################## -->
+
+<!-- see https://mathjs.org/docs/reference/functions/inv.html -->
+<script src="mathjs/math.min.js" type="text/javascript"></script>
+
+<script src="fmin/fmin.min.js"></script>
+<script type="application/javascript" src="console-log-html.min.js"></script>
+
+<script type="text/javascript" src="redirect.js"></script> 
+
+<!-- NOT application/json also if some consoles want this! not running-->
+<script type="text/javascript" src="data/github_cases2020_11_14.json"></script>
+<script type="text/javascript" src="data/github_tests2020_11_17.json"></script>
+<script type="text/javascript" src="corona.js"></script> 
+<script type="text/javascript" src="corona_gui.js"></script> 
+</html>

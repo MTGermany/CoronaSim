@@ -294,7 +294,7 @@ var itmax_calib; //  end calibr time interval =^ data_itmax-1
 const calibInterval=7; //!! calibration time interval [days] for one R value
 const calibAddtlDaysLast=14; // do not calibrate remaining period smaller
 const calibrateOnce=false; // following variables only relevant if false
-const nCalibIntervals=5; // multiples of calibInterval, >=30/calibInterval
+const nCalibIntervals=5; // multiples of calibInterval, !!! >=30/calibInterval
 const nOverlap=3;        // multiples of calibInterval, 
                          // >=max(1,floor(calibAddtlDaysLast/calibInterval)
 var useInitSnap;
@@ -470,14 +470,19 @@ function initializeData(country) {
     var nxtStart=data[data_idataStart]["confirmed"];
 
     console.log(
-      "dateInitStr=",dateInitStr, "dateInitStr2=",dateInitStr2,
-      "\n data_idataStart=",data_idataStart,
+      "\ndata.length=",data.length,"  data2.length=",data2.length,
+      "\ndata_idataStart=",data_idataStart,
       "  data2_idataStart=",data2_idataStart,
-      "\n data.length=",data.length," data2.length=",data2.length,
-      "\n data[data_idataStart][\"date\"]=",data[data_idataStart]["date"],
-      "\n data2[data2_idataStart][\"date\"]=",data2[data2_idataStart]["date"],
-      "\n data_itmax=",data_itmax," data2_itmax=",data2_itmax,
-      "\n nxtStart=",nxtStart,
+      "\ndata_itmax=",data_itmax,"  data2_itmax=",data2_itmax,
+      "\n\ndata[0][\"date\"]=",data[0]["date"],
+      "  data2[0][\"date\"]=",data2[0]["date"],
+      "\ndata[data_idataStart][\"date\"]=",data[data_idataStart]["date"],
+      "  data2[data2_idataStart][\"date\"]=",data2[data2_idataStart]["date"],
+      "\ndata[data_idataStart+data_itmax-1][\"date\"]=",
+         data[data_idataStart+data_itmax-1]["date"],
+      "  data2[data2_idataStart+data2_itmax-1][\"date\"]=",
+         data2[data2_idataStart+data2_itmax-1]["date"],
+       "\nnxtStart=",nxtStart,
       "\n"
     );
   }
@@ -1232,7 +1237,7 @@ function calibrate(){
 
   else{ 
 
-    var logging=false;
+    var logging=true;
 
 
     var dn=nCalibIntervals-nOverlap;
@@ -1336,15 +1341,19 @@ function calibrate(){
   //!!!! QUICK HACK for some F...... reason Rtime SOMETIMES
   // has one superfluous element on web with SAME model and data as locally;
   // reset this superfluous element to last value
-  
-  if(Rtime.length>getIndexCalibmax(itmaxinit)){
-    console.log("\nCalibration: Warning: Rtime.length=",Rtime.length,
-		" getIndexCalibmax(itmaxinit)=",getIndexCalibmax(itmaxinit),
-		"\nquick hack: reset strange superfluous element(s)",
-		" of Rtime to last regular element ",
-		Rtime[getIndexCalibmax(itmaxinit)-1]);
-    for(var ir=getIndexCalibmax(itmaxinit); ir<Rtime.length; ir++){
-      Rtime[ir]=Rtime[getIndexCalibmax(itmaxinit)-1];
+
+ 
+  if(true){//!!!!
+  //if(Rtime.length>getIndexCalibmax(itmaxinit)){
+    console.log("\n\nCalibration: Rtime.length=",Rtime.length,
+		" getIndexCalibmax(itmaxinit)=",getIndexCalibmax(itmaxinit));
+    if(false){
+      console.log("\nquick hack: reset strange superfluous element(s)",
+		  " of Rtime to last regular element ",
+		  Rtime[getIndexCalibmax(itmaxinit)-1]);
+      for(var ir=getIndexCalibmax(itmaxinit); ir<Rtime.length; ir++){
+	Rtime[ir]=Rtime[getIndexCalibmax(itmaxinit)-1];
+      }
     }
   }
   
@@ -1353,7 +1362,7 @@ function calibrate(){
   // see quick hack above
   
   for(var ir=getIndexCalibmax(itmaxinit)-1; ir<Rtime.length; ir++){
-    Rtime[ir] -=0.05;
+    Rtime[ir] -=0.00;
   }
 
    // !!! limit last R entry to 1.35 because strange things can happen if
@@ -1371,7 +1380,7 @@ function calibrate(){
   console.log("itmaxinit=",itmaxinit,
 	      " getIndexCalibmax(itmaxinit)",getIndexCalibmax(itmaxinit));
   if(true){
-    for(var i=data_date.length-42; i<data_date.length; i++){ //!!!!
+    for(var i=data_date.length-7; i<data_date.length; i++){ //!!!!
       var it=i-data_idataStart;
       console.log(
 	insertLeadingZeroes(data_date[i]),": iData=",i,
@@ -3279,8 +3288,9 @@ DrawSim.prototype.drawREstimate=function(it){
       +((true) // if plotting  w/o "+/- stddev
 	? "" : (" +/- "+sigmaR_hist[itR].toFixed(2)));
 
-    if(ical%2==0){
-      ctx.fillText(str_R,0,0);
+    //if(ical%2==0){ //!! drawn every ical'th calibration value
+    if(ical%1==0){
+     ctx.fillText(str_R,0,0);
       ctx.font = (Math.round(0.7*textsizeR))+"px Arial"; 
       ctx.fillText("0",0.8*textsizeR,0.4*textsizeR);
     }
