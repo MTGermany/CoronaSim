@@ -4,7 +4,9 @@ fmin/src
 
 *.swp
 *.zip
-data/*
+data/coronaWorldwide.README
+data/github.json
+data/githubWithTests.json
 
 ## generated files
 
