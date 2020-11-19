@@ -294,7 +294,9 @@ var itmax_calib; //  end calibr time interval =^ data_itmax-1
 const calibInterval=7; //!! calibration time interval [days] for one R value
 const calibAddtlDaysLast=14; // do not calibrate remaining period smaller
 const calibrateOnce=false; // following variables only relevant if false
-const nCalibIntervals=5; // multiples of calibInterval, !!! >=30/calibInterval
+const nCalibIntervals=6; // multiples of calibInterval, !!! >=30/calibInterval
+                         // calibrates nCalibIntervals-nOverlap+1 params
+                         // per step
 const nOverlap=3;        // multiples of calibInterval, 
                          // >=max(1,floor(calibAddtlDaysLast/calibInterval)
 var useInitSnap;
