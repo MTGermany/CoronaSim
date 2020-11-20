@@ -8,10 +8,9 @@
 # wget https://covid.ourworldindata.org/data/owid-covid-data.json
 
 wget https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/owid-covid-data.json --output-document=data/githubWithTests.json
-cp data/githubWithTests.json data/githubWithTests_orig.json
 
+#cp data/githubWithTests.json data/githubWithTests_orig.json
 
-cp data/githubWithTests_orig.json data/githubWithTests.json
 
 # delete irrelevant/redundant data lines
 

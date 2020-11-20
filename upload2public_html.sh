@@ -21,7 +21,8 @@ perl -i -p -e 's/corona\.js/coronaNonlive\.js/g' indexNonlive.html
 cp redirect.js corona_gui.js corona_gui_eng.js corona_eng.js console-log-html.min.js $target
 cp -r *.html *.css figs $target
 # cp data/coronaWorldwide.json data/github.json $target/data
-cp data/*.json $target/data
+cp data/github.json data/githubWithTests.json  $target/data
+cp data/github_tests*json data/github_cases*json $target/data
 cp fmin/fmin.min.js fmin/LICENSE $target/fmin
 cp fmin/examples/*.html  $target/fmin/examples
 cp fmin/examples/*.js  $target/fmin/examples
