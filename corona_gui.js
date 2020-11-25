@@ -179,54 +179,6 @@ function setSlider(slider, sliderText, value, unit){
 
 
 
-//###############################################################
-// canvas mouse callbacks
-//###############################################################
-
-function onmousemoveCallback(event){
- 
-  // canvas.left undefined; canvas.width=canvasBB.width-2
-
-  var canvasBB = canvas.getBoundingClientRect();
-  xPixLeft=canvasBB.left; // left-upper corner of the canvas 
-  yPixTop=canvasBB.top;   // in browser reference system
-  xPix= event.clientX-xPixLeft; //pixel coords in canvas reference
-  yPix= event.clientY-yPixTop; 
-  var xPixRel=xPix/canvasBB.width;
-  var yPixRel=yPix/canvasBB.height;
-
-
-  if(mouseDown){
-    ctx.moveTo(xPixOld, yPixOld);
-    ctx.lineTo(xPix, yPix);
-    ctx.stroke();
-  }
-
-  xPixOld=xPix; yPixOld=yPix;
-
-}
-
-var mouseDown=false;
-function onmousedownCallback(event){
-  mouseDown=true;
-}
-
-function onmouseupCallback(event){
-  mouseDown=false;
-}
-
-function onclickCallback(event){
-  console.log("mouse clicked");
-}
-
-function onmouseoutCallback(event){
-  //log1("mouse out");
-}
-
-function onmouseenterCallback(event){
-  //log1("mouse entering canvas");
-}
-
 
 
 //###############################################################
@@ -313,4 +265,192 @@ function canvas_resize(){
 
  }
 
+
+//#################### new ###########################
+
+//###############################################################
+// canvas mouse callbacks
+//###############################################################
+
+var xPixOld,yPixOld;  // needed!
+var xPixArr=[];
+var yPixArr=[];
+var xPixArrOld=[];
+var yPixArrOld=[];
+var newStrokeIndexArray=[]; // index of xPixArr,yPixArr where new curve starts
+
+
+
+// clean array of double/multiple entries
+
+function cleanPixArrays(){
+  //console.log("entering cleanPixArrays: xPixArr.length=",xPixArr.length);
+
+  for(var i=0; i<xPixArr.length; i++){
+    xPixArrOld[i]=xPixArr[i];
+    yPixArrOld[i]=yPixArr[i];
+  }
+  xPixArr=[]; // reset
+  yPixArr=[];
+  var j=0;
+  xPixArr[0]=xPixArrOld[0];
+  yPixArr[0]=yPixArrOld[0];
+  for(var i=1; i<xPixArrOld.length; i++){
+    var dist2=Math.pow(xPixArrOld[i]-xPixArrOld[i-1],2)
+      +Math.pow(yPixArrOld[i]-yPixArrOld[i-1],2);
+    //console.log("cleanPixArrays: i=",i," dist2=",dist2,
+//		" xPixArrOld=",xPixArrOld);
+    if(dist2>1e-6){
+      j++;
+      xPixArr[j]=xPixArrOld[i];
+      yPixArr[j]=yPixArrOld[i];
+    }
+  }
+  //console.log("leaving cleanPixArrays: xPixArr.length=",xPixArr.length);
+}
+
+
+
+// called on onmousedown and in DrawSim.draw()
+
+function shiftX(){ // if moving time window; xPix always orig drawn pixel
+  var timeshift=itmax-itmaxinit;
+  return - (xshift=timeshift/itmaxinit * (drawsim.xPixMax-drawsim.xPix0));
+}
+
+
+
+
+function drawMouseAnnotations(){ 
+
+  // draw if distance between 2 points not too large (-> new stroke)
+  var distCrit=30;  // in pixels; only draw if points closer together
+  for(var i=1; i<xPixArr.length; i++){
+
+    // move points with the moving window
+
+    var xOld=xPixArr[i-1]+shiftX();
+    var xNew=xPixArr[i]+shiftX();
+    var dist=Math.sqrt(Math.pow(xNew-xOld,2)
+		       +Math.pow(yPixArr[i]-yPixArr[i-1],2));
+
+    if(dist<distCrit){
+      var w=5;          // width of mouse-drawn lines
+      var dx=xNew-xOld;
+      var dy=yPixArr[i]-yPixArr[i-1];
+      var offsetx=w*dy/dist;
+      var offsety=-w*dx/dist;
+
+      ctx.moveTo(xOld, yPixArr[i-1]);
+      ctx.lineTo(xNew, yPixArr[i]);
+      ctx.lineTo(xNew+offsetx, yPixArr[i]+offsety);
+      ctx.lineTo(xOld+offsetx, yPixArr[i-1]+offsety);
+      ctx.closePath(); // go to first point
+      ctx.fill();
+    }
+  }
+}
+
+// swipe away annotations at doubleclick
+
+function wipeAway(){
+  console.log("in wipeAway()");
+  xPixArr=[];
+  yPixArr=[];
+  xPixArrOld=[];
+  yPixArrOld=[];
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  drawsim.draw(it);
+}
+
+
+
+
+//###############################################################
+// canvas mouse callbacks
+//###############################################################
+
+var doubleclicked;
+var mouseDown=false;
+
+function onmouseenterCallback(event){
+  console.log("mouse entering canvas");
+  mouseDown=false;
+}
+
+function onmouseoutCallback(event){
+  //console.log("mouse out"); 
+}
+
+
+function onmousedownCallback(event){
+  //console.log("mouse down");
+  mouseDown=true;
+}
+
+function onmouseupCallback(event){
+  //console.log("mouse up");
+  mouseDown=false;
+}
+
+function onclickCallback(event){
+  //console.log("mouse clicked");
+  mouseDown=false;
+}
+
+
+function ondoubleclickCallback(event){ //Buggy; do not use it!
+  //console.log("mouse doubleclicked");
+  wipeAway();
+  doubleclicked=true;
+}
+
+function keyCallback(event){
+  console.log("key entered");
+  wipeAway();
+  //doubleclicked=true;
+}
+
+function onmousemoveCallback(event){
+ 
+  var canvasBB = canvas.getBoundingClientRect();
+  var xPixLeft=canvasBB.left; // left-upper corner of the canvas 
+  var yPixTop=canvasBB.top;   // in browser reference system
+  var xPix= event.clientX-xPixLeft; //pixel coords in canvas reference
+  var yPix= event.clientY-yPixTop; 
+  //console.log("mouse moved: mouseDown=",mouseDown," xPix=",xPix); 
+  var xPixRel=xPix/canvasBB.width;
+  var yPixRel=yPix/canvasBB.height;
+
+  if(doubleclicked){
+    mouseDown=false;
+    doubleclicked=false;
+  }
+
+
+  if(mouseDown){
+    xPixArr.push(xPixOld-shiftX());
+    yPixArr.push(yPixOld);
+    xPixArr.push(xPix-shiftX());
+    yPixArr.push(yPix);
+    cleanPixArrays();
+
+    if(activateAnnotations){drawMouseAnnotations();}
+  }
+
+  xPixOld=xPix; yPixOld=yPix;
+
+  if(false){
+    if(mouseDown) console.log("mouse moved && down: drawing ...");
+    else console.log("mouse moved && up: drag mouse to draw");
+  }
+
+  if(false){console.log("in onmousemoveCallback(event):"
+       +" clientX="+ event.clientX+ " clientY="+ event.clientY
+       +" xPix="+Math.round(xPix)+" yPix="+Math.round(yPix)
+       +"<br>xPixRel="+xPixRel.toPrecision(2)
+       +" yPixRel="+yPixRel.toPrecision(2)
+      );
+	   }
+}
 

@@ -16,6 +16,9 @@ var useLiveData=false;  //!! will be changed by upload script, 2 versions
 
 var debugApple=false;
 
+var activateAnnotations=true; // if true, annotations can be drawn with mouse
+
+
 var country="Germany";
 var countryGer="Deutschland";
 
@@ -1151,6 +1154,12 @@ function initialize() {
   canvas_resize();
 
   drawsim.setWindow(windowG);
+
+  //DOS!! (MT 2020-11)
+  document.addEventListener('keyup',keyCallback(event));
+
+  //works!! avoids the buggy doubleclick event (MT 2020-11)
+  document.addEventListener('keyup',function(event){keyCallback(event);});
 
 
   // =============================================================
@@ -3300,7 +3309,7 @@ DrawSim.prototype.drawREstimate=function(it){
 
 
 //######################################################################
-DrawSim.prototype.draw=function(it,q){
+DrawSim.prototype.draw=function(it){
 //######################################################################
 
   //console.log("\nin DrawSim.draw: it=",it," this.itmin=",this.itmin,
@@ -3421,6 +3430,9 @@ DrawSim.prototype.draw=function(it,q){
   }
 
   this.drawAxes(windowG);  // at the end to have grid+labels at top layer
+
+
+  if(activateAnnotations){drawMouseAnnotations();}
 
 } //DrawSim.draw
 
