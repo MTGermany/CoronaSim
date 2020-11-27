@@ -93,7 +93,9 @@ Dr. Treiber
           onclick="onclickCallback(event)"
           onmousedown="onmousedownCallback(event)"
           onmouseup="onmouseupCallback()" 
-          style="border:1px solid #d3d3d3;">
+          <!--ondblclick="ondoubleclickCallback()"--> <!-- buggy -->
+          onkeyup="keyCallback()" <!-- DOS -->
+          style="border:1px solid #d3d3d3;"
    >
 
     <!-- no onmousedragged-->

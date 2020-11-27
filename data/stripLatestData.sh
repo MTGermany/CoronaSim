@@ -12,7 +12,7 @@
 if ( (($#!=3)) );
 then echo "usage: stripLatestData.sh yyyy-mm-dd <github file><githubWithTest file>";
      echo "will produce github_casesyyyy-mm-dd and github_testsyyyy-mm-dd";
-     echo "example: stripLatestData.sh 2020-11-01 github_cases2020_11_23.json github_tests2020_11_23.json" 
+     echo "example: stripLatestData.sh 2020-11-01 github.json githubWithTests.json" 
      exit -1;
 fi
 lastDate=$1

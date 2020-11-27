@@ -323,6 +323,7 @@ function shiftX(){ // if moving time window; xPix always orig drawn pixel
 
 function drawMouseAnnotations(){ 
 
+  console.log("drawMouseAnnotations: xPixArr.length=",xPixArr.length);
   // draw if distance between 2 points not too large (-> new stroke)
   var distCrit=30;  // in pixels; only draw if points closer together
   for(var i=1; i<xPixArr.length; i++){
@@ -335,7 +336,7 @@ function drawMouseAnnotations(){
 		       +Math.pow(yPixArr[i]-yPixArr[i-1],2));
 
     if(dist<distCrit){
-      var w=5;          // width of mouse-drawn lines
+      var w=2;          // width of mouse-drawn lines
       var dx=xNew-xOld;
       var dy=yPixArr[i]-yPixArr[i-1];
       var offsetx=w*dy/dist;
@@ -343,10 +344,15 @@ function drawMouseAnnotations(){
 
       ctx.moveTo(xOld, yPixArr[i-1]);
       ctx.lineTo(xNew, yPixArr[i]);
-      ctx.lineTo(xNew+offsetx, yPixArr[i]+offsety);
-      ctx.lineTo(xOld+offsetx, yPixArr[i-1]+offsety);
-      ctx.closePath(); // go to first point
-      ctx.fill();
+      if(true){
+	ctx.stroke(); // simple+fast
+      }
+      else{  // nicer and slower
+        ctx.lineTo(xNew+offsetx, yPixArr[i]+offsety);
+        ctx.lineTo(xOld+offsetx, yPixArr[i-1]+offsety);
+        ctx.closePath(); // go to first point
+        ctx.fill();
+      }
     }
   }
 }
