@@ -1,0 +1,105 @@
+1. Standard page Internet ENGLISH
+=================================
+
+In this video, I want to present my corona simulator
+corona-dash-simulation.dot.de. Along with it, I want to present the
+methods and the thinking of an econometrist.
+
+This pandemic simulation is really a perfect example to appreciate the
+importance of exact statistical definitions.
+
+[Laufen lassen restart unter Chromium, zeichnet schneller!]
+
+Now let's just start the default setting activated when loading this
+site: Germany, till present
+
+* Red: Cases/day
+* Black Casualties per day
+
+Now let's identify some game changers:
+
+* Starts exponential increase February/March: R above 2
+* [senkr Strich zeichnen bis Datum] Measures Mid March 
+* [arrow at R=0.9] exp increase for 1-2 more weeks but R already near/below 1
+* ["S"] Summer: Decay in spite of relaxing measures: Summer
+* ["W"] Autumn/Winter: increasing infections
+* [senkr Strich zeichnen bis Datum] New measures in Germany
+* With the usual delay of 1-2 weeks stagnation
+
+2. Scenario Projections Standard page Internet ENGLISH
+=========================================================
+
+[key -> wipe away annotations]
+
+Scenario Projection: Scenario=conditional forecast assuming certain
+measures.
+
+2.1. Permanent semi-lockdown
+============================
+
+If I want to maintain the present measures (semi-lockdown)
+permanently, what will happen? Just press go once the simulation has
+stopped at the present
+
+[Go -> April 2021]
+[vertical line where cases=6000 -> 40 000 per week, or 50 per 100 000]
+[horiz line at maximum]
+
+[Cumulated cases]
+You will have a total of 30 000 covid-19 deaths, as many as a stronger
+but not catastrophic flu season
+
+[ point at contamination] Furthermore, more than 20% are already
+infected *including the unreportred cases* yielding no perfect
+immunity (for this we need about 60%) but a significant stabilisation
+and complete decay in summer, even w/o measures
+
+2.2 Complete hard lockdown till Christmas, then normal distance rules
+=======================================================
+
+Remember the R0 parameter. The simulation says that is is for a
+semi-lockdown in winter 1.12. However, this is the reproduction number
+for 100% susceptible persons. In fact, 10% have already been infected
+and hence immune (assuming a factor 5-10 as unreported cases depending
+on the number of tests in my simulation), so the actual R is given by
+1.00, i.e., stagnation. Assume that in a complete lockdown in winter, the R0
+number drops by 30 percentage points to 0.8 till
+christmas. Observe after a delay a strong breakdown, after 14-21 days
+also for the casualties [black curve].
+
+Are we done with it? You cannot maintain strikt lockdown for a longer
+period, so relax for Christmas to the normal distance and mask rules
+w/o lockdown, 
+say R0=1.3 in winter times till end of March, then, w/o changing
+anything, spring summer will lead to lower R0 values and the wave is
+gone. Now, the body count: Even a bit more casualties, about 35 000 
+
+
+2.3 Release to just distance/mask rules over Christmas
+=====================================================
+
+partial lockdown over the rest of winter
+
+[4 weeks w/o changes]
+[R0=1.3 for 2 Christmas weeks]
+[R0 back to last calibr value 1.12 till March]
+[Reduction due to spring/summer sun and temps afterwrds]
+Body Count: 35 000 Nearly no change compared to permanent semi-lockdown!
+
+2.4 Only distance/mask rules starting at Christmas
+=====================================================
+
+[4 weeks w/o changes]
+[R0=1.3 afterwards]
+
+Body Count about 50 000 instead of 35 000, or 40 000 for this winter
+season. This is a very strong flu but not unheard-of
+
+
+3. Other countries
+==================
+
+
+
+
+
