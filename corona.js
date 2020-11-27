@@ -907,6 +907,29 @@ function Rfun_time(Rarr, it){
       var relRest=(it-calibInterval*index)/calibInterval;
       R= (1-relRest)*Rarr[index]+relRest*Rarr[indexPlus]; 
     }
+
+    // MT 2020-11 introduce seasonality for forecast; peak in Januar 
+    // Does not cooperate with calibration and also not with UI
+    // !!!! => need it to introduce into the core of the model, not into the
+    // input (as the model parameters where it works)
+    
+    var seasonFactor=1;
+    var seasonFactorPresent=1;
+    if(it>itmaxinit){
+      var fracYearAtStart=0.2; // !!! calculate from datestart etc
+      var fracYearPeak=0.08;
+      var relAmplitude=0.1;
+      var phase=2*Math.PI*(fracYearAtStart-fracYearPeak+it/365.);
+      var phasePresent=2*Math.PI
+	*(fracYearAtStart-fracYearPeak+itmaxinit/365.);
+      seasonFactor=1+relAmplitude*Math.cos(phase);
+      seasonFactorPresent=1+relAmplitude*Math.cos(phasePresent);
+      if(it>itmaxinit){
+	console.log(" phase=",phase," seasonFactor=",seasonFactor);
+      }
+      return R*seasonFactor/seasonFactorPresent;
+    }
+
     return R;
   }
 }//Rfun_time
