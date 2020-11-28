@@ -742,8 +742,8 @@ function initializeData(country) {
     pTest_weeklyPattern[is]=avg0[2]+season0[is];
     dn_weeklyPattern[is]=avg1[2]+season1[is];
 
-    //!!!!
-    if(true){console.log("is=",is,
+ 
+    if(false){console.log("is=",is,
 			 //" pTest: season0[is]=",season0[is],
 			 " pTest_weeklyPattern[is]=",
 			 pTest_weeklyPattern[is].toPrecision(3),
@@ -798,7 +798,7 @@ function initializeData(country) {
     console.log("");
     //for(var i=0; i<itmaxData; i++){
     //for(var i=data_idataStart-5; i<=data_idataStart; i++){
-    for(var i=itmaxData-21; i<itmaxData; i++){ //!!!!
+    for(var i=itmaxData-8; i<itmaxData; i++){ //!!!!
     //if((i>itmaxData-30)&&(i<itmaxData)){
       console.log(
 	insertLeadingZeroes(data[i]["date"]),": iData=",i,
@@ -915,7 +915,8 @@ function Rfun_time(Rarr, it){
     
     var seasonFactor=1;
     var seasonFactorPresent=1;
-    if(it>itmaxinit){
+    if(false){
+    //if(it>itmaxinit){
       var fracYearAtStart=0.2; // !!! calculate from datestart etc
       var fracYearPeak=0.08;
       var relAmplitude=0.1;
@@ -1144,7 +1145,7 @@ function initialize() {
 
   if( typeof Rtime[0] === "undefined"){
     Rtime[0]=3; // start with high reproduction rate in first week 
-    for(var index=1; index<=getIndexCalibmax(itmaxinit); index++){
+    for(var index=1; index<getIndexCalibmax(itmaxinit); index++){
       Rtime[index]=1.010101;
     }
   }
@@ -1271,7 +1272,7 @@ function calibrate(){
 
   else{ 
 
-    var logging=true;
+    var logging=false; //!!!
 
 
     var dn=nCalibIntervals-nOverlap;
@@ -1379,7 +1380,7 @@ function calibrate(){
  
   if(true){//!!!!
   //if(Rtime.length>getIndexCalibmax(itmaxinit)){
-    console.log("\n\nCalibration: Rtime.length=",Rtime.length,
+    console.log("\n\n\n\nCalibration: Rtime.length=",Rtime.length,
 		" getIndexCalibmax(itmaxinit)=",getIndexCalibmax(itmaxinit));
     if(false){
       console.log("\nquick hack: reset strange superfluous element(s)",
@@ -1408,7 +1409,7 @@ function calibrate(){
 	      "\n fit quality sse=",sse);
   console.log("itmaxinit=",itmaxinit,
 	      " getIndexCalibmax(itmaxinit)",getIndexCalibmax(itmaxinit));
-  if(true){
+  if(false){
     for(var i=data_date.length-7; i<data_date.length; i++){ //!!!!
       var it=i-data_idataStart;
       console.log(
@@ -1552,12 +1553,14 @@ function estimateR(itmin_c, itmax_c, Rcalib){
 
   //console.log("estimateR before new transfer: Rtime=",Rtime);
   if(firstRfixed) for(var j=0; j<Rcalib.length; j++){ 
-    Rtime[j+1+icalibmin]=sol2_SSEfunc.x[j];
+     Rtime[j+1+icalibmin]=sol2_SSEfunc.x[j];
   }
   else for(var j=0; j<Rcalib.length; j++){ // normal
-    Rtime[j+icalibmin]=sol2_SSEfunc.x[j];
+     Rtime[j+icalibmin]=sol2_SSEfunc.x[j];
   }
-  //console.log("estimateR after new transfer: Rtime=",Rtime);
+  if(false){console.log("estimateR after new transfer: firstRfixed=",
+			firstRfixed, " Rtime.length=",Rtime.length);
+	   }
 
 
  

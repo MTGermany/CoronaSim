@@ -323,7 +323,8 @@ function shiftX(){ // if moving time window; xPix always orig drawn pixel
 
 function drawMouseAnnotations(){ 
 
-  console.log("drawMouseAnnotations: xPixArr.length=",xPixArr.length);
+  //console.log("drawMouseAnnotations: xPixArr.length=",xPixArr.length);
+
   // draw if distance between 2 points not too large (-> new stroke)
   var distCrit=30;  // in pixels; only draw if points closer together
   for(var i=1; i<xPixArr.length; i++){
@@ -360,7 +361,6 @@ function drawMouseAnnotations(){
 // swipe away annotations at doubleclick
 
 function wipeAway(){
-  console.log("in wipeAway()");
   xPixArr=[];
   yPixArr=[];
   xPixArrOld=[];
@@ -380,7 +380,7 @@ var doubleclicked;
 var mouseDown=false;
 
 function onmouseenterCallback(event){
-  console.log("mouse entering canvas");
+  //console.log("mouse entering canvas");
   mouseDown=false;
 }
 
@@ -412,7 +412,7 @@ function ondoubleclickCallback(event){ //Buggy; do not use it!
 }
 
 function keyCallback(event){
-  console.log("key entered");
+  //console.log("key entered");
   wipeAway();
   //doubleclicked=true;
 }

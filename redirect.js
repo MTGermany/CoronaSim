@@ -9,7 +9,7 @@ function myRedirectEng(){
   var base=page.substring(0, page.length-5);
   var newpage=base+"_eng.html";
   console.log("page=",page," base=",base," newpage=",newpage);
-  window.location.href = "./"+newpage;
+  window.location.href = newpage; // attention: NOT with "./"+ Fck bug server
 }
 
 function myRedirectGer(){
@@ -18,6 +18,6 @@ function myRedirectGer(){
   var base=page.substring(0, page.length-9);
   var newpage=base+".html";
   console.log("page=",page," base=",base," newpage=",newpage);
-  window.location.href = "./"+newpage;
+  window.location.href = newpage; // attention: NOT with "./"+ Fck bug server
 }
 
