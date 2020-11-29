@@ -16,6 +16,7 @@ site: Germany, till present
 * Red: Cases/day
 * Black Casualties per day
 
+
 Now let's identify some game changers:
 
 * Starts exponential increase February/March: R above 2
@@ -25,6 +26,13 @@ Now let's identify some game changers:
 * ["W"] Autumn/Winter: increasing infections
 * [senkr Strich zeichnen bis Datum] New measures in Germany
 * With the usual delay of 1-2 weeks stagnation
+
+
+
+[Andere Anzeigefenster]
+
+MACHEN
+
 
 2. Scenario Projections Standard page Internet ENGLISH
 =========================================================
@@ -98,6 +106,55 @@ season. This is a very strong flu but not unheard-of
 
 3. Other countries
 ==================
+
+Austria Xtot=24%, peak Nov 13 @ 18% , Ract=0.89 @ 24%
+Tschechia: peak Oct 23 @ Xtot 20%, Ract=0.76 @ 35%
+Spain: peak Nov 2 @ , Ract=0.85 @ 27%
+Sweden: peak not reached, Ract=1.00 @ 17%
+Switzerland: peak Nov 2 @ 17%, Ract 0.80 @ 28%
+Russia: peak not reached, Ract=1.06 @ 11%
+USA: peak not reached @ 30% only exception
+
+India: Reduction although smaller contamination
+        Google: new delhi weather
+
+Australia, Peru/Chile, South Africa: Peak in summer
+
+4. Take home message
+====================
+
+(1) Nearly all countries have their peak if contamination
+about 20%. No herd immunity but sufficient immunity that mild measures
+(masks, distances) are enough
+
+(2) Peak in cold season; on southern hemisphere in summer, if no cold
+season (India) les spronounced peaks
+
+(3) hard lockdowns will hardly  lead to fewer deaths before
+vaccination available in scale. With or without, we will have 25 000
+casualties this season (35 000 total),  comparable to a heavy flu
+occuring once in a 
+decade or so. Leaving everything open we will have about 40 000 deaths
+this season 
+
+(4) With only masks and distance rulkes at and after Christmas,
+we will have about 35 000 deaths this season
+
+(5) In any case, with or without lockdown, with or without
+vaccination, the pandemic is over in March/April
+
+(6) Other countries are already over the peak. With or without skiing
+allowed, cases will drop in Austria/Swizzerland. In Czech republic,
+the pandemic is already over.
+
+
+(7) Final disclaimer. These are conditional projections, not
+unconditional forecasts, although there is much simulation evidence
+that Czech and Swizzerland are done with the pandemic, in contrast to
+Germany.
+
+This video is published on the 30th of November. Lets see if it stands
+the test of time.
 
 
 

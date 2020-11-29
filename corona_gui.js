@@ -323,7 +323,7 @@ function shiftX(){ // if moving time window; xPix always orig drawn pixel
 
 function drawMouseAnnotations(){ 
 
-  //console.log("drawMouseAnnotations: xPixArr.length=",xPixArr.length);
+  console.log("drawMouseAnnotations: xPixArr.length=",xPixArr.length);
 
   // draw if distance between 2 points not too large (-> new stroke)
   var distCrit=30;  // in pixels; only draw if points closer together
@@ -434,14 +434,16 @@ function onmousemoveCallback(event){
   }
 
 
-  if(mouseDown){
-    xPixArr.push(xPixOld-shiftX());
-    yPixArr.push(yPixOld);
-    xPixArr.push(xPix-shiftX());
-    yPixArr.push(yPix);
-    cleanPixArrays();
-
-    if(activateAnnotations){drawMouseAnnotations();}
+  if(activateAnnotations&&mouseDown){
+    var dist2=Math.pow(xPix-xPixOld,2)+Math.pow(yPix-yPixOld,2);
+    if(dist2>0.9){
+      xPixArr.push(xPixOld-shiftX());
+      yPixArr.push(yPixOld);
+      xPixArr.push(xPix-shiftX());
+      yPixArr.push(yPix);
+      cleanPixArrays();
+      if(isStopped){drawMouseAnnotations();} // otherwise in drawsim.draw()
+    }
   }
 
   xPixOld=xPix; yPixOld=yPix;

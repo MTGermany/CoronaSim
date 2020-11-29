@@ -33,6 +33,7 @@ perl -i -p -e 's/Schweden/Sweden/g' *_eng.html
 perl -i -p -e 's/Schweiz/Swizzerland/g' *_eng.html
 perl -i -p -e 's/Indien/India/g' *_eng.html
 perl -i -p -e 's/Russland/Russia/g' *_eng.html
+perl -i -p -e 's/Australien/Australia/g' *_eng.html
 
 perl -i -p -e 's/kumulierte F\&auml\;lle/Cumulated cases/g' *_eng.html
 perl -i -p -e 's/F\&auml\;lle vs\. Infizierte/Cases vs\. infected/g' *_eng.html

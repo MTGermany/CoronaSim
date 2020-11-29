@@ -123,75 +123,79 @@ var dataGit2=[];
 var n0=80.e6;  // #persons in Germany
 
 const countryGerList={
-    "Germany": "Deutschland",
-    "Austria": "&Ouml;sterreich",
-    "Czechia": "Tschechien",
-    "France": "Frankreich",
-    "United Kingdom": "England",
-    "Italy": "Italien",
-    "Poland": "Polen",
-    "Spain": "Spanien",
-    "Sweden": "Schweden",
-    "Switzerland": "Schweiz",
+  "Germany": "Deutschland",
+  "Austria": "&Ouml;sterreich",
+  "Czechia": "Tschechien",
+  "France": "Frankreich",
+  "United Kingdom": "England",
+  "Italy": "Italien",
+  "Poland": "Polen",
+  "Spain": "Spanien",
+  "Sweden": "Schweden",
+  "Switzerland": "Schweiz",
   //  "China": "China",
-    "India": "Indien",
+  "India": "Indien",
   //  "Japan": "Japan",
-    "Russia": "Ru&szlig;land",
+  "Russia": "Ru&szlig;land",
   //  "Turkey": "T&uuml;rkei",
-    "US": "USA"
+  "US": "USA",
+  "Australia": "Australien"
 }
 
 
 const n0List={
-    "Germany"       :   80500000,
-    "Austria"       :    8800000,
-    "Czechia"       :   10700000,
-    "France"        :   67400000,
-    "United Kingdom":   65100000,
-    "Italy"         :   62200000,
-    "Poland"        :   38400000,
-    "Spain"         :   49300000,
-    "Sweden"        :   10000000,
-    "Switzerland"   :    8300000,
-    "India"         : 1353000000,
-    "Russia"        :  144000000,
-    "US"            :  328000000
+  "Germany"       :   80500000,
+  "Austria"       :    8800000,
+  "Czechia"       :   10700000,
+  "France"        :   67400000,
+  "United Kingdom":   65100000,
+  "Italy"         :   62200000,
+  "Poland"        :   38400000,
+  "Spain"         :   49300000,
+  "Sweden"        :   10000000,
+  "Switzerland"   :    8300000,
+  "India"         : 1353000000,
+  "Russia"        :  144000000,
+  "US"            :  328000000,
+  "Australia"     :   25499881
 }
 
 
 // will be only relevant if "xyz no longer <<1 ("Durchseuchung")
 // will be later changed to fracDie=fracDieInit*pTest/pTestInit;
 const fracDieInitList={
-    "Germany"       : 0.005, // init
-    "Austria"       : 0.0031,
-    "Czechia"       : 0.0027,
-    "France"        : 0.0040,
-    "United Kingdom": 0.0040,
-    "Italy"         : 0.0040,
-    "Poland"        : 0.0040,
-    "Spain"         : 0.0040,
-    "Sweden"        : 0.0040,
-    "Switzerland"   : 0.0055,
-    "India"         : 0.0045,
-    "Russia"        : 0.0040,
-    "US"            : 0.0055
+  "Germany"       : 0.005, // init
+  "Austria"       : 0.0031,
+  "Czechia"       : 0.0027,
+  "France"        : 0.0040,
+  "United Kingdom": 0.0040,
+  "Italy"         : 0.0040,
+  "Poland"        : 0.0040,
+  "Spain"         : 0.0040,
+  "Sweden"        : 0.0040,
+  "Switzerland"   : 0.0055,
+  "India"         : 0.0045,
+  "Russia"        : 0.0040,
+  "US"            : 0.0055,
+  "Australia"     : 0.0040
 }
 
 
 const tauDieList={
-    "Germany"       : 19, //19
-    "Austria"       : 19,
-    "Czechia"       : 19,
-    "France"        : 19,
-    "United Kingdom": 19,
-    "Italy"         : 19,
-    "Poland"        : 19,
-    "Spain"         : 19,
-    "Sweden"        : 19,
-    "Switzerland"   : 19,
-    "India"         : 17,
-    "Russia"        : 17,
-    "US"            : 17
+  "Germany"       : 19, //19
+  "Austria"       : 19,
+  "Czechia"       : 19,
+  "France"        : 19,
+  "United Kingdom": 19,
+  "Italy"         : 19,
+  "Poland"        : 19,
+  "Spain"         : 19,
+  "Sweden"        : 19,
+  "Switzerland"   : 19,
+  "India"         : 17,
+  "Russia"        : 17,
+  "US"            : 17,
+  "Australia"     : 17
 }
 
 
@@ -199,19 +203,20 @@ const tauDieList={
 
 
 const tauRecoverList={
-    "Germany"       : 16,
-    "Austria"       : 16,
-    "Czechia"       : 30,
-    "France"        : 20,
-    "United Kingdom": 25,
-    "Italy"         : 25,
-    "Poland"        : 25,
-    "Spain"         : 25,
-    "Sweden"        : 25,
-    "Switzerland"   : 18,
-    "India"         : 18,
-    "Russia"        : 18,
-    "US"            : 18
+  "Germany"       : 16,
+  "Austria"       : 16,
+  "Czechia"       : 30,
+  "France"        : 20,
+  "United Kingdom": 25,
+  "Italy"         : 25,
+  "Poland"        : 25,
+  "Spain"         : 25,
+  "Sweden"        : 25,
+  "Switzerland"   : 18,
+  "India"         : 18,
+  "Russia"        : 18,
+  "US"            : 18,
+  "Australia"     : 18
 }
 
 
@@ -240,7 +245,8 @@ var betaIFR=[];
 
 // global simulation  parameters
 
-var fps=50;
+var fpsstart=50;
+var fps=fpsstart;  // controlled @ doSimulationStep()
 
 // (i) controlled by sliders/control elements (apart from R0)
 
@@ -281,7 +287,8 @@ var taumax=Math.max(tauDie,tauRecover)+tauAvg+1;
 //  note: useSqrtModel at the controlled variables
 
 var alpha=0.0; // alpha error of test (false negative)
-var beta=0.003; // beta error (false positive) after double testing
+var betainit=0.003; // beta error (false positive) after double testing
+var betaErr=betainit; // in Australia sometimes fracPos<beta
 // if in Germany beta>0.006, n_falsePos can be > nPositive => contradict
 // => formally, matrix not invertible
 
@@ -651,9 +658,7 @@ function initializeData(country) {
     data_dn[i]=data_dxt[i]/data_posRate[i];// more stable
     if(!((data_dn[i]>0)&&(data_dn[i]<1e11))){data_dn[i]=0;}
     var dnTauPos=data2_cumTestsCalc[i+di]-data2_cumTestsCalc[i+di-tauPos];
-    var pit=(data2_posRate[i+di]-beta)/(1-alpha-beta); // prob infected|tested
- 
-  
+   
     data_cfr[i]=Math.max(data_cumDeaths[i+tauDie-tauTest]
 		 -data_cumDeaths[i+tauDie-tauTest-tauPos],0.)/dxtTauPos;
 
@@ -662,19 +667,7 @@ function initializeData(country) {
     var dztTauPos=Math.max(data_cumDeaths[i]-data_cumDeaths[i-tauPos],0.);
 
 
-    if(false){ //!! replaced by calibrated fracDie, keep it just in case..
-      // IFRfun_time(betaIFR,i-data_idataStart); 
-      
-      // denom tauPos because not tested people have a period tauPos
-      // to be tested positive 
-
-      var gamma=0.05;
-      var data_dx=(pit*dnTauPos + gamma*pit*(n0-dnTauPos))/tauPos;
-      data_ifr[i]=Math.max(data_cumDeaths[i+tauDie]
-		 -data_cumDeaths[i+tauDie-tauPos],0.)/(tauPos*data_dx);
-    }
-
-
+ 
 
     //  proportional or  sqrt-like "Hellfeld" model: 
     // sqrt: assume 100% "Hellfeld" ifP(tested|new infected) if all n0 persons
@@ -1082,7 +1075,7 @@ function SSEfunc(Rarr, fR, logging, itStartInp, itMaxInp,
     // additionally penalty for negative R or R near zero
 
     var RlowLimit=0.4;  
-    var prefact=0.001;
+    var prefact=0.01;
     if(R_actual<RlowLimit){
       sse += prefact*Math.pow(RlowLimit-R_actual,2);
     }
@@ -1128,20 +1121,11 @@ function SSEfunc(Rarr, fR, logging, itStartInp, itMaxInp,
 
 function initialize() {
   //console.log("in initialize");
+
+
   // =============================================================
-  // get present and difference to startDay
-  // =============================================================
-
-  //present=new Date();
-  //var present=new Date(2020,02,23); //!!
-  
-  // initialisation of itmaxinit; 
-  // round because of daylight saving time complications
-
-  //console.log("present=",present);
-
-
   // initialize R estimation result (particularly length) if still undefined
+  // =============================================================
 
   if( typeof Rtime[0] === "undefined"){
     Rtime[0]=3; // start with high reproduction rate in first week 
@@ -1881,6 +1865,7 @@ function selectWindow(){ // callback html select box "windowGDiv"
 function myRestartFunction(){ 
   //console.log("in myRestartFunction: itmax=itmaxinit=",itmaxinit);
   initialize();
+  fps=fpsstart;
   itmax=itmaxinit;
   it=0; //!!! only instance apart from init where global it is reset to zero 
   ctx.clearRect(0, 0, canvas.width, canvas.height)
@@ -1979,6 +1964,15 @@ function simulationRun() {
 
 function doSimulationStep(){
 
+  var itSlower=itmaxinit-42;
+  var itFaster=itmaxinit+56;
+  var changed_fps=((it==itSlower)||(it==itFaster));
+  if(changed_fps){
+    fps=(it==itSlower) ? 0.30*fpsstart : fpsstart;
+    console.log("doSimulationStep: changing fps, new fps=",fps);
+    clearInterval(myRun);
+    myRun=setInterval(simulationRun, 1000/fps);
+  }
   R0_actual=(RsliderUsed) ? R0 : Rfun_time(Rtime,it);
   fracDie= IFRfun_time(betaIFR,it);
 
@@ -2158,11 +2152,11 @@ CoronaSim.prototype.init=function(itStart,logging){
   this.xt       *= scaleDownFact;
   this.dx       *= scaleDownFact;
   this.dxt      *= scaleDownFact;
-  this.dxtFalse = 0; //!!
   this.y        *= scaleDownFact;
   this.z        *= scaleDownFact;
-  this.dxtFalse=(data_dn[data_idataStart]/n0 
-		 - pTest*this.xohne[tauTest])*beta;//!!
+  this.dxtFalse = 0; //!!
+  //this.dxtFalse=(data_dn[data_idataStart]/n0 
+//		 - pTest*this.xohne[tauTest])*betaErr;//!!
 
   for(var tau=0; tau<taumax; tau++){
     this.x[tau]     *= scaleDownFact;
@@ -2418,7 +2412,8 @@ CoronaSim.prototype.updateOneDay=function(R,it,logging){
 
 
     if(includeInfluenceTestNumber){ 
-      this.dxtFalse=(dn/n0 - pTest*this.xohne[tauTest])*beta; //!!!
+      this.dxtFalse=(dn/n0 - pTest*this.xohne[tauTest])*betaErr;
+      this.dxtFalse=Math.min(this.dxtFalse, 0.9*this.dxt); //!!!
     }
 
     else{ // prob tree nt with p infected->1-alpha pos, alpha neg

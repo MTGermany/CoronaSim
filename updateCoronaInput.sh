@@ -9,7 +9,7 @@
 
 wget https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/owid-covid-data.json --output-document=data/githubWithTests.json
 
-#cp data/githubWithTests.json data/githubWithTests_orig.json
+cp data/githubWithTests.json data/githubWithTests_orig.json
 
 
 # delete irrelevant/redundant data lines
@@ -41,6 +41,8 @@ grep Germany data/githubWithTests.json > data/tmp.json
  grep India data/githubWithTests.json >> data/tmp.json
  grep Russia data/githubWithTests.json >> data/tmp.json
  grep USA data/githubWithTests.json >> data/tmp.json
+ grep AUS data/githubWithTests.json >> data/tmp.json
+
 
 # add variable name and neceesary '  ' between rhs of var
 
@@ -72,6 +74,8 @@ perl -i -p -e "s/CHE/Switzerland/g" data/tmp2.json
 perl -i -p -e "s/IND/India/g" data/tmp2.json
 perl -i -p -e "s/RUS/Russia/g" data/tmp2.json
 perl -i -p -e "s/USA/US/g" data/tmp2.json
+perl -i -p -e "s/AUS/Australia/g" data/tmp2.json
+
 
 
 
@@ -87,7 +91,7 @@ mv data/tmp2.json data/githubWithTests.json
 #####################################################################
 
 wget https://pomber.github.io/covid19/timeseries.json --output-document=data/github.json
-#cp data/github.json.orig data/github.json
+cp data/github.json data/github_orig.json
 
 # separate countries in lines: all lines off, then ] => ]\n
 
@@ -109,6 +113,7 @@ grep Switzerland data/github.json >> data/tmp.json
 grep India data/github.json >> data/tmp.json
 grep Russia data/github.json >> data/tmp.json
 grep US data/github.json >> data/tmp.json
+grep Australia data/github.json >> data/tmp.json
 
 # add variable name and neceesary '  ' between rhs of var
 
