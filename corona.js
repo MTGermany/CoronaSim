@@ -243,7 +243,7 @@ var betaIFR=[];
 
 
 
-// global simulation  parameters
+// global simulation parameters/infection constants/parameters
 
 var fpsstart=50;
 var fps=fpsstart;  // controlled @ doSimulationStep()
@@ -258,8 +258,8 @@ var includeInfluenceTestNumber=true; // if true, pTest =f(#tests)
 var useSqrtModel=true; // whether use sqrt or linear dependence 
 
 var tauRstartInit=2;   // active infectivity begins [days since infection]//1
-var tauRendInit=8;    // active infectivity ends [days since infection]//10
-var tauTestInit=5;     // time delay [days] test-infection //8
+var tauRendInit=10;    // active infectivity ends [days since infection]//10
+var tauTestInit=7;     // time delay [days] test-infection //8
 
 var tauRstart=tauRstartInit;
 var tauRend=tauRendInit;  
