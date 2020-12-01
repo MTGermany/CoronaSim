@@ -83,6 +83,7 @@ perl -i -p -e 's/oder/or/g' corona_eng.js
 
 perl -i -p -e 's/Durchseuchung/Contamination/g' corona_eng.js
 perl -i -p -e 's/Aktuelles/Actual/g' corona_eng.js
+perl -i -p -e 's/Aktuelle/Actual/g' corona_eng.js
 perl -i -p -e 's/Tagen/days/g' corona_eng.js corona_gui_eng.js *_eng.html
 perl -i -p -e 's/Tage/days/g' corona_eng.js corona_gui_eng.js *_eng.html
 perl -i -p -e 's/pro Tag/per day/g' corona_eng.js corona_gui_eng.js

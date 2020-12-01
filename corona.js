@@ -3082,12 +3082,15 @@ DrawSim.prototype.drawAxes=function(windowG){
   if(true){// draw "Durchseuchung"
     var Xperc=Math.round(1000*corona.xyz)/10;
     ctx.fillStyle="rgb(0,0,0)";
-    ctx.fillText("Durchseuchung X="+(Xperc.toFixed(1))+"%",
+    ctx.fillText("Durchseuchung X="+(Xperc.toFixed(1))+" %",
 		 this.xPix0+xrelLeft*this.wPix,
 		 this.yPix0+(yrelTop-(ikey+1)*dyrel)*this.hPix);
     ctx.fillText("Aktuelles R="+((R0_actual*(1-corona.xyz)).toFixed(2)),
 		 this.xPix0+xrelLeft*this.wPix,
 		 this.yPix0+(yrelTop-(ikey+2)*dyrel)*this.hPix);
+    ctx.fillText("Aktuelle IFR="+(100*IFRfun_time(betaIFR,it)).toFixed(2)+" %",
+		 this.xPix0+xrelLeft*this.wPix,
+		 this.yPix0+(yrelTop-(ikey+3)*dyrel)*this.hPix);
   }
 
 
