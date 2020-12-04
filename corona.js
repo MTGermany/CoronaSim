@@ -236,7 +236,7 @@ var sigmaR_hist=[]; sigmaR_hist[0]=0;
 // beta parameters for IFR function IFRfun_time
 // need to define it explicitely here because sequentially calibrated after R
 
-var betaIFRinit=[0.010,0.003,0.001,0.001,0.001];
+var betaIFRinit=[0.010,0.003,0.002,0.002,0.002];
 var betaIFR=[];
 
 
@@ -1758,8 +1758,8 @@ function IFRfun_time(beta, it){
   var it0=0; 
   var it1=28;//20
   var it2=56;//70
-  var it3=84;//140
-  var it4=140;
+  var it3=175;//140
+  var it4=280;
   var IFR=(it<it0) ? beta[0] : (it<it1)
     ? beta[0]+(beta[1]-beta[0])/(it1-it0)*(it-it0):(it<it2)
     ? beta[1]+(beta[2]-beta[1])/(it2-it1)*(it-it1):(it<it3)
