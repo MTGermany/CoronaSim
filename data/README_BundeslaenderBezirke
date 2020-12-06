@@ -1,0 +1,97 @@
+=> json data for Bundeslaender (not Landkreise)
+http://covid19-germany.appspot.com/
+
+curl -s http://covid19-germany.appspot.com/timeseries/DE-SN/deaths
+curl -s http://covid19-germany.appspot.com/timeseries/DE-SN/cases
+curl -s http://covid19-germany.appspot.com/timeseries/DE-BY/deaths
+curl -s http://covid19-germany.appspot.com/timeseries/DE-BY/cases
+State codes:
+https://kb.bullseyelocations.com/support/solutions/articles/5000544642-germany-state-codes
+
+Cases per Landkreis: [DIE Zentralen Daten, leider in bloeden html-csv-Format
+https://github.com/jgehrcke/covid-19-germany-gae/blob/master/cases-rki-by-ags.csv
+
+Deaths per Landkreis:
+https://github.com/jgehrcke/covid-19-germany-gae/blob/master/deaths-rki-by-ags.csv
+
+Gemeindeschluessel (AGS) der obigen Daten:
+https://github.com/jgehrcke/covid-19-germany-gae/blob/master/ags.json
+"14511": {
+    "name": "SK Chemnitz",
+    "state": "Sachsen",
+    "lat": 50.8333,
+    "lon": 12.9167
+  },
+  "14521": {
+    "name": "LK Erzgebirgskreis",
+    "state": "Sachsen",
+    "lat": 50.5735,
+    "lon": 12.9833
+  },
+  "14522": {
+    "name": "LK Mittelsachsen",
+    "state": "Sachsen",
+    "lat": 50.8569,
+    "lon": 13.3159
+  },
+  "14523": {
+    "name": "LK Vogtlandkreis",
+    "state": "Sachsen",
+    "lat": 50.4722,
+    "lon": 12.2695
+  },
+  "14524": {
+    "name": "LK Zwickau",
+    "state": "Sachsen",
+    "lat": 50.7333,
+    "lon": 12.5
+  },
+  "14612": {
+    "name": "SK Dresden",
+    "state": "Sachsen",
+    "lat": 51.0493,
+    "lon": 13.6987
+  },
+  "14625": {
+    "name": "LK Bautzen",
+    "state": "Sachsen",
+    "lat": 51.1556,
+    "lon": 14.3739
+  },
+  "14626": {
+    "name": "LK Görlitz",
+    "state": "Sachsen",
+    "lat": 51.1526,
+    "lon": 14.9699
+  },
+  "14627": {
+    "name": "LK Meißen",
+    "state": "Sachsen",
+    "lat": 51.1374,
+    "lon": 13.4771
+  },
+  "14628": {
+    "name": "LK Sächsische Schweiz-Osterzgebirge", line 372 delete 371 prev
+    "state": "Sachsen",
+    "lat": 50.9459,
+    "lon": 14.05
+  },
+  "14713": {
+    "name": "SK Leipzig",
+    "state": "Sachsen",
+    "lat": 51.3493,
+    "lon": 12.3939
+  },
+  "14729": {
+    "name": "LK Leipzig",
+    "state": "Sachsen",
+    "lat": 51.17,
+    "lon": 12.65
+  },
+  "14730": {
+    "name": "LK Nordsachsen",
+    "state": "Sachsen",
+    "lat": 51.4671,
+    "lon": 12.7665
+  },
+ 
