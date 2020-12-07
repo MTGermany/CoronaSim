@@ -6,7 +6,8 @@
 // useLiveData=false: obtained data server-side 
 // via script updateCoronaInput.sh. Stable but need to upload once a day
 
-var useLiveData=false;  //!! will be changed by upload script, 2 versions
+var useLiveDataInit=false;  //!! will be changed by upload script, 2 versions
+var useLiveData=useLiveDataInit;
 
 // debugApple=true for debugging of devices w/o console (ipad) redirect
 // it to a html element using console-log-html.js
@@ -21,6 +22,7 @@ var activateAnnotations=true; // if true, annotations can be drawn with mouse
 
 var country="Germany";
 var countryGer="Deutschland";
+var useLandkreise=false; // MT 2020-12-07: =true for new RKI Landkreis data
 
 /* Date object: 
  - Constructor e.g., date=new Date(2020,02,19); months start @ zero, days @ 1
@@ -83,6 +85,13 @@ var itmax=itmaxinit; // can be >itmaxinit during interactive simulation
 // or load as a variable server-side (if useLiveData=false)
 
 var dataGit=[];
+// MT 2020-09
+var dataGit2=[];
+
+// MT 2020-12
+var dataRKI=[];
+
+
 var data_dateBegin;
 
 var data_idataStart; //!! dataGit dataset index for dayStartMar
@@ -109,14 +118,11 @@ var data_dyt=[];
 var data_dz=[];
 var data_posRate=[];
 var data_cfr=[];
-var data_ifr=[];
 var data_pTestModel=[]; // sim. "Hellfeld" P(tested|infected) if f(#tests)=true
 var pTest_weeklyPattern=[]; // constant extrapolation with weekly pattern
 var dn_weeklyPattern=[];  // constant extrapolation of #tests "
 
 
-// MT 2020-09
-var dataGit2=[];
 
 // global geographic simulation vars 
 
@@ -139,7 +145,10 @@ const countryGerList={
   "Russia": "Ru&szlig;land",
   //  "Turkey": "T&uuml;rkei",
   "US": "USA",
-  "Australia": "Australien"
+  "Australia": "Australien",
+  "LK_Erzgebirgskreis": "LK Erzgebirgskreis",
+  "LK_Osterzgebirge": "LK Osterzgebirge",
+  "SK_Dresden": "Dresden"
 }
 
 
@@ -157,7 +166,10 @@ const n0List={
   "India"         : 1353000000,
   "Russia"        :  144000000,
   "US"            :  328000000,
-  "Australia"     :   25499881
+  "Australia"     :   25499881,
+  "LK_Erzgebirgskreis": 334948,
+  "LK_Osterzgebirge"  : 245586,
+  "SK_Dresden"        : 556780
 }
 
 
@@ -177,7 +189,10 @@ const fracDieInitList={
   "India"         : 0.0045,
   "Russia"        : 0.0040,
   "US"            : 0.0055,
-  "Australia"     : 0.0040
+  "Australia"     : 0.0040,
+  "LK_Erzgebirgskreis": 0.005,
+  "LK_Osterzgebirge"  : 0.005,
+  "SK_Dresden"        : 0.005
 }
 
 
@@ -195,7 +210,10 @@ const tauDieList={
   "India"         : 17,
   "Russia"        : 17,
   "US"            : 17,
-  "Australia"     : 17
+  "Australia"     : 17,
+  "LK_Erzgebirgskreis": 19,
+  "LK_Osterzgebirge"  : 19,
+  "SK_Dresden"        : 19
 }
 
 
@@ -216,7 +234,10 @@ const tauRecoverList={
   "India"         : 18,
   "Russia"        : 18,
   "US"            : 18,
-  "Australia"     : 18
+  "Australia"     : 18,
+  "LK_Erzgebirgskreis": 16,
+  "LK_Osterzgebirge"  : 16,
+  "SK_Dresden"        : 16
 }
 
 
@@ -378,7 +399,8 @@ function getGithubData() {
   }
 
 
-  // input data on number of tests always from server (-> cron-job!)
+  // input data on number of tests and German RKI data
+  // always from server (-> cron-job!)
   // since original json file too big
   // because of annoying undefined time order in fetch, set at beginnng!
 
@@ -387,6 +409,10 @@ function getGithubData() {
   console.log("dataGit2=",dataGit2);
   console.log("dataGit2.England.data[100]=",dataGit2.England.data[100]);
 
+  dataRKI = JSON.parse(dataRKI_string); // must be different name!!
+  console.log("dataRKI=",dataRKI);
+  console.log("dataRKI[SK_Dresden]=",dataRKI["SK_Dresden"]);
+  console.log("dataRKI[SK_Dresden][190]=",dataRKI["SK_Dresden"][190]);
 
   // other data can be brought life by fetch on modern browsers
 
@@ -449,6 +475,10 @@ function insertLeadingZeroes(dateStr){
 
 function initializeData(country) { 
   var country2=(country==="United Kingdom") ? "England" : country;
+  useLandkreise=(country==="LK_Erzgebirgskreis")
+    || (country==="LK_Osterzgebirge") || (country==="SK_Dresden");
+  if(useLandkreise){country2="Germany";}
+  useLiveData=(useLandkreise) ? false : useLiveDataInit;
   console.log("in initializeData(country): country=",country,
 	      " country2=",country2);
   console.log(" Rtime.length=",Rtime.length);
@@ -457,7 +487,7 @@ function initializeData(country) {
   // MT 2020-09  // [] access for strings works ONLY with "" or string vars
   // . access ONLY for literals w/o string ""
 
-  var data=dataGit[country];
+  var data=(useLandkreise) ? dataRKI[country] : dataGit[country];
   var dateInitStr=data[0]["date"];
 
   var data2=dataGit2[country2].data;
@@ -482,6 +512,7 @@ function initializeData(country) {
     var nxtStart=data[data_idataStart]["confirmed"];
 
     console.log(
+      "\n\n\nTesting the overall read data structure:",
       "\ndata.length=",data.length,"  data2.length=",data2.length,
       "\ndata_idataStart=",data_idataStart,
       "  data2_idataStart=",data2_idataStart,
@@ -502,21 +533,43 @@ function initializeData(country) {
 
 
   // extract main data
+  // reset all arrays since RKI sources have other length than country data
+
+  data_date=[]; 
+  data_cumCases=[];
+  data_cumDeaths=[];
+  data_cumRecovered=[];
+  data_cumCfr=[];
+
+  // also for derived data (unless test numbers) used in simulation
+
+  data_dn=[];
+  data_dxt=[];
+  data_dyt=[];
+  data_dz=[];
+  data_posRate=[];
+  data_cfr=[];
+
 
   var itmaxData=data.length;
   for(var it=0; it<itmaxData; it++){
     data_date[it]=data[it]["date"];
     data_cumCases[it]=data[it]["confirmed"];
     data_cumDeaths[it]=data[it]["deaths"];
-    data_cumRecovered[it]=data[it]["recovered"];
+    data_cumRecovered[it]=(useLandkreise) ? 0 : data[it]["recovered"];
     data_cumCfr[it]=(data_cumCases[it]==0)
       ? 0 : data_cumDeaths[it]/data_cumCases[it];
-    if(false){
+  }
+
+
+  if(false){
+    for(var it=0; it<itmaxData; it++){
 	  console.log("it=",it," data_date=",data_date[it],
-		      "\n data_cumCases=",data_cumCases[it],
+		      " data_cumCases=",data_cumCases[it],
 		      " data_cumDeaths=",data_cumDeaths[it],
 		      " data_cumRecovered=",data_cumRecovered[it]);
     }
+    console.log("data_cumCases.length=",data_cumCases.length);
   }
 
 
@@ -655,7 +708,7 @@ function initializeData(country) {
 
   for(var i=0; i<itmaxData; i++){
     data_posRate[i]=data2_posRate[i+di];
-    data_dn[i]=data_dxt[i]/data_posRate[i];// more stable
+    data_dn[i]=data_dxt[i]/data_posRate[i];// more stable //!!!!check with RKI
     if(!((data_dn[i]>0)&&(data_dn[i]<1e11))){data_dn[i]=0;}
     var dnTauPos=data2_cumTestsCalc[i+di]-data2_cumTestsCalc[i+di-tauPos];
    
@@ -1026,8 +1079,8 @@ function SSEfunc(Rarr, fR, logging, itStartInp, itMaxInp,
   else{
     if(logging){console.log("SSEfunc; initializing from scratch with data");}
     fracDie=IFRfun_time(betaIFRinit,-20); //!!
-    //corona.init(itStart, logging); 
-    corona.init(itStart, false); 
+    corona.init(itStart, logging); 
+    //corona.init(itStart, false); 
   }
   
   
@@ -1384,9 +1437,9 @@ function calibrate(){
     Rtime[ir] -=0.00;
   }
 
-  
+  //!! here logging can be true for check of corona.update and corona.init!!
   //var logging=false;  //calibrate()
-  var logging=false;
+  var logging=true; 
   sse=SSEfunc(Rtime,null,logging,0,data_itmax-1); // -1 because it: it->it+1
   console.log("leaving calibrate(): Rtime.length=",Rtime.length,
 	      "\n final R values=",Rtime,
@@ -2468,7 +2521,7 @@ CoronaSim.prototype.updateOneDay=function(R,it,logging){
       "end CoronaSim.updateOneDay: it=",it," R=",R.toPrecision(2),
       " this.xAct=",this.xAct.toPrecision(3),
       " this.xyz=",this.xyz.toPrecision(3),
-      " pTest=",pTest.toPrecision(3),
+     // " pTest=",pTest.toPrecision(3), //!!!! undefined for Dresden etc
      // " this.y=",this.y.toPrecision(3),
       " this.z=",this.z.toPrecision(3),
 	//	" nxt=n0*this.xt=",Math.round(n0*this.xt),
@@ -3160,7 +3213,6 @@ DrawSim.prototype.transferRecordedData=function(){
 //######################################################################
 
 // windows 0,1
-
   this.dataG[4].data=data_cumCases;  // by reference
   this.dataG[5].data=data_cumRecovered;
   this.dataG[6].data=data_cumDeaths;
@@ -3186,7 +3238,6 @@ DrawSim.prototype.transferRecordedData=function(){
   var dzSmooth=smooth(data_dz,kernel);
   var posRateSmooth=smooth(data_posRate,kernel);
   var cfrSmooth=smooth(data_cfr,kernel);
-  //var ifrSmooth=smooth(data_ifr,kernel);
 
   
 
@@ -3201,7 +3252,8 @@ DrawSim.prototype.transferRecordedData=function(){
   //this.dataG[22].data=ifrSmooth;//!! now [22] reserved for sim ifr=fracDie
 
   if(false){
-    console.log("\n\nDrawSim.transferRecordedData:");
+    console.log("\n\nDrawSim.transferRecordedData: data_cumCases.length=",
+		data_cumCases.length);
     for(var q=0; q<this.dataG.length; q++){
       if(this.dataG[q].type<3){
 	data=this.dataG[q].data;

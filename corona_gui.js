@@ -323,7 +323,7 @@ function shiftX(){ // if moving time window; xPix always orig drawn pixel
 
 function drawMouseAnnotations(){ 
 
-  console.log("drawMouseAnnotations: xPixArr.length=",xPixArr.length);
+  //console.log("drawMouseAnnotations: xPixArr.length=",xPixArr.length);
 
   // draw if distance between 2 points not too large (-> new stroke)
   var distCrit=30;  // in pixels; only draw if points closer together

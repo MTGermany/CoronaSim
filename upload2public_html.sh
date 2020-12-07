@@ -10,9 +10,9 @@ ger2eng.sh
 
 
 cp corona.js tmp.js
-perl -i -p -e 's/var useLiveData=true/var useLiveData=false/g' tmp.js
+perl -i -p -e 's/var useLiveDataInit=true/var useLiveDataInit=false/g' tmp.js
 cp tmp.js $target/coronaNonlive.js
-perl -i -p -e 's/var useLiveData=false/var useLiveData=true/g' tmp.js
+perl -i -p -e 's/var useLiveDataInit=false/var useLiveDataInit=true/g' tmp.js
 cp tmp.js $target/corona.js
 
 cp index.html indexNonlive.html
