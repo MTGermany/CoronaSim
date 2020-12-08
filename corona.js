@@ -9,6 +9,8 @@
 var useLiveDataInit=false;  //!! will be changed by upload script, 2 versions
 var useLiveData=useLiveDataInit;
 
+var loggingDebug=false; //!! global var for testing functions inside calibr
+
 // debugApple=true for debugging of devices w/o console (ipad) redirect
 // it to a html element using console-log-html.js
 // copy corona.js to coronaDebugApple.js and 
@@ -21,6 +23,7 @@ var activateAnnotations=true; // if true, annotations can be drawn with mouse
 
 
 var country="Germany";
+var country2="Germany"; // needed for test data if(useLandkreise)
 var countryGer="Deutschland";
 var useLandkreise=false; // MT 2020-12-07: =true for new RKI Landkreis data
 
@@ -474,15 +477,15 @@ function insertLeadingZeroes(dateStr){
 
 
 function initializeData(country) { 
-  var country2=(country==="United Kingdom") ? "England" : country;
+  country2=(country==="United Kingdom") ? "England" : country;
   useLandkreise=(country==="LK_Erzgebirgskreis")
     || (country==="LK_Osterzgebirge") || (country==="SK_Dresden");
   if(useLandkreise){country2="Germany";}
   useLiveData=(useLandkreise) ? false : useLiveDataInit;
-  console.log("in initializeData(country): country=",country,
-	      " country2=",country2);
-  console.log(" Rtime.length=",Rtime.length);
-
+  console.log("\n\n======================================================",
+	      "\nin initializeData(country): country=",country,
+	      " country2=",country2,
+	      "\n========================================================");
 
   // MT 2020-09  // [] access for strings works ONLY with "" or string vars
   // . access ONLY for literals w/o string ""
@@ -493,16 +496,46 @@ function initializeData(country) {
   var data2=dataGit2[country2].data;
   var dateInitStr2=data2[0]["date"];
 
+
  // define time shifts start date - start date of the two data sources 
 
   data_dateBegin=new Date(insertLeadingZeroes(dateInitStr));
   data_idataStart=Math.round( // absolute index
     (startDay.getTime() - data_dateBegin.getTime() )/oneDay_ms);
-  data_itmax=data.length-data_idataStart; // relative index
 
   data2_dateBegin=new Date(insertLeadingZeroes(dateInitStr2));
   data2_idataStart=Math.round(
     (startDay.getTime() - data2_dateBegin.getTime() )/oneDay_ms);
+
+
+  // MT 2020-12-10: Check if already cases at intended sim start day
+  // if less than 10 days of cases at start, shift sim start forwards
+
+  var daysCasesWarmupMin=10;
+  var iFirstCase=0;
+  var success=false;
+  for(var i=0; (i<data.length)&&(!success); i++){
+    if(data[i]["confirmed"]>0){ // later data_cumCases[i]
+      iFirstCase=i;
+      success=true;
+    }
+  }
+
+  if(data_idataStart<iFirstCase+daysCasesWarmupMin){ // shift start of sim
+    var daysForwards=iFirstCase+daysCasesWarmupMin-data_idataStart;
+    data_idataStart+=daysForwards;
+    data2_idataStart+=daysForwards;
+    startDay=new Date(2020,02,dayStartMar+daysForwards);
+    itmaxinit -= daysForwards;
+    itmax=itmaxinit;
+    console.log("Warning: no data >=ten days before sim start",
+		"\n => shift start date by ",daysForwards,
+		" days to ",data2[data2_idataStart]["date"]);
+  }
+
+ // define time shifts start date - start date of the two data sources 
+
+  data_itmax =data.length-data_idataStart; // relative index
   data2_itmax=data2.length-data2_idataStart;
 
 
@@ -512,7 +545,7 @@ function initializeData(country) {
     var nxtStart=data[data_idataStart]["confirmed"];
 
     console.log(
-      "\n\n\nTesting the overall read data structure:",
+      "\nTesting the overall read data structure:",
       "\ndata.length=",data.length,"  data2.length=",data2.length,
       "\ndata_idataStart=",data_idataStart,
       "  data2_idataStart=",data2_idataStart,
@@ -551,23 +584,22 @@ function initializeData(country) {
   data_cfr=[];
 
 
-  var itmaxData=data.length;
-  for(var it=0; it<itmaxData; it++){
-    data_date[it]=data[it]["date"];
-    data_cumCases[it]=data[it]["confirmed"];
-    data_cumDeaths[it]=data[it]["deaths"];
-    data_cumRecovered[it]=(useLandkreise) ? 0 : data[it]["recovered"];
-    data_cumCfr[it]=(data_cumCases[it]==0)
-      ? 0 : data_cumDeaths[it]/data_cumCases[it];
+  for(var i=0; i<data.length; i++){
+    data_date[i]=data[i]["date"];
+    data_cumCases[i]=data[i]["confirmed"];
+    data_cumDeaths[i]=data[i]["deaths"];
+    data_cumRecovered[i]=(useLandkreise) ? 0 : data[i]["recovered"];
+    data_cumCfr[i]=(data_cumCases[i]==0)
+      ? 0 : data_cumDeaths[i]/data_cumCases[i];
   }
 
 
   if(false){
-    for(var it=0; it<itmaxData; it++){
-	  console.log("it=",it," data_date=",data_date[it],
-		      " data_cumCases=",data_cumCases[it],
-		      " data_cumDeaths=",data_cumDeaths[it],
-		      " data_cumRecovered=",data_cumRecovered[it]);
+    for(var i=0; i<data.length; i++){
+	  console.log("i=",i," data_date=",data_date[i],
+		      " data_cumCases=",data_cumCases[i],
+		      " data_cumDeaths=",data_cumDeaths[i],
+		      " data_cumRecovered=",data_cumRecovered[i]);
     }
     console.log("data_cumCases.length=",data_cumCases.length);
   }
@@ -576,12 +608,10 @@ function initializeData(country) {
 
   // extract test data (MT 2020-09)
 
-  var itmaxData2=data2.length;
-  for(var it=0; it<itmaxData2; it++){
-    data2_cumTests[it]=data2[it].total_tests;
-    data2_cumCases[it]=data2[it].total_cases;
-    data2_posRate[it]=data2[it].positive_rate;
-    //console.log("it=",it," data2[it]=",data2[it]);
+  for(var i2=0; i2<data2.length; i2++){
+    data2_cumTests[i2]=data2[i2].total_tests;
+    data2_cumCases[i2]=data2[i2].total_cases;
+    data2_posRate[i2]=data2[i2].positive_rate;
   }
 		
   // extract cumTests
@@ -589,39 +619,39 @@ function initializeData(country) {
   // interpolate them
 
   var firstTestsRecorded=false;
-  var it_last=0; // it for last defined cumul #tests
+  var i2_last=0; // i2 for last defined cumul #tests
   var directTestData=[]; // data given w/o inter/extrapolation
 
-  for(var it=0; it<itmaxData2; it++){
-    directTestData[it]= (!(typeof data2_cumTests[it] === "undefined"));
-    if(directTestData[it]){
-      var cumAct=data2_cumTests[it];
-      var cumLast=data2_cumTests[it_last];
+  for(var i2=0; i2<data2.length; i2++){
+    directTestData[i2]= (!(typeof data2_cumTests[i2] === "undefined"));
+    if(directTestData[i2]){
+      var cumAct=data2_cumTests[i2];
+      var cumLast=data2_cumTests[i2_last];
 
       if(firstTestsRecorded){ // already reference for past
-	for(var i=it_last+1; i<it; i++){
-	  data2_cumTests[i]=cumLast+(i-it_last)/(it-it_last)
+	for(var i=i2_last+1; i<i2; i++){
+	  data2_cumTests[i]=cumLast+(i-i2_last)/(i2-i2_last)
 	    *(cumAct-cumLast);
 	}
       }
 
       else{ // assume 21 days of tests before first reporting
-	var di=Math.min(it, 21); 
-	for(var i=it-di; i<it; i++){
-	  data2_cumTests[i]=(1+(i-it)/di)*cumAct;
+	var di=Math.min(i2, 21); 
+	for(var i=i2-di; i<i2; i++){
+	  data2_cumTests[i]=(1+(i-i2)/di)*cumAct;
 	}
-	for(var i=0; i<it-di; i++){
+	for(var i=0; i<i2-di; i++){
 	  data2_cumTests[i]=0;
 	}
       }
-      it_last=it;
+      i2_last=i2;
       firstTestsRecorded=true;
     }
 
-    if((it==itmaxData2-1)&&(it_last>0)){ // extrapolate if any data is defined
-      for(var i=it_last+1; i<itmaxData2; i++){
-	data2_cumTests[i]=data2_cumTests[it_last] + (i-it_last)
-	  * (data2_cumTests[it_last]-data2_cumTests[it_last-1]);
+    if((i2==data2.length-1)&&(i2_last>0)){ // extrapolate if any data is defined
+      for(var i=i2_last+1; i<data2.length; i++){
+	data2_cumTests[i]=data2_cumTests[i2_last] + (i-i2_last)
+	  * (data2_cumTests[i2_last]-data2_cumTests[i2_last-1]);
       }
     }
 
@@ -631,46 +661,46 @@ function initializeData(country) {
 
   // extract posRate and calculate cum tests (some countries do not have them)
 
-  it_last=0; // it for last defined posRate
+  i2_last=0; // i2 for last defined posRate
   data2_cumTestsCalc[0]=0;
 
-  for(var it=0; it<itmaxData2; it++){
-    if( !(typeof data2_posRate[it] === "undefined")){ //posRate given
+  for(var i2=0; i2<data2.length; i2++){
+    if( !(typeof data2_posRate[i2] === "undefined")){ //posRate given
 
-      var rateAct=data2_posRate[it];
-      var cumCasesLast=data2_cumCases[it_last];
-      var cumTestLast=(directTestData[it_last])
-	? data2_cumTests[it_last] : data2_cumTestsCalc[it_last];
+      var rateAct=data2_posRate[i2];
+      var cumCasesLast=data2_cumCases[i2_last];
+      var cumTestLast=(directTestData[i2_last])
+	? data2_cumTests[i2_last] : data2_cumTestsCalc[i2_last];
       
       // extrapolate  to beginning if cum. test data defined
 
-      if(it_last==0){ 
-	if(directTestData[it]){
-	  rateAct=data2_cumCases[it]/data2_cumTests[it];
+      if(i2_last==0){ 
+	if(directTestData[i2]){
+	  rateAct=data2_cumCases[i2]/data2_cumTests[i2];
 	}
 	data2_posRate[0]=rateAct;
       }
 
       // interpolate between dates of defined posRate
 
-      for(var i=it_last+1; i<=it; i++){
+      for(var i=i2_last+1; i<=i2; i++){
 	data2_posRate[i]=rateAct;
 	data2_cumTestsCalc[i]=(rateAct>0) 
 	  ? cumTestLast+(data2_cumCases[i]-cumCasesLast)/rateAct
 	  : 0;
       }
 
-      it_last=it;
+      i2_last=i2;
     }
 
     // extrapolate if last posRate data undefined
 
-    if((it==itmaxData2-1)&&(it_last !=it)){
-      var rateAct=data2_posRate[it_last];
-      var cumTestLast=data2_cumTestsCalc[it_last];
-      var cumCasesLast=data2_cumCases[it_last];
+    if((i2==data2.length-1)&&(i2_last !=i2)){
+      var rateAct=data2_posRate[i2_last];
+      var cumTestLast=data2_cumTestsCalc[i2_last];
+      var cumCasesLast=data2_cumCases[i2_last];
 
-      for(var i=it_last+1; i<itmaxData2; i++){
+      for(var i=i2_last+1; i<data2.length; i++){
 	data2_posRate[i]=rateAct;
 	data2_cumTestsCalc[i]=(rateAct>0) 
 	  ? cumTestLast+(data2_cumCases[i]-cumCasesLast)/rateAct
@@ -679,8 +709,6 @@ function initializeData(country) {
     }
   }
 
-
-  console.log("initializeData:");  // inside initializeData(country);
 
   // generate the data arrays (in data, not data2 time order) to be plotted
   // data_dx=estmation from data assuming 
@@ -697,7 +725,11 @@ function initializeData(country) {
   var tauPos=7; //!! keep const 1 week irresp. of tau sliders:
                 // tauPos=7 cancels out weekly pattern
 
-  for(var i=0; i<itmaxData; i++){
+  data_dxt[0]=0; 
+  data_dyt[0]=0;
+  data_dz[0]=0;
+
+  for(var i=1; i<data.length; i++){
     data_dxt[i]=data_cumCases[i]-data_cumCases[i-1];
     data_dyt[i]=data_cumRecovered[i]-data_cumRecovered[i-1];
     // in spain the def of deaths changed -> cum deaths reduced, dz<0
@@ -706,7 +738,16 @@ function initializeData(country) {
 
   // need new loop because of forward ref at cfr, ifr
 
-  for(var i=0; i<itmaxData; i++){
+  if(useLandkreise){
+    console.log(
+      "initializeData second round: calculating dn[] and data_pTestModel[]",
+      "\n n0=",n0,"(n0Germany not needed if useLandkreise",
+      " since rateAct in data used",
+      "\n useSqrtModel=",useSqrtModel,
+      "\n data_idataStart=",data_idataStart);
+  }
+
+  for(var i=0; i<data.length; i++){
     data_posRate[i]=data2_posRate[i+di];
     data_dn[i]=data_dxt[i]/data_posRate[i];// more stable //!!!!check with RKI
     if(!((data_dn[i]>0)&&(data_dn[i]<1e11))){data_dn[i]=0;}
@@ -742,7 +783,7 @@ function initializeData(country) {
         data_pTestModel[i]=Math.min(data_pTestModel[i],1);
       }
       else{// use proportional model
-	var pModel=10*7*data_dn[i]/n0; //!!! still used???
+	var pModel=10*7*data_dn[i]/n0;
 	data_pTestModel[i]=Math.max(pTestModelMin,Math.min(1,pModel));
       }
     }
@@ -751,8 +792,15 @@ function initializeData(country) {
       data_pTestModel[i]= pTestInit; //MT 2020-11 change from pTestModelMin
     }
 
-    //console.log("it=",i-data_idataStart," useSqrtModel=",useSqrtModel,
-//		" data_pTestModel[i]=",data_pTestModel[i]);
+    //if(useLandkreise&&
+    if(false&&
+       ((i-data_idataStart<4)||(i>data.length-4)||(i==data.length-20))){
+      console.log("initializeData: it=i-data_idataStart=",i-data_idataStart,
+		  " data_dxt[i]=",data_dxt[i],
+		  " data_dz[i]=",data_dz[i],
+		  " data_dn[i]=",data_dn[i].toFixed(1),
+		  " data_pTestModel[i]=",data_pTestModel[i].toFixed(3));
+    }
   }
 
 
@@ -772,9 +820,9 @@ function initializeData(country) {
   var avg1=[];
   for(var k=0; k<3; k++){// up to three weeks back
     avg0[k]=0; avg1[k]=0;
-    for(var is=0; is<7; is++){ // is always =6 at itmaxData-1 //!!!
-      avg0[k] += data_pTestModel[itmaxData-21+7*k+is]/7;
-      avg1[k] += data_dn[itmaxData-21+7*k+is]/7;
+    for(var is=0; is<7; is++){ // is always =6 at data.length-1 //!!!
+      avg0[k] += data_pTestModel[data.length-21+7*k+is]/7;
+      avg1[k] += data_dn[data.length-21+7*k+is]/7;
     }
   }
 
@@ -782,8 +830,8 @@ function initializeData(country) {
   for(var is=0; is<7; is++){
     season0[is]=0; season1[is]=0;
     for(var k=0; k<3; k++){
-      season0[is] += (data_pTestModel[itmaxData-21+7*k+is]-avg0[k])/3;
-      season1[is] += (data_dn[itmaxData-21+7*k+is]-avg1[k])/3;
+      season0[is] += (data_pTestModel[data.length-21+7*k+is]-avg0[k])/3;
+      season1[is] += (data_dn[data.length-21+7*k+is]-avg1[k])/3;
     }
     pTest_weeklyPattern[is]=avg0[2]+season0[is];
     dn_weeklyPattern[is]=avg1[2]+season1[is];
@@ -839,16 +887,16 @@ function initializeData(country) {
 
 
   // ###############################################
-  // debug; saisonal is always=6 at itmaxData-1
-  if(true){
-    console.log("");
-    //for(var i=0; i<itmaxData; i++){
+  // debug; saisonal is always=6 at data.length-1
+  if(false){
+    console.log("\ninitializeData: weekly pattern:");
+    //for(var i=0; i<data.length; i++){
     //for(var i=data_idataStart-5; i<=data_idataStart; i++){
-    for(var i=itmaxData-8; i<itmaxData; i++){ //!!!!
-    //if((i>itmaxData-30)&&(i<itmaxData)){
+    for(var i=data.length-8; i<data.length; i++){ //!!!!
+    //if((i>data.length-30)&&(i<data.length)){
       console.log(
 	insertLeadingZeroes(data[i]["date"]),": iData=",i,
-	" is=",(70000+i-itmaxData)%7,
+	" is=",(70000+i-data.length)%7,
 	" data_dn=",Math.round(data_dn[i]),
 	" data_dxt=",Math.round(data_dxt[i]),
 	" data_dyt=",Math.round(data_dyt[i]),
@@ -862,7 +910,7 @@ function initializeData(country) {
 
 
   if(false){
-    for(var it=itmaxData2-5; it<itmaxData2; it++){
+    for(var it=data2.length-5; it<data2.length; it++){
       var it2=it+data_idataStart-data2_idataStart;
       console.log("");
       console.log(data2[it]["date"],": it=",it,
@@ -907,6 +955,7 @@ function Rfun_time(Rarr, it){
   var iTest    =iPresent+Math.round(tauTest);
   var iTestPrev=iPresent+Math.round(tauTest-0.5*(tauRstart+tauRend));
 
+
   if(it<0){ // direct estimate from data 
     var nxtNewnum  =1./2.*(data_cumCases[iTest+1]-data_cumCases[iTest-1]);
     var nxtNewdenom=1./2.*(data_cumCases[iTestPrev+1]
@@ -917,20 +966,19 @@ function Rfun_time(Rarr, it){
     // (little R jumps <=> little jumps in sim new infections)
     // compared to fitted R (no data if iTestPrev<0!)
 
-    var R=((iTestPrev<0) ||(nxtNewdenom<1)) ? 5 : 0.90*nxtNewnum/nxtNewdenom;
+    var R=((iTestPrev>=0)&&(nxtNewdenom>0)) ? 0.90*nxtNewnum/nxtNewdenom : 4;
 
-    if(false){
-      console.log("Rfun_time: t=",it," xtCum(iTest)=",data_cumCases[iTest],
-		" xtCum(iTestPrev)=",data_cumCases[iTestPrev],
-		" xtNewnum=",xtNewnum,
-		" xtNewdenom=",xtNewdenom,
+    if(loggingDebug){ //!!! global variable; must=false in calibration
+      console.log("Rfun_time: it=",it," nxtCum(iTest)=",data_cumCases[iTest],
+		" nxtCum(iTestPrev)=",data_cumCases[iTestPrev],
+		" nxtNewnum=",nxtNewnum,
+		" nxtNewdenom=",nxtNewdenom,
 		"");
     }
 
-    R=(includeInfluenceTestNumber) // because test influence reduces true R
-      ? Math.min(5, Math.max(0.2,R))
-      : Math.min(5, Math.max(0.2,R));
+    R= Math.min(5, Math.max(0.2,R));
 
+    if(loggingDebug){console.log("Rfun_time: warmup: returning R=",R);} //!!!
     return R;
   }
 
@@ -976,7 +1024,7 @@ function Rfun_time(Rarr, it){
       }
       return R*seasonFactor/seasonFactorPresent;
     }
-
+    if(loggingDebug){console.log("Rfun_time: regular: returning R=",R);} //!!!
     return R;
   }
 }//Rfun_time
@@ -1049,8 +1097,10 @@ function SSEfunc(Rarr, fR, logging, itStartInp, itMaxInp,
   if(logging){
     console.log("\nEntering SSE func:",
 	//	" Rarr=",Rarr, "\n",
-		" itStart=",itStart," itMax=",itMax,
-		" data_itmax=",data_itmax," itmax=",itmax,
+		"\n start calibr segment: itStart=",itStart,
+		"\n end calibr segment: <itMax=",itMax,
+		"\n max it in data: <data_itmax=",data_itmax,
+		"\n present it: itmax=",itmax,
 		"\n takeSnapshot=",takeSnapshot,
 		" useInitSnap=",useInitSnap,
 		" itSnap=",itSnap,
@@ -1077,8 +1127,11 @@ function SSEfunc(Rarr, fR, logging, itStartInp, itMaxInp,
   }
 
   else{
-    if(logging){console.log("SSEfunc; initializing from scratch with data");}
     fracDie=IFRfun_time(betaIFRinit,-20); //!!
+    if(logging){
+      console.log("SSEfunc; initializing from scratch with data: fracDie=",
+		  fracDie);
+    }
     corona.init(itStart, logging); 
     //corona.init(itStart, false); 
   }
@@ -1276,6 +1329,11 @@ function getIndexCalibmax(itime){
 
 function calibrate(){
 
+  console.log("\n\n==================================================",
+	      "\nEntering calibrate(): country=",country,
+	      "\n====================================================");
+
+  console.log("\nEntering calibration of R ...");
 
   var Rcalib=[]; 
   for(var j=0; j<betaIFRinit.length; j++){ 
@@ -1291,9 +1349,8 @@ function calibrate(){
     itmax_c=data_itmax-1; 
     icalibmin=getIndexCalib(itmin_c);
     icalibmax=getIndexCalibmax(itmax_c);// *max: >=10d cal intv
-    Rcalib=[]; // init
     for(var icalib=icalibmin; icalib<=icalibmax; icalib++){
-      Rcalib[icalib-icalibmin]=(icalib==0) ? 1.2 : 1; //!!
+      Rcalib[icalib-icalibmin]=(icalib==0) ? 1.2 : 1.111 //!!
     }
        
     //#####################################
@@ -1410,38 +1467,18 @@ function calibrate(){
 
   } // calbrate R with multiple periods
 
-  //!!!! QUICK HACK for some F...... reason Rtime SOMETIMES
-  // has one superfluous element on web with SAME model and data as locally;
-  // reset this superfluous element to last value
-
- 
-  if(true){//!!!!
-  //if(Rtime.length>getIndexCalibmax(itmaxinit)){
-    console.log("\n\n\n\nCalibration: Rtime.length=",Rtime.length,
-		" getIndexCalibmax(itmaxinit)=",getIndexCalibmax(itmaxinit));
-    if(false){
-      console.log("\nquick hack: reset strange superfluous element(s)",
-		  " of Rtime to last regular element ",
-		  Rtime[getIndexCalibmax(itmaxinit)-1]);
-      for(var ir=getIndexCalibmax(itmaxinit); ir<Rtime.length; ir++){
-	Rtime[ir]=Rtime[getIndexCalibmax(itmaxinit)-1];
-      }
-    }
-  }
-  
-
-  // !!!! Systematic endpoint calibr bias => decrease last R by 0.1
-  // see quick hack above
-  
-  for(var ir=getIndexCalibmax(itmaxinit)-1; ir<Rtime.length; ir++){
-    Rtime[ir] -=0.00;
-  }
 
   //!! here logging can be true for check of corona.update and corona.init!!
-  //var logging=false;  //calibrate()
-  var logging=true; 
+
+  var logging=false;  //!!!
+  //var logging=true; //!!!
+
+  if(logging){
+    console.log("\nCalibration of R finished: testing SSEfunc calc. ...");
+  }
+
   sse=SSEfunc(Rtime,null,logging,0,data_itmax-1); // -1 because it: it->it+1
-  console.log("leaving calibrate(): Rtime.length=",Rtime.length,
+  console.log("calibrate(): calibrating R finished",
 	      "\n final R values=",Rtime,
 	      "\n fit quality sse=",sse);
   console.log("itmaxinit=",itmaxinit,
@@ -1467,7 +1504,7 @@ function calibrate(){
   herd immunity xyzTot: more deaths<->less healed<->xyzTot
   ############################################################## */
 
-  //console.log("\n\ncalibrating IFR ...betaIFRinit=",betaIFRinit);
+  console.log("\n\ncalibrate(): entering calibration of IFR ...");
 
   var betaIFRcal=[]; // init for calibration
 
@@ -1794,7 +1831,7 @@ function SSEfuncIFR(beta, grad, logging) {
     // penalty for IFR<=0 //!!
 
     var IFRmin=5e-4;
-    var penalty0=1000*nData;
+    var penalty0=10000*Math.max(nData,1);
     if(fracDie<IFRmin){
       sseIFR += penalty0*Math.pow((IFRmin-fracDie)/fracDie,2);
     }
@@ -1873,7 +1910,6 @@ function toggleTestnumber(){ // callback html "testnumber"
 
 
 function selectDataCountry(){ // callback html select box "countryData"
-  console.log("\nin selectDataCountry(): itmax=",itmaxinit);
   itmax=itmaxinit;
   country=document.getElementById("countries").value;
   countryGer=countryGerList[country];
@@ -1882,13 +1918,18 @@ function selectDataCountry(){ // callback html select box "countryData"
   tauRecover=parseFloat(tauRecoverList[country]);
   tauDie=parseFloat(tauDieList[country]);
   taumax=Math.max(tauDie,tauRecover)+tauAvg+1;
-  console.log("country=",country);
-  console.log("selectDataCountry: country=",country,
-	      " Rtime.length=",Rtime.length); 
   setSlider(slider_R0,  slider_R0Text,  Rtime[0].toFixed(2),"");
 
   document.getElementById("title").innerHTML=
     "Simulation der Covid-19 Pandemie "+ countryGer;
+
+  if(false){console.log("\n\nin selectDataCountry",
+	      "\n (only called in html select box callback",
+	      " and in myResetFunction()):",
+	      "\n country=",country,
+	      " country2=",country2,
+	      " itmax=itmaxinit=",itmaxinit);
+	   }
 
   initializeData(country);
 
@@ -2175,10 +2216,20 @@ CoronaSim.prototype.init=function(itStart,logging){
 
   // data-driven warmup
 
-  for(var its=it0; its<itStart; its++){ 
-    var Rt=Rfun_time(Rtime,its);
+  //loggingDebug=logging&&useLandkreise; // !!! global variable
+  loggingDebug=false; // !!! global variable
 
-    if(logging&&(it==-10)){console.log("corona.init warmup before update: its=",its,
+  if(loggingDebug){
+    console.log("corona.init warmup:  it0=",it0," itStart=",itStart,
+		"\n Rtime=",Rtime);
+  }
+
+  for(var its=it0; its<itStart; its++){ 
+    var Rt=Rfun_time(Rtime,its); // !!! uses loggingDebug as global variable
+
+    //if(logging&&useLandkreise){
+    if(logging&&false){
+      console.log("corona.init warmup before update: its=",its,
 			    " pTest=",pTest.toPrecision(3),
 			    " R=",Rt.toFixed(2),
 			    " ndx=",(n0*this.x[0]).toPrecision(3),
@@ -2187,7 +2238,7 @@ CoronaSim.prototype.init=function(itStart,logging){
 			    "");}
     this.updateOneDay(Rt,its,logging); // in CoronaSim, data-driven warmup
   }
-
+  loggingDebug=false; 
 
 
   if(logging){
@@ -2335,17 +2386,17 @@ CoronaSim.prototype.updateOneDay=function(R,it,logging){
 
 
 
-  //if(logging){  //filter needed because of called mult times in calibr!
-  if(logging&&false){
+  //if(logging){  //filter because of called mult times in calibr!
+  if(logging&&useLandkreise&&(it<10)){//filter because of calibr!
   //if(logging&&((it==-10)||(it==10))){
     console.log(
       "Enter CoronaSim.updateOneDay: it=",it," R=",R.toPrecision(2),
-      " this.xAct=",this.xAct.toPrecision(3),
-      " this.xyz=",this.xyz.toPrecision(3),
-      " this.y=",this.y.toPrecision(3),
-      " this.z=",this.z.toPrecision(3),
+      " this.xAct=",this.xAct.toPrecision(2),
+      " this.xyz=",this.xyz.toPrecision(2),
+      " this.y=",this.y.toPrecision(2),
+      " this.z=",this.z.toPrecision(2),
       " nxt=n0*this.xt=",Math.round(n0*this.xt),
-      " fracDie=",fracDie.toPrecision(3),
+      " fracDie=",fracDie.toPrecision(2),
       " nzSim=",Math.round(n0*this.xt),
       //"\n  this.x[tauDie-1]=",this.x[tauDie-1].toPrecision(3),
       //"\n  this.x[tauDie]=",this.x[tauDie].toPrecision(3),
@@ -2439,7 +2490,8 @@ CoronaSim.prototype.updateOneDay=function(R,it,logging){
   // (1) simulated positive tests
   // test time ~ U(tauTest-tauAvg/2,tauTest+tauAvg/2) over infection age
 
-  var idata=it+data_idataStart+1; // sim from it to it+1, hence "+1"
+  // sim from it to it+1, hence "+1"
+  var idata=Math.max(it+data_idataStart+1, 0); 
 
   // possibly override slider-controlled pTest with the square-root model;
   // in forecast mode constant trend  with seasonal pattern
@@ -2515,7 +2567,8 @@ CoronaSim.prototype.updateOneDay=function(R,it,logging){
 
   // control output (it is undefined here!)
 
-  if(logging&&true){ // filter needed because called in calibration!
+  if(false){ // filter needed because called in calibration
+  //if(logging&&useLandkreise&&(it<10)){ // filter needed because calibration!
 
     console.log(
       "end CoronaSim.updateOneDay: it=",it," R=",R.toPrecision(2),
@@ -2657,11 +2710,8 @@ function DrawSim(){
 
   this.unitPers=1000;  // persons counted in multiples of unitPers
 
-  this.yminType=[0,1,0,0,0,0];   // lin,log,act0,act1,act2
-  this.ymaxType=[10,7,10,10,10,10];   // lin,log,act0,act1,act2
-  this.ymaxPerc=20;
-  this.ymaxLin=11;
-  this.ymaxLog=7;
+  this.yminType=[0,1,0,0,0,0];   // cum,log,infected,data,rates,cases(default)
+  this.ymaxType=[1,6,2,2,2,2];   // 
 
 
 
@@ -3274,9 +3324,10 @@ DrawSim.prototype.transferRecordedData=function(){
 DrawSim.prototype.checkRescaling=function(it){
 //######################################################################
 
+  // windows={cum,log,infected,data,rates,cases(default)}
+
   //console.log("\ndrawsim.checkRescaling: it=",it," itmax=",itmax);
   var erase=false;
-
 
   // (1) possible rescaling in x
 
@@ -3324,10 +3375,11 @@ DrawSim.prototype.checkRescaling=function(it){
     }
   }
 
+
  // (3) restrict scalings for some windows
 
   this.ymaxType[4]=Math.min(this.ymaxType[4], 20); // rel quant. <=20 %
-  this.ymaxType[0]=Math.max(this.ymaxType[0], 10); // abs lin to 20
+  this.ymaxType[0]=Math.max(this.ymaxType[0], 1); // abs lin to 20
 
   // (4) do actions
 
@@ -3431,7 +3483,8 @@ DrawSim.prototype.draw=function(it){
 
   // draw axes 
 
-  if((it==0)||hasChanged){
+  //if((it==0)||hasChanged){
+  if(true){
     this.clear();
     //this.drawAxes(windowG);
   }
