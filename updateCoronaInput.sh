@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# get local data from some Saxony Landkreise
+
+updateLandkreisData.sh
+
+
 #####################################################################
 # get data from the covid.ourworldindata website
 #####################################################################

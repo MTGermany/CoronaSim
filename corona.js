@@ -416,7 +416,6 @@ function getGithubData() {
 
   dataRKI = JSON.parse(dataRKI_string); // must be different name!!
   console.log("dataRKI=",dataRKI);
-  console.log("dataRKI[SK_Dresden]=",dataRKI["SK_Dresden"]);
   console.log("dataRKI[SK_Dresden][190]=",dataRKI["SK_Dresden"][190]);
 
   // other data can be brought life by fetch on modern browsers
@@ -804,7 +803,7 @@ function initializeData(country) {
   // debug (saisonal is always=6 at data.length-1)
   // ###############################################
 
-  if(true){
+  if(false){
     console.log("\ninitializeData finished: final data:");
     for(var i=0; i<data.length; i++){
       //var logging=useLandkreise&&(i>data.length-10);
@@ -830,7 +829,7 @@ function initializeData(country) {
     }
   }
 
-  if(true){
+  if(false){
     console.log("\ninitializeData finished: final weekly pattern:");
     for(var i=0; i<data.length; i++){
       //var logging=useLandkreise&&(i>data.length-10);
@@ -1878,8 +1877,7 @@ function selectWindow(){ // callback html select box "windowGDiv"
   drawsim.transferSimData(it);
 
   drawsim.draw(it);
-  //drawsim.drawOld(it,windowG,corona.xAct,corona.xt,
-//		       corona.y,corona.yt,corona.z); // !! also scales anew
+
 }
 
 
@@ -3183,13 +3181,7 @@ DrawSim.prototype.transferSimData=function(it){
     *(this.dataG[0].data[it]-this.dataG[0].data[Math.max(it-7,0)]);
   this.dataG[33].data[it]=100000/n0
     *(this.dataG[2].data[it]-this.dataG[2].data[Math.max(it-7,0)]);
-  if(true){
-    console.log("in drawsim.transferSimData: it=",it,
-		" nxsimIncidence=",this.dataG[32].data[it],
-		" nzsimIncidence=",this.dataG[33].data[it],
-		"");
-  }
-
+  
 
   // get yt  from balance xt past, zt=z
 
@@ -3226,7 +3218,9 @@ DrawSim.prototype.transferSimData=function(it){
 DrawSim.prototype.transferRecordedData=function(){
 //######################################################################
 
-  console.log("\nin drawsim.transferRecordedData");
+  console.log("\nin drawsim.transferRecordedData: it=",it,
+	      " for unnoying unknown reason repeated several times",
+	      " only at loading");
 // windows 0,1
   this.dataG[4].data=data_cumCases;  // by reference
   this.dataG[5].data=data_cumRecovered;
@@ -3276,7 +3270,8 @@ DrawSim.prototype.transferRecordedData=function(){
   for(var i=6; i<data_dxt.length; i++){
     data_dxIncidence[i]=cases_smooth[i-3]*700000/n0;
     data_dzIncidence[i]=deaths_smooth[i-3]*700000/n0;
-    if(i>data_dxt.length-14){
+    if(false){
+    //if(i>data_dxt.length-14){
       console.log("i=",i," data_dxIncidence[i]=",data_dxIncidence[i],
 		  " data_dzIncidence[i]=",data_dzIncidence[i]);
     }
@@ -3339,7 +3334,6 @@ DrawSim.prototype.checkRescaling=function(it){
   // (2) possible rescaling in y for all the graph windows
 
   for(var iw=0; iw<this.qselect.length; iw++){ //windows
-    console.log("iw=",iw," this.qselect[iw].length=",this.qselect[iw].length);
     for(iq=0; iq<this.qselect[iw].length; iq++){ // quantity selector
       var q=this.qselect[iw][iq];
       var data=this.dataG[q].data;
@@ -3351,7 +3345,7 @@ DrawSim.prototype.checkRescaling=function(it){
       if(value>this.ymaxType[iw]){
 	this.ymaxType[iw]=value;
 	erase=true;
-	if(iw==6){
+	if(false){
 	  console.log(
 	    "checkRescaling: new maximum! it=",it, "window iw=",iw,
 	    " quantity q=",q," i=",i,
@@ -3459,7 +3453,7 @@ DrawSim.prototype.draw=function(it){
     //}
   }
 
-  // initialize: transfer new data and redraw whole graphics
+  // transfer new data and redraw whole graphics
 
   this.transferSimData(it);
   if(it==0){this.transferRecordedData()}; 

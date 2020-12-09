@@ -6,11 +6,13 @@
 #curl -s https://github.com/jgehrcke/covid-19-germany-gae/blob/master/deaths-rki-by-ags.csv -o Germany_Kreise_deaths.csv
 
 
-#wget https://github.com/jgehrcke/covid-19-germany-gae/blob/master/cases-rki-by-ags.csv --output-document=RKI_cases_Landkreise.csv
-#wget  https://github.com/jgehrcke/covid-19-germany-gae/blob/master/deaths-rki-by-ags.csv --output-document=RKI_deaths_Landkreise.csv
+wget https://github.com/jgehrcke/covid-19-germany-gae/blob/master/cases-rki-by-ags.csv --output-document=data/RKI_cases_Landkreise.csv
+wget  https://github.com/jgehrcke/covid-19-germany-gae/blob/master/deaths-rki-by-ags.csv --output-document=data/RKI_deaths_Landkreise.csv
 
-cp RKI_deaths_Landkreise.csv RKI_deaths_selected.csv
-cp RKI_cases_Landkreise.csv RKI_cases_selected.csv
+# all csv files in main directory are temporary
+
+cp data/RKI_deaths_Landkreise.csv RKI_deaths_selected.csv
+cp data/RKI_cases_Landkreise.csv RKI_cases_selected.csv
 
 # delete anything till string "time_iso8601" (including)
 
@@ -87,20 +89,25 @@ perl -i -p -e "s/^.*\<tbody.*$/\"LK_Osterzgebirge\":  [/g" RKI_Kreis14628.json
 
 perl -i -p -e "s/^.*\<\/tbody.*$/]\}/g" RKI_Kreis*.json
 
-cat RKI_Kreis*.json > RKI_selectedKreise.json
+cat RKI_Kreis*.json > data/RKI_selectedKreise.json
 
 # do final touches on structure (eliminate newlines, some commas etc)
 
-perl -i -p -e 's/\n//g' RKI_selectedKreise.json
+perl -i -p -e 's/\n//g' data/RKI_selectedKreise.json
 
-perl -i -p -e 's/\}\,\]\}\"/\}\]\,  \"/g' RKI_selectedKreise.json
-perl -i -p -e "s/\}\,\]\}/\}\]\}\'/g" RKI_selectedKreise.json
+perl -i -p -e 's/\}\,\]\}\"/\}\]\,  \"/g' data/RKI_selectedKreise.json
+perl -i -p -e "s/\}\,\]\}/\}\]\}\'/g" data/RKI_selectedKreise.json
 
 # rename "cases" by "confirmed" since this is the name in github.json
 
-perl -i -p -e 's/cases/confirmed/g' RKI_selectedKreise.json
+perl -i -p -e 's/cases/confirmed/g' data/RKI_selectedKreise.json
 
-echo "produced RKI_selectedKreise.json"
+# clean up
+
+rm RKI_Kreis*.json RKI_*.csv
+
+
+echo "produced data/RKI_selectedKreise.json"
 
 
 
