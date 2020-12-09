@@ -21,23 +21,10 @@ perl -i -p -e 's/Simulation der Covid-19 Pandemie/Simulation of the Covid-19 Pan
 
 perl -i -p -e 's/\"de\"/\"en\"/g' *_eng.html
 
-perl -i -p -e 's/Deutschland/Germany/g' *_eng.html
-perl -i -p -e 's/\&Ouml\;sterreich/Austria/g' *_eng.html
-perl -i -p -e 's/Tschechien/Czechia/g' *_eng.html
-perl -i -p -e 's/Frankreich/France/g' *_eng.html
-perl -i -p -e 's/England/UK/g' *_eng.html
-perl -i -p -e 's/Italien/Italy/g' *_eng.html
-perl -i -p -e 's/Polen/Poland/g' *_eng.html
-perl -i -p -e 's/Spanien/Spain/g' *_eng.html
-perl -i -p -e 's/Schweden/Sweden/g' *_eng.html
-perl -i -p -e 's/Schweiz/Swizzerland/g' *_eng.html
-perl -i -p -e 's/Indien/India/g' *_eng.html
-perl -i -p -e 's/Russland/Russia/g' *_eng.html
-perl -i -p -e 's/Australien/Australia/g' *_eng.html
 
 perl -i -p -e 's/kumulierte F\&auml\;lle/Cumulated cases/g' *_eng.html
 perl -i -p -e 's/F\&auml\;lle vs\. Infizierte/Cases vs\. infected/g' *_eng.html
-perl -i -p -e 's/F\&auml\;lle/Cases/g' *_eng.html
+perl -i -p -e 's/T\&auml\;gliche F\&auml\;lle/Daily cases/g' *_eng.html
 perl -i -p -e 's/Daten\: Tests/Tests/g' *_eng.html
 
 perl -i -p -e 's/Infektionsraten/Infection rates/g' *_eng.html
@@ -75,6 +62,12 @@ perl -i -p -e 's/Simulierte Durchseuchung/Simulated contamination/g' corona_eng.
 perl -i -p -e 's/Simulierte False Positives pro Tag/Simulated daily false positives/g' corona_eng.js
 perl -i -p -e 's/Simulierte Gestorbene pro Tag/Simulated daily deaths/g' corona_eng.js
 perl -i -p -e 's/Simulierte Test-Positive pro Tag/Simulated daily cases/g' corona_eng.js
+perl -i -p -e 's/Wochen\-Inzidenz/Weekly incidence/g' *_eng.html
+perl -i -p -e 's/Wocheninzidenz pro/Weekly incidence per/g' corona_eng.js
+perl -i -p -e 's/Wocheninzidenz/Weekly incidence/g' corona_eng.js
+
+perl -i -p -e 's/W\&ouml\;chentlich Gestorbene/Weekly deaths per/g' corona_eng.js
+
 perl -i -p -e 's/Personenzahl/\# Persons/g' corona_eng.js
 perl -i -p -e 's/Personen/Persons/g' corona_eng.js
 perl -i -p -e 's/taegliche Zahlen/Daily figures/g' corona_eng.js
@@ -89,7 +82,26 @@ perl -i -p -e 's/Tage/days/g' corona_eng.js corona_gui_eng.js *_eng.html
 perl -i -p -e 's/pro Tag/per day/g' corona_eng.js corona_gui_eng.js
 perl -i -p -e 's/Tag/day/g' corona_eng.js corona_gui_eng.js
 perl -i -p -e 's/Simulierte/Simulated/g' corona_eng.js
+perl -i -p -e 's/Faelle/cases/g' corona_eng.js
+perl -i -p -e 's/Pers\./pers\./g' corona_eng.js
+perl -i -p -e 's/Woche/week/g' corona_eng.js
+perl -i -p -e 's/Ew\./inhabitants/g' corona_eng.js
 
+perl -i -p -e 's/Deutschland/Germany/g' *_eng.html *_eng.js
+perl -i -p -e 's/Oesterreich/Austria/g' *_eng.html *_eng.js
+perl -i -p -e 's/\&Ouml\;sterreich/Austria/g' *_eng.html
+perl -i -p -e 's/Tschechien/Czechia/g' *_eng.html *_eng.js
+perl -i -p -e 's/Frankreich/France/g' *_eng.html *_eng.js
+perl -i -p -e 's/England/UK/g' *_eng.html *_eng.js
+perl -i -p -e 's/Italien/Italy/g' *_eng.html *_eng.js
+perl -i -p -e 's/Polen/Poland/g' *_eng.html *_eng.js
+perl -i -p -e 's/Spanien/Spain/g' *_eng.html *_eng.js
+perl -i -p -e 's/Schweden/Sweden/g' *_eng.html *_eng.js
+perl -i -p -e 's/Schweiz/Swizzerland/g' *_eng.html *_eng.js
+perl -i -p -e 's/Indien/India/g' *_eng.html *_eng.js
+perl -i -p -e 's/Russland/Russia/g' *_eng.html *_eng.js
+perl -i -p -e 's/Ru\&szlig\;land/Russia/g' *_eng.html
+perl -i -p -e 's/Australien/Australia/g' *_eng.html
 
 echo "created *_eng.html corona_eng.js corona_gui_eng.js"
 

@@ -52,7 +52,8 @@ var useLandkreise=false; // MT 2020-12-07: =true for new RKI Landkreis data
 const ln10=Math.log(10);
 
 
-// graphical window at start, 0=lin,1=log,2=cases,3=tests,4=rates 
+// graphical window at start, 
+// 0=cum,1=log,2=casesReal,3=tests,4=rates,5=casesDaily,6=incidence 
 // new window: 
 // (1) define qselect[window] by selecting from drawsim.dataG[], 
 // (2) update initialisator of drawsim.yminType[], *ymax*: "this.yminType=["
@@ -108,13 +109,13 @@ var data_cumCases=[];
 var data_cumDeaths=[];
 var data_cumRecovered=[];
 var data_cumCfr=[];
-var data2_cumTests=[]; // other source, therefore dataGit2
-var data2_cumTestsCalc=[]; // calculated from posRate
-var data2_cumCases=[]; // #cases/#tests in last available period
-var data2_posRate=[]; // #cases/#tests in last available period
+var data2_posRate=[];      // #cases/#tests, last avail. period (in dataGit2)
+var data2_cumTests=[];     // direct, sometimes n.a.
+
 
 // derived data in data time order
 
+var data_cumTestsCalc=[]; // better calculate  from posRate
 var data_dn=[];
 var data_dxt=[];
 var data_dyt=[];
@@ -122,6 +123,10 @@ var data_dz=[];
 var data_posRate=[];
 var data_cfr=[];
 var data_pTestModel=[]; // sim. "Hellfeld" P(tested|infected) if f(#tests)=true
+
+var data_dxIncidence=[]; // weekly incidence per 100 000 from data
+var data_dzIncidence=[]; // weekly incidence per 100 000 from data
+
 var pTest_weeklyPattern=[]; // constant extrapolation with weekly pattern
 var dn_weeklyPattern=[];  // constant extrapolation of #tests "
 
@@ -133,7 +138,7 @@ var n0=80.e6;  // #persons in Germany
 
 const countryGerList={
   "Germany": "Deutschland",
-  "Austria": "&Ouml;sterreich",
+  "Austria": "Oesterreich",
   "Czechia": "Tschechien",
   "France": "Frankreich",
   "United Kingdom": "England",
@@ -145,8 +150,8 @@ const countryGerList={
   //  "China": "China",
   "India": "Indien",
   //  "Japan": "Japan",
-  "Russia": "Ru&szlig;land",
-  //  "Turkey": "T&uuml;rkei",
+  "Russia": "Russland",
+  //  "Turkey": "Tuerkei",
   "US": "USA",
   "Australia": "Australien",
   "LK_Erzgebirgskreis": "LK Erzgebirgskreis",
@@ -310,11 +315,8 @@ var taumax=Math.max(tauDie,tauRecover)+tauAvg+1;
 // (iii) additional variables for simulating influence of tests,
 //  note: useSqrtModel at the controlled variables
 
-var alpha=0.0; // alpha error of test (false negative)
-var betainit=0.003; // beta error (false positive) after double testing
-var betaErr=betainit; // in Australia sometimes fracPos<beta
-// if in Germany beta>0.006, n_falsePos can be > nPositive => contradict
-// => formally, matrix not invertible
+var alphaTest=0.0; // alpha error of test (false negative)
+var betaTest=0.003; // beta error (false positive) after double testing
 
 
 // (iv) calibration related parameters/variables
@@ -410,7 +412,7 @@ function getGithubData() {
   dataGit2 = JSON.parse(dataGitLocalTests); // must be different name!!
 
   console.log("dataGit2=",dataGit2);
-  console.log("dataGit2.England.data[100]=",dataGit2.England.data[100]);
+  console.log("dataGit2.Germany.data[0]=",dataGit2.Germany.data[0]);
 
   dataRKI = JSON.parse(dataRKI_string); // must be different name!!
   console.log("dataRKI=",dataRKI);
@@ -488,7 +490,7 @@ function initializeData(country) {
 	      "\n========================================================");
 
   // MT 2020-09  // [] access for strings works ONLY with "" or string vars
-  // . access ONLY for literals w/o string ""
+  // access ONLY for literals w/o string ""
 
   var data=(useLandkreise) ? dataRKI[country] : dataGit[country];
   var dateInitStr=data[0]["date"];
@@ -573,16 +575,24 @@ function initializeData(country) {
   data_cumDeaths=[];
   data_cumRecovered=[];
   data_cumCfr=[];
+  data2_posRate=[];
+  data2_cumTests=[];
 
   // also for derived data (unless test numbers) used in simulation
 
+  data_cumTestsCalc=[];
   data_dn=[];
   data_dxt=[];
   data_dyt=[];
   data_dz=[];
   data_posRate=[];
   data_cfr=[];
+  data_pTestModel=[];
 
+  data_dxIncidence=[];
+  data_dzIncidence=[];
+  pTest_weeklyPattern=[];
+  dn_weeklyPattern=[];
 
   for(var i=0; i<data.length; i++){
     data_date[i]=data[i]["date"];
@@ -594,120 +604,64 @@ function initializeData(country) {
   }
 
 
-  if(false){
-    for(var i=0; i<data.length; i++){
-	  console.log("i=",i," data_date=",data_date[i],
-		      " data_cumCases=",data_cumCases[i],
-		      " data_cumDeaths=",data_cumDeaths[i],
-		      " data_cumRecovered=",data_cumRecovered[i]);
-    }
-    console.log("data_cumCases.length=",data_cumCases.length);
-  }
-
 
 
   // extract test data (MT 2020-09)
 
   for(var i2=0; i2<data2.length; i2++){
     data2_cumTests[i2]=data2[i2].total_tests;
-    data2_cumCases[i2]=data2[i2].total_cases;
+    //data2_cumCases[i2]=data2[i2].total_cases;
     data2_posRate[i2]=data2[i2].positive_rate;
   }
-		
+
+
   // extract cumTests
   // in some countries, only few days/nonr have new cumul data: 
   // interpolate them
 
-  var firstTestsRecorded=false;
-  var i2_last=0; // i2 for last defined cumul #tests
   var directTestData=[]; // data given w/o inter/extrapolation
-
   for(var i2=0; i2<data2.length; i2++){
     directTestData[i2]= (!(typeof data2_cumTests[i2] === "undefined"));
-    if(directTestData[i2]){
-      var cumAct=data2_cumTests[i2];
-      var cumLast=data2_cumTests[i2_last];
-
-      if(firstTestsRecorded){ // already reference for past
-	for(var i=i2_last+1; i<i2; i++){
-	  data2_cumTests[i]=cumLast+(i-i2_last)/(i2-i2_last)
-	    *(cumAct-cumLast);
-	}
-      }
-
-      else{ // assume 21 days of tests before first reporting
-	var di=Math.min(i2, 21); 
-	for(var i=i2-di; i<i2; i++){
-	  data2_cumTests[i]=(1+(i-i2)/di)*cumAct;
-	}
-	for(var i=0; i<i2-di; i++){
-	  data2_cumTests[i]=0;
-	}
-      }
-      i2_last=i2;
-      firstTestsRecorded=true;
-    }
-
-    if((i2==data2.length-1)&&(i2_last>0)){ // extrapolate if any data is defined
-      for(var i=i2_last+1; i<data2.length; i++){
-	data2_cumTests[i]=data2_cumTests[i2_last] + (i-i2_last)
-	  * (data2_cumTests[i2_last]-data2_cumTests[i2_last-1]);
-      }
-    }
-
   }
 
 
+  // extract posRate (needed for calc. dn[] 
+  // and calculate cum tests (needed for cfr)
+  // more stable as direct test numbers since some countries do not have them)
 
-  // extract posRate and calculate cum tests (some countries do not have them)
+  var i2_lastR=0; // i2 for last defined posRate; needed for extrapol
 
-  i2_last=0; // i2 for last defined posRate
-  data2_cumTestsCalc[0]=0;
+  data_cumTestsCalc[0]=0; // (offset not relevant)
 
-  for(var i2=0; i2<data2.length; i2++){
+  for(var i=1; i<data.length; i++){
+
+    var di2=data2_idataStart-data_idataStart;
+    var i2=i+di2;
+
+    // direct calculation if actual posRate given
+
     if( !(typeof data2_posRate[i2] === "undefined")){ //posRate given
-
       var rateAct=data2_posRate[i2];
-      var cumCasesLast=data2_cumCases[i2_last];
-      var cumTestLast=(directTestData[i2_last])
-	? data2_cumTests[i2_last] : data2_cumTestsCalc[i2_last];
-      
-      // extrapolate  to beginning if cum. test data defined
+      data_cumTestsCalc[i]=data_cumTestsCalc[i-1] + ((rateAct>0) 
+	? (data_cumCases[i]-data_cumCases[i-1])/rateAct
+						     : 0);
+      i2_lastR=i2;
 
-      if(i2_last==0){ 
-	if(directTestData[i2]){
-	  rateAct=data2_cumCases[i2]/data2_cumTests[i2];
-	}
-	data2_posRate[0]=rateAct;
-      }
-
-      // interpolate between dates of defined posRate
-
-      for(var i=i2_last+1; i<=i2; i++){
-	data2_posRate[i]=rateAct;
-	data2_cumTestsCalc[i]=(rateAct>0) 
-	  ? cumTestLast+(data2_cumCases[i]-cumCasesLast)/rateAct
-	  : 0;
-      }
-
-      i2_last=i2;
     }
+  
 
-    // extrapolate if last posRate data undefined
+    // extrapolate if actual posRate data undefined
 
-    if((i2==data2.length-1)&&(i2_last !=i2)){
-      var rateAct=data2_posRate[i2_last];
-      var cumTestLast=data2_cumTestsCalc[i2_last];
-      var cumCasesLast=data2_cumCases[i2_last];
+    else{
 
-      for(var i=i2_last+1; i<data2.length; i++){
-	data2_posRate[i]=rateAct;
-	data2_cumTestsCalc[i]=(rateAct>0) 
-	  ? cumTestLast+(data2_cumCases[i]-cumCasesLast)/rateAct
-	  : 0;
-      }
+      var rateAct=data2_posRate[i2_lastR];
+      data2_posRate[i2]=rateAct;
+      data_cumTestsCalc[i]=data_cumTestsCalc[i-1] + ((rateAct>0) 
+	? (data_cumCases[i]-data_cumCases[i-1])/rateAct
+						     : 0);
     }
   }
+
 
 
   // generate the data arrays (in data, not data2 time order) to be plotted
@@ -736,6 +690,7 @@ function initializeData(country) {
     data_dz[i]=Math.max(data_cumDeaths[i]-data_cumDeaths[i-1], 0.);
   }
 
+
   // need new loop because of forward ref at cfr, ifr
 
   if(useLandkreise){
@@ -751,15 +706,15 @@ function initializeData(country) {
     data_posRate[i]=data2_posRate[i+di];
     data_dn[i]=data_dxt[i]/data_posRate[i];// more stable //!!!!check with RKI
     if(!((data_dn[i]>0)&&(data_dn[i]<1e11))){data_dn[i]=0;}
-    var dnTauPos=data2_cumTestsCalc[i+di]-data2_cumTestsCalc[i+di-tauPos];
+    var dnTauPos=data_cumTestsCalc[i+di]-data_cumTestsCalc[i+di-tauPos];
    
-    data_cfr[i]=Math.max(data_cumDeaths[i+tauDie-tauTest]
-		 -data_cumDeaths[i+tauDie-tauTest-tauPos],0.)/dxtTauPos;
 
     var dxtTauPos=data_cumCases[i]-data_cumCases[i-tauPos];
 
     var dztTauPos=Math.max(data_cumDeaths[i]-data_cumDeaths[i-tauPos],0.);
 
+    data_cfr[i]=Math.max(data_cumDeaths[i+tauDie-tauTest]
+		 -data_cumDeaths[i+tauDie-tauTest-tauPos],0.)/dxtTauPos;
 
  
 
@@ -792,15 +747,6 @@ function initializeData(country) {
       data_pTestModel[i]= pTestInit; //MT 2020-11 change from pTestModelMin
     }
 
-    //if(useLandkreise&&
-    if(false&&
-       ((i-data_idataStart<4)||(i>data.length-4)||(i==data.length-20))){
-      console.log("initializeData: it=i-data_idataStart=",i-data_idataStart,
-		  " data_dxt[i]=",data_dxt[i],
-		  " data_dz[i]=",data_dz[i],
-		  " data_dn[i]=",data_dn[i].toFixed(1),
-		  " data_pTestModel[i]=",data_pTestModel[i].toFixed(3));
-    }
   }
 
 
@@ -809,10 +755,10 @@ function initializeData(country) {
   kernel=[1/7,1/7,1/7,1/7,1/7,1/7,1/7];  //  in initializeData
   data_pTestModelSmooth=smooth(data_pTestModel,kernel);
 
-
-
+ 
   // ####################################################
   // weekly pattern for pTestModel and data_dn based on 3 periods
+  // ####################################################
 
   var season0=[];
   var season1=[];
@@ -837,15 +783,7 @@ function initializeData(country) {
     dn_weeklyPattern[is]=avg1[2]+season1[is];
 
  
-    if(false){console.log("is=",is,
-			 //" pTest: season0[is]=",season0[is],
-			 " pTest_weeklyPattern[is]=",
-			 pTest_weeklyPattern[is].toPrecision(3),
-			// "\nTest number dn: season1[is]=",season1[is],
-			 " dn_weeklyPattern[is]=",
-			 dn_weeklyPattern[is].toFixed(0));
-	     }
-  }
+   }
 
 
   
@@ -863,65 +801,55 @@ function initializeData(country) {
 
 
   // ###############################################
- /* (1) insert button "Beruecksichtige Testhaeufigkeit" <->"Rohdaten"
-     (2) action Testhaeufigkeit: data_cumCases[i]=data_cumCasesAdj+Neukalibr
-         var adaptCases=true (wie button "Neukalibrierung")
-     (3) Lasse in Grafik Geheilten und Totenzahl weg
-     (4) Slider Testrate zappelt hin und her propto adjFactor
-  5 Button nur aktiv falls in Sim-Modifunction myFunction() {
-  var x = document.getElementById("myDIV");
-  if (x.style.display === "none") {
-    x.style.display = "block";
-  } else {
-    x.style.display = "none";
+  // debug (saisonal is always=6 at data.length-1)
+  // ###############################################
+
+  if(true){
+    console.log("\ninitializeData finished: final data:");
+    for(var i=0; i<data.length; i++){
+      //var logging=useLandkreise&&(i>data.length-10);
+      var logging=(i>data.length-20);
+      if(logging){
+        var i2=i+data2_idataStart-data_idataStart;
+	console.log(
+	  data2[i2]["date"],": i=",i,
+	  " data_dxt=",Math.round(data_dxt[i]),
+	  //" data_dyt=",Math.round(data_dyt[i]),
+	  " data_dz=",Math.round(data_dz[i]),
+	  " data_dn[i]=",data_dn[i].toFixed(1),
+	  " data_pTestModel[i]=",data_pTestModel[i].toFixed(3),
+	  " data_pTestModelSmooth[i]=",data_pTestModelSmooth[i].toFixed(3),
+	  "\n  data_cumCases=",Math.round(data_cumCases[i]),
+	  " data_posRate=",data_posRate[i],
+	  " data2_posRate=",data2_posRate[i2],
+	  " data_cumTestsCalc=", Math.round(data_cumTestsCalc[i]),
+	  " data_cfr=",data_cfr[i].toPrecision(3),
+	  " "
+	);
+      }
+    }
   }
-}
 
-
-(6) Simulationsergebnisse xt auch in windowG==2 und 3 zeichnen, Xt von 0,1
-    diffenenzieren, bei adaptCases==true mit adjFactor zappeln lassen
-
-*/
-  // ###############################################
-
-
-
-  // ###############################################
-  // debug; saisonal is always=6 at data.length-1
-  if(false){
-    console.log("\ninitializeData: weekly pattern:");
-    //for(var i=0; i<data.length; i++){
-    //for(var i=data_idataStart-5; i<=data_idataStart; i++){
-    for(var i=data.length-8; i<data.length; i++){ //!!!!
-    //if((i>data.length-30)&&(i<data.length)){
-      console.log(
-	insertLeadingZeroes(data[i]["date"]),": iData=",i,
-	" is=",(70000+i-data.length)%7,
-	" data_dn=",Math.round(data_dn[i]),
-	" data_dxt=",Math.round(data_dxt[i]),
-	" data_dyt=",Math.round(data_dyt[i]),
-	" data_dz=",Math.round(data_dz[i]),
-	//"\n             data_posRate=",data_posRate[i],
-	//" data_cfr=",data_cfr[i].toPrecision(3),
-	" ");
+  if(true){
+    console.log("\ninitializeData finished: final weekly pattern:");
+    for(var i=0; i<data.length; i++){
+      //var logging=useLandkreise&&(i>data.length-10);
+      var logging=(i>data.length-10);
+      if(logging){
+	var is=(70000+i-data.length)%7;
+	console.log(
+	  insertLeadingZeroes(data[i]["date"]),": iData=",i,
+	  " is=",is,
+	  " pTest: season0[is]=",season0[is],
+	  " pTest_weeklyPattern[is]=",pTest_weeklyPattern[is].toPrecision(3),
+	  "\nTest number dn: season1[is]=",season1[is],
+	  " dn_weeklyPattern[is]=", dn_weeklyPattern[is].toFixed(0),
+	  " ");
+      }
     }
   }
 
 
-
-  if(false){
-    for(var it=data2.length-5; it<data2.length; it++){
-      var it2=it+data_idataStart-data2_idataStart;
-      console.log("");
-      console.log(data2[it]["date"],": it=",it,
-		" data2_cumCases=",Math.round(data2_cumCases[it]),
-		" data_cumCases=",Math.round(data_cumCases[it2]),
-		" data2_posRate=",data2_posRate[it].toPrecision(3),
-		" data2_cumTests=",Math.round(data2_cumTests[it]),
-		" data2_cumTestsCalc=", 
-		Math.round(data2_cumTestsCalc[it]) );
-    }
-  }
 
   RsliderUsed=false;
   otherSliderUsed=false;
@@ -2260,7 +2188,7 @@ CoronaSim.prototype.init=function(itStart,logging){
   this.z        *= scaleDownFact;
   this.dxtFalse = 0; //!!
   //this.dxtFalse=(data_dn[data_idataStart]/n0 
-//		 - pTest*this.xohne[tauTest])*betaErr;//!!
+//		 - pTest*this.xohne[tauTest])*betaTest;//!!
 
   for(var tau=0; tau<taumax; tau++){
     this.x[tau]     *= scaleDownFact;
@@ -2408,7 +2336,6 @@ CoronaSim.prototype.updateOneDay=function(R,it,logging){
   }
 
 
-
   // ###############################################
   // updateOneDay: Do the true dynamics
   // ###############################################
@@ -2505,33 +2432,31 @@ CoronaSim.prototype.updateOneDay=function(R,it,logging){
   var f_T=1./(2*dtau+1);
   this.dxt=0;
   for(var tau=tauTest-dtau; tau<=tauTest+dtau; tau++){
-    this.dxt +=pTest*f_T*this.xohne[tau]*(1-alpha);
+    this.dxt +=pTest*f_T*this.xohne[tau]*(1-alphaTest);
   }
 
   // add beta error outside tau loop (the test gets dn-pTest*n0*this.xohne
   // noninfected people ) and increment cumulative this.xt
+  // Math.min(.) prevents a larger number of false positives than cases
 
   if(it>=0){// do not use absolute data such as data_dn in warmup!
-    var dn=(idata<data_dn.length) 
-      ? data_dn[idata] : dn_weeklyPattern[(idata-data_pTestModel.length)%7];
-
 
     if(includeInfluenceTestNumber){ 
-      this.dxtFalse=(dn/n0 - pTest*this.xohne[tauTest])*betaErr;
-      this.dxtFalse=Math.min(this.dxtFalse, 0.9*this.dxt); //!!!
+      var dn=(idata<data_dn.length)
+	? data_dn[idata] : dn_weeklyPattern[(idata-data_pTestModel.length)%7];
+      this.dxtFalse=(dn/n0 - pTest*this.xohne[tauTest])*betaTest;
+      this.dxtFalse=Math.min(this.dxtFalse, 0.9*this.dxt); 
     }
 
-    else{ // prob tree nt with p infected->1-alpha pos, alpha neg
-           // 1-p ot infected, beta ->pos, 1-beta->neg
-      var p=7*this.dxt/(n0*pTest); // comes from sqrt model
-      var dn=n0*pTest*pTest/7.;
-      this.dxtFalse=dn/n0*(1-p)*beta;
-      if(idata<data_dn.length){//avoid more false positive than data
-        this.dxtFalse=Math.min(this.dxtFalse,0.742*data_dxt[idata]/n0);
-      }
-      if(logging){console.log("no*this.dxtFalse=",
-			      Math.round(n0*this.dxtFalse));
-		 }
+    // no influence of test number 
+    // => prob tree nt with p infected->1-alpha pos, alpha neg
+    // 1-p ot infected, beta ->pos, 1-beta->neg
+
+    else{ 
+      var dn=n0*pTest*pTest/7.; // comes from sqrt model
+      var p=7*this.dxt/(n0*pTest); 
+      this.dxtFalse=dn/n0*(1-p)*betaTest;
+      this.dxtFalse=Math.min(this.dxtFalse, 0.9*this.dxt); 
     }
 
     if(idata==data_dn.length-1){// save relative value of false positives
@@ -2545,38 +2470,30 @@ CoronaSim.prototype.updateOneDay=function(R,it,logging){
     }
     this.dxt+=this.dxtFalse;
 
-    //if(idata>=data_dn.length){this.dxtFalse=NaN;} //to prevent plotting
   }
 
   this.xt += this.dxt;
 
 
 
-  // (2) simulate tested recoveries:
-  // (now, do simply balance at graphics stage 
-  // (following three commented lines work well w/o beta error)
 
-  //this.pTestDay[it]= pTest;
-  //var dayTested=Math.max(0,it-Math.round(tauRecover-tauTest));
-  // this.yt  +=(this.pTestDay[dayTested]-fracDie)/(1-fracDie)*dysum
+  //##########################################################
+  // Debug output (filter needed because called in calibration)
+  //##########################################################
 
-
-  
-
-
-
-  // control output (it is undefined here!)
-
-  if(false){ // filter needed because called in calibration
+  //if(false){ // filter needed because called in calibration
   //if(logging&&useLandkreise&&(it<10)){ // filter needed because calibration!
-
+  if(it>=itmaxinit){ // it<itmaxinit in calibration => not reached
     console.log(
       "end CoronaSim.updateOneDay: it=",it," R=",R.toPrecision(2),
+      " dnxt=",Math.round(n0*this.dxt),
       " this.xAct=",this.xAct.toPrecision(3),
-      " this.xyz=",this.xyz.toPrecision(3),
+      " idata=",idata," data_pTestModel.length=",data_pTestModel.length,
+      " pTest=",pTest,
+     // " this.xyz=",this.xyz.toPrecision(3),
      // " pTest=",pTest.toPrecision(3), //!!!! undefined for Dresden etc
      // " this.y=",this.y.toPrecision(3),
-      " this.z=",this.z.toPrecision(3),
+     // " this.z=",this.z.toPrecision(3),
 	//	" nxt=n0*this.xt=",Math.round(n0*this.xt),
       //"\n  this.x[tauDie-1]=",this.x[tauDie-1].toPrecision(3),
       //"    this.xohne[tauDie-1]=",this.xohne[tauDie-1].toPrecision(3),
@@ -2592,6 +2509,8 @@ CoronaSim.prototype.updateOneDay=function(R,it,logging){
 
 
 } // CoronaSim.updateOneDay
+
+
 
 
 
@@ -2618,7 +2537,7 @@ function avgArithm(arr,tau){
 
 // kernel must have odd #points
 // although negative indices allowed, unstable: 
-// .length and initializer expect all indices starting at 0
+// length and initializer expect all indices starting at 0
 
 function smooth(arr, kernel){
   if(kernel.length%2==0){
@@ -2644,10 +2563,19 @@ function smooth(arr, kernel){
 
   for(var i=0; i<half; i++){smooth[i]=arr[i];} // lower boundary not relevant
 
-  var applySmoothingToUpper=true;
+  var applySmoothingSeason=false;
 
-  // additive saison decomposition since sometimes zeroes in the data
-  if(applySmoothingToUpper){// assume 7d period
+  if(!applySmoothingSeason){ // no season analysis
+    // just take raw data
+    // for(var i=arr.length-half; i<arr.length; i++){smooth[i]=arr[i];}
+
+    // use last fully smoothed value
+    for(var i=arr.length-half; i<arr.length; i++){
+      smooth[i]=arr[arr.length-half-1];
+    }
+  }
+
+  else{// assume 7d period
 
     var n=arr.length;
     var trendLen=3; // 3 periods (in this application, data always available)
@@ -2687,9 +2615,6 @@ function smooth(arr, kernel){
     }
   }
  
-  else{ // just take raw data
-    for(var i=arr.length-half; i<arr.length; i++){smooth[i]=arr[i];}
-  }
 
   //for(var i=arr.length-21; i<arr.length; i++){
   //  console.log("i=",i," arr[i]=",arr[i]," smooth[i]=",smooth[i]); }
@@ -2708,12 +2633,15 @@ function DrawSim(){
 
   //console.log("DrawSim created");
 
+  // windowG:
+  // 0=cum,1=log,2=casesReal,3=tests,4=rates,5=casesDaily,6=incidence 
+
   this.unitPers=1000;  // persons counted in multiples of unitPers
 
-  this.yminType=[0,1,0,0,0,0];   // cum,log,infected,data,rates,cases(default)
-  this.ymaxType=[1,6,2,2,2,2];   // 
+  this.yminType=[0,1,0,0,0,0,0];  
+  this.ymaxType=[1,6,2,2,2,2,1]; 
 
-
+  this.mirroredGraphics=false; // if death counts upside down
 
   this.xPix=[]; // this.xPix0 etc defined in drawSim method
   this.itmin=0; // moving window if simulation into future => this.itmin>0
@@ -2738,7 +2666,7 @@ function DrawSim(){
 
 
 
-  // central conatiner for the graphics data
+  // central container for the graphics data
 
   this.dataG=[];
   this.xtPast=0; // needed to derive yt from balance since no longer calc.
@@ -2751,7 +2679,6 @@ function DrawSim(){
                           // 1=solid deriv from data (CFR), 
                           // 2=more speculative derivation (IFR)
                           // 3=simulation, 4=speculative simulation
-		 window: 0, // 0=sim cum lin, 1=sim cum log,2-4=data views
 		 plottype: "lines",  // in "lines", "points", "bars"
 		 plotLog: false,  // if true, logarithm plotted
 		 ytrafo: [0.001, false,false],// [scalefact, half, mirrored]
@@ -2759,71 +2686,70 @@ function DrawSim(){
 		}
 
   this.dataG[1]={key: "Insg. Genesene unter den Getesteten (in 1000)",data:[],
-		 type: 3, window:0, plottype: "lines", plotLog: false, 
+		 type: 3, plottype: "lines", plotLog: false, 
 		 ytrafo: [0.001, false,false], color:colRecovCases};
 
   this.dataG[2]={key: "Insgesamt Gestorbene (in 100)", data: [],
-		 type: 3, window:0, plottype: "lines", plotLog: false, 
+		 type: 3, plottype: "lines", plotLog: false, 
 		 ytrafo: [0.01, false,false], color:colDead};
 
   this.dataG[3]={key: "#Tote ges/#positiv getestet ges", data: [],
-		 type: 3, window:0, plottype: "lines", plotLog: false,
+		 type: 3, plottype: "lines", plotLog: false,
 		  ytrafo: [1, false,false], color:colPosrateCum};
 
 
 
   this.dataG[4]={key: "Insgesamt positiv Getestete (in 1000)",data: [],
-		 type: 0, window:0, plottype: "points", plotLog: false, 
+		 type: 0, plottype: "points", plotLog: false, 
 		 ytrafo: [0.001, false,false], color:colCases};
 
   this.dataG[5]={key: "Insg. Genesene unter den Getesteten (in 1000)",data:[],
-		 type: 0, window:0, plottype: "points", plotLog: false, 
+		 type: 0, plottype: "points", plotLog: false, 
 		 ytrafo: [0.001, false,false], color:colRecovCases};
 
   this.dataG[6]={key: "Insgesamt Gestorbene (in 100)", data: [],
-		 type: 3, window:0, plottype: "lines", plotLog: false,
-		 type: 0, window:0, plottype: "points", plotLog: false, 
+		 type: 0, plottype: "points", plotLog: false, 
 		 ytrafo: [0.01, false,false], color:colDead};
 
   this.dataG[7]={key: "#Tote ges/#positiv getestet ges", data: [],
-		 type: 0, window:0, plottype: "points", plotLog: false,
+		 type: 0, plottype: "points", plotLog: false,
 		  ytrafo: [1, false,false], color:colPosrateCum};
 
   // window 1 (sim+data log)
 
 
   this.dataG[8]={key: "Aktuell real infizierte Personen", data: [],
-		 type: 4, window:1, plottype: "lines", plotLog: true, 
+		 type: 4, plottype: "lines", plotLog: true, 
 		 ytrafo: [1, false,false], color:colInfected};
 
   this.dataG[9]={key: "Insgesamt positiv Getestete", data: [],
-		 type: 3, window:1, plottype: "lines", plotLog: true, 
+		 type: 3, plottype: "lines", plotLog: true, 
 		 ytrafo: [1, false,false], color:colCases};
 
   this.dataG[10]={key: "Insgesamt Genesene unter allen Personen", data: [],
-		  type: 4, window:1, plottype: "lines", plotLog: true, 
+		  type: 4, plottype: "lines", plotLog: true, 
 		  ytrafo: [1, false,false], color:colRecov};
 
   this.dataG[11]={key: "Insgesamt Genesene unter den Getesteten", data: [],
-		  type: 3, window:1, plottype: "lines", plotLog: true, 
+		  type: 3, plottype: "lines", plotLog: true, 
 		  ytrafo: [1, false,false], color: colRecovCases};
 
   this.dataG[12]={key: "Insgesamt Gestorbene", data: [],
-		  type: 3, window:1, plottype: "lines", plotLog: true, 
+		  type: 3, plottype: "lines", plotLog: true, 
 		  ytrafo: [1, false,false], color:colDead};
 
 
 
   this.dataG[13]={key: "Insgesamt positiv Getestete", data: [],
-		 type: 0, window:1, plottype: "points", plotLog: true, 
+		 type: 0, plottype: "points", plotLog: true, 
 		 ytrafo: [1, false,false], color:colCases};
 
   this.dataG[14]={key: "Insgesamt Genesene unter den Getesteten", data: [],
-		  type: 0, window:1, plottype: "points", plotLog: true, 
+		  type: 0, plottype: "points", plotLog: true, 
 		  ytrafo: [1, false,false], color: colRecovCases};
 
   this.dataG[15]={key: "Insgesamt Gestorbene", data: [],
-		  type: 0, window:1, plottype: "points", plotLog: true, 
+		  type: 0, plottype: "points", plotLog: true, 
 		  ytrafo: [1, false,false], color:colDead};
 
 
@@ -2832,11 +2758,11 @@ function DrawSim(){
   // ytrafo=[scalefact, half, mirrored] 
 
   this.dataG[16]={key: "Positiv Getestete pro Tag", data: [],
-		 type: 0, window:2, plottype: "bars", plotLog: false, 
+		 type: 0, plottype: "bars", plotLog: false, 
 		 ytrafo: [0.1, true,false], color:colCasesBars}; // real: scale*10
 
   this.dataG[17]={key: "Gestorbene pro Tag", data: [],
-		 type: 0, window:2, plottype: "bars", plotLog: false, 
+		 type: 0, plottype: "bars", plotLog: false, 
 		 ytrafo: [1, true,true], color:colDead};
 
   // + new data at bottom
@@ -2847,60 +2773,81 @@ function DrawSim(){
   // ytrafo=[scalefact, half, mirrored]
 
   this.dataG[18]={key: "Positiv Getestete pro Tag", data: [],
-		 type: 0, window:3, plottype: "bars", plotLog: false, 
+		 type: 0, plottype: "bars", plotLog: false, 
 		 ytrafo: [1, false,false], color:colCasesBars};
 
   this.dataG[19]={key: "Tests pro Tag (in 100)", data: [],
-		 type: 0, window:3, plottype: "points", plotLog: false, 
+		 type: 0, plottype: "points", plotLog: false, 
 		 ytrafo: [0.01, false,false], color:colTests};
 
 
   // window 4: infection ratios
 
   this.dataG[20]={key: "Anteil positiver Tests [%]", data: [],
-		 type: 0, window:4, plottype: "points", plotLog: false, 
+		 type: 0, plottype: "points", plotLog: false, 
 		 ytrafo: [100, false,false], color:colPosrate};
 
   this.dataG[21]={key: "CFR (Case fatality rate) [%]", data: [],
-		 type: 1, window:4, plottype: "points", plotLog: false, 
+		 type: 1, plottype: "points", plotLog: false, 
 		 ytrafo: [100, false,false], color:colCFR};
 
   this.dataG[22]={key: "Sim IFR (Infection fatality rate) [Promille]", data: [],
-		 type: 4, window:4, plottype: "lines", plotLog: false, 
+		 type: 4, plottype: "lines", plotLog: false, 
 		 ytrafo: [1000, false,false], color:colIFR};
 
 
   // new curves/lines/bars
 
   this.dataG[23]={key: "Simulierte Neuinfizierte pro Tag (in 10)", data: [],
-		 type: 4, window:2, plottype: "lines", plotLog: false, 
+		 type: 4, plottype: "lines", plotLog: false, 
 		 ytrafo: [0.01, true,false], color:colInfectedWin3};// real: scale*10
 
   this.dataG[24]={key: "Simulierte Neuinfizierte pro Tag (in 10)", data: [],
-		 type: 4, window:3, plottype: "lines", plotLog: false, 
+		 type: 4, plottype: "lines", plotLog: false, 
 		 ytrafo: [0.1, false,false], color:colInfectedWin3};
 
   this.dataG[25]={key: "Simulierte Durchseuchung", data: [],
-		 type: 4, window:1, plottype: "lines", plotLog: true, 
+		 type: 4, plottype: "lines", plotLog: true, 
 		 ytrafo: [1, false,false], color:colInfectedTot};
 
   this.dataG[26]={key: "Simulierte False Positives pro Tag", data: [],
-		 type: 4, window:3, plottype: "lines", plotLog: false, 
+		 type: 4, plottype: "lines", plotLog: false, 
 		 ytrafo: [1, false,false], color:colFalsePos};
 
   this.dataG[27]={key: "Simulierte Test-Positive pro Tag", data: [],
-		 type: 3, window:3, plottype: "lines", plotLog: false, 
+		 type: 3, plottype: "lines", plotLog: false, 
 		 ytrafo: [1, false,false], color:colSimCases};
 
   this.dataG[28]={key: "Simulierte Gestorbene pro Tag", data: [],
-		 type: 4, window:2, plottype: "lines", plotLog: false, 
+		 type: 4, plottype: "lines", plotLog: false, 
 		 ytrafo: [1, true,true], color:colDeadSim};
 
 // other scaling as [27]
 
   this.dataG[29]={key: "Simulierte Test-Positive pro Tag", data: [],
-		 type: 3, window:3, plottype: "lines", plotLog: false, 
+		 type: 3, plottype: "lines", plotLog: false, 
 		 ytrafo: [0.1, true,false], color:colSimCases};
+
+
+// new window 6 weekly incidence
+
+  this.dataG[30]={key: "Wocheninzidenz pro 100 000", data: [],
+		 type: 0, plottype: "bars", plotLog: false, 
+		 ytrafo: [0.1, true,false], color:colCasesBars}; // real: scale*10
+
+  this.dataG[31]={key: "Woechentlich Gestorbene pro 100 000", data: [],
+		 type: 0, plottype: "bars", plotLog: false, 
+		 ytrafo: [1, true,true], color:colDead};
+
+
+  this.dataG[32]={key: "Simulierte Wocheninzidenz Faelle", data: [],
+		 type: 3, plottype: "lines", plotLog: false, 
+		 ytrafo: [0.1, true,false], color:colSimCases};
+
+  this.dataG[33]={key: "Simulierte Wocheninzidenz Gestorbene", data: [],
+		 type: 4, plottype: "lines", plotLog: false, 
+		 ytrafo: [1, true,true], color:colDeadSim};
+
 
 
 
@@ -2916,6 +2863,7 @@ function DrawSim(){
   this.qselect[3]=[18,19,24,26,27];
   this.qselect[4]=[20,21,22];
   this.qselect[5]=[16,17,28,29];
+  this.qselect[6]=[30,31,32,33];
 
 
   this.label_y_window=[countryGer+": Personenzahl (in Tausend)",
@@ -2923,7 +2871,8 @@ function DrawSim(){
 		       countryGer+": Personen pro Tag",
 		       countryGer+": taegliche Zahlen",
 		       countryGer+": Anteil [% oder Promille]",
-		       countryGer+": Personen pro Tag"
+		       countryGer+": Personen pro Tag",
+		       countryGer+": Pers./Woche/100 000 Ew."
 ];
 
 
@@ -2991,7 +2940,6 @@ DrawSim.prototype.drawGridLine=function(type,xyrel){
 // windowG in [0,4]
 
 DrawSim.prototype.drawAxes=function(windowG){
-
 
   // update the font (drawAxes called at first drawing and after all 
   // canvas/display changes)
@@ -3063,9 +3011,9 @@ DrawSim.prototype.drawAxes=function(windowG){
   // draw 3 px wide lines as coordinates
   // remaining hack: mirrored graphics cases/deaths: yPix0,hPix w/o "this"
 
-  var yPix0=((windowG==2)||(windowG==5)) 
+  var yPix0=(this.mirroredGraphics) 
     ? 0.5*(this.yPix0+this.yPixMax) : this.yPix0;
-  var hPix=((windowG==2)||(windowG==5)) ? 0.5*this.hPix : this.hPix;
+  var hPix=(this.mirroredGraphics) ? 0.5*this.hPix : this.hPix;
 
   ctx.fillStyle="rgb(0,0,0)";
   ctx.fillRect(this.xPix0, yPix0-1.5, this.wPix, 3);
@@ -3081,7 +3029,7 @@ DrawSim.prototype.drawAxes=function(windowG){
     if(timeRel[ix]>=0){this.drawGridLine("vertical", timeRel[ix]);}
   }
 
-  if((windowG!=2)&&(windowG!=5)){
+  if(!this.mirroredGraphics){
     for(var iy=1; iy<=ny; iy++){
       this.drawGridLine("horizontal",iy*dy/(ymax-ymin));
     }
@@ -3126,7 +3074,7 @@ DrawSim.prototype.drawAxes=function(windowG){
 
   // normal graphics
 
-  if((windowG!=2)&&(windowG!=5)){ 
+  if(!this.mirroredGraphics){ 
     for(var iy=0; iy<=ny; iy++){
       var valueStr=(windowG!=1)  ? iy*dy : "10^"+iy;
       //console.log("valueStr=",valueStr);
@@ -3228,7 +3176,23 @@ DrawSim.prototype.transferSimData=function(it){
   this.dataG[29].data[it]=n0*corona.dxt; // sim number of positive tests
                                          // other scaling
 
+  // weekly incidences per 100 000: sim_dxIncidence, sim_dzIncidence;
+
+  var xsimPastWeek=0;
+  this.dataG[32].data[it]=100000/n0
+    *(this.dataG[0].data[it]-this.dataG[0].data[Math.max(it-7,0)]);
+  this.dataG[33].data[it]=100000/n0
+    *(this.dataG[2].data[it]-this.dataG[2].data[Math.max(it-7,0)]);
+  if(true){
+    console.log("in drawsim.transferSimData: it=",it,
+		" nxsimIncidence=",this.dataG[32].data[it],
+		" nzsimIncidence=",this.dataG[33].data[it],
+		"");
+  }
+
+
   // get yt  from balance xt past, zt=z
+
   var itPast=it-tauRecover;
   var nxtPast=(it<tauRecover)
     ? data_cumCases[it-tauRecover+data_idataStart]
@@ -3262,6 +3226,7 @@ DrawSim.prototype.transferSimData=function(it){
 DrawSim.prototype.transferRecordedData=function(){
 //######################################################################
 
+  console.log("\nin drawsim.transferRecordedData");
 // windows 0,1
   this.dataG[4].data=data_cumCases;  // by reference
   this.dataG[5].data=data_cumRecovered;
@@ -3277,8 +3242,8 @@ DrawSim.prototype.transferRecordedData=function(){
 
   // windows 2-4
 
-   //kernel=[1]; //!!
-   kernel=[1/4,2/4,1/4];
+   kernel=[1]; //!!
+   //kernel=[1/4,2/4,1/4];
   //kernel=[1/9,2/9,3/9,2/9,1/9];
     //kernel=[1/16,2/16,3/16,4/16,3/16,2/16,1/16];
     //kernel=[1/25,2/25,3/25,4/25,5/25,4/25,3/25,2/25,1/25];
@@ -3300,6 +3265,30 @@ DrawSim.prototype.transferRecordedData=function(){
   this.dataG[20].data=posRateSmooth;
   this.dataG[21].data=cfrSmooth;
   //this.dataG[22].data=ifrSmooth;//!! now [22] reserved for sim ifr=fracDie
+
+
+  // data: calculate weekly incidences (transferRecordedData called only once)
+  // 700000=7 (weekly) times 100 000 (per 100 000)
+
+  var kernel=[1/7, 1/7, 1/7, 1/7, 1/7, 1/7, 1/7];
+  var cases_smooth=smooth(data_dxt,kernel);
+  var deaths_smooth=smooth(data_dz,kernel);
+  for(var i=6; i<data_dxt.length; i++){
+    data_dxIncidence[i]=cases_smooth[i-3]*700000/n0;
+    data_dzIncidence[i]=deaths_smooth[i-3]*700000/n0;
+    if(i>data_dxt.length-14){
+      console.log("i=",i," data_dxIncidence[i]=",data_dxIncidence[i],
+		  " data_dzIncidence[i]=",data_dzIncidence[i]);
+    }
+  }
+  for(var i=0; i<6; i++){
+    data_dxIncidence[i]=data_cumCases[i]*700000/n0;
+    data_dzIncidence[i]=data_cumDeaths[i]*700000/n0;
+  }
+
+  this.dataG[30].data=data_dxIncidence; // weekly data incidence by reference
+  this.dataG[31].data=data_dzIncidence;
+
 
   if(false){
     console.log("\n\nDrawSim.transferRecordedData: data_cumCases.length=",
@@ -3350,6 +3339,7 @@ DrawSim.prototype.checkRescaling=function(it){
   // (2) possible rescaling in y for all the graph windows
 
   for(var iw=0; iw<this.qselect.length; iw++){ //windows
+    console.log("iw=",iw," this.qselect[iw].length=",this.qselect[iw].length);
     for(iq=0; iq<this.qselect[iw].length; iq++){ // quantity selector
       var q=this.qselect[iw][iq];
       var data=this.dataG[q].data;
@@ -3361,7 +3351,7 @@ DrawSim.prototype.checkRescaling=function(it){
       if(value>this.ymaxType[iw]){
 	this.ymaxType[iw]=value;
 	erase=true;
-	if(false){
+	if(iw==6){
 	  console.log(
 	    "checkRescaling: new maximum! it=",it, "window iw=",iw,
 	    " quantity q=",q," i=",i,
@@ -3443,6 +3433,7 @@ DrawSim.prototype.draw=function(it){
   //console.log("\nin DrawSim.draw: it=",it," this.itmin=",this.itmin,
 //	      " itmax=",itmax);
 
+  this.mirroredGraphics=((windowG==2)||(windowG==5)||(windowG==6));
 
   // global vars canvas.width, canvas.height,
   // viewport.width, viewport.height
@@ -3554,7 +3545,7 @@ DrawSim.prototype.draw=function(it){
 
   // draw R0 estimates for windows qith simulations
   
-  if((windowG==2)||(windowG==5)){
+  if(this.mirroredGraphics){
       this.drawREstimate(it);
   }
 
