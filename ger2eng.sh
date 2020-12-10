@@ -43,7 +43,7 @@ perl -i -p -e 's/Ignoriere Testhaeufigkeit/Ignore \#tests/g' *_eng.html corona_e
 perl -i -p -e 's/Beruecksichtige Testhaeufigkeit/Include \#tests/g' *_eng.html corona_eng.js corona_gui_eng.js
 
 
-
+perl -i -p -e 's/de\-de/en\-us/g' corona_eng.js
 perl -i -p -e 's/\+ countryGer/\+ country/g' corona_eng.js
 perl -i -p -e 's/Insgesamt positiv Getestete/Total cases/g' corona_eng.js
 perl -i -p -e 's/Insg\. Genesene unter den Getesteten/Total recovered cases/g' corona_eng.js

@@ -752,7 +752,10 @@ function initializeData(country) {
   
   //kernel=[1/9,2/9,3/9,2/9,1/9];
   kernel=[1/7,1/7,1/7,1/7,1/7,1/7,1/7];  //  in initializeData
+
+  loggingDebug=true; //!! global debug variable
   data_pTestModelSmooth=smooth(data_pTestModel,kernel);
+  loggingDebug=false;
 
  
   // ####################################################
@@ -803,7 +806,7 @@ function initializeData(country) {
   // debug (saisonal is always=6 at data.length-1)
   // ###############################################
 
-  if(false){
+  if(true){
     console.log("\ninitializeData finished: final data:");
     for(var i=0; i<data.length; i++){
       //var logging=useLandkreise&&(i>data.length-10);
@@ -2557,10 +2560,13 @@ function smooth(arr, kernel){
     }
   }
 
-  // upper boundary treatment (lower not relevant)
+  // lower boundary: just the input (not relevant)
 
   for(var i=0; i<half; i++){smooth[i]=arr[i];} // lower boundary not relevant
 
+
+  // upper boundary treatment with or without seasonal analysis
+  
   var applySmoothingSeason=false;
 
   if(!applySmoothingSeason){ // no season analysis
@@ -2569,7 +2575,7 @@ function smooth(arr, kernel){
 
     // use last fully smoothed value
     for(var i=arr.length-half; i<arr.length; i++){
-      smooth[i]=arr[arr.length-half-1];
+      smooth[i]=smooth[arr.length-half-1];
     }
   }
 
@@ -3104,11 +3110,12 @@ DrawSim.prototype.drawAxes=function(windowG){
 
 
   
-  // draw key
+  // draw key drawkey
 
   var yrelTop=(windowG==1) // 1=log
-    ? -7*(1.2*textsize/this.hPix) : 0.95; // 7: lines above x axis
-  var xrelLeft=(windowG==0) ? 0.02 : 0.40; 
+    ? -8*(1.28*textsize/this.hPix) : 0.99; // 8: lines above x axis
+  var xrelLeft=(windowG==1)||(windowG==4) ? 0.40 :
+      (windowG==0) ? 0.02 : 0.20; 
   var dyrel=-1.2*textsize/this.hPix;
   var ikey=0;
 
@@ -3128,18 +3135,33 @@ DrawSim.prototype.drawAxes=function(windowG){
     }
   }
 
-  if(true){// draw "Durchseuchung"
+  if(true){// draw "Durchseuchung" etc
+
+    // calculate time string
+    
+    var date=new Date(startDay.getTime()); // copy constructor
+    date.setDate(date.getDate() + it); // set iw*7 days ahead
+    var options = {year: "numeric", month: "short", day: "2-digit"};
+    var str_date=date.toLocaleDateString("de-de",options);
+    //if(date.getMonth()==0){timeTextW[iw]+=(", "+date.getFullYear());}
+
     var Xperc=Math.round(1000*corona.xyz)/10;
     ctx.fillStyle="rgb(0,0,0)";
-    ctx.fillText("Durchseuchung X="+(Xperc.toFixed(1))+" %",
+    ctx.fillText(str_date,
 		 this.xPix0+xrelLeft*this.wPix,
 		 this.yPix0+(yrelTop-(ikey+1)*dyrel)*this.hPix);
-    ctx.fillText("Aktuelles R="+((R0_actual*(1-corona.xyz)).toFixed(2)),
+    
+    ctx.fillText("Durchseuchung X="+(Xperc.toFixed(1))+" %",
 		 this.xPix0+xrelLeft*this.wPix,
 		 this.yPix0+(yrelTop-(ikey+2)*dyrel)*this.hPix);
-    ctx.fillText("Aktuelle IFR="+(100*IFRfun_time(betaIFR,it)).toFixed(2)+" %",
+    
+    ctx.fillText("Aktuelles R="+((R0_actual*(1-corona.xyz)).toFixed(2)),
 		 this.xPix0+xrelLeft*this.wPix,
 		 this.yPix0+(yrelTop-(ikey+3)*dyrel)*this.hPix);
+    
+    ctx.fillText("Aktuelle IFR="+(100*IFRfun_time(betaIFR,it)).toFixed(2)+" %",
+		 this.xPix0+xrelLeft*this.wPix,
+		 this.yPix0+(yrelTop-(ikey+4)*dyrel)*this.hPix);
   }
 
 
