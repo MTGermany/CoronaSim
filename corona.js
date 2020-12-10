@@ -1,4 +1,9 @@
 
+
+var showVacc=false;  // false: only display as of dec2020
+                    // true: second display option vacc+measures
+
+
 // useLiveData=true: Obtain github data "live" via the fetch command
 // Unfortunately, the fetch command is sometimes unstable
 // and not working on my ipad
@@ -294,7 +299,15 @@ var tauRstart=tauRstartInit;
 var tauRend=tauRendInit;  
 var pTest=pTestInit;       // percentage of tested infected persons 
 var tauTest=tauTestInit;
-var tauAvg=5;      // smoothing interval (uneven!) for tauTest,tauDie,tauRecover
+var tauAvg=5;      // smoothing interval (uneven!) for tauTest,
+                   // tauDie, tauRecover
+
+var pVaccInit=0;    // vaccination fraction in [0,1]
+var pVacc=pVaccInit;
+
+var measuresInit=4; // "Abstand+Maske", cf. corona_gui.js->str_measures
+var measures=measuresInit;
+
 
 // (ii) not controlled
 
@@ -807,6 +820,7 @@ function initializeData(country) {
   // ###############################################
 
   if(true){
+    console.log("data2[0][\"date\"]=",data2[0]["date"]);
     console.log("\ninitializeData finished: final data:");
     for(var i=0; i<data.length; i++){
       //var logging=useLandkreise&&(i>data.length-10);
@@ -814,7 +828,7 @@ function initializeData(country) {
       if(logging){
         var i2=i+data2_idataStart-data_idataStart;
 	console.log(
-	  data2[i2]["date"],": i=",i,
+	  insertLeadingZeroes(data[i]["date"]),": i=",i,
 	  " data_dxt=",Math.round(data_dxt[i]),
 	  //" data_dyt=",Math.round(data_dyt[i]),
 	  " data_dz=",Math.round(data_dz[i]),
@@ -1159,6 +1173,7 @@ function initialize() {
   //console.log("in initialize");
 
 
+
   // =============================================================
   // initialize R estimation result (particularly length) if still undefined
   // =============================================================
@@ -1195,7 +1210,7 @@ function initialize() {
   yPixTop=rect.top;
   drawsim=new DrawSim();
 
-  canvas_resize();
+  setView(showVacc); // contains canvas_resize();
 
   drawsim.setWindow(windowG);
 
@@ -1821,13 +1836,13 @@ function toggleTestnumber(){ // callback html "testnumber"
   if(includeInfluenceTestNumber){
     includeInfluenceTestNumber=false;
     document.getElementById("testnumber").innerHTML
-      ="Beruecksichtige Testhaeufigkeit";
+      ="Ber&uuml;cksichtige<br>Testh&auml;ufigkeit";
         //myRun=setInterval(simulationRun, 1000/fps);
   }
   else{
     includeInfluenceTestNumber=true;
     document.getElementById("testnumber").innerHTML
-      ="Ignoriere Testhaeufigkeit";
+      ="Ignoriere<br>Testh&auml;ufigkeit";
   }
 
   pTest=parseFloat(slider_pTest.value)/100;
@@ -2647,7 +2662,7 @@ function DrawSim(){
 
   this.mirroredGraphics=false; // if death counts upside down
 
-  this.xPix=[]; // this.xPix0 etc defined in drawSim method
+  this.xPix=[]; // this.xPix0 etc defined in corona_gui.js
   this.itmin=0; // moving window if simulation into future => this.itmin>0
 
  
@@ -3258,8 +3273,9 @@ DrawSim.prototype.transferRecordedData=function(){
 
   // windows 2-4
 
-   kernel=[1]; //!!
-   //kernel=[1/4,2/4,1/4];
+   //kernel=[1]; //!! worldometer data too strong weekly changes, 
+                 // more than RKI => slight smoothing
+   kernel=[1/4,2/4,1/4];
   //kernel=[1/9,2/9,3/9,2/9,1/9];
     //kernel=[1/16,2/16,3/16,4/16,3/16,2/16,1/16];
     //kernel=[1/25,2/25,3/25,4/25,5/25,4/25,3/25,2/25,1/25];
@@ -3428,8 +3444,9 @@ DrawSim.prototype.drawREstimate=function(it){
       +((true) // if plotting  w/o "+/- stddev
 	? "" : (" +/- "+sigmaR_hist[itR].toFixed(2)));
 
+    var step=(canvas.width<=600) ? 2 : 1;
     //if(ical%2==0){ //!! drawn every ical'th calibration value
-    if(ical%1==0){
+    if(ical%step==0){
      ctx.fillText(str_R,0,0);
       ctx.font = (Math.round(0.7*textsizeR))+"px Arial"; 
       ctx.fillText("0",0.8*textsizeR,0.4*textsizeR);
@@ -3456,24 +3473,7 @@ DrawSim.prototype.draw=function(it){
   // textsize, textsizeR (for the R values) set by 
   // canvas_gui.canvas_resize()
 
-  // must update canvas boundaries since canvas may be resized
 
-  if(hasChanged){
-    this.xPix0=0.12*canvas.width;
-    this.xPixMax=0.98*canvas.width;
-    this.yPix0=(isSmartphone) ? 0.85*canvas.height : 0.90*canvas.height;
-    this.yPixMax=0.02*canvas.height;
-    this.wPix=this.xPixMax-this.xPix0;
-    this.hPix=this.yPixMax-this.yPix0;  //<0
-    for(var i=0; i<=itmax-this.itmin; i++){//!!!
-      this.xPix[i]=this.xPix0
-	+i*(this.xPixMax-this.xPix0)/(itmax-this.itmin);//!!!
-    }
-
-    //for(var i=0; i<=itmax; i++){
-    //  this.xPix[i]=this.xPix0+i*(this.xPixMax-this.xPix0)/itmax;
-    //}
-  }
 
   // transfer new data and redraw whole graphics
 

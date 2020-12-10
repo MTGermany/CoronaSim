@@ -28,38 +28,6 @@ slider_fps.oninput = function() {
 */
 
 
-// var R03
-
-/*
-var slider_R03=document.getElementById("slider_R03");
-var slider_R03Text = document.getElementById("slider_R03Text");
-
-setSlider(slider_R03, slider_R03Text, R03,"");
-
-
-slider_R03.oninput = function() {
-  slider_R03Text.innerHTML = "&nbsp;"+this.value;
-  R03=parseFloat(this.value);
-  console.log("slider1 callback: R03="+R03);
-}
-*/
-
-// var R04
-
-/*
-var slider_R04=document.getElementById("slider_R04");
-var slider_R04Text = document.getElementById("slider_R04Text");
-
-setSlider(slider_R04, slider_R04Text, R04,"");
-
-
-slider_R04.oninput = function() {
-  slider_R04Text.innerHTML = "&nbsp;"+this.value;
-  R04=parseFloat(this.value);
-  console.log("slider1 callback: R04="+R04);
-}
-*/
-
 // var R0
 
 var slider_R0=document.getElementById("slider_R0");
@@ -130,18 +98,17 @@ var slider_pTestText = document.getElementById("slider_pTestText");
 
 setSlider(slider_pTest, slider_pTestText, 100*pTest, " %");
 
-
 slider_pTest.oninput = function() {
   otherSliderUsed=true;
   testSliderUsed=true;
   includeInfluenceTestNumber=false;
   slider_pTestText.innerHTML = "&nbsp;"+this.value+" %";
-  var pTestold=pTest;
   pTest=parseFloat(this.value/100.);
   //console.log("slider4 callback: pTest="+pTest);
   document.getElementById("testnumber").innerHTML
       ="Beruecksichtige Testhaeufigkeit";
 }
+
 
 
 //var tauTest;
@@ -152,7 +119,6 @@ var slider_tauTestText = document.getElementById("slider_tauTestText");
 setSlider(slider_tauTest, slider_tauTestText, 
 	  tauTest, " Tagen");
 
-
 slider_tauTest.oninput = function() {
   otherSliderUsed=true;
   tauTest=parseFloat(this.value);
@@ -161,6 +127,40 @@ slider_tauTest.oninput = function() {
   //console.log("slider2 callback: tauTest="+tauTest);
 }
 
+
+
+//var pVacc;
+
+var slider_pVacc=document.getElementById("slider_pVacc");
+var slider_pVaccText = document.getElementById("slider_pVaccText");
+
+setSlider(slider_pVacc, slider_pVaccText, 100*pVacc, " %");
+
+slider_pVacc.oninput = function() {
+  slider_pVaccText.innerHTML = "&nbsp;"+this.value+" %";
+  pVacc=parseFloat(this.value/100.);
+}
+
+//var measures; {0=none,1=distance,2=distance+masks,3-5=lockdowns}
+
+function str_measures(measures){
+  return ((measures==0) ? "Halli Galli" : 
+	  (measures==1) ? "wie 2019" :
+	  (measures==2) ? "Abstand" :
+	  (measures==3) ? "Abstand+Maske" :
+	  (measures==4) ? "Teil-Lockdown" :
+	  (measures==5) ? "Lockdown" : "Max Shutdown");
+}
+var slider_measures=document.getElementById("slider_measures");
+var slider_measuresText = document.getElementById("slider_measuresText");
+
+slider_measures.value=measures; // setSlider does not fit here
+slider_measuresText.innerHTML="&nbsp;"+str_measures(measures);
+
+slider_measures.oninput = function() {
+  measures=parseInt(this.value);
+  slider_measuresText.innerHTML = "&nbsp;"+str_measures(measures);
+}
 
 
 
@@ -253,12 +253,18 @@ function canvas_resize(){
   // update dependent graphics elements
 
   // must update canvas boundaries since canvas may be resized
-  drawsim.xPix0  =0.12*canvas.width;
+  // canvas height is a bit oversized to allow changes inside canvas
+
+  drawsim.xPix0  =(isSmartphone) ? 0.13*canvas.width : 0.08*canvas.width;
   drawsim.xPixMax=0.98*canvas.width;
-  drawsim.yPix0  =0.85*canvas.height;
-  drawsim.yPixMax=0.02*canvas.height;
+  drawsim.yPix0  =(isSmartphone) ? 0.85*canvas.height : 0.90*canvas.height;
+  drawsim.yPixMax=(showVacc) ? 0.02*canvas.height : 0.10*canvas.height;
   drawsim.wPix=drawsim.xPixMax-drawsim.xPix0;
   drawsim.hPix=drawsim.yPixMax-drawsim.yPix0;  //<0
+  for(var i=0; i<=itmax-drawsim.itmin; i++){
+      drawsim.xPix[i]=drawsim.xPix0
+	+i*(drawsim.xPixMax-drawsim.xPix0)/(itmax-drawsim.itmin);
+  }
 
   if(drawsim!==null){drawsim.draw(it);}//!! draw after resize
 
@@ -461,4 +467,28 @@ function onmousemoveCallback(event){
       );
 	   }
 }
+
+
+function toggleViews(){
+  showVacc=(!showVacc);
+  setView(showVacc);
+}
+
+function setView(showVacc){
+  if(showVacc){
+    document.getElementById("vaccinationButton").innerHTML
+      = "=> Experten-<br>Ansicht";
+    document.getElementById("sliders").style.display="none"; // "hidden" DOS
+    document.getElementById("sliders2").style.display="block"; // css DOS
+  }
+
+  else{
+    document.getElementById("vaccinationButton").innerHTML
+      = "=> Ma&szlig;nahmen-<br>Ansicht";
+    document.getElementById("sliders").style.display="block";
+    document.getElementById("sliders2").style.display="none";
+  }
+  canvas_resize();
+}
+
 

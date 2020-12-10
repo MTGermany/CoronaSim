@@ -107,23 +107,6 @@ a:hover {
 
 
 
-/*######################################################*/
-/* title */
-/*######################################################*/
-
-
-#header{
-  position: absolute;
-  top: 0vmin;
-  left: 10vw;
-  font-weight:bold;
-  z-index: 3;  /* above simulation canvas in rare chances of overlapping */
-}
-
-/*######################################################*/
-/* main elements */
-/*######################################################*/
-
 
 #logDiv{ /* sadly does not log system generated errors as expected */
   position: absolute;
@@ -150,13 +133,77 @@ a:hover {
 }
 
 
+/* ################################################### */
+/* main elements default=landscape */
+/* ################################################### */
+
+
+#header{
+  position: absolute;
+  top: 0vmin;
+  left: 10vw;
+  font-weight:bold;
+  z-index: 3;  /* above simulation canvas in rare chances of overlapping */
+}
+
+#sliders{ 
+  position: absolute;
+  top:   9vh; 
+  left:   20vw;
+  width:  60vw;
+  height:  16vh;
+  background-color: rgb(222,255,222);
+  margin-right: 0vw;
+  margin-left: 0vw;
+  z-index: 3;  # the higher the more on top
+  /* display: none; DOS; same with property hidden and with "none" */
+}
+
+#sliders2{ 
+  position: absolute;
+  top:   9vh; 
+  left:   25vw;
+  width:  50vw;
+  height:  8vh;
+  background-color: rgb(222,255,222);
+  margin-right: 0vw;
+  margin-left: 0vw;
+  z-index: 3;  # the higher the more on top
+}
+
+#contents{ /* contains the canvas */
+  position: absolute;
+  top:   21vh;  /* 6 for the title, 24 for the sliders */
+  left:   2vw;
+  width:  85vw;
+  height: 78vh;
+  background-color: rgb(255,255,255);
+  margin-right: 0vw;
+  margin-left: 0vw;
+  z-index: 1; # the higher the more on top
+}
+
+
+/* ################################################### */
+/* secondary elements default */
+/* ################################################### */
+
+
+#info{ 
+  position: absolute;
+  top:     0.0vh; 
+  right:   36vmin;
+  z-index: 3; /* the higher, the more on top */
+}
+
+
 #startStopDiv{
   position: absolute;
   top:     0.0vh; 
   right:   24vmin;
   height:  7vmin;
   width:   7vmin;
-  z-index: 3; /* the higher the integer, the more on top */
+  z-index: 3; 
 }
 
 #restartDiv{
@@ -187,85 +234,138 @@ a:hover {
 }
 
 
+/* vertical array of elements; with width: attribute left aligned,
+   without right */
+
 #countryData{ /* normal landscape */
   position: absolute;
-  top:     10vh; 
-  right:   2vmin;
+  top:     9vh; 
+  right:   1vw;
   z-index: 4; # the higher the more on top
 }
 
 #dataTypeDiv{  /*normal, landscape */
   position: absolute;
-  top:     15vh; 
-  right:   2vmin;
+  top:     13.5vh; 
+  right:   1vw;
   z-index: 4; 
 }
 
+
 #calibrateDiv{ /* normal landscape */
   position: absolute;
-  top:     20vh; 
-  right:   2vmin;
+  top:     18vh; 
+  right:   1vw;
   z-index: 3; 
 }
 
 #testnumberDiv{
   position: absolute;
-  top:     10vh; 
-  right:   30vmin;
-  width:   12vmin;
+  top:     50vh; /*10vh*/
+  right:   1vw;
   z-index: 3; /* the higher the integer, the more on top */
 }
 
-
-#sliders{ 
+#vaccinationView{  /*normal, landscape */
   position: absolute;
-  top:   9vh; 
-  left:   10vw;
-  width:  60vw;
-  height:  16vh;
-  background-color: rgb(222,255,222);
-  margin-right: 0vw;
-  margin-left: 0vw;
-  z-index: 3;  # the higher the more on top
-}
-
-#contents{ /* contains the canvas */
-  position: absolute;
-  top:   27vh;  /* 6 for the title, 24 for the sliders */
-  left:   2vw;
-  width:  96vw;
-  height: 66vh;
-  background-color: rgb(255,255,255);
-  margin-right: 0vw;
-  margin-left: 0vw;
-  z-index: 1; # the higher the more on top
-}
-
-#info{ /* top middle of the canvas */
-  position: absolute;
-  top:   28vh;  /* 6 for the title, 24 for the sliders */
-  right:   16vw;
-  z-index: 2; # the higher the more on top
+  top:     60vh; 
+  right:   1vw;
+  z-index: 3; 
 }
 
 #impressum{ 
   position: absolute;
-  bottom:   1.5vh;  /* 6 for the title, 24 for the sliders */
-  right:   2vw;
-  z-index: 2; # the higher the more on top
+  top:     90vh; 
+  right:   1vw;
+  z-index: 3; 
 }
 
 #home{ 
   position: absolute;
-  bottom:   1.5vh;
-  left:   45vw;
-
-  z-index: 2; # the higher the more on top
+  top:     95vh; 
+  right:   1vw;
+  z-index: 3; 
 }
 
 
 
 
+
+
+
+
+/*#########################################################*/
+/* normalscreen portrait overrides (geht nicht nested!)
+/*#########################################################*/
+
+@media screen and (max-aspect-ratio: 7/5){  /* w/h */
+
+
+/* ################################################### */
+/* main elements rect or portrait */
+/* ################################################### */
+
+#header{
+  position: absolute;
+  top:   -1.5vmin;
+  left:  10vmin;
+  width: 50vmin;
+}
+
+
+#sliders{      /* normal portrait */
+  left:   12vw;
+}
+
+#sliders2{      /* normal portrait */
+  left:   12vw;
+  width:  60vw;
+}
+
+#contents{ /* contains the canvas */
+  position: absolute;
+  top:   21vh;  /* 6 for the title, 24 for the sliders */
+  left:   2vw;
+  width:  96vw;
+  height: 72vh;
+}
+
+
+/* ################################################### */
+/* secondary elements rect/portrait                    */
+/* ################################################### */
+
+
+#vaccinationView{  /*normal rect/portrait */
+  position: absolute;
+  top:     auto;   /* need auto because otherwise dependency bug */ 
+  bottom:  1vh; 
+  right:   auto;
+  left:    2vw;
+}
+
+#testnumberDiv{
+  top:     auto; 
+  bottom:  1vh; 
+  right:   auto;
+  left:    20vw;
+}
+
+
+
+#impressum{ 
+  top:     auto; 
+  bottom:  1vh; 
+  right:   15vw;
+}
+
+#home{              /*normal rect/portrait */
+  top:     auto; 
+  bottom:  1vh; 
+  right:   1vw;
+}
+
+}
 
 
 
@@ -321,181 +421,7 @@ input[type=range]::-webkit-slider-thumb {
   width:  2.0vmin;
 }
 
-
 }
-
-/*#########################################################*/
-/* normalscreen portrait overrides (geht nicht nested!)
-/*#########################################################*/
-
-@media screen and (max-aspect-ratio: 7/5){ 
-#header{
-  position: absolute;
-  top:   -1.5vmin;
-  left:  4vmin;
-  width: 50vmin;
-}
-
-
-#testnumberDiv{
-  top:     1vh; 
-  right:   35vmin;
-}
-
-
-
-#sliders{      /* normal portrait */
-  left:   2vw;
-}
-}
-
-/*#########################################################*/
-/* addtl smartphone landscape settings (geht nicht nested!)
-/*#########################################################*/
-
-
-@media screen and (max-height: 600px) and (min-aspect-ratio: 1/1), 
-screen and (max-width: 600px) and (min-aspect-ratio: 1/1),
-screen and (min-resolution: 1.5dppx) and (min-aspect-ratio: 1/1){
-
-#header{ /*mobile, landscape */
-  top:   -1.5vmin;
-  left:    5vmin;
-  width:   35vmin;
-  z-index: 4;
-}
-
-#sliders{     /*mobile, landscape */
-  position: absolute;
-  top:   1.5vh; 
-  background-color: rgb(255,255,255);
-  left:   20vw;
-  width:  55vw;
-}
-
-
-#startStopDiv{  /*mobile, landscape */
-  right:   30vmin;
-  height:  9vmin;
-  width:   9vmin;
-}
-
-#restartDiv{
-  right:   21vmin;
-  height:  8vmin;
-  width:   8vmin;
-}
-
-#resetDiv{ /*mobile, landscape */
-  right:   12vmin;
-  height:  8vmin;
-  width:   8vmin;
-}
-
-#flagDiv{ /*mobile, landscape */
-  top:   2vmin;
-  right:   5vmin;
-  height:  5vmin;
-  width:   5vmin;
-}
-
-
-#countryData{ /* mobile landscape */
-  position: absolute;
-  top:     10vh; 
-  right:   2vmin;
-  z-index: 4; # the higher the more on top
-}
-
-#dataTypeDiv{ /* 6 viewing windows */
-  position: absolute;
-  top:     15vh; 
-  right:   2vmin;
-  z-index: 4; /* the higher the integer, the more on top */
-}
-
-
-#contents{    /*mobile, landscape */
-  position: absolute;
-  top:   21vh; 
-  left:   2vw;
-  width:  96vw;
-  height: 72vh;
-}
-
-#info{ 
-  position: absolute;
-  top:   21vh;  /* 6 for the title, 24 for the sliders */
-  right:   16vw;
-  z-index: 4; 
-}
-
-/*mobile landscape */
-
-#testnumberDiv{ 
-  position: absolute;
-  top:    94vh;  /*BUG!! DOS if saying top: auto, bottom: something!!!*/
-  right: auto;
-  left:   25vw; 
-  width:   40vw; 
-  z-index: 4; /* BUG: muss immer neu gesetzt werden!!*/
-
-}
-
-#calibrateDiv{     /*mobile landscape */
-  top:      auto;  /*bugfix: removes the top property */
-  bottom:   1vh; 
-  left:    2vw;
-  width: auto;
-}
-
-
-#home{ 
-  position: absolute;  /*mobile landscape */
-  bottom:   1vh; 
-  left:     auto; 
-  right:   20vw;
-  width: auto;
-  z-index: 4; /* BUG: muss immer neu gesetzt werden!!*/
-}
-
-#impressum{ 
-  position: absolute;
-  bottom:   1vh; 
-  right:   2vw;
-  width: auto;
-  z-index: 4; /* BUG: muss immer neu gesetzt werden!!*/
-}
-
-}
-
-/*#########################################################*/
-/* addtl smartphone very landscape settings (Samsung etc)
-/*#########################################################*/
-
-@media screen and (max-height: 600px) and (min-aspect-ratio: 5/3), 
-screen and (max-width: 600px) and (min-aspect-ratio: 5/3),
-screen and (min-resolution: 1.5dppx) and (min-aspect-ratio: 5/3){
-
-
-
-#countryData{ /* mobile very landscape */
-  position: absolute;
-  top:     14vh; 
-  right:   35vmin;
-  z-index: 4; # the higher the more on top
-}
-
-#dataTypeDiv{ 
-  position: absolute;
-  top:     14vh; 
-  right:   2vmin;
-  z-index: 4;   /* mobile very landscape */
-}
-
-
-}
-
 
 /*#########################################################*/
 /* addtl smartphone portrait settings (geht NICHT nested!)
@@ -506,17 +432,17 @@ screen and (max-width: 600px) and (max-aspect-ratio: 1/1),
 screen and (min-resolution: 1.5dppx) and (max-aspect-ratio: 1/1){
 
 input[type=range]{ /*mobile, portrait, orig in sliders.css */ 
-  width: 40vmin;
+  width: 27vmin;
   height: 1.6vmin;
 }
 
 input[type=range]::-moz-range-track{
-  width: 40vmin;
+  width: 27vmin;
   height: 1.6vmin;
 }
 
 input[type=range]::-webkit-slider-runnable-track{ /*mobile portrait*/
-  width: 40vmin;
+  width: 27vmin;
   height: 1.6vmin;
 }
 
@@ -533,102 +459,327 @@ input[type=range]::-webkit-slider-thumb {
 
 
 
+
+/* ################################################### */
+/* main elements smartphone portrait */
+/* ################################################### */
+
 #header{
-  top:     -0.5vmin;
-  left:   5vmin;
-  width:  50vmin;
-}
-
-#startStopDiv{  /*mobile, portrait */
-  top:     1.5vmin;
-  right:   33vmin;
-  height:  9vmin;
-  width:   9vmin;
-}
-
-#restartDiv{/*mobile, portrait */
-  top:     2vmin;
-  right:   24vmin;
-  height:  8vmin;
-  width:   8vmin;
-}
-
-#resetDiv{
-  top:     2vmin;
-  right:   15vmin;
-  height:  8vmin;
-  width:   8vmin;
-}
-
-#flagDiv{
-  top:     3vmin;
-  right:   6vmin;
-  height:  5vmin;
-  width:   5vmin;
-}
-
-
-
-#sliders{     /*mobile, portrait */
   position: absolute;
-  top:   14vmin; 
+  top:   -1.5vmin;
+  left:  10vmin;
+  width: 50vmin;
+}
+
+
+#sliders{      /* smartphone portrait */
+  left:   1vw;
+  width:  70vw;
   background-color: rgb(255,255,255);
-  left:   2vmin;
-  width:  96vmin;
-  height: 20vmin;
+}
+
+#sliders2{      /* smartphone portrait */
+  left:   1vw;
+  width:  70vw;
+  background-color: rgb(255,255,255);
+}
+
+#contents{ /* contains the canvas */
+  position: absolute;
+  top:   21vh;  /* 6 for the title, 24 for the sliders */
+  left:   2vw;
+  width:  96vw;
+  height: 72vh;
 }
 
 
-#contents{           /*mobile, portrait */
+/* ################################################### */
+/* secondary elements smartphone portrait
+/* ################################################### */
+
+#info{ /* smartphone portrait */
   position: absolute;
-  top:   38vmin;  
-  left:  2vw;
-  width:  96vmin;
-  height: 90vmin;
+  top:     8vmin; 
+  right:   18vmin;
+  z-index: 3; 
 }
 
-#info{ 
+#countryData{ /* smartphone portrait */
   position: absolute;
-  top:   39vmin;  /* 6 for the title, 24 for the sliders */
-  right:   16vw;
+  top:     15.5vmin; 
+  right:   1vw;
   z-index: 4; 
 }
 
-#dataTypeDiv{ 
-  top:   130vmin;
-  left:  2vmin;
+#dataTypeDiv{  /*smartphone, portrait */
+  position: absolute;
+  top:     21vmin; 
+  right:   1vw;
+  z-index: 4; 
 }
 
-#countryData{ /*mobile, portrait */
-  top:   136vmin;
-  left:  2vmin;
+
+#calibrateDiv{ /* smartphone portrait */
+  position: absolute;
+  top:     26.5vmin; 
+  right:   1vw;
+  z-index: 3; 
 }
 
-#calibrateDiv{  /*mobile, portrait */
-  top:   130vmin;
-  left:  44vmin;
+#vaccinationView{  /*smartphone portrait */
+  position: absolute;
+  top:     auto;   /* need auto because otherwise dependency bug */ 
+  bottom:  1vh; 
+  right:   auto;
+  left:    2vw;
 }
 
 #testnumberDiv{
-  top:   136vmin;
-  left:  44vmin;
-}
-
-
-#home{ /*mobile portrait */
-  bottom: auto;
-  top:   130vmin;
-  left:  auto;
-  right:  2vmin;
-  z-index: 4;  
-}
-
-#impressum{ /*mobile, portrait */
-  top:   136vmin;
-  right:  2vmin;
+  position: absolute;
+  top:     auto; 
+  bottom:  1vh; 
+  right:   auto;
+  left:    30vw;
 }
 
 
 
-}  /*smartphone and max-aspect-ratio: 1/1*/
+#impressum{ 
+  top:     auto; 
+  bottom:  1vh; 
+  right:   25vw;
+}
+
+#home{              /*normal rect/portrait */
+  top:     auto; 
+  bottom:  1vh; 
+  right:   1vw;
+}
+
+}
+
+
+
+
+  /*smartphone portrait (max-aspect-ratio: 1/1) */
+
+
+/*#########################################################*/
+/* addtl smartphone landscape settings (geht nicht nested!)
+/*#########################################################*/
+
+
+@media screen and (max-height: 600px) and (min-aspect-ratio: 1/1), 
+screen and (max-width: 600px) and (min-aspect-ratio: 1/1),
+screen and (min-resolution: 1.5dppx) and (min-aspect-ratio: 1/1){
+
+
+/*#########################################################*/
+/* sliders smartphone landscape
+/*#########################################################*/
+
+h1{
+  font-size: 4vmin;
+}
+
+input[type=range]{ /*mobile, landscape, orig in sliders.css */ 
+  width: 16vw;
+  height: 2.5vmin;
+}
+
+input[type=range]::-moz-range-track{
+  width: 16vw;
+  height: 2.5vmin;
+}
+
+/* ################################################### */
+/* main elements smartphone landscape
+/* ################################################### */
+
+#header{
+  position: absolute;
+  top: -1vh;
+  left: 10vw;
+  font-weight:bold;
+  z-index: 3;  
+}
+
+#sliders{    /* smartphone landscape */
+  position: absolute;
+  top:   7.5vh; 
+  left:   20vw;
+  width:  60vw;
+  height:  16vh;
+  background-color: rgb(255,255,255);
+  margin-right: 0vw;
+  margin-left: 0vw;
+  z-index: 3;  # the higher the more on top
+  /* display: none; DOS; same with property hidden and with "none" */
+}
+
+#sliders2{ /* smartphone landscape */
+  position: absolute;
+  top:   8vh; 
+  left:   25vw;
+  width:  50vw;
+  height:  8vh;
+  background-color: rgb(255,255,255);
+  margin-right: 0vw;
+  margin-left: 0vw;
+  z-index: 3;  # the higher the more on top
+}
+
+#contents{ /* contains the canvas */
+  position: absolute;
+  top:   24vh;  /* 6 for the title, 24 for the sliders */
+  left:   2vw;
+  width:  82vw;
+  height: 75vh;
+  background-color: rgb(255,255,255);
+  margin-right: 0vw;
+  margin-left: 0vw;
+  z-index: 1; # the higher the more on top
+}
+
+
+/* ################################################### */
+/* secondary elements smartphone landscape
+/* ################################################### */
+
+
+#info{ /* smartphone landscape */
+  position: absolute;
+  top:     1vh; 
+  right:   36vmin;
+  z-index: 3; 
+}
+
+
+#startStopDiv{
+  position: absolute;
+  top:     0.0vh; 
+  right:   24vmin;
+  height:  7vmin;
+  width:   7vmin;
+  z-index: 3; 
+}
+
+#restartDiv{ /* smartphone landscape */
+  position: absolute;
+  top:     0.5vh; 
+  right:   18vmin;
+  height:  6vmin;
+  width:   6vmin;
+  z-index: 3;
+}
+
+#resetDiv{
+  position: absolute;
+  top:     0.5vh; 
+  right:   12vmin;
+  height:  6vmin;
+  width:   6vmin;
+  z-index: 3; 
+}
+
+#flagDiv{  /* smartphone landscape */
+  position: absolute;
+  top:     1vh; 
+  right:   4vmin;
+  height:  5vmin;
+  width:   6vmin;
+  z-index: 3; 
+}
+
+
+/* vertical array of elements; with width: attribute left aligned,
+   without right */
+
+#countryData{ /* smartphone landscape */
+  position: absolute;
+  top:     10vh; 
+  right:   1vw;
+  z-index: 4; 
+}
+
+#dataTypeDiv{  /*smartphone, landscape */
+  position: absolute;
+  top:     16vh; 
+  right:   1vw;
+  z-index: 4; 
+}
+
+
+#calibrateDiv{ /* smartphone landscape */
+  position: absolute;
+  top:     22vh; 
+  right:   1vw;
+  z-index: 3; 
+}
+
+#testnumberDiv{
+  position: absolute;
+  bottom:  auto;
+  top:     48vh;
+  left:    auto;
+  right:   1vw;
+  z-index: 3;
+}
+
+#vaccinationView{  /*smartphone landscape */
+  position: absolute;
+  bottom:  auto;
+  top:     60vh; 
+  left:    auto;
+  right:   1vw;
+  z-index: 3; 
+}
+
+#impressum{ 
+  position: absolute;
+  top:     86vh; 
+  right:   1vw;
+  z-index: 3; 
+}
+
+#home{ 
+  position: absolute;
+  top:     92vh; 
+  right:   1vw;
+  z-index: 3; 
+}
+
+
+
+}
+
+/*#########################################################*/
+/* addtl smartphone very landscape settings (Samsung etc)
+/*#########################################################*/
+
+/*
+@media screen and (max-height: 600px) and (min-aspect-ratio: 5/3), 
+screen and (max-width: 600px) and (min-aspect-ratio: 5/3),
+screen and (min-resolution: 1.5dppx) and (min-aspect-ratio: 5/3){
+
+
+
+#countryData{ 
+  position: absolute;
+  top:     14vh; 
+  right:   35vmin;
+  z-index: 4; # the higher the more on top
+}
+
+#dataTypeDiv{ 
+  position: absolute;
+  top:     14vh; 
+  right:   2vmin;
+  z-index: 4;   
+}
+*/
+
+}
+
+
 
