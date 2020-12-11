@@ -76,7 +76,7 @@ Info
 <div id="vaccinationView">
   <button  id="vaccinationButton" onclick="toggleViews()">
  => Ma&szlig;nahmen-<br>ansicht
-<!-- => normale <br>Ansicht</button> -->
+<!-- => Normale <br>Ansicht</button> -->
 </button>
 </div>
 
@@ -169,14 +169,14 @@ Dr. Treiber
   </tr>
 
   <tr>
-    <td> Ansteckungsstart </td>
+    <td> Ansteckungsstart &nbsp; </td>
     <td> <input id="slider_tauRstart" type="range" 
                 min="1" max="10" step="1"></td>   <!-- value in js -->
     <td> <div id="slider_tauRstartText"></div> </td>
   </tr>
 
   <tr>
-    <td> Ansteckungsende</td>
+    <td> Ansteckungsende &nbsp; </td>
     <td> <input id="slider_tauRend" type="range" 
                 min="4" max="20" step="1"></td>   <!-- value in js -->
     <td> <div id="slider_tauRendText"></div> </td>
@@ -184,15 +184,14 @@ Dr. Treiber
 
 
   <tr>
-    <td> Test nach </td>
+    <td> Test nach &nbsp; </td>
     <td> <input id="slider_tauTest" type="range" 
                 min="1" max="20" step="1"></td>  <!-- value in js -->
     <td> <div id="slider_tauTestText"></div> </td>
   </tr>
 
   <tr>
-    <td> Hellfeld &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; 
-         &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; </td>
+    <td> Hellfeld &nbsp; </td>
     <td> <input id="slider_pTest" type="range" 
                 min="2" max="20" step="0.1"></td>  <!-- value in js -->
     <td> <div id="slider_pTestText"></div> </td>
@@ -219,14 +218,21 @@ Dr. Treiber
 <table id="slidersTable2" border="0" cellspacing="1" cellpadding="1" >
 
   <tr>
-    <td>&nbsp;&nbsp; Impfrate </td>
+    <td>&nbsp; Import-F&auml;lle &nbsp; </td>
+    <td> <input id="slider_casesInflow" type="range" 
+                min="0" max="50" step="1"></td>  <!-- value in js -->
+    <td> <div id="slider_casesInflowText"></div> </td>
+  </tr>
+
+  <tr>
+    <td>&nbsp; Impfrate  &nbsp; </td>
     <td> <input id="slider_pVacc" type="range" 
                 min="0" max="100" step="1"></td>  <!-- value in js -->
     <td> <div id="slider_pVaccText"></div> </td>
   </tr>
 
   <tr>
-    <td>&nbsp;&nbsp; Ma&szlig;nahmen </td>
+    <td>&nbsp; Ma&szlig;nahmen  &nbsp; </td>
     <td> <input id="slider_measures" type="range" 
                 min="0" max="6" step="1"></td>  <!-- value in js -->
     <td> <div id="slider_measuresText"></div> </td>
@@ -241,7 +247,7 @@ Dr. Treiber
 
 <div id="testnumberDiv"> 
  <button id="testnumber" onclick="toggleTestnumber()">
- Ignoriere<br>Testhaeufigkeit</button>
+ Ignoriere<br>Testh&auml;ufigkeit</button>
 </div>
 
 <div id="startStopDiv"><img id="startStop" width="100%" 

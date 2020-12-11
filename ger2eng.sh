@@ -44,6 +44,7 @@ perl -i -p -e 's/Ber\&uuml\;sichtige/Consider/g' *_eng.html *_eng.js
 perl -i -p -e 's/Testh\&auml\;ufigkeit/test frequency/g' *_eng.html *_eng.js
 perl -i -p -e 's/Ma\&szlig;nahmen\-/Measures/g' *_eng.html *_eng.js
 perl -i -p -e 's/Ma\&szlig;nahmen/Measures/g' *_eng.html *_eng.js
+perl -i -p -e 's/Massnahmen/Measures/g' *_eng.html *_eng.js
 perl -i -p -e 's/Ansicht/view/g' *_eng.html *_eng.js
 perl -i -p -e 's/ansicht/view/g' *_eng.html *_eng.js
 perl -i -p -e 's/Normale/Normal/g' *_eng.html *_eng.js
@@ -54,6 +55,7 @@ perl -i -p -e 's/Maske/mask/g' *_eng.html *_eng.js
 perl -i -p -e 's/wie 2019/as 2019/g' *_eng.html *_eng.js
 perl -i -p -e 's/Halli Galli/Endless parties/g' *_eng.html *_eng.js
 perl -i -p -e 's/Import\-F&auml;lle/Import cases/g' *_eng.html *_eng.js
+perl -i -p -e 's/Fall-Import/Imported cases/g' *_eng.html *_eng.js
 perl -i -p -e 's/Einw\./inh./g' *_eng.html *_eng.js
 
 perl -i -p -e 's/de\-de/en\-us/g' *_eng.js

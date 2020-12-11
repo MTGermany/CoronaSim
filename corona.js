@@ -1260,6 +1260,7 @@ function getIndexCalibmax(itime){
 
 function calibrate(){
 
+  
   console.log("\n\n==================================================",
 	      "\nEntering calibrate(): country=",country,
 	      "\n====================================================");
@@ -1880,6 +1881,8 @@ function selectWindow(){ // callback html select box "windowGDiv"
 
 function myRestartFunction(){ 
   //console.log("in myRestartFunction: itmax=itmaxinit=",itmaxinit);
+
+
   initialize();
   fps=fpsstart;
   itmax=itmaxinit;
@@ -1908,6 +1911,10 @@ function myCalibrateFunction(){
   R0sliderUsed=false;
   otherSliderUsed=false;
   testSliderUsed=false;
+   // calibration unstable with external source => must set to zero
+  casesInflow=0;
+  setSlider(slider_casesInflow, slider_casesInflowText,
+	    casesInflow,"/Tag/100 000 Einw.");
   calibrate();
   myRestartFunction();
 }
@@ -1945,7 +1952,8 @@ function myResetFunction(){
   setSlider(slider_pVacc, slider_pVaccText, 100*pVacc, " %");
 
   casesInflow=casesInflowInit;
-  setSlider(slider_casesInflow, slider_casesInflowText, casesInflow,"/Tag/100 000 Einw.");
+  setSlider(slider_casesInflow, slider_casesInflowText,
+	    casesInflow,"/Tag/100 000 Einw.");
 
   measures=measuresInit;
   slider_measures.value=measures; // setSlider does not fit here
@@ -3182,9 +3190,28 @@ DrawSim.prototype.drawAxes=function(windowG){
     ctx.fillText("Aktuelle IFR="+(100*IFRfun_time(betaIFR,it)).toFixed(2)+" %",
 		 this.xPix0+xrelLeft*this.wPix,
 		 this.yPix0+(yrelTop-(ikey+4)*dyrel)*this.hPix);
-    ctx.fillText("Impfrate="+(pVacc.toFixed(1))+" %",
+    var line=4;
+    if(pVacc>0){
+      line++;
+      ctx.fillText("Impfrate: "+(Math.round(100*pVacc))+" %",
 		 this.xPix0+xrelLeft*this.wPix,
-		 this.yPix0+(yrelTop-(ikey+5)*dyrel)*this.hPix);
+		 this.yPix0+(yrelTop-(ikey+line)*dyrel)*this.hPix);
+    }
+    
+    if(casesInflow>0){
+      line++;
+      ctx.fillText("Fall-Import: "+(Math.round(casesInflow))
+		   +"/Tag/100 000 Einw.",
+		   this.xPix0+xrelLeft*this.wPix,
+		   this.yPix0+(yrelTop-(ikey+line)*dyrel)*this.hPix);
+    }
+
+    if(measures!=4){
+      line++;
+      ctx.fillText("Massnahmen: "+str_measures(measures),
+		   this.xPix0+xrelLeft*this.wPix,
+		   this.yPix0+(yrelTop-(ikey+line)*dyrel)*this.hPix);
+    }
     
   }
 
