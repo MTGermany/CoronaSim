@@ -37,7 +37,7 @@ setSlider(slider_R0, slider_R0Text, R0,"");
 
 
 slider_R0.oninput = function() {
-  RsliderUsed=true;
+  R0sliderUsed=true;
   slider_R0Text.innerHTML = "&nbsp;"+this.value;
   R0=parseFloat(this.value);
   console.log("slider1 callback: R0="+R0);
@@ -151,8 +151,20 @@ function str_measures(measures){
 	  (measures==4) ? "Teil-Lockdown" :
 	  (measures==5) ? "Lockdown" : "Max Shutdown");
 }
+
+function calc_factorMeasures(measures){ // multiplication factor for R
+  var factor=(measures==0) ? 1.20 :
+    (measures==1) ? 1.00 :
+    (measures==2) ? 0.85 :
+    (measures==3) ? 0.80 :
+    (measures==4) ? 0.65 :
+    (measures==5) ? 0.50 : 0.30;
+  return factor/0.65; // relate everything to actual level 4
+}
+
 var slider_measures=document.getElementById("slider_measures");
 var slider_measuresText = document.getElementById("slider_measuresText");
+var factorMeasures=calc_factorMeasures(measures);
 
 slider_measures.value=measures; // setSlider does not fit here
 slider_measuresText.innerHTML="&nbsp;"+str_measures(measures);
@@ -160,6 +172,7 @@ slider_measuresText.innerHTML="&nbsp;"+str_measures(measures);
 slider_measures.oninput = function() {
   measures=parseInt(this.value);
   slider_measuresText.innerHTML = "&nbsp;"+str_measures(measures);
+  factorMeasures=calc_factorMeasures(measures);
 }
 
 
@@ -196,7 +209,7 @@ function setSlider(slider, sliderText, value, unit){
   // sets global variables 
   // - canvas.width, canvas.height
   // - viewport.width, viewport.height
-  // - textsize, textsizeR (for the R values)
+  // - textsize, textsizeR0 (for the R0 values)
 //###############################################################
 
 var viewport={width: 200, height: 200}
@@ -235,14 +248,14 @@ function canvas_resize(){
   isSmartphone=(sizeminWindow<600);
 
   textsize=(isSmartphone) ? 0.03*sizeminWindow : 0.02*sizeminWindow;
-  textsizeR=1.1*textsize;
+  textsizeR0=1.1*textsize;
   if(false){
   console.log("canvas_gui.canvas_resize():",
 		" isSmartphone=",isSmartphone,
 		" canvas.width=",canvas.width,
 		" canvas.height=",canvas.height,
 		" textsize=",textsize,
-		" textsizeR=",textsizeR);
+		" textsizeR0=",textsizeR0);
 
   console.log("document.documentElement.clientHeight=",
 	      document.documentElement.clientHeight,
@@ -477,7 +490,7 @@ function toggleViews(){
 function setView(showVacc){
   if(showVacc){
     document.getElementById("vaccinationButton").innerHTML
-      = "=> Experten-<br>Ansicht";
+      = "=> normale<br>Ansicht";
     document.getElementById("sliders").style.display="none"; // "hidden" DOS
     document.getElementById("sliders2").style.display="block"; // css DOS
   }
