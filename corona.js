@@ -13,6 +13,7 @@ var showVacc=false;  // false: only display as of dec2020
 
 var useLiveDataInit=false;  //!! will be changed by upload script, 2 versions
 var useLiveData=useLiveDataInit;
+useLiveData=true;
 
 var loggingDebug=false; //!! global var for testing functions inside calibr
 
@@ -2070,6 +2071,8 @@ function CoronaSim(){
   this.xohne=[]; // age structure without deleting by recover,death 
                  // (!!needed for correct recovery rate and balance x,y,z!)
   this.snapAvailable=false; // initially, no snapshot of the state exists
+  this.Reff=1.11;  // need some start ecause otherwise bug at drawing
+                   // undeterministic too early calling of drawsim 
 }
 
 
@@ -2345,7 +2348,7 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
 
   this.Reff=R0*(1-pVacc)*factorMeasures*(1-this.xyz)
     * ((it<=itmaxinit) ? 1 : calc_seasonFactor(it));
-  //if(it>itmaxinit)console.log("calc_seasonFactor(it)=",calc_seasonFactor(it));
+  if(it>itmaxinit)console.log("this.Reff=",this.Reff);
 
   // true dynamics (1): shift age profile of already infected by one
 

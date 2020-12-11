@@ -73,6 +73,14 @@ Info
 </div>
 
 
+<div id="vaccinationView">
+  <button  id="vaccinationButton" onclick="toggleViews()">
+ => Ma&szlig;nahmen-<br>ansicht
+<!-- => normale <br>Ansicht</button> -->
+</button>
+</div>
+
+
 <div id="impressum"> 
  <button onclick="window.location.href = 'impressum.html' ">
 Impressum
@@ -206,9 +214,34 @@ Dr. Treiber
 
 <!-- ######################################################## -->
 
+<div id="sliders2">
+
+<table id="slidersTable2" border="0" cellspacing="1" cellpadding="1" >
+
+  <tr>
+    <td>&nbsp;&nbsp; Impfrate </td>
+    <td> <input id="slider_pVacc" type="range" 
+                min="0" max="100" step="1"></td>  <!-- value in js -->
+    <td> <div id="slider_pVaccText"></div> </td>
+  </tr>
+
+  <tr>
+    <td>&nbsp;&nbsp; Ma&szlig;nahmen </td>
+    <td> <input id="slider_measures" type="range" 
+                min="0" max="6" step="1"></td>  <!-- value in js -->
+    <td> <div id="slider_measuresText"></div> </td>
+  </tr>
+
+
+</table>
+
+</div>
+
+<!-- ######################################################## -->
+
 <div id="testnumberDiv"> 
  <button id="testnumber" onclick="toggleTestnumber()">
- Ignoriere Testhaeufigkeit</button>
+ Ignoriere<br>Testhaeufigkeit</button>
 </div>
 
 <div id="startStopDiv"><img id="startStop" width="100%" 
