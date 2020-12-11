@@ -176,6 +176,18 @@ slider_measures.oninput = function() {
 }
 
 
+//var casesInflow;
+
+var slider_casesInflow=document.getElementById("slider_casesInflow");
+var slider_casesInflowText = document.getElementById("slider_casesInflowText");
+
+setSlider(slider_casesInflow, slider_casesInflowText, casesInflow, "/Tag/100 000 Einw.");
+
+slider_casesInflow.oninput = function() {
+  slider_casesInflowText.innerHTML = "&nbsp;"+this.value+"/Tag/100 000 Einw.";
+  casesInflow=parseFloat(this.value);
+}
+
 
 //###############################################################
 
@@ -271,7 +283,7 @@ function canvas_resize(){
   drawsim.xPix0  =(isSmartphone) ? 0.13*canvas.width : 0.08*canvas.width;
   drawsim.xPixMax=0.98*canvas.width;
   drawsim.yPix0  =(isSmartphone) ? 0.85*canvas.height : 0.90*canvas.height;
-  drawsim.yPixMax=(showVacc) ? 0.02*canvas.height : 0.10*canvas.height;
+  drawsim.yPixMax=(showVacc) ? 0.05*canvas.height : 0.10*canvas.height;
   drawsim.wPix=drawsim.xPixMax-drawsim.xPix0;
   drawsim.hPix=drawsim.yPixMax-drawsim.yPix0;  //<0
   for(var i=0; i<=itmax-drawsim.itmin; i++){
@@ -490,7 +502,7 @@ function toggleViews(){
 function setView(showVacc){
   if(showVacc){
     document.getElementById("vaccinationButton").innerHTML
-      = "=> normale<br>Ansicht";
+      = "=> Normale<br>Ansicht";
     document.getElementById("sliders").style.display="none"; // "hidden" DOS
     document.getElementById("sliders2").style.display="block"; // css DOS
   }

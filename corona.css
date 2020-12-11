@@ -163,8 +163,8 @@ a:hover {
   position: absolute;
   top:   9vh; 
   left:   25vw;
-  width:  50vw;
-  height:  8vh;
+  width:  55vw;
+  height:  10vh;
   background-color: rgb(222,255,222);
   margin-right: 0vw;
   margin-left: 0vw;
@@ -193,7 +193,7 @@ a:hover {
   position: absolute;
   top:     0.0vh; 
   right:   36vmin;
-  z-index: 3; /* the higher, the more on top */
+  z-index: 4; /* the higher, the more on top */
 }
 
 
@@ -473,23 +473,25 @@ input[type=range]::-webkit-slider-thumb {
 
 
 #sliders{      /* smartphone portrait */
+  top:   10vh;
   left:   1vw;
   width:  70vw;
   background-color: rgb(255,255,255);
 }
 
 #sliders2{      /* smartphone portrait */
+  top:   10vh;
   left:   1vw;
-  width:  70vw;
+  width:  75vw;
   background-color: rgb(255,255,255);
 }
 
 #contents{ /* contains the canvas */
   position: absolute;
-  top:   21vh;  /* 6 for the title, 24 for the sliders */
+  top:   24vh;  /* 6 for the title, 24 for the sliders */
   left:   2vw;
   width:  96vw;
-  height: 72vh;
+  height: 68vh;
 }
 
 
@@ -501,7 +503,7 @@ input[type=range]::-webkit-slider-thumb {
   position: absolute;
   top:     8vmin; 
   right:   18vmin;
-  z-index: 3; 
+  z-index: 4; 
 }
 
 #countryData{ /* smartphone portrait */
@@ -550,7 +552,7 @@ input[type=range]::-webkit-slider-thumb {
   right:   25vw;
 }
 
-#home{              /*normal rect/portrait */
+#home{              /*smartphone rect/portrait */
   top:     auto; 
   bottom:  1vh; 
   right:   1vw;
@@ -606,8 +608,8 @@ input[type=range]::-moz-range-track{
 
 #sliders{    /* smartphone landscape */
   position: absolute;
-  top:   7.5vh; 
-  left:   20vw;
+  top:   11vh; 
+  left:   10vw;
   width:  60vw;
   height:  16vh;
   background-color: rgb(255,255,255);
@@ -619,9 +621,9 @@ input[type=range]::-moz-range-track{
 
 #sliders2{ /* smartphone landscape */
   position: absolute;
-  top:   8vh; 
-  left:   25vw;
-  width:  50vw;
+  top:   12vh; 
+  left:   15vw;
+  width:  60vw;
   height:  8vh;
   background-color: rgb(255,255,255);
   margin-right: 0vw;
@@ -631,10 +633,10 @@ input[type=range]::-moz-range-track{
 
 #contents{ /* contains the canvas */
   position: absolute;
-  top:   24vh;  /* 6 for the title, 24 for the sliders */
+  top:   28vh;  /* 6 for the title, 24 for the sliders */
   left:   2vw;
   width:  82vw;
-  height: 75vh;
+  height: 73vh;
   background-color: rgb(255,255,255);
   margin-right: 0vw;
   margin-left: 0vw;
@@ -651,7 +653,7 @@ input[type=range]::-moz-range-track{
   position: absolute;
   top:     1vh; 
   right:   36vmin;
-  z-index: 3; 
+  z-index: 4; 
 }
 
 

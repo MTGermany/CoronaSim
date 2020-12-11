@@ -17,7 +17,7 @@ perl -i -p -e 's/flagUSA/flagGermany/g' *_eng.html
 perl -i -p -e 's/myRedirectEng/myRedirectGer/g' *_eng.html
 
 
-perl -i -p -e 's/Simulation der Covid-19 Pandemie/Simulation of the Covid-19 Pandemics/g' *_eng.html corona_eng.js
+perl -i -p -e 's/Simulation der Covid-19 Pandemie/Simulation of the Covid-19 Pandemics/g' *_eng.html *_eng.js
 
 perl -i -p -e 's/\"de\"/\"en\"/g' *_eng.html
 
@@ -39,53 +39,65 @@ perl -i -p -e 's/Kalibriere neu\!/Re-calibrate\!/g' *_eng.html
 perl -i -p -e 's/corona\.js/corona_eng\.js/g' *_eng.html
 perl -i -p -e 's/corona_gui\.js/corona_gui_eng\.js/g' *_eng.html
 
-perl -i -p -e 's/Ignoriere Testhaeufigkeit/Ignore \#tests/g' *_eng.html corona_eng.js corona_gui_eng.js
-perl -i -p -e 's/Beruecksichtige Testhaeufigkeit/Include \#tests/g' *_eng.html corona_eng.js corona_gui_eng.js
+perl -i -p -e 's/Ignoriere/Ignore/g' *_eng.html *_eng.js
+perl -i -p -e 's/Ber\&uuml\;sichtige/Consider/g' *_eng.html *_eng.js
+perl -i -p -e 's/Testh\&auml\;ufigkeit/test frequency/g' *_eng.html *_eng.js
+perl -i -p -e 's/Ma\&szlig;nahmen\-/Measures/g' *_eng.html *_eng.js
+perl -i -p -e 's/Ma\&szlig;nahmen/Measures/g' *_eng.html *_eng.js
+perl -i -p -e 's/Ansicht/view/g' *_eng.html *_eng.js
+perl -i -p -e 's/ansicht/view/g' *_eng.html *_eng.js
+perl -i -p -e 's/Normale/Normal/g' *_eng.html *_eng.js
+perl -i -p -e 's/Impfrate/Vaccination/g' *_eng.html *_eng.js
+perl -i -p -e 's/Teil\-/Partial /g' *_eng.html *_eng.js
+perl -i -p -e 's/Abstand/Distance/g' *_eng.html *_eng.js
+perl -i -p -e 's/Maske/mask/g' *_eng.html *_eng.js
+perl -i -p -e 's/wie 2019/as 2019/g' *_eng.html *_eng.js
+perl -i -p -e 's/Halli Galli/Endless parties/g' *_eng.html *_eng.js
 
 
-perl -i -p -e 's/de\-de/en\-us/g' corona_eng.js
-perl -i -p -e 's/\+ countryGer/\+ country/g' corona_eng.js
-perl -i -p -e 's/Insgesamt positiv Getestete/Total cases/g' corona_eng.js
-perl -i -p -e 's/Insg\. Genesene unter den Getesteten/Total recovered cases/g' corona_eng.js
-perl -i -p -e 's/Insgesamt Genesene unter den Getesteten/Total recovered cases/g' corona_eng.js
-perl -i -p -e 's/Insgesamt Gestorbene/Total deaths/g' corona_eng.js
-perl -i -p -e 's/Tote ges/Total deaths/g' corona_eng.js
-perl -i -p -e 's/positiv getestet ges/Total cases/g' corona_eng.js
-perl -i -p -e 's/Aktuell real infizierte Personen/Actively infected/g' corona_eng.js
-perl -i -p -e 's/Insgesamt Genesene unter allen Personen/Total recovered/g' corona_eng.js
-perl -i -p -e 's/Positiv Getestete pro Tag/Cases per day/g' corona_eng.js
-perl -i -p -e 's/Gestorbene pro Tag/Deaths per day/g' corona_eng.js
-perl -i -p -e 's/Tests pro Tag/Tests per day/g' corona_eng.js
-perl -i -p -e 's/Anteil positiver Tests/Fraction positive tests/g' corona_eng.js
-perl -i -p -e 's/Simulierte Neuinfizierte pro Tag/Simulated daily new infected/g' corona_eng.js
-perl -i -p -e 's/Simulierte Durchseuchung/Simulated contamination/g' corona_eng.js
-perl -i -p -e 's/Simulierte False Positives pro Tag/Simulated daily false positives/g' corona_eng.js
-perl -i -p -e 's/Simulierte Gestorbene pro Tag/Simulated daily deaths/g' corona_eng.js
-perl -i -p -e 's/Simulierte Test-Positive pro Tag/Simulated daily cases/g' corona_eng.js
+perl -i -p -e 's/de\-de/en\-us/g' *_eng.js
+perl -i -p -e 's/\+ countryGer/\+ country/g' *_eng.js
+perl -i -p -e 's/Insgesamt positiv Getestete/Total cases/g' *_eng.js
+perl -i -p -e 's/Insg\. Genesene unter den Getesteten/Total recovered cases/g' *_eng.js
+perl -i -p -e 's/Insgesamt Genesene unter den Getesteten/Total recovered cases/g' *_eng.js
+perl -i -p -e 's/Insgesamt Gestorbene/Total deaths/g' *_eng.js
+perl -i -p -e 's/Tote ges/Total deaths/g' *_eng.js
+perl -i -p -e 's/positiv getestet ges/Total cases/g' *_eng.js
+perl -i -p -e 's/Aktuell real infizierte Personen/Actively infected/g' *_eng.js
+perl -i -p -e 's/Insgesamt Genesene unter allen Personen/Total recovered/g' *_eng.js
+perl -i -p -e 's/Positiv Getestete pro Tag/Cases per day/g' *_eng.js
+perl -i -p -e 's/Gestorbene pro Tag/Deaths per day/g' *_eng.js
+perl -i -p -e 's/Tests pro Tag/Tests per day/g' *_eng.js
+perl -i -p -e 's/Anteil positiver Tests/Fraction positive tests/g' *_eng.js
+perl -i -p -e 's/Simulierte Neuinfizierte pro Tag/Simulated daily new infected/g' *_eng.js
+perl -i -p -e 's/Simulierte Durchseuchung/Simulated contamination/g' *_eng.js
+perl -i -p -e 's/Simulierte False Positives pro Tag/Simulated daily false positives/g' *_eng.js
+perl -i -p -e 's/Simulierte Gestorbene pro Tag/Simulated daily deaths/g' *_eng.js
+perl -i -p -e 's/Simulierte Test-Positive pro Tag/Simulated daily cases/g' *_eng.js
 perl -i -p -e 's/Wochen\-Inzidenz/Weekly incidence/g' *_eng.html
-perl -i -p -e 's/Wocheninzidenz pro/Weekly incidence per/g' corona_eng.js
-perl -i -p -e 's/Wocheninzidenz/Weekly incidence/g' corona_eng.js
+perl -i -p -e 's/Wocheninzidenz pro/Weekly incidence per/g' *_eng.js
+perl -i -p -e 's/Wocheninzidenz/Weekly incidence/g' *_eng.js
 
-perl -i -p -e 's/W\&ouml\;chentlich Gestorbene/Weekly deaths per/g' corona_eng.js
+perl -i -p -e 's/W\&ouml\;chentlich Gestorbene/Weekly deaths per/g' *_eng.js
 
-perl -i -p -e 's/Personenzahl/\# Persons/g' corona_eng.js
-perl -i -p -e 's/Personen/Persons/g' corona_eng.js
-perl -i -p -e 's/taegliche Zahlen/Daily figures/g' corona_eng.js
-perl -i -p -e 's/Anteil/Percentage/g' corona_eng.js
-perl -i -p -e 's/oder/or/g' corona_eng.js
+perl -i -p -e 's/Personenzahl/\# Persons/g' *_eng.js
+perl -i -p -e 's/Personen/Persons/g' *_eng.js
+perl -i -p -e 's/taegliche Zahlen/Daily figures/g' *_eng.js
+perl -i -p -e 's/Anteil/Percentage/g' *_eng.js
+perl -i -p -e 's/oder/or/g' *_eng.js
 
-perl -i -p -e 's/Durchseuchung/Contamination/g' corona_eng.js
-perl -i -p -e 's/Aktuelles/Actual/g' corona_eng.js
-perl -i -p -e 's/Aktuelle/Actual/g' corona_eng.js
-perl -i -p -e 's/Tagen/days/g' corona_eng.js corona_gui_eng.js *_eng.html
-perl -i -p -e 's/Tage/days/g' corona_eng.js corona_gui_eng.js *_eng.html
-perl -i -p -e 's/pro Tag/per day/g' corona_eng.js corona_gui_eng.js
-perl -i -p -e 's/Tag/day/g' corona_eng.js corona_gui_eng.js
-perl -i -p -e 's/Simulierte/Simulated/g' corona_eng.js
-perl -i -p -e 's/Faelle/cases/g' corona_eng.js
-perl -i -p -e 's/Pers\./pers\./g' corona_eng.js
-perl -i -p -e 's/Woche/week/g' corona_eng.js
-perl -i -p -e 's/Ew\./inhabitants/g' corona_eng.js
+perl -i -p -e 's/Durchseuchung/Contamination/g' *_eng.js
+perl -i -p -e 's/Aktuelles/Actual/g' *_eng.js
+perl -i -p -e 's/Aktuelle/Actual/g' *_eng.js
+perl -i -p -e 's/Tagen/days/g' *_eng.js  *_eng.html
+perl -i -p -e 's/Tage/days/g' *_eng.js  *_eng.html
+perl -i -p -e 's/pro Tag/per day/g' *_eng.js 
+perl -i -p -e 's/Tag/day/g' *_eng.js 
+perl -i -p -e 's/Simulierte/Simulated/g' *_eng.js
+perl -i -p -e 's/Faelle/cases/g' *_eng.js
+perl -i -p -e 's/Pers\./pers\./g' *_eng.js
+perl -i -p -e 's/Woche/week/g' *_eng.js
+perl -i -p -e 's/Ew\./inhabitants/g' *_eng.js
 
 perl -i -p -e 's/Deutschland/Germany/g' *_eng.html *_eng.js
 perl -i -p -e 's/Oesterreich/Austria/g' *_eng.html *_eng.js

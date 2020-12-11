@@ -310,6 +310,8 @@ var pVacc=pVaccInit;
 var measuresInit=4; // "Abstand+Maske", cf. corona_gui.js->str_measures
 var measures=measuresInit;
 
+var casesInflowInit=0; // inported cases per day and 100 000 inhabitants
+var casesInflow=casesInflowInit;
 
 // (ii) not controlled
 
@@ -1942,6 +1944,9 @@ function myResetFunction(){
   pVacc=pVaccInit;
   setSlider(slider_pVacc, slider_pVaccText, 100*pVacc, " %");
 
+  casesInflow=casesInflowInit;
+  setSlider(slider_casesInflow, slider_casesInflowText, casesInflow,"/Tag/100 000 Einw.");
+
   measures=measuresInit;
   slider_measures.value=measures; // setSlider does not fit here
   slider_measuresText.innerHTML="&nbsp;"+str_measures(measures);
@@ -2342,13 +2347,18 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
   // ###############################################
 
 
-  // (0) calculate the effective R value from R0, the contamination rate,
-  //  and all the external effects
+  // true dynamics (0): calculate the factors contributing to the
+  //                    main infection process at step (2)
 
   this.Reff=R0*(1-pVacc)*factorMeasures*(1-this.xyz)
     * ((it<=itmaxinit) ? 1 : calc_seasonFactor(it));
-  if(it>itmaxinit)console.log("this.Reff=",this.Reff);
+  //if(it>itmaxinit)console.log("this.Reff=",this.Reff);
 
+  // source term from external trips
+
+  var x0source=casesInflow/100000; // from returners of foreign regions
+
+  
   // true dynamics (1): shift age profile of already infected by one
 
   for(var tau=taumax-1; tau>0; tau--){
@@ -2359,7 +2369,7 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
 
   // true dynamics (2): infect new people
 
-  this.x[0]=0;
+  this.x[0]=x0source;
   var f_R=1./(tauRend-tauRstart+1);
 
   if(n0*this.xAct>=1){ // !! infection finally dead if xAct<1
