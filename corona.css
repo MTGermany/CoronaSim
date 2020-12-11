@@ -475,14 +475,14 @@ input[type=range]::-webkit-slider-thumb {
 #sliders{      /* smartphone portrait */
   top:   10vh;
   left:   1vw;
-  width:  70vw;
+  width:  75vw;
   background-color: rgb(255,255,255);
 }
 
 #sliders2{      /* smartphone portrait */
   top:   10vh;
   left:   1vw;
-  width:  75vw;
+  width:  80vw;
   background-color: rgb(255,255,255);
 }
 

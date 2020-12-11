@@ -345,7 +345,7 @@ var itmax_calib; //  end calibr time interval =^ data_itmax-1
                  // 20 weeks of data
 
 const calibInterval=7; //!! calibration time interval [days] for one R0 value
-const calibAddtlDaysLast=14; // do not calibrate remaining period smaller
+const calibAddtlDaysLast=11; // do not calibrate remaining period smaller
 const calibrateOnce=false; // following variables only relevant if false
 const nCalibIntervals=6; // multiples of calibInterval, !!! >=30/calibInterval
                          // calibrates nCalibIntervals-nOverlap+1 params

@@ -3,6 +3,9 @@
 // implementation of redirect buttons on the simulation html pages
 //#################################################################
 
+// since new pages are loaded, all memory is sadly lost! always starts with
+// Germany, standard view ...
+
 function myRedirectEng(){
   var path = window.location.pathname;
   var page = path.split("/").pop(); // cut away the path

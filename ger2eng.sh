@@ -53,7 +53,8 @@ perl -i -p -e 's/Abstand/Distance/g' *_eng.html *_eng.js
 perl -i -p -e 's/Maske/mask/g' *_eng.html *_eng.js
 perl -i -p -e 's/wie 2019/as 2019/g' *_eng.html *_eng.js
 perl -i -p -e 's/Halli Galli/Endless parties/g' *_eng.html *_eng.js
-
+perl -i -p -e 's/Import\-F&auml;lle/Import cases/g' *_eng.html *_eng.js
+perl -i -p -e 's/Einw\./inh./g' *_eng.html *_eng.js
 
 perl -i -p -e 's/de\-de/en\-us/g' *_eng.js
 perl -i -p -e 's/\+ countryGer/\+ country/g' *_eng.js
