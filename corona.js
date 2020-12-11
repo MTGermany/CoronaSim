@@ -13,7 +13,6 @@ var showVacc=false;  // false: only display as of dec2020
 
 var useLiveDataInit=false;  //!! will be changed by upload script, 2 versions
 var useLiveData=useLiveDataInit;
-useLiveData=true;
 
 var loggingDebug=false; //!! global var for testing functions inside calibr
 
