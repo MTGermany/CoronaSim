@@ -344,13 +344,17 @@ var itmax_calib; //  end calibr time interval =^ data_itmax-1
                  // should be split if there are more than approx 
                  // 20 weeks of data
 
-const calibInterval=7; //!! calibration time interval [days] for one R0 value
-const calibAddtlDaysLast=11; // do not calibrate remaining period smaller
+const calibInterval=7; //!! calibration time interval [days] for one R0 value7
+const calibAddtlDaysLast=11; // do not calibrate remaining period smaller 11
 const calibrateOnce=false; // following variables only relevant if false
-const nCalibIntervals=6; // multiples of calibInterval, !!! >=30/calibInterval
+const nCalibIntervals=6; // multiples of calibInterval, !! >=30/calibInterval
                          // calibrates nCalibIntervals-nOverlap+1 params
-                         // per step
-const nOverlap=3;        // multiples of calibInterval, 
+                         // per step 6
+// !!2020-12-19 error with ..vals=6; last value of
+// calibr for ALL countries the same;
+// quick hack with 7 SOLVED; did not init Rtime[] before calibr
+
+const nOverlap=3;        // multiples of calibInterval, 3
                          // >=max(1,floor(calibAddtlDaysLast/calibInterval)
 var useInitSnap;
 var firstR0fixed=false; //if first R0 element firstR0 is fixed @ calibr 
@@ -721,7 +725,7 @@ function initializeData(country) {
 
   for(var i=0; i<data.length; i++){
     data_posRate[i]=data2_posRate[i+di];
-    data_dn[i]=data_dxt[i]/data_posRate[i];// more stable //!!!!check with RKI
+    data_dn[i]=data_dxt[i]/data_posRate[i];// more stable //!!!check with RKI
     if(!((data_dn[i]>0)&&(data_dn[i]<1e11))){data_dn[i]=0;}
     var dnTauPos=data_cumTestsCalc[i+di]-data_cumTestsCalc[i+di-tauPos];
    
@@ -1266,7 +1270,7 @@ function calibrate(){
 	      "\n====================================================");
 
   console.log("\nEntering calibration of R0 ...");
-
+  R0time=[];  //!!! must revert it since some countries may have less data!!
   var R0calib=[]; 
   for(var j=0; j<betaIFRinit.length; j++){ 
     betaIFR[j]=betaIFRinit[j];
@@ -1298,7 +1302,7 @@ function calibrate(){
 
   else{ 
 
-    var logging=false; //!!!
+    var logging=false; //!!!!
 
 
     var dn=nCalibIntervals-nOverlap;
