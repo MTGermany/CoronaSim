@@ -1,4 +1,7 @@
 
+//!!!! Bug 2020-12-20: Sometimes stops too early, before end of data
+// as of 2020-12-19 Osterzgebirge; stops 12-15, data till 12-18
+// Possibly let run always till present? Check!!!!
 
 var showVacc=false;  // false: only display as of dec2020
                     // true: second display option vacc+measures
