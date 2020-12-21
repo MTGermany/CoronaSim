@@ -85,11 +85,11 @@ var startDay=new Date(2020,02,dayStartMar); // months start @ zero, days @ 1
 var present=new Date();   // time object for present 
 var it=0;
 var oneDay_ms=(1000 * 3600 * 24);
-var itmaxinit=Math.round(
+var itPresent=Math.floor(
     (present.getTime() - startDay.getTime())/oneDay_ms); 
-                // itmaxinit=days(present-startDay)
-                // round because of daylight saving time complications
-var itmax=itmaxinit; // can be >itmaxinit during interactive simulation
+                // itPresent=days(present-startDay)
+                // floor because startDay time is 00:00 of given day
+var itmax=itPresent; // can be >itPresent during interactive simulation
 
 
 
@@ -553,8 +553,8 @@ function initializeData(country) {
     data2_idataStart+=daysForwards;
     startDay=new Date(2020,02,dayStartMar+daysForwards);
     dayStartYear+=daysForwards;
-    itmaxinit -= daysForwards;
-    itmax=itmaxinit;
+    itPresent -= daysForwards;
+    itmax=itPresent;
     console.log("Warning: no data >=ten days before sim start",
 		"\n => shift start date by ",daysForwards,
 		" days to ",data2[data2_idataStart]["date"]);
@@ -572,11 +572,14 @@ function initializeData(country) {
     var nxtStart=data[data_idataStart]["confirmed"];
 
     console.log(
+      "\nChecking times: ",
+      "startDay=",startDay," present=",present,
+      " itmax=itPresent=",itPresent,
       "\nTesting the overall read data structure:",
       "\ndata.length=",data.length,"  data2.length=",data2.length,
       "\ndata_idataStart=",data_idataStart,
       "  data2_idataStart=",data2_idataStart,
-      "\ndata_itmax=",data_itmax,"  data2_itmax=",data2_itmax,
+      "\nitmax=",itmax," data_itmax=",data_itmax,"  data2_itmax=",data2_itmax,
       "\n\ndata[0][\"date\"]=",data[0]["date"],
       "  data2[0][\"date\"]=",data2[0]["date"],
       "\ndata[data_idataStart][\"date\"]=",data[data_idataStart]["date"],
@@ -909,7 +912,7 @@ function calc_seasonFactor(it){
   var fracYearPeak=0.10; //  (first week February)
   var relAmplitude=0.2; // factor (1+/-relAmplitude) in July/January
   var phase=2*Math.PI*(dayStartYear+it-fracYearPeak)/365.;
-  var phasePresent=2*Math.PI*(dayStartYear+itmaxinit-fracYearPeak)/365.;
+  var phasePresent=2*Math.PI*(dayStartYear+itPresent-fracYearPeak)/365.;
   var factor=1+relAmplitude*Math.cos(phase);
   var factorPresent=1+relAmplitude*Math.cos(phasePresent);
   return factor/factorPresent;R0*seasonFactor/seasonFactorPresent;
@@ -1091,7 +1094,7 @@ function SSEfunc(R0arr, fR0, logging, itStartInp, itMaxInp,
   }
 
   var sse=0;
-  for(var it=itStart; it<itMax; it++){
+  for(var it=itStart; it<itMax; it++){ // SSEfunc
 
     if(it==itSnap){corona.takeSnapshot(itSnap);} //BEFORE corona.updateOneDay
 
@@ -1174,7 +1177,7 @@ function initialize() {
 
   if( typeof R0time[0] === "undefined"){
     R0time[0]=3; // start with high reproduction rate in first week 
-    for(var index=1; index<getIndexCalibmax(itmaxinit); index++){
+    for(var index=1; index<getIndexCalibmax(itPresent); index++){
       R0time[index]=1.010101;
     }
   }
@@ -1422,10 +1425,10 @@ function calibrate(){
   console.log("calibrate(): calibrating R0 finished",
 	      "\n final R0 values=",R0time,
 	      "\n fit quality sse=",sse);
-  console.log("itmaxinit=",itmaxinit,
-	      " getIndexCalibmax(itmaxinit)",getIndexCalibmax(itmaxinit));
+  console.log("itPresent=",itPresent,
+	      " getIndexCalibmax(itPresent)",getIndexCalibmax(itPresent));
   if(false){
-    for(var i=data_date.length-7; i<data_date.length; i++){ //!!!!
+    for(var i=data_date.length-7; i<data_date.length; i++){ //!!
       var it=i-data_idataStart;
       console.log(
 	insertLeadingZeroes(data_date[i]),": iData=",i,
@@ -1691,7 +1694,7 @@ function estimateErrorCovar_R0hist_sigmaR0hist(itmin_c, itmax_c, R0calib){
   // (extrapolate constant if needed, e.g. data not up-to-date)
   // getIndexTimeFromCalib(1) typically calibInterval days)
 
-  for(var it=itmin_c; it<itmaxinit; it++){//
+  for(var it=itmin_c; it<itPresent; it++){//
     var j=Math.min(Math.floor( (it-itmin_c)/calibInterval),
 		   R0calib.length-1);
     sigmaR0_hist[it]=sigmaR0[j];
@@ -1734,9 +1737,9 @@ function SSEfuncIFR(beta, grad, logging) {
   corona.init(0, logging); 
 
   var sseIFR=0;
-  for(var it=0; it<data_itmax-1; it++){
+  for(var it=0; it<data_itmax-1; it++){ //SSEfuncIFR 
 
-    // simulate
+    // simulate (SSEfuncIFR)
 
     fracDie= IFRfun_time(beta,it);    // beta to be calibrated
     var R0_actual= R0fun_time(R0time,it); // R0time already calibrated
@@ -1869,7 +1872,7 @@ function toggleTestnumber(){ // callback html "testnumber"
 
 
 function selectDataCountry(){ // callback html select box "countryData"
-  itmax=itmaxinit;
+  itmax=itPresent;
   country=document.getElementById("countries").value;
   countryGer=countryGerList[country];
   n0=parseInt(n0List[country]);
@@ -1887,7 +1890,7 @@ function selectDataCountry(){ // callback html select box "countryData"
 	      " and in myResetFunction()):",
 	      "\n country=",country,
 	      " country2=",country2,
-	      " itmax=itmaxinit=",itmaxinit);
+	      " itmax=itPresent=",itPresent);
 	   }
 
   initializeData(country);
@@ -1915,12 +1918,12 @@ function selectWindow(){ // callback html select box "windowGDiv"
 
 
 function myRestartFunction(){ 
-  //console.log("in myRestartFunction: itmax=itmaxinit=",itmaxinit);
+  //console.log("in myRestartFunction: itmax=itPresent=",itPresent);
 
 
   initialize();
   fps=fpsstart;
-  itmax=itmaxinit;
+  itmax=itPresent;
   it=0; //!!! only instance apart from init where global it is reset to zero 
   ctx.clearRect(0, 0, canvas.width, canvas.height)
 
@@ -2002,6 +2005,7 @@ function myResetFunction(){
 
 function simulationRun() {
   var idata=Math.min(data_idataStart+it, data_idataStart+data_itmax-1);
+  //console.log("simulationRun: before doSimulationStep: it=",it);
   doSimulationStep(); 
   //console.log("R0sliderUsed=",R0sliderUsed);
   if(!R0sliderUsed){
@@ -2015,11 +2019,11 @@ function simulationRun() {
   }
 
   // suffer one undefined at data_cumCases 
-  // (doSimulationStep increments it so itmaxinit-2 would be correct)
+  // (doSimulationStep increments it so itPresent-2 would be correct)
   // to get full sim curves (first plot then update 
   // to get the initial point it=0) 
 
-  if(it==itmaxinit-1){ 
+  if(it==itPresent){ // !!!! itPresent, not itPresent-1 represents present
     console.log("before clearInterval: it=",it);
     clearInterval(myRun);myStartStopFunction();
   }
@@ -2033,8 +2037,8 @@ function simulationRun() {
 
 function doSimulationStep(){
 
-  var itSlower=itmaxinit-42;
-  var itFaster=itmaxinit+56;
+  var itSlower=itPresent-42;
+  var itFaster=itPresent+56;
   var changed_fps=((it==itSlower)||(it==itFaster));
   if(changed_fps){
     fps=(it==itSlower) ? 0.30*fpsstart : fpsstart;
@@ -2065,7 +2069,7 @@ function doSimulationStep(){
 
 
   corona.updateOneDay(R0_actual,it,logging); // in doSimulationStep
-  it++;
+  it++; //!!!! ONLY it main update
 
   if(false){
     var idata=data_idataStart+it; // not "+1+" since after it++
@@ -2085,10 +2089,10 @@ function doSimulationStep(){
 		" ndxt=",Math.round(n0*corona.dxt),
 		" ndxtFalse=",Math.round(n0*corona.dxtFalse),
 		" nxt=",Math.round(n0*corona.xt),
-		" nxtData=",((it<itmaxinit-1) ? data_cumCases[idata]:"na"),
+		" nxtData=",((it<itPresent-1) ? data_cumCases[idata]:"na"),
 		" fracDie=",fracDie.toPrecision(3),
 		" n0*corona.z=",Math.round(n0*corona.z),
-		" deathsData=",((it<itmaxinit-1) ? data_cumDeaths[idata]:"na"),
+		" deathsData=",((it<itPresent-1) ? data_cumDeaths[idata]:"na"),
 		"");
   }
 
@@ -2403,8 +2407,8 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
   //                    main infection process at step (2)
 
   this.Reff=R0*(1-pVacc)*factorMeasures*(1-this.xyz)
-    * ((it<=itmaxinit) ? 1 : calc_seasonFactor(it));
-  //if(it>itmaxinit)console.log("this.Reff=",this.Reff);
+    * ((it<=itPresent) ? 1 : calc_seasonFactor(it));
+  //if(it>itPresent)console.log("this.Reff=",this.Reff);
 
   // source term from external trips
 
@@ -2556,7 +2560,7 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
 
   //if(false){ // filter needed because called in calibration
   //if(logging&&useLandkreise&&(it<10)){ // filter needed because calibration!
-  if(false&&(it>=itmaxinit)){ // it<itmaxinit in calibration => not reached
+  if(false&&(it>=itPresent)){ // it<itPresent in calibration => not reached
     console.log(
       "end CoronaSim.updateOneDay: it=",it," R0=",R0.toPrecision(2),
       " dnxt=",Math.round(n0*this.dxt),
@@ -2564,7 +2568,7 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
       " idata=",idata," data_pTestModel.length=",data_pTestModel.length,
       " pTest=",pTest,
      // " this.xyz=",this.xyz.toPrecision(3),
-     // " pTest=",pTest.toPrecision(3), //!!!! undefined for Dresden etc
+     // " pTest=",pTest.toPrecision(3), //!!! undefined for Dresden etc
      // " this.y=",this.y.toPrecision(3),
      // " this.z=",this.z.toPrecision(3),
 	//	" nxt=n0*this.xt=",Math.round(n0*this.xt),
@@ -3042,7 +3046,7 @@ DrawSim.prototype.drawAxes=function(windowG){
 
   for(var iw=0; iw<Math.floor(itmax/7)+1; iw++){
     var date=new Date(startDay.getTime()); // copy constructor
-    date.setDate(date.getDate() + iw*7); // set iw*7 days ahead
+    date.setDate(date.getDate() + iw*7+1); // set iw*7+1 days ahead (sim it => result at it+1)
     timeTextW[iw]=date.toLocaleDateString("en-us",options);
     //timeTextW[iw]=date.toLocaleDateString("de",options);
 
@@ -3212,7 +3216,7 @@ DrawSim.prototype.drawAxes=function(windowG){
     // calculate time string
     
     var date=new Date(startDay.getTime()); // copy constructor
-    date.setDate(date.getDate() + it); // set iw*7 days ahead
+    date.setDate(date.getDate() + it+1); // set it+1 days ahead (it=time BEFORE sim)
     var options = {year: "numeric", month: "short", day: "2-digit"};
     var str_date=date.toLocaleDateString("de-de",options);
     //if(date.getMonth()==0){timeTextW[iw]+=(", "+date.getFullYear());}
@@ -3514,7 +3518,7 @@ DrawSim.prototype.drawR0Estimate=function(it){
       console.log("drawSim.draw: it=",it," itR0=",itR0,
 		" R0_hist.length=",R0_hist.length,
 		" sigmaR0_hist.length=",sigmaR0_hist.length,
-		" itmaxinit=",itmaxinit,
+		" itPresent=",itPresent,
 		" R0_hist[itR0]=",R0_hist[itR0],
 		" sigmaR0_hist[itR0]=",sigmaR0_hist[itR0],
 		"");
@@ -3522,7 +3526,7 @@ DrawSim.prototype.drawR0Estimate=function(it){
 
     //'?' in following line should not happen ut extremely rarely does
     var R0=(itR0>=R0_hist.length) ? R0_actual : R0_hist[itR0]; 
-    var sigmaR0=(itR0<itmaxinit) ? sigmaR0_hist[itR0] : 0;
+    var sigmaR0=(itR0<itPresent) ? sigmaR0_hist[itR0] : 0;
     var str_R0="R0  ="+R0.toFixed(2)
       +((true) // if plotting  w/o "+/- stddev
 	? "" : (" +/- "+sigmaR0.toFixed(2)));
