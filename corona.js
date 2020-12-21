@@ -274,8 +274,9 @@ var sigmaR0_hist=[]; sigmaR0_hist[0]=0;
 
 // beta parameters for IFR function IFRfun_time
 // need to define it explicitely here because sequentially calibrated after R0
-
-var betaIFRinit=[0.010,0.003,0.002,0.002,0.002];
+// defined in IFRfun_time -> "itIFR"
+var betaIFRinit=[0.010,0.003,0.003,0.003,0.003];
+var itIFR      =[0,    28,   56,   230,  280]; // ref timesteps IFR
 var betaIFR=[];
 
 
@@ -1273,7 +1274,8 @@ function calibrate(){
 	      "\n====================================================");
 
   console.log("\nEntering calibration of R0 ...");
-  R0time=[];  //!!! must revert it since some countries may have less data!!
+  R0time=[];  //!! must revert it since some countries may have less data!!
+  betaIFR=[];  //!! must revert it since some countries may have less data!!
   var R0calib=[]; 
   for(var j=0; j<betaIFRinit.length; j++){ 
     betaIFR[j]=betaIFRinit[j];
@@ -1761,8 +1763,8 @@ function SSEfuncIFR(beta, grad, logging) {
 
     // penalty for IFR<=0 //!!
 
-    var IFRmin=5e-4;
-    var penalty0=10000*Math.max(nData,1);
+    var IFRmin=2e-3;
+    var penalty0=100000*Math.max(nData,1);
     if(fracDie<IFRmin){
       sseIFR += penalty0*Math.pow((IFRmin-fracDie)/fracDie,2);
     }
@@ -1776,16 +1778,42 @@ function SSEfuncIFR(beta, grad, logging) {
 // !! it0 <0 because interferes with init(: fracDie= IFRfun_time(beta,-20);
 
 function IFRfun_time(beta, it){
-  var it0=0; 
+
+
+
+  var itl=(it<itIFR[0]) ? -1
+      : (it<itIFR[1]) ? 0 : (it<itIFR[2]) ? 1
+      : (it<itIFR[3]) ? 2 : (it<itIFR[4]) ? 3 : 4;
+  var IFR=(itl==-1) ? beta[0]
+      : (itl==beta.length-1) ? beta[beta.length-1]
+      : beta[itl]
+        +(it-itIFR[itl])/(itIFR[itl+1]-itIFR[itl])*(beta[itl+1]-beta[itl]);
+  if(loggingDebug){
+    console.log("it=",it," itl=",itl," beta.length=",betaIFR.length,
+		" IFR=",IFR);
+  }
+  
+  /*var IFR=(it<=itIFR[0])
+      ? beta[0] : (it>=itIFR[itIFR.length-1])
+      ? beta[itIFR.length-1]
+      : beta[itl]
+    +(it-itIFR[itl])/(itIFR[itl+1]-itIFR[itl])*(beta[itl+1]-beta[itl]);
+  */
+
+  /*
+   var it0=0;
   var it1=28;//20
   var it2=56;//70
   var it3=175;//140
   var it4=280;
-  var IFR=(it<it0) ? beta[0] : (it<it1)
-    ? beta[0]+(beta[1]-beta[0])/(it1-it0)*(it-it0):(it<it2)
-    ? beta[1]+(beta[2]-beta[1])/(it2-it1)*(it-it1):(it<it3)
-    ? beta[2]+(beta[3]-beta[2])/(it3-it2)*(it-it2):(it<it4)
-    ? beta[3]+(beta[4]-beta[3])/(it4-it3)*(it-it3):beta[4];
+ var IFR=(it<it0)
+      ? beta[0] : (it<it1)
+      ? beta[0]+(beta[1]-beta[0])/(it1-itIFR[0])*(it-itIFR[0]):(it<it2)
+      ? beta[1]+(beta[2]-beta[1])/(it2-it1)*(it-it1):(it<it3)
+      ? beta[2]+(beta[3]-beta[2])/(it3-it2)*(it-it2):(it<it4)
+      ? beta[3]+(beta[4]-beta[3])/(it4-it3)*(it-it3)
+      : beta[4];
+*/
   return IFR;
 
 }//IFRfun_time
@@ -2166,6 +2194,15 @@ CoronaSim.prototype.init=function(itStart,logging){
   // data-driven warmup
 
   //loggingDebug=logging&&useLandkreise; // !!! global variable
+
+  loggingDebug=false; //!!
+  if(loggingDebug){
+    var ittest=[-1,20,50,150,250,350];
+    for(var i=0; i<ittest.length; i++){
+      var test=IFRfun_time(betaIFR, ittest[i]);
+    }
+  }
+  
   loggingDebug=false; // !!! global variable
 
   if(loggingDebug){
