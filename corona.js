@@ -61,13 +61,15 @@ const ln10=Math.log(10);
 
 
 // graphical window at start, 
-// 0=cum,1=log,2=casesReal,3=tests,4=rates,5=casesDaily,6=incidence 
+
 // new window: 
 // (1) define qselect[window] by selecting from drawsim.dataG[], 
 // (2) update initialisator of drawsim.yminType[], *ymax*: "this.yminType=["
 // (3) check various "windowG==", "windowG!=", "windowG<" etc conditions
 
-var windowG=5; // consolidate with first option value of html!!
+// initial window; consolidate with first option value of html!!
+// 0=cum,1=log,2=casesReal,3=tests,4=rates,5=casesDaily,6=incidence 
+var windowG=6; 
 
 
 var myRun;
@@ -1881,6 +1883,7 @@ function selectDataCountry(){ // callback html select box "countryData"
   tauDie=parseFloat(tauDieList[country]);
   taumax=Math.max(tauDie,tauRecover)+tauAvg+1;
   setSlider(slider_R0,  slider_R0Text,  R0time[0].toFixed(2),"");
+  setSlider(slider_R0cp,  slider_R0cpText,  R0time[0].toFixed(2),"");
 
   document.getElementById("title").innerHTML=
     "Simulation der Covid-19 Pandemie "+ countryGer;
@@ -2010,6 +2013,7 @@ function simulationRun() {
   //console.log("R0sliderUsed=",R0sliderUsed);
   if(!R0sliderUsed){
     setSlider(slider_R0, slider_R0Text, R0fun_time(R0time,it).toFixed(2),"");
+    setSlider(slider_R0cp, slider_R0cpText, R0fun_time(R0time,it).toFixed(2),"");
   }
 
   if((!testSliderUsed)&&includeInfluenceTestNumber){
@@ -3017,8 +3021,7 @@ DrawSim.prototype.drawGridLine=function(type,xyrel){
 }
 
 
-// windowG in [0,4]
-
+// windowG={0=cum,1=log,2=casesReal,3=tests,4=rates,5=casesDaily,6=incidence} 
 DrawSim.prototype.drawAxes=function(windowG){
 
   // update the font (drawAxes called at first drawing and after all 
@@ -3214,31 +3217,44 @@ DrawSim.prototype.drawAxes=function(windowG){
   if(true){// draw "Durchseuchung" etc
 
     // calculate time string
-    
+    // set it+1 days ahead of startDay (it=time BEFORE sim)
+
     var date=new Date(startDay.getTime()); // copy constructor
-    date.setDate(date.getDate() + it+1); // set it+1 days ahead (it=time BEFORE sim)
+    date.setDate(date.getDate() + it+1); 
     var options = {year: "numeric", month: "short", day: "2-digit"};
     var str_date=date.toLocaleDateString("de-de",options);
-    //if(date.getMonth()==0){timeTextW[iw]+=(", "+date.getFullYear());}
 
-    var Xperc=Math.round(1000*corona.xyz)/10;
+    // display date left upper corner
+    
     ctx.fillStyle="rgb(0,0,0)";
     ctx.fillText(str_date,
+		 this.xPix0-0.10*this.wPix,
+		 this.yPix0+1.04*this.hPix);
+
+    // display other state variables anchored at xrelLeft,yrelTop
+    
+    var Xperc=Math.round(1000*corona.xyz)/10;
+    ctx.fillText("Durchseuchung X="+(Xperc.toFixed(1))+" %",
 		 this.xPix0+xrelLeft*this.wPix,
 		 this.yPix0+(yrelTop-(ikey+1)*dyrel)*this.hPix);
     
-    ctx.fillText("Durchseuchung X="+(Xperc.toFixed(1))+" %",
+    ctx.fillText("Aktuelles R="+(corona.Reff.toFixed(2)),
 		 this.xPix0+xrelLeft*this.wPix,
 		 this.yPix0+(yrelTop-(ikey+2)*dyrel)*this.hPix);
     
-    ctx.fillText("Aktuelles R="+(corona.Reff.toFixed(2)),
-		 this.xPix0+xrelLeft*this.wPix,
-		 this.yPix0+(yrelTop-(ikey+3)*dyrel)*this.hPix);
-    
     ctx.fillText("Aktuelle IFR="+(100*IFRfun_time(betaIFR,it)).toFixed(2)+" %",
 		 this.xPix0+xrelLeft*this.wPix,
-		 this.yPix0+(yrelTop-(ikey+4)*dyrel)*this.hPix);
-    var line=4;
+		 this.yPix0+(yrelTop-(ikey+3)*dyrel)*this.hPix);
+
+    // 1 line gap ("ikey+5") because x axis of most relevant windows
+    // windowG={0=cum,1=log,2=casesReal,3=tests,4=rates,
+    // 5=casesDaily,6=incidence} 
+    var line=( (windowG==2)||(windowG==5)||(windowG==6)) ? 5 : 4
+   
+    ctx.fillText("Insgesamt Gestorbene (sim.)="+(Math.round(n0*corona.z)),
+		 this.xPix0+xrelLeft*this.wPix,
+		 this.yPix0+(yrelTop-(ikey+line)*dyrel)*this.hPix);
+
     if(pVacc>0){
       line++;
       ctx.fillText("Impfrate: "+(Math.round(100*pVacc))+" %",

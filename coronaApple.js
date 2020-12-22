@@ -19,8 +19,8 @@ var startDay=new Date(2020,02,dayStartMar); // months start @ zero, days @ 1
 var myRun;
 var isStopped=true
 var it=0;
-var itmaxinit;  // #days init simulation; to be determined by js Date() object
-var itmax;      // can be >itmaxinit during interactive simulation
+var itPresent;  // #days init simulation; to be determined by js Date() object
+var itmax;      // can be >itPresent during interactive simulation
 
 var n0=80.e6;  // #persons in Germany
 
@@ -339,12 +339,12 @@ function startup() {
   var present=new Date();
   //var present=new Date(2020,02,23); //!!
   
-  // initialisation of itmaxinit; 
+  // initialisation of itPresent; 
   // round because of daylight saving time complications
 
-  itmaxinit = Math.round(
+  itPresent = Math.round(
     (present.getTime() - startDay.getTime())/(oneDay_ms));
-  itmax=itmaxinit;
+  itmax=itPresent;
   console.log("present=",present);
 
 
@@ -388,15 +388,15 @@ function startup() {
   var istart=-data_diff2start[0];
   if(false){
     console.log(
-      "measured data: istart=",istart," itmaxinit=",itmaxinit,
+      "measured data: istart=",istart," itPresent=",itPresent,
       "\n  data_date_ddmmyyyy[istart]=", data_date_ddmmyyyy[istart],
       " data_cumCases[istart]=",data_cumCases[istart],
       "\n  data_date_ddmmyyyy[istart+1]=", data_date_ddmmyyyy[istart+1],
       " data_cumCases[istart+1]=",data_cumCases[istart+1],
       "\n  data_date_ddmmyyyy[istart+1]=", data_date_ddmmyyyy[istart+2],
       " data_cumCases[istart+1]=",data_cumCases[istart+2],
-      "\n  data_date_ddmmyyyy[istart+itmaxinit]=",data_date_ddmmyyyy[istart+itmaxinit],
-      " data_cumCases[istart+itmaxinit]=",data_cumCases[istart+itmaxinit]
+      "\n  data_date_ddmmyyyy[istart+itPresent]=",data_date_ddmmyyyy[istart+itPresent],
+      " data_cumCases[istart+itPresent]=",data_cumCases[istart+itPresent]
 	       );
   }
 
@@ -771,7 +771,7 @@ function simulationRun() {
   if(!RsliderUsed){
     setSlider(slider_R0, slider_R0Text, R0fun_time(it),"");
   }
-  if(it==itmaxinit+1){ 
+  if(it==itPresent+1){ 
     clearInterval(myRun);myStartStopFunction();
   }
 }

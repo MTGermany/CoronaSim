@@ -81,8 +81,9 @@ perl -i -p -e 's/Wochen\-Inzidenz/Weekly incidence/g' *_eng.html
 perl -i -p -e 's/Wocheninzidenz pro/Weekly incidence per/g' *_eng.js
 perl -i -p -e 's/Wocheninzidenz/Weekly incidence/g' *_eng.js
 
-perl -i -p -e 's/W\&ouml\;chentlich Gestorbene/Weekly deaths per/g' *_eng.js
-
+perl -i -p -e 's/W\&ouml\;chentlich Gestorbene pro/Weekly deaths per/g' *_eng.js
+perl -i -p -e 's/Woechentlich Gestorbene pro/Weekly deaths per/g' *_eng.js
+perl -i -p -e 's/Gestorbene/deaths/g' *_eng.js
 perl -i -p -e 's/Personenzahl/\# Persons/g' *_eng.js
 perl -i -p -e 's/Personen/Persons/g' *_eng.js
 perl -i -p -e 's/taegliche Zahlen/Daily figures/g' *_eng.js

@@ -141,7 +141,6 @@ slider_pVacc.oninput = function() {
   pVacc=parseFloat(this.value/100.);
 }
 
-//var measures; {0=none,1=distance,2=distance+masks,3-5=lockdowns}
 
 function str_measures(measures){
   return ((measures==0) ? "Halli Galli" : 
@@ -162,9 +161,19 @@ function calc_factorMeasures(measures){ // multiplication factor for R
   return factor/0.65; // relate everything to actual level 4
 }
 
+
+
+// MT 2020-12-22: Do not show measures since not scientific
+// var measures; {0=hulliGalli,1=none,2=distance,3=distance+masks,
+// 4-6=lockdowns}
+//!!! replaced by copy of R slider
+// need factorMeasures, however (measures=measuresInit=4 in corona.js)
+
+var factorMeasures=calc_factorMeasures(measures);
+
+/*
 var slider_measures=document.getElementById("slider_measures");
 var slider_measuresText = document.getElementById("slider_measuresText");
-var factorMeasures=calc_factorMeasures(measures);
 
 slider_measures.value=measures; // setSlider does not fit here
 slider_measuresText.innerHTML="&nbsp;"+str_measures(measures);
@@ -174,6 +183,23 @@ slider_measures.oninput = function() {
   slider_measuresText.innerHTML = "&nbsp;"+str_measures(measures);
   factorMeasures=calc_factorMeasures(measures);
 }
+*/
+
+// var R0copy
+
+var slider_R0cp=document.getElementById("slider_R0cp");
+var slider_R0cpText = document.getElementById("slider_R0cpText");
+
+setSlider(slider_R0cp, slider_R0cpText, R0,"");
+
+
+slider_R0cp.oninput = function() {
+  R0sliderUsed=true;
+  slider_R0cpText.innerHTML = "&nbsp;"+this.value;
+  R0=parseFloat(this.value);
+  console.log("slider R0cp callback: R0="+R0);
+}
+
 
 
 //var casesInflow;
@@ -181,10 +207,11 @@ slider_measures.oninput = function() {
 var slider_casesInflow=document.getElementById("slider_casesInflow");
 var slider_casesInflowText = document.getElementById("slider_casesInflowText");
 
-setSlider(slider_casesInflow, slider_casesInflowText, casesInflow, "/Tag/100 000 Einw.");
+setSlider(slider_casesInflow, slider_casesInflowText, casesInflow,
+	  "/Tag");
 
 slider_casesInflow.oninput = function() {
-  slider_casesInflowText.innerHTML = "&nbsp;"+this.value+"/Tag/100 000 Einw.";
+  slider_casesInflowText.innerHTML = "&nbsp;"+this.value+"/Tag";
   casesInflow=parseFloat(this.value);
 }
 
@@ -345,8 +372,8 @@ function cleanPixArrays(){
 // called on onmousedown and in DrawSim.draw()
 
 function shiftX(){ // if moving time window; xPix always orig drawn pixel
-  var timeshift=itmax-itmaxinit;
-  return - (xshift=timeshift/itmaxinit * (drawsim.xPixMax-drawsim.xPix0));
+  var timeshift=itmax-itPresent;
+  return - (xshift=timeshift/itPresent * (drawsim.xPixMax-drawsim.xPix0));
 }
 
 

@@ -62,8 +62,8 @@ Info
 <div id="dataTypeDiv">
 <label for="windows"></label>
 <select id="windows" onchange=selectWindow()> 
-  <option value="5">T&auml;gliche F&auml;lle</option>
   <option value="6">Wochen-Inzidenz</option>
+  <option value="5">T&auml;gliche F&auml;lle</option>
   <option value="0">kumulierte F&auml;lle</option>
   <option value="1">Simulation (log)</option>
   <option value="2">F&auml;lle vs. Infizierte</option>
@@ -193,7 +193,7 @@ Dr. Treiber
   <tr>
     <td> Hellfeld &nbsp; </td>
     <td> <input id="slider_pTest" type="range" 
-                min="2" max="20" step="0.1"></td>  <!-- value in js -->
+                min="2" max="40" step="0.1"></td>  <!-- value in js -->
     <td> <div id="slider_pTestText"></div> </td>
   </tr>
 
@@ -217,8 +217,24 @@ Dr. Treiber
 
 <table id="slidersTable2" border="0" cellspacing="1" cellpadding="1" >
 
+ <tr>
+    <td> <span class="important">&nbsp; Reproduktionszahl R<sub>0</sub>
+        </span></td>
+    <td> <input id="slider_R0cp" type="range" 
+                min="0" max="2" step="0.01"></td> 
+    <td> <div id="slider_R0cpText"></div> </td>
+  </tr>
+ <!--
   <tr>
-    <td>&nbsp; Import-F&auml;lle &nbsp; </td>
+    <td>&nbsp; Ma&szlig;nahmen  &nbsp; </td>
+    <td> <input id="slider_measures" type="range" 
+                min="0" max="6" step="1"></td>  
+    <td> <div id="slider_measuresText"></div> </td>
+  </tr>
+-->
+
+ <tr>
+    <td>&nbsp; Import-F&auml;lle/10<sup>5</sup> Einw. &nbsp; </td>
     <td> <input id="slider_casesInflow" type="range" 
                 min="0" max="50" step="1"></td>  <!-- value in js -->
     <td> <div id="slider_casesInflowText"></div> </td>
@@ -231,14 +247,7 @@ Dr. Treiber
     <td> <div id="slider_pVaccText"></div> </td>
   </tr>
 
-  <tr>
-    <td>&nbsp; Ma&szlig;nahmen  &nbsp; </td>
-    <td> <input id="slider_measures" type="range" 
-                min="0" max="6" step="1"></td>  <!-- value in js -->
-    <td> <div id="slider_measuresText"></div> </td>
-  </tr>
-
-
+ 
 </table>
 
 </div>
