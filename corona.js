@@ -1,7 +1,4 @@
 
-//!!!! Bug 2020-12-20: Sometimes stops too early, before end of data
-// as of 2020-12-19 Osterzgebirge; stops 12-15, data till 12-18
-// Possibly let run always till present? Check!!!!
 
 var showVacc=false;  // false: only display as of dec2020
                     // true: second display option vacc+measures
@@ -278,7 +275,7 @@ var sigmaR0_hist=[]; sigmaR0_hist[0]=0;
 // need to define it explicitely here because sequentially calibrated after R0
 // defined in IFRfun_time -> "itIFR"
 var betaIFRinit=[0.010,0.003,0.003,0.003,0.003];
-var itIFR      =[0,    28,   56,   230,  280]; // ref timesteps IFR
+var itIFR      =[0,    28,   56,   260,  285]; //!!!! ref timesteps IFR
 var betaIFR=[];
 
 
@@ -1848,6 +1845,7 @@ function myStartStopFunction(){ //!! hier bloederweise Daten noch nicht da!!
   }
 }
 
+// toggleViews (Massnahmen-Ansicht,=> normale Ansicht) in gui!
 
 function toggleTestnumber(){ // callback html "testnumber"
   //clearInterval(myRun);
@@ -2205,7 +2203,7 @@ CoronaSim.prototype.init=function(itStart,logging){
 
   loggingDebug=false; //!!
   if(loggingDebug){
-    var ittest=[-1,20,50,150,250,350];
+    var ittest=[-1,20,50,150,250,350]; // itIFR in real calibr
     for(var i=0; i<ittest.length; i++){
       var test=IFRfun_time(betaIFR, ittest[i]);
     }
@@ -3225,11 +3223,13 @@ DrawSim.prototype.drawAxes=function(windowG){
     var str_date=date.toLocaleDateString("de-de",options);
 
     // display date left upper corner
-    
+
+    var xrelLeftDate=-0.06;
+    var yrelTopDate=(showVacc) ? 1.02 : 1.04;
     ctx.fillStyle="rgb(0,0,0)";
     ctx.fillText(str_date,
-		 this.xPix0-0.10*this.wPix,
-		 this.yPix0+1.04*this.hPix);
+		 this.xPix0+xrelLeftDate*this.wPix,
+		 this.yPix0+yrelTopDate*this.hPix);
 
     // display other state variables anchored at xrelLeft,yrelTop
     
