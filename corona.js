@@ -276,10 +276,13 @@ var sigmaR0_hist=[]; sigmaR0_hist[0]=0;
 
 
 var IFRinit=0.002;
-var IFRtime=[];
 var IFRinterval=28;
-var IFRinterval_min=14;
-
+var IFRinterval_min=10;
+var IFRtime=[];
+var IFR_jmax=1+Math.ceil((itPresent-IFRinterval_min)/IFRinterval);
+for(var j=0; j<IFR_jmax;j++){
+  IFRtime[j]=IFRinit;
+}
 
 
 
@@ -523,7 +526,7 @@ function initializeData(country) {
   var data2=dataGit2[country2].data;
   var dateInitStr2=data2[0]["date"];
 
-  // !!!! re-initialize; otherwise consequential errors after switching back
+  // !! re-initialize; otherwise consequential errors after switching back
   // to countries with more data
   
   dayStartMar=dayStartMarInit;
@@ -751,7 +754,7 @@ function initializeData(country) {
 
   for(var i=0; i<data.length; i++){
     data_posRate[i]=data2_posRate[i+di];
-    data_dn[i]=data_dxt[i]/data_posRate[i];// more stable //!!!check with RKI
+    data_dn[i]=data_dxt[i]/data_posRate[i];// more stable
     if(!((data_dn[i]>0)&&(data_dn[i]<1e11))){data_dn[i]=0;}
     var dnTauPos=data_cumTestsCalc[i+di]-data_cumTestsCalc[i+di-tauPos];
    
@@ -816,7 +819,7 @@ function initializeData(country) {
   var avg1=[];
   for(var k=0; k<3; k++){// up to three weeks back
     avg0[k]=0; avg1[k]=0;
-    for(var is=0; is<7; is++){ // is always =6 at data.length-1 //!!!
+    for(var is=0; is<7; is++){ // is always =6 at data.length-1 //!!
       avg0[k] += data_pTestModel[data.length-21+7*k+is]/7;
       avg1[k] += data_dn[data.length-21+7*k+is]/7;
     }
@@ -971,7 +974,7 @@ function R0fun_time(R0arr, it){
 
     R0= Math.min(5, Math.max(0.2,R0));
 
-    if(loggingDebug){console.log("R0fun_time: warmup: returning R0=",R0);} //!!!
+    if(loggingDebug){console.log("R0fun_time: warmup: returning R0=",R0);} //!!
     return R0;
   }
 
@@ -996,7 +999,7 @@ function R0fun_time(R0arr, it){
     }
 
      
-    if(loggingDebug){console.log("R0fun_time: regular: returning R0=",R0);} //!!!
+    if(loggingDebug){console.log("R0fun_time: regular: returning R0=",R0);} //!!
     return R0;
   }
 }//R0fun_time
@@ -1329,7 +1332,7 @@ function calibrate(){
 
   else{ 
 
-    var logging=false; //!!!!
+    var logging=false; //!!!
 
 
     var dn=nCalibIntervals-nOverlap;
@@ -1431,10 +1434,10 @@ function calibrate(){
   } // calbrate R0 with multiple periods
 
 
-  //!! here logging can be true for check of corona.update and corona.init!!
+  //!!! here logging can be true for check of corona.update and corona.init
 
-  var logging=false;  //!!!
-  //var logging=true; //!!!
+  var logging=false; 
+  //var logging=true;
 
   if(logging){
     console.log("\nCalibration of R0 finished: testing SSEfunc calc. ...");
@@ -1463,60 +1466,71 @@ function calibrate(){
    /** ##############################################################
   estimate the infection fatality rate (IFR)
   in contrast to estimateR0 easy and only dependent on, 
-  not interacting with, estimateR0. (the numbe rof deaths is included in the 
-  herd immunity xyzTot: more deaths<->less healed<->xyzTot
+  not interacting with, estimateR0
   ############################################################## */
 
-/*
-  console.log("\n\ncalibrate(): entering calibration of IFR ...");
-
-  var betaIFRcal=[]; // init for calibration
-
-  for(var j=0; j<betaIFRinit.length; j++){ // betaIFRfinal def at beginning
-    betaIFRcal[j]=betaIFRinit[j];
-  }
-  var logging=true;
-  var sse=SSEfuncIFR(betaIFR,null,false);
-  console.log("before IFR calibration: betaIFRcal=",betaIFRcal,
-	      " sse=",Math.round(sse));
-
-
-  //###############################################
-  sol2_SSEfuncIFR=fmin.nelderMead(SSEfuncIFR, betaIFRcal);
-
-  //###############################################
-
-  for(var j=0; j<betaIFRcal.length; j++){ 
-    betaIFR[j]=sol2_SSEfuncIFR.x[j];
-  }
-
-  //check
-  //var sse=SSEfuncIFR(betaIFR,null,true); console.log("sse=",sse);
-  console.log("after IFR calibration: betaIFR=",betaIFR,
-	      " sse=",Math.round(sol2_SSEfuncIFR.fx));
-*/
 
   console.log("\n\ncalibrate(): entering NEW calibration of IFR ...");
-  var jmax=Math.ceil((itPresent-IFRinterval_min)/IFRinterval);
+  IFR_jmax=1+Math.ceil(
+    (itPresent-IFRinterval_min)/IFRinterval); //!!!as in def
 
-  IFRtime=[]; for(var j=0; j<jmax; j++){IFRtime[j]=0;}
+  IFRtime=[]; for(var j=0; j<IFR_jmax; j++){IFRtime[j]=IFRinit;}
   var cumDeathsSim0=0;
-  for(var j=0; j<jmax; j++){
+  for(var j=0; j<IFR_jmax-1; j++){
     var it0=IFRinterval*j;
-    var it1=Math.min(IFRinterval*(j+1), data_dz.length-1-data_idataStart);
+    var it1=Math.min(IFRinterval*(j+1), data_dz.length-data_idataStart);
     var IFRcal=calibIFR(cumDeathsSim0,it0,it1);
-    //console.log("it0=",it0," it1=",it1," IFRcal=",IFRcal);
-    // because first estimate (it<0 for infections) not normalized
-    // =>forget it, use IFRcal[1] instead of IFRcal[0] or average
     IFRtime[j]=(j==0) ? IFRcal[1] : 0.5*(IFRcal[0]+IFRtime[j]);
     IFRtime[j+1]=IFRcal[1];
     cumDeathsSim0+=IFRcal[2];
   }
 
-  //!!!! ANNOYING slightest shift after any country choice back to Germany
+  // remove drifts due to the local calibration
+
+  var cumDeathsSim=[];
+  cumDeathsSim[0]=data_cumDeaths[data_idataStart];
+  
+  var f_D=1./tauAvg; 
+  var dtau=Math.floor(tauAvg/2);
+
+  f_D=1; // hardly any difference w/o smoothing in Ger!
+  dtau=0;
+  console.log("IFRtime=",IFRtime);
+  for(var it=1; it<data_itmax; it++){
+    var fracDie= IFRfun_time(it); // uses IFRtime[]
+    var dnz=0;
+    for(var j=-dtau; j<=dtau; j++){
+      dnz+=n0*fracDie*f_D*corona.xnewShiftedTauDie[Math.max(0,it+j)];
+    }
+    cumDeathsSim[it]=cumDeathsSim[it-1]+dnz;
+    if(false){
+      console.log("it=",it," cumDeathsSim=",cumDeathsSim[it],
+	  	  " cumDeathsData=",data_cumDeaths[data_idataStart+it]);
+    }
+    if( (it%IFRinterval==0)&&(it>0)){
+      var j=it/IFRinterval;
+      if(j<IFR_jmax ){
+        var dCumDeathsSim=cumDeathsSim[it]-cumDeathsSim[it-IFRinterval];
+        var dCumDeathsData=data_cumDeaths[data_idataStart+it]
+	    - data_cumDeaths[data_idataStart+it-IFRinterval];
+        var factor=dCumDeathsData/dCumDeathsSim;
+        //var factor=data_cumDeaths[data_idataStart+it]/cumDeathsSim[it];
+        IFRtime[j] *=factor;
+        IFRtime[j-1] *=factor;
+      
+        if(false){
+	  console.log("it=",it," CumDeathsSim=",dCumDeathsSim,
+		    " dCumDeathsData=",dCumDeathsData, "factor=",factor);
+        }
+      }
+    }
+  }
+  
+
+  //!!! ANNOYING slightest shift after any country choice back to Germany
   // approx rel error 10^{-3} in calibr R and IFR (no solution; forget...)
 
-  if(false){
+  if(true){
     console.log("IFRtime=",IFRtime);
     console.log("data_idataStart=",data_idataStart);
     console.log("startDay=",startDay);
@@ -1531,24 +1545,7 @@ function calibrate(){
  //##############################################################
 
   if(false){
-    var jmax=Math.ceil((itPresent-IFRinterval_min)/IFRinterval);
-    var betaIFR1=[];
-    for(var j=0; j<jmax; j++){betaIFR1[j]=0;}
-    for(var j=0; j<jmax; j++){
-      console.log("\nbefore: j=",j,
-		  " betaIFR1[j-1]=",betaIFR1[j-1],
-		  " betaIFR1[j]=",betaIFR1[j]);
-      var it0=IFRinterval*j;
-      var it1=Math.min(IFRinterval*(j+1), data_dz.length-1);
-      var IFRcal=calibIFR(it0,it1);
-      betaIFR1[j]=(j==0) ? IFRcal[0] : 0.5*(IFRcal[0]+betaIFR1[j]); 
-      betaIFR1[j+1]=IFRcal[1]; 
-      console.log("after: IFRcal[0]=",IFRcal[0], "IFRcal[1]=",IFRcal[1],
-		  "\n     betaIFR1[j-1]=",betaIFR1[j-1],
-		  " betaIFR1[j]=",betaIFR1[j],
-		  " betaIFR1[j+1]=",betaIFR1[j+1]);
-    }
-    console.log("betaIFR1=",betaIFR1);
+    // code
     //alert('stopped simulation with alert');
     //setTimeout(function(){  alert('hello');}, 3000);  
     //alert('hi');
@@ -1593,7 +1590,8 @@ function calibIFR(cumDeathsSim0,it0, it1){
   var avec=[];
   var bvec=[];
   for(var i=0; i<it1-it0; i++){
-    // ! xnewShiftedTauDie not normalized if stemming from it<0 => error !!!
+      // ! xnewShiftedTauDie not normalized if stemming from it<0
+      // => bias error !!!
     var xnew=corona.xnewShiftedTauDie[Math.max(it0+i, 0)];
     var idata=data_idataStart+it0+i;
     avec[i]=n0*(1-r[i])*xnew;
@@ -1623,24 +1621,16 @@ function calibIFR(cumDeathsSim0,it0, it1){
   if(vecIFR[0]<=0){vecIFR[0]=IFRinit;} // cope with all sorts of errors
   if(vecIFR[1]<=0){vecIFR[1]=IFRinit;}
 
-  // adapt a bit to compensate for drifts at cumulated deaths
+  // calculate cumulated increment [t0,t1]
 
   var dCumDeathsSim=0;
   for(var i=0; i<it1-it0; i++){
     dCumDeathsSim+=avec[i]*vecIFR[0]+bvec[i]*vecIFR[1];
   }
 
-  var drift=cumDeathsSim0+dCumDeathsSim-data_cumDeaths[data_idataStart+it1];
-  var factor=(cumDeathsSim0<1) ? 1
-      : Math.min(1.3, Math.max(0.7, 1-3*drift/(cumDeathsSim0+dCumDeathsSim)));
-
-  if(false){ // !!! apply IFRcalib drift correction if true
-    vecIFR[0]*=factor; vecIFR[1]*=factor;
-  }
-  vecIFR[2]=dCumDeathsSim*factor;
-  console.log("calibIFR: it0=",it0," it1=",it1,
+  vecIFR[2]=dCumDeathsSim;
+  console.log("calibIFR: it0=",it0," it1-1=",it1-1,
 	      " data_itmax=",data_itmax,
-	      " it1-1=",it1-1,
 	      " data_cumDeaths.length=",data_cumDeaths.length,
 	      " data_dz.length=",data_dz.length,
 	      " data_idataStart=",data_idataStart,
@@ -1649,8 +1639,7 @@ function calibIFR(cumDeathsSim0,it0, it1){
 	      " data_cumDeaths[data_idataStart+it1]=",
 	      data_cumDeaths[data_idataStart+it1],
 	      " cumDeathsSim0=",cumDeathsSim0,
-	      " cumDeathsSim0+vecIFR[2]=",cumDeathsSim0+vecIFR[2],
-	      "\n drift=",drift," factor=",factor," vecIFR=",vecIFR);
+	      " cumDeathsSim0+vecIFR[2]=",cumDeathsSim0+vecIFR[2]);
   return vecIFR;
 } // calibIFR
 
@@ -1874,108 +1863,23 @@ function estimateErrorCovar_R0hist_sigmaR0hist(itmin_c, itmax_c, R0calib){
 
 
 
-// ###############################################################
-// calculate log(SSE(IFR)) as GoF of the IFR calibration
-// beta: hint: tauDie as 4th element does not work even with intp in corona.updateO*
-// ###############################################################
-
-
-function SSEfuncIFR(beta, grad, logging) {
-  if( typeof grad === "undefined"){
-    grad=[]; for(var j=0; j<beta.length; j++){grad[j]=0;}
-  }
-  if( typeof logging === "undefined"){logging=false;}
-
-  if(logging){
-    console.log("\nEntering SSEfuncIFR:",
-		" beta=",beta);
-  }
-
-  // init with it=0 to have exactly the same
-  // simulation as after finsihed R calibration  (one-step calib)
-
-  fracDie=IFRfun_time(-20); // also use fracDie in warmup!
-  corona.init(0, logging); 
-
-  var sseIFR=0;
-  for(var it=0; it<data_itmax-1; it++){ //SSEfuncIFR 
-
-    // simulate (SSEfuncIFR)
-
-    fracDie= IFRfun_time(it);    // beta to be calibrated
-    var R0_actual= R0fun_time(R0time,it); // R0time already calibrated
-
-    corona.updateOneDay(R0_actual, it, logging); // using fracDie
-    if(logging){console.log("it=",it," fracDie=",fracDie," tauDie=",tauDie,
-			    " R0_actual=",R0_actual," ndz=",n0*corona.dz,
-			    " ndx=",n0*corona.x[0],
-			    " nxt=",n0*corona.xt);}
-
-    //   GoF function new deaths (no log because of zero values) !! drift
-
-    // var nSim=n0*corona.dz;
-    // var nData=data_cumDeaths[data_idataStart+it+1]  
-    //     -data_cumDeaths[data_idataStart+it];
-
-    //   GoF function cum deaths (no log because of zero values)
-
-    var nSim=n0*corona.z;
-    var nData=data_cumDeaths[data_idataStart+it+1];
-
-    if(logging){console.log("it=",it," nSim=",nSim," nData=",nData);}
-    sseIFR+=Math.pow(nData-nSim,2);
-
-    // penalty for IFR<=0 //!!
-
-    var IFRmin=2e-3;
-    var penalty0=100000*Math.max(nData,1);
-    if(fracDie<IFRmin){
-      sseIFR += penalty0*Math.pow((IFRmin-fracDie)/fracDie,2);
-    }
-  }
-  return sseIFR;
-}
-
-
-// beta: 5-array containing 5 IFRs to be calibrated as first elements; 
-// times it0,it1, ...  fixed
-// !! it0 <0 because interferes with init(: fracDie= IFRfun_time(beta,-20);
 
 
 function IFRfun_time(it){
   var jlower=Math.floor(it/IFRinterval);
   var r=it/IFRinterval-jlower;
   var jhigher=jlower+1;
-  return ((it<0)||(IFRtime.length==0)) ? IFRinit
-    : (jhigher>=IFRtime.length) ? IFRtime[IFRtime.length-1]
-    : (1-r)*IFRtime[jlower]+r*IFRtime[jhigher];
-}
-
-/*
-function IFRfun_time(beta, it){
-
-
-
-  var itl=(it<itIFR[0]) ? -1
-      : (it<itIFR[1]) ? 0 : (it<itIFR[2]) ? 1
-      : (it<itIFR[3]) ? 2 : (it<itIFR[4]) ? 3 : 4;
-  var IFR=(itl==-1) ? beta[0]
-      : (itl==beta.length-1) ? beta[beta.length-1]
-      : beta[itl]
-        +(it-itIFR[itl])/(itIFR[itl+1]-itIFR[itl])*(beta[itl+1]-beta[itl]);
-  if(loggingDebug){
-    console.log("it=",it," itl=",itl," beta.length=",betaIFR.length,
-		" IFR=",IFR);
-  }
+  var ifr=((it<0)||(IFRtime.length==0)) ? IFRinit
+    : ((jlower>=IFRtime.length)||(jhigher>=IFRtime.length))
+    ? IFRtime[IFRtime.length-1]
+      : (1-r)*IFRtime[jlower]+r*IFRtime[jhigher];
   
-
-  return IFR;
-
-}//IFRfun_time
-*/
-
-
-
+  if(false){console.log("IFRfun_time: it=",it," IFRtime.length=",
+	      IFRtime.length,
+	      " IFRtime[IFRtime.length-1]=",IFRtime[IFRtime.length-1],
+			" jlower=",jlower," r=",r," ifr=",ifr);}
+  return ifr;
+}
 
 
 
@@ -2180,7 +2084,7 @@ function simulationRun() {
   // to get full sim curves (first plot then update 
   // to get the initial point it=0) 
 
-  if(it==itPresent){ // !!! itPresent, not itPresent-1 represents present
+  if(it==itPresent){ // !! itPresent, not itPresent-1 represents present
     console.log("before clearInterval: it=",it);
     clearInterval(myRun);myStartStopFunction();
   }
@@ -2226,7 +2130,7 @@ function doSimulationStep(){
 
 
   corona.updateOneDay(R0_actual,it,logging); // in doSimulationStep
-  it++; //!!!! ONLY it main update
+  it++; //!!! ONLY it main update
 
   if(false){
     var idata=data_idataStart+it; // not "+1+" since after it++
@@ -2355,10 +2259,10 @@ CoronaSim.prototype.init=function(itStart,logging){
 
   // data-driven warmup
 
-  //loggingDebug=logging&&useLandkreise; // !!! global variable
-
+  // !!! loggingDebug global variable
   
-  loggingDebug=false; // !!! global variable
+  //loggingDebug=logging&&useLandkreise;
+  loggingDebug=false; 
 
   if(loggingDebug){
     console.log("corona.init warmup:  it0=",it0," itStart=",itStart,
@@ -2611,7 +2515,7 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
     this.dz+=dztau;
     this.x[tau] -=dztau; // xohne remains unsubtracted
   }
-  //this.dz+=fracDie*f_D*tauDie_r*this.xohne[tauDie+dtau+1]; //!!real tauDie
+
 
   var f_Rec=1./tauAvg;
   for(var tau=tauRecover-dtau; tau<=tauRecover+dtau; tau++){
@@ -3611,15 +3515,14 @@ DrawSim.prototype.checkRescaling=function(it){
 
   if(it>itmax){
     itmax=it;
-    this.itmin++; //!!!
+    this.itmin++; //!!
     erase=true;
   }
 
   if(erase || (it==0)){
-    //for(var i=0; i<=itmax; i++){
-    for(var i=0; i<=itmax-this.itmin; i++){//!!!
+     for(var i=0; i<=itmax-this.itmin; i++){
       this.xPix[i]=this.xPix0
-	+i*(this.xPixMax-this.xPix0)/(itmax-this.itmin);//!!!
+	+i*(this.xPixMax-this.xPix0)/(itmax-this.itmin);
     }
   }
 
@@ -3860,7 +3763,7 @@ DrawSim.prototype.drawCurve=function(it, iDataStart, data_arr,
  
   ctx.fillStyle=color;
   //console.log("drawCurve: this.itmin=",this.itmin," it=",it);
-  for (var ig=this.itmin; ig<=it; ig++){// ig=visible graphed data point !!!
+  for (var ig=this.itmin; ig<=it; ig++){// ig=visible graphed data point !!
     var i=iDataStart+ig; // i=iData
     var ip=ig-this.itmin; // ip=ipixel; order number of shown data point
     var value=data_arr[i]*scaling;
