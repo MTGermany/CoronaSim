@@ -274,9 +274,13 @@ var sigmaR0_hist=[]; sigmaR0_hist[0]=0;
 // beta parameters for IFR function IFRfun_time
 // need to define it explicitely here because sequentially calibrated after R0
 // defined in IFRfun_time -> "itIFR"
-var betaIFRinit=[0.010,0.003,0.003,0.003,0.003];
-var itIFR      =[0,    28,   56,   260,  285]; //!!!! ref timesteps IFR
+
+//var betaIFRinit=[0.010,0.003,0.003,0.003,0.003];
+//var itIFR      =[0,    28,   56,   260,  285]; //!!!! ref timesteps IFR
+
 var betaIFR=[];
+var IFRinterval=21;
+var IFRinterval_min=7;
 
 
 
@@ -1279,9 +1283,9 @@ function calibrate(){
   R0time=[];  //!! must revert it since some countries may have less data!!
   betaIFR=[];  //!! must revert it since some countries may have less data!!
   var R0calib=[]; 
-  for(var j=0; j<betaIFRinit.length; j++){ 
-    betaIFR[j]=betaIFRinit[j];
-  }
+ // for(var j=0; j<betaIFRinit.length; j++){ 
+ //   betaIFR[j]=betaIFRinit[j];
+ // }
 
   var itmin_c=0;            // basis
   var itmax_c=data_itmax-1; //basis
@@ -1447,6 +1451,7 @@ function calibrate(){
   herd immunity xyzTot: more deaths<->less healed<->xyzTot
   ############################################################## */
 
+/*
   console.log("\n\ncalibrate(): entering calibration of IFR ...");
 
   var betaIFRcal=[]; // init for calibration
@@ -1473,24 +1478,120 @@ function calibrate(){
   //var sse=SSEfuncIFR(betaIFR,null,true); console.log("sse=",sse);
   console.log("after IFR calibration: betaIFR=",betaIFR,
 	      " sse=",Math.round(sol2_SSEfuncIFR.fx));
+*/
 
- 
+  console.log("\n\ncalibrate(): entering NEW calibration of IFR ...");
+  var jmax=Math.ceil((itPresent-IFRinterval_min)/IFRinterval);
+  betaIFR=[]; for(var j=0; j<jmax; j++){betaIFR[j]=0;}
+  for(var j=0; j<jmax; j++){
+      console.log("\nbefore: j=",j,
+		  " betaIFR[j-1]=",betaIFR[j-1],
+		  " betaIFR[j]=",betaIFR[j]);
+    var it0=IFRinterval*j;
+    var it1=Math.min(IFRinterval*(j+1), data_dz.length-1);
+    var IFRcal=calibIFR(it0,it1);
+    betaIFR[j]=(j==0) ? IFRcal[0] : 0.5*(IFRcal[0]+betaIFR[j]); 
+    betaIFR[j+1]=IFRcal[1]; 
+    console.log("after: IFRcal[0]=",IFRcal[0], "IFRcal[1]=",IFRcal[1],
+		  "\n     betaIFR[j-1]=",betaIFR[j-1],
+		  " betaIFR[j]=",betaIFR[j],
+		  " betaIFR[j+1]=",betaIFR[j+1]);
+  }
+  console.log("betaIFR=",betaIFR);
+
 
  //##############################################################
  // !! for inline nondynamic testing: add testcode here
  //##############################################################
 
   if(false){
-    alert('stopped simulation with alert');
+    var IFRinterval=21;
+    var IFRinterval_min=7;
+    var jmax=Math.ceil((itPresent-IFRinterval_min)/IFRinterval);
+    var betaIFR1=[];
+    for(var j=0; j<jmax; j++){betaIFR1[j]=0;}
+    for(var j=0; j<jmax; j++){
+      console.log("\nbefore: j=",j,
+		  " betaIFR1[j-1]=",betaIFR1[j-1],
+		  " betaIFR1[j]=",betaIFR1[j]);
+      var it0=IFRinterval*j;
+      var it1=Math.min(IFRinterval*(j+1), data_dz.length-1);
+      var IFRcal=calibIFR(it0,it1);
+      betaIFR1[j]=(j==0) ? IFRcal[0] : 0.5*(IFRcal[0]+betaIFR1[j]); 
+      betaIFR1[j+1]=IFRcal[1]; 
+      console.log("after: IFRcal[0]=",IFRcal[0], "IFRcal[1]=",IFRcal[1],
+		  "\n     betaIFR1[j-1]=",betaIFR1[j-1],
+		  " betaIFR1[j]=",betaIFR1[j],
+		  " betaIFR1[j+1]=",betaIFR1[j+1]);
+    }
+    console.log("betaIFR1=",betaIFR1);
+    //alert('stopped simulation with alert');
     //setTimeout(function(){  alert('hello');}, 3000);  
     //alert('hi');
   }
 
     //alert('stopped simulation with alert');
 }
-//calibrate()
+//end calibrate()
 
 
+// =============================================================
+// simple SSE calibration function for the death cases
+// in [it0, it1-1] 
+// returns the two parameters vecIFR=(I1,I2)'
+// of the linear function IFR(it)=I1+(it-it0)/(it1-it0)*(I2-I1)
+// needs 
+// * explicit time interval boundaries itin=it0, itmax=it1-1
+// * new infections frac corona.xnew[it] (=> R0 needs to e already calibrated)
+// * data deaths data_dz +shift of the data_* arrays data by idataStart
+// * delay infection-death tauDie (no averaging over interval as in main sim)
+// * number of people n0 in region
+
+function calibIFR(it0, it1){
+
+
+  // weighting function
+
+  var r=[];
+  for(var i=0; i<it1-it0; i++){
+    r[i]=i/(it1-it0);
+  }
+
+// matrix components of lin eq (I1,I2)'=A^{-1}(c1,c2)'
+
+  var a11=0;
+  var a12=0;
+  var a22=0;
+  var c1=0;
+  var c2=0;
+
+  for(var i=0; i<it1-it0; i++){
+    var xnew=corona.xnew[Math.max(it0+i-tauDie, 0)];
+    var idata=data_idataStart+it0+i;
+    var a=n0*(1-r[i])*xnew;
+    var b=n0*r[i]*xnew;
+    var z=data_dz[Math.min(idata, data_dz.length-1)]; // rhs from data
+    a11+=a*a;
+    a12+=a*b;
+    a22+=b*b;
+    c1+=z*a;
+    c2+=z*b;
+    //console.log("calibIFR: it0+i=",it0+i," idata=",idata, 
+//		"\n a=",a," b=",b," z=",z);
+  }
+
+  var detA=a11*a22-a12*a12;
+  if(detA==0){
+    console.log("calibIFR: error: determinant detA=0");
+    return [0,0];
+  }
+
+  var vecIFR=[];
+  vecIFR[0]=Math.max(0, (a22*c1-a12*c2)/detA);
+  vecIFR[1]=Math.max(0,(-a12*c1+a11*c2)/detA);
+  //console.log("calibIFR: it0=",it0," it1=",it1," vecIFR=",vecIFR);
+  return vecIFR;
+}
 
 
 // =============================================================
@@ -1779,6 +1880,13 @@ function SSEfuncIFR(beta, grad, logging) {
 // times it0,it1, ...  fixed
 // !! it0 <0 because interferes with init(: fracDie= IFRfun_time(beta,-20);
 
+
+function IFRfun_time(it){
+  var jmax=Math.ceil((itPresent-IFRinterval_min)/IFRinterval);
+var jlower=
+}
+
+/*
 function IFRfun_time(beta, it){
 
 
@@ -1795,30 +1903,12 @@ function IFRfun_time(beta, it){
 		" IFR=",IFR);
   }
   
-  /*var IFR=(it<=itIFR[0])
-      ? beta[0] : (it>=itIFR[itIFR.length-1])
-      ? beta[itIFR.length-1]
-      : beta[itl]
-    +(it-itIFR[itl])/(itIFR[itl+1]-itIFR[itl])*(beta[itl+1]-beta[itl]);
-  */
 
-  /*
-   var it0=0;
-  var it1=28;//20
-  var it2=56;//70
-  var it3=175;//140
-  var it4=280;
- var IFR=(it<it0)
-      ? beta[0] : (it<it1)
-      ? beta[0]+(beta[1]-beta[0])/(it1-itIFR[0])*(it-itIFR[0]):(it<it2)
-      ? beta[1]+(beta[2]-beta[1])/(it2-it1)*(it-it1):(it<it3)
-      ? beta[2]+(beta[3]-beta[2])/(it3-it2)*(it-it2):(it<it4)
-      ? beta[3]+(beta[4]-beta[3])/(it4-it3)*(it-it3)
-      : beta[4];
-*/
   return IFR;
 
 }//IFRfun_time
+*/
+
 
 
 
@@ -2120,9 +2210,10 @@ function log10(x){return Math.log(x)/ln10;}
 
 function CoronaSim(){
   //console.log("CoronaSim created");
-  this.x=[]; // age struture of fraction infected at given timestep
+  this.x=[]; // age struture f(tau|it) of frac infected at given timestep it
   this.xohne=[]; // age structure without deleting by recover,death 
                  // (!!needed for correct recovery rate and balance x,y,z!)
+  this.xnew=[]; // fraction new infected as f(timestep it),
   this.snapAvailable=false; // initially, no snapshot of the state exists
   this.Reff=1.11;  // need some start ecause otherwise bug at drawing
                    // undeterministic too early calling of drawsim 
@@ -2405,8 +2496,10 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
   // ###############################################
 
 
+  // ###############################################
   // true dynamics (0): calculate the factors contributing to the
   //                    main infection process at step (2)
+  // ###############################################
 
   this.Reff=R0*(1-pVacc)*factorMeasures*(1-this.xyz)
     * ((it<=itPresent) ? 1 : calc_seasonFactor(it));
@@ -2417,7 +2510,9 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
   var x0source=casesInflow/100000; // from returners of foreign regions
 
   
+  // ###############################################
   // true dynamics (1): shift age profile of already infected by one
+  // ###############################################
 
   for(var tau=taumax-1; tau>0; tau--){
     this.x[tau]=this.x[tau-1];
@@ -2425,7 +2520,9 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
   }
 
 
+  // ###############################################
   // true dynamics (2): infect new people
+  // ###############################################
 
   this.x[0]=x0source;
   var f_R=1./(tauRend-tauRstart+1);
@@ -2440,18 +2537,13 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
 
 
 
+  // ###############################################
   // true dynamics (3): let people die or recover
   // smooth  over tauAvg days
+  // ###############################################
 
   var dtau=Math.floor(tauAvg/2); // tauAvg is global uneven variable, e.g.=5
-
   var f_D=1./tauAvg;
-
-/*
-  var tauDie_i=Math.floor(tauDie); //!! real-values tauDie
-  var tauDie_r=tauDie-tauDie_i;
-  var f_D=1./(tauAvg+tauDie_r);
-*/
 
   this.dz=0;
   var dysum=0;
@@ -2473,12 +2565,16 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
   this.y   += dysum;
 
 
+  // ###############################################
   // (4) sum up the profile of infected people
   // xAct: relative sum of "actually infected" (neither recoverd nor dead)
   // xyz: relative cumulative sum of infected (incl recovered, dead)
+  // ###############################################
 
-
-  this.xyz+= this.x[0];
+  // MT 2020-12-23 fraction of newly infected at time it 
+  // for later use direct calibr IFR
+  if((it>=0)&&(it<itPresent)){this.xnew[it]=this.x[0];} 
+  this.xyz+= this.x[0]; // cumulative fraction of newly infected
 
   this.xAct=0;  
   for(var tau=0; tau<taumax; tau++){
