@@ -77,17 +77,20 @@ var isStopped=true
 // global time simulation vars (see also "data related global variables")
 // dayinit
 
-var dayStartMar=8; //!! 20 you can also exceed 31, date initializer takes it
+var dayStartMarInit=8; //!! can also exceed 31, date initializer takes it
+var dayStartMar=dayStartMarInit; 
 
 var dayStartYear=dayStartMar+59;
 var startDay=new Date(2020,02,dayStartMar); // months start @ zero, days @ 1
 var present=new Date();   // time object for present 
 var it=0;
 var oneDay_ms=(1000 * 3600 * 24);
-var itPresent=Math.floor(
+var itPresentInit=Math.floor(
     (present.getTime() - startDay.getTime())/oneDay_ms); 
                 // itPresent=days(present-startDay)
                 // floor because startDay time is 00:00 of given day
+
+var itPresent=itPresentInit;
 var itmax=itPresent; // can be >itPresent during interactive simulation
 
 
@@ -218,19 +221,19 @@ const tauDieList={
   "Austria"       : 19,
   "Czechia"       : 19,
   "France"        : 19,
-  "United Kingdom": 19,
-  "Italy"         : 19,
+  "United Kingdom": 14,
+  "Italy"         : 14,
   "Poland"        : 19,
-  "Spain"         : 19,
+  "Spain"         : 14,
   "Sweden"        : 19,
   "Switzerland"   : 19,
   "India"         : 17,
   "Russia"        : 17,
   "US"            : 17,
   "Australia"     : 17,
-  "LK_Erzgebirgskreis": 19,
-  "LK_Osterzgebirge"  : 19,
-  "SK_Dresden"        : 19
+  "LK_Erzgebirgskreis": 14,
+  "LK_Osterzgebirge"  : 16,
+  "SK_Dresden"        : 16
 }
 
 
@@ -271,16 +274,11 @@ var R0time=[];   // !! calibrated R0
 var R0_hist=[]; R0_hist[0]=R0; // one element PER DAY
 var sigmaR0_hist=[]; sigmaR0_hist[0]=0; 
 
-// beta parameters for IFR function IFRfun_time
-// need to define it explicitely here because sequentially calibrated after R0
-// defined in IFRfun_time -> "itIFR"
 
-//var betaIFRinit=[0.010,0.003,0.003,0.003,0.003];
-//var itIFR      =[0,    28,   56,   260,  285]; //!!!! ref timesteps IFR
-
-var betaIFR=[];
+var IFRinit=0.002;
+var IFRtime=[];
 var IFRinterval=21;
-var IFRinterval_min=7;
+var IFRinterval_min=14;
 
 
 
@@ -479,7 +477,7 @@ function getGithubData() {
     console.log("useLiveData=false, get data from server: dataGit=",dataGit);
     console.log("end getGithubData(..) non-live alternative");
     initializeData(country); //!! MUST repeat because of annoying time order
-    fracDie=IFRfun_time(betaIFRinit,-20); // use IFR start array for init()
+    fracDie=IFRfun_time(-20); // use IFR start array for init()
     corona.init(0); 
     myRestartFunction();
   }
@@ -525,6 +523,14 @@ function initializeData(country) {
   var data2=dataGit2[country2].data;
   var dateInitStr2=data2[0]["date"];
 
+  // !!!! re-initialize; otherwise consequential errors after switching back
+  // to countries with more data
+  
+  dayStartMar=dayStartMarInit;
+  dayStartYear=dayStartMar+59;
+  startDay=new Date(2020,02,dayStartMar);
+  itPresent=itPresentInit;
+  itmax=itPresent;
 
  // define time shifts start date - start date of the two data sources 
 
@@ -536,6 +542,15 @@ function initializeData(country) {
   data2_idataStart=Math.round(
     (startDay.getTime() - data2_dateBegin.getTime() )/oneDay_ms);
 
+
+
+
+ 
+
+  
+
+
+  
 
   // MT 2020-12-10: Check if already cases at intended sim start day
   // if less than 10 days of cases at start, shift sim start forwards
@@ -549,6 +564,7 @@ function initializeData(country) {
       success=true;
     }
   }
+
 
   if(data_idataStart<iFirstCase+daysCasesWarmupMin){ // shift start of sim
     var daysForwards=iFirstCase+daysCasesWarmupMin-data_idataStart;
@@ -843,7 +859,7 @@ function initializeData(country) {
     console.log("\ninitializeData finished: final data:");
     for(var i=0; i<data.length; i++){
       //var logging=useLandkreise&&(i>data.length-10);
-      var logging=(i>data.length-20);
+      var logging=(i>data.length-4);
       if(logging){
         var i2=i+data2_idataStart-data_idataStart;
 	console.log(
@@ -1071,7 +1087,7 @@ function SSEfunc(R0arr, fR0, logging, itStartInp, itMaxInp,
   }
 
   else{
-    fracDie=IFRfun_time(betaIFRinit,-20); //!!
+    fracDie=IFRfun_time(-20); //!!
     if(logging){
       console.log("SSEfunc; initializing from scratch with data: fracDie=",
 		  fracDie);
@@ -1191,7 +1207,7 @@ function initialize() {
   // =============================================================
 
   corona=new CoronaSim();
-  fracDie=IFRfun_time(betaIFRinit,-20); // !! needed for corona.init
+  fracDie=IFRfun_time(-20); // !! needed for corona.init
   if(!useLiveData){corona.init(0);} // otherwise inside fetch promise
 
 
@@ -1281,7 +1297,7 @@ function calibrate(){
 
   console.log("\nEntering calibration of R0 ...");
   R0time=[];  //!! must revert it since some countries may have less data!!
-  betaIFR=[];  //!! must revert it since some countries may have less data!!
+  IFRtime=[];  //!! must revert it since some countries may have less data!!
   var R0calib=[]; 
  // for(var j=0; j<betaIFRinit.length; j++){ 
  //   betaIFR[j]=betaIFRinit[j];
@@ -1482,31 +1498,37 @@ function calibrate(){
 
   console.log("\n\ncalibrate(): entering NEW calibration of IFR ...");
   var jmax=Math.ceil((itPresent-IFRinterval_min)/IFRinterval);
-  betaIFR=[]; for(var j=0; j<jmax; j++){betaIFR[j]=0;}
+
+  IFRtime=[]; for(var j=0; j<jmax; j++){IFRtime[j]=0;}
   for(var j=0; j<jmax; j++){
-      console.log("\nbefore: j=",j,
-		  " betaIFR[j-1]=",betaIFR[j-1],
-		  " betaIFR[j]=",betaIFR[j]);
     var it0=IFRinterval*j;
     var it1=Math.min(IFRinterval*(j+1), data_dz.length-1);
     var IFRcal=calibIFR(it0,it1);
-    betaIFR[j]=(j==0) ? IFRcal[0] : 0.5*(IFRcal[0]+betaIFR[j]); 
-    betaIFR[j+1]=IFRcal[1]; 
-    console.log("after: IFRcal[0]=",IFRcal[0], "IFRcal[1]=",IFRcal[1],
-		  "\n     betaIFR[j-1]=",betaIFR[j-1],
-		  " betaIFR[j]=",betaIFR[j],
-		  " betaIFR[j+1]=",betaIFR[j+1]);
+    //console.log("it0=",it0," it1=",it1," IFRcal=",IFRcal);
+    // because first estimate (it<0 for infections) not normalized
+    // =>forget it, use IFRcal[1] instead of IFRcal[0] or average
+    IFRtime[j]=(j==0) ? IFRcal[1] : 0.5*(IFRcal[0]+IFRtime[j]);
+    IFRtime[j+1]=IFRcal[1]; 
   }
-  console.log("betaIFR=",betaIFR);
 
+  //!!!! ANNOYING slightest shift after any country choice back to Germany
+  // approx rel error 10^{-3} in calibr R and IFR (no solution; forget...)
 
+  if(false){
+    console.log("IFRtime=",IFRtime);
+    console.log("data_idataStart=",data_idataStart);
+    console.log("startDay=",startDay);
+    console.log("dayStartMar=",dayStartMar);
+    console.log("dayStartYear=",dayStartYear);
+    console.log("itPresent=",itPresent);
+    console.log("calc_seasonFactor(0)=",calc_seasonFactor(0));
+  }
+  
  //##############################################################
  // !! for inline nondynamic testing: add testcode here
  //##############################################################
 
   if(false){
-    var IFRinterval=21;
-    var IFRinterval_min=7;
     var jmax=Math.ceil((itPresent-IFRinterval_min)/IFRinterval);
     var betaIFR1=[];
     for(var j=0; j<jmax; j++){betaIFR1[j]=0;}
@@ -1542,7 +1564,7 @@ function calibrate(){
 // of the linear function IFR(it)=I1+(it-it0)/(it1-it0)*(I2-I1)
 // needs 
 // * explicit time interval boundaries itin=it0, itmax=it1-1
-// * new infections frac corona.xnew[it] (=> R0 needs to e already calibrated)
+// * new infections frac corona.xnewShiftedTauDie[it] (=> R0 needs to e already calibrated)
 // * data deaths data_dz +shift of the data_* arrays data by idataStart
 // * delay infection-death tauDie (no averaging over interval as in main sim)
 // * number of people n0 in region
@@ -1566,7 +1588,8 @@ function calibIFR(it0, it1){
   var c2=0;
 
   for(var i=0; i<it1-it0; i++){
-    var xnew=corona.xnew[Math.max(it0+i-tauDie, 0)];
+    // ! xnewShiftedTauDie not normalized if stemming from it<0 => error !!!
+    var xnew=corona.xnewShiftedTauDie[Math.max(it0+i, 0)];
     var idata=data_idataStart+it0+i;
     var a=n0*(1-r[i])*xnew;
     var b=n0*r[i]*xnew;
@@ -1576,8 +1599,11 @@ function calibIFR(it0, it1){
     a22+=b*b;
     c1+=z*a;
     c2+=z*b;
-    //console.log("calibIFR: it0+i=",it0+i," idata=",idata, 
-//		"\n a=",a," b=",b," z=",z);
+    if(false){
+    //if(it0==0){
+      console.log("calibIFR: it0+i=",it0+i," idata=",idata, 
+		  "\n n0*xnew=",n0*xnew," a=",a," b=",b," z=",z);
+    }
   }
 
   var detA=a11*a22-a12*a12;
@@ -1587,8 +1613,10 @@ function calibIFR(it0, it1){
   }
 
   var vecIFR=[];
-  vecIFR[0]=Math.max(0, (a22*c1-a12*c2)/detA);
-  vecIFR[1]=Math.max(0,(-a12*c1+a11*c2)/detA);
+  vecIFR[0]=(a22*c1-a12*c2)/detA;
+  vecIFR[1]=(-a12*c1+a11*c2)/detA;
+  if(vecIFR[0]<=0){vecIFR[0]=IFRinit;} // cope with all sorts of errors
+  if(vecIFR[1]<=0){vecIFR[1]=IFRinit;}
   //console.log("calibIFR: it0=",it0," it1=",it1," vecIFR=",vecIFR);
   return vecIFR;
 }
@@ -1833,7 +1861,7 @@ function SSEfuncIFR(beta, grad, logging) {
   // init with it=0 to have exactly the same
   // simulation as after finsihed R calibration  (one-step calib)
 
-  fracDie=IFRfun_time(beta,-20); // also use fracDie in warmup!
+  fracDie=IFRfun_time(-20); // also use fracDie in warmup!
   corona.init(0, logging); 
 
   var sseIFR=0;
@@ -1841,7 +1869,7 @@ function SSEfuncIFR(beta, grad, logging) {
 
     // simulate (SSEfuncIFR)
 
-    fracDie= IFRfun_time(beta,it);    // beta to be calibrated
+    fracDie= IFRfun_time(it);    // beta to be calibrated
     var R0_actual= R0fun_time(R0time,it); // R0time already calibrated
 
     corona.updateOneDay(R0_actual, it, logging); // using fracDie
@@ -1882,8 +1910,12 @@ function SSEfuncIFR(beta, grad, logging) {
 
 
 function IFRfun_time(it){
-  var jmax=Math.ceil((itPresent-IFRinterval_min)/IFRinterval);
-var jlower=
+  var jlower=Math.floor(it/IFRinterval);
+  var r=it/IFRinterval-jlower;
+  var jhigher=jlower+1;
+  return ((it<0)||(IFRtime.length==0)) ? IFRinit
+    : (jhigher>=IFRtime.length) ? IFRtime[IFRtime.length-1]
+    : (1-r)*IFRtime[jlower]+r*IFRtime[jhigher];
 }
 
 /*
@@ -2018,7 +2050,7 @@ function myRestartFunction(){
   it=0; //!!! only instance apart from init where global it is reset to zero 
   ctx.clearRect(0, 0, canvas.width, canvas.height)
 
-  fracDie=IFRfun_time(betaIFR,-20); 
+  fracDie=IFRfun_time(-20); 
   corona.init(0,false); // because initialize redefines CoronaSim()
 
   clearInterval(myRun);
@@ -2115,7 +2147,7 @@ function simulationRun() {
   // to get full sim curves (first plot then update 
   // to get the initial point it=0) 
 
-  if(it==itPresent){ // !!!! itPresent, not itPresent-1 represents present
+  if(it==itPresent){ // !!! itPresent, not itPresent-1 represents present
     console.log("before clearInterval: it=",it);
     clearInterval(myRun);myStartStopFunction();
   }
@@ -2139,7 +2171,7 @@ function doSimulationStep(){
     myRun=setInterval(simulationRun, 1000/fps);
   }
   R0_actual=(R0sliderUsed) ? R0 : R0fun_time(R0time,it);
-  fracDie= IFRfun_time(betaIFR,it);
+  fracDie= IFRfun_time(it);
 
   R0_hist[it]=R0_actual;
 
@@ -2213,7 +2245,7 @@ function CoronaSim(){
   this.x=[]; // age struture f(tau|it) of frac infected at given timestep it
   this.xohne=[]; // age structure without deleting by recover,death 
                  // (!!needed for correct recovery rate and balance x,y,z!)
-  this.xnew=[]; // fraction new infected as f(timestep it),
+  this.xnewShiftedTauDie=[]; // fraction new infected as f(timestep it),
   this.snapAvailable=false; // initially, no snapshot of the state exists
   this.Reff=1.11;  // need some start ecause otherwise bug at drawing
                    // undeterministic too early calling of drawsim 
@@ -2292,13 +2324,6 @@ CoronaSim.prototype.init=function(itStart,logging){
 
   //loggingDebug=logging&&useLandkreise; // !!! global variable
 
-  loggingDebug=false; //!!
-  if(loggingDebug){
-    var ittest=[-1,20,50,150,250,350]; // itIFR in real calibr
-    for(var i=0; i<ittest.length; i++){
-      var test=IFRfun_time(betaIFR, ittest[i]);
-    }
-  }
   
   loggingDebug=false; // !!! global variable
 
@@ -2573,7 +2598,9 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
 
   // MT 2020-12-23 fraction of newly infected at time it 
   // for later use direct calibr IFR
-  if((it>=0)&&(it<itPresent)){this.xnew[it]=this.x[0];} 
+  if((it>=-tauDie)&&(it<itPresent)){
+    this.xnewShiftedTauDie[it+tauDie]=this.x[0];
+  }
   this.xyz+= this.x[0]; // cumulative fraction of newly infected
 
   this.xAct=0;  
@@ -3338,7 +3365,7 @@ DrawSim.prototype.drawAxes=function(windowG){
 		 this.xPix0+xrelLeft*this.wPix,
 		 this.yPix0+(yrelTop-(ikey+2)*dyrel)*this.hPix);
     
-    ctx.fillText("Aktuelle IFR="+(100*IFRfun_time(betaIFR,it)).toFixed(2)+" %",
+    ctx.fillText("Aktuelle IFR="+(100*IFRfun_time(it)).toFixed(2)+" %",
 		 this.xPix0+xrelLeft*this.wPix,
 		 this.yPix0+(yrelTop-(ikey+3)*dyrel)*this.hPix);
 
@@ -3397,7 +3424,7 @@ DrawSim.prototype.transferSimData=function(it){
   this.dataG[9].data[it]=log10(n0*corona.xt);
   this.dataG[10].data[it]=log10(n0*corona.y);
   this.dataG[12].data[it]=log10(n0*corona.z);
-  this.dataG[22].data[it]=IFRfun_time(betaIFR,it); //!! new!
+  this.dataG[22].data[it]=IFRfun_time(it); //!! new!
   this.dataG[23].data[it]=n0*corona.x[0]; // x[0]=infected at infection age 0
   this.dataG[24].data=this.dataG[23].data;
   this.dataG[25].data[it]=log10(n0*corona.xyz); // "Durchseuchung"
@@ -3451,9 +3478,9 @@ DrawSim.prototype.transferSimData=function(it){
 DrawSim.prototype.transferRecordedData=function(){
 //######################################################################
 
-  console.log("\nin drawsim.transferRecordedData: it=",it,
+  if(false){console.log("\nin drawsim.transferRecordedData: it=",it,
 	      " for unnoying unknown reason repeated several times",
-	      " only at loading");
+			" only at loading");}
 // windows 0,1
   this.dataG[4].data=data_cumCases;  // by reference
   this.dataG[5].data=data_cumRecovered;
