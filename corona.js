@@ -277,7 +277,7 @@ var sigmaR0_hist=[]; sigmaR0_hist[0]=0;
 
 var IFRinit=0.002;
 var IFRtime=[];
-var IFRinterval=21;
+var IFRinterval=28;
 var IFRinterval_min=14;
 
 
@@ -1500,15 +1500,17 @@ function calibrate(){
   var jmax=Math.ceil((itPresent-IFRinterval_min)/IFRinterval);
 
   IFRtime=[]; for(var j=0; j<jmax; j++){IFRtime[j]=0;}
+  var cumDeathsSim0=0;
   for(var j=0; j<jmax; j++){
     var it0=IFRinterval*j;
-    var it1=Math.min(IFRinterval*(j+1), data_dz.length-1);
-    var IFRcal=calibIFR(it0,it1);
+    var it1=Math.min(IFRinterval*(j+1), data_dz.length-1-data_idataStart);
+    var IFRcal=calibIFR(cumDeathsSim0,it0,it1);
     //console.log("it0=",it0," it1=",it1," IFRcal=",IFRcal);
     // because first estimate (it<0 for infections) not normalized
     // =>forget it, use IFRcal[1] instead of IFRcal[0] or average
     IFRtime[j]=(j==0) ? IFRcal[1] : 0.5*(IFRcal[0]+IFRtime[j]);
-    IFRtime[j+1]=IFRcal[1]; 
+    IFRtime[j+1]=IFRcal[1];
+    cumDeathsSim0+=IFRcal[2];
   }
 
   //!!!! ANNOYING slightest shift after any country choice back to Germany
@@ -1566,10 +1568,11 @@ function calibrate(){
 // * explicit time interval boundaries itin=it0, itmax=it1-1
 // * new infections frac corona.xnewShiftedTauDie[it] (=> R0 needs to e already calibrated)
 // * data deaths data_dz +shift of the data_* arrays data by idataStart
+// * cum data deaths data_cumDeaths +shift of the data_* arrays data by idataStart
 // * delay infection-death tauDie (no averaging over interval as in main sim)
 // * number of people n0 in region
 
-function calibIFR(it0, it1){
+function calibIFR(cumDeathsSim0,it0, it1){
 
 
   // weighting function
@@ -1587,22 +1590,24 @@ function calibIFR(it0, it1){
   var c1=0;
   var c2=0;
 
+  var avec=[];
+  var bvec=[];
   for(var i=0; i<it1-it0; i++){
     // ! xnewShiftedTauDie not normalized if stemming from it<0 => error !!!
     var xnew=corona.xnewShiftedTauDie[Math.max(it0+i, 0)];
     var idata=data_idataStart+it0+i;
-    var a=n0*(1-r[i])*xnew;
-    var b=n0*r[i]*xnew;
+    avec[i]=n0*(1-r[i])*xnew;
+    bvec[i]=n0*r[i]*xnew;
     var z=data_dz[Math.min(idata, data_dz.length-1)]; // rhs from data
-    a11+=a*a;
-    a12+=a*b;
-    a22+=b*b;
-    c1+=z*a;
-    c2+=z*b;
+    a11+=avec[i]*avec[i];
+    a12+=avec[i]*bvec[i];
+    a22+=bvec[i]*bvec[i];
+    c1+=z*avec[i];
+    c2+=z*bvec[i];
     if(false){
     //if(it0==0){
       console.log("calibIFR: it0+i=",it0+i," idata=",idata, 
-		  "\n n0*xnew=",n0*xnew," a=",a," b=",b," z=",z);
+		  "\n n0*xnew=",n0*xnew," a=",avec[i]," b=",bvec[i]," z=",z);
     }
   }
 
@@ -1617,9 +1622,37 @@ function calibIFR(it0, it1){
   vecIFR[1]=(-a12*c1+a11*c2)/detA;
   if(vecIFR[0]<=0){vecIFR[0]=IFRinit;} // cope with all sorts of errors
   if(vecIFR[1]<=0){vecIFR[1]=IFRinit;}
-  //console.log("calibIFR: it0=",it0," it1=",it1," vecIFR=",vecIFR);
+
+  // adapt a bit to compensate for drifts at cumulated deaths
+
+  var dCumDeathsSim=0;
+  for(var i=0; i<it1-it0; i++){
+    dCumDeathsSim+=avec[i]*vecIFR[0]+bvec[i]*vecIFR[1];
+  }
+
+  var drift=cumDeathsSim0+dCumDeathsSim-data_cumDeaths[data_idataStart+it1];
+  var factor=(cumDeathsSim0<1) ? 1
+      : Math.min(1.3, Math.max(0.7, 1-3*drift/(cumDeathsSim0+dCumDeathsSim)));
+
+  if(false){ // !!! apply IFRcalib drift correction if true
+    vecIFR[0]*=factor; vecIFR[1]*=factor;
+  }
+  vecIFR[2]=dCumDeathsSim*factor;
+  console.log("calibIFR: it0=",it0," it1=",it1,
+	      " data_itmax=",data_itmax,
+	      " it1-1=",it1-1,
+	      " data_cumDeaths.length=",data_cumDeaths.length,
+	      " data_dz.length=",data_dz.length,
+	      " data_idataStart=",data_idataStart,
+	      "\n data_cumDeaths[data_idataStart+it0]=",
+	      data_cumDeaths[data_idataStart+it0],
+	      " data_cumDeaths[data_idataStart+it1]=",
+	      data_cumDeaths[data_idataStart+it1],
+	      " cumDeathsSim0=",cumDeathsSim0,
+	      " cumDeathsSim0+vecIFR[2]=",cumDeathsSim0+vecIFR[2],
+	      "\n drift=",drift," factor=",factor," vecIFR=",vecIFR);
   return vecIFR;
-}
+} // calibIFR
 
 
 // =============================================================
