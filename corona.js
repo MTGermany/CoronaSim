@@ -267,24 +267,6 @@ var otherSliderUsed=false;
 var testSliderUsed=false;
 //var fracDieSliderUsed=false; does not exist
 
-var R0=1.42;    // init interactive R for slider corona_gui.js (overridden)
-var R0_actual=R0;
-var R0time=[];   // !! calibrated R0
-                // initialize in function initialize() (then data available)
-var R0_hist=[]; R0_hist[0]=R0; // one element PER DAY
-var sigmaR0_hist=[]; sigmaR0_hist[0]=0; 
-
-
-var IFRinit=0.002;
-var IFRinterval=28;
-var IFRinterval_min=10;
-var IFRtime=[];
-var IFR_jmax=1+Math.ceil((itPresent-IFRinterval_min)/IFRinterval);
-for(var j=0; j<IFR_jmax;j++){
-  IFRtime[j]=IFRinit;
-}
-
-
 
 
 // global simulation parameters/infection constants/parameters
@@ -353,20 +335,35 @@ var itmax_calib; //  end calibr time interval =^ data_itmax-1
                  // 20 weeks of data
 
 const calibInterval=7; //!! calibration time interval [days] for one R0 value7
-const calibAddtlDaysLast=11; // do not calibrate remaining period smaller 11
+const Rinterval_last_min=14; // do not calibrate remaining period smaller 11
 const calibrateOnce=false; // following variables only relevant if false
 const nCalibIntervals=6; // multiples of calibInterval, !! >=30/calibInterval
                          // calibrates nCalibIntervals-nOverlap+1 params
-                         // per step 6
-// !!2020-12-19 error with ..vals=6; last value of
-// calibr for ALL countries the same;
-// quick hack with 7 SOLVED; did not init Rtime[] before calibr
+var R0=1.42;    // init interactive R for slider corona_gui.js (overridden)
+var R0_actual=R0;
+var R0time=[];   // !! calibrated R0
+                // initialize in function initialize() (then data available)
+var R0_hist=[]; R0_hist[0]=R0; // one element PER DAY
+var sigmaR0_hist=[]; sigmaR0_hist[0]=0; 
+                   // per step 6
 
 const nOverlap=3;        // multiples of calibInterval, 3
-                         // >=max(1,floor(calibAddtlDaysLast/calibInterval)
+                         // >=max(1,floor(Rinterval_last_min/calibInterval)
 var useInitSnap;
 var firstR0fixed=false; //if first R0 element firstR0 is fixed @ calibr 
 var firstR0=0;
+
+
+
+var IFRinit=0.002;
+var IFRinterval=28;
+var IFRinterval_last_min=21;
+var IFRtime=[];
+var IFR_jmax=1+Math.ceil((itPresent-IFRinterval_last_min)/IFRinterval);
+for(var j=0; j<IFR_jmax;j++){
+  IFRtime[j]=IFRinit;
+}
+
 
 
 
@@ -1281,7 +1278,7 @@ function getIndexCalib(itime){
 
 // last calibration interval must have at least 16 days
 function getIndexCalibmax(itime){
-  return getIndexCalib(itime-calibAddtlDaysLast); 
+  return getIndexCalib(itime-Rinterval_last_min); 
 }
 
 
@@ -1336,7 +1333,7 @@ function calibrate(){
 
 
     var dn=nCalibIntervals-nOverlap;
-    var nPeriods=Math.round((data_itmax-1-calibAddtlDaysLast)/(calibInterval*dn));
+    var nPeriods=Math.round((data_itmax-1-Rinterval_last_min)/(calibInterval*dn));
 
     var ditOverlap=nOverlap*calibInterval;
  
@@ -1472,7 +1469,7 @@ function calibrate(){
 
   console.log("\n\ncalibrate(): entering NEW calibration of IFR ...");
   IFR_jmax=1+Math.ceil(
-    (itPresent-IFRinterval_min)/IFRinterval); //!!!as in def
+    (itPresent-IFRinterval_last_min)/IFRinterval); //!!!as in def
 
   IFRtime=[]; for(var j=0; j<IFR_jmax; j++){IFRtime[j]=IFRinit;}
   var cumDeathsSim0=0;
