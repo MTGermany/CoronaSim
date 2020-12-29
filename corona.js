@@ -101,12 +101,16 @@ var itmax=itPresent; // can be >itPresent during interactive simulation
 // or load as a variable server-side (if useLiveData=false)
 
 var dataGit=[];
-// MT 2020-09
 var dataGit2=[];
-
-// MT 2020-12
 var dataRKI=[];
 
+// for validation
+
+var dataGit_orig=[];
+var dataGit2_orig=[];
+var dataRKI_orig=[];
+var usedValidation=false; // only copy data to original data in first validation
+var nDaysValid=0;
 
 var data_dateBegin;
 
@@ -381,6 +385,7 @@ var sizeminCanvas;
 var textsize=14;
 var hasChanged=false;
 var isSmartphone=false;
+var isLandscape=true;
 
 corona=new CoronaSim();
 
@@ -1970,6 +1975,87 @@ function selectWindow(){ // callback html select box "windowGDiv"
 
   drawsim.draw(it);
 
+}
+
+
+function validate(){ // callback html select box "validateDiv"
+  nDaysValid=document.getElementById("validateDays").value;
+  console.log("in validate: nDaysValid=",nDaysValid);
+  var validText=((nDaysValid>0)&&((!isSmartphone) || isLandscape))
+    ? "Validierung der "+nDaysValid+" letzten Tage" : "";
+  document.getElementById("headerValidText").innerHTML=validText;
+
+
+  // copy working data from full data if validate already used
+  // save working data to full data if validate used for the first time
+
+  if(usedValidation){
+    dataGit=JSON.parse(JSON.stringify(dataGit_orig)); // full clone
+    dataGit2=JSON.parse(JSON.stringify(dataGit2_orig));
+    dataRKI=JSON.parse(JSON.stringify(dataRKI_orig));
+  }
+  else{
+    dataGit_orig=JSON.parse(JSON.stringify(dataGit)); // full clone
+    dataGit2_orig=JSON.parse(JSON.stringify(dataGit2));
+    dataRKI_orig=JSON.parse(JSON.stringify(dataRKI));
+    usedValidation=true;
+  }
+
+  // strip working data
+
+  for(var attribute in dataGit){
+    var n_arr=dataGit[attribute].length;
+    var lastDateStr=insertLeadingZeroes(dataGit[attribute][n_arr-1]["date"]);
+    var lastDate=new Date(lastDateStr);
+    var days2present
+      =Math.floor((present.getTime()-lastDate.getTime())/oneDay_ms);
+    console.log(
+      "dataGit: attribute=",attribute,
+      " n_arr=",n_arr," lastDateStr=",lastDateStr,
+      //" present=",present," lastDate=",lastDate,
+      " days2present=",days2present);
+
+    for(var j=days2present; j<nDaysValid; j++){
+      dataGit[attribute].pop();
+    }
+  }
+
+  for(var attribute in dataGit2){
+    var n_arr=dataGit2[attribute]["data"].length;
+    var lastDateStr=
+      insertLeadingZeroes(dataGit2[attribute]["data"][n_arr-1]["date"]);
+    var lastDate=new Date(lastDateStr);
+    var days2present
+      =Math.floor((present.getTime()-lastDate.getTime())/oneDay_ms);
+    console.log(
+      "dataGit2: attribute=",attribute,
+      " n_arr=",n_arr," lastDateStr=",lastDateStr,
+      " days2present=",days2present);
+
+    for(var j=days2present; j<nDaysValid; j++){
+      dataGit2[attribute]["data"].pop();
+    }
+  }
+
+  for(var attribute in dataRKI){
+    var n_arr=dataRKI[attribute].length;
+    var lastDateStr=insertLeadingZeroes(dataRKI[attribute][n_arr-1]["date"]);
+    var lastDate=new Date(lastDateStr);
+    var days2present
+      =Math.floor((present.getTime()-lastDate.getTime())/oneDay_ms);
+    console.log(
+      "dataGit: attribute=",attribute,
+      " n_arr=",n_arr," lastDateStr=",lastDateStr,
+      " days2present=",days2present);
+
+    for(var j=days2present; j<nDaysValid; j++){
+      dataRKI[attribute].pop();
+    }
+  }
+
+  console.log("dataGit=",dataGit," dataGit_orig=",dataGit_orig);
+  console.log("dataRKI=",dataRKI," dataRKI_orig=",dataRKI_orig);
+  initializeData(country); // includes calibrate()
 }
 
 

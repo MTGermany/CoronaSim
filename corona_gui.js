@@ -284,19 +284,19 @@ function canvas_resize(){
   sizeminCanvas=Math.min(canvas.width,canvas.height);
   sizeminWindow=Math.min(vw,vh); // "viewport" is standard object, not useful
 
-  isSmartphone=(sizeminWindow<600);
-
+  isSmartphone=(sizeminWindow<600);             // consolidate with corona.css
+  isLandscape=(canvas.width>7/5*canvas.height); // consolidate with corona.css
   textsize=(isSmartphone) ? 0.03*sizeminWindow : 0.02*sizeminWindow;
   textsizeR0=1.1*textsize;
   if(false){
-  console.log("canvas_gui.canvas_resize():",
+    console.log("canvas_gui.canvas_resize():",
 		" isSmartphone=",isSmartphone,
 		" canvas.width=",canvas.width,
 		" canvas.height=",canvas.height,
 		" textsize=",textsize,
 		" textsizeR0=",textsizeR0);
 
-  console.log("document.documentElement.clientHeight=",
+    console.log("document.documentElement.clientHeight=",
 	      document.documentElement.clientHeight,
 	      "nnwindow.innerHeight=",window.innerHeight,
 	      "\ncanvasWindow.clientHeight=",canvasWindow.clientHeight);
@@ -321,10 +321,13 @@ function canvas_resize(){
   if(drawsim!==null){drawsim.draw(it);}//!! draw after resize
 
 
- }
+  var validText=((nDaysValid>0)&&((!isSmartphone) || isLandscape))
+    ? "Validierung der "+nDaysValid+" letzten Tage" : "";
+  document.getElementById("headerValidText").innerHTML=validText;
 
 
-//#################### new ###########################
+} // canvas_resize
+
 
 //###############################################################
 // canvas mouse callbacks

@@ -11,6 +11,14 @@ h1{
      padding-top:0px;
  }
 
+h2{
+     font-family: helvetica, sans-serif;
+     font-size: 2.8vmin;
+     font-weight: bold;
+     color: #446;
+     padding-top:0px;
+ }
+
 body{
   margin: 2px;
   padding: 0;
@@ -138,9 +146,17 @@ a:hover {
 /* ################################################### */
 
 
-#header{
+#header{ /*title */
   position: absolute;
   top: 0vmin;
+  left: 10vw;
+  font-weight:bold;
+  z-index: 3;  /* above simulation canvas in rare chances of overlapping */
+}
+
+#headerValid{ /*title if validating*/
+  position: absolute;
+  top: 3vmin;
   left: 10vw;
   font-weight:bold;
   z-index: 3;  /* above simulation canvas in rare chances of overlapping */
@@ -173,7 +189,7 @@ a:hover {
 
 #contents{ /* contains the canvas */
   position: absolute;
-  top:   21vh;  /* 6 for the title, 24 for the sliders */
+  top:   21vh;  
   left:   2vw;
   width:  85vw;
   height: 78vh;
@@ -259,6 +275,13 @@ a:hover {
   z-index: 3; 
 }
 
+#validateDiv{ /* normal landscape */
+  position: absolute;
+  top:     22.5vh; 
+  right:   1vw;
+  z-index: 3; 
+}
+
 #testnumberDiv{
   position: absolute;
   top:     50vh; /*10vh*/
@@ -312,6 +335,15 @@ a:hover {
   width: 50vmin;
 }
 
+#headerValid{ /*title if validating regular portrait*/
+  position: absolute;
+  top: auto;
+  bottom: 42vh;
+  left: 27vw;
+  font-weight:bold;
+  z-index: 3;  /* above simulation canvas in rare chances of overlapping */
+}
+
 
 #sliders{      /* normal portrait */
   left:   12vw;
@@ -324,7 +356,7 @@ a:hover {
 
 #contents{ /* contains the canvas */
   position: absolute;
-  top:   21vh;  /* 6 for the title, 24 for the sliders */
+  top:   21vh; 
   left:   2vw;
   width:  96vw;
   height: 72vh;
@@ -382,6 +414,10 @@ screen and (min-resolution: 1.5dppx){
 
 h1{
   font-size: 4vmin;
+}
+
+h2{
+  font-size: 3.5vmin;
 }
 
 
@@ -464,13 +500,21 @@ input[type=range]::-webkit-slider-thumb {
 /* main elements smartphone portrait */
 /* ################################################### */
 
-#header{
+#header{ /*title*/
   position: absolute;
   top:   -1.5vmin;
   left:  10vmin;
   width: 50vmin;
 }
 
+#headerValid{ /*title if validating smartphone portrait*/
+  position: absolute;
+  top: auto;
+  bottom: 32vh;
+  left: 25vw;
+  font-weight:bold;
+  z-index: 3;  /* above simulation canvas in rare chances of overlapping */
+}
 
 #sliders{      /* smartphone portrait */
   top:   10vh;
@@ -488,7 +532,7 @@ input[type=range]::-webkit-slider-thumb {
 
 #contents{ /* contains the canvas */
   position: absolute;
-  top:   24vh;  /* 6 for the title, 24 for the sliders */
+  top:   24vh; 
   left:   2vw;
   width:  96vw;
   height: 68vh;
@@ -549,7 +593,15 @@ input[type=range]::-webkit-slider-thumb {
 #impressum{ 
   top:     auto; 
   bottom:  1vh; 
-  right:   25vw;
+  right:   auto;
+  left:    55vw;
+}
+
+#validateDiv{ 
+  top:     auto; 
+  bottom:  6vh; 
+  right:   auto;
+  left:    55vw;
 }
 
 #home{              /*smartphone rect/portrait */
@@ -583,6 +635,9 @@ screen and (min-resolution: 1.5dppx) and (min-aspect-ratio: 1/1){
 h1{
   font-size: 4vmin;
 }
+h2{
+  font-size: 3.5vmin;
+}
 
 input[type=range]{ /*mobile, landscape, orig in sliders.css */ 
   width: 16vw;
@@ -598,7 +653,7 @@ input[type=range]::-moz-range-track{
 /* main elements smartphone landscape
 /* ################################################### */
 
-#header{
+#header{ /*title*/
   position: absolute;
   top: -1vh;
   left: 10vw;
@@ -633,7 +688,7 @@ input[type=range]::-moz-range-track{
 
 #contents{ /* contains the canvas */
   position: absolute;
-  top:   28vh;  /* 6 for the title, 24 for the sliders */
+  top:   28vh;  
   left:   2vw;
   width:  82vw;
   height: 73vh;
@@ -717,6 +772,13 @@ input[type=range]::-moz-range-track{
   top:     22vh; 
   right:   1vw;
   z-index: 3; 
+}
+
+#validateDiv{ 
+  top:     29vh; 
+  bottom:  auto; 
+  right:   1vw;
+  left:    auto;
 }
 
 #testnumberDiv{

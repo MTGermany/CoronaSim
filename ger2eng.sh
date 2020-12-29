@@ -36,6 +36,9 @@ perl -i -p -e 's/Ansteckungsende/End infect\. period/g' *_eng.html
 perl -i -p -e 's/Test nach/Test after/g' *_eng.html
 perl -i -p -e 's/Hellfeld/Percentage reported/g' *_eng.html
 perl -i -p -e 's/Kalibriere neu\!/Re-calibrate\!/g' *_eng.html
+perl -i -p -e 's/Validiere/Validate/g' *_eng.html
+perl -i -p -e 's/Validierung der/Validation of the last/g' *_eng.js
+perl -i -p -e 's/letzten//g' *_eng.js
 perl -i -p -e 's/corona\.js/corona_eng\.js/g' *_eng.html
 perl -i -p -e 's/corona_gui\.js/corona_gui_eng\.js/g' *_eng.html
 
