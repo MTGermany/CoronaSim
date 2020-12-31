@@ -109,11 +109,14 @@ var dataRKI=[];
 var dataGit_orig=[];
 var dataGit2_orig=[];
 var dataRKI_orig=[];
-var usedValidation=false; // only cp data to original data in first validation
+var simValid=[]; // store validation sim data outside DrawSim (created anew)
+for (var iq=0; iq<=40; iq++){simValid[iq]=[];} //!!! def simValid
 var nDaysValid=0;
+var usedValidation=false; // only cp data to original data in first validation
+var saveGroundData=true; // true if nDaysValid changed from =0 to >0
+
 
 var data_dateBegin;
-
 var data_idataStart; //!! dataGit dataset index for dayStartMar
 var data_itmax;  // !! with respect to dayStartMar=data.length-data_idataStart
 
@@ -518,6 +521,12 @@ function initializeData(country) {
 	      "\nin initializeData(country): country=",country,
 	      " country2=",country2,
 	      "\n========================================================");
+
+
+  // reset validation flags
+
+  saveGroundData=true;
+
 
   // MT 2020-09  // [] access for strings works ONLY with "" or string vars
   // access ONLY for literals w/o string ""
@@ -1978,12 +1987,40 @@ function selectWindow(){ // callback html select box "windowGDiv"
 }
 
 
+//#################################################################
 function validate(){ // callback html select box "validateDiv"
+//#################################################################
+
   nDaysValid=document.getElementById("validateDays").value;
   console.log("in validate: nDaysValid=",nDaysValid);
   var validText=((nDaysValid>0)&&((!isSmartphone) || isLandscape))
     ? "Validierung der "+nDaysValid+" letzten Tage" : "";
   document.getElementById("headerValidText").innerHTML=validText;
+
+  // copy past data to 'ground truth" if nDaysValid switched from =0 to >0
+
+  if(saveGroundData){ 
+    console.log("copy windowg data to ground truth data");
+    console.log("drawsim.dataG[0]=",drawsim.dataG[0]);
+
+    // association see cstr drawSim
+    // !! check "def simValid"
+
+    for(var it=0; it<itPresent; it++){
+      simValid[34][it]=drawsim.dataG[0].data[it];  // "Insg pos Getestete"
+      simValid[35][it]=drawsim.dataG[2].data[it];  // "Insgesamt Gestorbene" 
+      simValid[36][it]=drawsim.dataG[23].data[it]; // "Sim Neuinfiz/Tag"
+      simValid[37][it]=drawsim.dataG[28].data[it]; // "Sim Gestorbene"
+      simValid[38][it]=drawsim.dataG[32].data[it]; // "Sim Wo-Inzidenz Faelle"
+      simValid[39][it]=drawsim.dataG[33].data[it]; // "Sim Wo-Inzidenz Gest."
+      simValid[40][it]=drawsim.dataG[29].data[it]; // "Sim Pos pro Tag"
+    }
+    saveGroundData=false;
+  }
+
+  // activate/deactivate validation dispplay
+
+  // [done in DrawSim Cstr which is called in calibrate below]
 
 
   // copy working data from full data if validate already used
@@ -2713,7 +2750,7 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
       " idata=",idata," data_pTestModel.length=",data_pTestModel.length,
       " pTest=",pTest,
      // " this.xyz=",this.xyz.toPrecision(3),
-     // " pTest=",pTest.toPrecision(3), //!!! undefined for Dresden etc
+     // " pTest=",pTest.toPrecision(3), //!! undefined for Dresden etc
      // " this.y=",this.y.toPrecision(3),
      // " this.z=",this.z.toPrecision(3),
 	//	" nxt=n0*this.xt=",Math.round(n0*this.xt),
@@ -2916,7 +2953,7 @@ function DrawSim(){
 
   this.dataG[34]={key: "Validierungsreferenz: alle Daten",
                                     //Insgesamt positiv Getestete (in 1000)"
-		 data: [],
+		 data: simValid[34], // simValid[][] defined in validate()
 		 type: 3, // 0=data dir (posCases),
                           // 1=solid deriv from data (CFR), 
                           // 2=more speculative derivation (IFR)
@@ -2937,7 +2974,7 @@ function DrawSim(){
 		 ytrafo: [0.01, false,false], color:colDead};
   this.dataG[35]={key: "Validierungsreferenz: alle Daten",
                                    //Insgesamt Gestorbene (in 100)", 
-                 data: [],
+		 data: simValid[35], // simValid[][] defined in validate()
 		 type: 3, plottype: "lines", plotLog: false, 
 		 ytrafo: [0.01, false,false], color:colDeadValid};
 
@@ -2997,7 +3034,7 @@ function DrawSim(){
 
 
 
-  // window 2: "Taegliche Faelle" mirrored bar chart cases vs dead persons
+  // window 2: "Faelle vs Infizierte" mirrored bar chart cases vs dead persons
   // ytrafo=[scalefact, half, mirrored] 
 
   this.dataG[16]={key: "Positiv Getestete pro Tag", data: [],
@@ -3015,7 +3052,7 @@ function DrawSim(){
                  // real: scale*10
   this.dataG[36]={key: "Validierungsreferenz: alle Daten",
                        //Simulierte Neuinfizierte pro Tag (in 10)", 
-                 data: [],
+                  data: simValid[36],
 		 type: 4, plottype: "lines", plotLog: false, 
 		 ytrafo: [0.01, true,false], color:colInfectedWin3Valid};
                  // real: scale*10
@@ -3024,14 +3061,14 @@ function DrawSim(){
 		 type: 4, plottype: "lines", plotLog: false, 
 		 ytrafo: [1, true,true], color:colDeadSim};
   this.dataG[37]={key: "Validierungsreferenz: alle Daten", // sim Gestorbene
-                 data: [],
+                 data: simValid[37],
 		 type: 4, plottype: "lines", plotLog: false, 
 		 ytrafo: [1, true,true], color:colDeadValid};
 
 
 
 
-  // window 3: "Faelle vs. Infizierte"
+  // window 3: "Daten: Tests
   // ytrafo=[scalefact, half, mirrored]
 
   this.dataG[18]={key: "Positiv Getestete pro Tag", data: [],
@@ -3070,12 +3107,17 @@ function DrawSim(){
 		 ytrafo: [1000, false,false], color:colIFR};
 
 
-// window 5: "Daten vs Tests" (plus this.dataG[16], [17], [28])
+// window 5: "Taegliche Faelle"  (plus this.dataG[16], [17], [28])
 
 
   this.dataG[29]={key: "Simulierte Test-Positive pro Tag", data: [],
 		 type: 3, plottype: "lines", plotLog: false, 
 		 ytrafo: [0.1, true,false], color:colSimCases};
+
+  this.dataG[40]={key: "Validierungsreferenz: alle Daten",
+		  data: simValid[40],
+		  type: 3, plottype: "lines", plotLog: false, 
+		  ytrafo: [0.1, true,false], color:colCasesValid};
 
 
 // new window 6 weekly incidence
@@ -3094,7 +3136,7 @@ function DrawSim(){
 		 ytrafo: [0.1, true,false], color:colSimCases};
 
   this.dataG[38]={key: "Validierungsreferenz: alle Daten", // Wocheninzidenz
-		  data: [],
+		  data: simValid[38],
 		  type: 3, plottype: "lines", plotLog: false, 
 		  ytrafo: [0.1, true,false], color:colCasesValid};
 
@@ -3103,7 +3145,7 @@ function DrawSim(){
 		  type: 4, plottype: "lines", plotLog: false, 
 		  ytrafo: [1, true,true], color:colDeadSim};
   this.dataG[39]={key: "Validierungsreferenz: alle Daten", // W-Inz. Gest
-		  data: [],
+		  data: simValid[39],
 		  type: 4, plottype: "lines", plotLog: false, 
 		  ytrafo: [1, true,true], color:colDeadValid};
 
@@ -3113,16 +3155,34 @@ function DrawSim(){
 
 // quantity selector for the different display windows
 // array indices>=34: validation reference
+// 0=cum,1=log,2=casesReal,3=tests,4=rates,5=casesDaily,6=incidence 
+
+  this.qselectRegular=[];
+  this.qselectValid=[];
   this.qselect=[];
 
-  this.qselect[0]=[0,1,2,4,5,6,34,35];  
-  this.qselect[1]=[8,9,12,13,15,25];
-  this.qselect[2]=[16,17,23,28,36,37];
-  this.qselect[3]=[18,19,24,26,27];
-  this.qselect[4]=[20,21,22];
-  this.qselect[5]=[16,17,28,29];
-  this.qselect[6]=[30,31,32,33,38,39];
+  this.qselectRegular[0]=[0,1,2,4,5,6];     // "kumulierte Faelle"
+  this.qselectRegular[1]=[8,9,12,13,15,25]; // "Simulationen (log)"
+  this.qselectRegular[2]=[16,17,23,28];     // "Faelle vs Infizierte"
+  this.qselectRegular[3]=[18,19,24,26,27];  // "Daten: Tests"
+  this.qselectRegular[4]=[20,21,22];        // "Infektionsraten"
+  this.qselectRegular[5]=[16,17,28,29];     // "Taegliche Faelle"
+  this.qselectRegular[6]=[30,31,32,33];     // "Wochen-Inzidenz"
 
+  this.qselectValid[0]=[0,34,1,2,35,4,5,6];  
+  this.qselectValid[1]=[8,9,12,13,15,25];
+  this.qselectValid[2]=[16,17,23,36,28,37];
+  this.qselectValid[3]=[18,19,24,26,27];
+  this.qselectValid[4]=[20,21,22];
+  this.qselectValid[5]=[16,17,28,37,29,40];
+  this.qselectValid[6]=[30,31,32,38,33,39];
+
+  for(var iw=0; iw<this.qselectRegular.length; iw++){
+    this.qselect[iw]=
+      (nDaysValid>0) ? this.qselectValid[iw] : this.qselectRegular[iw];
+  }
+
+  console.log("\n\n\nDrawSim Cstr: nDaysValid=",nDaysValid);
 
   this.label_y_window=[countryGer+": Personenzahl (in Tausend)",
 		       countryGer+": Personenzahl",
@@ -3150,7 +3210,7 @@ DrawSim.prototype.setWindow=function(windowG){
 			     ||(country==="India"));
 
   if(!displayRecovered){
-    this.qselect[0]=[0,2,4,6];
+    this.qselect[0]=(nDaysValid>0) ? [0,2,4,6,34,35] : [0,2,4,6];
   }
 
 
@@ -3363,7 +3423,9 @@ DrawSim.prototype.drawAxes=function(windowG){
 
 
   
-  // draw key drawkey
+  // draw key drawkey (drawAxes)
+
+  console.log("DrawSim.drawAxes: qselect=",this.qselect[windowG]);
 
   var yrelTop=(windowG==1) // 1=log
     ? -8*(1.28*textsize/this.hPix) : 0.99; // 8: lines above x axis
@@ -3378,7 +3440,7 @@ DrawSim.prototype.drawAxes=function(windowG){
 
     // no key for sim graphics when calibr./valid. points are plotted
 
-    if(!((windowG<2)&&(this.dataG[q].type<3))){
+    if((windowG>=2)||(this.dataG[q].type>=3)){
 
       ctx.fillStyle=this.dataG[q].color;
       ctx.fillText(this.dataG[q].key,
