@@ -169,7 +169,7 @@ function calc_factorMeasures(measures){ // multiplication factor for R
 //!!! replaced by copy of R slider
 // need factorMeasures, however (measures=measuresInit=4 in corona.js)
 
-var factorMeasures=calc_factorMeasures(measures);
+//var factorMeasures=calc_factorMeasures(measures);
 
 /*
 var slider_measures=document.getElementById("slider_measures");
@@ -313,9 +313,9 @@ function canvas_resize(){
   drawsim.yPixMax=(showVacc) ? 0.05*canvas.height : 0.10*canvas.height;
   drawsim.wPix=drawsim.xPixMax-drawsim.xPix0;
   drawsim.hPix=drawsim.yPixMax-drawsim.yPix0;  //<0
-  for(var i=0; i<=itmax-drawsim.itmin; i++){
+  for(var i=0; i<=drawsim.itmax-drawsim.itmin; i++){
       drawsim.xPix[i]=drawsim.xPix0
-	+i*(drawsim.xPixMax-drawsim.xPix0)/(itmax-drawsim.itmin);
+	+i*(drawsim.xPixMax-drawsim.xPix0)/(drawsim.itmax-drawsim.itmin);
   }
 
   if(drawsim!==null){drawsim.draw(it);}//!! draw after resize
@@ -375,7 +375,7 @@ function cleanPixArrays(){
 // called on onmousedown and in DrawSim.draw()
 
 function shiftX(){ // if moving time window; xPix always orig drawn pixel
-  var timeshift=itmax-itPresent;
+  var timeshift=drawsim.itmax-itPresent;
   return - (xshift=timeshift/itPresent * (drawsim.xPixMax-drawsim.xPix0));
 }
 

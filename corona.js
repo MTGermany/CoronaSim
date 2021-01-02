@@ -91,9 +91,6 @@ var itPresentInit=Math.floor(
                 // floor because startDay time is 00:00 of given day
 
 var itPresent=itPresentInit;
-var itmax=itPresent; // can be >itPresent during interactive simulation
-
-
 
 
 // data related global variables
@@ -544,7 +541,6 @@ function initializeData(country) {
   dayStartYear=dayStartMar+59;
   startDay=new Date(2020,02,dayStartMar);
   itPresent=itPresentInit;
-  itmax=itPresent;
 
  // define time shifts start date - start date of the two data sources 
 
@@ -587,7 +583,6 @@ function initializeData(country) {
     startDay=new Date(2020,02,dayStartMar+daysForwards);
     dayStartYear+=daysForwards;
     itPresent -= daysForwards;
-    itmax=itPresent;
     console.log("Warning: no data >=ten days before sim start",
 		"\n => shift start date by ",daysForwards,
 		" days to ",data2[data2_idataStart]["date"]);
@@ -607,12 +602,12 @@ function initializeData(country) {
     console.log(
       "\nChecking times: ",
       "startDay=",startDay," present=",present,
-      " itmax=itPresent=",itPresent,
+      " itPresent=",itPresent,
       "\nTesting the overall read data structure:",
       "\ndata.length=",data.length,"  data2.length=",data2.length,
       "\ndata_idataStart=",data_idataStart,
       "  data2_idataStart=",data2_idataStart,
-      "\nitmax=",itmax," data_itmax=",data_itmax,"  data2_itmax=",data2_itmax,
+      "\ndata_itmax=",data_itmax,"  data2_itmax=",data2_itmax,
       "\n\ndata[0][\"date\"]=",data[0]["date"],
       "  data2[0][\"date\"]=",data2[0]["date"],
       "\ndata[data_idataStart][\"date\"]=",data[data_idataStart]["date"],
@@ -1899,22 +1894,6 @@ function IFRfun_time(it){
 // do simulations and graphics
 // ###############################################################
 
-function myStartStopFunction(){ //!! hier bloederweise Daten noch nicht da!!
-  console.log("in myStartStopFunction");
-  clearInterval(myRun);
-  //console.log("in myStartStopFunction: isStopped=",isStopped);
-
-  if(isStopped){
-        isStopped=false;
-        document.getElementById("startStop").src="figs/buttonStop3_small.png";
-        myRun=setInterval(simulationRun, 1000/fps);
-  }
-  else{
-        document.getElementById("startStop").src="figs/buttonGo_small.png";
-        isStopped=true;
-  }
-}
-
 // toggleViews (Massnahmen-Ansicht,=> normale Ansicht) in gui!
 
 function toggleTestnumber(){ // callback html "testnumber"
@@ -1942,7 +1921,6 @@ function toggleTestnumber(){ // callback html "testnumber"
 
 
 function selectDataCountry(){ // callback html select box "countryData"
-  itmax=itPresent;
   country=document.getElementById("countries").value;
   countryGer=countryGerList[country];
   n0=parseInt(n0List[country]);
@@ -1961,7 +1939,7 @@ function selectDataCountry(){ // callback html select box "countryData"
 	      " and in myResetFunction()):",
 	      "\n country=",country,
 	      " country2=",country2,
-	      " itmax=itPresent=",itPresent);
+	      " itPresent=",itPresent);
 	   }
 
   initializeData(country);
@@ -2096,14 +2074,32 @@ function validate(){ // callback html select box "validateDiv"
 }
 
 
+// callback stop & go
+
+function myStartStopFunction(){ //!! hier bloederweise Daten noch nicht da!!
+  console.log("in myStartStopFunction");
+  clearInterval(myRun);
+  //console.log("in myStartStopFunction: isStopped=",isStopped);
+
+  if(isStopped){
+        isStopped=false;
+        document.getElementById("startStop").src="figs/buttonStop3_small.png";
+        myRun=setInterval(simulationRun, 1000/fps);
+  }
+  else{
+        document.getElementById("startStop").src="figs/buttonGo_small.png";
+        isStopped=true;
+  }
+}
+
+// callback restart button
 
 function myRestartFunction(){ 
-  //console.log("in myRestartFunction: itmax=itPresent=",itPresent);
-
+  console.log("in myRestartFunction: itPresent=",itPresent);
 
   initialize();
+  console.log(" myRestartFunction after initialize: drawsim.itmin=",drawsim.itmin);
   fps=fpsstart;
-  itmax=itPresent;
   it=0; //!!! only instance apart from init where global it is reset to zero 
   ctx.clearRect(0, 0, canvas.width, canvas.height)
 
@@ -2111,7 +2107,6 @@ function myRestartFunction(){
   corona.init(0,false); // because initialize redefines CoronaSim()
 
   clearInterval(myRun);
-  //console.log("myRestartFunction: itmax=",itmax);
   drawsim.checkRescaling(it); //  sometimes bug x scaling not reset
 
   myRun=setInterval(simulationRun, 1000/fps);
@@ -2125,20 +2120,8 @@ function myRestartFunction(){
   }
 }
 
-function myCalibrateFunction(){ 
-  R0sliderUsed=false;
-  otherSliderUsed=false;
-  testSliderUsed=false;
-   // calibration unstable with external source => must set to zero
-  casesInflow=0;
-  setSlider(slider_casesInflow, slider_casesInflowText,
-	    casesInflow,"/Tag/100 000 Einw.");
-  calibrate();
-  myRestartFunction();
-}
 
-
-
+// reset callback
 // selectDataCountry selects default sliders for the active country
 // => can use it directly as the reset function
 
@@ -2173,14 +2156,28 @@ function myResetFunction(){
   setSlider(slider_casesInflow, slider_casesInflowText,
 	    casesInflow,"/Tag/100 000 Einw.");
 
-  measures=measuresInit;
-  slider_measures.value=measures; // setSlider does not fit here
-  slider_measuresText.innerHTML="&nbsp;"+str_measures(measures);
+  //measures=measuresInit;
+  //slider_measures.value=measures; // setSlider does not fit here
+  //slider_measuresText.innerHTML="&nbsp;"+str_measures(measures);
 
 
   selectDataCountry();  
   myRestartFunction();
 }
+
+
+function myCalibrateFunction(){ 
+  R0sliderUsed=false;
+  otherSliderUsed=false;
+  testSliderUsed=false;
+   // calibration unstable with external source => must set to zero
+  casesInflow=0;
+  setSlider(slider_casesInflow, slider_casesInflowText,
+	    casesInflow,"/Tag/100 000 Einw.");
+  calibrate();
+  myRestartFunction();
+}
+
 
 
 function simulationRun() {
@@ -2583,9 +2580,11 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
   //                    main infection process at step (2)
   // ###############################################
 
-  this.Reff=R0*(1-pVacc)*factorMeasures*(1-this.xyz)
+  // measures slider obsolete
+  //this.Reff=R0*(1-pVacc)*factorMeasures*(1-this.xyz) 
+
+  this.Reff=R0*(1-pVacc)*(1-this.xyz)
     * ((it<=itPresent) ? 1 : calc_seasonFactor(it));
-  //if(it>itPresent)console.log("this.Reff=",this.Reff);
 
   // source term from external trips
 
@@ -2905,17 +2904,18 @@ function DrawSim(){
 
   this.mirroredGraphics=false; // if death counts upside down
 
+  this.timeWindow=180; // moving window of width this.timeWindow days
   this.xPix=[]; // this.xPix0 etc defined in corona_gui.js
-  this.itmin=0; // moving window if simulation into future => this.itmin>0
-
+  this.itmin=0; 
+  this.itmax=this.timeWindow; 
  
   colInfected="rgb(255,150,0)";
-  colInfectedWin3="rgb(255,170,0)";
-  colInfectedWin3Valid="rgb(255,210,50)";
+  colInfectedWin2="rgb(255,170,0)";
+  colInfectedWin2Valid="rgb(255,210,50)";
   colInfectedTot="rgb(0,0,220)";
   colTests="rgb(0,0,210)";
   colCases="rgb(245,10,0)";
-  colCasesValid="rgb(255,60,40)";
+  colCasesValid="rgb(255,120,10)";
   colCasesBars="rgb(255,50,0)";
   colSimCases="rgb(140,0,0)";
   colFalsePos="rgb(0,220,0)";
@@ -3048,13 +3048,13 @@ function DrawSim(){
 
   this.dataG[23]={key: "Simulierte Neuinfizierte pro Tag (in 10)", data: [],
 		 type: 4, plottype: "lines", plotLog: false, 
-		 ytrafo: [0.01, true,false], color:colInfectedWin3};
+		 ytrafo: [0.01, true,false], color:colInfectedWin2};
                  // real: scale*10
   this.dataG[36]={key: "Validierungsreferenz: alle Daten",
                        //Simulierte Neuinfizierte pro Tag (in 10)", 
                   data: simValid[36],
 		 type: 4, plottype: "lines", plotLog: false, 
-		 ytrafo: [0.01, true,false], color:colInfectedWin3Valid};
+		 ytrafo: [0.01, true,false], color:colInfectedWin2Valid};
                  // real: scale*10
 
   this.dataG[28]={key: "Simulierte Gestorbene pro Tag", data: [],
@@ -3081,7 +3081,7 @@ function DrawSim(){
 
   this.dataG[24]={key: "Simulierte Neuinfizierte pro Tag (in 10)", data: [],
 		 type: 4, plottype: "lines", plotLog: false, 
-		 ytrafo: [0.1, false,false], color:colInfectedWin3};
+		 ytrafo: [0.1, false,false], color:colInfectedWin2};
 
   this.dataG[26]={key: "Simulierte False Positives pro Tag", data: [],
 		 type: 4, plottype: "lines", plotLog: false, 
@@ -3182,7 +3182,7 @@ function DrawSim(){
       (nDaysValid>0) ? this.qselectValid[iw] : this.qselectRegular[iw];
   }
 
-  console.log("\n\n\nDrawSim Cstr: nDaysValid=",nDaysValid);
+  console.log("\n\n\nDrawSim Cstr: nDaysValid=",nDaysValid," this.itmin=",this.itmin);
 
   this.label_y_window=[countryGer+": Personenzahl (in Tausend)",
 		       countryGer+": Personenzahl",
@@ -3267,12 +3267,10 @@ DrawSim.prototype.drawAxes=function(windowG){
 
   // define x axis label positions and strings, time starts Mar 20
 
-  var itmaxCrit=105;
-  var itmaxCrit2=210;
   var timeTextW=[];
   var timeText=[];
   var days=[];
-  var timeRel=[]; // days relative to itmax-this.itmin
+  var timeRel=[]; // days relative to this.itmax-this.itmin
   var options = {month: "short", day: "2-digit"};
   //var year=startDay.getFullYear(); // no need; add year for whole January
   var phi=40 * Math.PI/180.; // to rotate date display anticlockw. by phi
@@ -3281,7 +3279,7 @@ DrawSim.prototype.drawAxes=function(windowG){
 
   // calculate weekly date string array for every week after startDay
 
-  for(var iw=0; iw<Math.floor(itmax/7)+1; iw++){
+  for(var iw=0; iw<Math.floor(this.itmax/7)+1; iw++){
     var date=new Date(startDay.getTime()); // copy constructor
     date.setDate(date.getDate() + iw*7+1); // set iw*7+1 days ahead (sim it => result at it+1)
     timeTextW[iw]=date.toLocaleDateString("en-us",options);
@@ -3293,12 +3291,12 @@ DrawSim.prototype.drawAxes=function(windowG){
   // calculate  x axis ticks/labels by selecting from string array
   // with variable tick intervals dweek
 
-  var dweek=(itmax<itmaxCrit) ? 1 : (itmax<itmaxCrit2) ? 2 : 4;
+  var dweek=2;
   var iwinit=0; // MT 2020-08
   for(var itick=0; itick<Math.round(timeTextW.length/dweek); itick++){
     days[itick]=7*(iwinit+dweek*itick);
     timeText[itick]=timeTextW[iwinit+dweek*itick];
-    timeRel[itick]=(days[itick]-this.itmin)/(itmax-this.itmin);
+    timeRel[itick]=(days[itick]-this.itmin)/(this.itmax-this.itmin);
   }
 
 
@@ -3342,7 +3340,7 @@ DrawSim.prototype.drawAxes=function(windowG){
 
   ctx.strokeStyle="rgb(0,0,0)";
 
-  for(var ix=0; days[ix]<=itmax; ix++){
+  for(var ix=0; days[ix]<=this.itmax; ix++){
     if(timeRel[ix]>=0){this.drawGridLine("vertical", timeRel[ix]);}
   }
 
@@ -3366,7 +3364,7 @@ DrawSim.prototype.drawAxes=function(windowG){
 
   var dxShift=(phi<0.01) ? -1.1*textsize : -2.4*cphi*textsize;
   var dyShift=(1.5+2*sphi)*textsize;
-  for(var ix=0; days[ix]<=itmax; ix++){
+  for(var ix=0; days[ix]<=this.itmax; ix++){
     if(timeRel[ix]>=0){
       var xpix=this.xPix0+timeRel[ix]*this.wPix+dxShift;
       var ypix=this.yPix0+dyShift;
@@ -3424,8 +3422,6 @@ DrawSim.prototype.drawAxes=function(windowG){
 
   
   // draw key drawkey (drawAxes)
-
-  console.log("DrawSim.drawAxes: qselect=",this.qselect[windowG]);
 
   var yrelTop=(windowG==1) // 1=log
     ? -8*(1.28*textsize/this.hPix) : 0.99; // 8: lines above x axis
@@ -3690,24 +3686,20 @@ DrawSim.prototype.transferRecordedData=function(){
 DrawSim.prototype.checkRescaling=function(it){
 //######################################################################
 
-  // windows={cum,log,infected,data,rates,cases(default)}
-
-  //console.log("\ndrawsim.checkRescaling: it=",it," itmax=",itmax);
-  var erase=false;
 
   // (1) possible rescaling in x
+  // !! only instance where this.itmin, this.itmax at lhs except init
 
-  if(it>itmax){
-    itmax=it;
-    this.itmin++; //!!
-    erase=true;
-  }
+  this.itmax=Math.max(it,this.timeWindow);
+  this.itmin=this.itmax-this.timeWindow;
 
-  if(erase || (it==0)){
-     for(var i=0; i<=itmax-this.itmin; i++){
+
+  if(true){ // only instance where this.xPix[] defined
+    for(var i=0; i<=this.itmax-this.itmin; i++){
       this.xPix[i]=this.xPix0
-	+i*(this.xPixMax-this.xPix0)/(itmax-this.itmin);
+	+i*(this.xPixMax-this.xPix0)/(this.itmax-this.itmin);
     }
+    console.log("this.itmax=",this.itmax," this.itmin=",this.itmin);
   }
 
 
@@ -3725,7 +3717,6 @@ DrawSim.prototype.checkRescaling=function(it){
 
       if(value>this.ymaxType[iw]){
 	this.ymaxType[iw]=value;
-	erase=true;
 	if(false){
 	  console.log(
 	    "checkRescaling: new maximum! it=",it, "window iw=",iw,
@@ -3746,12 +3737,6 @@ DrawSim.prototype.checkRescaling=function(it){
   this.ymaxType[4]=Math.min(this.ymaxType[4], 20); // rel quant. <=20 %
   this.ymaxType[0]=Math.max(this.ymaxType[0], 1); // abs lin to 20
 
-  // (4) do actions
-
-  if(erase){
-    this.clear();
-    //this.drawAxes(windowG);
-  }
 
   //console.log("leaving checkRescaling: this.ymaxType=",this.ymaxType);
 }// DrawSim.checkRescaling=
@@ -3786,7 +3771,7 @@ DrawSim.prototype.drawR0Estimate=function(it){
     //'?' in following line should not happen ut extremely rarely does
     var R0=(itR0>=R0_hist.length) ? R0_actual : R0_hist[itR0]; 
     var sigmaR0=(itR0<itPresent) ? sigmaR0_hist[itR0] : 0;
-    var str_R0="R0  ="+R0.toFixed(2)
+    var str_R0="R  ="+R0.toFixed(2)
       +((true) // if plotting  w/o "+/- stddev
 	? "" : (" +/- "+sigmaR0.toFixed(2)));
 
@@ -3795,7 +3780,7 @@ DrawSim.prototype.drawR0Estimate=function(it){
     if(ical%step==0){
      ctx.fillText(str_R0,0,0);
       ctx.font = (Math.round(0.7*textsizeR0))+"px Arial"; 
-      ctx.fillText("0",0.8*textsizeR0,0.4*textsizeR0);
+      ctx.fillText("0",0.8*textsizeR0,0.3*textsizeR0);
     }
     ctx.font = textsizeR0+"px Arial"; 
     ctx.setTransform(1,0,0,1,0,0);
@@ -3811,7 +3796,7 @@ DrawSim.prototype.draw=function(it){
 //######################################################################
 
   //console.log("\nin DrawSim.draw: it=",it," this.itmin=",this.itmin,
-//	      " itmax=",itmax);
+//	      " this.itmax=",this.itmax);
 
   this.mirroredGraphics=((windowG==2)||(windowG==5)||(windowG==6));
 
@@ -3830,18 +3815,12 @@ DrawSim.prototype.draw=function(it){
 
 
   // check for possible scaling/rescaling due to new data on x and y axis 
-  // and redraw if needed (local erase=true)
 
   this.checkRescaling(it);
 
+  // prepare drawing
 
-  // draw axes 
-
-  //if((it==0)||hasChanged){
-  if(true){
-    this.clear();
-    //this.drawAxes(windowG);
-  }
+  this.clear();
 
 
   // draw simulations and data for all windows

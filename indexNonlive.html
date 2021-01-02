@@ -24,6 +24,10 @@
 <h1 id="title">Simulation der Covid-19 Pandemie Deutschland</h1>
 </div>
 
+<div id="headerValid"> 
+<h2 id="headerValidText"> </h2>
+</div>
+
 
 <div id="info"> 
  <a href="info.html">
@@ -69,6 +73,18 @@ Info
   <option value="2">F&auml;lle vs. Infizierte</option>
   <option value="3">Daten: Tests</option>
   <option value="4">Infektionsraten</option>
+</select>
+</div>
+
+<div id="validateDiv">
+<label for="validateDays"></label>
+<select id="validateDays" onchange=validate()> 
+  <option value="0"> Validiere ... </option>
+  <option value="3"> Validiere 3 Tage</option>
+  <option value="7"> Validiere 7 Tage</option>
+  <option value="14">Validiere 14 Tage</option>
+  <option value="21">Validiere 21 Tage</option>
+  <option value="28">Validiere 28 Tage</option>
 </select>
 </div>
 
