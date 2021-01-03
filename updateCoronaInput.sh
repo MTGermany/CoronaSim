@@ -33,7 +33,7 @@ perl -i -p -e 's/\]    \}\,/\]    \},\n/g' data/githubWithTests.json
 
 # filter countries
 
-grep Germany data/githubWithTests.json > data/tmp.json
+ grep Germany data/githubWithTests.json > data/tmp.json
  grep Austria data/githubWithTests.json >> data/tmp.json
  grep Czech data/githubWithTests.json >> data/tmp.json
  grep France data/githubWithTests.json >> data/tmp.json
@@ -43,6 +43,8 @@ grep Germany data/githubWithTests.json > data/tmp.json
  grep Spain data/githubWithTests.json >> data/tmp.json
  grep Sweden data/githubWithTests.json >> data/tmp.json
  grep Switzerland data/githubWithTests.json >> data/tmp.json
+ grep GRC data/githubWithTests.json >> data/tmp.json
+ grep ISR data/githubWithTests.json >> data/tmp.json
  grep India data/githubWithTests.json >> data/tmp.json
  grep Russia data/githubWithTests.json >> data/tmp.json
  grep USA data/githubWithTests.json >> data/tmp.json
@@ -63,7 +65,7 @@ perl -i -p -e 's/\n//g' data/tmp2.json
 perl -i -p -e "s/\,(\s*)\}/\}/g"  data/tmp2.json
 perl -i -p -e "s/\{(\s*)/\{/g"  data/tmp2.json
 
-# consolidate country names with other json file 
+# consolidate country names of *Test.json with github.json  file 
 # (need to do this here, because other json is fetched online)
 
 perl -i -p -e "s/DEU/Germany/g" data/tmp2.json
@@ -76,6 +78,8 @@ perl -i -p -e "s/POL/Poland/g" data/tmp2.json
 perl -i -p -e "s/ESP/Spain/g" data/tmp2.json
 perl -i -p -e "s/SWE/Sweden/g" data/tmp2.json
 perl -i -p -e "s/CHE/Switzerland/g" data/tmp2.json
+perl -i -p -e "s/GRC/Greece/g" data/tmp2.json
+perl -i -p -e "s/ISR/Israel/g" data/tmp2.json
 perl -i -p -e "s/IND/India/g" data/tmp2.json
 perl -i -p -e "s/RUS/Russia/g" data/tmp2.json
 perl -i -p -e "s/USA/US/g" data/tmp2.json
@@ -103,7 +107,7 @@ cp data/github.json data/github_orig.json
 perl -i -p -e 's/\n//g' data/github.json
 perl -i -p -e 's/\]\,/\],\n/g' data/github.json
 
-# filter countries
+# filter countries of github.json file
 
 grep Germany data/github.json > data/tmp.json
 grep Austria data/github.json >> data/tmp.json
@@ -115,6 +119,8 @@ grep Poland data/github.json >> data/tmp.json
 grep Spain data/github.json >> data/tmp.json
 grep Sweden data/github.json >> data/tmp.json
 grep Switzerland data/github.json >> data/tmp.json
+grep Greece data/github.json >> data/tmp.json
+grep Israel data/github.json >> data/tmp.json
 grep India data/github.json >> data/tmp.json
 grep Russia data/github.json >> data/tmp.json
 grep US data/github.json >> data/tmp.json

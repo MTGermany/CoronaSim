@@ -163,6 +163,8 @@ const countryGerList={
   "Spain": "Spanien",
   "Sweden": "Schweden",
   "Switzerland": "Schweiz",
+  "Greece"     : "Griechenland",
+  "Israel": "Israel",
   //  "China": "China",
   "India": "Indien",
   //  "Japan": "Japan",
@@ -187,6 +189,8 @@ const n0List={
   "Spain"         :   49300000,
   "Sweden"        :   10000000,
   "Switzerland"   :    8300000,
+  "Greece"        :   10700000,
+  "Israel"        :    9100000,
   "India"         : 1353000000,
   "Russia"        :  144000000,
   "US"            :  328000000,
@@ -210,6 +214,8 @@ const fracDieInitList={
   "Spain"         : 0.0040,
   "Sweden"        : 0.0040,
   "Switzerland"   : 0.0055,
+  "Greece"        : 0.0055,
+  "Israel"        : 0.0055,
   "India"         : 0.0045,
   "Russia"        : 0.0040,
   "US"            : 0.0055,
@@ -231,6 +237,8 @@ const tauDieList={
   "Spain"         : 14,
   "Sweden"        : 19,
   "Switzerland"   : 19,
+  "Greece"        : 14,
+  "Israel"        : 17,
   "India"         : 17,
   "Russia"        : 17,
   "US"            : 17,
@@ -255,6 +263,8 @@ const tauRecoverList={
   "Spain"         : 25,
   "Sweden"        : 25,
   "Switzerland"   : 18,
+  "Greece"        : 18,
+  "Israel"        : 18,
   "India"         : 18,
   "Russia"        : 18,
   "US"            : 18,
@@ -869,7 +879,7 @@ function initializeData(country){
     console.log("\ninitializeData finished: final data:");
     for(var i=0; i<data.length; i++){
       //var logging=useLandkreise&&(i>data.length-10);
-      var logging=(i>data.length-4);
+      var logging=(i>data.length-40);
       if(logging){
         var i2=i+data2_idataStart-data_idataStart;
 	console.log(
