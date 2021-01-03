@@ -251,7 +251,18 @@ function setSlider(slider, sliderText, value, unit){
   // - textsize, textsizeR0 (for the R0 values)
 //###############################################################
 
-var viewport={width: 200, height: 200}
+
+function callback_wheel(event){
+  //console.log("mousewheel rolled: event.deltaY=",event.deltaY);
+  var mult=1.05; // change factor of drawsim.timeWindow for one pos. roll
+  var factor=(event.deltaY>0) ? mult : 1/mult;
+  if( !(typeof drawsim.timeWindow === "undefined")){ // paranth after ! needed
+    drawsim.timeWindow *=factor;
+    drawsim.draw(it);
+    //console.log("drawsim.timeWindow=",drawsim.timeWindow);
+  }
+
+}
 
 function canvas_resize(){
   hasChanged=false;

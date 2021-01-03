@@ -495,7 +495,7 @@ function getGithubData() {
 // e.g., 2020-1-22 as delivered by dataGit
 
 function insertLeadingZeroes(dateStr){
-  var monthIsOneDigit=(dateStr.lastIndexOf("-")==6);
+  var monthIsOneDigit=(dateStr.lastIndexOf("-")===6);
   var dayIsOneDigit=(dateStr.charAt(dateStr.length-2)==="-");
   return dateStr.substr(0,5)
     + ((monthIsOneDigit) ? "0" : "")
@@ -508,7 +508,7 @@ function insertLeadingZeroes(dateStr){
 
 
 
-function initializeData(country) { 
+function initializeData(country){ 
   country2=(country==="United Kingdom") ? "England" : country;
   useLandkreise=(country==="LK_Erzgebirgskreis")
     || (country==="LK_Osterzgebirge") || (country==="SK_Dresden");
@@ -798,6 +798,7 @@ function initializeData(country) {
 	data_pTestModel[i]=Math.max(pTestModelMin,Math.min(1,pModel));
       }
     }
+
 
     else{// no dn data
       data_pTestModel[i]= pTestInit; //MT 2020-11 change from pTestModelMin
@@ -1226,7 +1227,8 @@ function initialize() {
   // =============================================================
 
 
-  window.addEventListener("resize", canvas_resize);
+  window.addEventListener("resize", canvas_resize); // corona_gui.js
+  window.addEventListener("wheel", callback_wheel); // corona_gui.js
 
   canvas = document.getElementById("myCanvas");
   ctx = canvas.getContext("2d");
@@ -2830,9 +2832,16 @@ function smooth(arr, kernel){
     // just take raw data
     // for(var i=arr.length-half; i<arr.length; i++){smooth[i]=arr[i];}
 
-    // use last fully smoothed value
+    // use smaller filters (smooth[i]=0 already set at beginning)
     for(var i=arr.length-half; i<arr.length; i++){
-      smooth[i]=smooth[arr.length-half-1];
+      var halfRed=arr.length-i-1;
+      var denom=0;
+      for(var di=-halfRed; di<=halfRed; di++){
+	denom+= kernel[half+di];
+      }
+      for(var di=-halfRed; di<=halfRed; di++){
+        smooth[i]+=kernel[half+di]/denom * arr[i+di];
+      }
     }
   }
 
@@ -3291,7 +3300,9 @@ DrawSim.prototype.drawAxes=function(windowG){
   // calculate  x axis ticks/labels by selecting from string array
   // with variable tick intervals dweek
 
-  var dweek=2;
+  var dweek=(this.timeWindow<100) 
+    ? 1 : (this.timeWindow<200) 
+    ? 2 : 4;
   var iwinit=0; // MT 2020-08
   for(var itick=0; itick<Math.round(timeTextW.length/dweek); itick++){
     days[itick]=7*(iwinit+dweek*itick);
@@ -3613,12 +3624,13 @@ DrawSim.prototype.transferRecordedData=function(){
 
   // windows 2-4
 
-   //kernel=[1]; //!! worldometer data too strong weekly changes, 
+  //kernel=[1]; //!! worldometer data too strong weekly changes, 
                  // more than RKI => slight smoothing
-   kernel=[1/4,2/4,1/4];
+  kernel=[1/4,2/4,1/4];
+
   //kernel=[1/9,2/9,3/9,2/9,1/9];
-    //kernel=[1/16,2/16,3/16,4/16,3/16,2/16,1/16];
-    //kernel=[1/25,2/25,3/25,4/25,5/25,4/25,3/25,2/25,1/25];
+  //kernel=[1/16,2/16,3/16,4/16,3/16,2/16,1/16];
+  //kernel=[1/25,2/25,3/25,4/25,5/25,4/25,3/25,2/25,1/25];
 
   var dnSmooth=smooth(data_dn,kernel);
   var dxtSmooth=smooth(data_dxt,kernel);
@@ -3690,8 +3702,8 @@ DrawSim.prototype.checkRescaling=function(it){
   // (1) possible rescaling in x
   // !! only instance where this.itmin, this.itmax at lhs except init
 
-  this.itmax=Math.max(it,this.timeWindow);
-  this.itmin=this.itmax-this.timeWindow;
+  this.itmax=Math.round(Math.max(it,this.timeWindow));
+  this.itmin=Math.round(this.itmax-this.timeWindow);
 
 
   if(true){ // only instance where this.xPix[] defined
@@ -3699,7 +3711,7 @@ DrawSim.prototype.checkRescaling=function(it){
       this.xPix[i]=this.xPix0
 	+i*(this.xPixMax-this.xPix0)/(this.itmax-this.itmin);
     }
-    console.log("this.itmax=",this.itmax," this.itmin=",this.itmin);
+    //console.log("this.itmax=",this.itmax," this.itmin=",this.itmin);
   }
 
 
