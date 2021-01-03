@@ -117,6 +117,7 @@ perl -i -p -e 's/Polen/Poland/g' *_eng.html *_eng.js
 perl -i -p -e 's/Spanien/Spain/g' *_eng.html *_eng.js
 perl -i -p -e 's/Schweden/Sweden/g' *_eng.html *_eng.js
 perl -i -p -e 's/Schweiz/Swizzerland/g' *_eng.html *_eng.js
+perl -i -p -e 's/Griechenland/Greece/g' *_eng.html *_eng.js
 perl -i -p -e 's/Indien/India/g' *_eng.html *_eng.js
 perl -i -p -e 's/Russland/Russia/g' *_eng.html *_eng.js
 perl -i -p -e 's/Ru\&szlig\;land/Russia/g' *_eng.html
