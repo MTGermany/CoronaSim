@@ -129,16 +129,17 @@ slider_tauTest.oninput = function() {
 
 
 
-//var pVacc;
+//var rVacc;
 
-var slider_pVacc=document.getElementById("slider_pVacc");
-var slider_pVaccText = document.getElementById("slider_pVaccText");
+var slider_rVacc=document.getElementById("slider_rVacc");
+var slider_rVaccText = document.getElementById("slider_rVaccText");
 
-setSlider(slider_pVacc, slider_pVaccText, 100*pVacc, " %");
+setSlider(slider_rVacc, slider_rVaccText, 700*rVacc, " %");
 
-slider_pVacc.oninput = function() {
-  slider_pVaccText.innerHTML = "&nbsp;"+this.value+" %";
-  pVacc=parseFloat(this.value/100.);
+slider_rVacc.oninput = function() {
+  slider_rVaccText.innerHTML = "&nbsp;"+this.value+" %";
+  rVacc=parseFloat(this.value/700.);
+  console.log("slider_rVacc callback: rVacc=",rVacc);
 }
 
 

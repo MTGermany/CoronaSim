@@ -308,8 +308,9 @@ var tauTest=tauTestInit;
 var tauAvg=5;      // smoothing interval (uneven!) for tauTest,
                    // tauDie, tauRecover
 
-var pVaccInit=0;    // vaccination fraction in [0,1]
-var pVacc=pVaccInit;
+var pVacc=0;        // vaccination fraction in [0,1]
+var rVaccInit=0;    // pVacc'(t) [fraction per day]
+var rVacc=rVaccInit;
 
 var measuresInit=4; // "Abstand+Maske", cf. corona_gui.js->str_measures
 var measures=measuresInit;
@@ -793,9 +794,11 @@ function initializeData(country){
     if((data_dn[i]>0)&&(data_dn[i]<1e11)){
       if(useSqrtModel){ // global var
 
-	// the sqrt model
-	
-        var pModel=Math.sqrt(7*data_dn[i]/n0);  
+	// the sqrt model square root model pTest
+	//!!! (2021-01-04)
+        // updated to full test every 14 instead of 7 days=^ 100%
+
+        var pModel=Math.sqrt(14*data_dn[i]/n0);  
 
 	// corrections if very vew tests (only at beginning)
 	
@@ -1319,6 +1322,11 @@ function calibrate(){
   console.log("\nEntering calibration of R0 ...");
   R0time=[];  //!! must revert it since some countries may have less data!!
   IFRtime=[];  //!! must revert it since some countries may have less data!!
+
+  // !!! needed, otherwise side effects if nonzero vaccination
+  corona=new CoronaSim();//  corona.vaccination.initialize;
+
+
   var R0calib=[]; 
  // for(var j=0; j<betaIFRinit.length; j++){ 
  //   betaIFR[j]=betaIFRinit[j];
@@ -2161,8 +2169,8 @@ function myResetFunction(){
   pTest=pTestInit; 
   setSlider(slider_pTest, slider_pTestText, 100*pTest, " %");
 
-  pVacc=pVaccInit;
-  setSlider(slider_pVacc, slider_pVaccText, 100*pVacc, " %");
+  rVacc=rVaccInit;
+  setSlider(slider_rVacc, slider_rVaccText, 700*rVacc, " %/Woche");
 
   casesInflow=casesInflowInit;
   setSlider(slider_casesInflow, slider_casesInflowText,
@@ -2306,6 +2314,44 @@ function log10(x){return Math.log(x)/ln10;}
 //################################################################
 //################################################################
 
+function Vaccination(){
+  this.I0=0.95;      // fraction of immune people >=1 week after second vacc.
+  this.tau0=28;      // days after full effect I0 is reached (1 week after)
+  this.Ivacc=0;      // population immunity fraction by vaccinations
+  this.pVaccHist=[]; // history[tau] of vacc percentage pVacc (first vacc.)
+  for(var tau=0; tau<this.tau0; tau++){
+    this.pVaccHist[tau]=0;
+  }
+  // cannot use this.initialize9) here
+}
+
+Vaccination.prototype.initialize=function(){
+  this.Ivacc=0;
+  for(var tau=0; tau<this.tau0; tau++){
+    this.pVaccHist[tau]=0;
+  }
+}
+
+Vaccination.prototype.update=function(rVacc,it,logging){
+  if(it>=itPresent){ // !! change later if data on vaccinations go into calib
+    for(var tau=this.tau0-1; tau>0; tau--){
+      this.pVaccHist[tau]=this.pVaccHist[tau-1];
+    }
+    this.pVaccHist[0]=Math.min(this.pVaccHist[0]+rVacc,1);
+    pVacc=this.pVaccHist[0]; // global var for display
+    this.Ivacc +=this.I0/(this.tau0-1) // (this.tau0-1) Gartenzauneffekt OK
+      *(this.pVaccHist[0]-this.pVaccHist[this.tau0-1]);
+    if(logging){
+      console.log("Vaccination.update: it=",it,
+		  " this.pVaccHist[0]=",this.pVaccHist[0],
+		  " this.pVaccHist[this.tau0-1]=",this.pVaccHist[this.tau0-1],
+		  " this.Ivacc=",this.Ivacc);
+    }
+  }
+}
+
+
+
 function CoronaSim(){
   //console.log("CoronaSim created");
   this.x=[]; // age struture f(tau|it) of frac infected at given timestep it
@@ -2313,8 +2359,9 @@ function CoronaSim(){
                  // (!!needed for correct recovery rate and balance x,y,z!)
   this.xnewShiftedTauDie=[]; // fraction new infected as f(timestep it),
   this.snapAvailable=false; // initially, no snapshot of the state exists
-  this.Reff=1.11;  // need some start ecause otherwise bug at drawing
-                   // undeterministic too early calling of drawsim 
+  this.Reff=1.11;    // need some start ecause otherwise bug at drawing
+                     // undeterministic too early calling of drawsim 
+  this.vaccination=new Vaccination();
 }
 
 
@@ -2592,10 +2639,10 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
   //                    main infection process at step (2)
   // ###############################################
 
-  // measures slider obsolete
-  //this.Reff=R0*(1-pVacc)*factorMeasures*(1-this.xyz) 
-
-  this.Reff=R0*(1-pVacc)*(1-this.xyz)
+  this.vaccination.update(rVacc,it,true);
+  var Ivacc=this.vaccination.Ivacc;
+  if(it>=itPresent){console.log("Ivacc=",Ivacc);}
+  this.Reff=R0*(1-Ivacc)*(1-this.xyz)
     * ((it<=itPresent) ? 1 : calc_seasonFactor(it));
 
   // source term from external trips
@@ -2933,9 +2980,9 @@ function DrawSim(){
   colInfectedWin2Valid="rgb(255,210,50)";
   colInfectedTot="rgb(0,0,220)";
   colTests="rgb(0,0,210)";
-  colCases="rgb(245,10,0)";
+  colCases="rgb(245,10,0)"; // cumulated plots
   colCasesValid="rgb(255,120,10)";
-  colCasesBars="rgb(255,50,0)";
+  colCasesBars="rgb(255,150,100)";  // main plots
   colSimCases="rgb(140,0,0)";
   colFalsePos="rgb(0,220,0)";
   colRecov="rgb(60,255,40)";
