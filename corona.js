@@ -311,9 +311,13 @@ var tauAvg=5;      // smoothing interval (uneven!) for tauTest,
 var pVacc=0;        // vaccination fraction in [0,1]
 var rVaccInit=0;    // pVacc'(t) [fraction per day]
 var rVacc=rVaccInit;
+var IvaccArr=[];                    // used to calibrate with fixed time
+for(var it=0; it<=itPresent; it++){ // profile ofvaccination imunity
+  IvaccArr[it]=0;
+}
 
-var measuresInit=4; // "Abstand+Maske", cf. corona_gui.js->str_measures
-var measures=measuresInit;
+var measuresInit=4;  // obsolete "Abstand+Maske", cf. corona_gui.js->str_measures
+var measures=measuresInit; // obsolete
 
 var casesInflowInit=0; // inported cases per day and 100 000 inhabitants
 var casesInflow=casesInflowInit;
@@ -343,6 +347,8 @@ var betaTest=0.003; // beta error (false positive) after double testing
 
 // (iv) calibration related parameters/variables
 
+var inCalibration=false;  // other calc of vacc
+                          // in CoronaSim.updateOneDay 
 var itmin_calib; // start calibr time interval w/resp to dayStartMar
                  //     = dataGit_idataStart+1
 var itmax_calib; //  end calibr time interval =^ data_itmax-1 
@@ -949,10 +955,10 @@ function initializeData(country){
 
 // like influenca, covid19 is more active in winter
 // relate factor to present to make simple future projections
-
+// deactivate season/winter/summer curve by relAmplitude=0;
 function calc_seasonFactor(it){
   var fracYearPeak=0.10; //  (first week February)
-  var relAmplitude=0.2; // factor (1+/-relAmplitude) in July/January
+  var relAmplitude=0.0; // factor (1+/-relAmplitude)  (0.2)
   var phase=2*Math.PI*(dayStartYear+it-fracYearPeak)/365.;
   var phasePresent=2*Math.PI*(dayStartYear+itPresent-fracYearPeak)/365.;
   var factor=1+relAmplitude*Math.cos(phase);
@@ -1110,6 +1116,7 @@ function SSEfunc(R0arr, fR0, logging, itStartInp, itMaxInp,
   }
 
   else{
+    
     fracDie=IFRfun_time(-20); //!!
     if(logging){
       console.log("SSEfunc; initializing from scratch with data: fracDie=",
@@ -1143,6 +1150,7 @@ function SSEfunc(R0arr, fR0, logging, itStartInp, itMaxInp,
     // simulate
 
     var R0_actual= R0fun_time(R0arr,it-itStart); // ! only R0arr used in SSEfunc
+    //if(it==0){corona.vaccination.initialize();} //!!!!
     corona.updateOneDay(R0_actual, it, logging); // in SSE never logging=true!
 
     // increment SSE
@@ -1210,7 +1218,6 @@ function SSEfunc(R0arr, fR0, logging, itStartInp, itMaxInp,
 
 function initialize() {
   //console.log("in initialize");
-
 
 
   // =============================================================
@@ -1314,18 +1321,20 @@ function getIndexCalibmax(itime){
 
 function calibrate(){
 
+  inCalibration=true; // other calc of vacc in CoronaSim.updateOneDay 
   
   console.log("\n\n==================================================",
 	      "\nEntering calibrate(): country=",country,
 	      "\n====================================================");
-
+ 
   console.log("\nEntering calibration of R0 ...");
   R0time=[];  //!! must revert it since some countries may have less data!!
   IFRtime=[];  //!! must revert it since some countries may have less data!!
 
-  // !!! needed, otherwise side effects if nonzero vaccination
+  // !!!! needed, otherwise side effects if nonzero vaccination
+  // cannot calibrate with vaccinations!!
+  
   corona=new CoronaSim();//  corona.vaccination.initialize;
-
 
   var R0calib=[]; 
  // for(var j=0; j<betaIFRinit.length; j++){ 
@@ -1471,7 +1480,7 @@ function calibrate(){
 
   sse=SSEfunc(R0time,null,logging,0,data_itmax-1); // -1 because it: it->it+1
   console.log("calibrate(): calibrating R0 finished",
-	      "\n final R0 values=",R0time,
+	      "\n final R0 values R0time=",R0time,
 	      "\n fit quality sse=",sse);
   console.log("itPresent=",itPresent,
 	      " getIndexCalibmax(itPresent)",getIndexCalibmax(itPresent));
@@ -1577,6 +1586,9 @@ function calibrate(){
     //alert('hi');
   }
 
+  inCalibration=false; // use dynamic corona.vaccination.update(...)
+                       // outside of calibration
+  
     //alert('stopped simulation with alert');
 }
 //end calibrate()
@@ -1950,6 +1962,8 @@ function selectDataCountry(){ // callback html select box "countryData"
   taumax=Math.max(tauDie,tauRecover)+tauAvg+1;
   setSlider(slider_R0,  slider_R0Text,  R0time[0].toFixed(2),"");
   setSlider(slider_R0cp,  slider_R0cpText,  R0time[0].toFixed(2),"");
+  rVacc=0;
+  setSlider(slider_rVacc, slider_rVaccText, 700*rVacc, " %/Woche");
 
   document.getElementById("title").innerHTML=
     "Simulation der Covid-19 Pandemie "+ countryGer;
@@ -2333,7 +2347,8 @@ Vaccination.prototype.initialize=function(){
 }
 
 Vaccination.prototype.update=function(rVacc,it,logging){
-  if(it>=itPresent){ // !! change later if data on vaccinations go into calib
+  if(true){
+  //if(it>=itPresent-4){ // !! change later if data on vaccinations go into calib
     for(var tau=this.tau0-1; tau>0; tau--){
       this.pVaccHist[tau]=this.pVaccHist[tau-1];
     }
@@ -2500,7 +2515,7 @@ CoronaSim.prototype.init=function(itStart,logging){
 		"");
   }
 
-}//init
+ }//init
 
 
 
@@ -2639,8 +2654,16 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
   //                    main infection process at step (2)
   // ###############################################
 
-  this.vaccination.update(rVacc,it,true);
-  var Ivacc=this.vaccination.Ivacc;
+  if(it==0){this.vaccination.initialize();}
+ //var Ivacc=0.001*it; //!!!! DAS GEHT bei calibration! => festes aray(it)
+  //var Ivacc=0;
+  var Ivacc=(it>=0) ? IvaccArr[it] : 0;
+  if(!inCalibration){
+    this.vaccination.update(rVacc,it,logging);
+    Ivacc=this.vaccination.Ivacc; //!!! geht nicht bei calibration
+    IvaccArr[it]=Ivacc;
+  }
+  
   if(it>=itPresent){console.log("Ivacc=",Ivacc);}
   this.Reff=R0*(1-Ivacc)*(1-this.xyz)
     * ((it<=itPresent) ? 1 : calc_seasonFactor(it));
