@@ -2975,25 +2975,26 @@ function DrawSim(){
   this.itmin=0; 
   this.itmax=this.timeWindow; 
  
-  colInfected="rgb(255,150,0)";
-  colInfectedWin2="rgb(255,170,0)";
-  colInfectedWin2Valid="rgb(255,210,50)";
-  colInfectedTot="rgb(0,0,220)";
-  colTests="rgb(0,0,210)";
-  colCases="rgb(245,10,0)"; // cumulated plots
-  colCasesValid="rgb(255,120,10)";
-  colCasesBars="rgb(255,150,100)";  // main plots
-  colSimCases="rgb(140,0,0)";
+  colCasesCum="rgb(245,10,0)"; // cumulated plots
+  colCasesCumSim="rgb(255,0,0)"; // cumulated plots
+  colCasesCumValid="rgb(255,120,10)";
+  colCasesRecovCum="rgb(0,150,40)";
+  colCasesRecovCumSim="rgb(0,150,40)";
+  colCasesBars="rgb(255,150,0)";  // main plots
+  colCasesSim="rgb(255,0,0)";
+  colCasesValid="rgb(140,0,140)";
   colFalsePos="rgb(0,220,0)";
-  colRecov="rgb(60,255,40)";
-  colRecovCases="rgb(0,150,40)";
   colDead="rgb(0,0,0)";  
   colDeadValid="rgb(180,180,180)";  
   colDeadSim="rgb(120,120,120)";  
-  colPosrateCum="rgb(0,0,150)"; 
   colPosrate="rgb(255,0,255)"; 
   colCFR="rgb(100,0,180)";  
   colIFR="rgb(127,127,127)";
+  colInfectedReal="rgb(255,150,0)";
+  colInfectedLin="rgb(140,0,140)";
+  colInfectedLinValid="rgb(255,50,255)";
+  colInfectedTot="rgb(0,0,220)";
+  colTests="rgb(0,0,210)";
 
 
 
@@ -3014,7 +3015,7 @@ function DrawSim(){
 		 plottype: "lines",  // in "lines", "points", "bars"
 		 plotLog: false,  // if true, logarithm plotted
 		 ytrafo: [0.001, false,false],// [scalefact, half, mirrored]
-		 color:colCases
+		 color:colCasesCumSim
 		}
 
   this.dataG[34]={key: "Validierungsreferenz: alle Daten",
@@ -3027,68 +3028,77 @@ function DrawSim(){
 		 plottype: "lines",  // in "lines", "points", "bars"
 		 plotLog: false,  // if true, logarithm plotted
 		 ytrafo: [0.001, false,false],// [scalefact, half, mirrored]
-		 color:colCasesValid
+		 color:colCasesCumValid
 		}
 
   this.dataG[1]={key: "Insg. Genesene unter den Getesteten (in 1000)",data:[],
 		 type: 3, plottype: "lines", plotLog: false, 
-		 ytrafo: [0.001, false,false], color:colRecovCases};
+		 ytrafo: [0.001, false,false],
+		 color:colCasesRecovCumSim};
 
 
   this.dataG[2]={key: "Insgesamt Gestorbene (in 100)", data: [],
 		 type: 3, plottype: "lines", plotLog: false, 
-		 ytrafo: [0.01, false,false], color:colDead};
+		 ytrafo: [0.01, false,false],
+		 color:colDead};
+  
   this.dataG[35]={key: "Validierungsreferenz: alle Daten",
                                    //Insgesamt Gestorbene (in 100)", 
-		 data: simValid[35], // simValid[][] defined in validate()
-		 type: 3, plottype: "lines", plotLog: false, 
-		 ytrafo: [0.01, false,false], color:colDeadValid};
+		  data: simValid[35], // simValid[][] defined in validate()
+		  type: 3, plottype: "lines", plotLog: false, 
+		  ytrafo: [0.01, false,false],
+		  color:colDeadValid};
 
-  this.dataG[3]={key: "#Tote ges/#positiv getestet ges", data: [],
-		 type: 3, plottype: "lines", plotLog: false,
-		  ytrafo: [1, false,false], color:colPosrateCum};
-
+ // this.dataG[3]={key: "#Tote ges/#positiv getestet ges", data: [],
+//		 type: 3, plottype: "lines", plotLog: false,
+//		  ytrafo: [1, false,false], color:colPosrateCum};
 
 
   this.dataG[4]={key: "Insgesamt positiv Getestete (in 1000)",data: [],
 		 type: 0, plottype: "points", plotLog: false, 
-		 ytrafo: [0.001, false,false], color:colCases};
+		 ytrafo: [0.001, false,false], color:colCasesCum};
 
   this.dataG[5]={key: "Insg. Genesene unter den Getesteten (in 1000)",data:[],
 		 type: 0, plottype: "points", plotLog: false, 
-		 ytrafo: [0.001, false,false], color:colRecovCases};
+		 ytrafo: [0.001, false,false], color:colCasesRecovCum};
 
   this.dataG[6]={key: "Insgesamt Gestorbene (in 100)", data: [],
 		 type: 0, plottype: "points", plotLog: false, 
 		 ytrafo: [0.01, false,false], color:colDead};
 
-  this.dataG[7]={key: "#Tote ges/#positiv getestet ges", data: [],
-		 type: 0, plottype: "points", plotLog: false,
-		  ytrafo: [1, false,false], color:colPosrateCum};
+ // this.dataG[7]={key: "#Tote ges/#positiv getestet ges", data: [],
+//		 type: 0, plottype: "points", plotLog: false,
+//		  ytrafo: [1, false,false], color:colPosrateCum};
 
+
+
+  
   // window 1 "Simulationen (log)" (sim+data log)
 
 
   this.dataG[8]={key: "Aktuell real infizierte Personen", data: [],
 		 type: 4, plottype: "lines", plotLog: true, 
-		 ytrafo: [1, false,false], color:colInfected};
+		 ytrafo: [1, false,false],
+		 color:colInfectedReal};
 
   this.dataG[9]={key: "Insgesamt positiv Getestete", data: [],
 		 type: 3, plottype: "lines", plotLog: true, 
-		 ytrafo: [1, false,false], color:colCases};
-
+		 ytrafo: [1, false,false],
+		 color:colCasesCumSim};
 
   this.dataG[12]={key: "Insgesamt Gestorbene", data: [],
 		  type: 3, plottype: "lines", plotLog: true, 
-		  ytrafo: [1, false,false], color:colDead};
+		  ytrafo: [1, false,false],
+		  color:colDead};
 
   this.dataG[13]={key: "Insgesamt positiv Getestete", data: [],
-		 type: 0, plottype: "points", plotLog: true, 
-		 ytrafo: [1, false,false], color:colCases};
+		  type: 0, plottype: "points", plotLog: true, 
+		  ytrafo: [1, false,false],
+		  color:colCasesCum};
 
   this.dataG[14]={key: "Insgesamt Genesene unter den Getesteten", data: [],
 		  type: 0, plottype: "points", plotLog: true, 
-		  ytrafo: [1, false,false], color: colRecovCases};
+		  ytrafo: [1, false,false], color: colCasesRecovCum};
 
   this.dataG[15]={key: "Insgesamt Gestorbene", data: [],
 		  type: 0, plottype: "points", plotLog: true, 
@@ -3114,13 +3124,13 @@ function DrawSim(){
 
   this.dataG[23]={key: "Simulierte Neuinfizierte pro Tag (in 10)", data: [],
 		 type: 4, plottype: "lines", plotLog: false, 
-		 ytrafo: [0.01, true,false], color:colInfectedWin2};
+		 ytrafo: [0.01, true,false], color:colInfectedLin};
                  // real: scale*10
   this.dataG[36]={key: "Validierungsreferenz: alle Daten",
                        //Simulierte Neuinfizierte pro Tag (in 10)", 
                   data: simValid[36],
 		 type: 4, plottype: "lines", plotLog: false, 
-		 ytrafo: [0.01, true,false], color:colInfectedWin2Valid};
+		 ytrafo: [0.01, true,false], color:colInfectedLinValid};
                  // real: scale*10
 
   this.dataG[28]={key: "Simulierte Gestorbene pro Tag", data: [],
@@ -3147,7 +3157,7 @@ function DrawSim(){
 
   this.dataG[24]={key: "Simulierte Neuinfizierte pro Tag (in 10)", data: [],
 		 type: 4, plottype: "lines", plotLog: false, 
-		 ytrafo: [0.1, false,false], color:colInfectedWin2};
+		 ytrafo: [0.1, false,false], color:colInfectedLin};
 
   this.dataG[26]={key: "Simulierte False Positives pro Tag", data: [],
 		 type: 4, plottype: "lines", plotLog: false, 
@@ -3155,7 +3165,7 @@ function DrawSim(){
 
   this.dataG[27]={key: "Simulierte Test-Positive pro Tag", data: [],
 		 type: 3, plottype: "lines", plotLog: false, 
-		 ytrafo: [1, false,false], color:colSimCases};
+		 ytrafo: [1, false,false], color:colCasesSim};
 
 
   // window 4: infection ratios
@@ -3178,7 +3188,7 @@ function DrawSim(){
 
   this.dataG[29]={key: "Simulierte Test-Positive pro Tag", data: [],
 		 type: 3, plottype: "lines", plotLog: false, 
-		 ytrafo: [0.1, true,false], color:colSimCases};
+		 ytrafo: [0.1, true,false], color:colCasesSim};
 
   this.dataG[40]={key: "Validierungsreferenz: alle Daten",
 		  data: simValid[40],
@@ -3199,7 +3209,7 @@ function DrawSim(){
 
   this.dataG[32]={key: "Simulierte Wocheninzidenz Faelle", data: [],
 		 type: 3, plottype: "lines", plotLog: false, 
-		 ytrafo: [0.1, true,false], color:colSimCases};
+		 ytrafo: [0.1, true,false], color:colCasesSim};
 
   this.dataG[38]={key: "Validierungsreferenz: alle Daten", // Wocheninzidenz
 		  data: simValid[38],
@@ -3598,7 +3608,7 @@ DrawSim.prototype.transferSimData=function(it){
 
   this.dataG[0].data[it]=n0*corona.xt;
   this.dataG[2].data[it]=n0*corona.z;
-  this.dataG[3].data[it]=n0*corona.z/corona.xt
+  //this.dataG[3].data[it]=n0*corona.z/corona.xt
   this.dataG[8].data[it]=log10(n0*corona.xAct);
   this.dataG[9].data[it]=log10(n0*corona.xt);
   // this.dataG[10].data[it]=log10(n0*corona.y); // obsolete
@@ -3670,7 +3680,7 @@ DrawSim.prototype.transferRecordedData=function(){
   this.dataG[4].data=data_cumCases;  // by reference
   this.dataG[5].data=data_cumRecovered;
   this.dataG[6].data=data_cumDeaths;
-  this.dataG[7].data=data_cumCfr;
+  //this.dataG[7].data=data_cumCfr;
  
   for(var i=0; i<data_cumCases.length; i++){ // by value because of log10:
     this.dataG[13].data[i]=log10(data_cumCases[i]);
