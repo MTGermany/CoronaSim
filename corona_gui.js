@@ -345,9 +345,11 @@ function canvas_resize(){
 // canvas mouse callbacks
 //###############################################################
 
-var xPixOld,yPixOld;  // needed!
+var xPixOld,yPixOld,itOld;  // needed!
+var itArr=[];
 var xPixArr=[];
 var yPixArr=[];
+var itArrOld=[];
 var xPixArrOld=[];
 var yPixArrOld=[];
 var newStrokeIndexArray=[]; // index of xPixArr,yPixArr where new curve starts
@@ -362,34 +364,33 @@ function cleanPixArrays(){
   for(var i=0; i<xPixArr.length; i++){
     xPixArrOld[i]=xPixArr[i];
     yPixArrOld[i]=yPixArr[i];
+    itArrOld[i]=itArr[i];
   }
   xPixArr=[]; // reset
   yPixArr=[];
+  itArr=[];
   var j=0;
   xPixArr[0]=xPixArrOld[0];
   yPixArr[0]=yPixArrOld[0];
+  itArr[0]=itArrOld[0];
   for(var i=1; i<xPixArrOld.length; i++){
     var dist2=Math.pow(xPixArrOld[i]-xPixArrOld[i-1],2)
       +Math.pow(yPixArrOld[i]-yPixArrOld[i-1],2);
     //console.log("cleanPixArrays: i=",i," dist2=",dist2,
 //		" xPixArrOld=",xPixArrOld);
-    if(dist2>1e-6){
+
+
+    //if(dist2>1e-6){
+    if(dist2>1){
       j++;
       xPixArr[j]=xPixArrOld[i];
       yPixArr[j]=yPixArrOld[i];
+      itArr[j]=itArrOld[i];
     }
   }
   //console.log("leaving cleanPixArrays: xPixArr.length=",xPixArr.length);
 }
 
-
-
-// called on onmousedown and in DrawSim.draw()
-
-function shiftX(){ // if moving time window; xPix always orig drawn pixel
-  var timeshift=drawsim.itmax-itPresent;
-  return - (xshift=timeshift/itPresent * (drawsim.xPixMax-drawsim.xPix0));
-}
 
 
 
@@ -400,12 +401,19 @@ function drawMouseAnnotations(){
 
   // draw if distance between 2 points not too large (-> new stroke)
   var distCrit=30;  // in pixels; only draw if points closer together
+
+  // rescale points in x direction
+  
+  for(var ip=0; ip<itArr.length; ip++){
+    xPixArr[ip]=calc_xPix(itArr[ip]);
+  }
+  
   for(var i=1; i<xPixArr.length; i++){
 
     // move points with the moving window
 
-    var xOld=xPixArr[i-1]+shiftX();
-    var xNew=xPixArr[i]+shiftX();
+    var xOld=xPixArr[i-1];
+    var xNew=xPixArr[i];
     var dist=Math.sqrt(Math.pow(xNew-xOld,2)
 		       +Math.pow(yPixArr[i]-yPixArr[i-1],2));
 
@@ -496,8 +504,9 @@ function onmousemoveCallback(event){
   var xPixLeft=canvasBB.left; // left-upper corner of the canvas 
   var yPixTop=canvasBB.top;   // in browser reference system
   var xPix= event.clientX-xPixLeft; //pixel coords in canvas reference
-  var yPix= event.clientY-yPixTop; 
-  //console.log("mouse moved: mouseDown=",mouseDown," xPix=",xPix); 
+  var yPix= event.clientY-yPixTop;
+  var it=calc_it(xPix);
+ // console.log("mouse moved: mouseDown=",mouseDown," xPix=",xPix," it=",it); 
   var xPixRel=xPix/canvasBB.width;
   var yPixRel=yPix/canvasBB.height;
 
@@ -510,16 +519,24 @@ function onmousemoveCallback(event){
   if(activateAnnotations&&mouseDown){
     var dist2=Math.pow(xPix-xPixOld,2)+Math.pow(yPix-yPixOld,2);
     if(dist2>0.9){
-      xPixArr.push(xPixOld-shiftX());
+      itArr.push(it);
+      itArr.push(it); // twice the same; removed at 
+      xPixArr.push(xPixOld);
+      xPixArr.push(xPix);
       yPixArr.push(yPixOld);
-      xPixArr.push(xPix-shiftX());
       yPixArr.push(yPix);
       cleanPixArrays();
+      for(var ip=0; ip<itArr.length; ip++){
+	xPixArr[ip]=calc_xPix(itArr[ip]);
+      }
+      //console.log("xPixArr.length=",xPixArr.length," itArr.length=",itArr.length);
+      //console.log("itArr=",itArr);
+      //console.log("xPixArr=",xPixArr);
       if(isStopped){drawMouseAnnotations();} // otherwise in drawsim.draw()
     }
   }
 
-  xPixOld=xPix; yPixOld=yPix;
+  xPixOld=xPix; yPixOld=yPix; itOld=it;
 
   if(false){
     if(mouseDown) console.log("mouse moved && down: drawing ...");
@@ -534,6 +551,24 @@ function onmousemoveCallback(event){
       );
 	   }
 }
+
+// called on onmousedown and in DrawSim.draw()
+
+function calc_xPix(it){
+  var wPix=drawsim.xPixMax-drawsim.xPix0;
+  return drawsim.xPix0+wPix*(it-drawsim.itmin)/(drawsim.itmax-drawsim.itmin);
+}
+
+function calc_it(xPix){
+  return drawsim.itmin+(drawsim.itmax-drawsim.itmin)
+    * (xPix-drawsim.xPix0)/(drawsim.xPixMax-drawsim.xPix0);
+}
+
+/*function shiftX(){ // if moving time window; xPix always orig drawn pixel
+  var timeshift=drawsim.itmax-itPresent;
+  return - (xshift=timeshift/itPresent * (drawsim.xPixMax-drawsim.xPix0));
+}
+*/
 
 
 function toggleViews(){

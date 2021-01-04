@@ -3963,7 +3963,7 @@ DrawSim.prototype.draw=function(it){
   this.drawAxes(windowG);  // at the end to have grid+labels at top layer
 
 
-  if(activateAnnotations){drawMouseAnnotations();}
+  if(activateAnnotations){drawMouseAnnotations();} // corona_gui.js
 
 } //DrawSim.draw
 
