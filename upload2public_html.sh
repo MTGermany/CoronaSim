@@ -23,7 +23,7 @@ cp -r *.html *.css figs $target
 # cp data/coronaWorldwide.json data/github.json $target/data
 cp data/github.json data/githubWithTests.json  $target/data
 cp data/RKI_selectedKreise.json $target/data
-cp data/github_tests*json data/github_cases*json $target/data
+
 cp fmin/fmin.min.js fmin/LICENSE $target/fmin
 cp fmin/examples/*.html  $target/fmin/examples
 cp fmin/examples/*.js  $target/fmin/examples

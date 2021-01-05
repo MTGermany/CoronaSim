@@ -2131,6 +2131,9 @@ function myStartStopFunction(){ //!! hier bloederweise Daten noch nicht da!!
 function myRestartFunction(){ 
   console.log("in myRestartFunction: itPresent=",itPresent);
 
+  rVacc=0; //!!!! as long as vaccinations not yet in data
+  setSlider(slider_rVacc, slider_rVaccText, 700*rVacc, " %/Woche");
+
   initialize();
   console.log(" myRestartFunction after initialize: drawsim.itmin=",drawsim.itmin);
   fps=fpsstart;
@@ -2655,13 +2658,18 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
   // ###############################################
 
   if(it==0){this.vaccination.initialize();}
- //var Ivacc=0.001*it; //!!!! DAS GEHT bei calibration! => festes aray(it)
-  //var Ivacc=0;
-  var Ivacc=(it>=0) ? IvaccArr[it] : 0;
+
+
+  // IvaccArr[it]: global fixed vacc immunity time profile
+  // generated interactively here, if outside calibration
+  
+  var Ivacc=0; // inside calibration w/o fixed vacc immunity time profile
+  // var Ivacc=(it>=0) ? IvaccArr[it] : 0; // inside calibration with profile
+
   if(!inCalibration){
     this.vaccination.update(rVacc,it,logging);
     Ivacc=this.vaccination.Ivacc; //!!! geht nicht bei calibration
-    IvaccArr[it]=Ivacc;
+    IvaccArr[it]=Ivacc;  // create profile
   }
   
   if(it>=itPresent){console.log("Ivacc=",Ivacc);}
