@@ -670,6 +670,9 @@ function initializeData(country){
   for(var i=0; i<data.length; i++){
     data_date[i]=data[i]["date"];
     data_cumCases[i]=data[i]["confirmed"];
+    if((i>0)&&(data_cumCases[i]<data_cumCases[i-1])){
+      data_cumCases[i]=data_cumCases[i-1]; // ANNOYING inconsistent RKI data
+    }
     data_cumDeaths[i]=data[i]["deaths"];
     data_cumRecovered[i]=(useLandkreise) ? 0 : data[i]["recovered"];
     data_cumCfr[i]=(data_cumCases[i]==0)
