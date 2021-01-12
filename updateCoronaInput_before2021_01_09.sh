@@ -2,94 +2,73 @@
 
 # get local data from some Saxony Landkreise
 
-echo ""; echo "getting RKI Landkreis data ..."
-updateLandkreisData.sh
+echo "getting RKI Landkreis data ..."
+#updateLandkreisData.sh
 
 
 #####################################################################
 # get data from the covid.ourworldindata website
 #####################################################################
 
-# this link recommended but does not allow wget
+echo "getting OWID data for tests ..."
+
+# first link recommended but does not allow wget
 # wget https://covid.ourworldindata.org/data/owid-covid-data.json
 
 
-echo ""; echo "getting OWID data for tests ..."
 
-wget https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/owid-covid-data.json --output-document=data/githubWithTests.json
+#wget https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/owid-covid-data.json --output-document=data/githubWithTests.json
 
-cp data/githubWithTests.json data/githubWithTests_orig.json
-
-
- #only development!
-#cp data/githubWithTests_orig.json data/githubWithTests.json 
+#cp data/githubWithTests.json data/githubWithTests_orig.json
 
 
+# delete irrelevant/redundant data lines
 
-# first make line for each country in order to select
-# >=2021-01-11: now a single line !!
+perl -i -p -e 's/^.*new_.*\n//g' data/githubWithTests.json
+perl -i -p -e 's/^.*_per_.*\n//g' data/githubWithTests.json
+perl -i -p -e 's/^.*tests_units.*\n//g' data/githubWithTests.json
+perl -i -p -e 's/^.*stringency_index.*\n//g' data/githubWithTests.json
 
-perl -i -p -e 's/\}\]\}\,/\}\]\},\n/g' data/githubWithTests.json
-
-################################
-# select countries OWID
-################################
-
-grep Germany data/githubWithTests.json > data/tmp.json
-grep Austria data/githubWithTests.json >> data/tmp.json
-grep Czech data/githubWithTests.json >> data/tmp.json
-grep France data/githubWithTests.json >> data/tmp.json
-grep "United Kingdom" data/githubWithTests.json >> data/tmp.json
-grep Italy data/githubWithTests.json >> data/tmp.json
-grep Poland data/githubWithTests.json >> data/tmp.json
-grep Spain data/githubWithTests.json >> data/tmp.json
-grep Sweden data/githubWithTests.json >> data/tmp.json
-grep Switzerland data/githubWithTests.json >> data/tmp.json
-grep GRC data/githubWithTests.json >> data/tmp.json
-grep ISR data/githubWithTests.json >> data/tmp.json
-grep India data/githubWithTests.json >> data/tmp.json
-grep Russia data/githubWithTests.json >> data/tmp.json
-grep USA data/githubWithTests.json >> data/tmp.json
-grep AUS data/githubWithTests.json >> data/tmp.json
+# separate countries in lines: make a single line and use the pattern
+# "]    }," at the end of a countrie's entry to make one line per country
 
 
-################################
-# filter useless entries OWID
-################################
+perl -i -p -e 's/\n//g' data/githubWithTests.json # make a single line
+perl -i -p -e 's/\]    \}\,/\]    \},\n/g' data/githubWithTests.json
 
-# make each day a line for elimination
-perl -i -p -e 's/\}\,/},\n/g' data/tmp.json
+# filter countries
+
+ grep Germany data/githubWithTests.json > data/tmp.json
+ grep Austria data/githubWithTests.json >> data/tmp.json
+ grep Czech data/githubWithTests.json >> data/tmp.json
+ grep France data/githubWithTests.json >> data/tmp.json
+ grep "United Kingdom" data/githubWithTests.json >> data/tmp.json
+ grep Italy data/githubWithTests.json >> data/tmp.json
+ grep Poland data/githubWithTests.json >> data/tmp.json
+ grep Spain data/githubWithTests.json >> data/tmp.json
+ grep Sweden data/githubWithTests.json >> data/tmp.json
+ grep Switzerland data/githubWithTests.json >> data/tmp.json
+ grep GRC data/githubWithTests.json >> data/tmp.json
+ grep ISR data/githubWithTests.json >> data/tmp.json
+ grep India data/githubWithTests.json >> data/tmp.json
+ grep Russia data/githubWithTests.json >> data/tmp.json
+ grep USA data/githubWithTests.json >> data/tmp.json
+ grep AUS data/githubWithTests.json >> data/tmp.json
 
 
-# eliminate the manu useless "new_*" and "*_per_*" entries
-perl -i -p -e 's/\,\"new_\w+\"\:[\d\.]+//g' data/tmp.json 
-perl -i -p -e 's/\,\"new_\w+\"\:[\d\.]+//g' data/tmp.json # for some reason twice
-perl -i -p -e 's/\,"\w+_per_\w+\"\:[\d\.]+//g' data/tmp.json
-
-# eliminate other useless number entries
-for variable in stringency_index reproduction_rate;
-  do perl -i -p -e "s/\,\"${variable}\"\:[\d\.]+//g" data/tmp.json
-done
-
-# eliminate useless character entry "tests_units"
-perl -i -p -e 's/\,\"tests_units\"\:\"[\w\s]+\"//g' data/tmp.json
-
-
-################################
-# final touches OWID
-################################
-
-# add variable name and necessary '  ' between rhs of var and } at the end
+# add variable name and neceesary '  ' between rhs of var
 
 sed -e "1i\dataGitLocalTests=\'\{" data/tmp.json > data/tmp2.json
 echo "}'" >> data/tmp2.json
 
-# remove newlines
+# first remove newlines
+
 perl -i -p -e 's/\n//g' data/tmp2.json
 
-# remove commas before } at the end of file
-perl -i -p -e "s/\,\}/\}/g"  data/tmp2.json
+# remove commas before } and much space after {
 
+perl -i -p -e "s/\,(\s*)\}/\}/g"  data/tmp2.json
+perl -i -p -e "s/\{(\s*)/\{/g"  data/tmp2.json
 
 # consolidate country names of *Test.json with github.json  file 
 # (need to do this here, because other json is fetched online)
@@ -112,21 +91,20 @@ perl -i -p -e "s/USA/US/g" data/tmp2.json
 perl -i -p -e "s/AUS/Australia/g" data/tmp2.json
 
 
-#####################################################################
-# clean up
-#####################################################################
 
+
+#perl -i -p -e 's/\n//g' data/tmp2.json
+rm data/tmp.json
 mv data/tmp2.json data/githubWithTests.json
-mv data/tmp.json data/githubWithTests_debug.json
-#rm data/tmp.json data/githubWithTests_debug.json
+# tail }        ]    }}'
 
-
+exit
 
 #####################################################################
 # get data w/o test from another github website
 #####################################################################
 
-echo ""; echo "getting pomber github data for cases and deaths"
+echo "getting pomber github data for cases and deaths"
 
 wget https://pomber.github.io/covid19/timeseries.json --output-document=data/github.json
 cp data/github.json data/github_orig.json

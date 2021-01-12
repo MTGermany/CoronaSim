@@ -461,6 +461,13 @@ function getGithubData() {
 
   console.log("dataGit2=",dataGit2);
   console.log("dataGit2.Germany.data[0]=",dataGit2.Germany.data[0]);
+  var ndataTest2=dataGit2.Germany.data.length;
+  console.log("dataGit2.Germany.data[0]=",dataGit2.Germany.data[0]);
+
+  for(var i=ndataTest2-11; i<ndataTest2; i++){
+    console.log("i=",i," dataGit2.Germany.data[i]=",
+		dataGit2.Germany.data[i]);
+  }
 
   dataRKI = JSON.parse(dataRKI_string); // must be different name!!
   console.log("dataRKI=",dataRKI);
@@ -683,27 +690,20 @@ function initializeData(country){
 
 
   // extract test data (MT 2020-09)
-
+  // !! rely on positive_rate instead of total tests
+  // because more often available
+  
   for(var i2=0; i2<data2.length; i2++){
-    data2_cumTests[i2]=data2[i2].total_tests;
-    //data2_cumCases[i2]=data2[i2].total_cases;
-    data2_posRate[i2]=data2[i2].positive_rate;
+    data2_cumTests[i2]=data2[i2].total_tests; // not always available
+    //!! data2_cumCases[i2]=data2[i2].total_cases; if unific, 
+    data2_posRate[i2]=data2[i2].positive_rate; // nearly always available
   }
 
 
-  // extract cumTests
-  // in some countries, only few days/nonr have new cumul data: 
-  // interpolate them
 
-  var directTestData=[]; // data given w/o inter/extrapolation
-  for(var i2=0; i2<data2.length; i2++){
-    directTestData[i2]= (!(typeof data2_cumTests[i2] === "undefined"));
-  }
-
-
-  // extract posRate (needed for calc. dn[] 
-  // and calculate cum tests (needed for cfr)
-  // more stable as direct test numbers since some countries do not have them)
+  // fill data holes in posRate (needed for calc. dn[])
+  // and calculate cumulated tests (needed for cfr) 
+  // more stable as using direct test numbers
 
   var i2_lastR=0; // i2 for last defined posRate; needed for extrapol
 

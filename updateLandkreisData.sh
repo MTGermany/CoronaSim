@@ -10,8 +10,8 @@ echo ""
 
 
 
-#wget https://github.com/jgehrcke/covid-19-germany-gae/blob/master/cases-rki-by-ags.csv --output-document=data/RKI_cases_Landkreise.csv
-#wget  https://github.com/jgehrcke/covid-19-germany-gae/blob/master/deaths-rki-by-ags.csv --output-document=data/RKI_deaths_Landkreise.csv
+wget https://github.com/jgehrcke/covid-19-germany-gae/blob/master/cases-rki-by-ags.csv --output-document=data/RKI_cases_Landkreise.csv
+wget  https://github.com/jgehrcke/covid-19-germany-gae/blob/master/deaths-rki-by-ags.csv --output-document=data/RKI_deaths_Landkreise.csv
 
 
 
@@ -145,7 +145,7 @@ perl -i -p -e 's/cases/confirmed/g' data/RKI_selectedKreise.json
 
 # clean up
 
-# rm data/*_Kreis14[0-9]*.*
+ rm data/*_Kreis14[0-9]*.*
 
 
 echo "produced data/RKI_selectedKreise.json"
