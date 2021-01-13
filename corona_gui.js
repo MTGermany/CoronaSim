@@ -137,6 +137,7 @@ var slider_rVaccText = document.getElementById("slider_rVaccText");
 setSlider(slider_rVacc, slider_rVaccText, 700*rVacc, " %");
 
 slider_rVacc.oninput = function() {
+  slider_rVacc_moved=true;
   slider_rVaccText.innerHTML = "&nbsp;"+this.value+" %";
   rVacc=parseFloat(this.value/700.);
   console.log("slider_rVacc callback: rVacc=",rVacc);

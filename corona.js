@@ -126,6 +126,7 @@ var data_cumDeaths=[];
 var data_cumRecovered=[];
 var data_cumCfr=[];
 var data_cumVacc=[];     // direct, sometimes n.a.
+var data_rVacc=[];     // fraction of pop per day
 var data2_posRate=[];      // #cases/#tests, last avail. period (in dataGit2)
 var data2_cumTests=[];     // direct, sometimes n.a.
 
@@ -296,6 +297,7 @@ var pTestInit=0.1;     // P(Tested|infected)  if !f(#tests) assumed
 var pTestModelMin=0.04;   // if calculated by sqrt- or propto model
 
 var includeInfluenceTestNumber=true; // if true, pTest =f(#tests)
+var slider_rVacc_moved=false; // if true, pTest =f(#tests)
 var useSqrtModel=true; // whether use sqrt or linear dependence 
 
 var tauRstartInit=2;   // active infectivity begins [days since infection]//1
@@ -703,13 +705,7 @@ function initializeData(country){
 
 
 
-  // fill data holes in posRate (needed for calc. dn[])
-  // and calculate cumulated tests (needed for cfr) 
-  // more stable as using direct test numbers
 
-  var i2_lastR=0; // i2 for last defined posRate; needed for extrapol
-
-  data_cumTestsCalc[0]=0; // (offset not relevant)
   data_cumVacc[0]=0;                                                         
   var di2=data2_idataStart-data_idataStart;
 
@@ -729,9 +725,53 @@ function initializeData(country){
     data_cumVacc[i]=(!(typeof data2[i2].total_vaccinations === "undefined"))
       ? data2[i2].total_vaccinations : (i>0) ? data_cumVacc[i-1] : 0;
   }
+
+
+  // calculated vaccination rates (fraction of population per day)
+
+  var data_rVacc_unsmoothed=[];
+  data_rVacc_unsmoothed[0]=0;
+  for(var i=1; i<data.length; i++){
+    data_rVacc_unsmoothed[i]=(data_cumVacc[i]-data_cumVacc[i-1])/n0;
+  }
+  kernel=[1/7,1/7,1/7,1/7,1/7,1/7,1/7]; 
+  data_rVacc=smooth(data_rVacc_unsmoothed,kernel);
+
+  // correct artifacts near the end if rVacc unsmoothed=0 for last days
+
+  for(var i=data.length-3; i<data.length; i++){
+    var dVacc=data_cumVacc[i]-data_cumVacc[i-1]; // unsmoothed
+    if(dVacc<1){data_rVacc[i]=data_rVacc[data.length-4]}; // rVacc smoothed
+  }
+  
+  if(true) for(var i=0; i<data.length; i++){
+    console.log(data_date[i],": data_cumVacc=",
+		data_cumVacc[i]," data_rVacc=", data_rVacc[i]);
+  }
+  
+  // calculated immunity fraction profile IvacArr using the dynamics of
+  // vaccination() (!! related to it=i-data_idataStart)
+
+  vaccSim=new Vaccination();
+  vaccSim.initialize();
+  var rVaccSim=0;
+  for(var it=0; it<itPresent; it++){
+    var i=it+data_idataStart;
+    if(!( typeof data_rVacc[i] === "undefined")){
+      rVaccSim=data_rVacc[i]; // otherwise unchhanged
+    }
+    //console.log("it=",it," i=",i," date=",data_date[i]," rVaccSim=",rVaccSim);
+    vaccSim.update(rVaccSim,it,false);  // last arg=logging
+    IvaccArr[it]=vaccSim.Ivacc;
+    if(it>itPresent-10){console.log("it=",it," IvaccArr[it]=",IvaccArr[it]);}
+  }
+
   
     
   // calculated cum test numbers and positive rate
+
+  var i2_lastR=0; // i2 for last defined posRate; needed for extrapol
+  data_cumTestsCalc[0]=0; // (offset not relevant)
     
   for(var i=1; i<data.length; i++){ // !! other i range; above range => errors
     var i2=i+di2;
@@ -906,8 +946,8 @@ function initializeData(country){
   // ###############################################
 
   if(true){
-    console.log("data2[0][\"date\"]=",data2[0]["date"]);
-    console.log("\ninitializeData finished: final data:");
+    console.log("\ndata2[0][\"date\"]=",data2[0]["date"]);
+    console.log("initializeData finished: final data:");
     for(var i=0; i<data.length; i++){
       //var logging=useLandkreise&&(i>data.length-10);
       var logging=(i>data.length-40);
@@ -1345,7 +1385,7 @@ function getIndexCalibmax(itime){
 function calibrate(){
 
   inCalibration=true; // other calc of vacc in CoronaSim.updateOneDay 
-  
+  slider_rVacc_moved=false;
   console.log("\n\n==================================================",
 	      "\nEntering calibrate(): country=",country,
 	      "\n====================================================");
@@ -2256,6 +2296,11 @@ function simulationRun() {
 	      (100*data_pTestModelSmooth[idata]).toFixed(2), " %");
   }
 
+  if(!slider_rVacc_moved){
+    setSlider(slider_rVacc, slider_rVaccText, (700*rVacc).toFixed(2), " %");
+  }
+  
+
   // suffer one undefined at data_cumCases 
   // (doSimulationStep increments it so itPresent-2 would be correct)
   // to get full sim curves (first plot then update 
@@ -2362,7 +2407,7 @@ function Vaccination(){
   for(var tau=0; tau<this.tau0; tau++){
     this.pVaccHist[tau]=0;
   }
-  // cannot use this.initialize9) here
+  // cannot use this.initialize here
 }
 
 Vaccination.prototype.initialize=function(){
@@ -2383,8 +2428,8 @@ Vaccination.prototype.update=function(rVacc,it,logging){
     this.Ivacc +=this.I0/(this.tau0-1) // (this.tau0-1) Gartenzauneffekt OK
       *(this.pVaccHist[0]-this.pVaccHist[this.tau0-1]);
     if(logging){
-      console.log("Vaccination.update: it=",it,
-		  " this.pVaccHist[0]=",this.pVaccHist[0],
+      console.log("Vaccination.update: this.tau0=",this.tau0," it=",it,
+		  "\n this.pVaccHist[0]=",this.pVaccHist[0],
 		  " this.pVaccHist[this.tau0-1]=",this.pVaccHist[this.tau0-1],
 		  " this.Ivacc=",this.Ivacc);
     }
@@ -2686,16 +2731,25 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
   // IvaccArr[it]: global fixed vacc immunity time profile
   // generated interactively here, if outside calibration
   
-  var Ivacc=0; // inside calibration w/o fixed vacc immunity time profile
-  // var Ivacc=(it>=0) ? IvaccArr[it] : 0; // inside calibration with profile
+  var Ivacc=(it>=0) ? IvaccArr[it] : 0; // inside calibration with profile
 
   if(!inCalibration){
+    if(!slider_rVacc_moved){ // if slider moved, rVacc directly from slider
+      var i=it+data_idataStart;
+      if(i<0){rVacc=0;}
+      rVacc=(i<data_rVacc.length)
+	? data_rVacc[i] : data_rVacc[data_rVacc.length-1];
+    }
     this.vaccination.update(rVacc,it,logging);
     Ivacc=this.vaccination.Ivacc; //!!! geht nicht bei calibration
-    IvaccArr[it]=Ivacc;  // create profile
   }
   
-  if(it>=itPresent){console.log("Ivacc=",Ivacc);}
+  if(it>=itPresent){
+    console.log("inCalibration=",inCalibration,
+		" slider_rVacc_moved=",slider_rVacc_moved,
+		" rVacc=",rVacc,
+		" Ivacc=",Ivacc);
+  }
   this.Reff=R0*(1-Ivacc)*(1-this.xyz)
     * ((it<=itPresent) ? 1 : calc_seasonFactor(it));
 
