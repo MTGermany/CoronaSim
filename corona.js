@@ -125,6 +125,7 @@ var data_cumCases=[];
 var data_cumDeaths=[];
 var data_cumRecovered=[];
 var data_cumCfr=[];
+var data_cumVacc=[];     // direct, sometimes n.a.
 var data2_posRate=[];      // #cases/#tests, last avail. period (in dataGit2)
 var data2_cumTests=[];     // direct, sometimes n.a.
 
@@ -655,6 +656,7 @@ function initializeData(country){
   data_cumDeaths=[];
   data_cumRecovered=[];
   data_cumCfr=[];
+  data_cumVacc=[];
   data2_posRate=[];
   data2_cumTests=[];
 
@@ -692,7 +694,7 @@ function initializeData(country){
   // extract test data (MT 2020-09)
   // !! rely on positive_rate instead of total tests
   // because more often available
-  
+
   for(var i2=0; i2<data2.length; i2++){
     data2_cumTests[i2]=data2[i2].total_tests; // not always available
     //!! data2_cumCases[i2]=data2[i2].total_cases; if unific, 
@@ -708,14 +710,31 @@ function initializeData(country){
   var i2_lastR=0; // i2 for last defined posRate; needed for extrapol
 
   data_cumTestsCalc[0]=0; // (offset not relevant)
+  data_cumVacc[0]=0;                                                         
+  var di2=data2_idataStart-data_idataStart;
 
-  for(var i=1; i<data.length; i++){
 
-    var di2=data2_idataStart-data_idataStart;
+  // vaccinations
+  
+  for(var i=0; i<=-di2; i++){
+    data_cumTestsCalc[i]=0;
+    data_cumVacc[i]=0;
+  }
+
+  for(var i=Math.max(1,-di2); i<data.length; i++){
     var i2=i+di2;
-
-    // direct calculation if actual posRate given
-
+    if((i<30)||(i>=data.length-5)){
+      console.log("i2=",i2," data2[i2]=",data2[i2]);
+    }
+    data_cumVacc[i]=(!(typeof data2[i2].total_vaccinations === "undefined"))
+      ? data2[i2].total_vaccinations : (i>0) ? data_cumVacc[i-1] : 0;
+  }
+  
+    
+  // calculated cum test numbers and positive rate
+    
+  for(var i=1; i<data.length; i++){ // !! other i range; above range => errors
+    var i2=i+di2;
     if( !(typeof data2_posRate[i2] === "undefined")){ //posRate given
       var rateAct=data2_posRate[i2];
       data_cumTestsCalc[i]=data_cumTestsCalc[i-1] + ((rateAct>0) 
@@ -750,7 +769,7 @@ function initializeData(country){
   // (3) "Durchseuchung" <<1 (!! change later if xyz/n0 implemented!
   // (4) tests have certain alpha and beta errors
 
-  var di=data2_idataStart-data_idataStart; // translation data->data2 index
+  var di2=data2_idataStart-data_idataStart; // translation data->data2 index
 
   var tauPos=7; //!! keep const 1 week irresp. of tau sliders:
                 // tauPos=7 cancels out weekly pattern
@@ -779,10 +798,10 @@ function initializeData(country){
   }
 
   for(var i=0; i<data.length; i++){
-    data_posRate[i]=data2_posRate[i+di];
+    data_posRate[i]=data2_posRate[i+di2];
     data_dn[i]=data_dxt[i]/data_posRate[i];// more stable
     if(!((data_dn[i]>0)&&(data_dn[i]<1e11))){data_dn[i]=0;}
-    var dnTauPos=data_cumTestsCalc[i+di]-data_cumTestsCalc[i+di-tauPos];
+    var dnTauPos=data_cumTestsCalc[i+di2]-data_cumTestsCalc[i+di2-tauPos];
    
 
     var dxtTauPos=data_cumCases[i]-data_cumCases[i-tauPos];
@@ -900,13 +919,14 @@ function initializeData(country){
 	  //" data_dyt=",Math.round(data_dyt[i]),
 	  " data_dz=",Math.round(data_dz[i]),
 	  " data_dn[i]=",data_dn[i].toFixed(1),
-	  " data_pTestModel[i]=",data_pTestModel[i].toFixed(3),
+	  "\n  data_pTestModel[i]=",data_pTestModel[i].toFixed(3),
 	  " data_pTestModelSmooth[i]=",data_pTestModelSmooth[i].toFixed(3),
 	  "\n  data_cumCases=",Math.round(data_cumCases[i]),
+	  " data_cumVacc=",data_cumVacc[i],
 	  " data_posRate=",data_posRate[i],
-	  " data2_posRate=",data2_posRate[i2],
+	  //" data2_posRate=",data2_posRate[i2],
 	  " data_cumTestsCalc=", Math.round(data_cumTestsCalc[i]),
-	  " data_cfr=",data_cfr[i].toPrecision(3),
+	 // " data_cfr=",data_cfr[i].toPrecision(3),
 	  " "
 	);
       }
