@@ -11,7 +11,7 @@ var showVacc=false;  // false: only display as of dec2020
 // useLiveData=false: obtained data server-side 
 // via script updateCoronaInput.sh. Stable but need to upload once a day
 
-var useLiveDataInit=false;  //!! will be changed by upload script, 2 versions
+var useLiveDataInit=true;  //!! will be changed by upload script, 2 versions
 var useLiveData=useLiveDataInit;
 
 var loggingDebug=false; //!! global var for testing functions inside calibr
@@ -719,11 +719,29 @@ function initializeData(country){
 
   for(var i=Math.max(1,-di2); i<data.length; i++){
     var i2=i+di2;
-    if((i<30)||(i>=data.length-5)){
+    if(false){
+    //if((i<30)||(i>=data.length-5)){
       console.log("i2=",i2," data2[i2]=",data2[i2]);
     }
-    data_cumVacc[i]=(!(typeof data2[i2].total_vaccinations === "undefined"))
-      ? data2[i2].total_vaccinations : (i>0) ? data_cumVacc[i-1] : 0;
+
+    //!!! need to check parent and component separately against
+    // "undefined" since test of daughter against undefined
+    // throws an error if parent is undefined
+
+    //console.log("\n",data_date[i],": i=",i," i2=",i2);
+
+    
+    if( (!(typeof data2[i2] === "undefined"))
+	&&(!(typeof data2[i2].total_vaccinations === "undefined"))){
+      //console.log(
+//	" data2[i2] and data2[i2].total_vaccinations defined!");
+  	data_cumVacc[i]=data2[i2].total_vaccinations;
+    }
+    else{
+      data_cumVacc[i]= (i>0) ? data_cumVacc[i-1] : 0;
+    }
+    //console.log(" exit loop step: data_cumVacc[i]=",data_cumVacc[i],
+//	       " data_cumVacc[i-1]=",data_cumVacc[i-1]);
   }
 
 
@@ -744,7 +762,7 @@ function initializeData(country){
     if(dVacc<1){data_rVacc[i]=data_rVacc[data.length-4]}; // rVacc smoothed
   }
   
-  if(true) for(var i=0; i<data.length; i++){
+  if(false) for(var i=0; i<data.length; i++){
     console.log(data_date[i],": data_cumVacc=",
 		data_cumVacc[i]," data_rVacc=", data_rVacc[i]);
   }
@@ -950,7 +968,8 @@ function initializeData(country){
     console.log("initializeData finished: final data:");
     for(var i=0; i<data.length; i++){
       //var logging=useLandkreise&&(i>data.length-10);
-      var logging=(i>data.length-40);
+      var logging=false;
+      //var logging=(i>data.length-40);
       if(logging){
         var i2=i+data2_idataStart-data_idataStart;
 	console.log(
@@ -1730,7 +1749,8 @@ function calibIFR(cumDeathsSim0,it0, it1){
   }
 
   vecIFR[2]=dCumDeathsSim;
-  console.log("calibIFR: it0=",it0," it1-1=",it1-1,
+  if(false){
+    console.log("calibIFR: it0=",it0," it1-1=",it1-1,
 	      " data_itmax=",data_itmax,
 	      " data_cumDeaths.length=",data_cumDeaths.length,
 	      " data_dz.length=",data_dz.length,
@@ -1740,7 +1760,8 @@ function calibIFR(cumDeathsSim0,it0, it1){
 	      " data_cumDeaths[data_idataStart+it1]=",
 	      data_cumDeaths[data_idataStart+it1],
 	      " cumDeathsSim0=",cumDeathsSim0,
-	      " cumDeathsSim0+vecIFR[2]=",cumDeathsSim0+vecIFR[2]);
+		" cumDeathsSim0+vecIFR[2]=",cumDeathsSim0+vecIFR[2]);
+  }
   return vecIFR;
 } // calibIFR
 
