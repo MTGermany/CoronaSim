@@ -51,7 +51,8 @@ perl -i -p -e 's/Massnahmen/Measures/g' *_eng.html *_eng.js
 perl -i -p -e 's/Ansicht/view/g' *_eng.html *_eng.js
 perl -i -p -e 's/ansicht/view/g' *_eng.html *_eng.js
 perl -i -p -e 's/Normale/Normal/g' *_eng.html *_eng.js
-perl -i -p -e 's/Impfrate/Vaccination/g' *_eng.html *_eng.js
+perl -i -p -e 's/Geimpft/Vaccinated/g' *_eng.html *_eng.js
+perl -i -p -e 's/Impf\-Immunitaet/Immunity by vacc./g' *_eng.html *_eng.js
 perl -i -p -e 's/Teil\-/Partial /g' *_eng.html *_eng.js
 perl -i -p -e 's/Abstand/Distance/g' *_eng.html *_eng.js
 perl -i -p -e 's/Maske/mask/g' *_eng.html *_eng.js

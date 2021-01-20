@@ -314,7 +314,9 @@ var tauAvg=5;      // smoothing interval (uneven!) for tauTest,
 var pVacc=0;        // vaccination fraction in [0,1]
 var rVaccInit=0;    // pVacc'(t) [fraction per day]
 var rVacc=rVaccInit;
-var IvaccArr=[];                    // used to calibrate with fixed time
+var IvaccArr=[];
+var Ivacc=0;        // actual vaccination immunity rate
+// used to calibrate with fixed time
 for(var it=0; it<=itPresent; it++){ // profile ofvaccination imunity
   IvaccArr[it]=0;
 }
@@ -706,55 +708,51 @@ function initializeData(country){
 
 
 
-  data_cumVacc[0]=0;                                                         
+  // vaccinations
+
+  // extract from original data2
+
+  var data2_cumVacc=[];
+  data2_cumVacc[0]=0;
+  for(var i2=1; i2<data2.length; i2++){
+    data2_cumVacc[i2]=(!(typeof data2[i2].total_vaccinations === "undefined"))
+      ? data2[i2].total_vaccinations : data2_cumVacc[i2-1];
+  }
+
+
+  
+  // convert data2->data format
+  
   var di2=data2_idataStart-data_idataStart;
 
-
-  // vaccinations
   
   for(var i=0; i<=-di2; i++){
-    data_cumTestsCalc[i]=0;
     data_cumVacc[i]=0;
+    data_cumTestsCalc[i]=0;
   }
 
   for(var i=Math.max(1,-di2); i<data.length; i++){
     var i2=i+di2;
-    if(false){
-    //if((i<30)||(i>=data.length-5)){
-      console.log("i2=",i2," data2[i2]=",data2[i2]);
-    }
-
-    //!!! need to check parent and component separately against
-    // "undefined" since test of daughter against undefined
-    // throws an error if parent is undefined
-
-    //console.log("\n",data_date[i],": i=",i," i2=",i2);
-
-    
-    if( (!(typeof data2[i2] === "undefined"))
-	&&(!(typeof data2[i2].total_vaccinations === "undefined"))){
-      //console.log(
-//	" data2[i2] and data2[i2].total_vaccinations defined!");
-  	data_cumVacc[i]=data2[i2].total_vaccinations;
-    }
-    else{
-      data_cumVacc[i]= (i>0) ? data_cumVacc[i-1] : 0;
-    }
-    //console.log(" exit loop step: data_cumVacc[i]=",data_cumVacc[i],
-//	       " data_cumVacc[i-1]=",data_cumVacc[i-1]);
+    var cumVaccLast=data2_cumVacc[data2.length-1];
+    data_cumVacc[i]=(i2<data2.length) ? data2_cumVacc[i2] : cumVaccLast;
   }
-
-
+  
+ 
   // calculated vaccination rates (fraction of population per day)
 
   var data_rVacc_unsmoothed=[];
   data_rVacc_unsmoothed[0]=0;
   for(var i=1; i<data.length; i++){
     data_rVacc_unsmoothed[i]=(data_cumVacc[i]-data_cumVacc[i-1])/n0;
+    if(useLandkreise){
+      data_rVacc_unsmoothed[i] *= n0/n0List["Germany"]; //!!! n0/noGermany
+      //console.log("n0=",n0," n0List[\"Germany\"]=",n0List["Germany"]);
+    }
   }
   kernel=[1/7,1/7,1/7,1/7,1/7,1/7,1/7]; 
   data_rVacc=smooth(data_rVacc_unsmoothed,kernel);
 
+  
   // correct artifacts near the end if rVacc unsmoothed=0 for last days
 
   for(var i=data.length-3; i<data.length; i++){
@@ -784,6 +782,8 @@ function initializeData(country){
     if(it>itPresent-10){console.log("it=",it," IvaccArr[it]=",IvaccArr[it]);}
   }
 
+
+
   
     
   // calculated cum test numbers and positive rate
@@ -793,6 +793,7 @@ function initializeData(country){
     
   for(var i=1; i<data.length; i++){ // !! other i range; above range => errors
     var i2=i+di2;
+    
     if( !(typeof data2_posRate[i2] === "undefined")){ //posRate given
       var rateAct=data2_posRate[i2];
       data_cumTestsCalc[i]=data_cumTestsCalc[i-1] + ((rateAct>0) 
@@ -802,7 +803,6 @@ function initializeData(country){
 
     }
   
-
     // extrapolate if actual posRate data undefined
 
     else{
@@ -961,16 +961,19 @@ function initializeData(country){
 
   // ###############################################
   // debug (saisonal is always=6 at data.length-1)
+  // (in initializeData(country));
   // ###############################################
 
   if(true){
-    console.log("\ndata2[0][\"date\"]=",data2[0]["date"]);
-    console.log("initializeData finished: final data:");
+    console.log("\n\ndata2[0][\"date\"]=",data2[0]["date"]);
+    console.log("initializeData finished: final data:\n");
     for(var i=0; i<data.length; i++){
-      //var logging=useLandkreise&&(i>data.length-10);
+       //var logging=useLandkreise&&(i>data.length-10);
+      //var logging=true;
       var logging=false;
-      //var logging=(i>data.length-40);
+      //var logging=(i>data.length-20);
       if(logging){
+	var it=i-data_idataStart;
         var i2=i+data2_idataStart-data_idataStart;
 	console.log(
 	  insertLeadingZeroes(data[i]["date"]),": i=",i,
@@ -980,8 +983,9 @@ function initializeData(country){
 	  " data_dn[i]=",data_dn[i].toFixed(1),
 	  "\n  data_pTestModel[i]=",data_pTestModel[i].toFixed(3),
 	  " data_pTestModelSmooth[i]=",data_pTestModelSmooth[i].toFixed(3),
-	  "\n  data_cumCases=",Math.round(data_cumCases[i]),
-	  " data_cumVacc=",data_cumVacc[i],
+	  " data_cumCases=",Math.round(data_cumCases[i]),
+	  "\n  data_cumVacc=",data_cumVacc[i],
+	  " IvaccArr=",(it<0) ? 0 : IvaccArr[it],
 	  " data_posRate=",data_posRate[i],
 	  //" data2_posRate=",data2_posRate[i2],
 	  " data_cumTestsCalc=", Math.round(data_cumTestsCalc[i]),
@@ -1656,22 +1660,21 @@ function calibrate(){
     console.log("itPresent=",itPresent);
     console.log("calc_seasonFactor(0)=",calc_seasonFactor(0));
   }
-  
- //##############################################################
- // !! for inline nondynamic testing: add testcode here
- //##############################################################
-
-  if(false){
-    // code
-    //alert('stopped simulation with alert');
-    //setTimeout(function(){  alert('hello');}, 3000);  
-    //alert('hi');
-  }
 
   inCalibration=false; // use dynamic corona.vaccination.update(...)
-                       // outside of calibration
   
-    //alert('stopped simulation with alert');
+  //##############################################################
+  // !!!! for inline nondynamic testing: add testcode here
+  // outside of calibration
+  //##############################################################
+
+  if(false){
+    console.log("end calibrate: in testing zone!");
+    console.log("test the f... corona.init");
+    corona.init(0,true);
+    alert('stopped simulation with alert');
+  }
+  
 }
 //end calibrate()
 
@@ -2368,8 +2371,8 @@ function doSimulationStep(){
 
   drawsim.draw(it);
  
-  var logging=false;  // doSimulationStep: logging "allowed"
-  //var logging=(it<3);
+  //var logging=false;  // doSimulationStep: logging "allowed"
+  var logging=(it<3);
 
 
   corona.updateOneDay(R0_actual,it,logging); // in doSimulationStep
@@ -2439,8 +2442,7 @@ Vaccination.prototype.initialize=function(){
 }
 
 Vaccination.prototype.update=function(rVacc,it,logging){
-  if(true){
-  //if(it>=itPresent-4){ // !! change later if data on vaccinations go into calib
+  if(it>0){ // no vaccinations at beginning!!!
     for(var tau=this.tau0-1; tau>0; tau--){
       this.pVaccHist[tau]=this.pVaccHist[tau-1];
     }
@@ -2472,7 +2474,7 @@ function CoronaSim(){
 }
 
 
-//!! need to chose appropriate fracDie before!
+//!!!! need to chose appropriate fracDie before!
 
 CoronaSim.prototype.init=function(itStart,logging){
 
@@ -2544,8 +2546,8 @@ CoronaSim.prototype.init=function(itStart,logging){
 
   // !!! loggingDebug global variable
   
-  //loggingDebug=logging&&useLandkreise;
-  loggingDebug=false; 
+  loggingDebug=logging&&useLandkreise;
+  //loggingDebug=false; 
 
   if(loggingDebug){
     console.log("corona.init warmup:  it0=",it0," itStart=",itStart,
@@ -2555,8 +2557,8 @@ CoronaSim.prototype.init=function(itStart,logging){
   for(var its=it0; its<itStart; its++){ 
     var Rt=R0fun_time(R0time,its); // !!! uses loggingDebug as global variable
 
-    //if(logging&&useLandkreise){
-    if(logging&&false){
+    if(logging&&useLandkreise){
+    //if(logging&&false){
       console.log("corona.init warmup before update: its=",its,
 			    " pTest=",pTest.toPrecision(3),
 			    " R=",Rt.toFixed(2),
@@ -2715,7 +2717,7 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
 
 
   //if(logging){  //filter because of called mult times in calibr!
-  if(logging&&useLandkreise&&(it<10)){//filter because of calibr!
+  if(logging&&useLandkreise&&(it<3)){//filter because of calibr!
   //if(logging&&((it==-10)||(it==10))){
     console.log(
       "Enter CoronaSim.updateOneDay: it=",it," R0=",R0.toPrecision(2),
@@ -2747,12 +2749,11 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
   // ###############################################
 
   if(it==0){this.vaccination.initialize();}
-
-
+ 
   // IvaccArr[it]: global fixed vacc immunity time profile
   // generated interactively here, if outside calibration
   
-  var Ivacc=(it>=0) ? IvaccArr[it] : 0; // inside calibration with profile
+  Ivacc=(it>=0) ? IvaccArr[it] : 0; // inside calibration with profile
 
   if(!inCalibration){
     if(!slider_rVacc_moved){ // if slider moved, rVacc directly from slider
@@ -3698,10 +3699,10 @@ DrawSim.prototype.drawAxes=function(windowG){
 
     if(pVacc>0){
       line++;
-      ctx.fillText("Impfrate: "+(Math.round(100*pVacc))+" %",
+      ctx.fillText("Geimpft: "+(100*pVacc).toFixed(1)+" %, Impf-Immunitaet: "+(100*Ivacc).toFixed(1)+" %",
 		 this.xPix0+xrelLeft*this.wPix,
 		 this.yPix0+(yrelTop-(ikey+line)*dyrel)*this.hPix);
-    }
+     }
     
     if(casesInflow>0){
       line++;
