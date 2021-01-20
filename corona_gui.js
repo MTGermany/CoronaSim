@@ -213,7 +213,7 @@ setSlider(slider_casesInflow, slider_casesInflowText, casesInflow,
 	  "/Tag");
 
 slider_casesInflow.oninput = function() {
-  slider_casesInflowText.innerHTML = "&nbsp;"+this.value+"/Tag";
+  slider_casesInflowText.innerHTML = "&nbsp;"+this.value+"/day";
   casesInflow=parseFloat(this.value);
 }
 

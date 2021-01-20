@@ -2928,15 +2928,18 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
   // Debug output (filter needed because called in calibration)
   //##########################################################
 
-  //if(false){ // filter needed because called in calibration
+  if(false){ // filter needed because called in calibration
   //if(logging&&useLandkreise&&(it<10)){ // filter needed because calibration!
-  if(false&&(it>=itPresent)){ // it<itPresent in calibration => not reached
+  //if(it>=itPresent){ // it<itPresent in calibration => not reached
+  //if(false&&(it>=itPresent)){ // it<itPresent in calibration => not reached
     console.log(
       "end CoronaSim.updateOneDay: it=",it," R0=",R0.toPrecision(2),
-      " dnxt=",Math.round(n0*this.dxt),
-      " this.xAct=",this.xAct.toPrecision(3),
-      " idata=",idata," data_pTestModel.length=",data_pTestModel.length,
-      " pTest=",pTest,
+      //" dnxt=",Math.round(n0*this.dxt),
+      " 100000*this.xt=",Math.round(100000*this.xt),
+      " 100000*x0source=",Math.round(100000*x0source),
+      //" this.xAct=",this.xAct.toPrecision(3),
+      //" idata=",idata," data_pTestModel.length=",data_pTestModel.length,
+     // " pTest=",pTest,
      // " this.xyz=",this.xyz.toPrecision(3),
      // " pTest=",pTest.toPrecision(3), //!! undefined for Dresden etc
      // " this.y=",this.y.toPrecision(3),
@@ -3956,14 +3959,15 @@ DrawSim.prototype.drawR0Estimate=function(it){
 //######################################################################
 
   //console.log("in DrawSim.drawR0Estimate: it=",it);
-  if(!showVacc){ // do not show R0 values in "measures"=vaccination view
-   ctx.fillStyle="#888888";// vertical period separation lines
-   var y0=this.yPix0+0.03*this.hPix;
-   ctx.font = textsizeR0+"px Arial"; 
-   var dxPix=Math.max(1,0.002*sizeminWindow);
-   for(var ical=0; ical<=getIndexCalib(it); ical++){ 
+  ctx.fillStyle="#888888";// vertical period separation lines
+  var y0=this.yPix0+0.03*this.hPix;
+  ctx.font = textsizeR0+"px Arial"; 
+  var dxPix=Math.max(1,0.002*sizeminWindow);
+  for(var ical=0; ical<=getIndexCalib(it); ical++){ 
     var itR0=getIndexTimeFromCalib(ical);
-    var x0=this.xPix[itR0-this.itmin];
+     // during calibration, linear interpolation
+     // between old and new R0 value => in display -=calibInterval/2
+    var x0=this.xPix[itR0-this.itmin-Math.round(calibInterval/2)];
     //ctx.fillRect(x0-0.5*dxPix,this.yPix0,dxPix,this.hPix);
 
     ctx.setTransform(0,-1,1,0,x0+textsizeR0,y0);
@@ -3993,7 +3997,6 @@ DrawSim.prototype.drawR0Estimate=function(it){
     }
     ctx.font = textsizeR0+"px Arial"; 
     ctx.setTransform(1,0,0,1,0,0);
-   }
   }
 }
 
@@ -4094,10 +4097,11 @@ DrawSim.prototype.draw=function(it){
   } // loop over all quantities to be drawn
 
 
-  // draw R0 estimates for windows qith simulations
+  // draw R0 estimates for windows with simulations
   
+  //if(this.mirroredGraphics && (!showVacc)){
   if(this.mirroredGraphics){
-      this.drawR0Estimate(it);
+    this.drawR0Estimate(it);
   }
 
   this.drawAxes(windowG);  // at the end to have grid+labels at top layer
