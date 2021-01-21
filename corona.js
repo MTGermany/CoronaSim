@@ -233,7 +233,7 @@ const tauDieList={
   "Austria"       : 19,
   "Czechia"       : 19,
   "France"        : 19,
-  "United Kingdom": 14,
+  "United Kingdom": 21,
   "Italy"         : 14,
   "Poland"        : 19,
   "Spain"         : 14,
@@ -245,9 +245,9 @@ const tauDieList={
   "Russia"        : 17,
   "US"            : 17,
   "Australia"     : 17,
-  "LK_Erzgebirgskreis": 14,
-  "LK_Osterzgebirge"  : 16,
-  "SK_Dresden"        : 16
+  "LK_Erzgebirgskreis": 10,  // too short; overcome data inconsistency
+  "LK_Osterzgebirge"  : 10,
+  "SK_Dresden"        : 10
 }
 
 
@@ -361,7 +361,7 @@ var itmax_calib; //  end calibr time interval =^ data_itmax-1
                  // 20 weeks of data
 
 const calibInterval=7; //!! calibration time interval [days] for one R0 value7
-const Rinterval_last_min=14; // do not calibrate remaining period smaller 11
+const Rinterval_last_min=12; // do not calibrate remaining period smaller 11
 const calibrateOnce=false; // following variables only relevant if false
 const nCalibIntervals=6; // multiples of calibInterval, !! >=30/calibInterval
                          // calibrates nCalibIntervals-nOverlap+1 params
@@ -382,13 +382,10 @@ var firstR0=0;
 
 
 var IFRinit=0.002;
-var IFRinterval=28;
-var IFRinterval_last_min=21;
+var IFRinterval=21; //28
+var IFRinterval_last_min=14;  //21
+var IFR_dontUseLastDays=5;//(29 for ERZ) overcome "Nachmeldungen" bias IFR est.
 var IFRtime=[];
-var IFR_jmax=1+Math.ceil((itPresent-IFRinterval_last_min)/IFRinterval);
-for(var j=0; j<IFR_jmax;j++){
-  IFRtime[j]=IFRinit;
-}
 
 
 
@@ -541,6 +538,7 @@ function initializeData(country){
   country2=(country==="United Kingdom") ? "England" : country;
   useLandkreise=(country==="LK_Erzgebirgskreis")
     || (country==="LK_Osterzgebirge") || (country==="SK_Dresden");
+  IFR_dontUseLastDays=(useLandkreise) ? 29 : 5;
   if(useLandkreise){country2="Germany";}
   useLiveData=(useLandkreise) ? false : useLiveDataInit;
   console.log("\n\n======================================================",
@@ -1592,14 +1590,16 @@ function calibrate(){
 
 
   console.log("\n\ncalibrate(): entering NEW calibration of IFR ...");
-  IFR_jmax=1+Math.ceil(
-    (itPresent-IFRinterval_last_min)/IFRinterval); //!!!as in def
 
+  var itmax_calibIFR=data_dz.length-data_idataStart-IFR_dontUseLastDays;
+  var IFR_jmax=1+Math.ceil(
+    (itmax_calibIFR-IFRinterval_last_min)/IFRinterval);
   IFRtime=[]; for(var j=0; j<IFR_jmax; j++){IFRtime[j]=IFRinit;}
   var cumDeathsSim0=0;
+
   for(var j=0; j<IFR_jmax-1; j++){
     var it0=IFRinterval*j;
-    var it1=Math.min(IFRinterval*(j+1), data_dz.length-data_idataStart);
+    var it1=Math.min(IFRinterval*(j+1), itmax_calibIFR);
     var IFRcal=calibIFR(cumDeathsSim0,it0,it1);
     IFRtime[j]=(j==0) ? IFRcal[1] : 0.5*(IFRcal[0]+IFRtime[j]);
     IFRtime[j+1]=IFRcal[1];

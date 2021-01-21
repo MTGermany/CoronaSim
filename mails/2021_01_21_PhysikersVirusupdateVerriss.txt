@@ -1,0 +1,47 @@
+
+Hallo Philipp,
+
+Zugegeben, anders als KKK ist das nur eine phonetische Alliteration... Ich antworte mal per Mail, da man da leicher schreiben kann.
+
+Ich habe nicht alles angehoert (ist ja ellenlang!) aber Dank der Timeline wohl die fuer mich interessantesten Stellen getroffen
+
+02:00: Die Moderatorin sagt  faelschlicherweise "neu angesteckt" in einem wichtigen Kontext und Drosden geht darauf ein, anstatt es zu korrigieren. Es muss heissen "positiv getestet". Der Fehler ist etwa Faktor (!) 5 und fuehrt an mehreren Stellen, z.B. 13:00 und 1:00:00, zu falschen Schlussfolgerungen.
+
+03:10: die Moderatorin fragt, ob man, wenn man Entwicklungen schneller wissen will, auch eine 4-Tage statt 7-Tages-Inzidenz analysieren koenne. Drosten sagte paraphrasiert "nun ja, kann man machen". Falsch! Aufgrund des markanten Wochenzyklus der Meldungen (nicht der Infektionen!) wuerde man ueble Verzerrungen reinanalysieren und falsche Schlussfolgerungen machen. Man koennte eine aufwaendige Saisonanalyse machen wie ich in meinem Simulator, aber selbst das bringt einen hier nicht weiter, da es Nachmeldungen teilweise extremen Ausmasses gibt, z.B. im LK Osterzgebirge bei den Todesfaellen. Die sind so krass, dass selbst mein IFR-Schaetzer im Simulator durcheinanderkommt (screenshot1.png). Ich glaube, ich muss ihm die letzten 2 Wochen vorenthalten, da die einfach nur Junk sind. Interessanterweise betrifft das nur die RKI-Daten, die ich fuer Kreise brauche, waehrend die ueberregionalen Daten aus OWID bessere Qualitaet haben
+
+13:00 Grenzwert Inzidenz 50 wird mit Nachverfolgbarkeit bei Inzidenzen unterhalb begruendet. Grosser Unsinn! Da die meisten Infizierten (i) entweder asympomatisch aber ansteckend sind, (ii) normale Erkaeltungssymptome haben (es ist Winter!), (iii) manche sich auch bewusst wegen der Quarantaene-Konsequenzen nicht testen lassen (ich kenne Faelle), hat man ein Dunkelfeld, welches etwa den Faktor 4 (grosse Unsicherheit!)  groesser als das Hellfeld (=die positiv getesteten) ist. Zumal finden ein bedeutender Teil der Infektionen *vor* den Symptomen statt. Selbst bei perfekter Administration waere damit die Nachverfolgbarkeit hinfaellig. In realiter muss man auch mit einschlaegigen Symptomen auf den Test warten (!) und wenn er dann endlich gemacht ist, auf das Ergebnis (1-3 weitere Tage, koennen auch mal 7 sein). Die meisten sind dann schon nicht mehr in der Hauptansteckungsphase und koennen oder wollen die vergangenen Kontakte nicht mehr nennen. Kurzum: Bei den deutschen Verhaeltnissen *gibt* es keine Grenze, ab der Nachverfolgung sinnvoll ist, da es keine Nachverfolgung geben kann.
+
+Nachverfolgung bedingt (i) eine funktionierende Corona-App, die rollierend alle Kontakte der letzten 14 Tage zentral und fuer alle Gesundheitsaemter aufrufbar speichert, (ii) eine nahezu flaechendeckende Nutzung (die Wirkung der App steigt quadratisch (!) mit der Zahl der Nutzer), (iii) im Falle eines verifizierten positiven Tests eine sofortige Testung und ggf Quarantaenisierung aller Kontakte, die ein gewisses Kriterium erfuellen (z.B. <1.5 m fuer >=15 Minuten). 
+
+15:10 Zero-Covid Argumentation: "Wenn wir auf die Bremse gehen, halbiert sich die Inzidenz immer und immer wieder, 100-50-25,12.5 usw. Das funktioniert nicht, solange es externe Eintraege gibt, die spaetestens bei 12.5 zur Zeit ueberwiegen. Wie auf Glatteis, wenn es bergab geht: Da kann man bremsen, so viel man will, es tut sich nix
+
+danach: R-Werte: Bei R=0.7 haette man jede Woche eine Halbierung
+Dies wuerde nur gelten, wenn die Generationszeit 3-4 Tage betruege (ein neu Infizierter steckt im Mittel nach 3-4 Tagen einen weiteren an. Da die Generationszeit nicht messbar ist, schaetzt man sie durch das "serielle Intervall (SI)" ab, die mittlere Zeit, die zwischen den Auftreten von Symptomen bei Person A und B bei eineindeutiger Ansteckung A->B liegt
+Also mal "serielles Intervall" gegoogelt. Wikipedia kommt als ueblicher Verdaechtiger an erster Stelle. Nun ist Wikipedia uebelst linksgruen, aber bei objektiven Tatsachen meist - nun ja, objektiv. Die zitieren eine Studie mit mittlerem SI von 7.5 Tagen (425 Pat.) und eine mit 4 Tagen (28 Pat). Mit 28 Patienten ist die Stichprobe aber zu klein, zumal es dort sogar zu negativen SIs kam. Warum in die Ferne schweifen? Schauen wir doch mal beim Virusupdate-Podcast selbst nach! Das muessen die bei 100 Stunden Laberzeit doch mal gebracht haben. Und siehe da: Folge 55: Das SI betraegt 7-8 Tage!. Damit verdoppeln sich auch ohne externen Eintrag alle Zero-Covid-Zeiten.
+
+Immerhin hat Drosten richtigerweise gesagt, dass exponentielles Wachstum auch negativ sein kann! 
+
+19:00 Zero-Covid-Beispiel Australien: Boeser Schnitzer! Erstens ist Australien eine Insel, zweitens ist es fast so gross wie Europa bei einer Einwohnerzahl, die etwa 30% oberhalb Nordrhein-Westfalens liegt, drittens - es ist dort Sommer! Deren Welle ist einfach ein halbes Jahr zeitversetzt (Screenshot2.png).
+
+23:00 Noch Zero-Covid: Vision Deutschland "gruene Zone" in Europa, wo, wie jetzt in AUS, wieder Halli-Galli moeglich ist. Wie ist das wieder mit unseren neun Nachbarlaendern und offenen Grenzen? Zero-Covid funktioniert nur bei kompletter Isolation, komplette Schliessung der Grenzen - ja, auch fuer die LKW-Fahrer, Schiffskapitaene und Piloten, die unsere Bananen, Smartphones oder auch schnoede Rohstoffe und fuer die Industrie benoetigten Zulieferteile  importieren! Dichter als der antifaschistische Grenzwall! Auch unsere Migranten muessten sich dran halten - wissen die denn ueberhaupt davon? 
+
+Halli-Galli - und nur dann ergaeben die Muehen eines Zero-Covid Sinn - bedeutet etwa R0=2, also (ohne Drosten'schen Rechenfehler) eine Verdopplung pro Woche. Das ist wie ein Holzhaus auf einem trockenem Strohfeld und gleich jenseits des Zauns lodert ein Waldbrand mit Funkenflug.
+
+38:00 Eine repraesentative Stichprobe aus England wird erwaehnt. Drosten geht jedoch nur auf den Aspekt der Englandmutation ein (die nach Drosten nun doch nicht so schlimm ist, wie anfangs befuerchtet), nicht jedoch auf den wichtigen Aspekt der Moeglichkeit einer empirischen Ueberpruefung der Dunkelziffer, *obohl* die Moderatorin diesen erwaehnt
+
+etwa 1:00:00 Hier wird argumentiert, dass der bevorzugte Schutz der Alten nix bringt und dass alle weiter in den Shutdown muessen. Das ist volkswirtschaftlich fatal. Zumal aufgrund der Dunkelziffer die reale Herdenimmunitaet durch Infektionen etwa 5 mal groesser ist als die von Drosten wegargumentierte.
+
+Sicher kam auch was mit ausgelasteten Intensivstationen, ist mir aber beim Durchzappen nicht aufgefallen. Just in case auf das DVI-Register geguckt:
+27.031 Intensivbetten (weniger als 2019!) plus Reserve 11 000 (angeblich einsatzbereit in 1 Woche, erscheint mir aber fraglich)
+4.947 (17% davon) durch Covid-19 belegt, 4.424 frei , Rest andere ICU-Faelle
+
+Erst bei einer knappen Verdopplung der Fallzahlen wuerden die Betten knapp - ohne Beruecksichtigung der Reserve 
+So, das ist laenger geworden, kannst bei Interesse auch gerne weitergeben.
+
+
+
+LG
+
+Martin
+
+
