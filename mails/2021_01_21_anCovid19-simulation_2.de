@@ -1,0 +1,59 @@
+Hallo Herr Krüßmann,
+
+solche Massentests sind in der Tat nichttrivial. Zunaechst mal muss man festlegen, was und wie man testet: Aktuelle Infektionen mit PCR oder Schnelltest oder vergangene Infektionen mit einem Antigentest. Mit beiden waere eine Abschaetzung des Hellfeldes moeglich:
+
+Bei Antigentests misst man einfach den Anteil der Infizierten und vergleicht diesen mit den kumulierten Fallzahlen. Das Hellfeld ist die kumulierte Fallzahl geteilt durch den Massentestanteil.
+
+Beispiel: Der Massentest ergab eine Durchseuchung von 10%, die kumulierten Fallzahlen in Deutschland sind hingegen 2,1 Mio / 82 Mio approx 2.5%. Das kumulierte Hellfeld ist in diesem Beispiel also
+
+H=2.5%/10%=0.25
+
+Nachteil: kumulierte  Groesse; Aenderungen in der Impfhaeufigkeit und -strategie gehen nicht ein.
+
+Bei PCR-Tests (oder den ungenaueren Schnelltests) muss man erst einmal nachschauen, wie lange der verwendete Test anschlaegt, z.B. vom 3. bis zum 12. Infektionstag, also 10 Tage (habe die Werte nicht nachgeschaut, nur ein Beispiel!) . Dann macht man den Massentest an einer repraesentativen Stichprobe und ermittelt den Anteil r_Masse an Positiven, z.B. 1%. Da zu jedem Zeitpunkt nur wenige aktiv infiziert sind, benoetigt man einen Umfang von mindestens 10 000, um typischerweise 100 Positive zu bekommen. Diesen Stichprobenanteil r_Masse vergleicht man mit der zehntaegigen Fallzahl, z.B. jetzt typischerweise 20 000 Positive pro Tag, also in 10 Tagen 200 000. Daraus dann der Anteil positiver Testungen in der Bevoelkerung:
+r_10=200 000/82 Mio approx 0.25%. Das aktuelle Hellfeld  waere in diesem Beispiel
+
+H=r_10/r_Masse=0.25
+
+Wichtig: das hat weder was mit dem Positivanteil der Tests zu tun (z.Zt um 10%) noch mit dem Anteil derer, die Symptome haben, da auch so mancher Symptomfreie getestet und so mancher Symptomatische nicht getestet wird. Die zehn Tage im Beispiel garantieren, dass  der Massentest nach 10 Tagen eine disjunkte Menge an Infizierten finden wuerde und somit dass von Ihnen angesprochene Problem "entwickelt spaeter noch Symptome/wird positiv getestet" nicht auftreten kann. Die wirkliche Testdauswertung ist komplizierter, da der Detektionszeitraum des Tests eine verteilte Groesse ist und die Tests Alpha- und Betafehler haben. Vielleicht muss man auch die Stichprobe entzerren, aber im Prinzip geht es so.
+
+Das Ganze ist wirklich eine wunderschoene nichttriviale Anwendung oekonometrisch-statistischer Methoden, worin ich Dozent bin.
+Gruß,
+
+ ----------------------------------------------------------
+Dr. Martin Treiber
+Institute for Transport & Economics, TU Dresden
+Chair of Traffic Modelling, Econometrics, and Statistics
+Falkenbrunnen, Room 123 (two floors up from the entrance!)
+Würzburger Str. 35, D-01062 Dresden
+martin@mtreiber.de
+www.mtreiber.de
+phone/fax: +49 (351) 463 36794 / 36809
+---------------------------------------------------------
+
+
+Stefan Krüßmann <stefan@kruessmann.de> hat am 21.01.2021 23:14 geschrieben:
+
+
+Hallo Herr Treiber,
+
+ihre Argumente verstehe ich.
+Dann aber müßte man bei Massentests an zufälligen Personen, deutlich höhere Quoten an Infizierten feststellen, als im Vergleich zur  "normalen, gemessenen Inzidenz" oder?
+Ich meine, dass man sich bei den meisten Massentests über die niedrigen  Quoten an positivem Fälle wundert. Ich rechne das mal bei einigen nach. 
+Zumal bei Massentests ein Anteil der positiven entdeckten Fälle im nachhinein Symptome entwickelt und vielleicht nur einige Tage später unter "normalen" umständen getestet werden würde.
+
+Haben Sie eine aktuelle Studie, die andere Symptomquoten beschreibt?
+
+Ich habe nochmal beim RKI Corona Steckbrief nachgesehen.
+Das RKI beschreibt den Manifestationsindex laut Studienlage zwischen 55 und 85%
+
+Ich werden auch andere Zahlen und Zeiträume noch dem RKI Steckbrief anpassen. 
+Im großen und ganzen liege ich da auch in etwa, muß aber auch noch genauer werden.
+Ich werde es so machen, dass man unterschiedliche Virenprofile speichern und wählen kann. (auch wegen der Mutationen)
+
+Ich habe nun den 7 Tage Sprung eingeführt! 
+
+Viele Grüße
+
+Stefan Krüßmann
+
