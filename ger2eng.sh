@@ -34,7 +34,7 @@ perl -i -p -e 's/Reproduktionszahl/Base R value/g' *_eng.html
 perl -i -p -e 's/Ansteckungsstart/Start infect\. period/g' *_eng.html
 perl -i -p -e 's/Ansteckungsende/End infect\. period/g' *_eng.html
 perl -i -p -e 's/Test nach/Test after/g' *_eng.html
-perl -i -p -e 's/Hellfeld/Percentage reported/g' *_eng.html
+perl -i -p -e 's/Aktuelles Hellfeld/Percentage reported/g' *_eng.html
 perl -i -p -e 's/Kalibriere neu\!/Re-calibrate\!/g' *_eng.html
 perl -i -p -e 's/Validiere/Validate/g' *_eng.html
 perl -i -p -e 's/Validierung der/Validation of the last/g' *_eng.js
@@ -79,6 +79,7 @@ perl -i -p -e 's/Tests pro Tag/Tests per day/g' *_eng.js
 perl -i -p -e 's/Anteil positiver Tests/Fraction positive tests/g' *_eng.js
 perl -i -p -e 's/Simulierte Neuinfizierte pro Tag/Simulated daily new infected/g' *_eng.js
 perl -i -p -e 's/Simulierte Durchseuchung/Simulated contamination/g' *_eng.js
+perl -i -p -e 's/Sim\. Durchseuchung/Sim\. contamination/g' *_eng.js
 perl -i -p -e 's/Simulierte False Positives pro Tag/Simulated daily false positives/g' *_eng.js
 perl -i -p -e 's/Simulierte Gestorbene pro Tag/Simulated daily deaths/g' *_eng.js
 perl -i -p -e 's/Simulierte Test-Positive pro Tag/Simulated daily cases/g' *_eng.js
@@ -103,7 +104,7 @@ perl -i -p -e 's/Tage/days/g' *_eng.js  *_eng.html
 perl -i -p -e 's/pro Tag/per day/g' *_eng.js 
 perl -i -p -e 's/Tag/day/g' *_eng.js 
 perl -i -p -e 's/Simulierte/Simulated/g' *_eng.js
-perl -i -p -e 's/Faelle/cases/g' *_eng.js
+perl -i -p -e 's/Faelle/Cases/g' *_eng.js
 perl -i -p -e 's/Pers\./pers\./g' *_eng.js
 perl -i -p -e 's/Woche/week/g' *_eng.js
 perl -i -p -e 's/Ew\./inhabitants/g' *_eng.js

@@ -361,7 +361,7 @@ var itmax_calib; //  end calibr time interval =^ data_itmax-1
                  // 20 weeks of data
 
 const calibInterval=7; //!! calibration time interval [days] for one R0 value7
-const Rinterval_last_min=12; // do not calibrate remaining period smaller 11
+const Rinterval_last_min=11; // do not calibrate remaining period smaller 11
 const calibrateOnce=false; // following variables only relevant if false
 const nCalibIntervals=6; // multiples of calibInterval, !! >=30/calibInterval
                          // calibrates nCalibIntervals-nOverlap+1 params
@@ -3678,8 +3678,10 @@ DrawSim.prototype.drawAxes=function(windowG){
 
     // display other state variables anchored at xrelLeft,yrelTop
     
-    var Xperc=Math.round(1000*corona.xyz)/10;
-    ctx.fillText("Durchseuchung X="+(Xperc.toFixed(1))+" %",
+    var Xperc=100*corona.xyz;
+    var casesPerc=100*corona.xt;
+    ctx.fillText("Faelle:"+(casesPerc.toFixed(1))
+			    +" %, Sim. Durchseuchung:"+(Xperc.toFixed(1))+" %",
 		 this.xPix0+xrelLeft*this.wPix,
 		 this.yPix0+(yrelTop-(ikey+1)*dyrel)*this.hPix);
     
