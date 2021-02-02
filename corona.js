@@ -125,11 +125,12 @@ var data_cumCases=[];
 var data_cumDeaths=[];
 var data_cumRecovered=[];
 var data_cumCfr=[];
+
 var data_cumVacc=[];     // direct, sometimes n.a.
 var data_rVacc=[];     // fraction of pop per day
 var data2_posRate=[];      // #cases/#tests, last avail. period (in dataGit2)
 var data2_cumTests=[];     // direct, sometimes n.a.
-
+var daysBetweenVacc=23;   // between first and second vaccination (Ger)
 
 // derived data in data time order
 
@@ -729,9 +730,9 @@ function initializeData(country){
     data_cumTestsCalc[i]=0;
   }
 
+  var cumVaccLast=data2_cumVacc[data2.length-1];
   for(var i=Math.max(1,-di2); i<data.length; i++){
     var i2=i+di2;
-    var cumVaccLast=data2_cumVacc[data2.length-1];
     data_cumVacc[i]=(i2<data2.length) ? data2_cumVacc[i2] : cumVaccLast;
   }
   
@@ -740,13 +741,48 @@ function initializeData(country){
 
   var data_rVacc_unsmoothed=[];
   data_rVacc_unsmoothed[0]=0;
+  var pVaccWait=0; // waiting queue if more people need second vacc
+                   // than new vacc offered
+  var nVaccTot=0; // check total vacc with newspaper vacc numbers
+  var pVaccFirst=0; // check 
+  var pVaccSecond=0; // check
+
   for(var i=1; i<data.length; i++){
-    data_rVacc_unsmoothed[i]=(data_cumVacc[i]-data_cumVacc[i-1])/n0;
+    var newVacc=(data_cumVacc[i]-data_cumVacc[i-1])/n0;
+    nVaccTot +=n0*newVacc;
+    var secondVacc=(i>daysBetweenVacc)
+	? (data_cumVacc[i-daysBetweenVacc]
+	   -data_cumVacc[i-daysBetweenVacc-1])/n0 : 0;
+    
+    if(newVacc<secondVacc){ // should not happen but you never know ...
+      pVaccWait+=secondVacc-newVacc;
+      data_rVacc_unsmoothed[i]=0;  // no new vacc because second is first 
+    }
+    else{
+      decreaseWait=Math.min(pVaccWait,newVacc-secondVacc);
+      pVaccWait -=decreaseWait;
+      data_rVacc_unsmoothed[i]=newVacc-secondVacc-decreaseWait;
+    }
+    
+    pVaccFirst +=data_rVacc_unsmoothed[i];
+    pVaccSecond+=secondVacc;
+
     if(useLandkreise){
       data_rVacc_unsmoothed[i] *= n0/n0List["Germany"]; //!!! n0/noGermany
       //console.log("n0=",n0," n0List[\"Germany\"]=",n0List["Germany"]);
     }
+    
   }
+  if(true){
+    iSecond=Math.max(0,data.length-1-daysBetweenVacc);
+    console.log("finished vacc calculations:\n nVaccTot=",nVaccTot,
+		"\n data_cumVacc[data.length-1]=",
+		data_cumVacc[data.length-1],
+		"\n cumVaccLast=",cumVaccLast,
+		"\n pVaccFirst=",pVaccFirst,
+		"\n pVaccSecond=",pVaccSecond);
+  }
+      
   kernel=[1/7,1/7,1/7,1/7,1/7,1/7,1/7]; 
   data_rVacc=smooth(data_rVacc_unsmoothed,kernel);
 
@@ -772,12 +808,18 @@ function initializeData(country){
   for(var it=0; it<itPresent; it++){
     var i=it+data_idataStart;
     if(!( typeof data_rVacc[i] === "undefined")){
+      //rVaccSim=data_rVacc_unsmoothed[i]; // otherwise unchhanged
       rVaccSim=data_rVacc[i]; // otherwise unchhanged
     }
     //console.log("it=",it," i=",i," date=",data_date[i]," rVaccSim=",rVaccSim);
     vaccSim.update(rVaccSim,it,false);  // last arg=logging
     IvaccArr[it]=vaccSim.Ivacc;
-    if(it>itPresent-10){console.log("it=",it," IvaccArr[it]=",IvaccArr[it]);}
+    if(it>itPresent-10){
+      console.log("it=",it,
+		  " data_rVacc[i]=",data_rVacc[i],
+		  " data_rVacc_unsmoothed[i]=",data_rVacc_unsmoothed[i],
+		  " IvaccArr[it]=",IvaccArr[it]);
+    }
   }
 
 
