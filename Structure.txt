@@ -1,0 +1,50 @@
+
+loadData() called ONLY in the <body onload>  event
+  => defines dataGit, dataGit2, dataRKI
+  => defines dataGit_orig, dataGit2_orig, dataRKI_orig as deep copies
+
+
+
+
+selectDataCountry() // callback html select box "Deutschland"
+ => define country
+ => resetValidation()        // only html elements and nDaysValid
+ => initializeData(country)  // including calibrate; default insideVal=false
+                             // and myRestartFunction()
+
+
+myCalibrateFunction() // callback "Kalibriere neu!
+ => resetValidation()     // only html manipulations 
+ => initializeData(country); // including calibrate,myRestartFunction()
+ 
+
+initializeData(country) // OK
+ => defines data and data2 from country elem of
+    dataGit_orig,dataGit2_orig,dataRKI_orig default
+    and from
+    dataGit,dataGit2,dataRKI_orig dataRKI if insideValidation
+    (validation manipulated dataGit etc before)
+ => defines associated data_idataStart, data_itmax etc
+ => defines data_cumCases, data2_cumCases etc  from data,data2
+    -> because of the many derived data we need initializeData
+       also if same country, only changed from valid->calib->valid
+ => calibrate()
+ => myRestartFunction()
+
+
+validate() // callback html select box "Validiere ..."
+ => determine nDaysValid from html
+ => save sim/data validation reference for drawing
+ => undo stripping of dataGit,dataGit2,dataRKI from past validation
+ => strip last nDaysValid days from dataGit,data2Git,dataRKI
+ => initializeData(country,true);
+    (insideValidation=true=> dataGit etc, not dataGit_orig etc taken
+    to derive all the dependent data as basis for calibration,
+    including calibrate,myRestartFunction()
+
+
+resetValidation()
+ => nDaysValid=0, otherwise only html manipulations
+
+myRestartFunction() // callback restart button
+ => redefines CoronaSim() but not DrawSim

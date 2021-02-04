@@ -97,20 +97,17 @@ var itPresent=itPresentInit;
 // fetch with https://pomber.github.io/covid19/timeseries.json
 // or load as a variable server-side (if useLiveData=false)
 
-var dataGit=[];
+var dataGit=[];  // working data for validation
 var dataGit2=[];
 var dataRKI=[];
 
-// for validation
-
-var dataGit_orig=[];
+var dataGit_orig=[]; // normal data and reference for validation
 var dataGit2_orig=[];
 var dataRKI_orig=[];
+
 var simValid=[]; // store validation sim data outside DrawSim (created anew)
 for (var iq=0; iq<=40; iq++){simValid[iq]=[];} //!!! def simValid
 var nDaysValid=0;
-var alreadyUsedValidation=false; // only cp data to original data in first validation
-var saveGroundtruth=true; // true after initialisations
 var itmaxReference=0;
 
 
@@ -435,10 +432,10 @@ corona=new CoronaSim();
 // I have replaced them with normal anonymous functions 
 // ##############################################################
 
-//called ONLY in the <body onload> and toggleData event
-function getGithubData() {
+//called ONLY in the <body onload>  event
+function loadData() {
   var log=false;
-  if(log) console.log("in getGithubData");
+  if(log) console.log("in loadData");
   //corona=new CoronaSim(); //!!
 
   if(debugApple){
@@ -463,7 +460,11 @@ function getGithubData() {
   // since original json file too big
   // because of annoying undefined time order in fetch, set at beginnng!
 
+  // deep copy to dataGit_orig,dataGit2_orig,dataRKI_orig
+  // for reference at validation AT RESPECTIVE PLACES be of annoy time order
+
   dataGit2 = JSON.parse(dataGitLocalTests); // must be different name!!
+  dataGit2_orig=JSON.parse(JSON.stringify(dataGit2));
 
   console.log("dataGit2=",dataGit2);
   console.log("dataGit2.Germany.data[0]=",dataGit2.Germany.data[0]);
@@ -478,6 +479,7 @@ function getGithubData() {
   }
 
   dataRKI = JSON.parse(dataRKI_string); // must be different name!!
+  dataRKI_orig=JSON.parse(JSON.stringify(dataRKI));
   console.log("dataRKI=",dataRKI);
   console.log("dataRKI[SK_Dresden][190]=",dataRKI["SK_Dresden"][190]);
 
@@ -485,7 +487,7 @@ function getGithubData() {
 
   if(useLiveData && !(typeof fetch === "undefined")){
 
-    console.log("getGithubData(): fetch defined");
+    console.log("loadData(): fetch defined");
 
     fetch("https://pomber.github.io/covid19/timeseries.json")
       //.then((response1) => {
@@ -496,8 +498,9 @@ function getGithubData() {
       //.then((data1) => {
       .then(function(data1){
         dataGit=data1;
+	dataGit_orig=JSON.parse(JSON.stringify(dataGit)); // full clone
         console.log("in fetch function: dataGit=",dataGit);
-	console.log("end getGithubData(..) live alternative");
+	console.log("end loadData(..) live alternative");
         initializeData(country); //!! MUST remain inside; extremely annoying
 	myRestartFunction(); // only HERE guaranteed that everything loaded
       });
@@ -511,14 +514,17 @@ function getGithubData() {
       console.log("You are using an old Browser that does not understand Javascript's fetch");
     }
     dataGit = JSON.parse(dataGitLocal); // known since html->data/github.json
+    dataGit_orig=JSON.parse(JSON.stringify(dataGit)); // full clone
     console.log("useLiveData=false, get data from server: dataGit=",dataGit);
-    console.log("end getGithubData(..) non-live alternative");
+    console.log("end loadData(..) non-live alternative");
     initializeData(country); //!! MUST repeat because of annoying time order
     fracDie=IFRfun_time(-20); // use IFR start array for init()
     corona.init(0); 
     myRestartFunction();
   }
-} // getGithubData
+
+
+} // loadData
 
 
 
@@ -541,8 +547,12 @@ function insertLeadingZeroes(dateStr){
 
 
 //!!! also called in validation, so do not use reset validation operations
+// if called inside validation, insideValidation should be true
 
-function initializeData(country){  
+function initializeData(country,insideValidation){
+
+  if( typeof insideValidation === "undefined"){insideValidation=false;}
+  
   country2=(country==="United Kingdom") ? "England" : country;
   useLandkreise=(country==="LK_Erzgebirgskreis")
     || (country==="LK_Osterzgebirge") || (country==="SK_Dresden");
@@ -558,10 +568,13 @@ function initializeData(country){
   // MT 2020-09  // [] access for strings works ONLY with "" or string vars
   // access ONLY for literals w/o string ""
 
-  var data=(useLandkreise) ? dataRKI[country] : dataGit[country];
+  var data=(useLandkreise) ? dataRKI_orig[country] : dataGit_orig[country];
+  if(insideValidation){
+    data=(useLandkreise) ? dataRKI[country] : dataGit[country];}
   var dateInitStr=data[0]["date"];
 
-  var data2=dataGit2[country2].data;
+  var data2=(insideValidation)
+      ? dataGit2[country2].data : dataGit2_orig[country2].data;
   var dateInitStr2=data2[0]["date"];
 
   // !! re-initialize; otherwise consequential errors after switching back
@@ -582,16 +595,7 @@ function initializeData(country){
   data2_idataStart=Math.round(
     (startDay.getTime() - data2_dateBegin.getTime() )/oneDay_ms);
 
-
-
-
- 
-
   
-
-
-  
-
   // MT 2020-12-10: Check if already cases at intended sim start day
   // if less than 10 days of cases at start, shift sim start forwards
 
@@ -1075,8 +1079,11 @@ function initializeData(country){
   myRestartFunction();
 
 
-
-  console.log("\nend initializeData: country=",country);
+  if(true){
+    console.log("\nend initializeData: country=",country,
+		" insideValidation=",insideValidation,
+		" ");
+  }
 
 } // initializeData(country);
 
@@ -2112,14 +2119,9 @@ function selectDataCountry(){ // callback html select box "countryData"
 	      " country2=",country2,
 	      " itPresent=",itPresent);
 	   }
-
-  resetValidation(); // for a new country, need first full data before valid
+  resetValidation();
   initializeData(country);
 
-  //myCalibrateFunction(); // THIS addition solved annoying err "corona.yt=NaN"
-                         // if several sequential conditions were satisfied
-
-  //myRestartFunction();
 } // selectDataCountry
 
  
@@ -2139,13 +2141,11 @@ function selectWindow(){ // callback html select box "windowGDiv"
 // helper functions validation:
 
 function resetValidation(){
-  saveGroundtruth=true;
   nDaysValid=0;
   itmaxReference=0;
   document.getElementById("validateDays").value=nDaysValid;
   document.getElementById("headerValidText").innerHTML="";
-  
-  validate(); // validate with nDaysValid=0=calibrate
+  //revertWorkingData();
 }
 
 // undo stripping of working data of past validation
@@ -2156,13 +2156,6 @@ function revertWorkingData(){
     dataRKI=JSON.parse(JSON.stringify(dataRKI_orig));
 }
 
-  // cp full data to reference *_orig in first validation, only
-function saveReferenceData(){
-    dataGit_orig=JSON.parse(JSON.stringify(dataGit)); // full clone
-    dataGit2_orig=JSON.parse(JSON.stringify(dataGit2));
-    dataRKI_orig=JSON.parse(JSON.stringify(dataRKI));
-    alreadyUsedValidation=true;
-}
 
 
 //#################################################################
@@ -2183,12 +2176,10 @@ function validate(){ // callback html select box "validateDiv"
 	      " itmaxReference=",itmaxReference);
 
 
-  // validate (2): save reference data and simulation results
-  // used in drawsim to visualize the validation quality
-  // copy past data to 'ground truth" if nDaysValid switched from =0 to >0
+  // validate (2): save past drawsim data in
+  // validation reference data structure for reference values
 
-  console.log("\n\nvalidate(): saveGroundtruth=",saveGroundtruth);
-  if(saveGroundtruth){ 
+  if(true){ 
     console.log("copy windowg data to ground truth data");
     console.log("drawsim.dataG[0]=",drawsim.dataG[0]);
 
@@ -2208,21 +2199,18 @@ function validate(){ // callback html select box "validateDiv"
       simValid[39][it]=drawsim.dataG[33].data[it]; // "Sim Wo-Inzidenz Gest."
       simValid[40][it]=drawsim.dataG[29].data[it]; // "Sim Pos pro Tag"
     }
-    saveGroundtruth=false;
   }
 
-
   // validate (3):
-  // assign validation and reference observations to appropriate vars
-
-
   // undo stripping of working data of past validation
-  // using reference data or save reference
+  // using reference data or save reference 
 
-  if(alreadyUsedValidation){revertWorkingData();} 
-  else{saveReferenceData(); }
+  revertWorkingData();
   
 
+
+
+  // validate (4):
   // strip working data
 
   for(var attribute in dataGit){
@@ -2283,9 +2271,12 @@ function validate(){ // callback html select box "validateDiv"
 
   console.log("dataGit=",dataGit," dataGit_orig=",dataGit_orig);
   console.log("dataRKI=",dataRKI," dataRKI_orig=",dataRKI_orig);
-  initializeData(country); // !!!! quick hack, otherwise side effects
-                           // includes calibrate()
-}
+
+  initializeData(country,true); // insideValidation=true
+  //calibrate(); // in initializeData(country);
+  //myRestartFunction(); // in initializeData(country);
+
+} // validate
 
 
 
@@ -2349,7 +2340,7 @@ function myRestartFunction(){
 
 function myResetFunction(){ 
   console.log("in myResetFunction");
-  resetValidation(); 
+  //!!!!resetValidation(); 
   R0sliderUsed=false;
   otherSliderUsed=false;
   testSliderUsed=false;
@@ -2397,8 +2388,12 @@ function myCalibrateFunction(){ // callback "Kalibriere neu!
   casesInflow=0;
   setSlider(slider_casesInflow, slider_casesInflowText,
 	    casesInflow,"/Tag");
-  resetValidation(); // calibrate, not validate (includes calibrate())
-  myRestartFunction();
+
+  // resets effect of past validations and defines all data derivatives
+  // from the data*_orig data (containing all countries)
+  // (because of the many derivatives, I need initializeData(country) here)
+  resetValidation();
+  initializeData(country); // includes calibrate(); myRestartFunction();
 }
 
 
