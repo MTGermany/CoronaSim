@@ -2164,9 +2164,9 @@ function validate(){ // callback html select box "validateDiv"
   // [done in DrawSim Cstr which is called in calibrate below]
 
 
-  // copy working data from full data if validate already used
-  // save working data to full data if validate used for the first time
-
+  // copy full data to working data if validate already used
+  // copy (safe) working data to full data if validate used for the first time
+  //!!!! clarify
   if(usedValidation){
     dataGit=JSON.parse(JSON.stringify(dataGit_orig)); // full clone
     dataGit2=JSON.parse(JSON.stringify(dataGit2_orig));
@@ -2320,7 +2320,7 @@ function myResetFunction(){
 
   casesInflow=casesInflowInit;
   setSlider(slider_casesInflow, slider_casesInflowText,
-	    casesInflow,"/Tag/100 000 Einw.");
+	    casesInflow,"/Tag");
 
   //measures=measuresInit;
   //slider_measures.value=measures; // setSlider does not fit here
@@ -2339,7 +2339,7 @@ function myCalibrateFunction(){
    // calibration unstable with external source => must set to zero
   casesInflow=0;
   setSlider(slider_casesInflow, slider_casesInflowText,
-	    casesInflow,"/Tag/100 000 Einw.");
+	    casesInflow,"/Tag");
   calibrate();
   myRestartFunction();
 }
