@@ -109,9 +109,12 @@ var dataRKI_orig=[];
 var simValid=[]; // store validation sim data outside DrawSim (created anew)
 for (var iq=0; iq<=40; iq++){simValid[iq]=[];} //!!! def simValid
 var nDaysValid=0;
-var usedValidation=false; // only cp data to original data in first validation
-var saveGroundData=true; // true if nDaysValid changed from =0 to >0
+var alreadyUsedValidation=false; // only cp data to original data in first validation
+var saveGroundtruth=true; // true after initialisations
+var itmaxReference=0;
 
+
+// data related
 
 var data_dateBegin;
 var data_idataStart; //!! dataGit dataset index for dayStartMar
@@ -467,9 +470,11 @@ function getGithubData() {
   var ndataTest2=dataGit2.Germany.data.length;
   console.log("dataGit2.Germany.data[0]=",dataGit2.Germany.data[0]);
 
-  for(var i=ndataTest2-11; i<ndataTest2; i++){
-    console.log("i=",i," dataGit2.Germany.data[i]=",
-		dataGit2.Germany.data[i]);
+  if(false){
+    for(var i=ndataTest2-11; i<ndataTest2; i++){
+      console.log("i=",i," dataGit2.Germany.data[i]=",
+		  dataGit2.Germany.data[i]);
+    }
   }
 
   dataRKI = JSON.parse(dataRKI_string); // must be different name!!
@@ -535,7 +540,9 @@ function insertLeadingZeroes(dateStr){
 
 
 
-function initializeData(country){ 
+//!!! also called in validation, so do not use reset validation operations
+
+function initializeData(country){  
   country2=(country==="United Kingdom") ? "England" : country;
   useLandkreise=(country==="LK_Erzgebirgskreis")
     || (country==="LK_Osterzgebirge") || (country==="SK_Dresden");
@@ -546,11 +553,6 @@ function initializeData(country){
 	      "\nin initializeData(country): country=",country,
 	      " country2=",country2,
 	      "\n========================================================");
-
-
-  // reset validation flags
-
-  saveGroundData=true;
 
 
   // MT 2020-09  // [] access for strings works ONLY with "" or string vars
@@ -814,7 +816,8 @@ function initializeData(country){
     //console.log("it=",it," i=",i," date=",data_date[i]," rVaccSim=",rVaccSim);
     vaccSim.update(rVaccSim,it,false);  // last arg=logging
     IvaccArr[it]=vaccSim.Ivacc;
-    if(it>itPresent-10){
+    if(false){
+    //if(it>itPresent-10){
       console.log("it=",it,
 		  " data_rVacc[i]=",data_rVacc[i],
 		  " data_rVacc_unsmoothed[i]=",data_rVacc_unsmoothed[i],
@@ -2082,6 +2085,11 @@ function toggleTestnumber(){ // callback html "testnumber"
 
 
 function selectDataCountry(){ // callback html select box "countryData"
+                              // "Deutschland"
+
+  //!!!!! last error: validation remembered wrong data as reference (one json save op false)
+
+  
   country=document.getElementById("countries").value;
   countryGer=countryGerList[country];
   n0=parseInt(n0List[country]);
@@ -2105,6 +2113,7 @@ function selectDataCountry(){ // callback html select box "countryData"
 	      " itPresent=",itPresent);
 	   }
 
+  resetValidation(); // for a new country, need first full data before valid
   initializeData(country);
 
   //myCalibrateFunction(); // THIS addition solved annoying err "corona.yt=NaN"
@@ -2127,20 +2136,59 @@ function selectWindow(){ // callback html select box "windowGDiv"
 
 }
 
+// helper functions validation:
+
+function resetValidation(){
+  saveGroundtruth=true;
+  nDaysValid=0;
+  itmaxReference=0;
+  document.getElementById("validateDays").value=nDaysValid;
+  document.getElementById("headerValidText").innerHTML="";
+  
+  validate(); // validate with nDaysValid=0=calibrate
+}
+
+// undo stripping of working data of past validation
+
+function revertWorkingData(){
+    dataGit=JSON.parse(JSON.stringify(dataGit_orig)); // full clone
+    dataGit2=JSON.parse(JSON.stringify(dataGit2_orig));
+    dataRKI=JSON.parse(JSON.stringify(dataRKI_orig));
+}
+
+  // cp full data to reference *_orig in first validation, only
+function saveReferenceData(){
+    dataGit_orig=JSON.parse(JSON.stringify(dataGit)); // full clone
+    dataGit2_orig=JSON.parse(JSON.stringify(dataGit2));
+    dataRKI_orig=JSON.parse(JSON.stringify(dataRKI));
+    alreadyUsedValidation=true;
+}
+
 
 //#################################################################
 function validate(){ // callback html select box "validateDiv"
+  //!!!! need quickhack initializeData(country) and calls calibrate
 //#################################################################
 
+
+
+  // validate(1): how many days of forecast should be validated?
+  
   nDaysValid=document.getElementById("validateDays").value;
-  console.log("in validate: nDaysValid=",nDaysValid);
+
   var validText=((nDaysValid>0)&&((!isSmartphone) || isLandscape))
     ? "Validierung der "+nDaysValid+" letzten Tage" : "";
   document.getElementById("headerValidText").innerHTML=validText;
+  console.log("\nvalidate: nDaysValid=",nDaysValid,
+	      " itmaxReference=",itmaxReference);
 
+
+  // validate (2): save reference data and simulation results
+  // used in drawsim to visualize the validation quality
   // copy past data to 'ground truth" if nDaysValid switched from =0 to >0
 
-  if(saveGroundData){ 
+  console.log("\n\nvalidate(): saveGroundtruth=",saveGroundtruth);
+  if(saveGroundtruth){ 
     console.log("copy windowg data to ground truth data");
     console.log("drawsim.dataG[0]=",drawsim.dataG[0]);
 
@@ -2149,35 +2197,31 @@ function validate(){ // callback html select box "validateDiv"
 
     for(var it=0; it<itPresent; it++){
       simValid[34][it]=drawsim.dataG[0].data[it];  // "Insg pos Getestete"
-      simValid[35][it]=drawsim.dataG[2].data[it];  // "Insgesamt Gestorbene" 
+      simValid[35][it]=drawsim.dataG[2].data[it];  // "Insgesamt Gestorbene"
+    }
+    
+    for(var it=0; it<itmaxReference; it++){
+    //for(var it=0; it<Math.max(itPresent,itmaxReference); it++){
       simValid[36][it]=drawsim.dataG[23].data[it]; // "Sim Neuinfiz/Tag"
       simValid[37][it]=drawsim.dataG[28].data[it]; // "Sim Gestorbene"
       simValid[38][it]=drawsim.dataG[32].data[it]; // "Sim Wo-Inzidenz Faelle"
       simValid[39][it]=drawsim.dataG[33].data[it]; // "Sim Wo-Inzidenz Gest."
       simValid[40][it]=drawsim.dataG[29].data[it]; // "Sim Pos pro Tag"
     }
-    saveGroundData=false;
+    saveGroundtruth=false;
   }
 
-  // activate/deactivate validation dispplay
 
-  // [done in DrawSim Cstr which is called in calibrate below]
+  // validate (3):
+  // assign validation and reference observations to appropriate vars
 
 
-  // copy full data to working data if validate already used
-  // copy (safe) working data to full data if validate used for the first time
-  //!!!! clarify
-  if(usedValidation){
-    dataGit=JSON.parse(JSON.stringify(dataGit_orig)); // full clone
-    dataGit2=JSON.parse(JSON.stringify(dataGit2_orig));
-    dataRKI=JSON.parse(JSON.stringify(dataRKI_orig));
-  }
-  else{
-    dataGit_orig=JSON.parse(JSON.stringify(dataGit)); // full clone
-    dataGit2_orig=JSON.parse(JSON.stringify(dataGit2));
-    dataRKI_orig=JSON.parse(JSON.stringify(dataRKI));
-    usedValidation=true;
-  }
+  // undo stripping of working data of past validation
+  // using reference data or save reference
+
+  if(alreadyUsedValidation){revertWorkingData();} 
+  else{saveReferenceData(); }
+  
 
   // strip working data
 
@@ -2187,11 +2231,13 @@ function validate(){ // callback html select box "validateDiv"
     var lastDate=new Date(lastDateStr);
     var days2present
       =Math.floor((present.getTime()-lastDate.getTime())/oneDay_ms);
-    console.log(
-      "dataGit: attribute=",attribute,
-      " n_arr=",n_arr," lastDateStr=",lastDateStr,
-      //" present=",present," lastDate=",lastDate,
-      " days2present=",days2present);
+    if(false){
+      console.log(
+        "dataGit: attribute=",attribute,
+        " n_arr=",n_arr," lastDateStr=",lastDateStr,
+        //" present=",present," lastDate=",lastDate,
+        " days2present=",days2present);
+    }
 
     for(var j=days2present; j<nDaysValid; j++){
       dataGit[attribute].pop();
@@ -2205,10 +2251,12 @@ function validate(){ // callback html select box "validateDiv"
     var lastDate=new Date(lastDateStr);
     var days2present
       =Math.floor((present.getTime()-lastDate.getTime())/oneDay_ms);
-    console.log(
-      "dataGit2: attribute=",attribute,
-      " n_arr=",n_arr," lastDateStr=",lastDateStr,
-      " days2present=",days2present);
+    if(false){
+      console.log(
+        "dataGit2: attribute=",attribute,
+        " n_arr=",n_arr," lastDateStr=",lastDateStr,
+        " days2present=",days2present);
+    }
 
     for(var j=days2present; j<nDaysValid; j++){
       dataGit2[attribute]["data"].pop();
@@ -2221,10 +2269,12 @@ function validate(){ // callback html select box "validateDiv"
     var lastDate=new Date(lastDateStr);
     var days2present
       =Math.floor((present.getTime()-lastDate.getTime())/oneDay_ms);
-    console.log(
-      "dataGit: attribute=",attribute,
-      " n_arr=",n_arr," lastDateStr=",lastDateStr,
-      " days2present=",days2present);
+    if(false){
+      console.log(
+        "dataGit: attribute=",attribute,
+        " n_arr=",n_arr," lastDateStr=",lastDateStr,
+        " days2present=",days2present);
+    }
 
     for(var j=days2present; j<nDaysValid; j++){
       dataRKI[attribute].pop();
@@ -2233,11 +2283,17 @@ function validate(){ // callback html select box "validateDiv"
 
   console.log("dataGit=",dataGit," dataGit_orig=",dataGit_orig);
   console.log("dataRKI=",dataRKI," dataRKI_orig=",dataRKI_orig);
-  initializeData(country); // includes calibrate()
+  initializeData(country); // !!!! quick hack, otherwise side effects
+                           // includes calibrate()
 }
 
 
+
+
+
+//################################################
 // callback stop & go
+//################################################
 
 function myStartStopFunction(){ //!! hier bloederweise Daten noch nicht da!!
   console.log("in myStartStopFunction");
@@ -2293,6 +2349,7 @@ function myRestartFunction(){
 
 function myResetFunction(){ 
   console.log("in myResetFunction");
+  resetValidation(); 
   R0sliderUsed=false;
   otherSliderUsed=false;
   testSliderUsed=false;
@@ -2332,7 +2389,7 @@ function myResetFunction(){
 }
 
 
-function myCalibrateFunction(){ 
+function myCalibrateFunction(){ // callback "Kalibriere neu!
   R0sliderUsed=false;
   otherSliderUsed=false;
   testSliderUsed=false;
@@ -2340,7 +2397,7 @@ function myCalibrateFunction(){
   casesInflow=0;
   setSlider(slider_casesInflow, slider_casesInflowText,
 	    casesInflow,"/Tag");
-  calibrate();
+  resetValidation(); // calibrate, not validate (includes calibrate())
   myRestartFunction();
 }
 
@@ -2418,6 +2475,8 @@ function doSimulationStep(){
 
 
   corona.updateOneDay(R0_actual,it,logging); // in doSimulationStep
+  itmaxReference=it;
+  
   it++; //!!! ONLY it main update
 
   if(false){
