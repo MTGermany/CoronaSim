@@ -22,7 +22,7 @@ cp data/githubWithTests.json data/githubWithTests_orig.json
 
 
  #only development!
-#cp data/githubWithTests_orig.json data/githubWithTests.json 
+# cp data/githubWithTests_orig.json data/githubWithTests.json 
 
 
 
@@ -52,7 +52,6 @@ grep Russia data/githubWithTests.json >> data/tmp.json
 grep USA data/githubWithTests.json >> data/tmp.json
 grep AUS data/githubWithTests.json >> data/tmp.json
 
-
 ################################
 # filter useless entries OWID
 ################################
@@ -67,7 +66,7 @@ perl -i -p -e 's/\,\"new_\w+\"\:[\d\.]+//g' data/tmp.json # for some reason twic
 perl -i -p -e 's/\,"\w+_per_\w+\"\:[\d\.]+//g' data/tmp.json
 
 # eliminate other useless number entries
-for variable in stringency_index reproduction_rate;
+for variable in reproduction_rate total_vaccinations;
   do perl -i -p -e "s/\,\"${variable}\"\:[\d\.]+//g" data/tmp.json
 done
 
@@ -155,19 +154,52 @@ grep Russia data/github.json >> data/tmp.json
 grep US data/github.json >> data/tmp.json
 grep Australia data/github.json >> data/tmp.json
 
+# extract Germany data for development reference
+
+
 # add variable name and neceesary '  ' between rhs of var
 
 sed -e "1i\dataGitLocal=\'\{" data/tmp.json > data/tmp2.json
 echo "}'" >> data/tmp2.json
 
 # remove last comma
+# tail should be }  ]}'
 
 perl -i -p -e 's/\n//g' data/tmp2.json
 perl -i -p -e "s/\]\,\}/\]\}/g"  data/tmp2.json
+
+
+#####################################################################
+# final bookkeeping
+#####################################################################
+
 rm data/tmp.json
 mv data/tmp2.json data/github.json
 
-# tail  }  ]}'
+# prepare full githubWithTests_orig for Germany with lines
+
+cp data/githubWithTests_orig.json tmp2
+perl -i -p -e 's/\}\]\}\,/\}\]\},\n/g' tmp2
+grep Germany tmp2 > tmp
+perl -i -p -e 's/\}\,/},\n/g' tmp # each day a line
+perl -i -p -e 's/\,\"new_\w+\"\:[\d\.]+//g' tmp # eliminate useless
+perl -i -p -e 's/\,"\w+_per_\w+\"\:[\d\.]+//g' tmp
+#perl -i -p -e "s/\,\"total_vaccinations\"\:[\d\.]+//g" tmp
+perl -i -p -e 's/\,\"tests_units\"\:\"[\w\s]+\"//g' tmp
+
+rm tmp2
+mv tmp data/githubWithTests_orig_Germany_lines.json
+
+# save past json files to history
+# (because of the sluggishly reported deaths)
+
+dateStr=`date +"%Y_%m_%d"`
+cp data/github.json history/github_$dateStr.json
+cp data/githubWithTests.json history/githubWithTests_$dateStr.json
+cp data/RKI_selectedKreise.json history/RKI_selectedKreise_$dateStr.json
+
+# propagate changes
+
 upload2public_html.sh
 
 exit

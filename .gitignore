@@ -8,6 +8,8 @@ data/coronaWorldwide.README
 data/github.json
 data/githubWithTests.json
 data/*orig.json
+data/githubWithTests_orig_Germany_lines.json
+data/githubWithTests_orig_Germany.json
 
 ## generated files
 

@@ -118,7 +118,9 @@ var data_idataStart; //!! dataGit dataset index for dayStartMar
 var data_itmax;  // !! with respect to dayStartMar=data.length-data_idataStart
 
 var data2_idataStart; // same for data2 containing the corona-test data
-var data2_itmax;  
+var data2_itmax;
+var di2=0;  // i2-i for same date FROM THE END
+            // since e.g., Czech data weekly at begin
 
 var data_date=[];
 var data_cumCases=[];
@@ -127,10 +129,11 @@ var data_cumRecovered=[];
 var data_cumCfr=[];
 
 var data_cumVacc=[];     // direct, sometimes n.a.
-var data_rVacc=[];     // fraction of pop per day
-var data2_posRate=[];      // #cases/#tests, last avail. period (in dataGit2)
-var data2_cumTests=[];     // direct, sometimes n.a.
-var daysBetweenVacc=23;   // between first and second vaccination (Ger)
+var data_cumVaccFully=[];     // direct, sometimes n.a.
+var data_stringencyIndex=[];  // degree of measures/lockdown in [0,100]
+var data_rVacc=[];     // fraction of pop per day !!! check if needed
+//var data2_posRate=[];      // #cases/#tests, last avail. period (in dataGit2)
+//var data2_cumTests=[];     // direct, sometimes n.a.
 
 // derived data in data time order
 
@@ -572,16 +575,26 @@ function initializeData(country,insideValidation){
   if(insideValidation){
     data=(useLandkreise) ? dataRKI[country] : dataGit[country];}
   var dateInitStr=data[0]["date"];
+  var dateMaxStr=insertLeadingZeroes(data[data.length-1]["date"]);
 
   var data2=(insideValidation)
       ? dataGit2[country2].data : dataGit2_orig[country2].data;
   var dateInitStr2=data2[0]["date"];
+  var dateMaxStr2=data2[data2.length-1]["date"];
+
+  // define index shift di2=i2-i1 for same date
+  // (define from the end since some data weekly (!) at very beginning)
+
+  var dateMax=new Date(insertLeadingZeroes(dateMaxStr));
+  var dateMax2=new Date(insertLeadingZeroes(dateMaxStr2));
+  di2=data2.length-data.length
+    +Math.round((dateMax.getTime()-dateMax2.getTime())/oneDay_ms);
 
   // !! re-initialize; otherwise consequential errors after switching back
   // to countries with more data
   
   dayStartMar=dayStartMarInit;
-  dayStartYear=dayStartMar+59;
+  dayStartYear=dayStartMar+59; // for season effects
   startDay=new Date(2020,02,dayStartMar);
   itPresent=itPresentInit;
 
@@ -616,7 +629,7 @@ function initializeData(country,insideValidation){
     data2_idataStart+=daysForwards;
     startDay=new Date(2020,02,dayStartMar+daysForwards);
     dayStartYear+=daysForwards;
-    itPresent -= daysForwards;
+    itPresent -= daysForwards; // di2 unchanged
     console.log("Warning: no data >=ten days before sim start",
 		"\n => shift start date by ",daysForwards,
 		" days to ",data2[data2_idataStart]["date"]);
@@ -644,6 +657,10 @@ function initializeData(country,insideValidation){
       "\ndata_itmax=",data_itmax,"  data2_itmax=",data2_itmax,
       "\n\ndata[0][\"date\"]=",data[0]["date"],
       "  data2[0][\"date\"]=",data2[0]["date"],
+      "\ndateMaxStr=",dateMaxStr," dateMaxStr2=",dateMaxStr2,
+      "\ndi2=",di2,
+      "\ndata[data.length-20][\"date\"]=",data[data.length-20]["date"],
+      "  data2[data.length-20+di2][\"date\"]=",data2[data.length-20+di2]["date"],
       "\ndata[data_idataStart][\"date\"]=",data[data_idataStart]["date"],
       "  data2[data2_idataStart][\"date\"]=",data2[data2_idataStart]["date"],
       "\ndata[data_idataStart+data_itmax-1][\"date\"]=",
@@ -657,7 +674,7 @@ function initializeData(country,insideValidation){
 
 
 
-  // extract main data
+  // (1) extract all quantities from "data"
   // reset all arrays since RKI sources have other length than country data
 
   data_date=[]; 
@@ -666,8 +683,8 @@ function initializeData(country,insideValidation){
   data_cumRecovered=[];
   data_cumCfr=[];
   data_cumVacc=[];
-  data2_posRate=[];
-  data2_cumTests=[];
+  data_stringencyIndex=[]; 
+
 
   // also for derived data (unless test numbers) used in simulation
 
@@ -697,98 +714,88 @@ function initializeData(country,insideValidation){
       ? 0 : data_cumDeaths[i]/data_cumCases[i];
   }
 
+  // debug 1: is data=dataRKI[country] or =dataGit[country] there?
+  if(false){ // => "final debugging"
+  //if(useLandkreise){
+    console.log("initializeData round 1:",
+		" check data=dataRKI[country] or =dataGit[country]");
+    for(var i=0; i<data.length; i++){
+      console.log(
+	data_date[i],": data_cumCases[i]=", data_cumCases[i],
+	" data_cumDeaths[i]=",data_cumDeaths[i],
+	" data_cumRecovered[i]=",data_cumRecovered[i]);
+    }
+  }
+
+  
 
 
-
-  // extract test data (MT 2020-09)
+  // (2) extract all relevant quantities from "data2":
+  // stringency index, test and vacination data
   // !! rely on positive_rate instead of total tests
-  // because more often available
+  // (=> data_cumTestsCalc) because more often available
 
-  for(var i2=0; i2<data2.length; i2++){
-    data2_cumTests[i2]=data2[i2].total_tests; // not always available
-    //!! data2_cumCases[i2]=data2[i2].total_cases; if unific, 
-    data2_posRate[i2]=data2[i2].positive_rate; // nearly always available
-  }
+  // di2 defined at data initialisation
 
+  //var cumVaccLast=data2_cumVacc[data2.length-1];
+  //var cumVaccFullyLast=data2_cumVaccFully[data2.length-1];
 
-
-
-  // vaccinations
-
-  // extract from original data2
-
-  var data2_cumVacc=[];
-  data2_cumVacc[0]=0;
-  for(var i2=1; i2<data2.length; i2++){
-    data2_cumVacc[i2]=(!(typeof data2[i2].total_vaccinations === "undefined"))
-      ? data2[i2].total_vaccinations : data2_cumVacc[i2-1];
-  }
-
-
-  
-  // convert data2->data format
-  
-  var di2=data2_idataStart-data_idataStart;
-
-  
-  for(var i=0; i<=-di2; i++){
-    data_cumVacc[i]=0;
+  for(var i=0; i<=Math.max(1,-di2); i++){ // !!! 1 => always elem[0] defined
     data_cumTestsCalc[i]=0;
+    data_posRate[i]=0;
+    data_stringencyIndex[i]=0;
+    data_cumVacc[i]=0;
+    data_cumVaccFully[i]=0;
   }
 
-  var cumVaccLast=data2_cumVacc[data2.length-1];
-  for(var i=Math.max(1,-di2); i<data.length; i++){
-    var i2=i+di2;
-    data_cumVacc[i]=(i2<data2.length) ? data2_cumVacc[i2] : cumVaccLast;
-  }
+  var i2_lastPosRate=0; // i2 for last defined posRate; needed for extrapol
+  data2[0].positive_rate=0;  // to have always defined basis
+
+  for(var i=Math.max(1,-di2); i<Math.min(data.length,data2.length-di2); i++){
+    var i2=i+di2; // di2 defined at data initialisation
+    //console.log("i2=",i2," data2[i2]=",data2[i2]);
+    data_cumVacc[i]=(
+      !(typeof data2[i2].people_vaccinated === "undefined"))
+      ? data2[i2].people_vaccinated : data_cumVacc[i-1];
+    data_cumVaccFully[i]=(
+      !(typeof data2[i2].people_fully_vaccinated === "undefined"))
+      ? data2[i2].people_fully_vaccinated : data_cumVacc[i-1];
+    
+    data_stringencyIndex[i]=(
+      !(typeof data2[i2].stringency_index === "undefined"))
+      ? data2[i2].stringency_index : data_stringencyIndex[i-1];
+
+    if( !(typeof data2[i2].positive_rate === "undefined")){ //is defined
+      i2_lastPosRate=i2; 
+    }
   
- 
-  // calculated vaccination rates (fraction of population per day)
+    data_posRate[i]=data2[i2_lastPosRate].positive_rate;
+    data_cumTestsCalc[i]=data_cumTestsCalc[i-1] + (data_posRate[i]>0) 
+      ? (data_cumCases[i]-data_cumCases[i-1])/data_posRate[i] : 0;
+  }
+
+
+
+  // (3) calculate vaccination rates (fraction of population per day)
+  // data_cumVacc = data2[i2].people_vaccinated
+  // data2[i2].people_fully_vaccinated defined but not yet used (necessary?)
 
   var data_rVacc_unsmoothed=[];
   data_rVacc_unsmoothed[0]=0;
-  var pVaccWait=0; // waiting queue if more people need second vacc
-                   // than new vacc offered
-  var nVaccTot=0; // check total vacc with newspaper vacc numbers
-  var pVaccFirst=0; // check 
-  var pVaccSecond=0; // check
-
+  //data_cumVacc[0]=0; //!! solved bug now more centrally, see max(0,-di2)
   for(var i=1; i<data.length; i++){
-    var newVacc=(data_cumVacc[i]-data_cumVacc[i-1])/n0;
-    nVaccTot +=n0*newVacc;
-    var secondVacc=(i>daysBetweenVacc)
-	? (data_cumVacc[i-daysBetweenVacc]
-	   -data_cumVacc[i-daysBetweenVacc-1])/n0 : 0;
-    
-    if(newVacc<secondVacc){ // should not happen but you never know ...
-      pVaccWait+=secondVacc-newVacc;
-      data_rVacc_unsmoothed[i]=0;  // no new vacc because second is first 
-    }
-    else{
-      decreaseWait=Math.min(pVaccWait,newVacc-secondVacc);
-      pVaccWait -=decreaseWait;
-      data_rVacc_unsmoothed[i]=newVacc-secondVacc-decreaseWait;
-    }
-    
-    pVaccFirst +=data_rVacc_unsmoothed[i];
-    pVaccSecond+=secondVacc;
-
+    data_rVacc_unsmoothed[i]=(data_cumVacc[i]-data_cumVacc[i-1])/n0;
     if(useLandkreise){
       data_rVacc_unsmoothed[i] *= n0/n0List["Germany"]; //!!! n0/noGermany
       //console.log("n0=",n0," n0List[\"Germany\"]=",n0List["Germany"]);
     }
-    
+    if(false){
+      console.log("i=",i," date=",data[i]["date"],
+		  " data_rVacc_unsmoothed[i]=",data_rVacc_unsmoothed[i]);
+    }
+
   }
-  if(true){
-    iSecond=Math.max(0,data.length-1-daysBetweenVacc);
-    console.log("finished vacc calculations:\n nVaccTot=",nVaccTot,
-		"\n data_cumVacc[data.length-1]=",
-		data_cumVacc[data.length-1],
-		"\n cumVaccLast=",cumVaccLast,
-		"\n pVaccFirst=",pVaccFirst,
-		"\n pVaccSecond=",pVaccSecond);
-  }
-      
+  
   kernel=[1/7,1/7,1/7,1/7,1/7,1/7,1/7]; 
   data_rVacc=smooth(data_rVacc_unsmoothed,kernel);
 
@@ -830,52 +837,20 @@ function initializeData(country,insideValidation){
   }
 
 
+  // (4) generate the data arrays 
+  // (in data, not data2 time order) to be plotted
 
-  
-    
-  // calculated cum test numbers and positive rate
-
-  var i2_lastR=0; // i2 for last defined posRate; needed for extrapol
-  data_cumTestsCalc[0]=0; // (offset not relevant)
-    
-  for(var i=1; i<data.length; i++){ // !! other i range; above range => errors
-    var i2=i+di2;
-    
-    if( !(typeof data2_posRate[i2] === "undefined")){ //posRate given
-      var rateAct=data2_posRate[i2];
-      data_cumTestsCalc[i]=data_cumTestsCalc[i-1] + ((rateAct>0) 
-	? (data_cumCases[i]-data_cumCases[i-1])/rateAct
-						     : 0);
-      i2_lastR=i2;
-
-    }
-  
-    // extrapolate if actual posRate data undefined
-
-    else{
-
-      var rateAct=data2_posRate[i2_lastR];
-      data2_posRate[i2]=rateAct;
-      data_cumTestsCalc[i]=data_cumTestsCalc[i-1] + ((rateAct>0) 
-	? (data_cumCases[i]-data_cumCases[i-1])/rateAct
-						     : 0);
-    }
-  }
-
-
-
-  // generate the data arrays (in data, not data2 time order) to be plotted
-  // data_dx=estmation from data assuming 
-  // (1) time interval tauTest where test is positive for infected people
+  // [assuming
+  // (i) time interval tauTest where test is positive for infected people
   //     e.g. tauPos=7 from infection days 3-9 
   //     (start day here not relevant) 
-  // (2) the probability that not tested people are infected factor gamma
+  // (ii) the probability that not tested people are infected factor gamma
   //     of that for tested people
-  // (3) "Durchseuchung" <<1 (!! change later if xyz/n0 implemented!
-  // (4) tests have certain alpha and beta errors
+  // iii "Durchseuchung" <<1 (!! change later if xyz/n0 implemented!)
+  // (iv) tests have certain alpha and beta errors
+  // ]
 
-  var di2=data2_idataStart-data_idataStart; // translation data->data2 index
-
+  
   var tauPos=7; //!! keep const 1 week irresp. of tau sliders:
                 // tauPos=7 cancels out weekly pattern
 
@@ -893,17 +868,9 @@ function initializeData(country,insideValidation){
 
   // need new loop because of forward ref at cfr, ifr
 
-  if(useLandkreise){
-    console.log(
-      "initializeData second round: calculating dn[] and data_pTestModel[]",
-      "\n n0=",n0,"(n0Germany not needed if useLandkreise",
-      " since rateAct in data used",
-      "\n useSqrtModel=",useSqrtModel,
-      "\n data_idataStart=",data_idataStart);
-  }
-
+ 
   for(var i=0; i<data.length; i++){
-    data_posRate[i]=data2_posRate[i+di2];
+    //data_posRate[i]=data2_posRate[i+di2];
     data_dn[i]=data_dxt[i]/data_posRate[i];// more stable
     if(!((data_dn[i]>0)&&(data_dn[i]<1e11))){data_dn[i]=0;}
     var dnTauPos=data_cumTestsCalc[i+di2]-data_cumTestsCalc[i+di2-tauPos];
@@ -988,11 +955,9 @@ function initializeData(country,insideValidation){
     pTest_weeklyPattern[is]=avg0[2]+season0[is];
     dn_weeklyPattern[is]=avg1[2]+season1[is];
 
- 
-   }
+  }
 
 
-  
 
   // in initializeData(country);
   // check smoothing the objective data_cumCases for calibration
@@ -1007,23 +972,32 @@ function initializeData(country,insideValidation){
 
 
   // ###############################################
-  // debug (saisonal is always=6 at data.length-1)
-  // (in initializeData(country));
+  // final debugging of  initializeData(country)
+  // (note: saisonal is always=6 at data.length-1)
   // ###############################################
 
   if(true){
-    console.log("\n\ndata2[0][\"date\"]=",data2[0]["date"]);
-    console.log("initializeData finished: final data:\n");
+    console.log(
+      "\n\ninitializeData finished:",
+      "\ndata[0][\"date\"]=",data[0]["date"],
+      " data[data.length-1][\"date\"]=",data[data.length-1]["date"],
+      "\nata2[0][\"date\"]=",data2[0]["date"],
+      " data2[data2.length-1][\"date\"]=",data2[data2.length-1]["date"]);
+
     for(var i=0; i<data.length; i++){
-       //var logging=useLandkreise&&(i>data.length-10);
+      //var logging=useLandkreise&&(i>data.length-10);
       //var logging=true;
-      var logging=false;
-      //var logging=(i>data.length-20);
+      //var logging=false;
+      var logging=(i>data.length-5);
       if(logging){
 	var it=i-data_idataStart;
         var i2=i+data2_idataStart-data_idataStart;
+	var scheissData2Undefined=(typeof data2[i2] === "undefined");
 	console.log(
-	  insertLeadingZeroes(data[i]["date"]),": i=",i,
+	  " data: ",insertLeadingZeroes(data[i]["date"]),
+	  " data2: ",((scheissData2Undefined)
+		      ? "i2<0=>undefined" : data2[i2]["date"]),
+	  " i=",i, " i2=",i2,
 	  " data_dxt=",Math.round(data_dxt[i]),
 	  //" data_dyt=",Math.round(data_dyt[i]),
 	  " data_dz=",Math.round(data_dz[i]),
@@ -1034,8 +1008,8 @@ function initializeData(country,insideValidation){
 	  "\n  data_cumVacc=",data_cumVacc[i],
 	  " IvaccArr=",(it<0) ? 0 : IvaccArr[it],
 	  " data_posRate=",data_posRate[i],
-	  //" data2_posRate=",data2_posRate[i2],
 	  " data_cumTestsCalc=", Math.round(data_cumTestsCalc[i]),
+	  " data_stringencyIndex=", Math.round(data_stringencyIndex[i]),
 	 // " data_cfr=",data_cfr[i].toPrecision(3),
 	  " "
 	);
@@ -2868,9 +2842,15 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
 		" rVacc=",rVacc,
 		" Ivacc=",Ivacc);
   }
+
+  
   this.Reff=R0*(1-Ivacc)*(1-this.xyz)
     * ((it<=itPresent) ? 1 : calc_seasonFactor(it));
 
+  //!!! use stringencyIndex !!! still to introduce lockdown slider
+  var i=Math.min(it+data_idataStart, data_stringencyIndex.length-1); 
+  this.Reff *=(1-0.007*data_stringencyIndex[i]);
+  
   // source term from external trips
 
   var x0source=casesInflow/100000; // from returners of foreign regions
@@ -3698,7 +3678,7 @@ DrawSim.prototype.drawAxes=function(windowG){
 
   if(!this.mirroredGraphics){ 
     for(var iy=0; iy<=ny; iy++){
-      var valueStr=(windowG!=1)  ? iy*dy : "10^"+iy;
+      var valueStr=(windowG!=1)  ? Math.round(iy*dy) : "10^"+iy;
       //console.log("valueStr=",valueStr);
       ctx.fillText(valueStr,
 		   this.xPix0-2.5*textsize,
@@ -3711,14 +3691,15 @@ DrawSim.prototype.drawAxes=function(windowG){
 
   else{
     for(var iy=0; iy<=ny; iy++){
-      var valueStr=10*iy*dy;
+      var valueStr=Math.round(10*iy*dy);
       ctx.fillText(valueStr,
 		   this.xPix0-2.5*textsize,
 		   yPix0+(iy*dy-ymin)/(ymax-ymin)*hPix+0.5*textsize);
     }
     for(var iy=1; iy<=ny; iy++){
-      var valueStr=iy*dy;
-      ctx.fillText(valueStr,
+      var valueStr=Math.round(100*iy*dy)/100; // quick-hack since neither
+      //var valueStr=(iy*dy).toPrecision(2);  // toPrecision nor simple round
+      ctx.fillText(valueStr,                  // OK
 		   this.xPix0-2.5*textsize,
 		   yPix0-(iy*dy-ymin)/(ymax-ymin)*hPix+0.5*textsize);
     }
