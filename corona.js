@@ -391,6 +391,7 @@ var IFRinterval_last_min=14;  //21
 var IFR_dontUseLastDays=5;//(29 for ERZ) overcome "Nachmeldungen" bias IFR est.
 var IFRtime=[];
 
+var stringency_hist=[]; stringency_hist[0]=0; // one element PER DAY
 
 
 
@@ -2423,8 +2424,14 @@ function doSimulationStep(){
   }
   R0_actual=(R0sliderUsed) ? R0 : R0fun_time(R0time,it);
   fracDie= IFRfun_time(it);
-
   R0_hist[it]=R0_actual;
+
+  var i=Math.min(data_idataStart+it, data_stringencyIndex.length-1);
+  stringencySliderUsed=false; //!!!! define later at approp slider
+  stringency=0; //!!!! define later at approp slider
+  stringency_hist[it]=(stringencySliderUsed)
+    ? stringency : data_stringencyIndex[i];
+  
 
   if(false){ // doSimulationStep: logging "allowed"
     console.log(" doSimulationStep before corona.update: it=",it,
@@ -2849,7 +2856,8 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
 
   //!!! use stringencyIndex !!! still to introduce lockdown slider
   var i=Math.min(it+data_idataStart, data_stringencyIndex.length-1); 
-  this.Reff *=(1-0.007*data_stringencyIndex[i]);
+  this.Reff *=(1-0.00*data_stringencyIndex[i]); //!!!!function 
+  //this.Reff *=(1-0.007*data_stringencyIndex[i]); //!!!!function 
   
   // source term from external trips
 
@@ -4061,7 +4069,10 @@ DrawSim.prototype.drawR0Estimate=function(it){
     }
 
     //'?' in following line should not happen ut extremely rarely does
-    var R0=(itR0>=R0_hist.length) ? R0_actual : R0_hist[itR0]; 
+    var R0WithoutStringency=
+	(itR0>=R0_hist.length) ? R0_actual : R0_hist[itR0];
+    var R0= R0WithoutStringency*(1-0.000*data_stringencyIndex[itR0]); //!!!!fun
+    //var R0= R0WithoutStringency*(1-0.007*data_stringencyIndex[itR0]); //!!!!fun
     var sigmaR0=(itR0<itPresent) ? sigmaR0_hist[itR0] : 0;
     var str_R0="R  ="+R0.toFixed(2)
       +((true) // if plotting  w/o "+/- stddev
