@@ -771,10 +771,23 @@ function initializeData(country,insideValidation){
     }
   
     data_posRate[i]=data2[i2_lastPosRate].positive_rate;
-    data_cumTestsCalc[i]=data_cumTestsCalc[i-1] + (data_posRate[i]>0) 
-      ? (data_cumCases[i]-data_cumCases[i-1])/data_posRate[i] : 0;
+    
+    //!!F.ck! ternary ? : expression MUST be in parentheses!!
+    data_cumTestsCalc[i]=data_cumTestsCalc[i-1]
+      + ((data_posRate[i]>0)
+	 ? (data_cumCases[i]-data_cumCases[i-1])/data_posRate[i] : 0);
   }
 
+  // if data2 is less up-to-date than data, fill data2 derived quantities
+  // with constants
+  var iLast_data2=Math.min(data.length,data2.length-di2)-1;
+  for(var i=iLast_data2+1; i<data.length; i++){
+    data_cumTestsCalc[i]=data_cumTestsCalc[iLast_data2];
+    data_posRate[i]=data_posRate[iLast_data2];
+    data_stringencyIndex[i]=data_stringencyIndex[iLast_data2];
+    data_cumVacc[i]=data_cumVacc[iLast_data2];
+    data_cumVaccFully[i]=data_cumVaccFully[iLast_data2];
+  }
 
 
   // (3) calculate vaccination rates (fraction of population per day)
@@ -814,7 +827,7 @@ function initializeData(country,insideValidation){
   }
   
   // calculated immunity fraction profile IvacArr using the dynamics of
-  // vaccination() (!! related to it=i-data_idataStart)
+  // Vaccination() (!! related to it=i-data_idataStart)
 
   vaccSim=new Vaccination();
   vaccSim.initialize();
@@ -988,8 +1001,8 @@ function initializeData(country,insideValidation){
     for(var i=0; i<data.length; i++){
       //var logging=useLandkreise&&(i>data.length-10);
       //var logging=true;
-      //var logging=false;
-      var logging=(i>data.length-5);
+      var logging=false;
+      //var logging=(i>data.length-5);
       if(logging){
 	var it=i-data_idataStart;
         var i2=i+data2_idataStart-data_idataStart;
@@ -1063,10 +1076,22 @@ function initializeData(country,insideValidation){
 } // initializeData(country);
 
 
+//##############################################################
+// factor dependence of R0 on political measures given as a 
+// "stringencyIndex" in [0,100] in OWID 
+//##############################################################
 
+function stringencyFactor(stringencyIndex){
+  return 1-0.006*stringencyIndex;
+  //return 1;
+}
+
+//##############################################################
 // like influenca, covid19 is more active in winter
 // relate factor to present to make simple future projections
 // deactivate season/winter/summer curve by relAmplitude=0;
+//##############################################################
+
 function calc_seasonFactor(it){
   var fracYearPeak=0.10; //  (first week February)
   var relAmplitude=0.0; // factor (1+/-relAmplitude)  (0.2)
@@ -1100,18 +1125,22 @@ function R0fun_time(R0arr, it){
     // compared to fitted R0 (no data if iTestPrev<0!)
 
     var R0=((iTestPrev>=0)&&(nxtNewdenom>0)) ? 0.90*nxtNewnum/nxtNewdenom : 4;
-
-    if(loggingDebug){ //!!! global variable; must=false in calibration
-      console.log("R0fun_time: it=",it," nxtCum(iTest)=",data_cumCases[iTest],
-		" nxtCum(iTestPrev)=",data_cumCases[iTestPrev],
-		" nxtNewnum=",nxtNewnum,
-		" nxtNewdenom=",nxtNewdenom,
-		"");
-    }
-
     R0= Math.min(5, Math.max(0.2,R0));
 
-    if(loggingDebug){console.log("R0fun_time: warmup: returning R0=",R0);} //!!
+    if(loggingDebug){ //!!! global variable; must=false in calibration
+      console.log(
+	"\n\nin R0fun_time: warmup: it=",it," iPresent=",iPresent,
+	" iTest=",iTest," iTestPrev=",iTestPrev,
+	"\n  data_cumCases[iTest+1]=",data_cumCases[iTest+1],
+	" data_cumCases[iTest-1]=",data_cumCases[iTest-1],
+	"\n  data_cumCases[iTestPrev+1]=",data_cumCases[iTestPrev+1],
+	" data_cumCases[iTestPrev-1]=",data_cumCases[iTestPrev-1],
+	"\n  nxtNewnum=",nxtNewnum,
+	" nxtNewdenom=",nxtNewdenom,
+	"\n  notice: undefined etc here OK; returning R0=",R0,
+	"");
+    }
+
     return R0;
   }
 
@@ -1200,7 +1229,7 @@ function SSEfunc(R0arr, fR0, logging, itStartInp, itMaxInp,
 		"\n start calibr segment: itStart=",itStart,
 		"\n end calibr segment: <itMax=",itMax,
 		"\n max it in data: <data_itmax=",data_itmax,
-		"\n present it: itmax=",itmax,
+		"\n present it: itPresent=",itPresent,
 		"\n takeSnapshot=",takeSnapshot,
 		" useInitSnap=",useInitSnap,
 		" itSnap=",itSnap,
@@ -1580,7 +1609,7 @@ function calibrate(){
   } // calbrate R0 with multiple periods
 
 
-  //!!! here logging can be true for check of corona.update and corona.init
+  //!!!! here logging can be true for check of corona.update and corona.init
 
   var logging=false; 
   //var logging=true;
@@ -1678,7 +1707,7 @@ function calibrate(){
   //!!! ANNOYING slightest shift after any country choice back to Germany
   // approx rel error 10^{-3} in calibr R and IFR (no solution; forget...)
 
-  if(true){
+  if(false){
     console.log("IFRtime=",IFRtime);
     console.log("data_idataStart=",data_idataStart);
     console.log("startDay=",startDay);
@@ -2262,7 +2291,7 @@ function validate(){ // callback html select box "validateDiv"
 //################################################
 
 function myStartStopFunction(){ //!! hier bloederweise Daten noch nicht da!!
-  console.log("in myStartStopFunction");
+  //console.log("in myStartStopFunction");
   clearInterval(myRun);
   //console.log("in myStartStopFunction: isStopped=",isStopped);
 
@@ -2280,13 +2309,13 @@ function myStartStopFunction(){ //!! hier bloederweise Daten noch nicht da!!
 // callback restart button
 
 function myRestartFunction(){ 
-  console.log("in myRestartFunction: itPresent=",itPresent);
+  //console.log("in myRestartFunction: itPresent=",itPresent);
 
   rVacc=0; //!!!! as long as vaccinations not yet in data
   setSlider(slider_rVacc, slider_rVaccText, 700*rVacc, " %/Woche");
 
   initialize();
-  console.log(" myRestartFunction after initialize: drawsim.itmin=",drawsim.itmin);
+  //console.log(" myRestartFunction after initialize: drawsim.itmin=",drawsim.itmin);
   fps=fpsstart;
   it=0; //!!! only instance apart from init where global it is reset to zero 
   ctx.clearRect(0, 0, canvas.width, canvas.height)
@@ -2584,7 +2613,7 @@ CoronaSim.prototype.init=function(itStart,logging){
 
 
   //var it0=Math.max(-21, itStart-28); // it BEFORE warmup
-  var it0=-21; // it BEFORE warmup
+  var it0=-21; // it BEFORE warmup //!!! Must be <=-20 for some f... reason
 
   // xAct: sum of "actually infected" this.x[tau] (neither rec. nor dead)
   // xyz: cumulative sum of infected (incl recovered, dead)
@@ -2621,34 +2650,36 @@ CoronaSim.prototype.init=function(itStart,logging){
 
   // data-driven warmup
 
-  // !!! loggingDebug global variable
-  
+  // !!! loggingDebug and logging global variables
+  // logging can be set controlled at "here logging can be true"
   loggingDebug=logging&&useLandkreise;
   //loggingDebug=false; 
 
   if(loggingDebug){
-    console.log("corona.init warmup:  it0=",it0," itStart=",itStart,
+    console.log("\n\n\ncorona.init warmup before loop:  it0=",it0,
+		" itStart=",itStart,
 		"\n R0time=",R0time);
   }
 
   for(var its=it0; its<itStart; its++){ 
     var Rt=R0fun_time(R0time,its); // !!! uses loggingDebug as global variable
 
-    if(logging&&useLandkreise){
-    //if(logging&&false){
-      console.log("corona.init warmup before update: its=",its,
-			    " pTest=",pTest.toPrecision(3),
+    if(loggingDebug){
+      //if(logging&&false){
+      
+      console.log("\ncorona.init warmup before update: its=",its,
 			    " R=",Rt.toFixed(2),
+			    " pTest=",pTest.toPrecision(3),
 			    " ndx=",(n0*this.x[0]).toPrecision(3),
 			    " ndxt=",(n0*this.dxt).toPrecision(3),
 			    " ndxtFalse=",(n0*this.dxtFalse).toPrecision(3),
-			    "");}
+		  "");
+    }
     this.updateOneDay(Rt,its,logging); // in CoronaSim, data-driven warmup
   }
-  loggingDebug=false; 
 
 
-  if(logging){
+  if(loggingDebug){
     console.log("corona.init, before scaledown: nxtStart=",nxtStart,
 		" n0*this.xt=",n0*this.xt);
   }
@@ -2677,14 +2708,15 @@ CoronaSim.prototype.init=function(itStart,logging){
   // reset it for start of proper simulation
 
 
-  if(logging){
+  if(loggingDebug){
     console.log("CoronaSim.init after warmup: itStart=",itStart,
 		"\n  n0*this.x[0]=",Math.round(n0*this.x[0]),
 		"\n  n0*this.dxt=",Math.round(n0*this.dxt),
 		"\n  n0*this.dxtFalse=",Math.round(n0*this.dxtFalse),
 		"\n  n0*this.z=",Math.round(n0*this.z),
-		"");
+		"\n\n\n");
   }
+  loggingDebug=false; 
 
  }//init
 
@@ -2785,19 +2817,17 @@ CoronaSim.prototype.setStateFromSnapshot=function(){
 
 //#################################################################
 
+// control logging at "here logging can be true"
+// and at "loggingDebug and logging global variables"
+// filter because of calibr!
+
 CoronaSim.prototype.updateOneDay=function(R0,it,logging){ 
 
   if( typeof logging === "undefined"){logging=false;}
-  //logging=logging&&(it>=83)&&(it<86);//!!
-  //logging=false; //!!
 
-
-
-  //if(logging){  //filter because of called mult times in calibr!
-  if(logging&&useLandkreise&&(it<3)){//filter because of calibr!
-  //if(logging&&((it==-10)||(it==10))){
+  if(logging&&(it<-19)){
     console.log(
-      "Enter CoronaSim.updateOneDay: it=",it," R0=",R0.toPrecision(2),
+      "\n\nEnter CoronaSim.updateOneDay: it=",it," R0=",R0.toPrecision(2),
       " this.xAct=",this.xAct.toPrecision(2),
       " this.xyz=",this.xyz.toPrecision(2),
       " this.y=",this.y.toPrecision(2),
@@ -2805,12 +2835,12 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
       " nxt=n0*this.xt=",Math.round(n0*this.xt),
       " fracDie=",fracDie.toPrecision(2),
       " nzSim=",Math.round(n0*this.xt),
-      //"\n  this.x[tauDie-1]=",this.x[tauDie-1].toPrecision(3),
-      //"\n  this.x[tauDie]=",this.x[tauDie].toPrecision(3),
-      //"\n  this.x[tauDie+1]=",this.x[tauDie+1].toPrecision(3),
-      //"\n  this.x[tauRecover-1]=",this.x[tauRecover-1].toPrecision(3),
-      //"\n  this.x[tauRecover]=",this.x[tauRecover].toPrecision(3),
-      //"\n  this.x[tauRecover+1]=",this.x[tauRecover+1].toPrecision(3),
+      "\n  this.x[tauDie-1]=",this.x[tauDie-1].toPrecision(3),
+      "\n  this.x[tauDie]=",this.x[tauDie].toPrecision(3),
+      "\n  this.x[tauDie+1]=",this.x[tauDie+1].toPrecision(3),
+      "\n  this.x[tauRecover-1]=",this.x[tauRecover-1].toPrecision(3),
+      "\n  this.x[tauRecover]=",this.x[tauRecover].toPrecision(3),
+      "\n  this.x[tauRecover+1]=",this.x[tauRecover+1].toPrecision(3),
       "");
   }
 
@@ -2839,11 +2869,12 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
       rVacc=(i<data_rVacc.length)
 	? data_rVacc[i] : data_rVacc[data_rVacc.length-1];
     }
-    this.vaccination.update(rVacc,it,logging);
+    this.vaccination.update(rVacc,it,false);
     Ivacc=this.vaccination.Ivacc; //!!! geht nicht bei calibration
   }
   
-  if(it>=itPresent){
+  if(false){
+  //if(it>=itPresent){
     console.log("inCalibration=",inCalibration,
 		" slider_rVacc_moved=",slider_rVacc_moved,
 		" rVacc=",rVacc,
@@ -2855,10 +2886,11 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
     * ((it<=itPresent) ? 1 : calc_seasonFactor(it));
 
   //!!! use stringencyIndex !!! still to introduce lockdown slider
-  var i=Math.min(it+data_idataStart, data_stringencyIndex.length-1); 
-  this.Reff *=(1-0.00*data_stringencyIndex[i]); //!!!!function 
-  //this.Reff *=(1-0.007*data_stringencyIndex[i]); //!!!!function 
-  
+  var i=Math.max(0, Math.min(
+    data_stringencyIndex.length-1, it+data_idataStart)); 
+  this.Reff *=stringencyFactor(data_stringencyIndex[i]);
+
+  if(it>itPresent){console.log("pastPresent=",it-itPresent," data_stringencyIndex[i]=",data_stringencyIndex[i]," this.Reff=",this.Reff);}
   // source term from external trips
 
   var x0source=casesInflow/100000; // from returners of foreign regions
@@ -2871,6 +2903,10 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
   for(var tau=taumax-1; tau>0; tau--){
     this.x[tau]=this.x[tau-1];
     this.xohne[tau]=this.xohne[tau-1];
+    if(logging&&(it<-19)){
+      console.log("tau=",tau," this.x[tau]=",this.x[tau],
+		  " this.xohne[tau]=",this.xohne[tau]);
+    }
   }
 
 
@@ -2880,6 +2916,7 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
 
   this.x[0]=x0source;
   var f_R=1./(tauRend-tauRstart+1);
+  if(logging&&(it<-19)){console.log("1. this.x[0]=",this.x[0]," this.Reff=",this.Reff );}
 
   if(n0*this.xAct>=1){ // !! infection finally dead if xAct<1
     for(var tau=tauRstart; tau<=tauRend; tau++){
@@ -2888,7 +2925,7 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
   }
 
   this.xohne[0]=this.x[0];
-
+  if(logging&&(it<-19)){console.log("2. this.x[0]=",this.x[0]);}
 
 
   // ###############################################
@@ -3012,32 +3049,25 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
   // Debug output (filter needed because called in calibration)
   //##########################################################
 
-  if(false){ // filter needed because called in calibration
-  //if(logging&&useLandkreise&&(it<10)){ // filter needed because calibration!
+  //if(logging){ // filter needed because called in calibration
+  if(logging&&(it<-19)){ // filter needed because calibration!
   //if(it>=itPresent){ // it<itPresent in calibration => not reached
   //if(false&&(it>=itPresent)){ // it<itPresent in calibration => not reached
     console.log(
-      "end CoronaSim.updateOneDay: it=",it," R0=",R0.toPrecision(2),
-      //" dnxt=",Math.round(n0*this.dxt),
-      " 100000*this.xt=",Math.round(100000*this.xt),
-      " 100000*x0source=",Math.round(100000*x0source),
-      //" this.xAct=",this.xAct.toPrecision(3),
-      //" idata=",idata," data_pTestModel.length=",data_pTestModel.length,
-     // " pTest=",pTest,
-     // " this.xyz=",this.xyz.toPrecision(3),
-     // " pTest=",pTest.toPrecision(3), //!! undefined for Dresden etc
-     // " this.y=",this.y.toPrecision(3),
-     // " this.z=",this.z.toPrecision(3),
-	//	" nxt=n0*this.xt=",Math.round(n0*this.xt),
-      //"\n  this.x[tauDie-1]=",this.x[tauDie-1].toPrecision(3),
-      //"    this.xohne[tauDie-1]=",this.xohne[tauDie-1].toPrecision(3),
-      //"\n  this.x[tauDie]=",this.x[tauDie].toPrecision(3),
-      //"    this.xohne[tauDie]=",this.xohne[tauDie].toPrecision(3),
-      //"\n  this.x[tauDie+1]=",this.x[tauDie+1].toPrecision(3),
-      //"    this.xohne[tauDie+1]=",this.xohne[tauDie+1].toPrecision(3),
-     // "\n  this.x[tauRecover-1]=",this.x[tauRecover-1].toPrecision(3),
-      //"\n  this.x[tauRecover]=",this.x[tauRecover].toPrecision(3),
-      //"\n  this.x[tauRecover+1]=",this.x[tauRecover+1].toPrecision(3),
+      "\nend CoronaSim.updateOneDay: it=",it," R0=",R0.toPrecision(2),
+      " this.xAct=",this.xAct.toPrecision(2),
+      " this.xyz=",this.xyz.toPrecision(2),
+      " this.y=",this.y.toPrecision(2),
+      " this.z=",this.z.toPrecision(2),
+      " nxt=n0*this.xt=",Math.round(n0*this.xt),
+      " fracDie=",fracDie.toPrecision(2),
+      " nzSim=",Math.round(n0*this.xt),
+      "\n  this.x[tauDie-1]=",this.x[tauDie-1].toPrecision(3),
+      "\n  this.x[tauDie]=",this.x[tauDie].toPrecision(3),
+      "\n  this.x[tauDie+1]=",this.x[tauDie+1].toPrecision(3),
+      "\n  this.x[tauRecover-1]=",this.x[tauRecover-1].toPrecision(3),
+      "\n  this.x[tauRecover]=",this.x[tauRecover].toPrecision(3),
+      "\n  this.x[tauRecover+1]=",this.x[tauRecover+1].toPrecision(3),
       "");
   }
 
@@ -3475,7 +3505,7 @@ function DrawSim(){
       (nDaysValid>0) ? this.qselectValid[iw] : this.qselectRegular[iw];
   }
 
-  console.log("\n\n\nDrawSim Cstr: nDaysValid=",nDaysValid," this.itmin=",this.itmin);
+  //console.log("\nDrawSim Cstr: nDaysValid=",nDaysValid," this.itmin=",this.itmin);
 
   this.label_y_window=[countryGer+": Personenzahl (in Tausend)",
 		       countryGer+": Personenzahl",
@@ -4071,8 +4101,11 @@ DrawSim.prototype.drawR0Estimate=function(it){
     //'?' in following line should not happen ut extremely rarely does
     var R0WithoutStringency=
 	(itR0>=R0_hist.length) ? R0_actual : R0_hist[itR0];
-    var R0= R0WithoutStringency*(1-0.000*data_stringencyIndex[itR0]); //!!!!fun
-    //var R0= R0WithoutStringency*(1-0.007*data_stringencyIndex[itR0]); //!!!!fun
+    var R0= R0WithoutStringency*stringencyFactor(data_stringencyIndex[itR0]);
+
+    if(itR0>itPresent){console.log("itR0=",itR0," R0_actual=",R0_actual," R0_hist[itR0]=",R0_hist[itR0]," data_stringencyIndex.length=",data_stringencyIndex.length," data_stringencyIndex[itR0]=",data_stringencyIndex[itR0]," R0=",R0);
+		       console.log("DEFINE stringIndex_hist[it] as R0_hist[it] and make R0 slider right!!!");}
+  
     var sigmaR0=(itR0<itPresent) ? sigmaR0_hist[itR0] : 0;
     var str_R0="R  ="+R0.toFixed(2)
       +((true) // if plotting  w/o "+/- stddev
