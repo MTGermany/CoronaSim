@@ -129,20 +129,26 @@ slider_tauTest.oninput = function() {
 
 
 
-//var rVacc;
 
-var slider_rVacc=document.getElementById("slider_rVacc");
-var slider_rVaccText = document.getElementById("slider_rVaccText");
+// var R0copy
 
-setSlider(slider_rVacc, slider_rVaccText, 700*rVacc, " %");
+/*
+var slider_R0cp=document.getElementById("slider_R0cp");
+var slider_R0cpText = document.getElementById("slider_R0cpText");
 
-slider_rVacc.oninput = function() {
-  slider_rVacc_moved=true;
-  slider_rVaccText.innerHTML = "&nbsp;"+this.value+" %";
-  rVacc=parseFloat(this.value/700.);
-  console.log("slider_rVacc callback: rVacc=",rVacc);
+setSlider(slider_R0cp, slider_R0cpText, R0,"");
+
+
+slider_R0cp.oninput = function() {
+  R0sliderUsed=true;
+  slider_R0cpText.innerHTML = "&nbsp;"+this.value;
+  R0=parseFloat(this.value);
+  console.log("slider R0cp callback: R0="+R0);
 }
+*/
 
+
+/*
 
 function str_measures(measures){
   return ((measures==0) ? "Halli Galli" : 
@@ -168,40 +174,36 @@ function calc_factorMeasures(measures){ // multiplication factor for R
 // MT 2020-12-22: Do not show measures since not scientific
 // var measures; {0=hulliGalli,1=none,2=distance,3=distance+masks,
 // 4-6=lockdowns}
-//!!! replaced by copy of R slider
-// need factorMeasures, however (measures=measuresInit=4 in corona.js)
-
-//var factorMeasures=calc_factorMeasures(measures);
-
-/*
-var slider_measures=document.getElementById("slider_measures");
-var slider_measuresText = document.getElementById("slider_measuresText");
-
-slider_measures.value=measures; // setSlider does not fit here
-slider_measuresText.innerHTML="&nbsp;"+str_measures(measures);
-
-slider_measures.oninput = function() {
-  measures=parseInt(this.value);
-  slider_measuresText.innerHTML = "&nbsp;"+str_measures(measures);
-  factorMeasures=calc_factorMeasures(measures);
-}
 */
 
-// var R0copy
 
-var slider_R0cp=document.getElementById("slider_R0cp");
-var slider_R0cpText = document.getElementById("slider_R0cpText");
+// var stringency
 
-setSlider(slider_R0cp, slider_R0cpText, R0,"");
+var slider_stringency=document.getElementById("slider_stringency");
+var slider_stringencyText
+    = document.getElementById("slider_stringencyText");
+setSlider(slider_stringency, slider_stringencyText,
+	  Math.round(stringency)," %");
 
-
-slider_R0cp.oninput = function() {
-  R0sliderUsed=true;
-  slider_R0cpText.innerHTML = "&nbsp;"+this.value;
-  R0=parseFloat(this.value);
-  console.log("slider R0cp callback: R0="+R0);
+slider_stringency.oninput = function() {
+  stringency=parseInt(this.value);
+  slider_stringencyText.innerHTML = "&nbsp;"+stringency+" %";
+  stringencySliderUsed=true;
 }
 
+
+//var rVacc;
+
+var slider_rVacc=document.getElementById("slider_rVacc");
+var slider_rVaccText = document.getElementById("slider_rVaccText");
+
+setSlider(slider_rVacc, slider_rVaccText, 700*rVacc, " %");
+
+slider_rVacc.oninput = function() {
+  slider_rVacc_moved=true;
+  slider_rVaccText.innerHTML = "&nbsp;"+this.value+" %";
+  rVacc=parseFloat(this.value/700.);
+}
 
 
 //var casesInflow;
@@ -226,7 +228,7 @@ slider_casesInflow.oninput = function() {
 // unit:          as displayed by html, e.g., "%"
 
 function setSlider(slider, sliderText, value, unit){
-  //console.log("setSlider: slider=",slider);
+  //console.log("setSlider: it=",it," slider=",slider," value=", value);
   slider.value=value;
   sliderText.innerHTML="&nbsp;"+value+unit;
 }
@@ -300,7 +302,7 @@ function canvas_resize(){
   isSmartphone=(sizeminWindow<600);             // consolidate with corona.css
   isLandscape=(canvas.width>7/5*canvas.height); // consolidate with corona.css
   textsize=(isSmartphone) ? 0.03*sizeminWindow : 0.02*sizeminWindow;
-  textsizeR0=1.1*textsize;
+  textsizeR0=0.9*textsize;
   if(false){
     console.log("canvas_gui.canvas_resize():",
 		" isSmartphone=",isSmartphone,
@@ -323,7 +325,7 @@ function canvas_resize(){
   drawsim.xPix0  =(isSmartphone) ? 0.13*canvas.width : 0.08*canvas.width;
   drawsim.xPixMax=0.98*canvas.width;
   drawsim.yPix0  =(isSmartphone) ? 0.85*canvas.height : 0.90*canvas.height;
-  drawsim.yPixMax=(showVacc) ? 0.05*canvas.height : 0.10*canvas.height;
+  drawsim.yPixMax=(measuresView) ? 0.05*canvas.height : 0.10*canvas.height;
   drawsim.wPix=drawsim.xPixMax-drawsim.xPix0;
   drawsim.hPix=drawsim.yPixMax-drawsim.yPix0;  //<0
   for(var i=0; i<=drawsim.itmax-drawsim.itmin; i++){
@@ -573,14 +575,14 @@ function calc_it(xPix){
 
 
 function toggleViews(){
-  showVacc=(!showVacc);
-  setView(showVacc);
+  measuresView=(!measuresView);
+  setView(measuresView);
 }
 
-function setView(showVacc){
-  if(showVacc){
+function setView(measuresView){
+  if(measuresView){
     document.getElementById("vaccinationButton").innerHTML
-      = "=> Normale<br>Ansicht";
+      = "=> R<sub>0</sub> -<br>Ansicht";
     document.getElementById("sliders").style.display="none"; // "hidden" DOS
     document.getElementById("sliders2").style.display="block"; // css DOS
   }

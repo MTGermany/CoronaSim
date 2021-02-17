@@ -93,8 +93,9 @@ Info
 
 <div id="vaccinationView">
   <button  id="vaccinationButton" onclick="toggleViews()">
- => Ma&szlig;nahmen-<br>ansicht
-<!-- => Normale <br>Ansicht</button> -->
+    <!-- controlled by toggleViews(), setView() -->
+<!-- => Ma&szlig;nahmen-<br>ansicht-->
+<!-- => R<sub>0</sub>-<br>Ansicht</button> -->
 </button>
 </div>
 
@@ -158,31 +159,11 @@ Dr. Treiber
 
 <table id="slidersTable" border="0" cellspacing="1" cellpadding="0" >
 
-<!-- attribute "value" not given, set in js-->
-
-<!--
-  <tr>
-    <td> Infektionsrate R<sub>30%</sub></td>
-    <td> <input id="slider_R03" type="range" 
-                min="0" max="4" step="0.01"></td> 
-    <td> <div id="slider_R03Text"></div> </td>
-  </tr>
--->
-
-<!--
-  <tr>
-    <td> <span class="important">
-         Reproduktionszahl R<sub>start</sub></span></td>
-    <td> <input id="slider_R04" type="range" 
-                min="0" max="4" step="0.01"></td> 
-    <td> <div id="slider_R04Text"></div> </td>
-  </tr>
--->
 
   <tr>
-    <td> <span class="important">Reproduktionszahl R<sub>0</sub></span></td>
+    <td> <span class="important"> R<sub>0</sub> ohne Ma&szlig;nahmen</sub></span></td>
     <td> <input id="slider_R0" type="range" 
-                min="0" max="2" step="0.01"></td> 
+                min="0" max="4" step="0.01"></td> 
     <td> <div id="slider_R0Text"></div> </td>
   </tr>
 
@@ -235,6 +216,7 @@ Dr. Treiber
 
 <table id="slidersTable2" border="0" cellspacing="1" cellpadding="1" >
 
+<!--
  <tr>
     <td> <span class="important">&nbsp; Reproduktionszahl R<sub>0</sub>
         </span></td>
@@ -242,16 +224,17 @@ Dr. Treiber
                 min="0" max="2" step="0.01"></td> 
     <td> <div id="slider_R0cpText"></div> </td>
   </tr>
- <!--
+ -->
+  
   <tr>
-    <td>&nbsp; Ma&szlig;nahmen  &nbsp; </td>
-    <td> <input id="slider_measures" type="range" 
-                min="0" max="6" step="1"></td>  
-    <td> <div id="slider_measuresText"></div> </td>
+    <td>&nbsp; Grad max. Shutdown &nbsp; </td>
+    <td> <input id="slider_stringency" type="range" 
+                min="0" max="100" step="1"></td>  
+    <td> <div id="slider_stringencyText"></div> </td>
   </tr>
--->
 
- <tr>
+
+  <tr>
     <td>&nbsp; Import-F&auml;lle/10<sup>5</sup> Einw. &nbsp; </td>
     <td> <input id="slider_casesInflow" type="range" 
                 min="0" max="50" step="1"></td>  <!-- value in js -->

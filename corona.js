@@ -1,7 +1,7 @@
 
 
-var showVacc=false;  // false: only display as of dec2020
-                    // true: second display option vacc+measures
+var measuresView=true;  // false: R0 and parameter view
+                    // true: "measures" view
 
 
 // useLiveData=true: Obtain github data "live" via the fetch command
@@ -65,6 +65,7 @@ const ln10=Math.log(10);
 // (3) check various "windowG==", "windowG!=", "windowG<" etc conditions
 
 // initial window; consolidate with first option value of html!!
+// windowG:
 // 0=cum,1=log,2=casesReal,3=tests,4=rates,5=casesDaily,6=incidence 
 var windowG=6; 
 
@@ -285,6 +286,8 @@ const tauRecoverList={
 var R0sliderUsed=false;
 var otherSliderUsed=false;
 var testSliderUsed=false;
+var stringencySliderUsed=false;
+
 //var fracDieSliderUsed=false; does not exist
 
 
@@ -375,7 +378,10 @@ var R0time=[];   // !! calibrated R0
                 // initialize in function initialize() (then data available)
 var R0_hist=[]; R0_hist[0]=R0; // one element PER DAY
 var sigmaR0_hist=[]; sigmaR0_hist[0]=0; 
-                   // per step 6
+
+var stringency=0;  // 0..100, from data_stringencyIndex
+var stringency_hist=[]; stringency_hist[0]=stringency; // one element PER DAY
+
 
 const nOverlap=3;        // multiples of calibInterval, 3
                          // >=max(1,floor(Rinterval_last_min/calibInterval)
@@ -390,8 +396,6 @@ var IFRinterval=21; //28
 var IFRinterval_last_min=14;  //21
 var IFR_dontUseLastDays=5;//(29 for ERZ) overcome "Nachmeldungen" bias IFR est.
 var IFRtime=[];
-
-var stringency_hist=[]; stringency_hist[0]=0; // one element PER DAY
 
 
 
@@ -1054,6 +1058,7 @@ function initializeData(country,insideValidation){
 
   R0sliderUsed=false;
   otherSliderUsed=false;
+  stringencySliderUsed=false;
 
 
  //##############################################################
@@ -1082,7 +1087,8 @@ function initializeData(country,insideValidation){
 //##############################################################
 
 function stringencyFactor(stringencyIndex){
-  return 1-0.006*stringencyIndex;
+  //return 1-0.7*(Math.pow(stringencyIndex/100,2));
+  return 1-0.005*stringencyIndex;
   //return 1;
 }
 
@@ -1094,12 +1100,12 @@ function stringencyFactor(stringencyIndex){
 
 function calc_seasonFactor(it){
   var fracYearPeak=0.10; //  (first week February)
-  var relAmplitude=0.0; // factor (1+/-relAmplitude)  (0.2)
+  var relAmplitude=0.1; // !! factor (1+/-relAmplitude)  (0.2)
   var phase=2*Math.PI*(dayStartYear+it-fracYearPeak)/365.;
   var phasePresent=2*Math.PI*(dayStartYear+itPresent-fracYearPeak)/365.;
   var factor=1+relAmplitude*Math.cos(phase);
   var factorPresent=1+relAmplitude*Math.cos(phasePresent);
-  return factor/factorPresent;R0*seasonFactor/seasonFactorPresent;
+  return factor/factorPresent;
 }
 
 //##############################################################
@@ -1397,7 +1403,7 @@ function initialize() {
   yPixTop=rect.top;
   drawsim=new DrawSim();
 
-  setView(showVacc); // contains canvas_resize();
+  setView(measuresView); // contains canvas_resize();
 
   drawsim.setWindow(windowG);
 
@@ -2109,7 +2115,9 @@ function selectDataCountry(){ // callback html select box "countryData"
   tauDie=parseFloat(tauDieList[country]);
   taumax=Math.max(tauDie,tauRecover)+tauAvg+1;
   setSlider(slider_R0,  slider_R0Text,  R0time[0].toFixed(2),"");
-  setSlider(slider_R0cp,  slider_R0cpText,  R0time[0].toFixed(2),"");
+  setSlider(slider_stringency, slider_stringencyText,
+	  Math.round(stringency)," %");
+  //setSlider(slider_R0cp,  slider_R0cpText,  R0time[0].toFixed(2),"");
   rVacc=0;
   setSlider(slider_rVacc, slider_rVaccText, 700*rVacc, " %/Woche");
 
@@ -2348,6 +2356,7 @@ function myResetFunction(){
   R0sliderUsed=false;
   otherSliderUsed=false;
   testSliderUsed=false;
+  stringencySliderUsed=false;
   includeInfluenceTestNumber=true;
 
   document.getElementById("testnumber").innerHTML
@@ -2366,6 +2375,10 @@ function myResetFunction(){
 
   pTest=pTestInit; 
   setSlider(slider_pTest, slider_pTestText, 100*pTest, " %");
+
+  stringency=0;
+  setSlider(slider_stringency, slider_stringencyText,
+	  Math.round(stringency)," %");
 
   rVacc=rVaccInit;
   setSlider(slider_rVacc, slider_rVaccText, 700*rVacc, " %/Woche");
@@ -2388,6 +2401,7 @@ function myCalibrateFunction(){ // callback "Kalibriere neu!
   R0sliderUsed=false;
   otherSliderUsed=false;
   testSliderUsed=false;
+  stringencySliderUsed=false;
    // calibration unstable with external source => must set to zero
   casesInflow=0;
   setSlider(slider_casesInflow, slider_casesInflowText,
@@ -2409,9 +2423,15 @@ function simulationRun() {
   //console.log("R0sliderUsed=",R0sliderUsed);
   if(!R0sliderUsed){
     setSlider(slider_R0, slider_R0Text, R0fun_time(R0time,it).toFixed(2),"");
-    setSlider(slider_R0cp, slider_R0cpText, R0fun_time(R0time,it).toFixed(2),"");
+    //setSlider(slider_R0cp, slider_R0cpText, R0fun_time(R0time,it).toFixed(2),"");
   }
-
+  
+  if(!stringencySliderUsed){
+    //console.log("setSlider(slider_stringency...): stringency=",stringency);
+    setSlider(slider_stringency, slider_stringencyText,
+	      Math.round(stringency)," %");
+  }
+  
   if((!testSliderUsed)&&includeInfluenceTestNumber){
     setSlider(slider_pTest, slider_pTestText, 
 	      //Math.round(100*pTest), " %");
@@ -2451,16 +2471,16 @@ function doSimulationStep(){
     clearInterval(myRun);
     myRun=setInterval(simulationRun, 1000/fps);
   }
-  R0_actual=(R0sliderUsed) ? R0 : R0fun_time(R0time,it);
   fracDie= IFRfun_time(it);
+
+  R0_actual=(R0sliderUsed) ? R0 : R0fun_time(R0time,it);
   R0_hist[it]=R0_actual;
 
   var i=Math.min(data_idataStart+it, data_stringencyIndex.length-1);
-  stringencySliderUsed=false; //!!!! define later at approp slider
-  stringency=0; //!!!! define later at approp slider
+
   stringency_hist[it]=(stringencySliderUsed)
     ? stringency : data_stringencyIndex[i];
-  
+
 
   if(false){ // doSimulationStep: logging "allowed"
     console.log(" doSimulationStep before corona.update: it=",it,
@@ -2873,24 +2893,20 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
     Ivacc=this.vaccination.Ivacc; //!!! geht nicht bei calibration
   }
   
-  if(false){
-  //if(it>=itPresent){
-    console.log("inCalibration=",inCalibration,
-		" slider_rVacc_moved=",slider_rVacc_moved,
-		" rVacc=",rVacc,
-		" Ivacc=",Ivacc);
-  }
-
-  
+ 
   this.Reff=R0*(1-Ivacc)*(1-this.xyz)
     * ((it<=itPresent) ? 1 : calc_seasonFactor(it));
 
-  //!!! use stringencyIndex !!! still to introduce lockdown slider
-  var i=Math.max(0, Math.min(
-    data_stringencyIndex.length-1, it+data_idataStart)); 
-  this.Reff *=stringencyFactor(data_stringencyIndex[i]);
-
-  if(it>itPresent){console.log("pastPresent=",it-itPresent," data_stringencyIndex[i]=",data_stringencyIndex[i]," this.Reff=",this.Reff);}
+  // include political measures by stringency in [0,100]
+  
+  if(inCalibration||(!stringencySliderUsed)){
+    var i=Math.max(0, Math.min(
+      data_stringencyIndex.length-1, it+data_idataStart));
+    stringency=data_stringencyIndex[i];
+  }
+  this.Reff *=stringencyFactor(stringency);
+  
+  
   // source term from external trips
 
   var x0source=casesInflow/100000; // from returners of foreign regions
@@ -3242,6 +3258,7 @@ function DrawSim(){
   colInfectedLinValid="rgb(255,50,255)";
   colInfectedTot="rgb(0,0,220)";
   colTests="rgb(0,0,210)";
+  colStringency="rgb(0,0,150)";
 
 
 
@@ -3471,8 +3488,12 @@ function DrawSim(){
 		  data: simValid[39],
 		  type: 4, plottype: "lines", plotLog: false, 
 		  ytrafo: [1, true,true], color:colDeadValid};
+  this.dataG[41]={key: "Grad Lockdown [0-100]", data: [],
+		 type: 4, plottype: "lines", plotLog: false, 
+		 ytrafo: [0.1, true,false], color:colStringency};
 
 
+  // addtl stringency index at window 6 weekly incidence
 
 
 
@@ -3490,7 +3511,7 @@ function DrawSim(){
   this.qselectRegular[3]=[18,19,24,26,27];  // "Daten: Tests"
   this.qselectRegular[4]=[20,21,22];        // "Infektionsraten"
   this.qselectRegular[5]=[16,17,28,29];     // "Taegliche Faelle"
-  this.qselectRegular[6]=[30,31,32,33];     // "Wochen-Inzidenz"
+  this.qselectRegular[6]=[30,31,32,33,41];     // "Wochen-Inzidenz"
 
   this.qselectValid[0]=[0,34,1,2,35,4,5,6];  
   this.qselectValid[1]=[8,9,12,13,15,25];
@@ -3748,13 +3769,21 @@ DrawSim.prototype.drawAxes=function(windowG){
 
   
   // draw key drawkey (drawAxes)
+  // windowG:
+  // 0=cum,1=log,2=casesReal,3=tests,4=rates,5=casesDaily,6=incidence 
 
-  var yrelTop=(windowG==1) // 1=log
-    ? -8*(1.28*textsize/this.hPix) : 0.99; // 8: lines above x axis
-  var xrelLeft=(windowG==1)||(windowG==4) ? 0.40 :
-      (windowG==0) ? 0.02 : 0.20; 
   var dyrel=-1.2*textsize/this.hPix;
   var ikey=0;
+
+  var yrelTopKey=(windowG==1) // 1=log=simView
+      ? 9*dyrel : 0.97; // 8: lines above x axis
+  var yrelTopVars=(windowG==1) ? yrelTopKey-4.5*dyrel :
+      (windowG==0) ? yrelTopKey-5.5*dyrel :  // because of validation 2L more 
+      (windowG==3) ? yrelTopKey-5.5*dyrel :
+      (windowG==4) ? yrelTopKey-3.5*dyrel :
+      (measuresView) ? 0.30 : 0.45;
+  
+  var xrelLeft=0.02;
 
   for (var iq=0; iq<this.qselect[windowG].length; iq++){
 
@@ -3767,7 +3796,7 @@ DrawSim.prototype.drawAxes=function(windowG){
       ctx.fillStyle=this.dataG[q].color;
       ctx.fillText(this.dataG[q].key,
 	           this.xPix0+xrelLeft*this.wPix,
-		   this.yPix0+(yrelTop-ikey*dyrel)*this.hPix);
+		   this.yPix0+(yrelTopKey-ikey*dyrel)*this.hPix);
       ikey++;
     }
   }
@@ -3785,7 +3814,7 @@ DrawSim.prototype.drawAxes=function(windowG){
     // display date left upper corner
 
     var xrelLeftDate=-0.06;
-    var yrelTopDate=(showVacc) ? 1.02 : 1.04;
+    var yrelTopDate=(measuresView) ? 1.02 : 1.04;
     ctx.fillStyle="rgb(0,0,0)";
     ctx.fillText(str_date,
 		 this.xPix0+xrelLeftDate*this.wPix,
@@ -3795,33 +3824,39 @@ DrawSim.prototype.drawAxes=function(windowG){
     
     var Xperc=100*corona.xyz;
     var casesPerc=100*corona.xt;
-    ctx.fillText("Faelle:"+(casesPerc.toFixed(1))
+
+    // line lines gap between curve keys and variable text
+    // windowG:
+    // 0=cum,1=log,2=casesReal,3=tests,4=rates,5=casesDaily,6=incidence 
+
+    var line=0;
+    ctx.fillText("Kumul. Faelle:"+(casesPerc.toFixed(1))
 			    +" %, Sim. Durchseuchung:"+(Xperc.toFixed(1))+" %",
 		 this.xPix0+xrelLeft*this.wPix,
-		 this.yPix0+(yrelTop-(ikey+1)*dyrel)*this.hPix);
-    
-    ctx.fillText("Aktuelles R="+(corona.Reff.toFixed(2)),
+		 this.yPix0+(yrelTopVars-(line)*dyrel)*this.hPix);
+
+    line++;
+    ctx.fillText("Aktuelles R="+(corona.Reff.toFixed(2))
+		 +",  R0 ohne Massnahmen="+(R0_actual.toFixed(2)),
 		 this.xPix0+xrelLeft*this.wPix,
-		 this.yPix0+(yrelTop-(ikey+2)*dyrel)*this.hPix);
+		 this.yPix0+(yrelTopVars-(line)*dyrel)*this.hPix);
     
+    line++;
     ctx.fillText("Aktuelle IFR="+(100*IFRfun_time(it)).toFixed(2)+" %",
 		 this.xPix0+xrelLeft*this.wPix,
-		 this.yPix0+(yrelTop-(ikey+3)*dyrel)*this.hPix);
+		 this.yPix0+(yrelTopVars-(line)*dyrel)*this.hPix);
 
-    // 1 line gap ("ikey+5") because x axis of most relevant windows
-    // windowG={0=cum,1=log,2=casesReal,3=tests,4=rates,
-    // 5=casesDaily,6=incidence} 
-    var line=( (windowG==2)||(windowG==5)||(windowG==6)) ? 5 : 4
-   
+    line++;
     ctx.fillText("Insgesamt Gestorbene (sim.)="+(Math.round(n0*corona.z)),
 		 this.xPix0+xrelLeft*this.wPix,
-		 this.yPix0+(yrelTop-(ikey+line)*dyrel)*this.hPix);
+		 this.yPix0+(yrelTopVars-(line)*dyrel)*this.hPix);
 
     if(pVacc>0){
       line++;
-      ctx.fillText("Geimpft: "+(100*pVacc).toFixed(1)+" %, Impf-Immunitaet: "+(100*Ivacc).toFixed(1)+" %",
+      ctx.fillText("Geimpft: "+(100*pVacc).toFixed(1)
+		   +" %, Impf-Immunitaet: "+(100*Ivacc).toFixed(1)+" %",
 		 this.xPix0+xrelLeft*this.wPix,
-		 this.yPix0+(yrelTop-(ikey+line)*dyrel)*this.hPix);
+		 this.yPix0+(yrelTopVars-(line)*dyrel)*this.hPix);
      }
     
     if(casesInflow>0){
@@ -3829,14 +3864,14 @@ DrawSim.prototype.drawAxes=function(windowG){
       ctx.fillText("Fall-Import: "+(Math.round(casesInflow))
 		   +"/Tag/100 000 Einw.",
 		   this.xPix0+xrelLeft*this.wPix,
-		   this.yPix0+(yrelTop-(ikey+line)*dyrel)*this.hPix);
+		   this.yPix0+(yrelTopVars-(line)*dyrel)*this.hPix);
     }
 
     if(measures!=4){
       line++;
       ctx.fillText("Massnahmen: "+str_measures(measures),
 		   this.xPix0+xrelLeft*this.wPix,
-		   this.yPix0+(yrelTop-(ikey+line)*dyrel)*this.hPix);
+		   this.yPix0+(yrelTopVars-(line)*dyrel)*this.hPix);
     }
     
   }
@@ -3991,6 +4026,8 @@ DrawSim.prototype.transferRecordedData=function(){
   this.dataG[30].data=data_dxIncidence; // weekly data incidence by reference
   this.dataG[31].data=data_dzIncidence;
 
+  this.dataG[41].data=stringency_hist;
+
 
   if(false){
     console.log("\n\nDrawSim.transferRecordedData: data_cumCases.length=",
@@ -4099,12 +4136,7 @@ DrawSim.prototype.drawR0Estimate=function(it){
     }
 
     //'?' in following line should not happen ut extremely rarely does
-    var R0WithoutStringency=
-	(itR0>=R0_hist.length) ? R0_actual : R0_hist[itR0];
-    var R0= R0WithoutStringency*stringencyFactor(data_stringencyIndex[itR0]);
-
-    if(itR0>itPresent){console.log("itR0=",itR0," R0_actual=",R0_actual," R0_hist[itR0]=",R0_hist[itR0]," data_stringencyIndex.length=",data_stringencyIndex.length," data_stringencyIndex[itR0]=",data_stringencyIndex[itR0]," R0=",R0);
-		       console.log("DEFINE stringIndex_hist[it] as R0_hist[it] and make R0 slider right!!!");}
+    var R0=(itR0>=R0_hist.length) ? R0_actual : R0_hist[itR0];
   
     var sigmaR0=(itR0<itPresent) ? sigmaR0_hist[itR0] : 0;
     var str_R0="R  ="+R0.toFixed(2)
@@ -4222,8 +4254,8 @@ DrawSim.prototype.draw=function(it){
 
   // draw R0 estimates for windows with simulations
   
-  //if(this.mirroredGraphics && (!showVacc)){
-  if(this.mirroredGraphics){
+  if(this.mirroredGraphics && (!measuresView)){
+  //if(this.mirroredGraphics){
     this.drawR0Estimate(it);
   }
 
