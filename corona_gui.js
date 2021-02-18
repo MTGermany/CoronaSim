@@ -582,14 +582,14 @@ function toggleViews(){
 function setView(measuresView){
   if(measuresView){
     document.getElementById("vaccinationButton").innerHTML
-      = "=> R<sub>0</sub> -<br>Ansicht";
+      = "=> Infektions -<br>&nbsp;&nbsp;&nbsp;&nbsp;Parameter<br>Ansicht";
     document.getElementById("sliders").style.display="none"; // "hidden" DOS
     document.getElementById("sliders2").style.display="block"; // css DOS
   }
 
   else{
     document.getElementById("vaccinationButton").innerHTML
-      = "=> Ma&szlig;nahmen-<br>Ansicht";
+      = "&nbsp;=> Ma&szlig;nahmen-<br>Ansicht";
     document.getElementById("sliders").style.display="block";
     document.getElementById("sliders2").style.display="none";
   }

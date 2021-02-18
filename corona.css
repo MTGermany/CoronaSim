@@ -167,7 +167,7 @@ a:hover {
   top:   9vh; 
   left:   20vw;
   width:  60vw;
-  height:  16vh;
+  height:  13vh;
   background-color: rgb(222,255,222);
   margin-right: 0vw;
   margin-left: 0vw;
@@ -175,12 +175,12 @@ a:hover {
   /* display: none; DOS; same with property hidden and with "none" */
 }
 
-#sliders2{ 
+#sliders2{ /* normal landscape */
   position: absolute;
   top:   9vh; 
-  left:   25vw;
-  width:  55vw;
-  height:  10vh;
+  left:   20vw;
+  width:  60vw;
+  height:  13vh;
   background-color: rgb(222,255,222);
   margin-right: 0vw;
   margin-left: 0vw;
@@ -663,10 +663,10 @@ input[type=range]::-moz-range-track{
 
 #sliders{    /* smartphone landscape */
   position: absolute;
-  top:   11vh; 
-  left:   10vw;
+  top:   10vh; 
+  left:   15vw;
   width:  60vw;
-  height:  16vh;
+  height:  12vh;
   background-color: rgb(255,255,255);
   margin-right: 0vw;
   margin-left: 0vw;
@@ -676,10 +676,10 @@ input[type=range]::-moz-range-track{
 
 #sliders2{ /* smartphone landscape */
   position: absolute;
-  top:   12vh; 
-  left:   15vw;
-  width:  60vw;
-  height:  8vh;
+  top:   10vh; 
+  left:   22vw;
+  width:  50vw;
+  height:  12vh;
   background-color: rgb(255,255,255);
   margin-right: 0vw;
   margin-left: 0vw;

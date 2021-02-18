@@ -4120,39 +4120,41 @@ DrawSim.prototype.drawR0Estimate=function(it){
   for(var ical=0; ical<=getIndexCalib(it); ical++){ 
     var itR0=getIndexTimeFromCalib(ical);
      // during calibration, linear interpolation
-     // between old and new R0 value => in display -=calibInterval/2
-    var x0=this.xPix[itR0-this.itmin-Math.round(calibInterval/2)];
-    //ctx.fillRect(x0-0.5*dxPix,this.yPix0,dxPix,this.hPix);
-
-    ctx.setTransform(0,-1,1,0,x0+textsizeR0,y0);
-    if(false){
-      console.log("drawSim.draw: it=",it," itR0=",itR0,
+    // between old and new R0 value => in display -=calibInterval/2
+    var i_xPix=itR0-this.itmin-Math.round(calibInterval/2);
+    if((i_xPix>=0)&&(i_xPix<this.xPix.length)){
+      var x0=this.xPix[i_xPix];
+      //ctx.fillRect(x0-0.5*dxPix,this.yPix0,dxPix,this.hPix);
+      ctx.setTransform(0,-1,1,0,x0+textsizeR0,y0);
+      if(false){
+        console.log("drawSim.draw: it=",it," itR0=",itR0,
 		" R0_hist.length=",R0_hist.length,
 		" sigmaR0_hist.length=",sigmaR0_hist.length,
 		" itPresent=",itPresent,
 		" R0_hist[itR0]=",R0_hist[itR0],
-		" sigmaR0_hist[itR0]=",sigmaR0_hist[itR0],
+		  " sigmaR0_hist[itR0]=",sigmaR0_hist[itR0],
 		"");
-    }
+      }
 
-    //'?' in following line should not happen ut extremely rarely does
-    var R0=(itR0>=R0_hist.length) ? R0_actual : R0_hist[itR0];
+      //'?' in following line should not happen ut extremely rarely does
+      var R0=(itR0>=R0_hist.length) ? R0_actual : R0_hist[itR0];
   
-    var sigmaR0=(itR0<itPresent) ? sigmaR0_hist[itR0] : 0;
-    var str_R0="R  ="+R0.toFixed(2)
-      +((true) // if plotting  w/o "+/- stddev
-	? "" : (" +/- "+sigmaR0.toFixed(2)));
+      var sigmaR0=(itR0<itPresent) ? sigmaR0_hist[itR0] : 0;
+      var str_R0="R  ="+R0.toFixed(2)
+	+((true) // if plotting  w/o "+/- stddev
+	  ? "" : (" +/- "+sigmaR0.toFixed(2)));
 
-    var step=(canvas.width<=600) ? 2 : 1;
-    //if(ical%2==0){ //!! drawn every ical'th calibration value
-    if(ical%step==0){
-     ctx.fillText(str_R0,0,0);
-      ctx.font = (Math.round(0.7*textsizeR0))+"px Arial"; 
-      ctx.fillText("0",0.8*textsizeR0,0.3*textsizeR0);
+      var step=(canvas.width<=600) ? 2 : 1;
+      //if(ical%2==0){ //!! drawn every ical'th calibration value
+      if(ical%step==0){
+        ctx.fillText(str_R0,0,0);
+        ctx.font = (Math.round(0.7*textsizeR0))+"px Arial"; 
+        ctx.fillText("0",0.8*textsizeR0,0.3*textsizeR0);
+      }
     }
     ctx.font = textsizeR0+"px Arial"; 
-    ctx.setTransform(1,0,0,1,0,0);
   }
+  ctx.setTransform(1,0,0,1,0,0);
 }
 
 
