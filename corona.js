@@ -125,6 +125,13 @@ var di2=0;  // i2-i for same date FROM THE END
 
 var data_date=[];
 var data_cumCases=[];
+
+var countryComparison=false;
+var countryCmp="Czechia";
+var dataCmp_cumCases=[]; // for comparison with, e.g., Czechia
+var dataCmp_dxIncidence=[]; // compare weekly incidence per 100 000 from data
+
+
 var data_cumDeaths=[];
 var data_cumRecovered=[];
 var data_cumCfr=[];
@@ -171,6 +178,7 @@ const countryGerList={
   "Sweden": "Schweden",
   "Switzerland": "Schweiz",
   "Greece"     : "Griechenland",
+  "Portugal": "Portugal",
   "Israel": "Israel",
   //  "China": "China",
   "India": "Indien",
@@ -179,6 +187,7 @@ const countryGerList={
   //  "Turkey": "Tuerkei",
   "US": "USA",
   "Australia": "Australien",
+  "South Africa": "Suedafrika",
   "LK_Erzgebirgskreis": "LK Erzgebirgskreis",
   "LK_Osterzgebirge": "LK Osterzgebirge",
   "SK_Dresden": "Dresden"
@@ -197,11 +206,13 @@ const n0List={
   "Sweden"        :   10000000,
   "Switzerland"   :    8300000,
   "Greece"        :   10700000,
+  "Portugal"      :   10196707,
   "Israel"        :    9100000,
   "India"         : 1353000000,
   "Russia"        :  144000000,
   "US"            :  328000000,
   "Australia"     :   25499881,
+  "South Africa"  :   59308690,
   "LK_Erzgebirgskreis": 334948,
   "LK_Osterzgebirge"  : 245586,
   "SK_Dresden"        : 556780
@@ -222,11 +233,13 @@ const fracDieInitList={
   "Sweden"        : 0.0040,
   "Switzerland"   : 0.0055,
   "Greece"        : 0.0055,
+  "Portugal"      : 0.0055,
   "Israel"        : 0.0055,
   "India"         : 0.0045,
   "Russia"        : 0.0040,
   "US"            : 0.0055,
   "Australia"     : 0.0040,
+  "South Africa"  : 0.0060,
   "LK_Erzgebirgskreis": 0.005,
   "LK_Osterzgebirge"  : 0.005,
   "SK_Dresden"        : 0.005
@@ -245,11 +258,13 @@ const tauDieList={
   "Sweden"        : 19,
   "Switzerland"   : 19,
   "Greece"        : 14,
+  "Portugal"      : 17,
   "Israel"        : 17,
   "India"         : 17,
   "Russia"        : 17,
   "US"            : 17,
   "Australia"     : 17,
+  "South Africa"  : 17,
   "LK_Erzgebirgskreis": 10,  // too short; overcome data inconsistency
   "LK_Osterzgebirge"  : 10,
   "SK_Dresden"        : 10
@@ -271,11 +286,13 @@ const tauRecoverList={
   "Sweden"        : 25,
   "Switzerland"   : 18,
   "Greece"        : 18,
+  "Portugal"      : 18,
   "Israel"        : 18,
   "India"         : 18,
   "Russia"        : 18,
   "US"            : 18,
   "Australia"     : 18,
+  "South Africa"  : 18,
   "LK_Erzgebirgskreis": 16,
   "LK_Osterzgebirge"  : 16,
   "SK_Dresden"        : 16
@@ -561,9 +578,12 @@ function initializeData(country,insideValidation){
 
   if( typeof insideValidation === "undefined"){insideValidation=false;}
   
-  country2=(country==="United Kingdom") ? "England" : country;
+  country2=(country==="United Kingdom") ? "England" :
+    (country==="South Africa") ? "SouthAfrica" :country;
+  
   useLandkreise=(country==="LK_Erzgebirgskreis")
     || (country==="LK_Osterzgebirge") || (country==="SK_Dresden");
+  
   IFR_dontUseLastDays=(useLandkreise) ? 29 : 5;
   if(useLandkreise){country2="Germany";}
   useLiveData=(useLandkreise) ? false : useLiveDataInit;
@@ -577,11 +597,15 @@ function initializeData(country,insideValidation){
   // access ONLY for literals w/o string ""
 
   var data=(useLandkreise) ? dataRKI_orig[country] : dataGit_orig[country];
+  console.log("dataGit_orig[country]=",dataGit_orig[country]);
   if(insideValidation){
     data=(useLandkreise) ? dataRKI[country] : dataGit[country];}
   var dateInitStr=data[0]["date"];
   var dateMaxStr=insertLeadingZeroes(data[data.length-1]["date"]);
 
+  console.log("dataGit2_orig=",dataGit2_orig);
+  console.log("dataGit2_orig[country2]=",dataGit2_orig[country2]);
+  console.log("dataGit2[country2]=",dataGit2[country2]);
   var data2=(insideValidation)
       ? dataGit2[country2].data : dataGit2_orig[country2].data;
   var dateInitStr2=data2[0]["date"];
@@ -913,12 +937,13 @@ function initializeData(country,insideValidation){
       if(useSqrtModel){ // global var
 
 	// the sqrt model square root model pTest
-	//!!! (2021-01-04)
-        // updated to full test every 14 instead of 7 days=^ 100%
+	// (2021-01-04)
+        // updated to full test every 28 instead of 7 days=^ 100%
 
-        var pModel=Math.sqrt(14*data_dn[i]/n0);  
+        var pModel=Math.sqrt(28*data_dn[i]/n0); //!!! 
 
 	// corrections if very vew tests (only at beginning)
+	// or pTest >1
 	
         data_pTestModel[i]=pTestModelMin
 	*Math.sqrt(1+Math.pow(pModel/pTestModelMin,2));
@@ -999,7 +1024,7 @@ function initializeData(country,insideValidation){
       "\n\ninitializeData finished:",
       "\ndata[0][\"date\"]=",data[0]["date"],
       " data[data.length-1][\"date\"]=",data[data.length-1]["date"],
-      "\nata2[0][\"date\"]=",data2[0]["date"],
+      "\ndata2[0][\"date\"]=",data2[0]["date"],
       " data2[data2.length-1][\"date\"]=",data2[data2.length-1]["date"]);
 
     for(var i=0; i<data.length; i++){
@@ -1061,8 +1086,45 @@ function initializeData(country,insideValidation){
   stringencySliderUsed=false;
 
 
+  //##############################################################
+  // just try: compare with other country
+  // dataGit begin all at same date, in contrast to dataGit2
+  //##############################################################
+
+  console.log("in creating incidence for country to compare with:",
+	      " countryCmp=",countryCmp,
+	     // " dataGit[countryCmp]=",dataGit[countryCmp]
+	     );
+  dataCmp_cumCases=[];
+  dataCmp_dxIncidence=[];
+  var n0Cmp=parseInt(n0List[countryCmp]);
+  for(var i=0; i<dataGit[countryCmp].length; i++){
+    dataCmp_cumCases[i]=dataGit[countryCmp][i]["confirmed"];
+  }
+
+  for(var i=0; i<7; i++){
+    dataCmp_dxIncidence[i]=dataCmp_cumCases[i]*100000/n0Cmp;
+  }
+
+  for(var i=7; i<dataCmp_cumCases.length; i++){
+    dataCmp_dxIncidence[i]=(dataCmp_cumCases[i]-dataCmp_cumCases[i-7])
+      *100000/n0Cmp;
+    if(i>dataCmp_cumCases.length-14){
+      console.log("i=",i," date=",dataGit[countryCmp][i]["date"],
+		  " dataCmp_dxIncidence[i]=",dataCmp_dxIncidence[i]);
+    }
+  }
+  dataCmp_dxIncidence=smooth(
+    dataCmp_dxIncidence,[1/7, 1/7, 1/7, 1/7, 1/7, 1/7, 1/7]);
+  
+
+  
+ 
+  
+  console.log("dataCmp_cumCases[300]=",dataCmp_cumCases[300]);
+
  //##############################################################
-// calibrate
+ // calibrate
  //##############################################################
 
   // args set global vars itmin_calib, itmax_calib 
@@ -2142,6 +2204,11 @@ function selectWindow(){ // callback html select box "windowGDiv"
   console.log("in selectWindow");
   windowG=document.getElementById("windows").value;
 
+  // hide country cmp button for all but window 6 (incidences)
+  
+  document.getElementById("buttonCmp").style.display=
+    (windowG==6) ? "block" : "none"; 
+
   drawsim.setWindow(windowG); // clear and draAxes in setDisplay..
 
   drawsim.transferSimData(it);
@@ -2414,6 +2481,18 @@ function myCalibrateFunction(){ // callback "Kalibriere neu!
   initializeData(country); // includes calibrate(); myRestartFunction();
 }
 
+function myCountryComparison(){ // callback "Kalibriere neu!
+  if(countryComparison){
+    countryComparison=false;
+    document.getElementById("buttonCmp").innerHTML="Start CZ Vergleich";
+  }
+  else{
+    countryComparison=true;
+    countryCmp="Czechia";
+    document.getElementById("buttonCmp").innerHTML="Stop CZ Vergleich";
+ }
+  myRestartFunction();
+}
 
 
 function simulationRun() {
@@ -3259,6 +3338,7 @@ function DrawSim(){
   colInfectedTot="rgb(0,0,220)";
   colTests="rgb(0,0,210)";
   colStringency="rgb(0,0,150)";
+  colCmp="rgba(255,50,0,0.3)";
 
 
 
@@ -3484,13 +3564,19 @@ function DrawSim(){
 		  data: [],
 		  type: 4, plottype: "lines", plotLog: false, 
 		  ytrafo: [1, true,true], color:colDeadSim};
+
   this.dataG[39]={key: "Validierungsreferenz: alle Daten", // W-Inz. Gest
 		  data: simValid[39],
 		  type: 4, plottype: "lines", plotLog: false, 
 		  ytrafo: [1, true,true], color:colDeadValid};
+
   this.dataG[41]={key: "Grad Lockdown [0-100]", data: [],
 		 type: 4, plottype: "lines", plotLog: false, 
 		 ytrafo: [0.1, true,false], color:colStringency};
+
+  this.dataG[42]={key: "Wocheninzidenz Vergleichsland", data: [],
+		 type: 0, plottype: "bars", plotLog: false, 
+		 ytrafo: [0.1, true,false], color:colCmp}; // real: scale*10
 
 
   // addtl stringency index at window 6 weekly incidence
@@ -3513,6 +3599,8 @@ function DrawSim(){
   this.qselectRegular[5]=[16,17,28,29];     // "Taegliche Faelle"
   this.qselectRegular[6]=[30,31,32,33,41];     // "Wochen-Inzidenz"
 
+  if(countryComparison){this.qselectRegular[6]=[30,31,32,33,41,42];}
+  
   this.qselectValid[0]=[0,34,1,2,35,4,5,6];  
   this.qselectValid[1]=[8,9,12,13,15,25];
   this.qselectValid[2]=[16,17,23,36,28,37];
@@ -4027,6 +4115,7 @@ DrawSim.prototype.transferRecordedData=function(){
   this.dataG[31].data=data_dzIncidence;
 
   this.dataG[41].data=stringency_hist;
+  this.dataG[42].data=dataCmp_dxIncidence;
 
 
   if(false){

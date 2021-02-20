@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # get local data from some Saxony Landkreise
-
+# updateCoronaInput.sh
 echo ""; echo "getting RKI Landkreis data ..."
 updateLandkreisData.sh
 
@@ -13,12 +13,16 @@ updateLandkreisData.sh
 # this link recommended but does not allow wget
 # wget https://covid.ourworldindata.org/data/owid-covid-data.json
 
+if(($#==0)); then
+  echo ""; echo "wgetting OWID data for tests ..."
 
-echo ""; echo "getting OWID data for tests ..."
+  wget https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/owid-covid-data.json --output-document=data/githubWithTests.json
+  cp data/githubWithTests.json data/githubWithTests_orig.json;
 
-wget https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/owid-covid-data.json --output-document=data/githubWithTests.json
+else echo ""; echo "debug mode: copying OWID data from saved one";
+  cp data/githubWithTests_orig.json data/githubWithTests.json;
+fi
 
-cp data/githubWithTests.json data/githubWithTests_orig.json
 
 
  #only development!
@@ -39,7 +43,8 @@ grep Germany data/githubWithTests.json > data/tmp.json
 grep Austria data/githubWithTests.json >> data/tmp.json
 grep Czech data/githubWithTests.json >> data/tmp.json
 grep France data/githubWithTests.json >> data/tmp.json
-grep "United Kingdom" data/githubWithTests.json >> data/tmp.json
+# grep "United Kingdom" data/githubWithTests.json >> data/tmp.json
+grep GBR data/githubWithTests.json >> data/tmp.json  # 3-Buchst Abk gehen auch
 grep Italy data/githubWithTests.json >> data/tmp.json
 grep Poland data/githubWithTests.json >> data/tmp.json
 grep Spain data/githubWithTests.json >> data/tmp.json
@@ -51,6 +56,9 @@ grep India data/githubWithTests.json >> data/tmp.json
 grep Russia data/githubWithTests.json >> data/tmp.json
 grep USA data/githubWithTests.json >> data/tmp.json
 grep AUS data/githubWithTests.json >> data/tmp.json
+grep PRT data/githubWithTests.json >> data/tmp.json
+grep ZAF data/githubWithTests.json >> data/tmp.json # Suedafrika
+
 
 ################################
 # filter useless entries OWID
@@ -109,6 +117,8 @@ perl -i -p -e "s/IND/India/g" data/tmp2.json
 perl -i -p -e "s/RUS/Russia/g" data/tmp2.json
 perl -i -p -e "s/USA/US/g" data/tmp2.json
 perl -i -p -e "s/AUS/Australia/g" data/tmp2.json
+perl -i -p -e "s/PRT/Portugal/g" data/tmp2.json
+perl -i -p -e "s/ZAF/SouthAfrica/g" data/tmp2.json # cannot use spaces
 
 
 #####################################################################
@@ -153,6 +163,8 @@ grep India data/github.json >> data/tmp.json
 grep Russia data/github.json >> data/tmp.json
 grep US data/github.json >> data/tmp.json
 grep Australia data/github.json >> data/tmp.json
+grep Portugal data/github.json >> data/tmp.json
+grep "South Africa" data/github.json >> data/tmp.json
 
 # extract Germany data for development reference
 

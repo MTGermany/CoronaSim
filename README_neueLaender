@@ -1,0 +1,104 @@
+
+(1) Bereite Files zur Analyse vor
+(nicht zu lange Zeilen, neues Land am Anfang)
+
+OWID: tmpTests.json, "kleines" github: tmp.json
+
+cp data/githubWithTests_orig.json tmpTests.json
+perl -i -p -e 's/\}\]\}\,/\}\]\},\n/g' tmpTests.json
+perl -i -p -e 's/\}\,/},\n/g' tmpTests.json
+cp data/github_orig.json tmp.json
+
+(2) check, wie die Laenderabkuerzungen heissen (Bsp Portugal)
+
+grep Portug tmpTests.json tmp.json
+  => PRT in OWID-Daten, Portugal in "kleinen" Daten
+
+grep "South Africa" tmpTests.json tmp.json
+  => ZAF in OWID-Daten, South Africa in "kleinen" Daten
+
+(3) Passe extrakt-Skript updateCoronaInput.sh an
+
+konsolidiere alles nach Konventionen im "kleinen git", da die direkt
+genommen, ausser Laender mit Leerzeichen, dort in .js Extrabehnadlung
+noetig
+
+OWID
+
+[nach grep AUS data/githubWithTests.json >> data/tmp.json]:
+grep PRT data/githubWithTests.json >> data/tmp.json
+grep ZAF data/githubWithTests.json >> data/tmp.json
+
+[nach perl -i -p -e "s/AUS/Australia/g" data/tmp2.json]:
+perl -i -p -e "s/PRT/Portugal/g" data/tmp2.json
+perl -i -p -e "s/ZAF/SouthAfrica/g" data/tmp2.json # cannot use spaces
+
+"kleines git"
+
+[nach grep Australia data/github.json >> data/tmp.json]:
+
+grep Portugal data/github.json >> data/tmp.json
+grep "South Africa" data/github.json >> data/tmp.json
+
+
+
+(4) Lasse Script laufen und checke es
+
+updateCoronaInput.sh
+
+grep ZAF data/githubWithTests_debug.json
+grep PRT data/githubWithTests_debug.json
+grep Portugal data/github.json
+grep "South Africa" data/github.json
+
+
+(5) Anpassungen in index.html 
+an geeigneter Stelle (zB letzte Europa-Laender bzw letztes Land)
+
+<option value="Portugal">Portugal</option>
+  <option value="South Africa">S&uuml;dafrika</option>
+
+
+(6) Anpassungen in corona.js
+
+(i) countryGerList add:
+  "South Africa": "Suedafrika",
+  "Portugal": "Portugal",
+
+(ii) n0List add: [data in
+ grep ZAF data/githubWithTests_debug.json
+ grep PRT data/githubWithTests_debug.json]
+  "Portugal"      :   10196707,
+  "South Africa"  :   59308690,
+
+(iii) fracDieList add: [just init guesses, copy]
+  "Portugal"      : 0.0055,
+  "South Africa"  : 0.0060,
+
+(iv) tauDie, tauRecover analogy
+
+(v) Extrawurst 2-Worte Laender in function initializeData: 
+  country2=(country==="United Kingdom") ? "England" :
+    (country==="South Africa") ? "SouthAfrica" :country;
+
+
+(7) Anpassungen in ger2eng.sh
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

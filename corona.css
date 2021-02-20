@@ -282,6 +282,13 @@ a:hover {
   z-index: 3; 
 }
 
+#compareCountry{ /* normal landscape */
+  position: absolute;
+  top:     27vh; 
+  right:   1vw;
+  z-index: 3; 
+}
+
 #testnumberDiv{
   position: absolute;
   top:     50vh; /*10vh*/
@@ -375,6 +382,8 @@ a:hover {
   right:   auto;
   left:    2vw;
 }
+
+
 
 #testnumberDiv{
   top:     auto; 
@@ -572,6 +581,13 @@ input[type=range]::-webkit-slider-thumb {
   z-index: 3; 
 }
 
+#compareCountry{ /* normal rect/portrai */
+  position: absolute;
+  top:     32vmin; 
+  right:   1vw;
+  z-index: 3; 
+}
+
 #vaccinationView{  /*smartphone portrait */
   position: absolute;
   top:     auto;   /* need auto because otherwise dependency bug */ 
@@ -579,6 +595,8 @@ input[type=range]::-webkit-slider-thumb {
   right:   auto;
   left:    2vw;
 }
+
+
 
 #testnumberDiv{
   position: absolute;
@@ -775,10 +793,16 @@ input[type=range]::-moz-range-track{
 }
 
 #validateDiv{ 
-  top:     29vh; 
+  top:     28vh; 
   bottom:  auto; 
   right:   1vw;
   left:    auto;
+}
+
+#compareCountry{ /* normal rect/portrai */
+  top:     34vh; 
+  right:   1vw;
+  z-index: 3; 
 }
 
 #testnumberDiv{
