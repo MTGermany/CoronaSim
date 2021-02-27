@@ -1162,7 +1162,7 @@ function stringencyFactor(stringencyIndex){
 
 function calc_seasonFactor(it){
   var fracYearPeak=0.10; //  (first week February)
-  var relAmplitude=0.1; // !! factor (1+/-relAmplitude)  (0.2)
+  var relAmplitude=0.1; // !!! factor (1+/-relAmplitude)  (0.2)
   var phase=2*Math.PI*(dayStartYear+it-fracYearPeak)/365.;
   var phasePresent=2*Math.PI*(dayStartYear+itPresent-fracYearPeak)/365.;
   var factor=1+relAmplitude*Math.cos(phase);
@@ -3088,7 +3088,11 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
 
   if(includeInfluenceTestNumber){ 
     if(idata<data_pTestModel.length){pTest=data_pTestModel[idata];} 
-    else{pTest=pTest_weeklyPattern[(idata-data_pTestModel.length)%7];} 
+    else{
+      //!!! quick hack to avoid sudden drop cases 2021-02-22
+      var factor=1.0999 
+      pTest=factor*pTest_weeklyPattern[(idata-data_pTestModel.length)%7];
+    } 
   }
 
   var dtau=Math.min(Math.floor(tauAvg/2),Math.round(tauTest));
