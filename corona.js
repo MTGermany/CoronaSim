@@ -613,11 +613,11 @@ function initializeData(country,insideValidation){
 
   // define index shift di2=i2-i1 for same date
   // (define from the end since some data weekly (!) at very beginning)
-
+  // (see also !!! if useLandkreise)
   var dateMax=new Date(insertLeadingZeroes(dateMaxStr));
   var dateMax2=new Date(insertLeadingZeroes(dateMaxStr2));
   di2=data2.length-data.length
-    +Math.round((dateMax.getTime()-dateMax2.getTime())/oneDay_ms);
+    -Math.round((dateMax2.getTime()-dateMax.getTime())/oneDay_ms);
 
   // !! re-initialize; otherwise consequential errors after switching back
   // to countries with more data
@@ -4119,7 +4119,40 @@ DrawSim.prototype.transferRecordedData=function(){
   this.dataG[31].data=data_dzIncidence;
 
   this.dataG[41].data=stringency_hist;
-  this.dataG[42].data=dataCmp_dxIncidence;
+  if(!useLandkreise){
+    this.dataG[42].data=dataCmp_dxIncidence; // reference
+  }
+  else{ // !!! if useLandkreise index shift => need to copy element by element
+    // data contains appropriate RKI data of Saxon regions
+    // but data is local (reference) variable in initializeData
+    // => need to redefine
+    
+    var data=dataRKI_orig[country]; // country=saxon region, country2=Germany
+    var dataCmp=dataGit_orig[countryCmp];
+    var dateMaxStr=insertLeadingZeroes(data[data.length-1]["date"]);
+    var dateMaxStrCmp=insertLeadingZeroes(dataCmp[dataCmp.length-1]["date"]);
+    var dateMax=new Date(insertLeadingZeroes(dateMaxStr));
+    var dateMaxCmp=new Date(insertLeadingZeroes(dateMaxStrCmp));
+
+    // define index shift diCmp=iCmp-i|same date
+    // from the end since some data weekly (!) at very beginning)
+    // see also "define index shift di2=i2-i1"
+
+    var diCmp=dataCmp.length-data.length
+	-Math.round((dateMaxCmp.getTime()-dateMax.getTime())/oneDay_ms);
+    console.log("define (Czech) comparison data for Saxon countries:",
+		"\nNeed index shift: diCmp=",diCmp,
+		"\n calculated from dataCmp.length=",dataCmp.length,
+		" data.length=",data.length,
+		" dateMaxStrCmp=",dateMaxStrCmp,
+		" dateMax=",dateMax
+	       );
+    for(var i=0; i<data_dxIncidence.length; i++){
+      this.dataG[42].data[i]= ((i+diCmp>=0)&&(i+diCmp<dataCmp.length))
+	? dataCmp_dxIncidence[i+diCmp] : 0;
+    }
+  }
+  
 
 
   if(false){
