@@ -1,0 +1,200 @@
+
+
+
+%#############################################
+% New pdflatex format,
+% only png, jpg (or svg?) images but positioning now ok
+% template in ~/tex/inputs/template_folien.tex
+% [TODO now specialized to Vkoem_Ma; make general]
+%#############################################
+
+
+\documentclass[mathserif,aspectratio=169]{beamer}
+%\documentclass[mathserif,handout,aspectratio=169]{beamer}
+%\usepackage{beamerthemeshadow}
+\input{$HOME/tex/inputs/defsSkript}  %$
+\input{$HOME/tex/inputs/styleBeamerVkoekMa}   %$ 
+
+\usepackage{graphicx}
+
+
+%##############################################################
+
+\begin{document}
+
+\section*{Covid-19 Simulation}
+
+
+%##############################################################
+\frame{ %title layout
+%##############################################################
+
+\placebox{0.50}{0.50}{
+  \figSimple{1.12\textwidth}{figsCorona/Skifoaehrn_still.jpg}}
+%>=1.15\textwidth full width
+
+\visible<2>{\placebox{0.50}{0.54}{ %5. Schlag
+  \figSimple{0.60\textwidth}{figsCorona/coronaSemitransp80.png}}}
+
+\visible<6>{\placebox{0.50}{0.54}{ %9. Schlag
+  \figSimple{0.40\textwidth}{figsCorona/SoederKopfSemitransp80.png}}}
+
+\visible<10>{\placebox{0.50}{0.54}{ %13. Schlag
+  \figSimple{0.60\textwidth}{figsCorona/coronaSemitransp50.png}}}
+
+\visible<14>{\placebox{0.50}{0.54}{ %17. Schlag
+  \figSimple{0.40\textwidth}{figsCorona/SoederKopfSemitransp60.png}}}
+
+\visible<18-19>{\placebox{0.20}{0.35}{%21.-22. Schlag
+  \figSimple{0.40\textwidth}{figsCorona/coronaSemitransp50.png}}}
+
+\visible<20-25>{\placebox{0.35}{0.70}{%23.-28. Schlag
+  \figSimple{0.40\textwidth}{figsCorona/coronaSemitransp50.png}}}
+
+\visible<22-23>{\placebox{0.85}{0.35}{
+  \figSimple{0.25\textwidth}{figsCorona/SoederKopfSemitransp60.png}}}
+
+\visible<24-25>{\placebox{0.70}{0.70}{%27.-28. Schlag
+  \figSimple{0.25\textwidth}{figsCorona/SoederKopfSemitransp60.png}}}
+
+
+\visible<26>{\placebox{0.50}{0.50}{ %29. Schlag
+  \figSimple{0.60\textwidth}{figsCorona/coronaSemitransp50.png}}}
+
+\visible<28>{\placebox{0.50}{0.50}{ %31. Schlag, => doppelt schnell!!
+  \figSimple{0.40\textwidth}{figsCorona/SoederKopfSemitransp40.png}}}
+
+
+\visible<30>{\placebox{0.50}{0.50}{ %32. Schlag
+  \figSimple{0.50\textwidth}{figsCorona/SoederKopf.png}}}
+
+\visible<30>{\placebox{0.52}{0.40}{
+  \figSimple{0.55\textwidth}{figsCorona/coronaSemitransp50.png}}}
+
+
+%33. Schlag=Klimax: daab - daab - dab-dab-dab-dab-dab!
+\visible<32-36>{\placebox{0.50}{0.50}{ %33. Schlag=Klimax
+  \figSimple{0.60\textwidth}{figsCorona/corona.png}}}
+
+
+
+}
+
+
+
+%##############################################################
+\frame{\frametitle{Below the Hood}
+%##############################################################
+
+\visible<1>{
+ \placebox{0.5}{0.54}{\figSimple{1.08\textwidth}{figsCorona/SEIRsim02.png}}}
+
+\visible<2>{
+ \placebox{0.5}{0.54}{\figSimple{1.08\textwidth}{figsCorona/SEIRsim03.png}}}
+
+\visible<3>{
+ \placebox{0.5}{0.54}{\figSimple{1.08\textwidth}{figsCorona/SEIRsim04.png}}}
+
+\visible<4>{
+ \placebox{0.5}{0.54}{\figSimple{1.08\textwidth}{figsCorona/SEIRsim05.png}}}
+
+\visible<5>{
+ \placebox{0.5}{0.54}{\figSimple{1.08\textwidth}{figsCorona/SEIRsim06.png}}}
+
+\visible<6>{
+ \placebox{0.5}{0.54}{\figSimple{1.08\textwidth}{figsCorona/SEIRsim07.png}}}
+
+\visible<7>{
+ \placebox{0.5}{0.54}{\figSimple{1.08\textwidth}{figsCorona/SEIRsim08.png}}}
+
+\visible<8>{
+ \placebox{0.5}{0.54}{\figSimple{1.08\textwidth}{figsCorona/SEIRsim09.png}}}
+
+\visible<9>{
+ \placebox{0.5}{0.54}{\figSimple{1.08\textwidth}{figsCorona/SEIRsim10.png}}}
+
+\visible<10>{
+ \placebox{0.5}{0.54}{\figSimple{1.08\textwidth}{figsCorona/SEIRsim11.png}}}
+
+\visible<11->{
+ \placebox{0.5}{0.54}{\figSimple{1.08\textwidth}{figsCorona/SEIRsim12.png}}}
+
+\placebox{0.5}{0.11}{\parbox{0.9\textwidth}{
+\bi
+
+\item \visible<1->{Vier Phasen: infizierbar,}
+      \visible<2->{infiziert,}
+      \visible<3->{ ansteckend,}
+      \visible<4->{ nicht mehr ansteckend}
+\visible<7->{\item Sensitivit\"at $1-\alpha$=Prob\,(positiv $|$ infiziert)}
+\visible<8->{\item Specifizit\"at $1-\beta$
+            =Prob\,(negativ $|$ nicht infiziert)}
+\ei
+}}
+
+
+
+
+}
+
+
+
+%##############################################################
+\frame{ %title layout
+%##############################################################
+
+
+\visible<7->{\placebox{0.48}{0.62}
+ {\figSimple{1.05\textwidth}{figsCorona/Czechia_oct30_cases_prog_cropped.png}}}
+
+% make images pale (see demo_makePale.tex)
+%\makePale{opacity}{centerXrel}{centerYrel}{wrel}{hrel}
+% e.g., \makePale{0.8}{0.5}{0.5}{1}{0.3}
+
+%\makePale{0.1}{0.48}{0.57}{1.2}{1.1}
+
+\placebox{0.50}{0.90}{\myheading{Take-Home Messages }}
+
+\placebox{0.50}{0.40}
+ {\parbox{0.95\textwidth}{
+  \bi
+    \visible<1-6>{\item Separation between \bfdef{infection} and
+      \bfdef{data dynamics}} 
+    \visible<2-6>{\item Data used to \bfdef{calibrate} the base
+      reproduction numbers  and IFRs}
+    \visible<3-6>{\item \bfdef{Wave peak} if contamination $\approx
+      \unit[20]{\%}$: 
+    No herd immunity but sufficient for mild measures
+    to be effective}
+    \visible<4-6>{\item As flu, there is a strong \bfdef{season dependence}
+      (Peru, Australia)}
+    \visible<5->{\item hard lockdowns will hardly lead to fewer deaths;\\ 
+    \bfdef{$\approx$ \unit[30\,000]{Covid/flu deaths}} this winter season
+    in Germany anyway}
+    \visible<6->{\item Pandemic \bfdef{is over} in March/April 2021; in
+      Czechia already now}
+      %\item Disclaimer: conditional projections, not
+      %unconditional forecasts. 
+    \visible<7->{\item \bfred{Let's see if these projections stand the
+        test of time!}} 
+  \ei
+}}
+
+}
+
+
+
+\end{document}
+
+
+
+
+
+
+
+
+
+
+
+
+

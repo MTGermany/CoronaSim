@@ -1,0 +1,144 @@
+
+
+
+%#############################################
+% New pdflatex format,
+% only png, jpg (or svg?) images but positioning now ok
+% template in ~/tex/inputs/template_folien.tex
+% [TODO now specialized to Vkoem_Ma; make general]
+%#############################################
+
+
+%\documentclass[mathserif,aspectratio=1610]{beamer}
+%\documentclass[mathserif,handout,aspectratio=1610]{beamer}
+\documentclass[mathserif,aspectratio=169]{beamer}
+%\documentclass[mathserif,handout,aspectratio=169]{beamer}
+%\usepackage{beamerthemeshadow}
+\input{$HOME/tex/inputs/defsSkript}  %$
+\input{$HOME/tex/inputs/styleBeamerVkoekMa}   %$
+
+\usepackage{graphicx}
+
+
+%##############################################################
+
+\begin{document}
+
+\section*{Covid-19 Simulation}
+
+
+
+%##############################################################
+\frame{\frametitle{Below the Hood}
+%##############################################################
+
+\visible<1>{
+ \placebox{0.5}{0.55}{\figSimple{1.08\textwidth}{figsCorona/SEIRsim02.png}}}
+
+\visible<2>{
+ \placebox{0.5}{0.55}{\figSimple{1.08\textwidth}{figsCorona/SEIRsim03.png}}}
+
+\visible<3>{
+ \placebox{0.5}{0.55}{\figSimple{1.08\textwidth}{figsCorona/SEIRsim04.png}}}
+
+\visible<4>{
+ \placebox{0.5}{0.55}{\figSimple{1.08\textwidth}{figsCorona/SEIRsim05.png}}}
+
+\visible<5>{
+ \placebox{0.5}{0.55}{\figSimple{1.08\textwidth}{figsCorona/SEIRsim06.png}}}
+
+\visible<6>{
+ \placebox{0.5}{0.55}{\figSimple{1.08\textwidth}{figsCorona/SEIRsim07.png}}}
+
+\visible<7>{
+ \placebox{0.5}{0.55}{\figSimple{1.08\textwidth}{figsCorona/SEIRsim08.png}}}
+
+\visible<8>{
+ \placebox{0.5}{0.55}{\figSimple{1.08\textwidth}{figsCorona/SEIRsim09.png}}}
+
+\visible<9>{
+ \placebox{0.5}{0.55}{\figSimple{1.08\textwidth}{figsCorona/SEIRsim10.png}}}
+
+\visible<10>{
+ \placebox{0.5}{0.55}{\figSimple{1.08\textwidth}{figsCorona/SEIRsim11.png}}}
+
+\visible<11->{
+ \placebox{0.5}{0.55}{\figSimple{1.08\textwidth}{figsCorona/SEIRsim12.png}}}
+
+\placebox{0.5}{0.15}{\parbox{0.9\textwidth}{
+\bi
+\visible<5->{
+\item Four ``compartiments'': Susceptible, Exposed, Infected,
+  Controlled/Recovered/Dead}
+\visible<7->{\item Sensitivity $1-\alpha$=Prob\,(positive $|$ infected)}
+\visible<8->{\item Specificity $1-\beta$=Prob\,(negative $|$ not infected)}
+\ei
+}}
+
+
+
+
+}
+
+
+
+%##############################################################
+%\frame{\frametitle{}
+\frame{ 
+%##############################################################
+
+
+\visible<7->{\placebox{0.48}{0.62}
+ {\figSimple{1.05\textwidth}{figsCorona/Czechia_oct30_cases_prog_cropped.png}}}
+
+% make images pale (see demo_makePale.tex)
+%\makePale{opacity}{centerXrel}{centerYrel}{wrel}{hrel}
+% e.g., \makePale{0.8}{0.5}{0.5}{1}{0.3}
+
+%\makePale{0.1}{0.48}{0.57}{1.2}{1.1}
+
+\placebox{0.50}{0.90}{\myheading{Take-Home Messages }}
+
+\placebox{0.50}{0.40}
+ {\parbox{0.95\textwidth}{
+  \bi
+    \visible<1-6>{\item Separation between \bfdef{infection} and
+      \bfdef{data dynamics}} 
+    \visible<2-6>{\item Data used to \bfdef{calibrate} the base
+      reproduction numbers  and IFRs}
+    \visible<3-6>{\item \bfdef{Wave peak} if contamination $\approx
+      \unit[20]{\%}$: 
+    No herd immunity but sufficient for mild measures
+    to be effective}
+    \visible<4-6>{\item As flu, there is a strong \bfdef{season dependence}
+      (Peru, Australia)}
+    \visible<5->{\item hard lockdowns will hardly lead to fewer deaths;\\ 
+    \bfdef{$\approx$ \unit[30\,000]{Covid/flu deaths}} this winter season
+    in Germany anyway}
+    \visible<6->{\item Pandemic \bfdef{is over} in March/April 2021; in
+      Czechia already now}
+      %\item Disclaimer: conditional projections, not
+      %unconditional forecasts. 
+    \visible<7->{\item \bfred{Let's see if these projections stand the
+        test of time!}} 
+  \ei
+}}
+
+}
+
+
+
+\end{document}
+
+
+
+
+
+
+
+
+
+
+
+
+

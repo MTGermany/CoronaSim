@@ -1,0 +1,560 @@
+
+
+
+%#############################################
+% New pdflatex format,
+% only png, jpg (or svg?) images but positioning now ok
+% template in ~/tex/inputs/template_folien.tex
+% [TODO now specialized to Vkoem_Ma; make general]
+%#############################################
+
+
+%\documentclass[mathserif]{beamer}
+\documentclass[mathserif,handout]{beamer}
+%\usepackage{beamerthemeshadow}
+\input{$HOME/tex/inputs/defsSkript}  %$
+\input{$HOME/tex/inputs/styleBeamerVkoekMa}   %$
+
+\usepackage{graphicx}
+
+
+%##############################################################
+
+\begin{document}
+
+\section*{1a: Covid-19 Dynamics}
+
+%##############################################################
+%\frame{\frametitle{}
+\frame{ 
+%##############################################################
+
+
+\placebox{0.50}{0.42}
+ {\figSimple{1.10\textwidth}{figsCorona/coronaSimulationDe_1.png}}
+
+% make images pale (see demo_makePale.tex)
+%\makePale{opacity}{centerXrel}{centerYrel}{wrel}{hrel}
+% e.g., \makePale{0.8}{0.5}{0.5}{1}{0.3}
+
+\makePale{0.7}{0.48}{0.57}{1.2}{1.1}
+
+\placebox{0.50}{0.90}{\myheading{Traffic Econometrics Master's Course}}
+\placebox{0.50}{0.82}{\mysubheading{Lecture 01a: Covid-19 Dynamics}}
+\placebox{0.86}{0.05}{Martin Treiber} 
+
+\placebox{0.50}{0.38}
+ {\parbox{0.8\textwidth}{
+  \bi
+    \pause \item 1a.1 Simple Macroscopic Models (SI, SIR, SEIR, SIRM)
+    \pause \item 1a.2 Microscopic Models
+    \pause \item 1a.3 Down to Earth: Data-Related Issues
+    \pause \item 1a.4 Simulation \texttt{Corona-simulation.de}
+  \ei
+}}
+
+}
+
+
+
+
+ \subsection*{1a.1 Simple macroscopic models}
+
+%##############################################################
+\frame{\frametitle{1a.1 Simple macroscopic models I: SI model}
+%##############################################################
+
+\bfdef{Compartemental models}: consider different status such as susceptible,
+infected, or recovered and transitions between them
+
+\bi
+\item As in any macroscopic model on infection dynamics, the basic
+  dynamic quantities are \emph{percentages of the population} (e.g., of a
+  country) rather than individual persons
+
+\pause \item Scale separation: The \emph{infection dynamics} is much faster than the
+  rest of the \emph{population dynamics}
+  (births, ``normal'' deaths, in- and outwards directed
+  migration/moves) $\Rightarrow$ population number $N=\text{const.}$
+
+\pause \item Two compartiments: any person can be either \emph{susceptible} to infection (S), or
+  already infected (I) which includes actually ill, recovered, or
+  dead. Particularly, there is no reverse transition I$\to$S
+\visible<3->{\fig{0.6\textwidth}{figsCorona/SI.png}}
+\ei
+
+}
+
+%##############################################################
+\frame{\frametitle{SI model II}
+%##############################################################
+
+
+{\small
+\bi
+\item All infected persons become \emph{contagious instantaneously} and
+  remain so all the time (notice the
+  inconsistency to the point above)
+
+\pause \item The \emph{rate of contagion} $\beta$ (\# persons per time unit if
+  everybody else is~S) remains constant 
+\ei
+}
+
+\pause
+\maintextbox{0.6\textwidth}{{\large
+$\Rightarrow \quad \begin{array}{ll}
+\abl{S}{t} &=-\beta I S,\\[0.5em]
+\abl{I}{t} &=+\beta I S
+\end{array}$
+}
+\qquad
+SI model
+}
+\bi
+\item $S=N_S/N$: fraction of susceptible
+\pause \item $I=N_I/N$: fraction of infected
+\pause \item $\abl{}{t}(S+I)=0$ $\Leftrightarrow$ conservation of
+  population number $N=\text{const.}$
+\ei
+\pause Rewrite with $S+I=1$:
+\bdm
+\abl{I}{t}=\beta I (1-I) 
+\edm
+$\Rightarrow$ \emph{classical model for limited growth} with saturation 1
+}
+
+%##############################################################
+\frame{\frametitle{SI model III: Simulation}
+%##############################################################
+
+\placebox{0.5}{0.43}{
+ \figSimple{0.95\textwidth}{figsCorona/modelSI.png}}
+
+}
+
+
+
+%##############################################################
+\frame{\frametitle{SIR model}
+%##############################################################
+
+{\small
+\bi
+\item Unlike the situation in the SI model, infected people recover/die after an
+  average  time
+$1/\gamma$ thereby becoming \emph{no longer contagious} 
+\pause \item Chained models for the transitions susceptible-infected (SI) and
+  infected-recovered persons(IR), $R=$ fraction of recovered:
+\ei
+
+\vspace{-1em}
+\visible<2->{\fig{0.8\textwidth}{figsCorona/SIR.png}}
+\vspace{-1em}
+
+%Chained model equations for $S$, $I$ and $R$ (fraction $N_R/N$ of
+%recovered/removed persons): 
+
+\pause
+\maintextbox{0.6\textwidth}{{\large
+$\begin{array}{ll}
+\abl{S}{t} &=-\beta I S,\\[0.5em]
+\abl{I}{t} &=+\beta I S - \gamma I,\\[0.5em]
+\abl{R}{t} &=+\gamma I
+\end{array}$
+}
+\qquad
+SIR model
+}
+\vspace{-1ex}
+
+\bi
+\pause \item Conservation of the population number: $S+I+R=1$
+\pause \itemAsk \colAsk{Show that the initial reproduction number is given by
+  $R_0=\beta/\gamma$}\\[-1ex]
+\pause \itemAnswer \colAnswer{\tiny{Initially ($S=1$), any infected person infects
+  $\beta$ other persons per day but recovers after an\\[-1ex]exponentially
+  distributed time $\tau_R \sim \text{Exp}(\gamma)$, so the
+  average \#infected people $= \beta E(\tau_R)=\beta/\gamma$}}
+\ei
+}
+
+
+}
+
+
+%##############################################################
+\frame{\frametitle{SI and SIR models: simulation}
+%##############################################################
+
+\placebox{0.5}{0.43}{
+ \figSimple{0.95\textwidth}{figsCorona/modelSIR.png}}
+\visible<2>{\placebox{0.5}{0.43}{
+ \figSimple{0.95\textwidth}{figsCorona/modelSI.png}}}
+\visible<3>{\placebox{0.5}{0.43}{
+ \figSimple{0.95\textwidth}{figsCorona/modelSIR.png}}}
+}
+
+
+%##############################################################
+\frame{\frametitle{SEIR model}
+%##############################################################
+
+{\small
+\bi
+\item Adds to the SIR model a finite \emph{incubation time} $\tau_I
+  \sim \text{Exp}(\alpha)$ where people are infected but not yet
+  contagious (``exposed'', E)
+\pause \item Triple chain with $S+E+I+R=1$:
+\ei
+
+\vspace{-1em}
+\visible<2->{\fig{1.0\textwidth}{figsCorona/SEIR.png}}
+\vspace{-1em}
+
+%Chained model equations for $S$, $I$ and $R$ (fraction $N_R/N$ of
+%recovered/removed persons): 
+
+\pause
+\maintextbox{0.6\textwidth}{{\large
+$\begin{array}{ll}
+\abl{S}{t} &=-\beta I S,\\[0.5em]
+\abl{E}{t} &=+\beta I S - \alpha E,\\[0.5em]
+\abl{I}{t} &=+\alpha E - \gamma I,\\[0.5em]
+\abl{R}{t} &=+\gamma I
+\end{array}$
+}
+\qquad
+SEIR model
+}
+\vspace{-1ex}
+
+\bi
+\pause \itemAsk \colAsk{Show that
+  $R_0=\beta/\gamma$ and that the initial time for doubling of the
+  infected is given by 
+$\tau=(1/\gamma+1/\alpha)/\text{log}_2(R_0)$}\\[-1ex]
+\pause \itemAnswer \colAnswer{\tiny{$R_0$ as in the SIR model. The average
+    time for passing an infection is the\\[-1ex] sum $1/\gamma+1/\alpha$ of
+    the incubation and 
+    infection times. In this timescale, there are $\text{log}_2(R_0)$
+    doublings. }}
+\ei
+}
+
+
+}
+
+
+
+%##############################################################
+\frame{\frametitle{SIR \emph{vs.} SEIR model simulations}
+%##############################################################
+
+\placebox{0.5}{0.43}{
+ \figSimple{0.95\textwidth}{figsCorona/modelSEIR.png}}
+\visible<2>{\placebox{0.5}{0.43}{
+ \figSimple{0.95\textwidth}{figsCorona/modelSIR.png}}}
+\visible<3>{\placebox{0.5}{0.43}{
+ \figSimple{0.95\textwidth}{figsCorona/modelSEIR.png}}}
+}
+
+%##############################################################
+\frame{\frametitle{SEIR model with seasons (winter is ``flu'' time)}
+%##############################################################
+
+{\small
+\placebox{0.5}{0.80}{\parbox{0.8\textwidth}{
+\bi
+\pause \item [$\Rightarrow$] make the reproduction number $R_0(t)$ time dependent
+\\[-0.5ex]
+\pause \item [$\Rightarrow$] %Recovery $\gamma$ and incubation $\alpha$ unchanged
+infection rate
+  $\beta$ variable: $\beta=\gamma R_0(t)$
+\ei
+}}
+}
+
+\visible<4->{\placebox{0.5}{0.37}{
+ \figSimple{0.90\textwidth}{figsCorona/modelSEIRseason.png}}}
+
+}
+
+%##############################################################
+\frame{\frametitle{Iterated map models}
+%##############################################################
+\bi
+\item The SI, SIR, SEIR models were \bfdef{ordinary differential
+  equations} (ODEs)
+\pause \item Another more direct approach are \bfdef{iterated maps}:
+  models for time evolution by classical model chaining
+\pause \item can be interpreted as numerical solutions of ODEs but they are
+  more flexible allowing ``real'' memory, e.g., truly nonzero
+  incubation time instead of an exponential distributed one
+\pause \item Of course, this also means we need initialize all past values
+  within the memory time
+\ei
+}
+
+
+%##############################################################
+\frame{\frametitle{Iterated SIR model with memory (SIRM)}
+%##############################################################
+
+{\small
+\bi
+\item An infected person contacts $R_0$ persons and infects $R_0 S$
+  persons \emph{exactly} 
+  $\tau_I$ days after  his/her own infection
+\pause \item [$\Rightarrow$] need
+  history of all fractions
+  $I_{t'}$ of persons infected \emph{exactly} at day $t' \le t$
+\pause \item The person recovers exactly $\tau_R$ days after infection
+\pause \item [$\Rightarrow$] The total fraction of ill persons (\emph{active
+  cases}) at day $t$ is given by 
+\bdm
+I(t)=\sum_{j=i-\tau_I+1}^i I_j
+\edm
+\ei
+}
+
+\pause
+\maintextbox{0.75\textwidth}{{\large
+$\begin{array}{ll}
+I_t &=R_0S(t-\tau_I)I_{t-\tau_I},\\[0.5em]
+S(t) &=S(t-1)-I_t,\\
+R(t) &= R(t-1) + I_{t-\tau_R},\\
+I(t) &= 1-S(t)-R(t)
+\end{array}$
+}
+\qquad
+\parbox{0.20\textwidth}{SIR model\\with memory}
+}
+{\small Notice that the recovery does not influence the infection process
+since only infection day $\tau_I$ is contagious}
+
+}
+
+%##############################################################
+\frame{\frametitle{Simulation of the SIR model with memory}
+%##############################################################
+
+\placebox{0.5}{0.46}{
+  \figSimple{0.95\textwidth}{figsCorona/modelSIRiterated.png}}
+
+}
+
+
+
+\subsection*{1a.2 Microscopic Models}
+%##############################################################
+\frame{\frametitle{1a.2 Microscopic Models}
+%##############################################################
+The principle is straightforward: Just break down the compartemental
+models to single persons (remember the definition of a microscopic
+model!)
+{\small
+\bi
+\pause \item The health status of each person $i$ is exactly one out of a
+  set, e.g. status $\in \{$ S, E, I, R $\}$
+\pause \item Transition $S_i\to E_i$ if an S person $i$ is 
+sufficiently close to an I person $j$ sufficiently long, e.g.
+\bdm
+S_i(t) \to E_i(t) \quad \text{if} \quad d_{ij}(t') \le \unit[1.5]{m}
+\ \forall \ t': t-\tau_E\le t' \le t
+\edm
+\\[-1em]
+\pause \item Transition to an I person after an incubation time
+$\tau_I$
+\pause \item Transition to an R person after a time period $\tau_R>\tau_I$
+\ei
+}
+
+\pause So the pandemic micromodel is easy: It gets interesting when adding a
+\bfdef{particle dynamics model} for the motion of the people to model,
+e.g., \emph{superspreading events}
+
+
+}
+
+%##############################################################
+\frame{\frametitle{Microscopic example}
+%##############################################################
+\visible<1>{\placebox{0.5}{0.62}{
+  \figSimple{1.05\textwidth}{figsCorona/micro1.png}}}
+\visible<2>{\placebox{0.5}{0.62}{
+  \figSimple{1.05\textwidth}{figsCorona/micro2.png}}}
+\visible<3>{\placebox{0.5}{0.62}{
+  \figSimple{1.05\textwidth}{figsCorona/micro3.png}}}
+\visible<4>{\placebox{0.5}{0.62}{
+  \figSimple{1.05\textwidth}{figsCorona/micro4.png}}}
+\visible<5>{\placebox{0.5}{0.62}{
+  \figSimple{1.05\textwidth}{figsCorona/micro5.png}}}
+
+\placebox{0.5}{0.22}{\parbox{0.9\textwidth}{
+\bi
+\item Time $t$: superspreading event
+\pause \item Time $t+\tau$: three people infected in the middle group
+\pause \item Time $t+2\tau$: one of the newly 
+infected moves to the other group
+\pause \item Time $t+3\tau$: incubation time over (also at the left group)
+\pause \item Time $t+4\tau$: two infections in two groups
+\ei
+}}
+
+
+
+}
+
+
+\subsection*{1a.3 Down to Earth: Data-Related Issues}
+
+%##############################################################
+\frame{\frametitle{1a.3 Down to reality/econometrics: what can be observed?}
+%##############################################################
+
+\maintextbox{0.8\textwidth}{We want to know: \bfred{\#Infections} 
+$N_I(t)=N\, I(t)$,\\ 
+ideally its ``age
+structure'' $I_0, I_1, ..., I_t$}
+\vspace{-1em}
+
+\pause
+\maintextbox{0.8\textwidth}{We do know: \bfred{\#positive tests}
+ $N_T(t)$
+(``cases'') and \\ \bfred{\#Covid-19 deaths} $N_D(t)$ including the
+  history $t'\le t$ 
+}
+
+{\small
+Many uncertainties:
+\bi
+\pause \item The tests have an imperfect \bfdef{sensitivity}
+$P(\text{positive}|\text{infected}) \approx \unit[99]{\%}$
+\pause \item ... and an imperfect \bfdef{specifity}
+$P(\text{negative}|\text{not infected}) \approx \unit[99]{\%}$
+%and these figures even have large uncertainties in themselves
+\pause \item Different/inconsistent definitions of a ``Covid-19 death'' event
+\pause \item There is a high number of untested and potentially ill people
+  $\Rightarrow$ high number of unreported cases, probably $\gg N_T$
+\pause \item The fraction of reported cases depends on the number of tests
+  via a monotonously increasing but otherwise unknown function
+\ei
+}
+
+}
+
+
+
+\subsection*{1a.4 Simulation at \texttt{Corona-simulation.de}}
+
+%##############################################################
+\frame{\frametitle{Corona-simulation.de (as of Oct 30, 2020)}
+%##############################################################
+
+Interactive \emph{data-driven} simulator based on an extended SIRM model
+\vspace{1em}
+
+\hspace*{-0.05\textwidth}
+\figSimple{1.05\textwidth}{figsCorona/Germany_oct30_cases.png}
+}
+
+%##############################################################
+\frame{\frametitle{Features I: different countries}
+%##############################################################
+\vspace{1em}
+
+\hspace*{-0.05\textwidth}
+\figSimple{1.05\textwidth}{figsCorona/Czechia_oct30_cases.png}
+}
+
+%##############################################################
+\frame{\frametitle{Features II: different windows}
+%##############################################################
+\placebox{0.25}{0.66}{
+ \figSimple{0.5\textwidth}{figsCorona/Germany_oct30_cum.png}}
+\placebox{0.75}{0.66}{
+ \figSimple{0.5\textwidth}{figsCorona/Germany_oct30_log.png}}
+\placebox{0.25}{0.23}{
+ \figSimple{0.5\textwidth}{figsCorona/Germany_oct30_tests.png}}
+\placebox{0.75}{0.23}{
+ \figSimple{0.5\textwidth}{figsCorona/Germany_oct30_rates.png}}
+
+}
+
+%##############################################################
+\frame{\frametitle{Features III: scenario-based projections}
+%##############################################################
+\placebox{0.52}{0.65}{
+ \figSimple{0.9\textwidth}{figsCorona/Germany_oct30_cases_prog_cropped.png}}
+\placebox{0.45}{0.22}{
+ \figSimple{0.9\textwidth}{figsCorona/Czechia_oct30_cases_prog_cropped.png}}
+\placebox{0.33}{0.78}{Germany}
+\placebox{0.25}{0.35}{Czechia}
+
+}
+
+%##############################################################
+\frame{\frametitle{Features III: ``lockdown'' shifts ``wave''}
+%##############################################################
+\placebox{0.50}{0.45}{
+ \figSimple{1.05\textwidth}{figsCorona/Germany_oct30_cases_progLockdown.png}}
+
+}
+
+%##############################################################
+\frame{\frametitle{Features IV: sensitivity tests, e.g., ramping up \#tests}
+%##############################################################
+\placebox{0.50}{0.45}{
+ \figSimple{1.05\textwidth}{figsCorona/Germany_oct30_increaseTests.png}}
+
+}
+
+%##############################################################
+\frame{\frametitle{Summary/take-home messages }
+%##############################################################
+\bi
+\item Only \bfred{data brings us ``down to Earth''} allowing for 
+\bi
+\item tests of the model quality
+\item doing useful things such as projection scenarios (do not forget
+  Mark Twains quote about predictions!)
+\ei
+
+\pause \item Always \bfred{check definitions of events}, e.g.,
+   ``Covid-19 infection'' (including all symptom free people?) or
+  ``Covid-19 death'' (including
+  fatal traffic accidents of a test-positive persons?)
+
+\pause \item \bfred{Do not confuse/mix proxies with the real
+  quantities}, e.g.,
+  positive tests \emph{vs.} infection events. Also check how well the
+  proxy \emph{represents} the interesting quantities 
+  (\#positive tests is a poor proxy for the \#infections, \#\emph{recorded}
+  Covid-19 death is a much better proxy for all the Covid-19 deaths)
+
+\pause \item \bfred{Check your sample.} Is it essentially the population or only a
+  small and unknown fraction thereof?
+
+\pause \item \bfred{Be careful with exponentially growing things}
+ since small changes
+  in the scenario setting can greatly influence the result
+
+\ei
+}
+
+
+\end{document}
+
+
+
+
+
+
+
+
+
+
+
+
+
