@@ -218,6 +218,29 @@ const n0List={
   "SK_Dresden"        : 556780
 }
 
+const ageProfileListPerc={ // age groups [0-30,-40,-50,-60,-70,-80,-90, 90+]
+  "Germany"       :     [30,10,10,15,15,10,8,2],
+  "Austria"       :     [30,10,10,15,15,10,8,2],
+  "Czechia"       :     [30,10,10,15,15,10,8,2],
+  "France"        :     [30,10,10,15,15,10,8,2],
+  "United Kingdom":     [30,10,10,15,15,10,8,2],
+  "Italy"         :     [30,10,10,15,15,10,8,2],
+  "Poland"        :     [30,10,10,15,15,10,8,2],
+  "Spain"         :     [30,10,10,15,15,10,8,2],
+  "Sweden"        :     [30,10,10,15,15,10,8,2],
+  "Switzerland"   :     [30,10,10,15,15,10,8,2],
+  "Greece"        :     [30,10,10,15,15,10,8,2],
+  "Portugal"      :     [30,10,10,15,15,10,8,2],
+  "Israel"        :     [30,10,10,15,15,10,8,2],
+  "India"         :     [50,15,10,10, 8, 5,1,1],
+  "Russia"        :     [30,10,10,15,15,10,8,2],
+  "US"            :     [30,10,10,15,15,10,8,2],
+  "Australia"     :     [30,10,10,15,15,10,8,2],
+  "South Africa"  :     [30,10,10,15,15,10,8,2],
+  "LK_Erzgebirgskreis": [30,10,10,15,15,10,8,2],
+  "LK_Osterzgebirge"  : [30,10,10,15,15,10,8,2],
+  "SK_Dresden"        : [30,10,10,15,15,10,8,2]
+}
 
 // will be only relevant if "xyz no longer <<1 ("Durchseuchung")
 // will be later changed to fracDie=fracDieInit*pTest/pTestInit;
@@ -345,6 +368,12 @@ for(var it=0; it<=itPresent; it++){ // profile ofvaccination imunity
   IvaccArr[it]=0;
 }
 
+var corrIFR=1.11; // value in Germany w/o vacc: 2
+var corrIFRarr=[]; //!!!
+for(var it=0; it<=itPresent; it++){ // profile ofvaccination imunity
+  corrIFRarr[it]=1.11;
+}
+
 var measuresInit=4;  // obsolete "Abstand+Maske", cf. corona_gui.js->str_measures
 var measures=measuresInit; // obsolete
 
@@ -412,7 +441,7 @@ var IFRinit=0.002;
 var IFRinterval=21; //28
 var IFRinterval_last_min=14;  //21
 var IFR_dontUseLastDays=5;//(29 for ERZ) overcome "Nachmeldungen" bias IFR est.
-var IFRtime=[];
+var IFR65time=[];
 
 
 
@@ -857,24 +886,28 @@ function initializeData(country,insideValidation){
   // calculated immunity fraction profile IvacArr using the dynamics of
   // Vaccination() (!! related to it=i-data_idataStart)
 
-  vaccSim=new Vaccination();
-  vaccSim.initialize();
-  var rVaccSim=0;
+  var vaccData=new Vaccination();  // in sim: CoronaSim.vaccination=new ...
+  vaccData.initialize(country);
+  var rVaccData=0;
   for(var it=0; it<itPresent; it++){
     var i=it+data_idataStart;
     if(!( typeof data_rVacc[i] === "undefined")){
-      //rVaccSim=data_rVacc_unsmoothed[i]; // otherwise unchhanged
-      rVaccSim=data_rVacc[i]; // otherwise unchhanged
+      //rVaccData=data_rVacc_unsmoothed[i]; // otherwise unchhanged
+      rVaccData=data_rVacc[i]; // otherwise unchhanged
     }
-    //console.log("it=",it," i=",i," date=",data_date[i]," rVaccSim=",rVaccSim);
-    vaccSim.update(rVaccSim,it,false);  // last arg=logging
-    IvaccArr[it]=vaccSim.Ivacc;
-    if(false){
-    //if(it>itPresent-10){
+    //console.log("it=",it," i=",i," date=",data_date[i]," rVaccData=",rVaccData);
+    vaccData.update(rVaccData,it);  // last arg=logging
+    IvaccArr[it]=vaccData.Ivacc; //!!!! here array age group
+    corrIFRarr[it]=vaccData.corrFactorIFR;
+    //if(true){
+    if(it>itPresent-10){
       console.log("it=",it,
 		  " data_rVacc[i]=",data_rVacc[i],
 		  " data_rVacc_unsmoothed[i]=",data_rVacc_unsmoothed[i],
-		  " IvaccArr[it]=",IvaccArr[it]);
+		  " rVaccData=",rVaccData,
+		  " IvaccArr[it]=",IvaccArr[it],
+		  " corrIFRarr[it]=",corrIFRarr[it],
+		 "");
     }
   }
 
@@ -1537,7 +1570,7 @@ function calibrate(){
  
   console.log("\nEntering calibration of R0 ...");
   R0time=[];  //!! must revert it since some countries may have less data!!
-  IFRtime=[];  //!! must revert it since some countries may have less data!!
+  IFR65time=[];  //!! must revert it since some countries may have less data!!
 
   // !!!! needed, otherwise side effects if nonzero vaccination
   // cannot calibrate with vaccinations!!
@@ -1718,20 +1751,32 @@ function calibrate(){
   var itmax_calibIFR=data_dz.length-data_idataStart-IFR_dontUseLastDays;
   var IFR_jmax=1+Math.ceil(
     (itmax_calibIFR-IFRinterval_last_min)/IFRinterval);
-  IFRtime=[]; for(var j=0; j<IFR_jmax; j++){IFRtime[j]=IFRinit;}
+  IFR65time=[]; for(var j=0; j<IFR_jmax; j++){IFR65time[j]=IFRinit;}
   var cumDeathsSim0=0;
 
   for(var j=0; j<IFR_jmax-1; j++){
     var it0=IFRinterval*j;
     var it1=Math.min(IFRinterval*(j+1), itmax_calibIFR);
-    var IFRcal=calibIFR(cumDeathsSim0,it0,it1);
-    IFRtime[j]=(j==0) ? IFRcal[1] : 0.5*(IFRcal[0]+IFRtime[j]);
-    IFRtime[j+1]=IFRcal[1];
+    var IFRcal=calibIFR(it0,it1);
+    var IFR0=(j==0) ? IFRcal[1] : 0.5*(IFRcal[0]+IFR65time[j]);
+    var IFR1=IFRcal[1];
     cumDeathsSim0+=IFRcal[2];
+
+    // scale down to IFR65 for age group 65
+
+    var corrIFR0=(it0>=tauDie)
+	? corrIFRarr[it0-tauDie] : corona.vaccination.corrFactorIFR0;
+    var corrIFR1=(it1>=tauDie)
+	? corrIFRarr[it1-tauDie] : corona.vaccination.corrFactorIFR0;
+    IFR65time[j]=IFR0/corrIFR0;
+    IFR65time[j+1]=IFR0/corrIFR1;
+    //IFR65time[j]=IFR0;
+    //IFR65time[j+1]=IFR0;
   }
 
   // remove drifts due to the local calibration
 
+  /*
   var cumDeathsSim=[];
   cumDeathsSim[0]=data_cumDeaths[data_idataStart];
   
@@ -1740,9 +1785,9 @@ function calibrate(){
 
   f_D=1; // hardly any difference w/o smoothing in Ger!
   dtau=0;
-  console.log("IFRtime=",IFRtime);
+  console.log("IFR65time=",IFR65time);
   for(var it=1; it<data_itmax; it++){
-    var fracDie= IFRfun_time(it); // uses IFRtime[]
+    var fracDie= IFRfun_time(it); // uses IFR65time[]
     var dnz=0;
     for(var j=-dtau; j<=dtau; j++){
       dnz+=n0*fracDie*f_D*corona.xnewShiftedTauDie[Math.max(0,it+j)];
@@ -1760,8 +1805,8 @@ function calibrate(){
 	    - data_cumDeaths[data_idataStart+it-IFRinterval];
         var factor=dCumDeathsData/dCumDeathsSim;
         //var factor=data_cumDeaths[data_idataStart+it]/cumDeathsSim[it];
-        IFRtime[j] *=factor;
-        IFRtime[j-1] *=factor;
+        IFR65time[j] *=factor;
+        IFR65time[j-1] *=factor;
       
         if(false){
 	  console.log("it=",it," CumDeathsSim=",dCumDeathsSim,
@@ -1770,13 +1815,13 @@ function calibrate(){
       }
     }
   }
-  
+  */
 
   //!!! ANNOYING slightest shift after any country choice back to Germany
   // approx rel error 10^{-3} in calibr R and IFR (no solution; forget...)
 
   if(false){
-    console.log("IFRtime=",IFRtime);
+    console.log("IFR65time=",IFR65time);
     console.log("data_idataStart=",data_idataStart);
     console.log("startDay=",startDay);
     console.log("dayStartMar=",dayStartMar);
@@ -1803,20 +1848,29 @@ function calibrate(){
 //end calibrate()
 
 
-// =============================================================
-// simple SSE calibration function for the death cases
-// in [it0, it1-1] 
-// returns the two parameters vecIFR=(I1,I2)'
-// of the linear function IFR(it)=I1+(it-it0)/(it1-it0)*(I2-I1)
-// needs 
-// * explicit time interval boundaries itin=it0, itmax=it1-1
-// * new infections frac corona.xnewShiftedTauDie[it] (=> R0 needs to e already calibrated)
-// * data deaths data_dz +shift of the data_* arrays data by idataStart
-// * cum data deaths data_cumDeaths +shift of the data_* arrays data by idataStart
-// * delay infection-death tauDie (no averaging over interval as in main sim)
-// * number of people n0 in region
+/** =============================================================
+!!!! simple local SSE calibration function for the deaths in [it0, it1-1] 
+solves the 2-parameter regression problem 
 
-function calibIFR(cumDeathsSim0,it0, it1){
+dz[it]=I0*(dxTau[it]*(1-r[it]) + I1*(dxTau[it]*r[it]=zData[it]
+
+with 
+ * parameters I0,I1 the IFRs at begin/end (not IFR65!)
+ * dxTau[it] simulated daily innfection increments tauD days earlier
+   (no averaging over interval as in main sim)
+ * (1-r[it]) decreasing weighting 1->0 and r[it] increasing 0->1
+
+@ return:   vecIFR=(I0est,I1est,dCumDeathsSim)'
+            I0est=vecIFR[0]=estimated IFR (not IFR65!) at it0
+            I1est=vecIFR[1]=estimated IFR (not IFR65!) at it1
+            dCumDeathsSim=simulated estimated addtl deaths in interval
+            (needed for later correction of the drift due to local calibr
+
+@param it0: begin calibr time interval
+@param it1: end calibr time interval
+*/
+
+function calibIFR(it0, it1){
 
 
   // weighting function
@@ -1839,10 +1893,10 @@ function calibIFR(cumDeathsSim0,it0, it1){
   for(var i=0; i<it1-it0; i++){
       // ! xnewShiftedTauDie not normalized if stemming from it<0
       // => bias error !!!
-    var xnew=corona.xnewShiftedTauDie[Math.max(it0+i, 0)];
+    var dxTau=corona.xnewShiftedTauDie[Math.max(it0+i, 0)];
     var idata=data_idataStart+it0+i;
-    avec[i]=n0*(1-r[i])*xnew;
-    bvec[i]=n0*r[i]*xnew;
+    avec[i]=n0*(1-r[i])*dxTau;
+    bvec[i]=n0*r[i]*dxTau;
     var z=data_dz[Math.min(idata, data_dz.length-1)]; // rhs from data
     a11+=avec[i]*avec[i];
     a12+=avec[i]*bvec[i];
@@ -1852,7 +1906,7 @@ function calibIFR(cumDeathsSim0,it0, it1){
     if(false){
     //if(it0==0){
       console.log("calibIFR: it0+i=",it0+i," idata=",idata, 
-		  "\n n0*xnew=",n0*xnew," a=",avec[i]," b=",bvec[i]," z=",z);
+		  "\n n0*dxTau=",n0*dxTau," a=",avec[i]," b=",bvec[i]," z=",z);
     }
   }
 
@@ -1876,18 +1930,16 @@ function calibIFR(cumDeathsSim0,it0, it1){
   }
 
   vecIFR[2]=dCumDeathsSim;
-  if(false){
+  if(true){ // OK here
     console.log("calibIFR: it0=",it0," it1-1=",it1-1,
-	      " data_itmax=",data_itmax,
-	      " data_cumDeaths.length=",data_cumDeaths.length,
-	      " data_dz.length=",data_dz.length,
-	      " data_idataStart=",data_idataStart,
-	      "\n data_cumDeaths[data_idataStart+it0]=",
-	      data_cumDeaths[data_idataStart+it0],
-	      " data_cumDeaths[data_idataStart+it1]=",
-	      data_cumDeaths[data_idataStart+it1],
-	      " cumDeathsSim0=",cumDeathsSim0,
-		" cumDeathsSim0+vecIFR[2]=",cumDeathsSim0+vecIFR[2]);
+		" data_itmax=",data_itmax,
+		" data_dz.length=",data_dz.length,
+		" data_idataStart=",data_idataStart,
+		"\n cum deaths in interval data: ",
+		(data_cumDeaths[data_idataStart+it1-1]
+		 -data_cumDeaths[data_idataStart+it0]),
+		"\n cum deaths in interval sim: ",vecIFR[2],
+		"");
   }
   return vecIFR;
 } // calibIFR
@@ -1931,7 +1983,7 @@ function estimateR0(itmin_c, itmax_c, R0calib){
 	   
 
   /** ##############################################################
-  THE central estimation 
+  !!!! THE central estimation 
   - global control vars itmin_calib,itmax_calib
   - global data variable data_cumCases to fit to by minimizing SSEfunc
   - input/output R0calib
@@ -2118,14 +2170,14 @@ function IFRfun_time(it){
   var jlower=Math.floor(it/IFRinterval);
   var r=it/IFRinterval-jlower;
   var jhigher=jlower+1;
-  var ifr=((it<0)||(IFRtime.length==0)) ? IFRinit
-    : ((jlower>=IFRtime.length)||(jhigher>=IFRtime.length))
-    ? IFRtime[IFRtime.length-1]
-      : (1-r)*IFRtime[jlower]+r*IFRtime[jhigher];
+  var ifr=((it<0)||(IFR65time.length==0)) ? IFRinit
+    : ((jlower>=IFR65time.length)||(jhigher>=IFR65time.length))
+    ? IFR65time[IFR65time.length-1]
+      : (1-r)*IFR65time[jlower]+r*IFR65time[jhigher];
   
-  if(false){console.log("IFRfun_time: it=",it," IFRtime.length=",
-	      IFRtime.length,
-	      " IFRtime[IFRtime.length-1]=",IFRtime[IFRtime.length-1],
+  if(false){console.log("IFRfun_time: it=",it," IFR65time.length=",
+	      IFR65time.length,
+	      " IFR65time[IFR65time.length-1]=",IFR65time[IFR65time.length-1],
 			" jlower=",jlower," r=",r," ifr=",ifr);}
   return ifr;
 }
@@ -2632,35 +2684,145 @@ function Vaccination(){
   this.I0=0.95;      // fraction of immune people >=1 week after second vacc.
   this.tau0=28;      // days after full effect I0 is reached (1 week after)
   this.Ivacc=0;      // population immunity fraction by vaccinations
+                     // ! read from application routines after update()
+  this.vaccmax=0.9;  // vacc deniers/med impossibilities in each age group
   this.pVaccHist=[]; // history[tau] of vacc percentage pVacc (first vacc.)
-  for(var tau=0; tau<this.tau0; tau++){
-    this.pVaccHist[tau]=0;
-  }
+
+  this.f_age=[];     // demographic profile of age groups
+                     // [0-30,-40,-50,-60,-70,-80,-90, 90+]
+  this.ageGroup=6;   // will be overwritten in initialize
+  this.pVaccHist_age=[]; // age-specific history[tau]
+  this.Ivacc_age=[]; // vacc immunity disaggregated into the age groups
+
+  this.corrFactorIFR=1.11; // IFR(not immune pop average)/IFR(group60-70)
+                           // ! just init; overridden
+  this.corrFactorIFR0=1.11;
+  this.iaRef=4;      // age index of reference age group 60-70
+  this.multFactor10=3.5; //every 10 years older increases IFR by this factor
+
   // cannot use this.initialize here
 }
 
-Vaccination.prototype.initialize=function(){
+
+Vaccination.prototype.initialize=function(country){
   this.Ivacc=0;
+  this.corrFactorIFR=1;
+  var ageProfilePerc=ageProfileListPerc[country];
+  for(var ia=0;ia<ageProfilePerc.length; ia++){
+    this.pVaccHist_age[ia]=[];
+    this.f_age[ia]=0.01*ageProfilePerc[ia];
+  }
   for(var tau=0; tau<this.tau0; tau++){
     this.pVaccHist[tau]=0;
   }
+  
+  for(var ia=0;ia<ageProfilePerc.length; ia++){
+    this.Ivacc_age[ia]=0;
+    for(var tau=0; tau<this.tau0; tau++){
+       this.pVaccHist_age[ia][tau]=0;
+    }
+  }
+  this.update(0,0); // to calculate this.corrFactorIFR for zero vacc
+  this.corrFactorIFR0=this.corrFactorIFR;
+  this.ageGroup=ageProfilePerc.length-1; // actual age group to be vacc
+  
 }
 
-Vaccination.prototype.update=function(rVacc,it,logging){
-  if(it>0){ // no vaccinations at beginning!!!
-    for(var tau=this.tau0-1; tau>0; tau--){
+// update using rate of first vaccinations (no second vacc or other
+// vaccination brands modelled by this.I0)
+
+Vaccination.prototype.update=function(rVacc,it){
+  if(it>0){ // no vaccinations for it<=0
+
+    // shift history by 1 day
+    
+    for(var tau=this.tau0-1; tau>0; tau--){ 
       this.pVaccHist[tau]=this.pVaccHist[tau-1];
+      for(var ia=0;ia<this.f_age.length; ia++){
+	this.pVaccHist_age[ia][tau]=this.pVaccHist_age[ia][tau-1];
+      }
     }
-    this.pVaccHist[0]=Math.min(this.pVaccHist[0]+rVacc,1);
+
+    // add new daily first vaccination percentage globally
+    
+    this.pVaccHist[0]=Math.min(this.pVaccHist[1]+rVacc,this.vaccmax);
     pVacc=this.pVaccHist[0]; // global var for display
+
+    // distribute new vaccinations top-down to the age groups
+
+    var j=this.ageGroup;
+    var p_remaining=this.f_age[j]*(this.vaccmax-this.pVaccHist_age[j][1]);
+    if(p_remaining>=rVacc){
+      this.pVaccHist_age[j][0]=this.pVaccHist_age[j][1]+rVacc/this.f_age[j];
+    }
+    else{
+      this.pVaccHist_age[j][0]=this.vaccmax;
+      if(this.ageGroup==0){
+	console.log("Warning: cannot vaccinate more than perc ",this.vaccmax);
+      }
+      else{
+        this.pVaccHist_age[j-1][0]=(rVacc-p_remaining)/this.f_age[j-1];
+	this.ageGroup--;
+      }
+    }
+      
+
+    // update immunity percentage globally and in age groups
+    
     this.Ivacc +=this.I0/(this.tau0-1) // (this.tau0-1) Gartenzauneffekt OK
       *(this.pVaccHist[0]-this.pVaccHist[this.tau0-1]);
-    if(logging){
+
+    for(var ia=0;ia<this.f_age.length; ia++){
+      this.Ivacc_age[ia] +=this.I0/(this.tau0-1) 
+	*(this.pVaccHist_age[ia][0]-this.pVaccHist_age[ia][this.tau0-1]);
+    }
+  }
+
+  else{ // it=0, initialize
+    for(var ia=0; ia<this.f_age.length; ia++){
+      this.Ivacc_age[ia]=0;
+    }
+  }
+
+  
+  // calculate this.corrFactorIFR=IFR(population)/IFR(age group 50-60)
+
+  var num=0;
+  var denom=0;
+  for(var ia=0; ia<this.f_age.length; ia++){
+    var factor=Math.pow(this.multFactor10, ia-this.iaRef);
+    var fracSuscept=this.f_age[ia]*(1-this.Ivacc_age[ia]);
+    num +=fracSuscept*factor;
+    denom+=fracSuscept; // should become 1-this.Ivacc after loop
+    if(false){
+      //if(rVacc>0){
+	console.log(" ia=",ia," factor=",factor," fracSuscept=",fracSuscept,
+		    " num=",num," denom=",denom);
+      }
+  }
+    
+  this.corrFactorIFR=num/denom;
+
+
+    
+    // debug
+
+  if(false){
+    //if(rVacc>0){
       console.log("Vaccination.update: this.tau0=",this.tau0," it=",it,
 		  "\n this.pVaccHist[0]=",this.pVaccHist[0],
 		  " this.pVaccHist[this.tau0-1]=",this.pVaccHist[this.tau0-1],
 		  " this.Ivacc=",this.Ivacc);
-    }
+      var sum=0; 
+      for(var ia=0; ia<this.f_age.length; ia++){
+	sum+=this.f_age[ia]*this.Ivacc_age[ia];
+	console.log("age group ",ia,": f_age=",this.f_age[ia],
+		    " this.Ivacc_age[ia]=",this.Ivacc_age[ia],
+		    " sum=",sum);
+      }
+      console.log("num=",num," denom=",denom,
+		  " this.corrFactorIFR=",this.corrFactorIFR);
+
   }
 }
 
@@ -2954,12 +3116,14 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
   //                    main infection process at step (2)
   // ###############################################
 
-  if(it==0){this.vaccination.initialize();}
+  if(it==0){this.vaccination.initialize(country);}
  
   // IvaccArr[it]: global fixed vacc immunity time profile
   // generated interactively here, if outside calibration
   
   Ivacc=(it>=0) ? IvaccArr[it] : 0; // inside calibration with profile
+  corrIFR=(it>=tauDie)
+    ? corrIFRarr[it-tauDie] : this.vaccination.corrFactorIFR0; 
 
   if(!inCalibration){
     if(!slider_rVacc_moved){ // if slider moved, rVacc directly from slider
@@ -2968,8 +3132,12 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
       rVacc=(i<data_rVacc.length)
 	? data_rVacc[i] : data_rVacc[data_rVacc.length-1];
     }
-    this.vaccination.update(rVacc,it,false);
-    Ivacc=this.vaccination.Ivacc; //!!! geht nicht bei calibration
+    this.vaccination.update(rVacc,it);
+    Ivacc=this.vaccination.Ivacc; //!! geht nicht bei calibration
+    corrIFRarr[it]=this.vaccination.corrFactorIFR;
+    corrIFR=(it>=tauDie)
+      ? corrIFRarr[it-tauDie] : this.vaccination.corrFactorIFR0; 
+
   }
   
  
@@ -3035,7 +3203,7 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
   var dysum=0;
 
   for(var tau=tauDie-dtau; tau<=tauDie+dtau; tau++){
-    var dztau=fracDie*f_D*this.xohne[tau]; //!! here xohne crucial
+    var dztau=fracDie*corrIFR*f_D*this.xohne[tau]; //!! here xohne crucial
     this.dz+=dztau;
     this.x[tau] -=dztau; // xohne remains unsubtracted
   }
