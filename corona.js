@@ -896,11 +896,12 @@ function initializeData(country,insideValidation){
       rVaccData=data_rVacc[i]; // otherwise unchhanged
     }
     //console.log("it=",it," i=",i," date=",data_date[i]," rVaccData=",rVaccData);
-    vaccData.update(rVaccData,it);  // last arg=logging
-    IvaccArr[it]=vaccData.Ivacc; //!!!! here array age group
+    vaccData.update(rVaccData,it);  
+    IvaccArr[it]=vaccData.Ivacc; 
     corrIFRarr[it]=vaccData.corrFactorIFR;
     //if(true){
-    if(it>itPresent-10){
+    //if(it>itPresent-10){
+    if(false){
       console.log("it=",it,
 		  " data_rVacc[i]=",data_rVacc[i],
 		  " data_rVacc_unsmoothed[i]=",data_rVacc_unsmoothed[i],
@@ -1142,7 +1143,8 @@ function initializeData(country,insideValidation){
   for(var i=7; i<dataCmp_cumCases.length; i++){
     dataCmp_dxIncidence[i]=(dataCmp_cumCases[i]-dataCmp_cumCases[i-7])
       *100000/n0Cmp;
-    if(i>dataCmp_cumCases.length-14){
+    //if(i>dataCmp_cumCases.length-14){
+    if(false){
       console.log("i=",i," date=",dataGit[countryCmp][i]["date"],
 		  " dataCmp_dxIncidence[i]=",dataCmp_dxIncidence[i]);
     }
@@ -1391,7 +1393,6 @@ function SSEfunc(R0arr, fR0, logging, itStartInp, itMaxInp,
     // simulate
 
     var R0_actual= R0fun_time(R0arr,it-itStart); // ! only R0arr used in SSEfunc
-    //if(it==0){corona.vaccination.initialize();} //!!!!
     corona.updateOneDay(R0_actual, it, logging); // in SSE never logging=true!
 
     // increment SSE
@@ -1572,7 +1573,7 @@ function calibrate(){
   R0time=[];  //!! must revert it since some countries may have less data!!
   IFR65time=[];  //!! must revert it since some countries may have less data!!
 
-  // !!!! needed, otherwise side effects if nonzero vaccination
+  // !! new CoronaSim needed, otherwise side effects if nonzero vaccination
   // cannot calibrate with vaccinations!!
   
   corona=new CoronaSim();//  corona.vaccination.initialize;
@@ -1758,7 +1759,9 @@ function calibrate(){
     var it0=IFRinterval*j;
     var it1=Math.min(IFRinterval*(j+1), itmax_calibIFR);
     var IFRcal=calibIFR(it0,it1);
-    var IFR0=(j==0) ? IFRcal[1] : 0.5*(IFRcal[0]+IFR65time[j]);
+    // average of old and new calibration, old IFRcal[1] in IFR65time[j]
+    // !!! start: IFRcal[1] better than IFRcal[0] in Germany 
+    var IFR0=(j==0) ? IFRcal[1] : 0.5*(IFRcal[0]+IFR65time[j]);//
     var IFR1=IFRcal[1];
     cumDeathsSim0+=IFRcal[2];
 
@@ -1768,33 +1771,37 @@ function calibrate(){
 	? corrIFRarr[it0-tauDie] : corona.vaccination.corrFactorIFR0;
     var corrIFR1=(it1>=tauDie)
 	? corrIFRarr[it1-tauDie] : corona.vaccination.corrFactorIFR0;
-    IFR65time[j]=IFR0/corrIFR0;
-    IFR65time[j+1]=IFR0/corrIFR1;
-    //IFR65time[j]=IFR0;
-    //IFR65time[j+1]=IFR0;
+
+    IFR65time[j]=IFR0;
+    IFR65time[j+1]=IFR1;
   }
 
-  // remove drifts due to the local calibration
+  
+  // !!remove drifts due to the local calibration
 
-  /*
+  //console.log("before removing drifts: IFR65time=",IFR65time);
+
   var cumDeathsSim=[];
   cumDeathsSim[0]=data_cumDeaths[data_idataStart];
   
-  var f_D=1./tauAvg; 
-  var dtau=Math.floor(tauAvg/2);
+  //var f_D=1./tauAvg; 
+  //var dtau=Math.floor(tauAvg/2);
 
-  f_D=1; // hardly any difference w/o smoothing in Ger!
-  dtau=0;
-  console.log("IFR65time=",IFR65time);
+  var f_D=1; // hardly any difference w/o smoothing in Ger!
+  var dtau=0;
   for(var it=1; it<data_itmax; it++){
     var fracDie= IFRfun_time(it); // uses IFR65time[]
+    var itTau=Math.max(0, Math.min(corrIFRarr.length-1,it-tauDie));
+    var corrIFR=corrIFRarr[itTau];
+    //console.log("itTau=",itTau," corrIFRarr.length=",corrIFRarr.length);
     var dnz=0;
     for(var j=-dtau; j<=dtau; j++){
-      dnz+=n0*fracDie*f_D*corona.xnewShiftedTauDie[Math.max(0,it+j)];
+      dnz+=n0*fracDie*f_D*corrIFR*corona.xnewShiftedTauDie[Math.max(0,it+j)];
     }
     cumDeathsSim[it]=cumDeathsSim[it-1]+dnz;
     if(false){
-      console.log("it=",it," cumDeathsSim=",cumDeathsSim[it],
+      console.log("it=",it," fracDie=",fracDie," corrIFR=",corrIFR,
+		  " cumDeathsSim=",cumDeathsSim[it],
 	  	  " cumDeathsData=",data_cumDeaths[data_idataStart+it]);
     }
     if( (it%IFRinterval==0)&&(it>0)){
@@ -1815,9 +1822,13 @@ function calibrate(){
       }
     }
   }
-  */
+  
 
-  //!!! ANNOYING slightest shift after any country choice back to Germany
+
+  console.log("final calibrated IFR65: IFR65time=",IFR65time);
+
+  
+  //!! ANNOYING slightest shift after any country choice back to Germany
   // approx rel error 10^{-3} in calibr R and IFR (no solution; forget...)
 
   if(false){
@@ -1833,7 +1844,7 @@ function calibrate(){
   inCalibration=false; // use dynamic corona.vaccination.update(...)
   
   //##############################################################
-  // !!!! for inline nondynamic testing: add testcode here
+  // !!! for inline nondynamic testing: add testcode here
   // outside of calibration
   //##############################################################
 
@@ -1849,20 +1860,22 @@ function calibrate(){
 
 
 /** =============================================================
-!!!! simple local SSE calibration function for the deaths in [it0, it1-1] 
+!!! simple local SSE calibration function for the deaths in [it0, it1-1] 
 solves the 2-parameter regression problem 
 
-dz[it]=I0*(dxTau[it]*(1-r[it]) + I1*(dxTau[it]*r[it]=zData[it]
+dz[it] = I0*IFRcorr[it]*(dxTau[it]*(1-r[it])
+       + I1*IFRcorr[it]*(dxTau[it]*r[it]
+       =zData[it]
 
 with 
- * parameters I0,I1 the IFRs at begin/end (not IFR65!)
- * dxTau[it] simulated daily innfection increments tauD days earlier
+ * parameters I0,I1 the IFR65s at begin/end 
+ * dxTau[it] simulated daily infection increments tauD days earlier
    (no averaging over interval as in main sim)
  * (1-r[it]) decreasing weighting 1->0 and r[it] increasing 0->1
 
-@ return:   vecIFR=(I0est,I1est,dCumDeathsSim)'
-            I0est=vecIFR[0]=estimated IFR (not IFR65!) at it0
-            I1est=vecIFR[1]=estimated IFR (not IFR65!) at it1
+@ return:   vecIFR=(IFR65est0,IFR65est1,dCumDeathsSim)'
+            IFR65est0=vecIFR[0]=estimated IFR65 at it0
+            IFR65est1=vecIFR[1]=estimated IFR65 at it1-1
             dCumDeathsSim=simulated estimated addtl deaths in interval
             (needed for later correction of the drift due to local calibr
 
@@ -1890,13 +1903,16 @@ function calibIFR(it0, it1){
 
   var avec=[];
   var bvec=[];
+  var corrIFRvec=[];
   for(var i=0; i<it1-it0; i++){
       // ! xnewShiftedTauDie not normalized if stemming from it<0
-      // => bias error !!!
+      // => bias error !!
     var dxTau=corona.xnewShiftedTauDie[Math.max(it0+i, 0)];
     var idata=data_idataStart+it0+i;
-    avec[i]=n0*(1-r[i])*dxTau;
-    bvec[i]=n0*r[i]*dxTau;
+    var itTau=Math.max(0, Math.min(corrIFRarr.length-1,it0+i-tauDie));
+    corrIFRvec[i]=corrIFRarr[itTau];
+    avec[i]=n0*corrIFRvec[i]*(1-r[i])*dxTau;
+    bvec[i]=n0*corrIFRvec[i]*r[i]*dxTau;
     var z=data_dz[Math.min(idata, data_dz.length-1)]; // rhs from data
     a11+=avec[i]*avec[i];
     a12+=avec[i]*bvec[i];
@@ -1923,6 +1939,7 @@ function calibIFR(it0, it1){
   if(vecIFR[1]<=0){vecIFR[1]=IFRinit;}
 
   // calculate cumulated increment [t0,t1]
+  // avec and bvec contain corrIFRvec[i]!!
 
   var dCumDeathsSim=0;
   for(var i=0; i<it1-it0; i++){
@@ -1930,15 +1947,19 @@ function calibIFR(it0, it1){
   }
 
   vecIFR[2]=dCumDeathsSim;
-  if(true){ // OK here
+  if(false){ // true OK here
     console.log("calibIFR: it0=",it0," it1-1=",it1-1,
 		" data_itmax=",data_itmax,
 		" data_dz.length=",data_dz.length,
 		" data_idataStart=",data_idataStart,
+		"\n it0: corrIFRvec[0]=",corrIFRvec[0],
+		" it1-1:corrIFRvec[corrIFRvec.length-1]=",
+		corrIFRvec[corrIFRvec.length-1], 
 		"\n cum deaths in interval data: ",
 		(data_cumDeaths[data_idataStart+it1-1]
 		 -data_cumDeaths[data_idataStart+it0]),
 		"\n cum deaths in interval sim: ",vecIFR[2],
+		"\n return val vecIFR=",vecIFR,
 		"");
   }
   return vecIFR;
@@ -1983,7 +2004,7 @@ function estimateR0(itmin_c, itmax_c, R0calib){
 	   
 
   /** ##############################################################
-  !!!! THE central estimation 
+  !!! THE central estimation 
   - global control vars itmin_calib,itmax_calib
   - global data variable data_cumCases to fit to by minimizing SSEfunc
   - input/output R0calib
@@ -2218,8 +2239,6 @@ function toggleTestnumber(){ // callback html "testnumber"
 function selectDataCountry(){ // callback html select box "countryData"
                               // "Deutschland"
 
-  //!!!!! last error: validation remembered wrong data as reference (one json save op false)
-
   
   country=document.getElementById("countries").value;
   countryGer=countryGerList[country];
@@ -2291,7 +2310,8 @@ function revertWorkingData(){
 
 //#################################################################
 function validate(){ // callback html select box "validateDiv"
-  //!!!! need quickhack initializeData(country) and calls calibrate
+  //needs additional initializeData(country,true) with flagValid=true
+  // and calls calibrate
 //#################################################################
 
 
@@ -2438,7 +2458,7 @@ function myStartStopFunction(){ //!! hier bloederweise Daten noch nicht da!!
 function myRestartFunction(){ 
   //console.log("in myRestartFunction: itPresent=",itPresent);
 
-  rVacc=0; //!!!! as long as vaccinations not yet in data
+  rVacc=0; // as long as vaccinations not yet in data
   setSlider(slider_rVacc, slider_rVaccText, 700*rVacc, " %/Woche");
 
   initialize();
@@ -2471,7 +2491,7 @@ function myRestartFunction(){
 
 function myResetFunction(){ 
   console.log("in myResetFunction");
-  //!!!!resetValidation(); 
+  //resetValidation(); //!!?? 
   R0sliderUsed=false;
   otherSliderUsed=false;
   testSliderUsed=false;
@@ -2625,9 +2645,11 @@ function doSimulationStep(){
   }
 
   drawsim.draw(it);
- 
-  //var logging=false;  // doSimulationStep: logging "allowed"
-  var logging=(it<3);
+
+  //!!! test updateOneDay here
+  var logging=false;  // doSimulationStep: logging "allowed"
+  //var logging=(it<20);
+  //var logging=true;
 
 
   corona.updateOneDay(R0_actual,it,logging); // in doSimulationStep
@@ -2841,7 +2863,7 @@ function CoronaSim(){
 }
 
 
-//!!!! need to chose appropriate fracDie before!
+//!! need to chose appropriate fracDie before!
 
 CoronaSim.prototype.init=function(itStart,logging){
 
@@ -3093,15 +3115,15 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
       " this.xyz=",this.xyz.toPrecision(2),
       " this.y=",this.y.toPrecision(2),
       " this.z=",this.z.toPrecision(2),
+      "\n fracDie=IFR65=",fracDie.toPrecision(2),
       " nxt=n0*this.xt=",Math.round(n0*this.xt),
-      " fracDie=",fracDie.toPrecision(2),
-      " nzSim=",Math.round(n0*this.xt),
-      "\n  this.x[tauDie-1]=",this.x[tauDie-1].toPrecision(3),
-      "\n  this.x[tauDie]=",this.x[tauDie].toPrecision(3),
-      "\n  this.x[tauDie+1]=",this.x[tauDie+1].toPrecision(3),
-      "\n  this.x[tauRecover-1]=",this.x[tauRecover-1].toPrecision(3),
-      "\n  this.x[tauRecover]=",this.x[tauRecover].toPrecision(3),
-      "\n  this.x[tauRecover+1]=",this.x[tauRecover+1].toPrecision(3),
+      " nzSim=n0*this.z=",Math.round(n0*this.z),
+      //"\n  this.x[tauDie-1]=",this.x[tauDie-1].toPrecision(3),
+      //"\n  this.x[tauDie]=",this.x[tauDie].toPrecision(3),
+      //"\n  this.x[tauDie+1]=",this.x[tauDie+1].toPrecision(3),
+      //"\n  this.x[tauRecover-1]=",this.x[tauRecover-1].toPrecision(3),
+      //"\n  this.x[tauRecover]=",this.x[tauRecover].toPrecision(3),
+      //"\n  this.x[tauRecover+1]=",this.x[tauRecover+1].toPrecision(3),
       "");
   }
 
@@ -3258,7 +3280,7 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
     if(idata<data_pTestModel.length){pTest=data_pTestModel[idata];} 
     else{
       //!!! quick hack to avoid sudden drop cases 2021-02-22
-      var factor=1.0999 
+      var factor=1.0333
       pTest=factor*pTest_weeklyPattern[(idata-data_pTestModel.length)%7];
     } 
   }
@@ -3316,8 +3338,8 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
   // Debug output (filter needed because called in calibration)
   //##########################################################
 
-  //if(logging){ // filter needed because called in calibration
-  if(logging&&(it<-19)){ // filter needed because calibration!
+  if(logging){ // filter needed because called in calibration
+  //if(logging&&(it<-19)){ // filter needed because calibration!
   //if(it>=itPresent){ // it<itPresent in calibration => not reached
   //if(false&&(it>=itPresent)){ // it<itPresent in calibration => not reached
     console.log(
@@ -3326,15 +3348,16 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
       " this.xyz=",this.xyz.toPrecision(2),
       " this.y=",this.y.toPrecision(2),
       " this.z=",this.z.toPrecision(2),
+      "\n fracDie=IFR65=",fracDie.toPrecision(2),
+      " corrIFR=",corrIFR,
       " nxt=n0*this.xt=",Math.round(n0*this.xt),
-      " fracDie=",fracDie.toPrecision(2),
-      " nzSim=",Math.round(n0*this.xt),
-      "\n  this.x[tauDie-1]=",this.x[tauDie-1].toPrecision(3),
-      "\n  this.x[tauDie]=",this.x[tauDie].toPrecision(3),
-      "\n  this.x[tauDie+1]=",this.x[tauDie+1].toPrecision(3),
-      "\n  this.x[tauRecover-1]=",this.x[tauRecover-1].toPrecision(3),
-      "\n  this.x[tauRecover]=",this.x[tauRecover].toPrecision(3),
-      "\n  this.x[tauRecover+1]=",this.x[tauRecover+1].toPrecision(3),
+      " nzSim=n0*this.z=",Math.round(n0*this.z),
+      //"\n  this.x[tauDie-1]=",this.x[tauDie-1].toPrecision(3),
+      //"\n  this.x[tauDie]=",this.x[tauDie].toPrecision(3),
+      //"\n  this.x[tauDie+1]=",this.x[tauDie+1].toPrecision(3),
+      //"\n  this.x[tauRecover-1]=",this.x[tauRecover-1].toPrecision(3),
+      //"\n  this.x[tauRecover]=",this.x[tauRecover].toPrecision(3),
+      //"\n  this.x[tauRecover+1]=",this.x[tauRecover+1].toPrecision(3),
       "");
   }
 
@@ -4102,7 +4125,7 @@ DrawSim.prototype.drawAxes=function(windowG){
 		 this.yPix0+(yrelTopVars-(line)*dyrel)*this.hPix);
     
     line++;
-    ctx.fillText("Aktuelle IFR="+(100*IFRfun_time(it)).toFixed(2)+" %",
+    ctx.fillText("Aktuelle IFR65="+(100*IFRfun_time(it)).toFixed(2)+" %",
 		 this.xPix0+xrelLeft*this.wPix,
 		 this.yPix0+(yrelTopVars-(line)*dyrel)*this.hPix);
 
