@@ -13,6 +13,7 @@ data/githubWithTests_orig_Germany.json
 
 ## generated files
 
+*.o
 corona_eng.js
 corona_gui_eng.js
 *_eng.html

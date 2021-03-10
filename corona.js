@@ -218,28 +218,32 @@ const n0List={
   "SK_Dresden"        : 556780
 }
 
+// https://www.populationpyramid.net
+// cd populationStructure
+// run.sh
+
 const ageProfileListPerc={ // age groups [0-30,-40,-50,-60,-70,-80,-90, 90+]
-  "Germany"       :     [30,10,10,15,15,10,8,2],
-  "Austria"       :     [30,10,10,15,15,10,8,2],
-  "Czechia"       :     [30,10,10,15,15,10,8,2],
-  "France"        :     [30,10,10,15,15,10,8,2],
-  "United Kingdom":     [30,10,10,15,15,10,8,2],
-  "Italy"         :     [30,10,10,15,15,10,8,2],
-  "Poland"        :     [30,10,10,15,15,10,8,2],
-  "Spain"         :     [30,10,10,15,15,10,8,2],
-  "Sweden"        :     [30,10,10,15,15,10,8,2],
-  "Switzerland"   :     [30,10,10,15,15,10,8,2],
-  "Greece"        :     [30,10,10,15,15,10,8,2],
-  "Portugal"      :     [30,10,10,15,15,10,8,2],
-  "Israel"        :     [30,10,10,15,15,10,8,2],
-  "India"         :     [50,15,10,10, 8, 5,1,1],
-  "Russia"        :     [30,10,10,15,15,10,8,2],
-  "US"            :     [30,10,10,15,15,10,8,2],
-  "Australia"     :     [30,10,10,15,15,10,8,2],
-  "South Africa"  :     [30,10,10,15,15,10,8,2],
-  "LK_Erzgebirgskreis": [30,10,10,15,15,10,8,2],
-  "LK_Osterzgebirge"  : [30,10,10,15,15,10,8,2],
-  "SK_Dresden"        : [30,10,10,15,15,10,8,2]
+  "Germany"       :     [30,13,12,20,12,9,6,1],
+  "Austria"       :     [32,14,13,16,11,9,4,1],
+  "Czechia"       :     [31,14,17,12,13,9,3,1],
+  "France"        :     [35,12,13,13,12,8,5,1],
+  "United Kingdom":     [36,14,13,14,11,8,4,1],
+  "Italy"         :     [28,12,15,16,12,10,6,1],
+  "Poland"        :     [32,16,14,12,14,7,4,1],
+  "Spain"         :     [29,13,17,15,11,8,5,1],
+  "Sweden"        :     [36,13,13,13,11,10,4,1],
+  "Switzerland"   :     [32,14,14,15,11,9,4,1],
+  "Greece"        :     [29,13,15,14,12,9,6,1],
+  "Portugal"      :     [29,12,16,14,13,10,6,1],
+  "Israel"        :     [49,13,12,9,8,5,2,1],
+  "India"         :     [53,16,12,9,6,3,1,0.1],
+  "Russia"        :     [34,17,14,13,12,6,3,1],
+  "US"            :     [39,13,12,13,12,7,3,1],
+  "Australia"     :     [32,14,13,16,11,9,4,1],
+  "South Africa"  :     [55,17,12,8,5,2,1,0.1],
+  "LK_Erzgebirgskreis": [30,13,12,16,12,9,6,1],
+  "LK_Osterzgebirge"  : [30,13,12,16,12,9,6,1],
+  "SK_Dresden"        : [30,13,12,16,12,9,6,1]
 }
 
 // will be only relevant if "xyz no longer <<1 ("Durchseuchung")
@@ -337,8 +341,25 @@ var stringencySliderUsed=false;
 var fpsstart=50;
 var fps=fpsstart;  // controlled @ doSimulationStep()
 
+
+
 // (i) controlled by sliders/control elements (apart from R0)
 
+// British B.1.1.7 simulation
+// Data for Germany, see header of function MutationDynamics
+
+var simulateMutation=false;
+var dateOld=new Date("2021-02-11"); 
+var dateNew=new Date("2021-03-04");
+//var dateNew=new Date("2021-02-25");
+
+var pOld=0.176;;  
+var pNew=0.460;;  
+//var pNew=0.400;  
+
+var mutationDynamics;  // new MutationDynamics(dateOld,pOld,dateNew,pNew,R0)
+
+// test
 
 var pTestInit=0.1;     // P(Tested|infected)  if !f(#tests) assumed
 var pTestModelMin=0.04;   // if calculated by sqrt- or propto model
@@ -887,6 +908,7 @@ function initializeData(country,insideValidation){
   // Vaccination() (!! related to it=i-data_idataStart)
 
   var vaccData=new Vaccination();  // in sim: CoronaSim.vaccination=new ...
+  console.log("before vaccData.initialize(country)");
   vaccData.initialize(country);
   var rVaccData=0;
   for(var it=0; it<itPresent; it++){
@@ -1393,7 +1415,7 @@ function SSEfunc(R0arr, fR0, logging, itStartInp, itMaxInp,
     // simulate
 
     var R0_actual= R0fun_time(R0arr,it-itStart); // ! only R0arr used in SSEfunc
-    corona.updateOneDay(R0_actual, it, logging); // in SSE never logging=true!
+    corona.updateOneDay(R0_actual, it, logging); //in SSE; never logging=true!
 
     // increment SSE
 
@@ -1842,17 +1864,19 @@ function calibrate(){
   }
 
   inCalibration=false; // use dynamic corona.vaccination.update(...)
+
+  
   
   //##############################################################
-  // !!! for inline nondynamic testing: add testcode here
+  // !!!! for inline nondynamic testing: add testcode here
   // outside of calibration
   //##############################################################
 
+  
   if(false){
     console.log("end calibrate: in testing zone!");
-    console.log("test the f... corona.init");
-    corona.init(0,true);
-    alert('stopped simulation with alert');
+    // enter testing code here
+    //alert('stopped simulation with alert');
   }
   
 }
@@ -2464,7 +2488,10 @@ function myRestartFunction(){
   initialize();
   //console.log(" myRestartFunction after initialize: drawsim.itmin=",drawsim.itmin);
   fps=fpsstart;
-  it=0; //!!! only instance apart from init where global it is reset to zero 
+  it=0; //!!! only instance apart from init where global it is reset to zero
+        // cannot set it=itPresen if simulateMutation
+        // because of dyn Vars vacc, x,y,z
+
   ctx.clearRect(0, 0, canvas.width, canvas.height)
 
   fracDie=IFRfun_time(-20); 
@@ -2473,6 +2500,27 @@ function myRestartFunction(){
   clearInterval(myRun);
   drawsim.checkRescaling(it); //  sometimes bug x scaling not reset
 
+  //!!!
+  console.log("simulateMutation=",simulateMutation);
+  if(simulateMutation){
+    var itOld=itPresent
+	- Math.floor((present.getTime()-dateOld.getTime())/oneDay_ms);
+    var itNew=itPresent
+	- Math.floor((present.getTime()-dateNew.getTime())/oneDay_ms);
+    var R0old=R0fun_time(R0time,itOld);
+    var R0new=R0fun_time(R0time,itNew);
+    var R0present=R0fun_time(R0time,itPresent);
+    console.log("myRestartFunction, simulateMutation=true:",
+		"\n itOld=",itOld,"  R0old=",R0old,
+		"\n itNew=",itNew,"  R0new=",R0new,
+		"\n itPresent=",itPresent,"  R0present=",R0present);
+    mutationDynamics=new MutationDynamics(
+      dateOld, pOld, dateNew, pNew, R0present);
+    //mutationDynamics.update(itPresent);
+    //mutationDynamics.update(itPresent+7);
+  }
+
+  
   myRun=setInterval(simulationRun, 1000/fps);
 
    // activate thread if stopped
@@ -2553,6 +2601,7 @@ function myCalibrateFunction(){ // callback "Kalibriere neu!
   initializeData(country); // includes calibrate(); myRestartFunction();
 }
 
+
 function myCountryComparison(){ // callback "Kalibriere neu!
   if(countryComparison){
     countryComparison=false;
@@ -2563,6 +2612,22 @@ function myCountryComparison(){ // callback "Kalibriere neu!
     countryCmp="Czechia";
     document.getElementById("buttonCmp").innerHTML="Stop CZ Vergleich";
  }
+  myRestartFunction(); // in both cases; depends on countryComparison
+}
+
+
+
+function myMutationSim(){ // callback "Kalibriere neu!
+  if(simulateMutation){
+    simulateMutation=false;
+    document.getElementById("buttonMut").innerHTML="Start B.1.1.7 Sim";
+  }
+  else{
+    simulateMutation=true;
+    document.getElementById("buttonMut").innerHTML="Stop B.1.1.7 Sim";
+  }
+  console.log("myMutationSim: simulateMutation=",simulateMutation);
+  //myCalibrateFunction(); // in both cases; depends on simulateMutation
   myRestartFunction();
 }
 
@@ -2573,8 +2638,8 @@ function simulationRun() {
   doSimulationStep(); 
   //console.log("R0sliderUsed=",R0sliderUsed);
   if(!R0sliderUsed){
-    setSlider(slider_R0, slider_R0Text, R0fun_time(R0time,it).toFixed(2),"");
-    //setSlider(slider_R0cp, slider_R0cpText, R0fun_time(R0time,it).toFixed(2),"");
+    setSlider(slider_R0, slider_R0Text, R0_actual.toFixed(2),"");
+    //setSlider(slider_R0, slider_R0Text, R0fun_time(R0time,it).toFixed(2),"");
   }
   
   if(!stringencySliderUsed){
@@ -2625,7 +2690,17 @@ function doSimulationStep(){
   fracDie= IFRfun_time(it);
 
   R0_actual=(R0sliderUsed) ? R0 : R0fun_time(R0time,it);
-  R0_hist[it]=R0_actual;
+    //!!!
+  if(simulateMutation){
+    if(it>=itPresent){
+      mutationDynamics.update(it);
+      R0_actual=mutationDynamics.R0; // override R0_actual=R0fun_time(..)
+      console.log("in simulateMutation: p117=",mutationDynamics.p,
+		  " R0mixed=",mutationDynamics.R0);
+    }
+  }
+ 
+  R0_hist[it]=R0_actual; // for drawing
 
   var i=Math.min(data_idataStart+it, data_stringencyIndex.length-1);
 
@@ -2651,7 +2726,7 @@ function doSimulationStep(){
   //var logging=(it<20);
   //var logging=true;
 
-
+ 
   corona.updateOneDay(R0_actual,it,logging); // in doSimulationStep
   itmaxReference=it;
   
@@ -2702,7 +2777,83 @@ function log10(x){return Math.log(x)/ln10;}
 //################################################################
 //################################################################
 
+
+//################################################################
+function MutationDynamics(dateOld, pOld, dateNew, pNew, R0){
+//################################################################
+
+  /** B.1.1.7 Variante https://de.statista.com/statistik/daten/studie/1208627/umfrage/ausbreitung-von-corona-mutationen-in-deutschland/#professional
+
+KW8: Beginn Mo 2020-02-22, Ende So 2020-02-28, Mitte 2020-02-25
+KW2 p=0.02
+KW3 p=0.036
+KW4 p=0.047
+KW5 p=0.072
+KW6 p=0.176     2020-02-11
+KW7 p=0.259     2020-02-18
+KW8 p=0.400     2020-02-25
+KW9 p=0.460     2020-03-04
+KW10 p=0.
+   */
+
+  
+  this.daysNew2present
+     =Math.floor((present.getTime()-dateNew.getTime())/oneDay_ms);
+
+  this.dt =Math.floor((dateNew.getTime()-dateOld.getTime())/oneDay_ms);
+  this.yOld=pOld/(1-pOld);
+  this.yNew=pNew/(1-pNew);
+  this.ry=1/this.dt * Math.log(this.yNew/this.yOld);
+
+  // middle period for one repro cycle
+  // !!! re-create ("new") if tauRstart, tauRend changed with sliders
+  
+  var tauR=0.5*(tauRstart+tauRend);
+
+  // based on present R0 values since these calibrated and
+  // R0mut/R0wild=tauR*this.ry+1=const
+
+  var ratioMutWild=tauR*this.ry+1;
+  var yPresent=this.yNew*Math.exp(this.daysNew2present*this.ry);
+  var pPresent=yPresent/(1+yPresent);
+  
+  this.R0wild=R0/(1+pPresent*(ratioMutWild-1));
+  this.R0mut=ratioMutWild*this.R0wild;
+  if(true){
+    console.log("MutationDynamics Constructor: dt=",this.dt,
+		" daysNew2present=",this.daysNew2present,
+		" pOld=",pOld," yOld=",this.yOld,
+		" pNew=",pNew," yNew=",this.yNew,
+		" ry=",this.ry,
+		" R0=",R0,
+		" R0wild=",this.R0wild,
+		" R0mut=",this.R0mut,
+		"");
+  }
+
+}
+
+// dynamics obeys dy/dt=r0y*y
+
+MutationDynamics.prototype.update=function(it){
+  var daysSinceDateNew=this.daysNew2present + it-itPresent;
+  this.y=this.yNew*Math.exp(this.ry*daysSinceDateNew);
+  this.p=this.y/(1+this.y)
+  this.R0=(1-this.p)*this.R0wild + this.p*this.R0mut;
+  if(true){
+    console.log("MutationDynamics.updateOneDay: it=",it,
+		" it-itPresent=",it-itPresent,
+		" y=",this.y,
+		" p=",this.p,
+		" R0=",this.R0,
+		"");
+  }
+}
+
+
+//################################################################
 function Vaccination(){
+//################################################################
   this.I0=0.95;      // fraction of immune people >=1 week after second vacc.
   this.tau0=28;      // days after full effect I0 is reached (1 week after)
   this.Ivacc=0;      // population immunity fraction by vaccinations
@@ -2745,9 +2896,11 @@ Vaccination.prototype.initialize=function(country){
     }
   }
   this.update(0,0); // to calculate this.corrFactorIFR for zero vacc
+
   this.corrFactorIFR0=this.corrFactorIFR;
   this.ageGroup=ageProfilePerc.length-1; // actual age group to be vacc
   
+  //console.log("Vaccination.initialize: this.corrFactorIFR0=",this.corrFactorIFR0);
 }
 
 // update using rate of first vaccinations (no second vacc or other
