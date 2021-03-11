@@ -16,7 +16,7 @@ set style line 5 lt 1 lw 2 pt 5 ps 1.5 dt 1 lc rgb "#00DD22" #gruen,
 set style line 6 lt 1 lw 2 pt 4 ps 1.5 dt 1 lc rgb "#00AAAA"
 set style line 7 lt 1 lw 2 pt 4 ps 2.0 dt 7 lc rgb "#1100FF" #blau,
 set style line 8 lt 1 lw 2 pt 8 ps 1.5 dt 1 lc rgb "#220088"
-set style line 9 lt 1 lw 2 pt 9 ps 1.5 dt 9 lc rgb "#999999" #grau
+set style line 9 lt 1 lw 1 pt 9 ps 1.5 dt 1 lc rgb "#999999" #grau
 
 set style line 11 lt 1 lw 3 pt 7 ps 1.9  lc rgb "#000000" 
 set style line 12 lt 1 lw 3 pt 2 ps 1.5 dt 2 lc rgb "#CC0022" 
@@ -81,7 +81,7 @@ ratioMutWild=ratioMutWildcalc(tauR, dt, pold, pnew)
 pPresent=pTime(tPresent,ry,told,pold)
 R0wild=R0wildcalc(R0present,pPresent,ratioMutWild)
 R0mut=R0wild*ratioMutWild
-print "ry=",ry
+print "ry=",ry," R0wild=",R0wild," R0mut=",R0mut
 
 ##############################################################
 # Time Format using internal Gnuplot-Time seconds since 01.01.1970
@@ -89,8 +89,6 @@ print "ry=",ry
 
 
 
-set out "p117.png"
-print "plotting p117.png"
 set xdata time
 #set format x '%d.%m.%Y'         #21.03.2021
 #set format x '%d.%m.,%H:00'     #21.03,00:00
@@ -103,12 +101,58 @@ print "pTime(tmax,ry,told,pold)=",pTime(tmax,ry,told,pold)
 set xtics 86400*14
 set key box top left
 set xlabel "Zeit"
+set xrange [tmin:tmax]
 set ylabel "B.1.1.7-Anteile und Gesamt-R_0-Wert"
+set yrange [0:100]
+
+###############################################################
+set out "figsCorona/p117-1.png"
+print "plotting figsCorona/p117-1.png"
+set label 1 sprintf("p=%2.1f\% on 2021-02-11",100*pold) at screen 0.22,0.35
+plot [t=tmin:tmax]\
+ told, 70*(t-tmin)/(tmax-tmin) t "1. Erhebung p" w l ls 9,\
+ told, 100*pold t "" w p ls 7 
+
+###############################################################
+set out "figsCorona/p117-2.png"
+print "plotting figsCorona/p117-2.png"
+set label 2 sprintf("p=%2.1f\% on 2021-03-04",100*pnew) at screen 0.38,0.56
+
+plot [t=tmin:tmax]\
+ told, 70*(t-tmin)/(tmax-tmin) t "1. und 2. Erhebung p" w l ls 9,\
+ told, 100*pold t "" w p ls 7,\
+ tnew, 70*(t-tmin)/(tmax-tmin) t "" w l ls 9,\
+ tnew, 100*pnew t "" w p ls 7
+
+###############################################################
+set out "figsCorona/p117-3.png"
+print "plotting figsCorona/p117-3.png"
+
+plot [t=tmin:tmax]\
+ t, 100*pTime(t,ry,told,pold) t "Anteil B.1.1.7 [%]" w l ls 7,\
+ tPresent, 100*(t-tmin)/(tmax-tmin) t "Gegenwart" w l ls 11,\
+ told, 70*(t-tmin)/(tmax-tmin) t "1. und 2. Erhebung p" w l ls 9,\
+ told, 100*pold t "" w p ls 7,\
+ tnew, 70*(t-tmin)/(tmax-tmin) t "" w l ls 9,\
+ tnew, 100*pnew t "" w p ls 7
+
+###############################################################
+set out "figsCorona/p117-4.png"
+print "plotting figsCorona/p117-4.png"
+set label 3 sprintf("R_0^{wild}=%1.2f",R0wild) at screen 0.14,0.63
+set label 4 sprintf("R_0^{mut}=%1.2f", R0mut)  at screen 0.14,0.58
+
 plot [t=tmin:tmax]\
  t, 100*pTime(t,ry,told,pold) t "Anteil B.1.1.7 [%]" w l ls 7,\
  t, 100*(R0(R0wild, R0mut, pTime(t,ry,told,pold))/R0wild-1)\
     t "Anstieg R_0/R_{0,wild}-1 [%]" w l ls 2,\
- tPresent, 100*(t-tmin)/(tmax-tmin) t "Gegenwart" w l ls 11
+ tPresent, 100*(t-tmin)/(tmax-tmin) t "Gegenwart" w l ls 11,\
+ told, 70*(t-tmin)/(tmax-tmin) t "1. und 2. Erhebung p" w l ls 9,\
+ told, 100*pold t "" w p ls 7,\
+ tnew, 70*(t-tmin)/(tmax-tmin) t "" w l ls 9,\
+ tnew, 100*pnew t "" w p ls 7
+
+
 
 quit
 

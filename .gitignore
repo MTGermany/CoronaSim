@@ -29,7 +29,14 @@ data/RKI_Kreis*.json
 *.out
 *.toc
 *.dvi
+*.nav
+*.snm
+
+
 *.save
+
+
+## Movie files
 *.mkv
 
 ## Figure files (no longer)
