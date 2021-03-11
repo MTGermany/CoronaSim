@@ -405,7 +405,8 @@
 {"date":"2021-03-06","total_cases":2502151.0,"total_deaths":71951.0,"people_vaccinated":5085443.0,"people_fully_vaccinated":2465185.0,"stringency_index":77.78},
 {"date":"2021-03-07","total_cases":2508655.0,"total_deaths":71984.0,"people_vaccinated":5198174.0,"people_fully_vaccinated":2499242.0,"stringency_index":77.78},
 {"date":"2021-03-08","total_cases":2513784.0,"total_deaths":72236.0,"people_vaccinated":5371741.0,"people_fully_vaccinated":2552137.0},
-{"date":"2021-03-09","total_cases":2520618.0,"total_deaths":72534.0,"people_vaccinated":5555420.0,"people_fully_vaccinated":2605818.0}]},
+{"date":"2021-03-09","total_cases":2520618.0,"total_deaths":72534.0,"people_vaccinated":5555420.0,"people_fully_vaccinated":2605818.0},
+{"date":"2021-03-10","total_cases":2541781.0,"total_deaths":72858.0}]},
 
 "AUT":{"continent":"Europe","location":"Austria","population":9006400.0,"population_density":106.749,"median_age":44.4,"aged_65_older":19.202,"aged_70_older":13.748,"extreme_poverty":0.7,"cardiovasc_death_rate":145.183,"diabetes_prevalence":6.35,"female_smokers":28.4,"male_smokers":30.9,"life_expectancy":81.54,"human_development_index":0.922,"data":[{"date":"2020-02-25","total_cases":2.0,"stringency_index":11.11},
 {"date":"2020-02-26","total_cases":2.0,"stringency_index":11.11},
@@ -785,7 +786,8 @@
 {"date":"2021-03-06","total_cases":472871.0,"total_deaths":8694.0,"total_tests":16374288.0,"people_vaccinated":564784.0,"people_fully_vaccinated":247292.0,"stringency_index":74.07},
 {"date":"2021-03-07","total_cases":475070.0,"total_deaths":8713.0,"people_vaccinated":575758.0,"people_fully_vaccinated":247915.0,"stringency_index":74.07},
 {"date":"2021-03-08","total_cases":476980.0,"total_deaths":8732.0,"people_vaccinated":585209.0,"people_fully_vaccinated":249157.0,"stringency_index":74.07},
-{"date":"2021-03-09","total_cases":479391.0,"total_deaths":8757.0,"people_vaccinated":608045.0,"people_fully_vaccinated":252097.0}]},
+{"date":"2021-03-09","total_cases":479391.0,"total_deaths":8757.0,"people_vaccinated":608045.0,"people_fully_vaccinated":252097.0},
+{"date":"2021-03-10","total_cases":481919.0,"total_deaths":8776.0}]},
 
 "CZE":{"continent":"Europe","location":"Czechia","population":10708982.0,"population_density":137.176,"median_age":43.3,"aged_65_older":19.027,"aged_70_older":11.58,"cardiovasc_death_rate":227.485,"diabetes_prevalence":6.82,"female_smokers":30.5,"male_smokers":38.3,"life_expectancy":79.38,"human_development_index":0.9,"data":[{"date":"2020-02-02","stringency_index":16.67},
 {"date":"2020-02-09","stringency_index":16.67},
@@ -1164,7 +1166,8 @@
 {"date":"2021-03-06","total_cases":1312164.0,"total_deaths":21558.0,"positive_rate":0.131,"people_vaccinated":561663.0,"people_fully_vaccinated":263055.0,"stringency_index":69.44},
 {"date":"2021-03-07","total_cases":1321331.0,"total_deaths":21717.0,"positive_rate":0.13,"people_vaccinated":571499.0,"people_fully_vaccinated":263873.0,"stringency_index":69.44},
 {"date":"2021-03-08","total_cases":1325291.0,"total_deaths":21882.0,"people_vaccinated":599222.0,"people_fully_vaccinated":268410.0},
-{"date":"2021-03-09","total_cases":1335815.0,"total_deaths":22147.0,"people_vaccinated":629117.0,"people_fully_vaccinated":273488.0}]},
+{"date":"2021-03-09","total_cases":1335815.0,"total_deaths":22147.0,"people_vaccinated":629117.0,"people_fully_vaccinated":273488.0},
+{"date":"2021-03-10","total_cases":1351195.0,"total_deaths":22385.0}]},
 
 "FRA":{"continent":"Europe","location":"France","population":65273512.0,"population_density":122.578,"median_age":42.0,"aged_65_older":19.718,"aged_70_older":13.079,"cardiovasc_death_rate":86.06,"diabetes_prevalence":4.77,"female_smokers":30.1,"male_smokers":35.6,"life_expectancy":82.66,"human_development_index":0.901,"data":[{"date":"2020-01-24","total_cases":2.0,"stringency_index":5.56},
 {"date":"2020-01-25","total_cases":3.0,"stringency_index":5.56},
@@ -1576,7 +1579,8 @@
 {"date":"2021-03-06","total_cases":3942243.0,"total_deaths":88597.0,"people_vaccinated":3772579.0,"people_fully_vaccinated":1920395.0,"stringency_index":82.41},
 {"date":"2021-03-07","total_cases":3964078.0,"total_deaths":88727.0,"people_vaccinated":3881967.0,"people_fully_vaccinated":1925812.0,"stringency_index":82.41},
 {"date":"2021-03-08","total_cases":3969612.0,"total_deaths":89090.0,"people_vaccinated":3996329.0,"people_fully_vaccinated":1976264.0,"stringency_index":82.41},
-{"date":"2021-03-09","total_cases":3992755.0,"total_deaths":89455.0}]},
+{"date":"2021-03-09","total_cases":3992755.0,"total_deaths":89455.0},
+{"date":"2021-03-10","total_cases":4022429.0,"total_deaths":89707.0}]},
 
 "GBR":{"continent":"Europe","location":"United Kingdom","population":67886004.0,"population_density":272.898,"median_age":40.8,"aged_65_older":18.517,"aged_70_older":12.527,"extreme_poverty":0.2,"cardiovasc_death_rate":122.137,"diabetes_prevalence":4.28,"female_smokers":20.0,"male_smokers":24.7,"life_expectancy":81.32,"human_development_index":0.932,"data":[{"date":"2020-01-31","total_cases":2.0,"stringency_index":8.33},
 {"date":"2020-02-01","total_cases":2.0,"stringency_index":8.33},
@@ -1981,7 +1985,8 @@
 {"date":"2021-03-06","total_cases":4225906.0,"total_deaths":124654.0,"people_vaccinated":22213112.0,"people_fully_vaccinated":1122402.0},
 {"date":"2021-03-07","total_cases":4231166.0,"total_deaths":124736.0,"people_vaccinated":22377255.0,"people_fully_vaccinated":1142643.0},
 {"date":"2021-03-08","total_cases":4235989.0,"total_deaths":124801.0,"people_vaccinated":22592528.0,"people_fully_vaccinated":1181431.0},
-{"date":"2021-03-09","total_cases":4241858.0,"total_deaths":125032.0}]},
+{"date":"2021-03-09","total_cases":4241858.0,"total_deaths":125032.0},
+{"date":"2021-03-10","total_cases":4247879.0,"total_deaths":125222.0}]},
 
 "ITA":{"continent":"Europe","location":"Italy","population":60461828.0,"population_density":205.859,"median_age":47.9,"aged_65_older":23.021,"aged_70_older":16.24,"extreme_poverty":2.0,"cardiovasc_death_rate":113.151,"diabetes_prevalence":4.78,"female_smokers":19.8,"male_smokers":27.8,"life_expectancy":83.51,"human_development_index":0.892,"data":[{"date":"2020-01-31","total_cases":2.0,"stringency_index":19.44},
 {"date":"2020-02-01","total_cases":2.0,"stringency_index":19.44},
@@ -2386,7 +2391,8 @@
 {"date":"2021-03-06","total_cases":3046762.0,"total_deaths":99578.0,"total_tests":42071509.0,"positive_rate":0.063,"people_vaccinated":3712992.0,"people_fully_vaccinated":1636676.0,"stringency_index":84.26},
 {"date":"2021-03-07","total_cases":3067486.0,"total_deaths":99785.0,"total_tests":42342845.0,"positive_rate":0.064,"people_vaccinated":3789272.0,"people_fully_vaccinated":1656332.0,"stringency_index":84.26},
 {"date":"2021-03-08","total_cases":3081368.0,"total_deaths":100103.0,"people_vaccinated":3911124.0,"people_fully_vaccinated":1702049.0,"stringency_index":84.26},
-{"date":"2021-03-09","total_cases":3101093.0,"total_deaths":100479.0,"people_vaccinated":4035099.0,"people_fully_vaccinated":1747516.0}]},
+{"date":"2021-03-09","total_cases":3101093.0,"total_deaths":100479.0,"people_vaccinated":4035099.0,"people_fully_vaccinated":1747516.0},
+{"date":"2021-03-10","total_cases":3123368.0,"total_deaths":100811.0}]},
 
 "POL":{"continent":"Europe","location":"Poland","population":37846605.0,"population_density":124.027,"median_age":41.8,"aged_65_older":16.763,"aged_70_older":10.202,"cardiovasc_death_rate":227.331,"diabetes_prevalence":5.91,"female_smokers":23.3,"male_smokers":33.1,"life_expectancy":78.73,"human_development_index":0.88,"data":[{"date":"2020-03-04","total_cases":1.0,"stringency_index":11.11},
 {"date":"2020-03-05","total_cases":1.0,"stringency_index":11.11},
@@ -2758,7 +2764,8 @@
 {"date":"2021-03-06","total_cases":1781345.0,"total_deaths":45159.0,"total_tests":9892083.0,"positive_rate":0.232,"people_vaccinated":2526389.0,"people_fully_vaccinated":1424715.0},
 {"date":"2021-03-07","total_cases":1794914.0,"total_deaths":45285.0,"total_tests":9941773.0,"positive_rate":0.237},
 {"date":"2021-03-08","total_cases":1801083.0,"total_deaths":45317.0,"people_vaccinated":2570094.0,"people_fully_vaccinated":1434640.0},
-{"date":"2021-03-09","total_cases":1811036.0,"total_deaths":45599.0,"people_vaccinated":2641693.0,"people_fully_vaccinated":1445170.0}]},
+{"date":"2021-03-09","total_cases":1811036.0,"total_deaths":45599.0,"people_vaccinated":2641693.0,"people_fully_vaccinated":1445170.0},
+{"date":"2021-03-10","total_cases":1828313.0,"total_deaths":45997.0}]},
 
 "ESP":{"continent":"Europe","location":"Spain","population":46754783.0,"population_density":93.105,"median_age":45.5,"aged_65_older":19.436,"aged_70_older":13.799,"extreme_poverty":1.0,"cardiovasc_death_rate":99.403,"diabetes_prevalence":7.17,"female_smokers":27.4,"male_smokers":31.4,"life_expectancy":83.56,"human_development_index":0.904,"data":[{"date":"2020-02-01","total_cases":1.0,"stringency_index":11.11},
 {"date":"2020-02-02","total_cases":1.0,"weekly_icu_admissions":2.963,"weekly_hosp_admissions":18.768,"stringency_index":11.11},
@@ -3162,7 +3169,8 @@
 {"date":"2021-03-06","total_cases":3149012.0,"new_cases_smoothed":-5648.714,"total_deaths":71138.0,"new_cases_smoothed_per_million":-120.816,"stringency_index":71.3},
 {"date":"2021-03-07","total_cases":3149012.0,"new_cases_smoothed":-5648.714,"total_deaths":71138.0,"new_cases_smoothed_per_million":-120.816,"people_vaccinated":3328703.0,"people_fully_vaccinated":1383488.0,"stringency_index":71.3},
 {"date":"2021-03-08","total_cases":3160970.0,"new_cases_smoothed":-6223.0,"total_deaths":71436.0,"new_cases_smoothed_per_million":-133.099,"people_vaccinated":3436412.0,"people_fully_vaccinated":1412236.0,"stringency_index":71.3},
-{"date":"2021-03-09","total_cases":3164982.0,"total_deaths":71727.0}]},
+{"date":"2021-03-09","total_cases":3164982.0,"total_deaths":71727.0},
+{"date":"2021-03-10","total_cases":3178442.0,"total_deaths":71961.0}]},
 
 "SWE":{"continent":"Europe","location":"Sweden","population":10099270.0,"population_density":24.718,"median_age":41.0,"aged_65_older":19.985,"aged_70_older":13.433,"extreme_poverty":0.5,"cardiovasc_death_rate":133.982,"diabetes_prevalence":4.79,"female_smokers":18.8,"male_smokers":18.9,"life_expectancy":82.8,"human_development_index":0.945,"data":[{"date":"2020-02-01","total_cases":1.0,"stringency_index":0.0},
 {"date":"2020-02-02","total_cases":1.0,"stringency_index":0.0},
@@ -3566,7 +3574,8 @@
 {"date":"2021-03-06","total_cases":684961.0,"total_deaths":13003.0,"stringency_index":69.44},
 {"date":"2021-03-07","total_cases":684961.0,"total_deaths":13003.0,"stringency_index":69.44},
 {"date":"2021-03-08","total_cases":684961.0,"total_deaths":13003.0,"stringency_index":69.44},
-{"date":"2021-03-09","total_cases":695975.0,"total_deaths":13042.0,"people_vaccinated":669950.0,"people_fully_vaccinated":316439.0}]},
+{"date":"2021-03-09","total_cases":695975.0,"total_deaths":13042.0,"people_vaccinated":669950.0,"people_fully_vaccinated":316439.0},
+{"date":"2021-03-10","total_cases":701892.0,"total_deaths":13088.0}]},
 
 "CHE":{"continent":"Europe","location":"Switzerland","population":8654618.0,"population_density":214.243,"median_age":43.1,"aged_65_older":18.436,"aged_70_older":12.644,"cardiovasc_death_rate":99.739,"diabetes_prevalence":5.59,"female_smokers":22.6,"male_smokers":28.9,"life_expectancy":83.78,"human_development_index":0.955,"data":[{"date":"2020-01-24","total_tests":3.0,"stringency_index":0.0},
 {"date":"2020-01-25","total_tests":7.0,"stringency_index":0.0},
@@ -3978,7 +3987,8 @@
 {"date":"2021-03-06","total_cases":562290.0,"total_deaths":10046.0,"total_tests":4477450.0,"positive_rate":0.047,"people_vaccinated":596836.0,"people_fully_vaccinated":309594.0,"stringency_index":56.48},
 {"date":"2021-03-07","total_cases":562290.0,"total_deaths":10048.0,"people_vaccinated":616913.0,"people_fully_vaccinated":331765.0},
 {"date":"2021-03-08","total_cases":565034.0,"total_deaths":10056.0},
-{"date":"2021-03-09","total_cases":566412.0,"total_deaths":10065.0}]},
+{"date":"2021-03-09","total_cases":566412.0,"total_deaths":10065.0},
+{"date":"2021-03-10","total_cases":567903.0,"total_deaths":10082.0}]},
 
 "GRC":{"continent":"Europe","location":"Greece","population":10423056.0,"population_density":83.479,"median_age":45.3,"aged_65_older":20.396,"aged_70_older":14.524,"extreme_poverty":1.5,"cardiovasc_death_rate":175.695,"diabetes_prevalence":4.55,"female_smokers":35.3,"male_smokers":52.0,"life_expectancy":82.24,"human_development_index":0.888,"data":[{"date":"2020-02-02","stringency_index":0.0},
 {"date":"2020-02-09","stringency_index":0.0},
@@ -4361,7 +4371,8 @@
 {"date":"2021-03-06","total_cases":203978.0,"total_deaths":6705.0,"total_tests":5534478.0,"positive_rate":0.044,"people_vaccinated":725388.0,"people_fully_vaccinated":366361.0},
 {"date":"2021-03-07","total_cases":205120.0,"total_deaths":6758.0},
 {"date":"2021-03-08","total_cases":206281.0,"total_deaths":6797.0,"people_vaccinated":753636.0,"people_fully_vaccinated":372424.0},
-{"date":"2021-03-09","total_cases":209462.0,"total_deaths":6843.0,"people_vaccinated":780536.0,"people_fully_vaccinated":377850.0}]},
+{"date":"2021-03-09","total_cases":209462.0,"total_deaths":6843.0,"people_vaccinated":780536.0,"people_fully_vaccinated":377850.0},
+{"date":"2021-03-10","total_cases":212091.0,"total_deaths":6886.0}]},
 
 "ISR":{"continent":"Asia","location":"Israel","population":8655541.0,"population_density":402.606,"median_age":30.6,"aged_65_older":11.733,"aged_70_older":7.359,"extreme_poverty":0.5,"cardiovasc_death_rate":93.32,"diabetes_prevalence":6.74,"female_smokers":15.4,"male_smokers":35.4,"life_expectancy":82.97,"human_development_index":0.919,"data":[{"date":"2020-02-20","total_tests":29.0,"stringency_index":19.44},
 {"date":"2020-02-21","total_cases":1.0,"total_tests":57.0,"stringency_index":19.44},
@@ -4746,7 +4757,8 @@
 {"date":"2021-03-06","total_cases":799727.0,"total_deaths":5856.0,"total_tests":13521135.0,"positive_rate":0.046,"people_vaccinated":4929849.0,"people_fully_vaccinated":3719246.0,"stringency_index":57.41},
 {"date":"2021-03-07","total_cases":801575.0,"total_deaths":5891.0,"total_tests":13586171.0,"positive_rate":0.044,"people_vaccinated":4960769.0,"people_fully_vaccinated":3791510.0,"stringency_index":54.63},
 {"date":"2021-03-08","total_cases":805116.0,"total_deaths":5917.0,"people_vaccinated":4995681.0,"people_fully_vaccinated":3864171.0,"stringency_index":54.63},
-{"date":"2021-03-09","total_cases":808262.0,"total_deaths":5933.0,"people_vaccinated":5035562.0,"people_fully_vaccinated":3940352.0}]},
+{"date":"2021-03-09","total_cases":808262.0,"total_deaths":5933.0,"people_vaccinated":5035562.0,"people_fully_vaccinated":3940352.0},
+{"date":"2021-03-10","total_cases":811492.0,"total_deaths":5950.0}]},
 
 "IND":{"continent":"Asia","location":"India","population":1380004385.0,"population_density":450.419,"median_age":28.2,"aged_65_older":5.989,"aged_70_older":3.414,"extreme_poverty":21.2,"cardiovasc_death_rate":282.28,"diabetes_prevalence":10.39,"female_smokers":1.9,"male_smokers":20.6,"handwashing_facilities":59.55,"life_expectancy":69.66,"human_development_index":0.645,"data":[{"date":"2020-01-30","total_cases":1.0,"stringency_index":10.19},
 {"date":"2020-01-31","total_cases":1.0,"stringency_index":10.19},
@@ -5152,7 +5164,8 @@
 {"date":"2021-03-06","total_cases":11210799.0,"total_deaths":157756.0,"total_tests":220692677.0,"positive_rate":0.022,"people_vaccinated":17168303.0,"people_fully_vaccinated":3754041.0,"stringency_index":63.43},
 {"date":"2021-03-07","total_cases":11229398.0,"total_deaths":157853.0,"total_tests":221430507.0,"positive_rate":0.023,"people_vaccinated":17227903.0,"people_fully_vaccinated":3761107.0,"stringency_index":63.43},
 {"date":"2021-03-08","total_cases":11244786.0,"total_deaths":157930.0,"people_vaccinated":18943283.0,"people_fully_vaccinated":4065450.0,"stringency_index":63.43},
-{"date":"2021-03-09","total_cases":11262707.0,"total_deaths":158063.0,"people_vaccinated":20004227.0,"people_fully_vaccinated":4363679.0}]},
+{"date":"2021-03-09","total_cases":11262707.0,"total_deaths":158063.0,"people_vaccinated":20004227.0,"people_fully_vaccinated":4363679.0},
+{"date":"2021-03-10","total_cases":11285561.0,"total_deaths":158189.0}]},
 
 "RUS":{"continent":"Europe","location":"Russia","population":145934460.0,"population_density":8.823,"median_age":39.6,"aged_65_older":14.178,"aged_70_older":9.393,"extreme_poverty":0.1,"cardiovasc_death_rate":431.297,"diabetes_prevalence":6.18,"female_smokers":23.4,"male_smokers":58.3,"life_expectancy":72.58,"human_development_index":0.824,"data":[{"date":"2020-01-31","total_cases":2.0,"stringency_index":8.33},
 {"date":"2020-02-01","total_cases":2.0,"stringency_index":8.33},
@@ -5557,7 +5570,8 @@
 {"date":"2021-03-06","total_cases":4263785.0,"total_deaths":87253.0,"total_tests":113280229.0,"positive_rate":0.034,"people_vaccinated":5082127.0,"people_fully_vaccinated":1501746.0,"stringency_index":40.28},
 {"date":"2021-03-07","total_cases":4274263.0,"total_deaths":87614.0,"total_tests":113562188.0,"positive_rate":0.034,"people_vaccinated":5128138.0,"people_fully_vaccinated":1527349.0,"stringency_index":40.28},
 {"date":"2021-03-08","total_cases":4284408.0,"total_deaths":87985.0,"people_vaccinated":5136605.0,"people_fully_vaccinated":1532861.0,"stringency_index":40.28},
-{"date":"2021-03-09","total_cases":4293750.0,"total_deaths":88315.0,"people_vaccinated":5149589.0,"people_fully_vaccinated":1544760.0}]},
+{"date":"2021-03-09","total_cases":4293750.0,"total_deaths":88315.0,"people_vaccinated":5149589.0,"people_fully_vaccinated":1544760.0},
+{"date":"2021-03-10","total_cases":4302726.0,"total_deaths":88773.0}]},
 
 "USA":{"continent":"North America","location":"United States","population":331002647.0,"population_density":35.608,"median_age":38.3,"aged_65_older":15.413,"aged_70_older":9.732,"extreme_poverty":1.2,"cardiovasc_death_rate":151.089,"diabetes_prevalence":10.79,"female_smokers":19.1,"male_smokers":24.6,"life_expectancy":78.86,"human_development_index":0.926,"data":[{"date":"2020-01-22","total_cases":1.0,"stringency_index":0.0},
 {"date":"2020-01-23","total_cases":1.0,"stringency_index":0.0},
@@ -5971,7 +5985,8 @@
 {"date":"2021-03-06","total_cases":28952970.0,"total_deaths":524362.0,"people_vaccinated":57358849.0,"people_fully_vaccinated":29776160.0,"stringency_index":64.35},
 {"date":"2021-03-07","total_cases":28993873.0,"total_deaths":525033.0,"people_vaccinated":58873710.0,"people_fully_vaccinated":30686881.0,"stringency_index":64.35},
 {"date":"2021-03-08","total_cases":29038631.0,"total_deaths":525752.0,"people_vaccinated":60005231.0,"people_fully_vaccinated":31493040.0,"stringency_index":64.35},
-{"date":"2021-03-09","total_cases":29096048.0,"total_deaths":527699.0,"people_vaccinated":61088527.0,"people_fully_vaccinated":32102061.0}]},
+{"date":"2021-03-09","total_cases":29096048.0,"total_deaths":527699.0,"people_vaccinated":61088527.0,"people_fully_vaccinated":32102061.0},
+{"date":"2021-03-10","total_cases":29154659.0,"total_deaths":529263.0}]},
 
 "AUS":{"continent":"Oceania","location":"Australia","population":25499881.0,"population_density":3.202,"median_age":37.9,"aged_65_older":15.504,"aged_70_older":10.129,"extreme_poverty":0.5,"cardiovasc_death_rate":107.791,"diabetes_prevalence":5.07,"female_smokers":13.0,"male_smokers":16.5,"life_expectancy":83.44,"human_development_index":0.944,"data":[{"date":"2020-01-26","total_cases":4.0,"stringency_index":11.11},
 {"date":"2020-01-27","total_cases":5.0,"stringency_index":11.11},
@@ -6381,7 +6396,8 @@
 {"date":"2021-03-06","total_cases":29034.0,"total_deaths":909.0,"people_vaccinated":76940.0,"stringency_index":50.46},
 {"date":"2021-03-07","total_cases":29046.0,"total_deaths":909.0,"people_vaccinated":81000.0,"stringency_index":50.46},
 {"date":"2021-03-08","total_cases":29061.0,"total_deaths":909.0,"people_vaccinated":86369.0,"stringency_index":50.46},
-{"date":"2021-03-09","total_cases":29074.0,"total_deaths":909.0,"people_vaccinated":94908.0}]},
+{"date":"2021-03-09","total_cases":29074.0,"total_deaths":909.0,"people_vaccinated":94908.0},
+{"date":"2021-03-10","total_cases":29090.0,"total_deaths":909.0}]},
 
 "PRT":{"continent":"Europe","location":"Portugal","population":10196707.0,"population_density":112.371,"median_age":46.2,"aged_65_older":21.502,"aged_70_older":14.924,"extreme_poverty":0.5,"cardiovasc_death_rate":127.842,"diabetes_prevalence":9.85,"female_smokers":16.3,"male_smokers":30.0,"life_expectancy":82.05,"human_development_index":0.864,"data":[{"date":"2020-02-02","weekly_hosp_admissions":9.904,"stringency_index":11.11},
 {"date":"2020-02-09","weekly_hosp_admissions":9.904,"stringency_index":11.11},
@@ -6760,7 +6776,8 @@
 {"date":"2021-03-06","total_cases":809412.0,"total_deaths":16512.0,"people_vaccinated":724202.0,"people_fully_vaccinated":287830.0,"stringency_index":87.96},
 {"date":"2021-03-07","total_cases":810094.0,"total_deaths":16540.0,"people_vaccinated":737206.0,"people_fully_vaccinated":291983.0,"stringency_index":87.96},
 {"date":"2021-03-08","total_cases":810459.0,"total_deaths":16565.0,"people_vaccinated":739762.0,"people_fully_vaccinated":293338.0,"stringency_index":76.85},
-{"date":"2021-03-09","total_cases":811306.0,"total_deaths":16595.0,"people_vaccinated":748575.0,"people_fully_vaccinated":295516.0,"stringency_index":76.85}]},
+{"date":"2021-03-09","total_cases":811306.0,"total_deaths":16595.0,"people_vaccinated":748575.0,"people_fully_vaccinated":295516.0,"stringency_index":76.85},
+{"date":"2021-03-10","total_cases":811948.0,"total_deaths":16617.0}]},
 
 "ZAF":{"continent":"Africa","location":"South Africa","population":59308690.0,"population_density":46.754,"median_age":27.3,"aged_65_older":5.344,"aged_70_older":3.053,"extreme_poverty":18.9,"cardiovasc_death_rate":200.38,"diabetes_prevalence":5.52,"female_smokers":8.1,"male_smokers":33.2,"handwashing_facilities":43.993,"life_expectancy":64.13,"human_development_index":0.709,"data":[{"date":"2020-02-07","total_tests":42.0,"stringency_index":2.78},
 {"date":"2020-02-08","stringency_index":2.78},
@@ -7158,5 +7175,6 @@
 {"date":"2021-03-06","total_cases":1520206.0,"total_deaths":50647.0,"total_tests":9236503.0,"positive_rate":0.044},
 {"date":"2021-03-07","total_cases":1521068.0,"total_deaths":50678.0,"total_tests":9255492.0,"positive_rate":0.043,"people_vaccinated":101573.0,"people_fully_vaccinated":101573.0},
 {"date":"2021-03-08","total_cases":1521706.0,"total_deaths":50803.0,"people_vaccinated":101841.0,"people_fully_vaccinated":101841.0},
-{"date":"2021-03-09","total_cases":1522697.0,"total_deaths":50906.0,"people_vaccinated":107054.0,"people_fully_vaccinated":107054.0}]},
+{"date":"2021-03-09","total_cases":1522697.0,"total_deaths":50906.0,"people_vaccinated":107054.0,"people_fully_vaccinated":107054.0},
+{"date":"2021-03-10","total_cases":1524174.0,"total_deaths":51015.0}]},
 
