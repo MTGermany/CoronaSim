@@ -2481,25 +2481,6 @@ function myStartStopFunction(){ //!! hier bloederweise Daten noch nicht da!!
 
 function myRestartFunction(){ 
   //console.log("in myRestartFunction: itPresent=",itPresent);
-
-  rVacc=0; // as long as vaccinations not yet in data
-  setSlider(slider_rVacc, slider_rVaccText, 700*rVacc, " %/Woche");
-
-  initialize();
-  //console.log(" myRestartFunction after initialize: drawsim.itmin=",drawsim.itmin);
-  fps=fpsstart;
-  it=0; //!!! only instance apart from init where global it is reset to zero
-        // cannot set it=itPresen if simulateMutation
-        // because of dyn Vars vacc, x,y,z
-
-  ctx.clearRect(0, 0, canvas.width, canvas.height)
-
-  fracDie=IFRfun_time(-20); 
-  corona.init(0,false); // because initialize redefines CoronaSim()
-
-  clearInterval(myRun);
-  drawsim.checkRescaling(it); //  sometimes bug x scaling not reset
-
   //!!!
   console.log("simulateMutation=",simulateMutation);
   if(simulateMutation){
@@ -2516,9 +2497,29 @@ function myRestartFunction(){
 		"\n itPresent=",itPresent,"  R0present=",R0present);
     mutationDynamics=new MutationDynamics(
       dateOld, pOld, dateNew, pNew, R0present);
+    console.log("\n\nmutationDynamics=",mutationDynamics,"\n\n");
     //mutationDynamics.update(itPresent);
     //mutationDynamics.update(itPresent+7);
   }
+
+  rVacc=0; // as long as vaccinations not yet in data
+  setSlider(slider_rVacc, slider_rVaccText, 700*rVacc, " %/Woche");
+  console.log("myRestartFunction before initialize");
+  initialize();
+  console.log(" myRestartFunction after initialize: drawsim.itmin=",drawsim.itmin);
+  fps=fpsstart;
+  it=0; //!!! only instance apart from init where global it is reset to zero
+        // cannot set it=itPresen if simulateMutation
+        // because of dyn Vars vacc, x,y,z
+
+  ctx.clearRect(0, 0, canvas.width, canvas.height)
+
+  fracDie=IFRfun_time(-20); 
+  corona.init(0,false); // because initialize redefines CoronaSim()
+
+  clearInterval(myRun);
+  drawsim.checkRescaling(it); //  sometimes bug x scaling not reset
+
 
   
   myRun=setInterval(simulationRun, 1000/fps);
@@ -2695,8 +2696,6 @@ function doSimulationStep(){
     if(it>=itPresent){
       mutationDynamics.update(it);
       R0_actual=mutationDynamics.R0; // override R0_actual=R0fun_time(..)
-      console.log("in simulateMutation: p117=",mutationDynamics.p,
-		  " R0mixed=",mutationDynamics.R0);
     }
   }
  
@@ -2799,6 +2798,8 @@ KW10 p=0.
   
   this.daysNew2present
      =Math.floor((present.getTime()-dateNew.getTime())/oneDay_ms);
+  this.daysOld2present
+     =Math.floor((present.getTime()-dateOld.getTime())/oneDay_ms);
 
   this.dt =Math.floor((dateNew.getTime()-dateOld.getTime())/oneDay_ms);
   this.yOld=pOld/(1-pOld);
@@ -2840,7 +2841,7 @@ MutationDynamics.prototype.update=function(it){
   this.y=this.yNew*Math.exp(this.ry*daysSinceDateNew);
   this.p=this.y/(1+this.y)
   this.R0=(1-this.p)*this.R0wild + this.p*this.R0mut;
-  if(true){
+  if(false){
     console.log("MutationDynamics.updateOneDay: it=",it,
 		" it-itPresent=",it-itPresent,
 		" y=",this.y,
@@ -4012,7 +4013,7 @@ DrawSim.prototype.drawGridLine=function(type,xyrel){
   if(type==="vertical"){
     var nSegm=-0.2*this.hPix; 
     for(var i=0; i<nSegm; i++){
-      var x0=this.xPix0+xyrel* this.wPix;
+      var x0=this.xPix0+xyrel* this.wPix; // graph width; def corona_gui.js
       var x1=x0;
       var y0=this.yPix0+i/nSegm* this.hPix;
       var y1=y0+0.3/nSegm* this.hPix;
@@ -4278,7 +4279,8 @@ DrawSim.prototype.drawAxes=function(windowG){
 		 this.yPix0+(yrelTopVars-(line)*dyrel)*this.hPix);
     
     line++;
-    ctx.fillText("Aktuelle IFR65="+(100*IFRfun_time(it)).toFixed(2)+" %",
+    var str_text="Aktuelle IFR65="+(100*IFRfun_time(it)).toFixed(2)+" %";
+    ctx.fillText(str_text,
 		 this.xPix0+xrelLeft*this.wPix,
 		 this.yPix0+(yrelTopVars-(line)*dyrel)*this.hPix);
 
@@ -4309,6 +4311,28 @@ DrawSim.prototype.drawAxes=function(windowG){
 		   this.xPix0+xrelLeft*this.wPix,
 		   this.yPix0+(yrelTopVars-(line)*dyrel)*this.hPix);
     }
+
+    //console.log("it=",it," mutationDynamics=",mutationDynamics);
+    if(simulateMutation//&&(it>0) 
+       &&(it>=itPresent-3*mutationDynamics.daysOld2present)){
+      mutationDynamics.update(it);  // double call does not harm
+      var mutTopPix=this.yPix0+1.01*this.hPix;
+      var mutLeftPix=this.xPix0+0.80*this.wPix;
+      line=0;
+      ctx.fillText("R0_wild="+mutationDynamics.R0wild.toFixed(2),
+		   mutLeftPix,mutTopPix);
+      line++;
+      ctx.fillText("R0_mut="+mutationDynamics.R0mut.toFixed(2),
+		   mutLeftPix,mutTopPix-line*dyrel*this.hPix);
+      line++;
+      ctx.fillText("p_mut="+Math.round(100*mutationDynamics.p)+"%",
+		   mutLeftPix,mutTopPix-line*dyrel*this.hPix);
+      line++;
+      ctx.fillText("R_0="+mutationDynamics.R0.toFixed(2),
+		   mutLeftPix,mutTopPix-line*dyrel*this.hPix);
+      
+    }
+    
     
   }
 

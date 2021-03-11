@@ -255,14 +255,14 @@ a:hover {
 
 #countryData{ /* normal landscape */
   position: absolute;
-  top:     9vh; 
+  top:     8vh; 
   right:   1vw;
   z-index: 4; # the higher the more on top
 }
 
 #dataTypeDiv{  /*normal, landscape */
   position: absolute;
-  top:     13.5vh; 
+  top:     12vh; 
   right:   1vw;
   z-index: 4; 
 }
@@ -270,28 +270,28 @@ a:hover {
 
 #calibrateDiv{ /* normal landscape */
   position: absolute;
-  top:     18vh; 
+  top:     16vh; 
   right:   1vw;
   z-index: 3; 
 }
 
 #validateDiv{ /* normal landscape */
   position: absolute;
-  top:     22.5vh; 
+  top:     20vh; 
   right:   1vw;
   z-index: 3; 
 }
 
 #compareCountry{ /* normal landscape */
   position: absolute;
-  top:     27vh; 
+  top:     24vh; 
   right:   1vw;
   z-index: 3; 
 }
 
 #mutation{ /* normal landscape */
   position: absolute;
-  top:     31.5vh; 
+  top:     28vh; 
   right:   1vw;
   z-index: 3; 
 }
@@ -381,6 +381,29 @@ a:hover {
 /* secondary elements rect/portrait                    */
 /* ################################################### */
 
+#countryData{ /* normal rect/portrait */
+  top:     7vh; 
+}
+
+#dataTypeDiv{  /*normal, rect/portrait */
+  top:     10vh; 
+}
+
+#calibrateDiv{ /* normal rect/portrait */
+  top:     13vh; 
+}
+
+#validateDiv{ /* normal rect/portrait */
+  top:     16vh; 
+}
+
+#compareCountry{ /* normal rect/portrait */
+  top:     19vh; 
+}
+
+#mutation{ /* normal rect/portrait */
+  top:     22vh; 
+}
 
 #vaccinationView{  /*normal rect/portrait */
   position: absolute;
@@ -534,15 +557,15 @@ input[type=range]::-webkit-slider-thumb {
 
 #sliders{      /* smartphone portrait */
   top:   10vh;
-  left:   1vw;
-  width:  75vw;
+  left:   -1vw;
+  width:  70vw;
   background-color: rgb(255,255,255);
 }
 
 #sliders2{      /* smartphone portrait */
   top:   10vh;
-  left:   1vw;
-  width:  80vw;
+  left:   -1vw;
+  width:  74vw;
   background-color: rgb(255,255,255);
 }
 
@@ -568,14 +591,14 @@ input[type=range]::-webkit-slider-thumb {
 
 #countryData{ /* smartphone portrait */
   position: absolute;
-  top:     15.5vmin; 
+  top:     15vmin; 
   right:   1vw;
   z-index: 4; 
 }
 
 #dataTypeDiv{  /*smartphone, portrait */
   position: absolute;
-  top:     21vmin; 
+  top:     20vmin; 
   right:   1vw;
   z-index: 4; 
 }
@@ -583,14 +606,14 @@ input[type=range]::-webkit-slider-thumb {
 
 #calibrateDiv{ /* smartphone portrait */
   position: absolute;
-  top:     26.5vmin; 
+  top:     25vmin; 
   right:   1vw;
   z-index: 3; 
 }
 
-#compareCountry{ /* normal rect/portrai */
+#mutation{ /* smartphone portrait */
   position: absolute;
-  top:     32vmin; 
+  top:     30vmin; 
   right:   1vw;
   z-index: 3; 
 }
@@ -604,29 +627,37 @@ input[type=range]::-webkit-slider-thumb {
 }
 
 
+#compareCountry{ /* smartphone portrait */
+  position: absolute;
+  top:     auto;   /* need auto because otherwise dependency bug */ 
+  bottom:  7vh; 
+  right:   auto;
+  left:    26vw;
+}
+
 
 #testnumberDiv{
   position: absolute;
   top:     auto; 
   bottom:  1vh; 
   right:   auto;
-  left:    30vw;
+  left:    26vw;
 }
 
 
+
+#validateDiv{ 
+  top:     auto; 
+  bottom:  5vh; 
+  right:   auto;
+  left:    60vw;
+}
 
 #impressum{ 
   top:     auto; 
   bottom:  1vh; 
   right:   auto;
-  left:    55vw;
-}
-
-#validateDiv{ 
-  top:     auto; 
-  bottom:  6vh; 
-  right:   auto;
-  left:    55vw;
+  left:    60vw;
 }
 
 #home{              /*smartphone rect/portrait */
@@ -806,8 +837,14 @@ input[type=range]::-moz-range-track{
   left:    auto;
 }
 
-#compareCountry{ /* normal rect/portrai */
+#compareCountry{ /* smartphone landscape */
   top:     34vh; 
+  right:   1vw;
+  z-index: 3; 
+}
+
+#mutation{ /* smartphone landscape */
+  top:     40vh; 
   right:   1vw;
   z-index: 3; 
 }
