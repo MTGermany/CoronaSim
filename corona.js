@@ -16,6 +16,9 @@ var useLiveData=useLiveDataInit;
 
 var loggingDebug=false; //!! global var for testing functions inside calibr
 
+var showCoronaSimulationDe=true; // only for showing corona-simulation.de
+                                 // in movies
+
 // debugApple=true for debugging of devices w/o console (ipad) redirect
 // it to a html element using console-log-html.js
 // copy corona.js to coronaDebugApple.js and 
@@ -2634,6 +2637,14 @@ function myMutationSim(){ // callback "Kalibriere neu!
 
 
 function simulationRun() {
+
+  // misuse DOM headerValidText for printing corona-simulation.de for movies
+  if(showCoronaSimulationDe){
+    var websiteText=(isLandscape)
+    ? "traffic-simulation.de" : "";
+    document.getElementById("headerValidText").innerHTML=websiteText;
+  }
+
   var idata=Math.min(data_idataStart+it, data_idataStart+data_itmax-1);
   //console.log("simulationRun: before doSimulationStep: it=",it);
   doSimulationStep(); 
@@ -2642,7 +2653,11 @@ function simulationRun() {
     setSlider(slider_R0, slider_R0Text, R0_actual.toFixed(2),"");
     //setSlider(slider_R0, slider_R0Text, R0fun_time(R0time,it).toFixed(2),"");
   }
-  
+  else{
+    simulateMutation=false;
+    document.getElementById("buttonMut").innerHTML="Start B.1.1.7 Sim";
+  }
+    
   if(!stringencySliderUsed){
     //console.log("setSlider(slider_stringency...): stringency=",stringency);
     setSlider(slider_stringency, slider_stringencyText,

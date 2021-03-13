@@ -137,6 +137,24 @@ plot [t=tmin:tmax]\
  tnew, 100*pnew t "" w p ls 7
 
 ###############################################################
+set out "figsCorona/p117-3a.png"
+print "plotting figsCorona/p117-3a.png"
+plot [t=tmin:tmax]\
+ t, 100*pTime(t,ry,told,pold) t "Anteil B.1.1.7 [%]" w l ls 7,\
+ tPresent, 100*(t-tmin)/(tmax-tmin) t "Gegenwart" w l ls 11,\
+ told, 70*(t-tmin)/(tmax-tmin) t "1. und 2. Erhebung p" w l ls 9,\
+ told, 100*pold t "" w p ls 7,\
+ tnew, 70*(t-tmin)/(tmax-tmin) t "" w l ls 9,\
+ tnew, 100*pnew t "" w p ls 7,\
+ told+7*86400, 100*0.259 t "" w p ls 7,\
+ told+14*86400, 100*0.400 t "" w p ls 7,\
+ told-7*86400, 100*0.072 t "" w p ls 7,\
+ told-14*86400, 100*0.047 t "" w p ls 7,\
+ told-21*86400, 100*0.036 t "" w p ls 7,\
+ told-28*86400, 100*0.02 t "" w p ls 7
+ 
+
+###############################################################
 set out "figsCorona/p117-4.png"
 print "plotting figsCorona/p117-4.png"
 set label 3 sprintf("R_0^{wild}=%1.2f",R0wild) at screen 0.14,0.63

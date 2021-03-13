@@ -1,0 +1,188 @@
+==================================================================
+[Allgemeines]
+==================================================================
+
+[Ich groß im Bild]
+
+Hallo liebe Simulanten und Freunde der gepflegten Corona-Simulation.
+
+Ich habe eine neue Major Version meines Corona-Simulators
+erstellt. Diese enthält neben einem Tschechen-Vergleich
+zwei wesentliche neue Punkte:
+
+[ich klein, Simulation D bis Gegenwart]
+
+1. Berücksichtigung der Altersabhängigkeit bei den Sterberisiken
+   Infection Fatality rate (IFR) bzw Case Fatality Rate (CFR) [Deuten
+   auf die Sterbezahlen, dann "Go", zeigen, dass Sterbezahlen
+   schneller sinken als Infektionen, obwohl verzögert]
+
+2. Berücksichtigung neuer Mutationen wie zur Zeit die britischen
+   B117-Mutante [Zeigen auf das neue B117-Feld]
+
+Da die B117-Mutation in aller Munde ist, werde ich sie in diesem Video
+behandeln, die altersabhängigen Sterberisiken kommen im nächsten
+Video dran
+
+==================================================================
+[Modell]
+==================================================================
+
+[ich groß, beim Dr-Hut aufsetzen]
+
+Zunächst mal: Wie macht man ein einfaches, aber aussagekräftiges
+Modell der Ausbreitung neuer Mutationen und Verdrängung der alten?
+
+Entscheidend dabei ist, dass man zu festen Zeiten die Verbreitung,
+also den B117-Anteil abschätzen kann. Wenn der sich ausbreitet und
+den alten sog. "Wildtyp" verdrängt, ist er offensichtlich
+infektiöser. Aber um wie viel?
+
+[ich Dr-Hut klein, pdf-Folie vorn]
+
+*    Eine Erhebung gibt es am 2. Februar mit 17.6% B117-Anteil
+
+[->] Eine weitere am 4. März mit 46% Anteil
+
+[->] Die Formel beruht auf dem sog. "Odds-Ratio" beim 2. Termin ist
+     dieses bspw y=46:54
+
+[->] Nur für das Odds-Ratio, nicht für p selbst, gilt nämlich
+     exponentielles Wachstum: y proportional e^{Wachstumsrate8t}
+
+[->] Mit der Wachstumsrate aus zwei Datenpunkten des Anteils!
+     Konsistenzcheck: Wenn der B117-Anteil und damit das Odds-Ratio y
+     steigt, ist die Wachstumsrate positiv, da der Logarithmus eine
+     streng monotone Funktion ist
+
+[->] Für den Anteil p selbst gilt durch Rücktransformation vom
+     Odds-Ratio auf p diese [Formelzeig] Dynamik. Das ist die blaue Kurve,
+     die auch Sigmoidale Funktion genannt wird. Zur Zeit sind wir also
+     bei 60% Britisch-Anteil
+
+[->] Zur Validierung fuege ich jetzt noch die anderen bekannten Werte
+     ein. Stimmt natuerlich nicht 100%, schon aufgrund er Messfehler nicht,
+     aber doch ganz ordentlich
+
+[->] Wie berechnet man aber die Änderung der Basisreproduktionsraten
+     R0 über die Zeit, also die rote Kurve? Wir wissen"
+
+[->] 1., dass das Verhältnis der R0-Werte des Wildtyps und der
+     Mutation im Wesentlichen von der schon bekannten Wachstumsrate ry
+     abhängt (mit tau der Zykluszeit zwischen zwei
+     Corona-Generationen, etwa 7 Tage bei beiden Virensorten)
+
+[->] 2., dass die im Simulator an die Daten kalibrierte
+     Gesamt-Basisreproduktionszahl ein gewichtetes Mittel der Einzelwerte ist.
+
+[->] Zwei Gleichungen, 2 Unbekannte => Die Reproduktionsraten sind beide
+     einzeln bekannt und mit derselben Gleichung [zeigen] lässt sich nun
+     die Änderung gemäß der roten Kurve prognostizieren!
+
+Übrigens beziehe ich alles wirklich auf die Änderung der
+BASISreproduktionszahl, also
+
+ * ohne Immunität durch durchgemachte Infektionen
+ * ohne Immun durch Impfungen
+ * ohne Beschränkung ber Dynamik durch Maßnahmen, also
+   StringencyIndex 0% in der Simulation
+ * ohne Saisoneinfluss
+
+Deshalb sind die R0-Werte [zeigen] so hoch.
+
+
+
+==================================================================
+[Simulation]
+==================================================================
+
+[Ich ohne Dr-Hut gross im Bild]
+
+Damit kann ich, bis auf den R0-Regler, alles interaktiv während der
+Sim wie bisher verändern! (Rühre ich den R0-Regler an, beendet
+dies die B117-Simulation und man ist für seine Mutationen selbst
+verantwortlich. Setzen wir also die Theorie in die Praxis - äh, in
+die Simulation um!
+
+[Simulation klassiche Prognose Gegenwart]
+
+Ich Starte mit dem Simulator in der Gegenwart und lasse zunächst
+ohne weitere Veränderungen, insbesondere ohne B117-Knopf
+weitersimulieren:
+
+[Projektion bis Anfang Mai]
+
+Das bedeutet, ich friere den jetztigen Stand des B117-Anteils ein und
+betrahcte keine Änderungen beim Lockdownzustand, em Stringency
+Index:
+
+* Max Inzidenz 90, 50er Inzidenz ist Anfang Mai erreicht
+
+* Tote sinken schneller als Inzidenz, trotz verzögerung, wegen der
+  im Simulator eingebauten Altersschichten
+
+[B117-Knopf druecken]
+
+Ich druecke nun den B117-Knopf. Die Simulation startet neu, da sie ja
+neu kalibrieren muss und die Mutation ja schon Anfang des jahres
+startete. Ich lasse die B117-Simulation nochmal starten, schauen Sie
+auf den Zähler rechts oben:
+
+[Restart druecken] [Stoppen 10. Jan]
+Anfangs ist die Durchsetzung klein, R0 nahe beim Wildtyp,
+[Go -> Gegenwart]
+Mit wachsender Verbreitung steigt der R0-Wert, waehrend der der
+einelnen Virensorten unverändert ist. Rein biologische Dynamik ohne
+Impfungen, Saison, Erkrankungen oder Maßnahmen
+
+[Go->bis 10. Mai]
+
+Nun druecke ich nochmals Go, um eine Zukunftprojektion mit B117 zu
+starten. Erinnerung: Max Inzidenz ohne war nahe 100, Anfang Mai
+Absinken auf 50
+=> Nun steigt sie bis, aber nicht über 100, es braucht aber
+länger, bis sie zurückgeht: Anfang Mai Inzidenz 80 statt 50. Dann
+hat sich Mutation zu nahezu 100% verbreitet
+
+
+==================================================================
+[Ergebnisse]
+==================================================================
+
+Was ist die Bottom Line dieses Videos?
+
+Ich habe in corona-simulation.de nun explizit ein Szenario
+für die Ausbreitung der
+britischen Mutation B.1.1.7. eingefügt. Sowohl die
+Ausbreitungsdynamik als auch die R0-Werte des Wildtypes und der
+Mutation sowie das resultierende R0 werden stringent aus den Daten
+geschätzt
+
+Das Ergebnis der Simulation:
+
+Erstens: Die 100%ige Ausbreitung wird den maximale Inzidenz von 80 auf
+gut 100 - 150 steigen. Die 50er-Schwelle wird von oben erst Ende statt
+Anfang Mai durchbrochen. Also ein moderater Anstieg: Warum so wenig?
+Die neue Dynamik durch die Mutation ist schlicht und ergreifend schon
+zu 60% eingepreist
+
+Zweitens: Auch mit Mutation ist ab Juni eine Lockerung der Maßnahmen
+auf den lockersten Stand des letzten Sommers möglich, ab Juli/August
+eine vollständige aufhebung aller Maßnahmen und Rückkehr zu einer
+Vor-Covid-19 Welt.
+
+Bedingung: Weitere Mutationen sind nicht wesentlich infektiöser und
+es wird neu geimpft, sobald die Immunität nachlässt.
+
+Covid-19 ist
+gekommen, um zu bleiben. Aber er wird die Bedeutung einer weiteren
+Sorte der vielen schon vorhandenen Grippe-Coronaviren erhalten.
+Die ganze Coronageschichte wird in 20 Jahren so bekannt sein wie das
+Waldsterben Ende der 1980er oder die Spanische Grippe vor Ausbruch der
+aktuellen Seuche.
+
+Das RKI mit seinem Nostradamus-Club und einer aktuellen Prognose eines  exponentiellen Anstiegs
+auf Inzidenz nahe 1000 - dort durchstößt die Kurve die
+Grafik - wird eine Kuriosität der Geschichte werden. In
+einer Liga mit den Fehlprognosen des  Club Of
+Rome 1972.

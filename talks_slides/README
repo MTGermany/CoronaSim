@@ -1,0 +1,88 @@
+Screen aufnehmen
+echtes Filmen
+
+
+
+
+Screen aufnehmen
+================
+
+1. Chromium-Browser (wg Schreiben) ohne Bookmarks Leiste starten
+   z.B. corona-simulation.de laden und/oder pdf oeffnen und view
+   so einstellen, dass page-down/up funzt
+
+2. Webcam:
+Besser: vlc mit Crop-Moeglichkeiten
+
+[EXTRA Terminal:]
+
+vlc v4l2:///dev/video0
+vlc input "--video-filter=croppadd{cropright=200,cropleft=200}" v4l2:///dev/video0
+vlc input "--video-filter=croppadd{cropright=150,cropleft=150}" v4l2:///dev/video0
+vlc input "--video-filter=croppadd{cropright=100,cropleft=100}" v4l2:///dev/video0
+vlc input "--video-filter=croppadd{croptop=100,cropbottom=100}" v4l2:///dev/video0
+ACHTUNG: v4l2 mit lowercase 'l', not '1' !
+
+Manipulieren Helligkeit/Kontrast: 
+guvcview
+(hat auf alle Webcam Viewer (vlc, cheese) Einfluss!!)
+
+ACHTUNG: Nicht vlc mit 'x' schliessen, sondern immer mit 'q' im
+Terminal, braucht extra Terminal
+!!!! Ansonsten geht Webcam nicht aus und laesst sich mit ps -a NICHT
+schliessen, muss Computer neustarten!!! Also wirklich mit 'q'
+schliessen!!!!
+
+
+3. Simple Screen recorder (Verhueterli) oeffnen
+   - Profile Vorlesungen2020 lassen
+   - record a fixed rectangle-select size/Window (pdf)
+     select window -> klick auf Window, aber enthaelt Titelbar etc
+     select size -> ziehe mit Maus auf (blau gezeigt) zumindest
+                    Ubuntu18 sehr gut
+   - aufpassen, dass nichts das Window ueberdeckt, z.B. screen
+     recorder selbst: Wird sonst mitaufgezeichnet! (vorher auf pdf
+     fokussieren)
+     
+4. Ausgabe festlegen: ~/vorlesungen/Verkehrsoekonometrie_MA/VideoLectures/
+5. naechste Seite SimpleScereenR
+   (aufnehmen+Stoppen mit ctrl-s vorher eingestellt)
+   (manchmal error message, check)
+
+6. Maus auf Fokus pdf, dann funzt page up/down, aber auch die 4
+Pfeiltasten (machen entweder pageUp or Dpwn Aktion, logische
+Zuordnung)
+
+7. Mit ctrl-s starten und stoppen. Kann mit weiterem ctrl-s ins selbe
+Video appenden
+
+###################################################################
+ACHTUNG!!! vor 8. ALLES saven!!!!
+###################################################################
+
+8. Schnitt: Entweder (besser) => README_YouTubeSchneiden.txt, ggf
+mkvmerge (s.u.) davor)
+
+oder (noch besser) README_ShotCutSchneiden.txt
+
+
+Oder (fallback)
+
+8.1 Schnitt mit
+~/scripts/lossless-cut/LosslessCut-linux-x64/LosslessCut
+ => alias losslessCut
+ graphisch oder mit File files einlesen, geschnittene, nicht
+ verbleibende Teile gespeichert ACHTUNG: Marker '<' und '>' AUF HOEHE
+ DER SCHERE nehmen, nicht die Dreiecke darueber! 
+
+
+8.2 Merge mit 
+mkvmerge -o testMerge.mkv test1.mkv +test2.mkv +...
+Abkuerzung
+merge.sh testMerge.mkv test?.mkv
+Achtung! selbe Groesse bei allen Videoteilen noetig!
+Achtung! Entweder bei 8.1 und/oder 8.2 mismatch Audio/Video
+(Check, ob auch Ubuntu18)
+
+
+

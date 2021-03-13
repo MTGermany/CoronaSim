@@ -1,0 +1,18 @@
+Besten Dank fuer das Lob! Ich habe gerade eine neue Major Version hochgeladen, die die Altersabhaengigkeit beim Covid-19 Sterberisiko und vor allem die Dynamik neuer Virus-Mutationen wie z.B. die britische Variante B.1.1.7 explizit beruecksichtigt.
+
+
+
+ Da die Mutationsdaten aber nicht in einem generischen Format vorliegen, kann ich das nur auf Einzelfall-Basis (z.Zt angepasst fuer Deutschland) anbieten. In der neuen Version auf "Start B.1.1.7 Sim" klicken. Dann werden die Basismutationsraten beider Arten und die Durchdringungsdynamik anhand der Daten geschaetzt. Mit "Go" wird dann wie ueblich die Simulation mit der Mutation in die Zukunft projiziert. Dies funktioniert auch fuer die anderen Laender mit automatisch geschaetzten  R0-Werten, nur stimmen dann die Durchdringungsdaten nicht
+
+
+
+Wichtig:  Wie sonst bei mir bilden die R0-Werte die reine biologische
+Dynamik ab, also ohne Massnahmen, ohne bereits Erkrankte, ohne
+Impfungen und ohne Saisonabhaengigkeit.  Dadurch kann ich die
+bisherige interaktive Funktionalitaet voll mit der Mutantendynamik
+kombinieren
+
+===============================================
+
+Vielen Dank für die Simulationen. Das ist bisher mit Abstand das beste Tool, das ich zur Pandemie gefunden habe. Es hilft wirklich sehr, die Auswirkungen einzelner Parameter zu verstehen - besonders in Zeiten, in denen die Debatte um Maßnahmen immer hitziger geführt wird und Daten immer selektiver präsentiert werden. Vielen Dank dafür 😊 
+
