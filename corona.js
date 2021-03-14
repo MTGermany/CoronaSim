@@ -109,8 +109,9 @@ var dataGit_orig=[]; // normal data and reference for validation
 var dataGit2_orig=[];
 var dataRKI_orig=[];
 
-var simValid=[]; // store validation sim data outside DrawSim (created anew)
-for (var iq=0; iq<=40; iq++){simValid[iq]=[];} //!!! def simValid
+var simPrevious=[]; // store previous sim data outside DrawSim (created anew)
+                    // needed for validation or if doing mutation scenario
+for (var iq=0; iq<=40; iq++){simPrevious[iq]=[];} //!!! def simPrevious
 var nDaysValid=0;
 var itmaxReference=0;
 
@@ -463,8 +464,10 @@ var firstR0=0;
 
 var IFRinit=0.002;
 var IFRinterval=21; //28
-var IFRinterval_last_min=14;  //21
-var IFR_dontUseLastDays=5;//(29 for ERZ) overcome "Nachmeldungen" bias IFR est.
+var IFRinterval_last_min=12;  //21
+var IFR_dontUseLastDaysReg=0;    //regular: all data used
+var IFR_dontUseLastDaysSax=30; // tackles"Nachmeldungen" lag Saxon. regions
+var IFR_dontUseLastDays=IFR_dontUseLastDaysReg;
 var IFR65time=[];
 
 
@@ -637,7 +640,8 @@ function initializeData(country,insideValidation){
   useLandkreise=(country==="LK_Erzgebirgskreis")
     || (country==="LK_Osterzgebirge") || (country==="SK_Dresden");
   
-  IFR_dontUseLastDays=(useLandkreise) ? 29 : 5;
+  IFR_dontUseLastDays=(useLandkreise)
+    ? IFR_dontUseLastDaysSax : IFR_dontUseLastDaysReg;
   if(useLandkreise){country2="Germany";}
   useLiveData=(useLandkreise) ? false : useLiveDataInit;
   console.log("\n\n======================================================",
@@ -1772,15 +1776,35 @@ function calibrate(){
   ############################################################## */
 
 
-  console.log("\n\ncalibrate(): entering NEW calibration of IFR ...");
+  console.log("\n\ncalibrate(): entering calibration of IFR ...");
 
+  // depends on IFR_dontUseLastDays see beginning of corona.js
   var itmax_calibIFR=data_dz.length-data_idataStart-IFR_dontUseLastDays;
-  var IFR_jmax=1+Math.ceil(
+  
+  // depends on IFRinterval_last_min see beginning of corona.js
+  // last interval it in [(IFR_jmax-1)*IFRinterval,IFR_jmax*IFRinterval-1]
+  // contains IFRinterval_last_min data points in extreme case,
+  // generally more
+  
+  var IFR_jmax=Math.ceil(
     (itmax_calibIFR-IFRinterval_last_min)/IFRinterval);
-  IFR65time=[]; for(var j=0; j<IFR_jmax; j++){IFR65time[j]=IFRinit;}
+
+  if(true){
+    console.log("IFR calibration: IFR_dontUseLastDays=",IFR_dontUseLastDays,
+		" IFRinterval_last_min=",IFRinterval_last_min,
+		"\n  itmax_calibIFR=",itmax_calibIFR,
+		" itPresent=",itPresent,
+		" IFR_jmax*IFRinterval=",IFR_jmax*IFRinterval,
+		" (IFR_jmax-1)*IFRinterval=",(IFR_jmax-1)*IFRinterval,
+		"");
+  }
+  
+  IFR65time=[];
+  for(var j=0; j<IFR_jmax; j++){IFR65time[j]=IFRinit;}
+
   var cumDeathsSim0=0;
 
-  for(var j=0; j<IFR_jmax-1; j++){
+  for(var j=0; j<IFR_jmax; j++){
     var it0=IFRinterval*j;
     var it1=Math.min(IFRinterval*(j+1), itmax_calibIFR);
     var IFRcal=calibIFR(it0,it1);
@@ -1798,13 +1822,15 @@ function calibrate(){
 	? corrIFRarr[it1-tauDie] : corona.vaccination.corrFactorIFR0;
 
     IFR65time[j]=IFR0;
-    IFR65time[j+1]=IFR1;
+    IFR65time[j+1]=IFR1; // time it=(j+1)*IFRinterval=IFR_jmax*IFRinterval
+    // may be outside of data; no problem if j*IFRinterval inside
+    
   }
 
   
   // !!remove drifts due to the local calibration
 
-  //console.log("before removing drifts: IFR65time=",IFR65time);
+  console.log("before removing drifts: IFR65time=",IFR65time);
 
   var cumDeathsSim=[];
   cumDeathsSim[0]=data_cumDeaths[data_idataStart];
@@ -2355,41 +2381,44 @@ function validate(){ // callback html select box "validateDiv"
 
 
   // validate (2): save past drawsim data in
-  // validation reference data structure for reference values
+  // validation reference data structure referenced by 
+  // elements such as drawsim.dataG[34].
+  // Need to store outside drawsim since drawsim created anew at restart
 
   if(true){ 
     console.log("copy windowg data to ground truth data");
     console.log("drawsim.dataG[0]=",drawsim.dataG[0]);
 
     // association see cstr drawSim
-    // !! check "def simValid"
+    // !! check "def simPrevious"
 
     for(var it=0; it<itPresent; it++){
-      simValid[34][it]=drawsim.dataG[0].data[it];  // "Insg pos Getestete"
-      simValid[35][it]=drawsim.dataG[2].data[it];  // "Insgesamt Gestorbene"
+      simPrevious[34][it]=drawsim.dataG[0].data[it];  // "Insg pos Getestete"
+      simPrevious[35][it]=drawsim.dataG[2].data[it];  // "Insgesamt Gestorbene"
     }
     
     for(var it=0; it<itmaxReference; it++){
     //for(var it=0; it<Math.max(itPresent,itmaxReference); it++){
-      simValid[36][it]=drawsim.dataG[23].data[it]; // "Sim Neuinfiz/Tag"
-      simValid[37][it]=drawsim.dataG[28].data[it]; // "Sim Gestorbene"
-      simValid[38][it]=drawsim.dataG[32].data[it]; // "Sim Wo-Inzidenz Faelle"
-      simValid[39][it]=drawsim.dataG[33].data[it]; // "Sim Wo-Inzidenz Gest."
-      simValid[40][it]=drawsim.dataG[29].data[it]; // "Sim Pos pro Tag"
+      simPrevious[36][it]=drawsim.dataG[23].data[it]; // "Sim Neuinfiz/Tag"
+      simPrevious[37][it]=drawsim.dataG[28].data[it]; // "Sim Gestorbene"
+      simPrevious[38][it]=drawsim.dataG[32].data[it]; // "Sim Wo-Inzidenz Faelle"
+      simPrevious[39][it]=drawsim.dataG[33].data[it]; // "Sim Wo-Inzidenz Gest."
+      simPrevious[40][it]=drawsim.dataG[29].data[it]; // "Sim Pos pro Tag"
     }
   }
 
+  
   // validate (3):
-  // undo stripping of working data of past validation
-  // using reference data or save reference 
+  // undo stripping of json input dataGit,dataGit2,dataRKI of past validation
+  // using dataGit_orig, dataGit2_orig, dataRKI_orig
 
   revertWorkingData();
-  
-
 
 
   // validate (4):
-  // strip working data
+  // re-strip working input data dataGit,dataGit2,dataRKI
+  // will later be copied to usual input arrays
+  // in initializeData(country,true)
 
   for(var attribute in dataGit){
     var n_arr=dataGit[attribute].length;
@@ -3728,7 +3757,7 @@ function DrawSim(){
 
   this.dataG[34]={key: "Validierungsreferenz: alle Daten",
                                     //Insgesamt positiv Getestete (in 1000)"
-		 data: simValid[34], // simValid[][] defined in validate()
+		 data: simPrevious[34], // simPrevious[][] defined in validate()
 		 type: 3, // 0=data dir (posCases),
                           // 1=solid deriv from data (CFR), 
                           // 2=more speculative derivation (IFR)
@@ -3752,7 +3781,7 @@ function DrawSim(){
   
   this.dataG[35]={key: "Validierungsreferenz: alle Daten",
                                    //Insgesamt Gestorbene (in 100)", 
-		  data: simValid[35], // simValid[][] defined in validate()
+		  data: simPrevious[35], // simPrevious[][] defined in validate()
 		  type: 3, plottype: "lines", plotLog: false, 
 		  ytrafo: [0.01, false,false],
 		  color:colDeadValid};
@@ -3836,7 +3865,7 @@ function DrawSim(){
                  // real: scale*10
   this.dataG[36]={key: "Validierungsreferenz: alle Daten",
                        //Simulierte Neuinfizierte pro Tag (in 10)", 
-                  data: simValid[36],
+                  data: simPrevious[36],
 		 type: 4, plottype: "lines", plotLog: false, 
 		 ytrafo: [0.01, true,false], color:colInfectedLinValid};
                  // real: scale*10
@@ -3845,7 +3874,7 @@ function DrawSim(){
 		 type: 4, plottype: "lines", plotLog: false, 
 		 ytrafo: [1, true,true], color:colDeadSim};
   this.dataG[37]={key: "Validierungsreferenz: alle Daten", // sim Gestorbene
-                 data: simValid[37],
+                 data: simPrevious[37],
 		 type: 4, plottype: "lines", plotLog: false, 
 		 ytrafo: [1, true,true], color:colDeadValid};
 
@@ -3899,7 +3928,7 @@ function DrawSim(){
 		 ytrafo: [0.1, true,false], color:colCasesSim};
 
   this.dataG[40]={key: "Validierungsreferenz: alle Daten",
-		  data: simValid[40],
+		  data: simPrevious[40],
 		  type: 3, plottype: "lines", plotLog: false, 
 		  ytrafo: [0.1, true,false], color:colCasesValid};
 
@@ -3920,7 +3949,7 @@ function DrawSim(){
 		 ytrafo: [0.1, true,false], color:colCasesSim};
 
   this.dataG[38]={key: "Validierungsreferenz: alle Daten", // Wocheninzidenz
-		  data: simValid[38],
+		  data: simPrevious[38],
 		  type: 3, plottype: "lines", plotLog: false, 
 		  ytrafo: [0.1, true,false], color:colCasesValid};
 
@@ -3930,7 +3959,7 @@ function DrawSim(){
 		  ytrafo: [1, true,true], color:colDeadSim};
 
   this.dataG[39]={key: "Validierungsreferenz: alle Daten", // W-Inz. Gest
-		  data: simValid[39],
+		  data: simPrevious[39],
 		  type: 4, plottype: "lines", plotLog: false, 
 		  ytrafo: [1, true,true], color:colDeadValid};
 
