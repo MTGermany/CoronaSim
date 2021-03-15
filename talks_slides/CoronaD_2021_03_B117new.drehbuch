@@ -1,0 +1,142 @@
+[ich groß]
+
+Hallo liebe Simulanten und Freunde der gepflegten Corona-Simulation.
+
+Ich habe nun die neue Major Version meines Simulator in einen
+engültigen Stand gebracht, sozusagen die "stable release". Als neues
+Feature habe ich noch einen Vergleich mit der jeweils letzten
+Simulation gemacht (sofern denn eine da ist) 
+
+Mit dieser neuen Visualisierung erkannte ich, Ache auf mein Haupt,
+dass eine der neuen Funktionalit\"aten, die Simulation der
+Ausbreitung von Mutationen wie der 
+englischen B.1.1.7 Variante, einen Fehler enthielt. Dieser ist zwar
+subtil, lässt aber die prognostizierte Inzidenz bis auf 160-170 statt
+120 gehen. 
+
+
+[Simulation mit Fehler, var startMut2present=0; Standard, Gegenwart]
+
+Um den Fehler zu sehen, simuliere ich zunächst mit der neuen
+Funktionalität des Simulationsvergleichs, aber mit belassenem
+Fehler. Hier sehen Sie die Simulation Stand Gegenwart, 15. März 
+
+[weiter bis Mai]
+
+Ich lasse nun die Simulation ohne Mutationsdynamik mit dem letzten
+geschätzten R0-Wert bis Mai weiterlaufen: Hat sich kaum was gegenüber
+dem letzten Videpo geändert. 
+
+[Start B.1.1.7]
+
+Nun starte ich die Berücksichtigung der Mutationsdynamik. Bis zur
+Gegenwart hat sich nichts geändert, was OK ist: Schließlich liegen
+ja Daten zu den positiven Fällen vor und die Simulation fittet die
+R0-Werte auf die Daten 
+
+[Infektionsparameteransicht]
+
+Die letzten Wochen werden mit R0=2.1 gut beschrieben. Sie erinnern
+sich: R0 ist die Reproduktionsrate
+
+- ohne Immunität durch Impfungen
+- ohne Immunität durch vergangene Erkrankungen
+- ohne Eindämmung durch Kontaktbeschränkung
+- ohne durch die Tetszahl schwankende Dunkelziffer
+- ohne Saisoneinfluss
+
+All diese Effekte halbieren R0
+auf den letzten simulierten Wert  R=1.05 [im Text zeigen] 
+
+[Weiter simulieren]
+
+Nun simuliere ich weiter.
+
+Nun sehen Sie das neue Feature: Die alte Simulation ohne B117-Dynamik
+ist violett, die neue mit B117-Dynamik ist rot. 
+
+Sie sehen auch unten, wie die Mutation die Basisreproduktionsrate
+erhöhte: Von 2.1 auf 2.33 bei nahe 100% Durchdringung. 
+
+Auch die B117-Simulation ist gegenüber dem letzten Video weitgehend
+gleich geblieben: Maximaler Inzidenzwert von knapp 120. 
+
+Aber sehen Sie den Fehler?
+
+Genau! hier [Maus zeichnen] wird R0 nicht mehr durch die Anpassung an
+die Daten, sondern durch die Mutationsdynamik bestimmt (ohne B117
+wuerde sie konstant fortgesetzt) 
+
+Aber erst hier [Maus 10 Tage in Zukungft] ändert sich was!
+
+Warum? Natürlich, weil ich die ganzen Verzögerungen durch die
+Infektionsgenerationszeit und die Testverzögerung ja
+mitsimuliere. Die Inzidenz sind keine realen Infizierten sondern die
+gemessenen! Änderungen wirken sich erst verzögert aus! 
+
+Krasses Beispiel: Ich verordne  ab jetzt Halli Galli, hebe *alle* Kontaktbeschränkungen auf, setzte also den Stringency Index auf Null!
+
+[Umschalten Massnahmen Ansicht, Markieren sim Stand] => erst nach 8-10 Tagen gibt es Auswirkungen! (die aber auch nicht zu einer KH-Überlastung führen würden - Todeszahlen)
+
+Was ist der Fehler?
+
+Ich habe bis zur Gegenwart die Basisreproduktionszahl an die Daten
+angepasst, obwohl sich die letzten Tage gar nicht kalibrieren lassen,
+da die Dynamik mit Verzögerung wirkt! Auch eine Aufhebung der
+Massnahmen und massive Erhoehung von R0 bewirkt 10 Tage lang nix! 
+
+[Ansicht Faelle vs Infizierte]
+Bei den realen Infektionen hingegen tut sich was instantan!
+
+Nochmal: Was ist der fehler?
+
+Das gleiche passiert, wenn sich die effektive Reproduktionsrate nicht
+durch Massnahmenänderung, sondern durch die Mutationsdynamik
+ändert. Der Fehler war also, dass ich de-facto 10 Tage hinterher bin,
+10 Tage der Entwicklung ignoriert habe. Und in diesen 10 Tagen kann
+viel geschehen! 
+
+Was ist die Lösung?
+
+Die Mutationsdynamik übernimmt die Kontrolle über R0 von der Kontrolle
+durch die Datenanpassung bereits 10 Tage vor der Gegenwart! 
+
+Das mache ich, indem ich im Quellcode die Variable "startMut2present"
+von 0 auf 10 ändere! [Quellcode und Änderung zeigen] [neu reload] 
+
+[Referenz bis Mai] [B117 Gegenwart]
+
+Bis zur gegenwart sehen Sie, dass Sie nichts sehen. So soll es sein!
+Obwohl bereits 10 Tage das R0 durch die Mutationsausbreitung
+kontrolliert wird (ist bereits von 2.1 auf 2.2 gestiegen), sieht man
+wg der Verzögerung nichts. [Faelle vs Infizierte] 
+
+Wohl aber in der Ansicht Faelle vs Infizierte, wenn man genauer hinsieht
+
+[dann bis Mai]
+
+Nun sehen Sie die drastische Änderung: Inzidenz steigt bis auf 160 statt 120!
+
+Der Langfristeffekt ist aber nahezu unverändert: Ab Juli ist
+Hulli-Galli möglich, alternativ ab Ende Mai die letztjährige minimale
+Restriktion. 
+
+Schluss
+=======
+
+Ich und Sie lernen eine neue Lektion:
+
+Nicht nur sind Prognosen sehr schwierig, vor allem wenn sie die
+Zukunft betreffen. 
+
+Auch EXTREM SUBTILE logische Fehler können eine deutliche Auswirkung
+haben, obwohl ich eine prognostizierte maximale Inzidenz von 160 statt
+120 nun nicht als Gamechanger bezeichnen würde, vor allem in Hinblick
+auf die apokalyptischen RKI-Projektionen. 
+
+Vielen Dank fürs Zusehen und bis zum nächen Mal!
+
+
+
+
+

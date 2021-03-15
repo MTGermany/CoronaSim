@@ -52,13 +52,15 @@ V2-V3-zweiter Teil V2
 
 
 
-10. Exportieren mit file-export Video
-  Braucht lange! grosse Files
+10. Exportieren mit "file" - "Export Video" oder (li unten) "Export"
+
+Braucht lange! grosse Files
 
   links "Youtube" settings, dann aber advanced => Menu. Format ->
   Matroska Frames/s 30 - Codec Reiter - Rate control - average bitrate
   - 1M
-  GOP (group of pictures, max keyframe) 30  [=1 s] - export File
+  GOP (group of pictures, max keyframe) 30  [=1 s]
+  - [li unten] "Export File" [dort, wo vorher "Export" stand]
   - filename <projName>.mkv  (mit Extension, sonst DOS)
   ! Achtung, Gefahr! Nimmt automatisch mlt und ueberschreibt das
     Projektfile, ausserdem in Unterdir. Aufpassen!

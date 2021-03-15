@@ -362,11 +362,11 @@ var simulateMutation=false;
 var dateOld=new Date("2021-02-11"); 
 var dateNew=new Date("2021-03-04");
 var itStartMut=0; // time index where mutation dynamics rather calibr R0 used
+
 var startMut2present=10; //!!! days start mutation dynamics - present
 
-
-var pOld=0.176;;  
-var pNew=0.460;;  
+var pOld=0.176;
+var pNew=0.460;
 //var pNew=0.400;  
 //var dateNew=new Date("2021-02-25");
 
