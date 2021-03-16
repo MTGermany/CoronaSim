@@ -13,7 +13,7 @@
 %\documentclass[mathserif,handout]{beamer}
 %\usepackage{beamerthemeshadow}
 \input{$HOME/tex/inputs/defsSkript}  %$
-\input{$HOME/tex/inputs/styleBeamerVkoekMa}   %$
+\input{$HOME/tex/inputs/styleBeamerCorona}   %$
 
 \usepackage{graphicx}
 
@@ -28,37 +28,36 @@
 
 
 %##############################################################
-\frame{\frametitle{Makroskopische Modellierung}
+\frame{\frametitle{Makroskopische Modellierung: SEIR Model mit Totzeiten}
 %##############################################################
 
-\placebox{0.5}{0.80}{\parbox{0.9\textwidth}{Sowohl die Mikro- als auch
-    die Makrosimulation betrachten verschiedene 
-Infektions\emph{phasen} und deren \emph{\"Uberg\"ange}
+\placebox{0.5}{0.80}{\parbox{0.9\textwidth}{Verschiedene 
+Infektions\emph{phasen} und deren \emph{\"Uberg\"ange}:
 }}
 
 
 
 \visible<2>{
- \placebox{0.5}{0.29}{\figSimple{1.08\textwidth}{figsCorona/SEIRsim02.png}}}
+ \placebox{0.5}{0.34}{\figSimple{1.08\textwidth}{figsCorona/SEIRsim02.png}}}
 
 \visible<3>{
- \placebox{0.5}{0.29}{\figSimple{1.08\textwidth}{figsCorona/SEIRsim03.png}}}
+ \placebox{0.5}{0.34}{\figSimple{1.08\textwidth}{figsCorona/SEIRsim03.png}}}
 
 \visible<4>{
- \placebox{0.5}{0.29}{\figSimple{1.08\textwidth}{figsCorona/SEIRsim04.png}}}
+ \placebox{0.5}{0.34}{\figSimple{1.08\textwidth}{figsCorona/SEIRsim04.png}}}
 
 \visible<5>{
- \placebox{0.5}{0.29}{\figSimple{1.08\textwidth}{figsCorona/SEIRsim06.png}}}
+ \placebox{0.5}{0.34}{\figSimple{1.08\textwidth}{figsCorona/SEIRsim06.png}}}
 
 \visible<6>{
- \placebox{0.5}{0.29}{\figSimple{1.08\textwidth}{figsCorona/SEIRsim06a.png}}}
+ \placebox{0.5}{0.34}{\figSimple{1.08\textwidth}{figsCorona/SEIRsim06a.png}}}
 
 \visible<7>{
- \placebox{0.5}{0.29}{\figSimple{1.08\textwidth}{figsCorona/SEIRsim06b.png}}}
+ \placebox{0.5}{0.34}{\figSimple{1.08\textwidth}{figsCorona/SEIRsim06b.png}}}
 
 
 % muss drunter sein, da das Bild den ganzen bereich ausfuellt!
-\placebox{0.5}{0.60}{\parbox{0.9\textwidth}{
+\placebox{0.5}{0.65}{\parbox{0.9\textwidth}{
 \benum
 \visible<2->{\item Infizierbar (\emph{Susceptible, S})}
 \visible<3->{\item Infiziert, noch nicht ansteckend (\emph{Exposed, E})}
@@ -70,20 +69,63 @@ Infektions\emph{phasen} und deren \emph{\"Uberg\"ange}
 }
 
 
+%##############################################################
+\frame{\frametitle{Altersabh\"angigkeit der Infection Fatality Rate (IFR)} 
+%##############################################################
+
+\placebox{0.5}{0.42}{
+  \figSimple{0.8\textwidth}{figsCorona/natureAgeSpecificIFR.png}}
+
+\placebox{0.7}{0.26}{M. O'Driscoll et. al., Nature \textbf{590}, pp. 140 (2021)}
+
+}
+
 
 %##############################################################
 \frame{\frametitle{Altersabh\"angigkeit} 
 %##############################################################
 
 \visible<1>{
- \placebox{0.5}{0.45}{\figSimple{0.85\textwidth}{figsCorona/ageProfile1.png}}}
+ \placebox{0.5}{0.46}{\figSimple{0.96\textwidth}{figsCorona/ageProfile1.png}}}
 \visible<2>{
- \placebox{0.5}{0.45}{\figSimple{0.85\textwidth}{figsCorona/ageProfile2.png}}}
+ \placebox{0.5}{0.46}{\figSimple{0.96\textwidth}{figsCorona/ageProfile2.png}}}
+\visible<3-4>{
+ \placebox{0.5}{0.46}{\figSimple{0.96\textwidth}{figsCorona/ageProfile3.png}}}
+\visible<5>{
+ \placebox{0.5}{0.46}{\figSimple{0.96\textwidth}{figsCorona/ageProfile4.png}}}
+\visible<6>{
+ \placebox{0.5}{0.46}{\figSimple{0.96\textwidth}{figsCorona/ageProfile5.png}}}
+\visible<7>{
+ \placebox{0.5}{0.46}{\figSimple{0.96\textwidth}{figsCorona/ageProfile6.png}}}
+\visible<8>{
+ \placebox{0.5}{0.46}{\figSimple{0.96\textwidth}{figsCorona/ageProfile7.png}}}
+\visible<9>{
+ \placebox{0.5}{0.46}{\figSimple{0.96\textwidth}{figsCorona/ageProfile8.png}}}
+\visible<10>{
+ \placebox{0.5}{0.46}{\figSimple{0.96\textwidth}{figsCorona/ageProfile9.png}}}
+
+\visible<4->{\placebox{0.878}{0.30}{
+ \includegraphics[width=0.15\textwidth,angle=90,origin=c]{figsCorona/syringe.png}}}
+\visible<5->{\placebox{0.8}{0.255}{
+ \includegraphics[width=0.15\textwidth,angle=90,origin=c]{figsCorona/syringe.png}}}
+\visible<6->{\placebox{0.722}{0.23}{
+ \includegraphics[width=0.15\textwidth,angle=90,origin=c]{figsCorona/syringe.png}}}
+\visible<7->{\placebox{0.644}{0.20}{
+ \includegraphics[width=0.15\textwidth,angle=90,origin=c]{figsCorona/syringe.png}}}
+\visible<8->{\placebox{0.566}{0.14}{
+ \includegraphics[width=0.15\textwidth,angle=90,origin=c]{figsCorona/syringe.png}}}
+
+
+\visible<10>{
+ \placebox{0.62}{0.58}{95\% Wirksamkeit, 15\% Impfverweigerer}}
 
 }
 
 
-
+%##############################################################
+\frame{\frametitle{Platzhalter wg latex Bug} 
+%##############################################################
+}
 
 \end{document}
 
