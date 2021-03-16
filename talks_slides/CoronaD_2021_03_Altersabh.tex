@@ -24,181 +24,11 @@
 
 \section*{Mutation}
 
-%##############################################################
-%\frame{\frametitle{}
-\frame{ 
-%##############################################################
-
-
-\placebox{0.50}{0.38}
- {\figSimple{1.10\textwidth}{figsCorona/screen2_2021_02_21_crop.png}}
-
-% make images pale (see demo_makePale.tex)
-%\makePale{opacity}{centerXrel}{centerYrel}{wrel}{hrel}
-% e.g., \makePale{0.8}{0.5}{0.5}{1}{0.3}
-
-\makePale{0.7}{0.48}{0.57}{1.2}{1.1}
-
-\placebox{0.50}{0.90}
-  {\myheading{Covid-19 Mutation Dynamics}}
-\placebox{0.50}{0.82}{\myheading{mit \texttt{traffic-simulation.de}}}
-\placebox{0.50}{0.74}{\mysubheading{Martin Treiber, TU Dresden}}
-
-\placebox{0.50}{0.38}
- {\parbox{0.8\textwidth}{
-  \bi
-    \pause \item 1. Simulator
-    \pause \item 2. Model
-    \pause \item 3. 
-    \pause \item 4. 
-  \ei
-}}
-
-}
-
-%##############################################################
-\frame{\frametitle{Macroscopic Dynamics of new Virus Strains}
-%##############################################################
-
-\bi
-\item \bfdef{Reproduction period $\tau$}: average time interval between
- two infection generations\\[1ex]
-\pause \item \bfdef{Actively infected \#persons $x$} in the 'E' or 'I'
-  states\\[1ex]
-\pause \item \bfdef{Base reproduction numbers $R_0\sup{wild}$ 
-and $R_0\sup{mut}$ }of
-  the wild type and the mutated strain (e.g., B.1.1.7),
-respectively\\[1ex]
-\pause \item \bfdef{Penetration rate $p$} of the mutated strain
-\ei
-
-\vspace{2em}
-
-\pause Dynamics without immunity and measures:
-
-\maintextbox{0.5\textwidth}{
-\vspace{-0.5em}
-\begin{align*}
-x(t+\tau) &=
-  R_0 x \stackrel{!}{=} (1-p) R_0\sup{wild} x+pR_0\sup{mut}x\\
-& \Rightarrow 
-R_0=(1-p) R_0\sup{wild} + pR_0\sup{mut}
-\end{align*}
-\vspace{-1em}
-}
-
-}
-
-%##############################################################
-\frame{\frametitle{Macroscopic Dynamics of new Virus Strains II}
-%##############################################################
-
-\vspace{1em}
-
-Dynamics of the \bfdef{percentage $p$} of the new strain:
-\bdm
-p(t+\tau)=\frac{x\sup{mut}(t+\tau)}{x\sup{wild}(t+\tau)}
-= \frac{pR_0\sup{mut}}{(1-p)R_0\sup{wild}}
-\edm
-
-\pause Dynamics of the \bfdef{odds ratio} $y=p/(1-p)$:
-%\bdm
-%\left(\frac{p}{1-p}\right)_{t+\tau}=\frac{R_0\sup{mut}}{R_0\sup{wild}}
-%\left(\frac{p}{1-p}\right)_{t}
-%\edm
-%Or, with $y=p/(1-p)$:
-\bdm
-y(t+\tau)=\frac{R_0\sup{mut}}{R_0\sup{wild}} \ y(t)
-\edm
-
-\pause Formulation as a \bfdef{differential equation}:
-\be
-\label{dydt}
-\abl{y}{t} \approx \frac{y(t+\tau)-y(t)}{\tau}
-=\frac{1}{\tau}\left(\frac{R_0\sup{mut}}{R_0\sup{wild}}-1\right)y 
-\stackrel{!}{=} r_y y
-\ee
-
-\pause resulting \bfdef{replacement dynamics}:
-\bdm
-p=\frac{y}{1+y}, \quad
-y(t)=y_0e^{r_yt}, \quad
-\maindmIntext{p(t)=\frac{y_0e^{r_yt}}{1+y_0e^{r_yt}}
-=\frac{p_0e^{r_yt}}{1+p_0\left(e^{r_yt}-1\right)}}
-\edm
-}
-
-%##############################################################
-\frame{\frametitle{Parameters from Data}
-%##############################################################
-
-\mysubsubheading{Given:}
-{\small
-\bi
-\item Observed strain fractions $p_1$ and $p_2$ at the times  $t_1$
-  and $t_2$
-\item Observed or simulated base reproduction number $R_0$ at time $t$
-\ei
-\vspace{1em}
-
-\pause
-\mysubsubheading{Wanted:} 
-dynamic parameters $r_y$, $R_0\sup{wild}$ and
-  $R_0\sup{mut}$, and all the rest
-
-\vspace{1em}
-
-\pause
-\mysubsubheading{Solution:} 
-
-\bi
-\item use the relation $y(t)=y_0e^{r_y(t-t_0)}$ to estimate
-the growth rate  $r_y$:
-\bdm
-r_y \approx (\ln y(t_2)-\ln y(t_1))/(t_2-t_1)
-\edm
-\pause \item Use Relation~\eqref{dydt} to estimate the reproduction
-number ratio: 
-\bdm
-R_0\sup{mut}/R_0\sup{wild} \approx \tau r_y+1
-\edm
-
-\pause \item Use the observed/simulated total base reproduction number to
-  estimate the $R_0$'s individually: 
-\maindm{
-R_0\sup{wild}=\frac{R_0(t)}{1+p(t)\tau r_y}, \quad
-R_0\sup{mut}=(\tau r_y+1)R_0\sup{wild}
-}
-\ei
-}
-}
- 
-%##############################################################
-\frame{\frametitle{Example Germany, 2021-03-12}
-%##############################################################
-
-\visible<1>{
- \placebox{0.5}{0.45}{\figSimple{0.80\textwidth}{figsCorona/p117-1.png}}}
-
-\visible<2>{
- \placebox{0.5}{0.45}{\figSimple{0.80\textwidth}{figsCorona/p117-2.png}}}
-
-\visible<3>{
- \placebox{0.5}{0.45}{\figSimple{0.80\textwidth}{figsCorona/p117-3.png}}}
-
-\visible<4>{
- \placebox{0.5}{0.45}{\figSimple{0.80\textwidth}{figsCorona/p117-4.png}}}
-
-}
-
-\end{document}
-%##############################################################
-
 
 
 
 %##############################################################
-\frame{\frametitle{2. Modellierung}
+\frame{\frametitle{Makroskopische Modellierung}
 %##############################################################
 
 \placebox{0.5}{0.80}{\parbox{0.9\textwidth}{Sowohl die Mikro- als auch
@@ -220,6 +50,12 @@ Infektions\emph{phasen} und deren \emph{\"Uberg\"ange}
 \visible<5>{
  \placebox{0.5}{0.29}{\figSimple{1.08\textwidth}{figsCorona/SEIRsim06.png}}}
 
+\visible<6>{
+ \placebox{0.5}{0.29}{\figSimple{1.08\textwidth}{figsCorona/SEIRsim06a.png}}}
+
+\visible<7>{
+ \placebox{0.5}{0.29}{\figSimple{1.08\textwidth}{figsCorona/SEIRsim06b.png}}}
+
 
 % muss drunter sein, da das Bild den ganzen bereich ausfuellt!
 \placebox{0.5}{0.60}{\parbox{0.9\textwidth}{
@@ -236,94 +72,16 @@ Infektions\emph{phasen} und deren \emph{\"Uberg\"ange}
 
 
 %##############################################################
-\frame{\frametitle{2.2 Corona-Simulation.de: Modifiziertes SEIR-Makromodell} 
+\frame{\frametitle{Altersabh\"angigkeit} 
 %##############################################################
-
-
-\visible<1-2>{\placebox{0.5}{0.62}{
-  \figSimple{1.05\textwidth}{figsCorona/SEIRsim06.png}}}
-
-\visible<3->{\placebox{0.5}{0.62}{
-  \figSimple{1.05\textwidth}{figsCorona/SEIRsim06a.png}}}
-
-\placebox{0.53}{0.83}{\parbox{1.0\textwidth}{
-  Die dynamischen Gr\"o\3en sind \emph{Anteilswerte} der Gesamtbev\"olkerung}}
-
-
-\placebox{0.5}{0.20}{\parbox{1.0\textwidth}{
-{\small
-\bi
-\visible<2->{\item Jeder Ansteckende infiziert nach 2-10 Tagen $R_0$
-  andere Personen \emph{falls alle anderen noch ansteckbar (S) sind}}
-\visible<3->{\item Bereits infizierte,
-  ansteckende, geheilte \emph{oder geimpfte} Personen sind nicht
-  ansteckbar (Annahme!), so dass der \emph{effektive}
-    Reproduktionsfaktor $R$ u.U. deutlich geringer ist}
-\visible<4->{\item Sobald ein Infizierter nicht mehr ansteckend ist,
-  ist er aus der Infektionsdynamik raus, die weiteren Phasen sind
-  nicht relevant}
-\ei
-}
-}}
-
-}
-
-
-%##############################################################
-\frame{\frametitle{3. Infektionen \emph{vs.} Beobachtungen} 
-%##############################################################
-
 
 \visible<1>{
- \placebox{0.5}{0.60}{\figSimple{1.08\textwidth}{figsCorona/SEIRsim06.png}}}
-
+ \placebox{0.5}{0.45}{\figSimple{0.85\textwidth}{figsCorona/ageProfile1.png}}}
 \visible<2>{
- \placebox{0.5}{0.60}{\figSimple{1.08\textwidth}{figsCorona/SEIRsim07.png}}}
-
-\visible<3>{
- \placebox{0.5}{0.60}{\figSimple{1.08\textwidth}{figsCorona/SEIRsim08.png}}}
-
-\visible<4>{
- \placebox{0.5}{0.60}{\figSimple{1.08\textwidth}{figsCorona/SEIRsim09.png}}}
-
-\visible<5>{
- \placebox{0.5}{0.60}{\figSimple{1.08\textwidth}{figsCorona/SEIRsim10.png}}}
-
-\visible<6>{
- \placebox{0.5}{0.60}{\figSimple{1.08\textwidth}{figsCorona/SEIRsim11.png}}}
-
-\visible<7->{
- \placebox{0.5}{0.60}{\figSimple{1.08\textwidth}{figsCorona/SEIRsim12.png}}}
-
-
-
-\placebox{0.5}{0.20}{\parbox{0.9\textwidth}{
-{\small
-\bi
-
-\item \visible<1->{Das Infektionsgeschehen: Was ist beobachtbar?}
-\visible<2->{\item Prinzipiell E- und I-Zustand mit PCR oder
-  Antigentests, R mit Anik\"orpertest (und nat\"urlich Todesf\"alle)}
-\visible<3->{\item Test-Sensitivit\"at $1-\alpha$=Prob\,(positiv $|$ infiziert)}
-\visible<4->{\item Test-Spezifizit\"at $1-\beta$
-            =Prob\,(negativ $|$ nicht infiziert); zwischen
-            \unit[80]{\%} und \unit[99]{\%} der Getesteten sind
-            \emph{nicht} infiziert!}
-\ei
-}
-}}
+ \placebox{0.5}{0.45}{\figSimple{0.85\textwidth}{figsCorona/ageProfile2.png}}}
 
 }
 
-
-
-%##############################################################
-\frame{\frametitle{4. Anwendung: Szenarienprojektion} 
-%##############################################################
-
-\figSimple{0.95\textwidth}{figsCorona/screen2_2021_02_21.png}
-
-}
 
 
 
