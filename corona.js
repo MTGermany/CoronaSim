@@ -1101,8 +1101,8 @@ function initializeData(country,insideValidation){
     for(var i=0; i<data.length; i++){
       //var logging=useLandkreise&&(i>data.length-10);
       //var logging=true;
-      var logging=false;
-      //var logging=(i>data.length-5);
+      //var logging=false;
+      var logging=(i>data.length-14);
       if(logging){
 	var it=i-data_idataStart;
         var i2=i+data2_idataStart-data_idataStart;
@@ -1119,10 +1119,11 @@ function initializeData(country,insideValidation){
 	  "\n  data_pTestModel[i]=",data_pTestModel[i].toFixed(3),
 	  " data_pTestModelSmooth[i]=",data_pTestModelSmooth[i].toFixed(3),
 	  " data_cumCases=",Math.round(data_cumCases[i]),
+	  " data_cumTestsCalc=", Math.round(data_cumTestsCalc[i]),
 	  "\n  data_cumVacc=",data_cumVacc[i],
+	  " data_rVacc=",data_rVacc[i], // data_rVacc is smoothed
 	  " IvaccArr=",(it<0) ? 0 : IvaccArr[it],
 	  " data_posRate=",data_posRate[i],
-	  " data_cumTestsCalc=", Math.round(data_cumTestsCalc[i]),
 	  " data_stringencyIndex=", Math.round(data_stringencyIndex[i]),
 	 // " data_cfr=",data_cfr[i].toPrecision(3),
 	  " "
@@ -1748,7 +1749,7 @@ function calibrate(){
   } // calbrate R0 with multiple periods
 
 
-  //!!!! here logging can be true for check of corona.update and corona.init
+  //!!! here logging can be true for check of corona.update and corona.init
 
   var logging=false; 
   //var logging=true;
@@ -1912,7 +1913,7 @@ function calibrate(){
   
   
   //##############################################################
-  // !!!! for inline nondynamic testing: add testcode here
+  // !!! for inline nondynamic testing: add testcode here
   // outside of calibration
   //##############################################################
 
@@ -2386,7 +2387,6 @@ function selectWindow(){ // callback html select box "windowGDiv"
 
 function resetValidation(){ //// check/explain why needed
   nDaysValid=0;
-  itmaxPrev=0; //!!!! delete???
   document.getElementById("validateDays").value=nDaysValid;
   document.getElementById("headerValidText").innerHTML="";
   //revertWorkingData();
@@ -2728,7 +2728,6 @@ function simulationRun() {
     document.getElementById("headerValidText").innerHTML=websiteText;
   }
 
-  var idata=Math.min(data_idataStart+it, data_idataStart+data_itmax-1);
   //console.log("simulationRun: before doSimulationStep: it=",it);
   doSimulationStep(); 
   //console.log("R0sliderUsed=",R0sliderUsed);
@@ -2748,6 +2747,10 @@ function simulationRun() {
   }
   
   if((!testSliderUsed)&&includeInfluenceTestNumber){
+    // if data_idataStart+it greater than data_itmax-1-3 use this value
+    // to obtain full smoothing from -3 to 3
+    // (last value not smoothed at all!)
+    var idata=Math.min(data_idataStart+it, data_idataStart+data_itmax-1-3);
     setSlider(slider_pTest, slider_pTestText, 
 	      //Math.round(100*pTest), " %");
 	      (100*data_pTestModelSmooth[idata]).toFixed(2), " %");
@@ -3413,8 +3416,10 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
     if(!slider_rVacc_moved){ // if slider moved, rVacc directly from slider
       var i=it+data_idataStart;
       if(i<0){rVacc=0;}
-      rVacc=(i<data_rVacc.length)
-	? data_rVacc[i] : data_rVacc[data_rVacc.length-1];
+      // last data of vacc rate unreliable; use smoothed val
+      // 6 days before last data and average with 
+      rVacc=(i<data_rVacc.length-7) // data_rVacc is smoothed over one week
+	? data_rVacc[i] : data_rVacc[data_rVacc.length-7];
     }
     this.vaccination.update(rVacc,it);
     Ivacc=this.vaccination.Ivacc; //!! geht nicht bei calibration
@@ -3536,7 +3541,7 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
 
 
   //#####################################################
-  // Test people (in updateOneDay)
+  // Test people (in CoronaSim.updateOneDay)
   //#####################################################
 
 
@@ -3553,10 +3558,17 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
   if(includeInfluenceTestNumber){ 
     if(idata<data_pTestModel.length){pTest=data_pTestModel[idata];} 
     else{
-      //!!! quick hack to avoid sudden drop cases 2021-02-22
-      var factor=1.0333
+      //!!!! quick hack to avoid sudden drop cases 2021-02-22
+      var factor=1.04
       pTest=factor*pTest_weeklyPattern[(idata-data_pTestModel.length)%7];
-    } 
+      //pTest=data_pTestModelSmooth[data_pTestModelSmooth.length)-1];//!!!!
+    }
+    if(false){
+    //if((!inCalibration)&&(it-itPresent>-25)){
+      console.log("CoronaSim.updateOneDay: it-itPresent=",it-itPresent,
+		  " pTest=",pTest);
+    }
+    
   }
 
   var dtau=Math.min(Math.floor(tauAvg/2),Math.round(tauTest));
@@ -3573,7 +3585,7 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
   if(it>=0){// do not use absolute data such as data_dn in warmup!
 
     if(includeInfluenceTestNumber){ 
-      var dn=(idata<data_dn.length)
+      var dn=(idata<data_dn.length) //!!!!
 	? data_dn[idata] : dn_weeklyPattern[(idata-data_pTestModel.length)%7];
       this.dxtFalse=(dn/n0 - pTest*this.xohne[tauTest])*betaTest;
       this.dxtFalse=Math.min(this.dxtFalse, 0.9*this.dxt); 
@@ -4782,6 +4794,7 @@ DrawSim.prototype.draw=function(it){
 
   if(false){
     console.log("\nin DrawSim.draw: it=",it,
+		" this.qselect[6]=",this.qselect[6],
 		//" this.itmin=",this.itmin,
 		//" this.itmax=",this.itmax,
 		" usePrevious=",usePrevious,
