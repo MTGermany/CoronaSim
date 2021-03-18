@@ -1,18 +1,233 @@
+
+[i\Ich links, die fertige Standardsimulation rechts]
+
+
 Hallo liebe Simulanten und Freunde der gepflegten Corona-Simulation.
 
-Ich habe eine neue Major Version meines Corona-Simulators
-erstellt. Diese enth\"alt neben einem Tschechen-Vergleich
-zwei wesentliche neue Punkte:
+Meine neue Major Version meines Corona-Simulators
+enth\"alt zwei wesentliche neue Punkte:
 
-1. Ber\"ucksichtigung der Altersabh\"angigkeit bei den Sterberisiken
+1. Ber\"ucksichtigung neuer Mutanten wie zur Zeit die britischen
+   B117-Mutation
+
+2. Ber\"ucksichtigung der Altersabh\"angigkeit bei den Sterberisiken
    Infection Fatality rate (IFR) bzw Case Fatality Rate (CFR)
 
-2. Ber\"ucksichtigung neuer Mutanten wie zur Zeit die britischen
-   B117-Mutante
+Die B117-Simulation habe ich in meinen beiden letzten Videos
+vorgestellt.
 
-Da die neue Mutante in aller Munde ist, werde ich sie in diesem Video
-behandeln, die altersabh\"angigen Sterberisiken kommen im n\"achsten
-Video dran
+[Mit Maus um B.1.1.7 rechts kreisen]
 
-Altersabhaengigkeit: Auch Nature-Artikel in tex-pdf einfuegen!!!
+Da diese britische Mutation ja Fact ist und inzwischen
+ihre Verbreitung bei etwa 70% liegt, habe ich ab heute, 18. M\"arz
+2021, ihre Ber\"ucksichtigung
+im Simulator als Default voreingestellt. Ich will ja so realistisch
+wie m\"oglich sein und immerhin macht es denn Unterschied aus, ob die
+maximale simulierte Inzidenz nahe 200 oder eher um 120 sein
+wird.
+
+Zum besseren Vergleich habe logge ich auch immer einige Zeitreihen der
+jeweils letzten Simulation mit. Hier habe ich vorher die Simulation
+mit konstanten R simuliert. Nun mit voreingestellter B117-Dynamik:
+
+[run bis April]
+
+Deutlicher Unterschied!
+Nun gab es ja ab Montag auch weitergehende Schul\"offnungen, die
+leider der von OWID kommende Stringency Index noch nicht
+abbildet. Dieser ist leider bis zu 7 Tage verz\"ogert. Simulieren wir
+also neu mit B117 und Reduktion des Stringency-Index um einen Tacken
+von 78% auf 70%. Nun Max gute 200 statt knapp 150!
+
+Nun aber weg vom Tagesgeschaeft zum eigentlichen heutigen Thema:
+Altersabh\"angigkeit der Sterblichkeit.
+
+[Mit Maus im rechten Teil kreisen]
+
+Sie haben ja schon bemerkt, dass die Inzidenzen immer weiter
+hochgehen, die Intensivstation-Belegung und vor allem die Todesf\"alle
+aber immer weiter zur\"uckgehen. Dies hat drei Gr\"unde:
+
+1. Die Verz\"ogerung zwischen Infektion und Sterbefall.
+In corona-simulation.de f\"ur Deutschland auf 20
+Tage eingestellt. Da die Positivtests den Infektionen ja auch
+typischerweise um 7 Tage hinterherhinken (kann man im Simulator auf
+der "Infektionsparameter-Ansicht einstellen), sollten die Todesf\"alle
+den Inzidenzen um etwa 13 Tage hinterherhinken, da dies generell mit
+den Daten am besten passt.
+
+[Mit Maus auf Weihnachten orange-Schwarz zeigen]
+
+Allerdings nicht zu Weihnachten, wo die
+Inzidenzen und die Todesf\"alle gleichzeitig zur\"uckgehen.
+
+* Zu Weihnachten.
+* R\"uckgang.
+* Gleichzeitig:
+
+Ein Schelm, wer dabei Hintergedanken hat. 
+
+2. Die 2. Ursache des R\"uckgangs der Todesziffern bei Steigen der
+Inzidenz ist die Erh\"ohung der Testzahlen, nun durch die durch die
+verf\"ugbaren Schnelltests zus\"atzlihc getriggerten PCR-Tests:
+Inzidenz w\"urde selbst bei gleicher Infektionsrate  steigen, da die
+Dunkelziffer sinkt, w\"ahrend bei den Toten die Dunkelziffer immer
+nahe null ist.
+
+3. Beide Effekte reichen aber nicht aus, um den starken Abfall
+vollst\"andig zu
+erkl\"aren. In der Tat ist der gr\"o\3te Faktor die starke
+Altersabh\"angigkeit der IFR, gekoppelt mit der Impfstrategie: Genau
+aus diesen Gr\"unden impfen wir ja die Alten zuerst!
+
+
+[Folien CoronaD_2021_03_Altersabh.pdf]
+
+Wie kann ich das simulieren ohne die grundlegende Struktur des
+Simulators zu ver\"andern? Wie schon einmal gezeigt: Mein Simulator
+modelliert ein einfaches Makromodell mit Verz\"ogerungen:
+
+-> S
+-> E
+-> I
+-> R Alles pauschal f\"ur die gesamte Bev\"olkerung ohne Altersstruktur
+
+-> Impfung f\"uhrt den S-Zustand direkt an der Infektion vorbei in den
+   R-Zustand
+
+-> Impft man die Alten zuerst, wird der \"Ubergang vom R Zustand zum
+   Tod am effektivsten bek\"ampft, da die \"Ubergangsrate, die IFR
+   f\"ur Alte am h\"ochsten ist
+
+Gleichzeitig ist die Ansteckung, also der \"Ubergang vom S in den
+E-Zustand, f\"ur alle Altersgruppen etwa gleich. Deshalb muss man ja
+auch bei der - \"ubrigens dringen notwendigen -   \"Offnung der
+Schulen so aufpassen!
+
+Da der altersspezifische \"Ubergang vom Status R nach Tot ja jenseits
+der aktiven Infektionsdynamik stattfindet (die Schwerkranken sind ja
+strikt nach au\3en abgeschirmt und damit au\3erhalb der R\"uckkopplung
+\"uber die Reproduktionsrate R0 [Maus]), kann man die Analyse also im
+Nachgang machen.
+
+Also erst normal die Dynamik simulieren und anschlie\3end den Einfluss
+der Impfstrategie auf die Todesf\"alle simulieren!
+
+-> Nature
+
+Dieses frei zug\"angliche Paper sch\"atzt die Infection Fatality Rate
+(IFR) als f(Alter) in vielen L\"andern ab (Streubreite der roten u
+blauen Punkte fuer weiblich und m\"annlich)
+
+* Es sch\"atzt auch die Dunkelziffer mit Analyse von Antik\"orpertests
+  ab; meine Annahmen zur  Dunkelziffer sind
+  konsistent mit deren Ergebnissen
+
+* Die CFR hat einen \"ahnlichen Verlauf, wie \"ubrigens auch die
+  allgemeine Sterblichkeit! Deshalb liegt auch das durchschnittliche
+  Alter der Covid-19 Toten nahe am durchschnittl ALter der
+  Gesamtbev\"olkerung. Kurve ist sogar etewas steiler, Medianalter
+  liegt dr\"uber
+
+* Alle 20 Jahre, also alle 4 Datenwolken, geht es eine Zehnerpotenz
+  nach oben
+
+* M\"annlein u Weiblein haben Unterschied, der ist aber im Vergleich
+  zur Altersabh\"angigkeit gering und wird von mir nicht weiter betrachtet
+
+-> Wie bringe ich nun die Impfstrategie ins Spiel?
+   Beispiel D: Altersstruktur M\"annlein und Wieblein zusammen, Summe
+   der Balkenl\"angen=100%
+
+-> Altersspezifische IFR, normiert auf die IFR der 60-70 J\"ahrigen
+   aus Nature-Paper (lin statt log Skala!)
+
+-> Multiplikation des blauen Bev\"olkeringsanteils mit der roten IFR
+   gibt die Zahl der Covid-19-Toten in jeweiliger Altersschicht. Habe
+   ich hier als Anteilswert, auf 100% zu summieren, dargestellt: Ohne
+   Impfung ist AK 80-90 am meisten betroffen. Bei den ganz alten gibt
+   es einfach zu wenig und bei den j\"ungeren dominiert die
+   Abh\"angigkeit vom IFR
+
+-> Impfstrategie: Alte zuerst: Wir impfen erst die \"uber 90
+   j\"ahrigen. Schwarzer Balken ist noch da, da Impfung nicht sofoert
+   Schutz gibt!
+
+-> Dann n\"achste AK, bei den ganz alten ist der schwarze Balken nun
+   weg
+
+-> Sind wir bei dne 70-80 J\"ahrigen angekommen, sind die \"alteren
+   schon immun und mit 7% vollst\"andig immunisierten Anteil an
+   Bev\"olkerung werden mehr als die H\"alfte der Toten vermieden!
+   Summe verbleib schw Balken vlt 35%
+
+-> und so geht's weiter
+
+->
+
+->
+
+-> Sind wir bei den 50-60 J\"ahrigen angekommen, also meiner AK, sind
+   alle Toten schon weg. Wirklich? Die Wirkung ist nicht 100% und es
+   gibt Impfverweigerer. Sind wir optimitisch und nehmen 95% bzw 15%
+   an, bleiben etwas schwarze Balken \
+   \"ubrig. Insgesamt etwa 20%.
+   Die gesamtdeutsche IFR ist damit auf 20% reduziert
+
+Mit 25% Geimpften reduziert man die IFR um 80%!
+
+Die Gesamtzahl der zuk\"unftigen Totewn wird viel mehr reduziert, da
+Geimpfte ja nicht nur viel seltener erkranken, sondern auch weniger
+ansteckend werden! Die 80% Reduktion gelten nur bei gleichbleibender
+Inzidenz/Ansteckungsdynamik. Wird diese durch Teilimmunit\"at
+reduziert, ist die Gesamterduktion weitaus h\"oher!
+
+[Sim Standard bis Gegenwart]
+
+Reduzieren wir nun zur gegenwart, 17.3., die Ma\3nahmen, um einen
+h\"oheren Effekt, eine gr\"o\3ere 3. Welle zu bekommen,
+z.B. nachhaltige Schul\"offnungen und keine R\"ucknahme der bisherigen
+Lockerungen, Stringency Index 70%
+
+Am Peak der 3. Welle Anfang Mai w\"are die Inzidenz dann gleich hoch
+wie zu Weihachten, 2. Welle mit um die 800 Toten pro Tag, aber nun ist
+die Todeszahl max 160 pro Tag, also 80% Reduktion
+
+
+Aber oh ach! Die Bundesregierung hat ja die Impfungen versaubeutelt,
+die relative hohe Rate der letzten Woche 1.6% pro Tag kann nicht
+aufrechterhalten werden!
+
+[Neu kalibrieren]
+
+Simulieren wir also neu. Da ich was an den Reglern gedreht habe, muss
+ich neu kalibrieren, also habe ich auf "Kalibrieren" gedr\"uckt. Sonst
+w\"urde von Start weg mit 70% hhutdown-Level simuliert, was zu
+geringeren Fallzahlen f\"uhrte
+
+[Gegenwart Stringency auf 70%, Impfrate halbieren auf 0.8]
+
+l\"angere h\"ohere Welle mit viel mehr Toten
+
+[Neu kalinbrieren]
+[Gegenwart Stringency auf 70%, Impfrate auf Israel-Niveau 6%]
+
+Massiver Effekt
+
+[Halli Galli]
+
+Sie sehen, dass Sie nichts sehen. So soll es sein, keine rote Kurve,
+keine Inzidenz!
+
+[Schluss ich Vollbild]
+
+Das war die Vorstellung der Altersabh\"angigkeit der
+Sterbewahrscheinlichkeit und wie die Impfstrategie wirkt: Die Toten
+werden \"uberproportional reduziert. Vielen Dank f\"urs Zuh\"oren und
+Zuschauen. Wenn es Ihnen gefallen hat, empfehlen Sie das Video und
+corona-simulation.de weiter!
+
+
+
+
 

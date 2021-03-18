@@ -1,4 +1,7 @@
 
+//##################################################################
+// general global variables affecting global appearance
+//##################################################################
 
 var measuresView=true;  // false: R0 and parameter view
                     // true: "measures" view
@@ -27,13 +30,41 @@ var showCoronaSimulationDe=true; // only for showing corona-simulation.de
 
 var debugApple=false;
 
-var activateAnnotations=true; // if true, annotations can be drawn with mouse
+var activateAnnotations=true; // if true, lines/curves can be drawn with mouse
 
 
 var country="Germany";
 var country2="Germany"; // needed for test data if(useLandkreise)
 var countryGer="Deutschland";
 var useLandkreise=false; // MT 2020-12-07: =true for new RKI Landkreis data
+
+
+
+const ln10=Math.log(10);
+
+
+// graphical window at start, 
+
+// new window: 
+// (1) define qselect[window] by selecting from drawsim.dataG[], 
+// (2) update initialisator of drawsim.yminType[], *ymax*: "this.yminType=["
+// (3) check various "windowG==", "windowG!=", "windowG<" etc conditions
+
+// initial window; consolidate with first option value of html!!
+// windowG:
+// 0=cum,1=log,2=casesReal,3=tests,4=rates,5=casesDaily,6=incidence
+
+var windowG=6; 
+
+
+var myRun;
+var isStopped=true
+
+
+
+//######################################################################
+// global time simulation vars (see also "data related global variables")
+//######################################################################
 
 /* Date object: 
  - Constructor e.g., date=new Date(2020,02,19); months start @ zero, days @ 1
@@ -53,33 +84,8 @@ var useLandkreise=false; // MT 2020-12-07: =true for new RKI Landkreis data
    date.toLocaleDateString("en-us",options) -> Jun 05;
 */
 
-
-
-// general global variables
-
-const ln10=Math.log(10);
-
-
-// graphical window at start, 
-
-// new window: 
-// (1) define qselect[window] by selecting from drawsim.dataG[], 
-// (2) update initialisator of drawsim.yminType[], *ymax*: "this.yminType=["
-// (3) check various "windowG==", "windowG!=", "windowG<" etc conditions
-
-// initial window; consolidate with first option value of html!!
-// windowG:
-// 0=cum,1=log,2=casesReal,3=tests,4=rates,5=casesDaily,6=incidence 
-var windowG=6; 
-
-
-var myRun;
-var isStopped=true
-
-
-
-// global time simulation vars (see also "data related global variables")
-// dayinit
+var fpsstart=50;
+var fps=fpsstart;  // controlled @ doSimulationStep()
 
 var dayStartMarInit=8; //!! can also exceed 31, date initializer takes it
 var dayStartMar=dayStartMarInit; 
@@ -97,48 +103,35 @@ var itPresentInit=Math.floor(
 var itPresent=itPresentInit;
 
 
-// data related global variables
+//######################################################################
+// Data related global variables
+//######################################################################
+
 // fetch with https://pomber.github.io/covid19/timeseries.json
 // or load as a variable server-side (if useLiveData=false)
 
-var dataGit=[];  // working data for validation
-var dataGit2=[];
-var dataRKI=[];
+var dataGit=[];  // json: loaded just in time; also used for data for validation
+var dataGit2=[]; // json: addtl test, stringency, vacc data (prepared by script)
+var dataRKI=[];  // json: RKI data for Saxonian regions (prepared by script); 
 
 var dataGit_orig=[]; // normal data and reference for validation
 var dataGit2_orig=[];
 var dataRKI_orig=[];
 
-// previous simulated data of drawsim for comparison
-
-var usePreviousGlob=true; // wether comparison is active
-var usePrevious=usePreviousGlob; // if *Glob=false,
-   // usePrevious true in, e.g., validation or B117 simulation
-var itmaxPrev=0;     // maximum it reached in previous simulation
-var simPrevious=[]; // store previous sim data outside DrawSim (created anew)
-                    // needed for validation or if doing mutation scenario
-for (var iq=0; iq<=40; iq++){simPrevious[iq]=[];} //!!! def simPrevious
-var nDaysValid=0;     // validation days (default=0=no validation)
-
 
 // data related
 
-var data_dateBegin;
+var data_dateBegin; // Date object
 var data_idataStart; //!! dataGit dataset index for dayStartMar
 var data_itmax;  // !! with respect to dayStartMar=data.length-data_idataStart
 
-var data2_idataStart; // same for data2 containing the corona-test data
+var data2_idataStart; // same for dataGit2 set  containing the corona-test data
 var data2_itmax;
 var di2=0;  // i2-i for same date FROM THE END
             // since e.g., Czech data weekly at begin
 
 var data_date=[];
 var data_cumCases=[];
-
-var countryComparison=false;
-var countryCmp="Czechia";
-var dataCmp_cumCases=[]; // for comparison with, e.g., Czechia
-var dataCmp_dxIncidence=[]; // compare weekly incidence per 100 000 from data
 
 
 var data_cumDeaths=[];
@@ -149,8 +142,7 @@ var data_cumVacc=[];     // direct, sometimes n.a.
 var data_cumVaccFully=[];     // direct, sometimes n.a.
 var data_stringencyIndex=[];  // degree of measures/lockdown in [0,100]
 var data_rVacc=[];     // fraction of pop per day !!! check if needed
-//var data2_posRate=[];      // #cases/#tests, last avail. period (in dataGit2)
-//var data2_cumTests=[];     // direct, sometimes n.a.
+
 
 // derived data in data time order
 
@@ -170,8 +162,9 @@ var pTest_weeklyPattern=[]; // constant extrapolation with weekly pattern
 var dn_weeklyPattern=[];  // constant extrapolation of #tests "
 
 
-
-// global geographic simulation vars 
+//#########################################################
+// Fixed socioeconomic data of the simulated countries
+//#########################################################
 
 var n0=80.e6;  // #persons in Germany
 
@@ -201,7 +194,6 @@ const countryGerList={
   "LK_Osterzgebirge": "LK Osterzgebirge",
   "SK_Dresden": "Dresden"
 }
-
 
 const n0List={
   "Germany"       :   80500000,
@@ -336,48 +328,20 @@ const tauRecoverList={
 
 
 
-var R0sliderUsed=false;
-var otherSliderUsed=false;
-var testSliderUsed=false;
-var stringencySliderUsed=false;
+//#########################################################
+// slider-related variables
+//#########################################################
 
-//var fracDieSliderUsed=false; does not exist
-
-
-
-// global simulation parameters/infection constants/parameters
-
-var fpsstart=50;
-var fps=fpsstart;  // controlled @ doSimulationStep()
-
-
-
-// (i) controlled by sliders/control elements (apart from R0)
-
-// British B.1.1.7 B117 simulation
-// Data for Germany, see header of function MutationDynamics
-
-var mutationDynamics;  // new MutationDynamics(dateOld,pOld,dateNew,pNew,R0)
-var simulateMutation=false;
-var dateOld=new Date("2021-02-11"); 
-var dateNew=new Date("2021-03-04");
-var itStartMut=0; // time index where mutation dynamics rather calibr R0 used
-
-var startMut2present=10; //!!! days start mutation dynamics - present
-
-var pOld=0.176;
-var pNew=0.460;
-//var pNew=0.400;  
-//var dateNew=new Date("2021-02-25");
-
-
-// test
+var R0slider_moved=false;     // not every slider needs such a state variable
+var otherSlider_moved=false;
+var testSlider_moved=false;
+var stringencySlider_moved=false;
+var slider_rVacc_moved=false; // if true, pTest =f(#tests)
 
 var pTestInit=0.1;     // P(Tested|infected)  if !f(#tests) assumed
 var pTestModelMin=0.04;   // if calculated by sqrt- or propto model
 
 var includeInfluenceTestNumber=true; // if true, pTest =f(#tests)
-var slider_rVacc_moved=false; // if true, pTest =f(#tests)
 var useSqrtModel=true; // whether use sqrt or linear dependence 
 
 var tauRstartInit=2;   // active infectivity begins [days since infection]//1
@@ -388,8 +352,68 @@ var tauRstart=tauRstartInit;
 var tauRend=tauRendInit;  
 var pTest=pTestInit;       // percentage of tested infected persons 
 var tauTest=tauTestInit;
-var tauAvg=5;      // smoothing interval (uneven!) for tauTest,
-                   // tauDie, tauRecover
+var tauAvg=5;      // smoothing interval (uneven!) for tauTest,tauDie,tauRecover
+
+var stringency=0;  // 0..100, from data_stringencyIndex
+var stringency_hist=[]; stringency_hist[0]=stringency; // one element PER DAY
+
+
+//######################################################################
+// variables related to previous simulation for comparison 
+//######################################################################
+
+// (taken from from drawsim)
+
+
+var usePreviousGlob=true; // wether comparison is active
+var usePrevious=usePreviousGlob; // if *Glob=false,
+   // usePrevious true in, e.g., validation or B117 simulation
+var itmaxPrev=0;     // maximum it reached in previous simulation
+var simPrevious=[]; // store previous sim data outside DrawSim (created anew)
+                    // needed for validation or if doing mutation scenario
+for (var iq=0; iq<=40; iq++){simPrevious[iq]=[];} //!!! def simPrevious
+var nDaysValid=0;     // validation days (default=0=no validation)
+
+
+//######################################################################
+// variables related to comparison with other country (Czech)
+//######################################################################
+
+var countryComparison=false;
+var countryCmp="Czechia";
+var dataCmp_cumCases=[]; // for comparison with, e.g., Czechia
+var dataCmp_dxIncidence=[]; // compare weekly incidence per 100 000 from data
+
+
+
+//######################################################################
+// British B.1.1.7 B117 simulation
+//######################################################################
+
+// Data for Germany, see header of function MutationDynamics
+
+var simulateMutation=true;
+var dateOld=new Date("2021-02-11"); 
+var dateNew=new Date("2021-03-04");
+var itStartMut=itPresent-80; // time index where mutation dynamics rather calibr R0 used
+
+var startMut2present=10; //!!! days start mutation dynamics - present
+
+var pOld=0.176;
+var pNew=0.460;
+//var pNew=0.400;  
+//var dateNew=new Date("2021-02-25");
+
+// will be overridden (needed for some initial. )
+var mutationDynamics=new MutationDynamics(dateOld,pOld,dateNew,pNew,2.84, itStartMut);
+
+
+
+//###############################################################
+// vaccination specification. Parameters like this.Imax=0.95 (Biontec)
+// or this.vaccmax=0.8;
+// (20% vacc deniers/impossible to vacc) are data elements of Vaccination
+//###############################################################
 
 var pVacc=0;        // vaccination fraction in [0,1]
 var rVaccInit=0;    // pVacc'(t) [fraction per day]
@@ -401,19 +425,22 @@ for(var it=0; it<=itPresent; it++){ // profile ofvaccination imunity
   IvaccArr[it]=0;
 }
 
-var corrIFR=1.11; // value in Germany w/o vacc: 2
+var corrIFR=1.11; // correction factor IFR/IFR65 (value in Germany w/o vacc: 2)
 var corrIFRarr=[]; //!!!
-for(var it=0; it<=itPresent; it++){ // profile ofvaccination imunity
-  corrIFRarr[it]=1.11;
+for(var it=0; it<=itPresent; it++){ 
+  corrIFRarr[it]=1.11; // profile of IFR/IFR65 as f(vaccination history)
 }
 
-var measuresInit=4;  // obsolete "Abstand+Maske", cf. corona_gui.js->str_measures
-var measures=measuresInit; // obsolete
+//###############################################################
+// "externer Eintrag"
+//###############################################################
 
 var casesInflowInit=0; // inported cases per day and 100 000 inhabitants
 var casesInflow=casesInflowInit;
 
-// (ii) not controlled
+//###############################################################
+// not controlled infection dynamics and test  parameters
+//###############################################################
 
 // reset to fracDieInit*pTest/pTestInit at restart but NOT during simulation
 var fracDieInit=fracDieInitList.Germany; 
@@ -428,15 +455,13 @@ var tauSymptoms=7;  // incubation time
 
 var taumax=Math.max(tauDie,tauRecover)+tauAvg+1;
  
-
-// (iii) additional variables for simulating influence of tests,
-//  note: useSqrtModel at the controlled variables
-
 var alphaTest=0.0; // alpha error of test (false negative)
 var betaTest=0.003; // beta error (false positive) after double testing
 
 
-// (iv) calibration related parameters/variables
+//###############################################################
+// calibration related parameters/variables
+//###############################################################
 
 var inCalibration=false;  // other calc of vacc
                           // in CoronaSim.updateOneDay 
@@ -458,9 +483,6 @@ var R0time=[];   // !! calibrated R0
 var R0_hist=[]; R0_hist[0]=R0; // one element PER DAY
 var sigmaR0_hist=[]; sigmaR0_hist[0]=0; 
 
-var stringency=0;  // 0..100, from data_stringencyIndex
-var stringency_hist=[]; stringency_hist[0]=stringency; // one element PER DAY
-
 
 const nOverlap=3;        // multiples of calibInterval, 3
                          // >=max(1,floor(Rinterval_last_min/calibInterval)
@@ -480,8 +502,9 @@ var IFR65time=[];
 
 
 
-
-// (v) global graphical vars
+//##########################################################
+// global graphical vars
+//##########################################################
 
 var canvas;
 var ctx;
@@ -496,15 +519,13 @@ var hasChanged=false;
 var isSmartphone=false;
 var isLandscape=true;
 
-corona=new CoronaSim();
 
 
 
 // ##############################################################
-// !! test fetch method: w/o addtl cronjob/script
 // directly from https://pomber.github.io/covid19/timeseries.json
 //
-// called ONLY in the html <body onload="..."> callback
+// loadData called ONLY in the html <body onload="..."> callback
 // NOT: offline
 // Ubuntu 12: Only Chrome! 
 // Ubuntu18: Every browser??
@@ -521,11 +542,9 @@ corona=new CoronaSim();
 // I have replaced them with normal anonymous functions 
 // ##############################################################
 
-//called ONLY in the <body onload>  event
 function loadData() {
   var log=false;
   if(log) console.log("in loadData");
-  //corona=new CoronaSim(); //!!
 
   if(debugApple){
     console.log("in ConsoleLogHTML");
@@ -591,6 +610,7 @@ function loadData() {
         console.log("in fetch function: dataGit=",dataGit);
 	console.log("end loadData(..) live alternative");
         initializeData(country); //!! MUST remain inside; extremely annoying
+	setMutationSim(simulateMutation);
 	myRestartFunction(); // only HERE guaranteed that everything loaded
       });
   }
@@ -608,12 +628,13 @@ function loadData() {
     console.log("end loadData(..) non-live alternative");
     initializeData(country); //!! MUST repeat because of annoying time order
     fracDie=IFRinit; // use IFR start array for init()
-    corona.init(0); 
-    myRestartFunction();
+    corona.init(0);
+    setMutationSim(simulateMutation);
+    myRestartFunction();// only HERE guaranteed that everything loaded=>separately
   }
 
-
-} // loadData
+  
+} // loadData called ONLY in the <body onload>  event
 
 
 
@@ -1153,9 +1174,9 @@ function initializeData(country,insideValidation){
 
 
 
-  R0sliderUsed=false;
-  otherSliderUsed=false;
-  stringencySliderUsed=false;
+  R0slider_moved=false;
+  otherSlider_moved=false;
+  stringencySlider_moved=false;
 
 
   //##############################################################
@@ -2627,10 +2648,10 @@ function myRestartFunction(){
 function myResetFunction(){ 
   console.log("in myResetFunction");
   //resetValidation(); //!!?? 
-  R0sliderUsed=false;
-  otherSliderUsed=false;
-  testSliderUsed=false;
-  stringencySliderUsed=false;
+  R0slider_moved=false;
+  otherSlider_moved=false;
+  testSlider_moved=false;
+  stringencySlider_moved=false;
   includeInfluenceTestNumber=true;
 
   document.getElementById("testnumber").innerHTML
@@ -2672,10 +2693,10 @@ function myResetFunction(){
 
 
 function myCalibrateFunction(){ // callback "Kalibriere neu!
-  R0sliderUsed=false;
-  otherSliderUsed=false;
-  testSliderUsed=false;
-  stringencySliderUsed=false;
+  R0slider_moved=false;
+  otherSlider_moved=false;
+  testSlider_moved=false;
+  stringencySlider_moved=false;
    // calibration unstable with external source => must set to zero
   casesInflow=0;
   setSlider(slider_casesInflow, slider_casesInflowText,
@@ -2703,8 +2724,26 @@ function myCountryComparison(){ // callback "Kalibriere neu!
 }
 
 
+function setMutationSim(withMutations){
+  if(withMutations){
+    simulateMutation=true;
+    document.getElementById("buttonMut").innerHTML="Stop B.1.1.7 Sim";
+  }
+  else{
+    simulateMutation=false;
+    document.getElementById("buttonMut").innerHTML="Start B.1.1.7 Sim";
+  }
+}
 
-function myMutationSim(){ // callback "Kalibriere neu!
+
+function toggleMutationSim(){ // callback B117 B.1.1.7 Mutation
+  setMutationSim(!simulateMutation); // toggles simulateMutation
+  myRestartFunction();
+}
+
+
+/*
+function myMutationSim(){ // callback B117 B.1.1.7 Mutation
   if(simulateMutation){
     simulateMutation=false;
     document.getElementById("buttonMut").innerHTML="Start B.1.1.7 Sim";
@@ -2714,9 +2753,9 @@ function myMutationSim(){ // callback "Kalibriere neu!
     document.getElementById("buttonMut").innerHTML="Stop B.1.1.7 Sim";
   }
   console.log("myMutationSim: simulateMutation=",simulateMutation);
-  //myCalibrateFunction(); // in both cases; depends on simulateMutation
   myRestartFunction();
 }
+*/
 
 
 function simulationRun() {
@@ -2730,8 +2769,8 @@ function simulationRun() {
 
   //console.log("simulationRun: before doSimulationStep: it=",it);
   doSimulationStep(); 
-  //console.log("R0sliderUsed=",R0sliderUsed);
-  if(!R0sliderUsed){
+  //console.log("R0slider_moved=",R0slider_moved);
+  if(!R0slider_moved){
     setSlider(slider_R0, slider_R0Text, R0_actual.toFixed(2),"");
     //setSlider(slider_R0, slider_R0Text, R0fun_time(R0time,it).toFixed(2),"");
   }
@@ -2740,13 +2779,13 @@ function simulationRun() {
     document.getElementById("buttonMut").innerHTML="Start B.1.1.7 Sim";
   }
     
-  if(!stringencySliderUsed){
+  if(!stringencySlider_moved){
     //console.log("setSlider(slider_stringency...): stringency=",stringency);
     setSlider(slider_stringency, slider_stringencyText,
 	      Math.round(stringency)," %");
   }
   
-  if((!testSliderUsed)&&includeInfluenceTestNumber){
+  if((!testSlider_moved)&&includeInfluenceTestNumber){
     // if data_idataStart+it greater than data_itmax-1-3 use this value
     // to obtain full smoothing from -3 to 3
     // (last value not smoothed at all!)
@@ -2791,7 +2830,7 @@ function doSimulationStep(){
   }
   fracDie= IFRfun_time(it);
 
-  R0_actual=(R0sliderUsed) ? R0 : R0fun_time(R0time,it);
+  R0_actual=(R0slider_moved) ? R0 : R0fun_time(R0time,it);
     //!!!
   if(simulateMutation){
     if(it>=itStartMut){
@@ -2804,7 +2843,7 @@ function doSimulationStep(){
 
   var i=Math.min(data_idataStart+it, data_stringencyIndex.length-1);
 
-  stringency_hist[it]=(stringencySliderUsed)
+  stringency_hist[it]=(stringencySlider_moved)
     ? stringency : data_stringencyIndex[i];
 
 
@@ -2939,6 +2978,7 @@ KW10 p=0.
 		" pStart=",pStart," yStart=",yStart,
 		" ry=",this.ry,
 		" R0Start=",R0Start,
+		" ratioMutWild=",ratioMutWild,
 		" R0wild=",this.R0wild,
 		" R0mut=",this.R0mut,
 		"");
@@ -2970,7 +3010,7 @@ function Vaccination(){
   this.tau0=28;      // days after full effect I0 is reached (1 week after)
   this.Ivacc=0;      // population immunity fraction by vaccinations
                      // ! read from application routines after update()
-  this.vaccmax=0.9;  // vacc deniers/med impossibilities in each age group
+  this.vaccmax=0.8;  // vacc deniers/med impossibilities in each age group
   this.pVaccHist=[]; // history[tau] of vacc percentage pVacc (first vacc.)
 
   this.f_age=[];     // demographic profile of age groups
@@ -3435,7 +3475,7 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
 
   // include political measures by stringency in [0,100]
   
-  if(inCalibration||(!stringencySliderUsed)){
+  if(inCalibration||(!stringencySlider_moved)){
     var i=Math.max(0, Math.min(
       data_stringencyIndex.length-1, it+data_idataStart));
     stringency=data_stringencyIndex[i];
@@ -4439,16 +4479,12 @@ DrawSim.prototype.drawAxes=function(windowG){
 		   this.yPix0+(yrelTopVars-(line)*dyrel)*this.hPix);
     }
 
-    if(measures!=4){
-      line++;
-      ctx.fillText("Massnahmen: "+str_measures(measures),
-		   this.xPix0+xrelLeft*this.wPix,
-		   this.yPix0+(yrelTopVars-(line)*dyrel)*this.hPix);
-    }
-
+   
     //console.log("it=",it," mutationDynamics=",mutationDynamics);
-    if(simulateMutation//&&(it>0) 
-       &&(it>mutationDynamics.itNew-63)){
+
+    if(!(typeof mutationDynamics === "undefined") // sometimes so at begin
+       && simulateMutation &&(it>mutationDynamics.itNew-63)){
+      console.log("it=",it);
       mutationDynamics.update(it); //just graphics; double call does not harm
       var mutTopPix=this.yPix0+1.01*this.hPix;
       var mutLeftPix=this.xPix0+0.80*this.wPix;
@@ -4570,7 +4606,7 @@ DrawSim.prototype.transferRecordedData=function(){
 
   // windows 2-4
 
-  //kernel=[1]; //!! worldometer data too strong weekly changes, 
+  //kernel=[1]; //!!!! worldometer data too strong weekly changes, 
                  // more than RKI => slight smoothing
   kernel=[1/4,2/4,1/4];
 

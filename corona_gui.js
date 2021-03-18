@@ -37,7 +37,7 @@ setSlider(slider_R0, slider_R0Text, R0,"");
 
 
 slider_R0.oninput = function() {
-  R0sliderUsed=true;
+  R0slider_moved=true;
   slider_R0Text.innerHTML = "&nbsp;"+this.value;
   R0=parseFloat(this.value);
   console.log("slider1 callback: R0="+R0);
@@ -55,7 +55,7 @@ setSlider(slider_tauRstart, slider_tauRstartText,
 
 
 slider_tauRstart.oninput = function() {
-  otherSliderUsed=true;
+  otherSlider_moved=true;
   tauRstart=parseFloat(this.value);
   slider_tauRstartText.innerHTML = "&nbsp;"+this.value
     +((tauRstart==1) ? " Tag" : " Tage");
@@ -78,7 +78,7 @@ setSlider(slider_tauRend, slider_tauRendText,
 
 
 slider_tauRend.oninput = function() {
-  otherSliderUsed=true;
+  otherSlider_moved=true;
   tauRend=parseFloat(this.value);
   slider_tauRendText.innerHTML = "&nbsp;"+this.value
     +((tauRend==1) ? " Tag" : " Tage");
@@ -99,8 +99,8 @@ var slider_pTestText = document.getElementById("slider_pTestText");
 setSlider(slider_pTest, slider_pTestText, 100*pTest, " %");
 
 slider_pTest.oninput = function() {
-  otherSliderUsed=true;
-  testSliderUsed=true;
+  otherSlider_moved=true;
+  testSlider_moved=true;
   includeInfluenceTestNumber=false;
   slider_pTestText.innerHTML = "&nbsp;"+this.value+" %";
   pTest=parseFloat(this.value/100.);
@@ -120,7 +120,7 @@ setSlider(slider_tauTest, slider_tauTestText,
 	  tauTest, " Tagen");
 
 slider_tauTest.oninput = function() {
-  otherSliderUsed=true;
+  otherSlider_moved=true;
   tauTest=parseFloat(this.value);
   slider_tauTestText.innerHTML = "&nbsp;"+this.value
     +((tauTest==1) ? " Tag" : " Tagen");
@@ -140,7 +140,7 @@ setSlider(slider_R0cp, slider_R0cpText, R0,"");
 
 
 slider_R0cp.oninput = function() {
-  R0sliderUsed=true;
+  R0slider_moved=true;
   slider_R0cpText.innerHTML = "&nbsp;"+this.value;
   R0=parseFloat(this.value);
   console.log("slider R0cp callback: R0="+R0);
@@ -188,7 +188,7 @@ setSlider(slider_stringency, slider_stringencyText,
 slider_stringency.oninput = function() {
   stringency=parseInt(this.value);
   slider_stringencyText.innerHTML = "&nbsp;"+stringency+" %";
-  stringencySliderUsed=true;
+  stringencySlider_moved=true;
 }
 
 
