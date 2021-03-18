@@ -1,0 +1,6 @@
+https://youtu.be/h1Tn11K5PT8
+
+corona-simulation.de: Implementierung der Altersabhängigkeit der Sterbewahrscheinlichkeit
+
+
+Durch die Impfungen sinkt die Todesrate viel stärker als die Rate an Testpositiven, auch wenn man die Zeitverzögerung und die Änderung der Testzahlen berücksichtigt. Die Ursache ist der exponentielle Anstieg der Sterbewahrscheinlichkeit mit dem Alter und die Impfstrategie "die Ältesten zuerst". In diesem Video erkläre ich, wie ich das quantitativ in corona-simulation.de eingebaut habe 
