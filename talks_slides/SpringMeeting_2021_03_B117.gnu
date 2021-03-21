@@ -1,0 +1,235 @@
+
+
+
+###############################################
+# dashed no longer works (2020)
+###############################################
+
+# post eps dashed no longer works but dashtype (dt) in ls
+# specs! dt 1 = solid
+ 
+set style line 1 lt 1 lw 2 pt 7 ps 1.0 dt 1 lc rgb "#000000" #schwarz, bullet
+set style line 2 lt 1 lw 2 pt 9 ps 1.5 dt 1 lc rgb "#CC0022" #closedUpTriang
+set style line 3 lt 1 lw 2 pt 4 ps 1.2 dt 1 lc rgb "#FF3300" #closedSquare
+set style line 4 lt 1 lw 2 pt 4 ps 1.5 dt 1 lc rgb "#FFAA00" #gelb,
+set style line 5 lt 1 lw 2 pt 5 ps 1.5 dt 1 lc rgb "#00DD22" #gruen,
+set style line 6 lt 1 lw 2 pt 4 ps 1.5 dt 1 lc rgb "#00AAAA"
+set style line 7 lt 1 lw 2 pt 4 ps 2.0 dt 7 lc rgb "#1100FF" #blau,
+set style line 8 lt 1 lw 2 pt 8 ps 1.5 dt 1 lc rgb "#220088"
+set style line 9 lt 1 lw 1 pt 9 ps 1.5 dt 1 lc rgb "#999999" #grau
+
+set style line 11 lt 1 lw 3 pt 7 ps 1.9  lc rgb "#000000" 
+set style line 12 lt 1 lw 3 pt 2 ps 1.5 dt 2 lc rgb "#CC0022" 
+set style line 13 lt 8 lw 3 pt 4 ps 1.2  lc rgb "#FF3300"
+set style line 14 lt 6 lw 3 pt 4 ps 1.5  lc rgb "#FFAA00"
+set style line 15 lt 1 lw 3 pt 5 ps 1.5  lc rgb "#00DD22"
+set style line 16 lt 5 lw 3 pt 7 ps 1.5  lc rgb "#00AAAA"
+set style line 17 lt 1 lw 3 pt 7 ps 1.5  lc rgb "#1100FF"
+set style line 18 lt 4 lw 3 pt 8 ps 1.5  lc rgb "#220088"
+set style line 19 lt 7 lw 3 pt 9 ps 1.5  lc rgb "#999999"
+
+
+
+##############################################################
+# Beispiele fuer Funktionen 
+##############################################################
+
+max(x,y)    = (x>y) ? x : y
+min(x,y)    = (x>y) ? y : x
+mod(x,interval)=x-(floor(x/interval)*interval) # x%interval for reals
+round(x) = x - floor(x) < 0.5 ? floor(x) : ceil(x)
+filterData(data,number)=(data==number) ? 1 : NaN
+
+
+##############################################################
+#set term post eps enhanced color solid "Helvetica" 20
+#set term png notransparent truecolor medium font "Helvetica, 12"
+set term pngcairo enhanced color notransparent crop font "Helvetica, 12" #better
+#set term post eps enhanced color dashed "Helvetica" 20
+# set out "test.eps"
+# set out "test.png"
+# Ubuntu18: bug with wide line ending in png. workaround: set samples 300
+##############################################################
+
+y(p)=p/(1.-p)
+p(y)=y/(1+y)
+rycalc(dDays, pOld, pNew)=1./dDays*log(y(pNew)/y(pOld))
+ratioMutWildcalc(tauR, dDays, pOld, pNew)=tauR*rycalc(dDays, pOld, pNew)+1
+R0wildcalc(R0,p,ratioMutWild)=R0/(1+p*(ratioMutWild-1))
+yTime(t,ry,t0,y0)=y0*exp(ry*((t-t0)/86400))
+pTime(t,ry,t0,p0)=p(yTime(t,ry,t0,y(p0)))
+R0(R0wild, R0mut,p)=(1-p)*R0wild+p*R0mut
+
+
+sec2021_01_01=(51*365+13)*86400 # seconds since 1970-01-01:00:00
+
+sec2021_01_25=sec2021_01_01+24*86400
+sec2021_02_11=sec2021_01_01+41*86400
+sec2021_03_04=sec2021_01_01+62*86400
+
+# see corona.js, string "British B.1.1.7"
+p2=0.02;      t2=sec2021_01_01+10*86400;   label_t2="2020-01-11"
+p3=0.036;     t3=sec2021_01_01+17*86400;   label_t3="2020-01-18"
+p4=0.047;     t4=sec2021_01_01+24*86400;   label_t4="2020-01-25"
+p5=0.072;     t5=sec2021_01_01+31*86400;   label_t5="2020-02-04"
+p6=0.176;     t6=sec2021_01_01+38*86400;   label_t6="2020-02-11"
+p7=0.259;     t7=sec2021_01_01+45*86400;   label_t7="2020-02-18"
+p8=0.400;     t8=sec2021_01_01+52*86400;   label_t8="2020-02-25"
+#KW9 p=0.460     t9=sec2021_01_01+59*86400;   label_t9="2020-03-04"
+
+
+
+#########################
+pold=p4
+told=t4
+label_told=label_t4
+
+pnew=p8
+tnew=t8
+label_tnew=label_t8
+#########################
+
+dt=(tnew-told)/86400
+
+tPresent=sec2021_03_04+18*86400
+R0present=2.38
+tauR=7
+
+print "dt=",dt
+print "pold=",pold
+
+ry=rycalc(dt, pold, pnew)
+ratioMutWild=ratioMutWildcalc(tauR, dt, pold, pnew)
+pPresent=pTime(tPresent,ry,told,pold)
+R0wild=R0wildcalc(R0present,pPresent,ratioMutWild)
+R0mut=R0wild*ratioMutWild
+print "ry=",ry," R0wild=",R0wild," R0mut=",R0mut
+
+##############################################################
+# Time Format using internal Gnuplot-Time seconds since 01.01.1970
+##############################################################
+
+
+
+set xdata time
+#set format x '%d.%m.%Y'         #21.03.2021
+#set format x '%d.%m.,%H:00'     #21.03,00:00
+set format x '%d.%m'     #21.03
+tmin=sec2021_01_01
+tmax=tPresent+5*86400
+
+print "pTime(told,ry,told,pold)=",pTime(told,ry,told,pold)
+print "pTime(tmax,ry,told,pold)=",pTime(tmax,ry,told,pold)
+set xtics 86400*14
+set key box top left
+set xlabel "Time"
+set xrange [tmin:tmax]
+set ylabel "B.1.1.7 share and effective R_0"
+set yrange [0:100]
+
+###############################################################
+set out "figsCorona/p117-1.png"
+print "plotting figsCorona/p117-1.png"
+set label 1 sprintf("p=%2.1f\%",100*pold)." on ".label_told\
+  at screen 0.18,0.25
+plot [t=tmin:tmax]\
+ told, 70*(t-tmin)/(tmax-tmin) t "Observed share 1" w l ls 9,\
+ told, 100*pold t "" w p ls 7 
+
+###############################################################
+set out "figsCorona/p117-2.png"
+print "plotting figsCorona/p117-2.png"
+set label 2 sprintf("p=%2.1f\%",100*pnew)." on ".label_tnew\
+  at screen 0.39,0.53
+
+
+plot [t=tmin:tmax]\
+ told, 70*(t-tmin)/(tmax-tmin) t "Observed share 1 and 2" w l ls 9,\
+ told, 100*pold t "" w p ls 7,\
+ tnew, 70*(t-tmin)/(tmax-tmin) t "" w l ls 9,\
+ tnew, 100*pnew t "" w p ls 7
+
+###############################################################
+set out "figsCorona/p117-3.png"
+print "plotting figsCorona/p117-3.png"
+
+plot [t=tmin:tmax]\
+ t, 100*pTime(t,ry,told,pold) t "Share B.1.1.7 [%]" w l ls 7,\
+ tPresent, 100*(t-tmin)/(tmax-tmin) t "Present" w l ls 11,\
+ told, 70*(t-tmin)/(tmax-tmin) t "1^{th} und 2^{nd} measurement p" w l ls 9,\
+ told, 100*pold t "" w p ls 7,\
+ tnew, 70*(t-tmin)/(tmax-tmin) t "" w l ls 9,\
+ tnew, 100*pnew t "" w p ls 7
+
+###############################################################
+set out "figsCorona/p117-3a.png"
+print "plotting figsCorona/p117-3a.png"
+plot [t=tmin:tmax]\
+ t, 100*pTime(t,ry,told,pold) t "Share B.1.1.7 [%]" w l ls 7,\
+ tPresent, 100*(t-tmin)/(tmax-tmin) t "Present" w l ls 11,\
+ told, 70*(t-tmin)/(tmax-tmin) t "1^{th} und 2^{nd} measurement p" w l ls 9,\
+ told, 100*pold t "" w p ls 7,\
+ tnew, 70*(t-tmin)/(tmax-tmin) t "" w l ls 9,\
+ tnew, 100*pnew t "" w p ls 7,\
+ t2, 100*p2 t "" w p ls 1,\
+ t3, 100*p3 t "" w p ls 1,\
+ t4, 100*p4 t "" w p ls 1,\
+ t5, 100*p5 t "" w p ls 1,\
+ t6, 100*p6 t "" w p ls 1,\
+ t7, 100*p7 t "" w p ls 1,\
+ t8, 100*p8 t "" w p ls 1
+ 
+
+###############################################################
+set out "figsCorona/p117-4.png"
+print "plotting figsCorona/p117-4.png"
+set label 3 sprintf("R_0^{wild}=%1.2f",R0wild) at screen 0.14,0.63
+set label 4 sprintf("R_0^{mut}=%1.2f", R0mut)  at screen 0.14,0.58
+
+plot [t=tmin:tmax]\
+ t, 100*pTime(t,ry,told,pold) t "Share B.1.1.7 [%]" w l ls 7,\
+ t, 100*(R0(R0wild, R0mut, pTime(t,ry,told,pold))/R0wild-1)\
+    t "Anstieg R_0/R_{0,wild}-1 [%]" w l ls 2,\
+ tPresent, 100*(t-tmin)/(tmax-tmin) t "Present" w l ls 11,\
+ told, 70*(t-tmin)/(tmax-tmin) t "1^{th} und 2^{nd} measurement p" w l ls 9,\
+ told, 100*pold t "" w p ls 7,\
+ tnew, 70*(t-tmin)/(tmax-tmin) t "" w l ls 9,\
+ tnew, 100*pnew t "" w p ls 7
+
+
+
+quit
+
+
+
+
+
+
+
+
+##############################################################
+# revert;
+# !!! must do ALL xdata and format, xtics and xrange !!!
+# check with show xdata; show format; show xtics
+##############################################################
+
+set xdata; set format; set xtics auto; set auto x
+set out "testRevertNormal.png"
+print "plotting testRevertNormal.png"
+plot [t=0:42]\
+ t, 2*t t "test" w l ls 2
+
+
+
+
+
+
+
+
+
+##############################################################
+#String-Konstanten:
+##############################################################
+
+#strParams=sprintf("lveh=%1.1f, v0=%1.0f, T=%1.1f, s0=%1.1f, s1=%1.1f, delta=%i",\
+ lveh,v0,T,s0,s11,delta)

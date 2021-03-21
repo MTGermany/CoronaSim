@@ -44,7 +44,7 @@ set term pngcairo enhanced color notransparent crop\
 
 
 ##############################################################
-set out "figsCorona/ageProfile3_ger.png"; print "plotting figsCorona/ageProfile3_ger.png"
+set out "figsCorona/ageProfile3.png"; print "plotting figsCorona/ageProfile3.png"
 ##############################################################
 
 f=1./1.7  # normalize percentage of deaths
@@ -57,34 +57,35 @@ set xlabel "Age [Years]" offset -2,0.6
 set xrange [0:100]
 set ylabel "|" offset 0,-1.7
 set label 1 "Percentage m+f [%]" at screen 0.02,0.14 rotate by 90
-set label 2 "IFR / IFR_{65},   Sterbeanteil" at screen 0.02,0.6 rotate by 90
+set label 2 "IFR / IFR_{65},   Share of deaths"\
+    at screen 0.02,0.58 rotate by 90
 set yrange [-33:50]
 set key top left
 #set size 1,0.9
 
 plot[t=0:100]\
  "CoronaD_2021_03_Altersabh.dat" u (0.5*($1+$2)):(-$3) : (5)\
-    t "Altersstruktur Deutschland  " with boxes fs solid 0.5 ls 8,\
+    t "Age strata Germany " with boxes fs solid 0.5 ls 8,\
  "CoronaD_2021_03_Altersabh.dat" u (0.5*($1+$2)):($4) : (7)\
     t "IFR / IFR_{65}" with boxes ls 2 fs transparent solid 0.5,\
  "CoronaD_2021_03_Altersabh.dat" u (0.5*($1+$2)):(f*$3*$4) : (5)\
-    t "Anteil an den Covid19-Toten"\
+    t "Share of Covid-19 deaths"\
     with boxes ls 1 fs transparent solid 0.50,\
     t,0 t "" w l ls 1
 
 
 ##############################################################
-set out "figsCorona/ageProfile1_ger.png"; print "plotting figsCorona/ageProfile1_ger.png"
+set out "figsCorona/ageProfile1.png"; print "plotting figsCorona/ageProfile1.png"
 plot[t=0:100]\
  "CoronaD_2021_03_Altersabh.dat" u (0.5*($1+$2)):(-$3) : (5)\
-    t "Altersstruktur Deutschland  " with boxes fs solid 0.5 ls 8,\
+    t "Age strata Germany " with boxes fs solid 0.5 ls 8,\
  t,0 t ""  w l ls 1
 
 ##############################################################
-set out "figsCorona/ageProfile2_ger.png"; print "plotting figsCorona/ageProfile2_ger.png"
+set out "figsCorona/ageProfile2.png"; print "plotting figsCorona/ageProfile2.png"
 plot[t=0:100]\
  "CoronaD_2021_03_Altersabh.dat" u (0.5*($1+$2)):(-$3) : (5)\
-    t "Altersstruktur Deutschland  " with boxes fs solid 0.5 ls 8,\
+    t "Age strata Germany " with boxes fs solid 0.5 ls 8,\
  "CoronaD_2021_03_Altersabh.dat" u (0.5*($1+$2)):($4) : (7)\
     t "IFR / IFR_{65}" with boxes ls 2 fs transparent solid 0.5,\
  t,0 t ""  w l ls 1
@@ -94,85 +95,85 @@ plot[t=0:100]\
 filterData(data,number)=(data<number) ? 1 : NaN
 reduceData(data,number,fact)=(data<number) ? 1 : fact
 
-set out "figsCorona/ageProfile4_ger.png"; print "plotting figsCorona/ageProfile4_ger.png"
+set out "figsCorona/ageProfile4.png"; print "plotting figsCorona/ageProfile4.png"
 
 plot[t=0:100]\
  "CoronaD_2021_03_Altersabh.dat" u (0.5*($1+$2)):(-$3)\
-    : (5) t "Altersstruktur Deutschland  " with boxes fs solid 0.5 ls 8,\
+    : (5) t "Age strata Germany " with boxes fs solid 0.5 ls 8,\
  "CoronaD_2021_03_Altersabh.dat" u (0.5*($1+$2)):($4)\
     : (7) t "IFR / IFR_{65}" with boxes ls 2 fs transparent solid 0.5,\
  "CoronaD_2021_03_Altersabh.dat" u (0.5*($1+$2)):(f*$3*$4)\
     : (5*filterData($0,7))\
-    t "Anteil an den Covid19-Toten" with boxes ls 1 fs transparent solid 0.50,\
+    t "Share of Covid-19 deaths" with boxes ls 1 fs transparent solid 0.50,\
  t,0 t ""  w l ls 1
 
 
 
 ##############################################################
-set out "figsCorona/ageProfile5_ger.png"; print "plotting figsCorona/ageProfile5_ger.png"
+set out "figsCorona/ageProfile5.png"; print "plotting figsCorona/ageProfile5.png"
 
 plot[t=0:100]\
  "CoronaD_2021_03_Altersabh.dat" u (0.5*($1+$2)):(-$3)\
-    : (5) t "Altersstruktur Deutschland  " with boxes fs solid 0.5 ls 8,\
+    : (5) t "Age strata Germany " with boxes fs solid 0.5 ls 8,\
  "CoronaD_2021_03_Altersabh.dat" u (0.5*($1+$2)):($4)\
     : (7) t "IFR / IFR_{65}" with boxes ls 2 fs transparent solid 0.5,\
  "CoronaD_2021_03_Altersabh.dat" u (0.5*($1+$2)):(f*$3*$4)\
     : (5*filterData($0,6))\
-    t "Anteil an den Covid19-Toten" with boxes ls 1 fs transparent solid 0.50,\
+    t "Share of Covid-19 deaths" with boxes ls 1 fs transparent solid 0.50,\
  t,0 t ""  w l ls 1
 
 
 ##############################################################
-set out "figsCorona/ageProfile6_ger.png"; print "plotting figsCorona/ageProfile6_ger.png"
+set out "figsCorona/ageProfile6.png"; print "plotting figsCorona/ageProfile6.png"
 
 plot[t=0:100]\
  "CoronaD_2021_03_Altersabh.dat" u (0.5*($1+$2)):(-$3)\
-    : (5) t "Altersstruktur Deutschland  " with boxes fs solid 0.5 ls 8,\
+    : (5) t "Age strata Germany " with boxes fs solid 0.5 ls 8,\
  "CoronaD_2021_03_Altersabh.dat" u (0.5*($1+$2)):($4)\
     : (7) t "IFR / IFR_{65}" with boxes ls 2 fs transparent solid 0.5,\
  "CoronaD_2021_03_Altersabh.dat" u (0.5*($1+$2)):(f*$3*$4)\
     : (5*filterData($0,5))\
-    t "Anteil an den Covid19-Toten" with boxes ls 1 fs transparent solid 0.50,\
+    t "Share of Covid-19 deaths" with boxes ls 1 fs transparent solid 0.50,\
  t,0 t ""  w l ls 1
 
 
 ##############################################################
-set out "figsCorona/ageProfile7_ger.png"; print "plotting figsCorona/ageProfile7_ger.png"
+set out "figsCorona/ageProfile7.png"; print "plotting figsCorona/ageProfile7.png"
 
 plot[t=0:100]\
  "CoronaD_2021_03_Altersabh.dat" u (0.5*($1+$2)):(-$3)\
-    : (5) t "Altersstruktur Deutschland  " with boxes fs solid 0.5 ls 8,\
+    : (5) t "Age strata Germany " with boxes fs solid 0.5 ls 8,\
  "CoronaD_2021_03_Altersabh.dat" u (0.5*($1+$2)):($4)\
     : (7) t "IFR / IFR_{65}" with boxes ls 2 fs transparent solid 0.5,\
  "CoronaD_2021_03_Altersabh.dat" u (0.5*($1+$2)):(f*$3*$4)\
     : (5*filterData($0,4))\
-    t "Anteil an den Covid19-Toten" with boxes ls 1 fs transparent solid 0.50,\
+    t "Share of Covid-19 deaths" with boxes ls 1 fs transparent solid 0.50,\
  t,0 t ""  w l ls 1
 
 ##############################################################
-set out "figsCorona/ageProfile8_ger.png"; print "plotting figsCorona/ageProfile8_ger.png"
+set out "figsCorona/ageProfile8.png"; print "plotting figsCorona/ageProfile8.png"
 
 plot[t=0:100]\
  "CoronaD_2021_03_Altersabh.dat" u (0.5*($1+$2)):(-$3)\
-    : (5) t "Altersstruktur Deutschland  " with boxes fs solid 0.5 ls 8,\
+    : (5) t "Age strata Germany " with boxes fs solid 0.5 ls 8,\
  "CoronaD_2021_03_Altersabh.dat" u (0.5*($1+$2)):($4)\
     : (7) t "IFR / IFR_{65}" with boxes ls 2 fs transparent solid 0.5,\
  "CoronaD_2021_03_Altersabh.dat" u (0.5*($1+$2)):(f*$3*$4)\
     : (5*filterData($0,3))\
-    t "Anteil an den Covid19-Toten" with boxes ls 1 fs transparent solid 0.50,\
+    t "Share of Covid-19 deaths" with boxes ls 1 fs transparent solid 0.50,\
  t,0 t ""  w l ls 1
 
 ##############################################################
-set out "figsCorona/ageProfile9_ger.png"; print "plotting figsCorona/ageProfile9_ger.png"
+set out "figsCorona/ageProfile9.png"; print "plotting figsCorona/ageProfile9.png"
 
 plot[t=0:100]\
  "CoronaD_2021_03_Altersabh.dat" u (0.5*($1+$2)):(-$3) : (5)\
-    t "Altersstruktur Deutschland  " with boxes fs solid 0.5 ls 8,\
+    t "Age strata Germany " with boxes fs solid 0.5 ls 8,\
  "CoronaD_2021_03_Altersabh.dat" u (0.5*($1+$2)):($4) : (7)\
     t "IFR / IFR_{65}" with boxes ls 2 fs transparent solid 0.5,\
  "CoronaD_2021_03_Altersabh.dat" u (0.5*($1+$2))\
     :(reduceData($0,3,0.2)*f*$3*$4):(5)\
-    t "Anteil an den Covid19-Toten"\
+    t "Share of Covid-19 deaths"\
     with boxes ls 1 fs transparent solid 0.50,\
     t,0 t "" w l ls 1
 
