@@ -1,0 +1,199 @@
+
+
+
+%#############################################
+% New pdflatex format,
+% only png, jpg (or svg?) images but positioning now ok
+% template in ~/tex/inputs/template_folien.tex
+% [TODO now specialized to Vkoem_Ma; make general]
+%#############################################
+
+
+\documentclass[mathserif,aspectratio=1610]{beamer}
+%\documentclass[mathserif,handout]{beamer}
+%\usepackage{beamerthemeshadow}
+\input{$HOME/tex/inputs/defsSkript}  %$
+\input{$HOME/tex/inputs/styleBeamerDPG_Springmeeting}   %$
+
+\usepackage{graphicx}
+
+
+%##############################################################
+
+\begin{document}
+
+\section*{Scenario Projections of the Covid-19 Pandemic 
+Using a Data-driven Macroscopic Model}
+
+
+%##############################################################
+%\frame{\frametitle{}
+\frame{ 
+%##############################################################
+
+
+\placebox{0.50}{0.38}
+ {\figSimple{1.10\textwidth}{figsCorona/screen1_springMeeting.png}}
+
+% make images pale (see demo_makePale.tex)
+%\makePale{opacity}{centerXrel}{centerYrel}{wrel}{hrel}
+% e.g., \makePale{0.8}{0.5}{0.5}{1}{0.3}
+
+\makePale{0.7}{0.48}{0.57}{1.2}{1.2}
+
+\placebox{0.50}{0.90}
+  {\myheading{Scenario projections of the Covid-19 pandemic}}
+\placebox{0.50}{0.845}{\myheading{using a data-driven macroscopic model}}
+%\placebox{0.50}{0.82}{\myheading{mit \texttt{traffic-simulation.de}}}
+\placebox{0.55}{0.75}{\mysubheading{Martin Treiber, TU Dresden}}
+
+\placebox{0.70}{0.15}
+ {\parbox{0.6\textwidth}{
+  \bi
+    \pause \item 1. The SEIR Model with Delays\\ and Test Dynamics
+    \pause 
+    \bi
+       \item 1.1 Modelling the Mutation Dynamics
+       \item 1.2 Modelling the Age-specific IFR
+    \ei
+    \pause \item 2. Scenario Projections
+  \ei
+}}
+
+}
+
+%##############################################################
+\frame{\frametitle{1.2 Modelling the Age-specific IFR} 
+%##############################################################
+
+\placebox{0.30}{0.42}{
+  \figSimple{0.68\textwidth}{figsCorona/natureAgeSpecificIFR.png}}
+
+\placebox{0.41}{0.275}
+  {\scriptsize{M. O'Driscoll et. al., Nature \textbf{590}, pp. 140 (2021)}}
+
+}
+
+
+%##############################################################
+\frame{\frametitle{Altersabh\"angigkeit} 
+%##############################################################
+
+\visible<1>{
+ \placebox{0.5}{0.46}{\figSimple{0.96\textwidth}{figsCorona/ageProfile1.png}}}
+\visible<2>{
+ \placebox{0.5}{0.46}{\figSimple{0.96\textwidth}{figsCorona/ageProfile2.png}}}
+\visible<3-4>{
+ \placebox{0.5}{0.46}{\figSimple{0.96\textwidth}{figsCorona/ageProfile3.png}}}
+\visible<5>{
+ \placebox{0.5}{0.46}{\figSimple{0.96\textwidth}{figsCorona/ageProfile4.png}}}
+\visible<6>{
+ \placebox{0.5}{0.46}{\figSimple{0.96\textwidth}{figsCorona/ageProfile5.png}}}
+\visible<7>{
+ \placebox{0.5}{0.46}{\figSimple{0.96\textwidth}{figsCorona/ageProfile6.png}}}
+\visible<8>{
+ \placebox{0.5}{0.46}{\figSimple{0.96\textwidth}{figsCorona/ageProfile7.png}}}
+\visible<9>{
+ \placebox{0.5}{0.46}{\figSimple{0.96\textwidth}{figsCorona/ageProfile8.png}}}
+\visible<10>{
+ \placebox{0.5}{0.46}{\figSimple{0.96\textwidth}{figsCorona/ageProfile9.png}}}
+
+\visible<4->{\placebox{0.878}{0.30}{
+ \includegraphics[width=0.15\textwidth,angle=90,origin=c]{figsCorona/syringe.png}}}
+\visible<5->{\placebox{0.8}{0.255}{
+ \includegraphics[width=0.15\textwidth,angle=90,origin=c]{figsCorona/syringe.png}}}
+\visible<6->{\placebox{0.722}{0.23}{
+ \includegraphics[width=0.15\textwidth,angle=90,origin=c]{figsCorona/syringe.png}}}
+\visible<7->{\placebox{0.644}{0.20}{
+ \includegraphics[width=0.15\textwidth,angle=90,origin=c]{figsCorona/syringe.png}}}
+\visible<8->{\placebox{0.566}{0.14}{
+ \includegraphics[width=0.15\textwidth,angle=90,origin=c]{figsCorona/syringe.png}}}
+
+
+\visible<10>{
+ \placebox{0.62}{0.58}{95\% Wirksamkeit, 15\% Impfverweigerer}}
+
+}
+
+
+
+
+\end{document}
+
+
+
+
+
+%##############################################################
+\frame{\frametitle{Macroscopic approach: SEIR model with explicit
+    delays and test dynamics}
+%##############################################################
+
+
+
+\visible<1>{
+ \placebox{0.5}{0.38}{\figSimple{1.08\textwidth}{figsCorona/SEIRsim02.png}}}
+
+\visible<2>{
+ \placebox{0.5}{0.38}{\figSimple{1.08\textwidth}{figsCorona/SEIRsim03.png}}}
+
+\visible<3>{
+ \placebox{0.5}{0.38}{\figSimple{1.08\textwidth}{figsCorona/SEIRsim04.png}}}
+
+\visible<4>{
+ \placebox{0.5}{0.38}{\figSimple{1.08\textwidth}{figsCorona/SEIRsim06.png}}}
+
+\visible<5>{
+ \placebox{0.5}{0.38}{\figSimple{1.08\textwidth}{figsCorona/SEIRsim06a.png}}}
+
+\visible<6>{
+ \placebox{0.5}{0.38}{\figSimple{1.08\textwidth}{figsCorona/SEIRsim07.png}}}
+
+\visible<7>{
+ \placebox{0.5}{0.38}{\figSimple{1.08\textwidth}{figsCorona/SEIRsim08.png}}}
+
+\visible<8>{
+ \placebox{0.5}{0.38}{\figSimple{1.08\textwidth}{figsCorona/SEIRsim09.png}}}
+
+\visible<9>{
+ \placebox{0.5}{0.38}{\figSimple{1.08\textwidth}{figsCorona/SEIRsim10.png}}}
+
+\visible<10>{
+ \placebox{0.5}{0.38}{\figSimple{1.08\textwidth}{figsCorona/SEIRsim11.png}}}
+
+\visible<11->{
+ \placebox{0.5}{0.38}{\figSimple{1.08\textwidth}{figsCorona/SEIRsim12.png}}}
+
+
+% muss drunter sein, da das Bild den ganzen bereich ausfuellt!
+%\placebox{0.5}{0.65}{\parbox{0.9\textwidth}{
+%\benum
+%\visible<1->{\item Can be infected (\emph{Susceptible, S})}
+%\visible<2->{\item Infected, not yet contagious (\emph{Exposed, E})}
+%\visible<3->{\item Infected and contagious(\emph{Infected, I})}
+%\visible<4->{\item No longer contagious (\emph{Removed from infection
+%    dynamics, R})} 
+%\eenum
+%}}
+\placebox{0.52}{0.80}{\parbox{0.95\textwidth}{
+\bi
+\item Different infection 
+\emph{phases} (compartiments) and their \emph{transitions}
+\item Macroscopic dynamic variables: fractions of the population in
+  the compartiments
+\ei
+}}
+
+
+}
+
+
+
+
+%##############################################################
+\frame{\frametitle{Platzhalter wg latex Bug} 
+%##############################################################
+}
+
+\end{document}
+

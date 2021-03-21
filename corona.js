@@ -390,19 +390,47 @@ var dataCmp_dxIncidence=[]; // compare weekly incidence per 100 000 from data
 // British B.1.1.7 B117 simulation
 //######################################################################
 
-// Data for Germany, see header of function MutationDynamics
+/* Data for Germany, 
+KW8: Beginn Mo 2020-02-22, Ende So 2020-02-28, Mitte 2020-02-25
+KW2 p=0.02      2020-01-11
+KW3 p=0.036     2020-01-18
+KW4 p=0.047     2020-01-25
+KW5 p=0.072     2020-02-04
+KW6 p=0.176     2020-02-11
+KW7 p=0.259     2020-02-18
+KW8 p=0.400     2020-02-25
+KW9 p=0.460     2020-03-04
+*/
 
 var simulateMutation=true;
-var dateOld=new Date("2021-02-11"); 
-var dateNew=new Date("2021-03-04");
-var itStartMut=itPresent-80; // time index where mutation dynamics rather calibr R0 used
 
-var startMut2present=10; //!!! days start mutation dynamics - present
+//var pOld=0.02;
+//var dateOld=new Date("2021-01-11"); //!!!!
 
-var pOld=0.176;
-var pNew=0.460;
+var pOld=0.047;
+var dateOld=new Date("2021-01-25"); //!!!!
+
+//var pOld=0.176;
+//var dateOld=new Date("2021-02-11"); 
+
+
+//var pNew=0.072;
+//var dateNew=new Date("2021-02-04"); 
+
+var pNew=0.176;
+var dateNew=new Date("2021-02-11"); 
+
 //var pNew=0.400;  
 //var dateNew=new Date("2021-02-25");
+
+//var pNew=0.460;
+//var dateNew=new Date("2021-03-04");
+
+
+var itStartMut=itPresent-80; // time index where mutation dynamics rather calibr R0 used
+
+var startMut2present=0; //!!! days start mutation dynamics - present
+
 
 // will be overridden (needed for some initial. )
 var mutationDynamics=new MutationDynamics(dateOld,pOld,dateNew,pNew,2.84, itStartMut);
@@ -472,7 +500,7 @@ var itmax_calib; //  end calibr time interval =^ data_itmax-1
                  // 20 weeks of data
 
 const calibInterval=7; //!! calibration time interval [days] for one R0 value7
-const Rinterval_last_min=11; // do not calibrate remaining period smaller 11
+const Rinterval_last_min=14; // do not calibrate remain. period smaller 14,21
 const calibrateOnce=false; // following variables only relevant if false
 const nCalibIntervals=6; // multiples of calibInterval, !! >=30/calibInterval
                          // calibrates nCalibIntervals-nOverlap+1 params
@@ -1040,6 +1068,17 @@ function initializeData(country,insideValidation){
         data_pTestModel[i]=pTestModelMin
 	*Math.sqrt(1+Math.pow(pModel/pTestModelMin,2));
         data_pTestModel[i]=Math.min(data_pTestModel[i],1);
+
+	// !!! corrections if too strong daily dn jumps
+	// (late cumulative data reporting)
+
+	//if(false){
+	if(i>0){
+	  var pPrev=data_pTestModel[i-1];
+	  data_pTestModel[i]
+	    =Math.min(1.2*pPrev, Math.max(0.84*pPrev, data_pTestModel[i]));
+	}
+	
       }
       else{// use proportional model
 	var pModel=10*7*data_dn[i]/n0;
@@ -2927,27 +2966,16 @@ function MutationDynamics(dateOld, pOld, dateNew, pNew,
 @param dateOld, dateNew:  two dates (Date class) for known mutation
                           penetration rates
 @param pOld, pNew:        corresponding penetration rates
+                          see string "British B.1.1.7"
 @param R0Start:           R0 value where mutation dynamics starts
 @param daysStart2present: it value where mutation dynamics starts
 
-KW8: Beginn Mo 2020-02-22, Ende So 2020-02-28, Mitte 2020-02-25
-KW2 p=0.02
-KW3 p=0.036
-KW4 p=0.047
-KW5 p=0.072
-KW6 p=0.176     2020-02-11
-KW7 p=0.259     2020-02-18
-KW8 p=0.400     2020-02-25
-KW9 p=0.460     2020-03-04
-KW10 p=0.
+
    */
 
   this.itNew=Math.floor((dateNew.getTime()-startDay.getTime())/oneDay_ms);
   this.itOld=Math.floor((dateOld.getTime()-startDay.getTime())/oneDay_ms);
   this.itStart=itStart;
- // this.daysNew2start
-  //  =Math.floor((present.getTime()-dateNew.getTime())/oneDay_ms)
-   // -start2present;
 
   this.dt =this.itNew-this.itOld;
   this.yOld=pOld/(1-pOld);
@@ -4068,7 +4096,7 @@ function DrawSim(){
 		 type: 0, plottype: "bars", plotLog: false, 
 		 ytrafo: [0.1, true,false], color:colCasesBars}; // real: scale*10
 
-  this.dataG[31]={key: "Woecheninzidenz Gestorbene pro 100 000", data: [],
+  this.dataG[31]={key: "Wocheninzidenz Gestorbene pro 100 000", data: [],
 		 type: 0, plottype: "bars", plotLog: false, 
 		 ytrafo: [1, true,true], color:colDead};
 
@@ -4130,7 +4158,7 @@ function DrawSim(){
   this.qselectWithPrev[4]=[20,21,22];
   this.qselectWithPrev[5]=[16,17,37,28,40,29];
   this.qselectWithPrev[6]=[30,31,38,32,39,33,41];
-  if(countryComparison){this.qselectRegular[6]=[30,31,38,32,39,33,41,42];}
+  if(countryComparison){this.qselectWithPrev[6]=[30,31,38,32,39,33,41,42];}
 
   for(var iw=0; iw<this.qselectRegular.length; iw++){
     this.qselect[iw]=
@@ -4484,7 +4512,7 @@ DrawSim.prototype.drawAxes=function(windowG){
 
     if(!(typeof mutationDynamics === "undefined") // sometimes so at begin
        && simulateMutation &&(it>mutationDynamics.itNew-63)){
-      console.log("it=",it);
+      //console.log("it=",it);
       mutationDynamics.update(it); //just graphics; double call does not harm
       var mutTopPix=this.yPix0+1.01*this.hPix;
       var mutLeftPix=this.xPix0+0.80*this.wPix;
@@ -4606,9 +4634,9 @@ DrawSim.prototype.transferRecordedData=function(){
 
   // windows 2-4
 
-  //kernel=[1]; //!!!! worldometer data too strong weekly changes, 
+  kernel=[1]; //!!!! worldometer data too strong weekly changes, 
                  // more than RKI => slight smoothing
-  kernel=[1/4,2/4,1/4];
+  //kernel=[1/4,2/4,1/4];
 
   //kernel=[1/9,2/9,3/9,2/9,1/9];
   //kernel=[1/16,2/16,3/16,4/16,3/16,2/16,1/16];
