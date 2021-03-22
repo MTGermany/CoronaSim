@@ -352,7 +352,7 @@ a:hover {
 #headerValid{ /*title if validating regular portrait*/
   position: absolute;
   top: auto;
-  bottom: 42vh;
+  bottom: 45vh;
   left: 27vw;
   font-weight:bold;
   z-index: 3;  /* above simulation canvas in rare chances of overlapping */

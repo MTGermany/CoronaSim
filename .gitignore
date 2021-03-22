@@ -10,6 +10,8 @@ data/githubWithTests.json
 data/*orig.json
 data/githubWithTests_orig_Germany_lines.json
 data/githubWithTests_orig_Germany.json
+data/githubWithTests_debug_Germany.json
+data/github_debug_Germany.json
 
 ## generated files
 

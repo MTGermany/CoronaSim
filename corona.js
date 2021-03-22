@@ -14,13 +14,12 @@ var measuresView=true;  // false: R0 and parameter view
 // useLiveData=false: obtained data server-side 
 // via script updateCoronaInput.sh. Stable but need to upload once a day
 
-var useLiveDataInit=true;  //!! will be changed by upload script, 2 versions
+var useLiveDataInit=false;  //!! will be changed by upload script, 2 versions
 var useLiveData=useLiveDataInit;
 
 var loggingDebug=false; //!! global var for testing functions inside calibr
 
-var showCoronaSimulationDe=true; // only for showing corona-simulation.de
-                                 // in movies
+var showCoronaSimulationDe=true; // bottom right
 
 // debugApple=true for debugging of devices w/o console (ipad) redirect
 // it to a html element using console-log-html.js
@@ -469,6 +468,7 @@ var casesInflow=casesInflowInit;
 //###############################################################
 // not controlled infection dynamics and test  parameters
 //###############################################################
+// after Fixed socioeconomic data of the simulated countries!
 
 // reset to fracDieInit*pTest/pTestInit at restart but NOT during simulation
 var fracDieInit=fracDieInitList.Germany; 
@@ -482,7 +482,8 @@ var tauRecover=16; // time from infection to full recovery
 var tauSymptoms=7;  // incubation time 
 
 var taumax=Math.max(tauDie,tauRecover)+tauAvg+1;
- 
+
+var tauInfectious_fullReporting=84; // !! param of the sqrt pTest model
 var alphaTest=0.0; // alpha error of test (false negative)
 var betaTest=0.003; // beta error (false positive) after double testing
 
@@ -499,8 +500,8 @@ var itmax_calib; //  end calibr time interval =^ data_itmax-1
                  // should be split if there are more than approx 
                  // 20 weeks of data
 
-const calibInterval=7; //!! calibration time interval [days] for one R0 value7
-const Rinterval_last_min=14; // do not calibrate remain. period smaller 14,21
+const calibInterval=7; //!! calibr time interval [days] for one R0 value 7,14
+const Rinterval_last_min=14// do not calibrate remain. period smaller 14,21
 const calibrateOnce=false; // following variables only relevant if false
 const nCalibIntervals=6; // multiples of calibInterval, !! >=30/calibInterval
                          // calibrates nCalibIntervals-nOverlap+1 params
@@ -542,7 +543,7 @@ var xPixOld, yPixOld;
 var sizeminViewport;
 var sizeminCanvas;
 
-var textsize=14;
+var textsize=14; // changed in corona_gui.js
 var hasChanged=false;
 var isSmartphone=false;
 var isLandscape=true;
@@ -635,7 +636,7 @@ function loadData() {
       .then(function(data1){
         dataGit=data1;
 	dataGit_orig=JSON.parse(JSON.stringify(dataGit)); // full clone
-        console.log("in fetch function: dataGit=",dataGit);
+        console.log("in fetch function:\n dataGit=",dataGit);
 	console.log("end loadData(..) live alternative");
         initializeData(country); //!! MUST remain inside; extremely annoying
 	setMutationSim(simulateMutation);
@@ -652,7 +653,7 @@ function loadData() {
     }
     dataGit = JSON.parse(dataGitLocal); // known since html->data/github.json
     dataGit_orig=JSON.parse(JSON.stringify(dataGit)); // full clone
-    console.log("useLiveData=false, get data from server: dataGit=",dataGit);
+    console.log("useLiveData=false, get data locally:\n dataGit=",dataGit);
     console.log("end loadData(..) non-live alternative");
     initializeData(country); //!! MUST repeat because of annoying time order
     fracDie=IFRinit; // use IFR start array for init()
@@ -717,6 +718,19 @@ function initializeData(country,insideValidation){
   var dateInitStr=data[0]["date"];
   var dateMaxStr=insertLeadingZeroes(data[data.length-1]["date"]);
 
+  // !!! knock off the last datum in German data since often delayed
+  // (ONLY Germany and France!)
+
+  if((nDaysValid==0)&&(dataGit["Austria"].length==data.length)
+     &&((country2==="Germany")||(country2==="France"))){
+    data.pop();
+    console.log(
+      "\n\n\n############\nGermany and France delay data delivery=>knock of last point",
+      "\n last date=",data[data.length-1].date,
+      "\n#####################");
+  }
+
+  
   console.log("dataGit2_orig=",dataGit2_orig);
   console.log("dataGit2_orig[country2]=",dataGit2_orig[country2]);
   console.log("dataGit2[country2]=",dataGit2[country2]);
@@ -780,9 +794,8 @@ function initializeData(country,insideValidation){
 
  // define time shifts start date - start date of the two data sources 
 
-  data_itmax =data.length-data_idataStart; // relative index
+  data_itmax=data.length-data_idataStart; 
   data2_itmax=data2.length-data2_idataStart;
-
 
   // testing the overall structure
 
@@ -845,6 +858,7 @@ function initializeData(country,insideValidation){
   pTest_weeklyPattern=[];
   dn_weeklyPattern=[];
 
+  
   for(var i=0; i<data.length; i++){
     data_date[i]=data[i]["date"];
     data_cumCases[i]=data[i]["confirmed"];
@@ -1060,7 +1074,7 @@ function initializeData(country,insideValidation){
 	// (2021-01-04)
         // updated to full test every 28 instead of 7 days=^ 100%
 
-        var pModel=Math.sqrt(28*data_dn[i]/n0); //!!! 
+        var pModel=Math.sqrt(tauInfectious_fullReporting*data_dn[i]/n0); 
 
 	// corrections if very vew tests (only at beginning)
 	// or pTest >1
@@ -1162,7 +1176,7 @@ function initializeData(country,insideValidation){
       //var logging=useLandkreise&&(i>data.length-10);
       //var logging=true;
       //var logging=false;
-      var logging=(i>data.length-14);
+      var logging=(i>data.length-10);
       if(logging){
 	var it=i-data_idataStart;
         var i2=i+data2_idataStart-data_idataStart;
@@ -2394,7 +2408,7 @@ function toggleTestnumber(){ // callback html "testnumber"
 function selectDataCountry(){ // callback html select box "countryData"
                               // "Deutschland"
 
-  
+  usePrevious=false;
   country=document.getElementById("countries").value;
   countryGer=countryGerList[country];
   n0=parseInt(n0List[country]);
@@ -2412,16 +2426,19 @@ function selectDataCountry(){ // callback html select box "countryData"
   document.getElementById("title").innerHTML=
     "Simulation der Covid-19 Pandemie "+ countryGer;
 
-  if(false){console.log("\n\nin selectDataCountry",
-	      "\n (only called in html select box callback",
-	      " and in myResetFunction()):",
-	      "\n country=",country,
-	      " country2=",country2,
-	      " itPresent=",itPresent);
+  if(true){console.log("\n\n\n\n\n\n\n\nin selectDataCountry",
+		       "\n (only called in html select box callback",
+		       " and in myResetFunction()):",
+		       "\n country=",country,
+		       " country2=",country2,
+		       " itPresent=",itPresent,
+		       " \n usePrevious=",usePrevious,
+		       "");
 	   }
   resetValidation();
   initializeData(country);
-
+  usePrevious=true;
+  console.log("  selectDataCountry: usePrevious=",usePrevious);
 } // selectDataCountry
 
  
@@ -2474,6 +2491,10 @@ function savePreviousSim(){ // save relevant data of drawsim for
 		"itPresent=",itPresent," itmaxPrev=",itmaxPrev);
   }
 
+  // in some combinations, drawsim not defined at the start
+  if( typeof drawsim === "undefined"){drawsim=new DrawSim();}
+
+  
   indicesPrev=[34,35,36,37,38,39,40];
   for(var iq=0; iq<indicesPrev.length; iq++){
     simPrevious[indicesPrev[iq]]=[];
@@ -2799,12 +2820,16 @@ function myMutationSim(){ // callback B117 B.1.1.7 Mutation
 
 function simulationRun() {
 
+  /*
   // misuse DOM headerValidText for printing corona-simulation.de for movies
+  // now in drawsim
   if(showCoronaSimulationDe){
     var websiteText=(isLandscape)
     ? "traffic-simulation.de" : "";
     document.getElementById("headerValidText").innerHTML=websiteText;
   }
+  */
+
 
   //console.log("simulationRun: before doSimulationStep: it=",it);
   doSimulationStep(); 
@@ -4420,7 +4445,7 @@ DrawSim.prototype.drawAxes=function(windowG){
       (windowG==0) ? yrelTopKey-6.5*dyrel :  // because of validation 2L more 
       (windowG==3) ? yrelTopKey-5.5*dyrel :
       (windowG==4) ? yrelTopKey-3.5*dyrel :
-      (measuresView) ? 0.30 : 0.45;
+      (measuresView) ? 0.30 : 0.33;
   
   var xrelLeft=0.02;
 
@@ -4459,6 +4484,31 @@ DrawSim.prototype.drawAxes=function(windowG){
 		 this.xPix0+xrelLeftDate*this.wPix,
 		 this.yPix0+yrelTopDate*this.hPix);
 
+
+    var xrelLeftDate=-0.06;
+    var yrelTopDate=(measuresView) ? 1.02 : 1.04;
+    ctx.fillStyle="rgb(0,0,0)";
+    ctx.fillText(str_date,
+		 this.xPix0+xrelLeftDate*this.wPix,
+		 this.yPix0+yrelTopDate*this.hPix);
+
+    // display traffic-simulation.de right bottom corner
+
+    if(showCoronaSimulationDe){
+      var textsizeWeb=(isSmartphone) ? textsize : 1.4*textsize;
+      ctx.font = "bold "+textsizeWeb+"px Arial";
+      ctx.fillStyle="rgb(127,127,127)";
+      ctx.fillText("traffic-simulation.de",
+		 this.xPix0+this.wPix-10*textsizeWeb,
+		 this.yPix0-1.4*textsizeWeb);
+      ctx.font = "normal "+textsize+"px Arial";
+      ctx.fillStyle="rgb(0,0,0)";
+
+    }
+
+    
+
+    
     // display other state variables anchored at xrelLeft,yrelTop
     
     var Xperc=100*corona.xyz;

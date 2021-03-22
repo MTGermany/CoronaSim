@@ -1,0 +1,151 @@
+Scenario Projections of the Covid-19 Pandemic 
+Using a Data-driven Macroscopic Model
+
+Slide 1
+=======
+
+
+Dear Ladies and Gentlemen of the virtual meeting,
+
+In my short presentation, I want to talk about an interactive online
+Covid-19 simulator and the models behind the hood
+
+In orer to enable interactivity and just-in-time calibration by the
+user, the models must be simple. Still, they should catch the most
+relevant aspects.
+
+So I used a common SEIR model with several modifications and
+additions:
+
+1. Explicit delays
+
+2. Including the test processes. After all, I am a physicists by
+education but work on an econometric chair now
+
+3. Mutation dynamics
+
+4. Introducing age strata and vaccination strategies to estimate the
+future fatalities
+
+
+[->] Slide 2: SEIR
+============
+
+The base model is the macroscopic SEIR model. It has four
+compartiments:
+
+S Susceptible to infections
+
+[->]
+E Exposed: Infected but still not contagious
+
+[->]
+I Infected proper: Infected and contagious, tunable delay of two days
+
+[->]
+R Removed from the active infection dynamics: Recovered, deceased, or
+...
+
+[->]
+vaccinated.
+
+In the simulator, the contagious period 2-10 days is
+tunable
+
+Indicated by the 2 arrows, infection depends multiplicatively on the
+percentage S and I with the base reproduction number R zero
+
+[->]
+However, this is only part of the story because all four states are
+unobserved quantities, so I need to include observations, i.e. tests
+
+* Depending on the test number, 10-40% of all infected are tested
+  after some delay [->] yielding with the sensitivity 1-alpha to test
+  positives which often stands for infected
+
+* [->] However, depending on the actual prevalence, the positive rate is
+  only between 1-20%. The rest are non-infected persons which are
+  tested negative with the specificity 1-beta and tested positive with
+  the beta error beta. So, test positives come from two sources,
+  infected and healthy ones and the proportion depends on the
+  prevalence, i.e., the true fraction of infected.
+
+[->], so, the simulator consists of [->][->][->]
+
+
+
+[->] Slide 3: Mutation
+=================
+
+The actual surge leading to the third wave about to roll in is, at
+least in Germany, manly caused by the new B.1.1.7 strain. Since, at
+the time of writing the abstract, this strain was not yet in the
+focus, my future projection in my abstract was abysmally
+wrong. However, I will show that this strain can, in fact, related
+nearly quantitatively to the third wave.
+
+[->] First, we need at least two observations of the penetration rate
+p of the B. 1.1.7
+
+[->] Evaluating the SEIR model with delays, we see that the odds ratio
+y grows exponential with growth rate r estimated by the observations
+
+[->] By transforming back, we obtain the estimated B.1.1.7 penetration
+dynamics p(t), just a sigmoidal function
+
+[->] validation: Other observations from the German destatis
+
+[->] How to estimate what the new strain is doing? Since it prevails
+over the wild type, it is obviously more contagious. We can estimate
+the R0 ratio
+[->] and the weighted sum of the R zeros by the effective R zero
+calibrated to the data
+
+[->] prediction of R0(t) and, by the SEIR model, of the third wave
+
+[->] Slide 4: IFR
+=================
+
+
+[->] ...
+
+So now let's vaccinate to down the age strata
+
+[-> Takes 30 days for maximum immunity
+
+
+
+[->] Slide 5: Simulations => Chrome window
+==========================================
+
+
+1. run standard ENGLISH, explain
+  * orange bar weekly incidence of positive tests (not infected persons)
+  * black bars: Covid-19 related deaths (nearly the real thing)
+  * red line: Simulator output after just-in-time calibration
+    => infection parameter view => measures view
+
+  * sliders R0, stringency, imported, vaccination
+
+2. standard projection
+
+3. [NEW TAB] ignore test frequency
+
+4. [NEW TAB] validate 21 days
+
+5. [NEW TAB] validate 49 days WITH stringency down 78%
+
+6. [NEW TAB] Vaccinate more
+
+Many thanks. Feel free to use my simulator traffic-simulation.de to
+make your own scenario projections
+
+
+
+
+
+
+
+
+
+

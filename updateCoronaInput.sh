@@ -1,20 +1,49 @@
 #!/bin/bash
 
-# get local data from some Saxony Landkreise
-# updateCoronaInput.sh
-echo ""; echo "getting RKI Landkreis data ..."
-updateLandkreisData.sh
+#####################################################################
+# 0. Parsing
+#####################################################################
+
+regular=true
+
+if(($#==0)); then
+    regular=true;
+    echo ""; echo "updateCoronaInput.sh: regular call";
+else
+    regular=false;
+    echo ""; echo "updateCoronaInput.sh: testing manipulations locally";
+fi
+echo "regular=$regular"
+if [[ $regular == true ]];
+then echo "in regular";
+else echo "in testing";
+fi
 
 
 #####################################################################
-# get data from the covid.ourworldindata website
+# 1. get local data from some Saxony Landkreise
+#####################################################################
+
+if [[ $regular == true ]];
+then
+    echo ""; echo "getting RKI Landkreis data ...";
+    updateLandkreisData.sh;
+else
+    echo "yet no updateLandkreisData.sh with testing option imple,mented"
+fi
+
+
+
+#####################################################################
+# 2. get data from the covid.ourworldindata website
 #####################################################################
 
 # this link recommended but does not allow wget
 # wget https://covid.ourworldindata.org/data/owid-covid-data.json
 
-if(($#==0)); then
-  echo ""; echo "wgetting OWID data for tests ..."
+if [[ $regular == true ]];
+then
+  echo ""; echo "regular:wgetting OWID data with tests ..."
 
   wget https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/owid-covid-data.json --output-document=data/githubWithTests.json
   cp data/githubWithTests.json data/githubWithTests_orig.json;
@@ -25,18 +54,13 @@ fi
 
 
 
- #only development!
-# cp data/githubWithTests_orig.json data/githubWithTests.json 
-
-
-
 # first make line for each country in order to select
 # >=2021-01-11: now a single line !!
 
 perl -i -p -e 's/\}\]\}\,/\}\]\},\n/g' data/githubWithTests.json
 
 ################################
-# select countries OWID
+# 2.1 select countries OWID
 ################################
 
 grep Germany data/githubWithTests.json > data/tmp.json
@@ -61,7 +85,7 @@ grep ZAF data/githubWithTests.json >> data/tmp.json # Suedafrika
 
 
 ################################
-# filter useless entries OWID
+# 2.2 filter useless entries OWID
 ################################
 
 # make each day a line for elimination
@@ -83,7 +107,7 @@ perl -i -p -e 's/\,\"tests_units\"\:\"[\w\s]+\"//g' data/tmp.json
 
 
 ################################
-# final touches OWID
+# 2.3 final touches OWID
 ################################
 
 # add variable name and necessary '  ' between rhs of var and } at the end
@@ -122,7 +146,7 @@ perl -i -p -e "s/ZAF/SouthAfrica/g" data/tmp2.json # cannot use spaces
 
 
 #####################################################################
-# clean up
+# 2.4 clean up
 #####################################################################
 
 mv data/tmp2.json data/githubWithTests.json
@@ -131,16 +155,25 @@ mv data/tmp.json data/githubWithTests_debug.json
 
 
 
+
 #####################################################################
-# get data w/o test from another github website
+# 3. get lean data w/o test from the pomber github website
 #####################################################################
 
-echo ""; echo "getting pomber github data for cases and deaths"
+if [[ $regular == true ]];
+then
+    echo ""; echo "regular: getting pomber github data for cases and deaths"
 
-wget https://pomber.github.io/covid19/timeseries.json --output-document=data/github.json
-cp data/github.json data/github_orig.json
+    wget https://pomber.github.io/covid19/timeseries.json --output-document=data/github.json;
+    cp data/github.json data/github_orig.json;
+else
+    echo ""; echo "debug mode: copying past downloaded pomber github data"
+    cp data/github_orig.json data/github.json;
+fi
 
-# separate countries in lines: all lines off, then ] => ]\n
+    
+
+# 3.1 separate countries in lines: all lines off, then ] => ]\n
 
 perl -i -p -e 's/\n//g' data/github.json
 perl -i -p -e 's/\]\,/\],\n/g' data/github.json
@@ -166,10 +199,17 @@ grep Australia data/github.json >> data/tmp.json
 grep Portugal data/github.json >> data/tmp.json
 grep "South Africa" data/github.json >> data/tmp.json
 
-# extract Germany data for development reference
+# 3.2 extract Germany data for development reference
+
+grep Germany data/github.json > data/github_debug_Germany.json
+perl -i -p -e 's/\}\,/\}\,\n/g' data/github_debug_Germany.json
+dateStr=`date +"%Y_%m_%d"`
+cp data/github_debug_Germany.json history/github_debug_Germany_$dateStr.json
 
 
-# add variable name and neceesary '  ' between rhs of var
+# 3.3 final touches
+
+add variable name and neceesary '  ' between rhs of var
 
 sed -e "1i\dataGitLocal=\'\{" data/tmp.json > data/tmp2.json
 echo "}'" >> data/tmp2.json
@@ -180,13 +220,13 @@ echo "}'" >> data/tmp2.json
 perl -i -p -e 's/\n//g' data/tmp2.json
 perl -i -p -e "s/\]\,\}/\]\}/g"  data/tmp2.json
 
-
-#####################################################################
-# final bookkeeping
-#####################################################################
-
 rm data/tmp.json
 mv data/tmp2.json data/github.json
+
+#####################################################################
+# 4. final bookkeeping
+#####################################################################
+
 
 # prepare full githubWithTests_orig for Germany with lines
 
@@ -200,17 +240,34 @@ perl -i -p -e 's/\,"\w+_per_\w+\"\:[\d\.]+//g' tmp
 perl -i -p -e 's/\,\"tests_units\"\:\"[\w\s]+\"//g' tmp
 
 rm tmp2
-mv tmp data/githubWithTests_orig_Germany_lines.json
+mv tmp data/githubWithTests_debug_Germany.json
 
 # save past json files to history
 # (because of the sluggishly reported deaths)
+
+
 
 dateStr=`date +"%Y_%m_%d"`
 cp data/github.json history/github_$dateStr.json
 cp data/githubWithTests.json history/githubWithTests_$dateStr.json
 cp data/RKI_selectedKreise.json history/RKI_selectedKreise_$dateStr.json
 
-# propagate changes
+# cp data/githubWithTests_debug.json history/githubWithTests_debug_$dateStr.json
+cp data/githubWithTests_debug_Germany.json history/githubWithTests_debug_Germany_$dateStr.json
+
+echo ""; echo "saved files to history reference:"
+ls -l history/github_$dateStr.json history/githubWithTests_$dateStr.json history/RKI_selectedKreise_$dateStr.json
+echo ""
+ls -l history/*debug*_$dateStr.json 
+
+
+
+
+#####################################################################
+# 5. propagate changes
+#####################################################################
+
+echo ""; echo "propagate to public_html directory"
 
 upload2public_html.sh
 
@@ -218,7 +275,7 @@ exit
 
 
 #####################################################################
-# get data from the eu opendata website
+# 3a. get data from the eu opendata website
 #####################################################################
 
 # get data. For some strange reason, target name needs to be entered twice
