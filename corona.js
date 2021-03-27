@@ -14,7 +14,7 @@ var measuresView=true;  // false: R0 and parameter view
 // useLiveData=false: obtained data server-side 
 // via script updateCoronaInput.sh. Stable but need to upload once a day
 
-var useLiveDataInit=false;  //!! will be changed by upload script, 2 versions
+var useLiveDataInit=true;  //!! will be changed by upload script, 2 versions
 var useLiveData=useLiveDataInit;
 
 var loggingDebug=false; //!! global var for testing functions inside calibr
@@ -33,10 +33,13 @@ var activateAnnotations=true; // if true, lines/curves can be drawn with mouse
 
 
 var country="Germany";
-var country2="Germany"; // needed for test data if(useLandkreise)
+var country2=""; // to be defined/needed for test data if(useLandkreise)
 var countryGer="Deutschland";
 var useLandkreise=false; // MT 2020-12-07: =true for new RKI Landkreis data
 
+
+document.getElementById("title").innerHTML=
+    "Simulation der Covid-19 Pandemie "+ countryGer;
 
 
 const ln10=Math.log(10);
@@ -120,6 +123,8 @@ var dataRKI_orig=[];
 
 // data related
 
+// do not use last datum (report delay bias in GER and FRA)
+var knockoffLastDatumGerFra=true; 
 var data_dateBegin; // Date object
 var data_idataStart; //!! dataGit dataset index for dayStartMar
 var data_itmax;  // !! with respect to dayStartMar=data.length-data_idataStart
@@ -165,7 +170,6 @@ var dn_weeklyPattern=[];  // constant extrapolation of #tests "
 // Fixed socioeconomic data of the simulated countries
 //#########################################################
 
-var n0=80.e6;  // #persons in Germany
 
 const countryGerList={
   "Germany": "Deutschland",
@@ -217,6 +221,8 @@ const n0List={
   "LK_Osterzgebirge"  : 245586,
   "SK_Dresden"        : 556780
 }
+
+var n0=n0List["Germany"];  // #persons in Germany
 
 // https://www.populationpyramid.net
 // cd populationStructure
@@ -487,6 +493,40 @@ var tauInfectious_fullReporting=84; // !! param of the sqrt pTest model
 var alphaTest=0.0; // alpha error of test (false negative)
 var betaTest=0.003; // beta error (false positive) after double testing
 
+// constant R0 influencing factors (asides from data-mutations)
+// investigation 2021-03-27:
+// (1) linear better than sqr in stringencyFactor(stringencyIndex)
+// measures ARE effective!
+// (2) season_relAmplitude=0.15 relativ. robust w/resp to other params
+// (3) season_fracYearPeak=-0.10 relativ. robust w/resp to other params
+//     but CZ autumn/winter impact artifact => shift to zero (01.01.)
+
+
+
+const stringencySensitivityLin=0.70;  // GER 0.70, AUT 0.75, FRA 0.70
+                                    // lin: decr. R[%] per icr. stringency[%]
+
+const stringencySensitivitySqr=0.70;  // sqr: R *=(1-str...Sqr) if stri=100%
+
+const season_fracYearPeak=0.00;   // peak of season dependence of R0
+                                  //!!! -0.1 better but CZ impact artifact
+                                  // GER,AUT 0; FRA 0.10, 
+                                  // SA 0.35, US 0.10, IND 0.35
+const season_relAmplitude=0.15;   // GER 0.15, AUT 0.20, FRA 0.10,
+                                  // SA 0.30, US 0.10, IND 0.10
+
+const str_sensitivStart="2020-04-10";// GER,AUT: 2020-04-01,
+                                     // all others: 2020-05-10
+const str_sensitivEnd="2021-01-10";  // all because of mut.
+var country="Germany";                       // unless Germany
+
+var countryGer=countryGerList[country]; // unless Germany
+
+
+
+document.getElementById("title").innerHTML=
+    "Simulation der Covid-19 Pandemie "+ countryGer;
+
 
 //###############################################################
 // calibration related parameters/variables
@@ -501,7 +541,7 @@ var itmax_calib; //  end calibr time interval =^ data_itmax-1
                  // 20 weeks of data
 
 const calibInterval=7; //!! calibr time interval [days] for one R0 value 7,14
-const Rinterval_last_min=14// do not calibrate remain. period smaller 14,21
+const Rinterval_last_min=17// do not calibrate remain. period smaller 14,21
 const calibrateOnce=false; // following variables only relevant if false
 const nCalibIntervals=6; // multiples of calibInterval, !! >=30/calibInterval
                          // calibrates nCalibIntervals-nOverlap+1 params
@@ -695,7 +735,7 @@ function initializeData(country,insideValidation){
   country2=(country==="United Kingdom") ? "England" :
     (country==="South Africa") ? "SouthAfrica" :country;
   
-  useLandkreise=(country==="LK_Erzgebirgskreis")
+  useLandkreise=(country==="LK_Erzgebirgskreis") // saxon!!
     || (country==="LK_Osterzgebirge") || (country==="SK_Dresden");
   
   IFR_dontUseLastDays=(useLandkreise)
@@ -706,13 +746,14 @@ function initializeData(country,insideValidation){
 	      "\nin initializeData(country): country=",country,
 	      " country2=",country2,
 	      "\n========================================================");
+  n0=parseInt(n0List[country]);
 
 
   // MT 2020-09  // [] access for strings works ONLY with "" or string vars
   // access ONLY for literals w/o string ""
 
   var data=(useLandkreise) ? dataRKI_orig[country] : dataGit_orig[country];
-  console.log("dataGit_orig[country]=",dataGit_orig[country]);
+  //console.log("dataGit_orig[country]=",dataGit_orig[country]);
   if(insideValidation){
     data=(useLandkreise) ? dataRKI[country] : dataGit[country];}
   var dateInitStr=data[0]["date"];
@@ -721,19 +762,29 @@ function initializeData(country,insideValidation){
   // !!! knock off the last datum in German data since often delayed
   // (ONLY Germany and France!)
 
-  if((nDaysValid==0)&&(dataGit["Austria"].length==data.length)
-     &&((country2==="Germany")||(country2==="France"))){
-    data.pop();
-    console.log(
-      "\n\n\n############\nGermany and France delay data delivery=>knock of last point",
-      "\n last date=",data[data.length-1].date,
-      "\n#####################");
+  var nloc=data.length;
+
+  if(knockoffLastDatumGerFra&&(nloc>9)){
+    var dxtFactor=(data[nloc-1]["confirmed"]-data[nloc-2]["confirmed"])/
+	(data[nloc-8]["confirmed"]-data[nloc-9]["confirmed"]);
+    var knockoffLast=(nDaysValid==0)&&(dataGit["Austria"].length==data.length)
+      &&((country2==="Germany")||(country2==="France"))
+	&&(dxtFactor<0.5);
+    if(knockoffLast){
+      data.pop();
+      console.log(
+        "\n\n\n############\nGermany and France delay data delivery=>knock of last point",
+        "\n last date=",data[data.length-1].date,
+        "\n#####################");
+    }
   }
 
+  if(false){
+    console.log("dataGit2_orig=",dataGit2_orig);
+    console.log("dataGit2_orig[country2]=",dataGit2_orig[country2]);
+    console.log("dataGit2[country2]=",dataGit2[country2]);
+  }
   
-  console.log("dataGit2_orig=",dataGit2_orig);
-  console.log("dataGit2_orig[country2]=",dataGit2_orig[country2]);
-  console.log("dataGit2[country2]=",dataGit2[country2]);
   var data2=(insideValidation)
       ? dataGit2[country2].data : dataGit2_orig[country2].data;
   var dateInitStr2=data2[0]["date"];
@@ -799,7 +850,7 @@ function initializeData(country,insideValidation){
 
   // testing the overall structure
 
-  if(true){
+  if(false){
     var nxtStart=data[data_idataStart]["confirmed"];
 
     console.log(
@@ -956,7 +1007,7 @@ function initializeData(country,insideValidation){
   for(var i=1; i<data.length; i++){
     data_rVacc_unsmoothed[i]=(data_cumVacc[i]-data_cumVacc[i-1])/n0;
     if(useLandkreise){
-      data_rVacc_unsmoothed[i] *= n0/n0List["Germany"]; //!!! n0/noGermany
+      data_rVacc_unsmoothed[i] *= n0/n0List[country2]; //!!! n0/n0Germany n02
       //console.log("n0=",n0," n0List[\"Germany\"]=",n0List["Germany"]);
     }
     if(false){
@@ -1075,7 +1126,7 @@ function initializeData(country,insideValidation){
         // updated to full test every 28 instead of 7 days=^ 100%
 
         var pModel=Math.sqrt(tauInfectious_fullReporting*data_dn[i]/n0); 
-
+	if(i==200){console.log("data_dn[i]=",data_dn[i]," n0=",n0);}
 	// corrections if very vew tests (only at beginning)
 	// or pTest >1
 	
@@ -1176,10 +1227,12 @@ function initializeData(country,insideValidation){
       //var logging=useLandkreise&&(i>data.length-10);
       //var logging=true;
       //var logging=false;
-      var logging=(i>data.length-10);
+      //var logging=(i>data.length-5);
+      var logging=(i==200);
       if(logging){
 	var it=i-data_idataStart;
         var i2=i+data2_idataStart-data_idataStart;
+	console.log("data2[i2]=",data2[i2]);
 	var scheissData2Undefined=(typeof data2[i2] === "undefined");
 	console.log(
 	  " data: ",insertLeadingZeroes(data[i]["date"]),
@@ -1190,6 +1243,7 @@ function initializeData(country,insideValidation){
 	  //" data_dyt=",Math.round(data_dyt[i]),
 	  " data_dz=",Math.round(data_dz[i]),
 	  " data_dn[i]=",data_dn[i].toFixed(1),
+	  " data_posRate[i]=",data_posRate[i],
 	  "\n  data_pTestModel[i]=",data_pTestModel[i].toFixed(3),
 	  " data_pTestModelSmooth[i]=",data_pTestModelSmooth[i].toFixed(3),
 	  " data_cumCases=",Math.round(data_cumCases[i]),
@@ -1281,7 +1335,7 @@ function initializeData(country,insideValidation){
   myRestartFunction();
 
 
-  if(true){
+  if(false){
     console.log("\nend initializeData: country=",country,
 		" insideValidation=",insideValidation,
 		" ");
@@ -1296,26 +1350,65 @@ function initializeData(country,insideValidation){
 //##############################################################
 
 function stringencyFactor(stringencyIndex){
-  //return 1-0.7*(Math.pow(stringencyIndex/100,2));
-  return 1-0.005*stringencyIndex;
+  //return 1-stringencySensitivitySqr*(Math.pow(stringencyIndex/100,2));
+  return 1-0.01*stringencySensitivityLin*stringencyIndex;
   //return 1;
 }
 
 //##############################################################
-// like influenca, covid19 is more active in winter
+// like influenca, covid19 is more active in winter [=>weather,climate]
 // relate factor to present to make simple future projections
 // deactivate season/winter/summer curve by relAmplitude=0;
 //##############################################################
 
 function calc_seasonFactor(it){
-  var fracYearPeak=0.10; //  (first week February)
-  var relAmplitude=0.1; // !!! factor (1+/-relAmplitude)  (0.2)
-  var phase=2*Math.PI*(dayStartYear+it-fracYearPeak)/365.;
-  var phasePresent=2*Math.PI*(dayStartYear+itPresent-fracYearPeak)/365.;
-  var factor=1+relAmplitude*Math.cos(phase);
-  var factorPresent=1+relAmplitude*Math.cos(phasePresent);
-  return factor/factorPresent;
+  var phase=2*Math.PI*((dayStartYear+it-365)/365. - season_fracYearPeak);
+  var factor=1+season_relAmplitude*Math.cos(phase);
+ // var factorPresent=1+season_relAmplitude*Math.cos(phasePresent);
+  if(false){
+  //if(it>itPresent){
+    console.log("calc_seasonFactor: it=",it," itPresent=",itPresent,
+		" phase/2pi=",phase/(2*Math.PI));
+  }
+  return factor;
 }
+
+//##############################################################
+// general statistics helper function
+//##############################################################
+
+function getArithmeticAverage(xdata,imin,imax){
+  if (!((imin>=0)&&(imax>=imin)&&(imax<xdata.length))){
+    console.log("getArithmeticAverage: error: xdata.length=",xdata.length,
+		" indexMin=",imin," indexMax=",imax);
+    return -1;
+  }
+  else{ // regular
+    var sum=0;
+    for(var i=imin; i<=imax; i++){sum+=xdata[i];}
+    sum/=(imax-imin+1);
+    return sum;
+  }
+}
+
+function getVariance(xdata,imin,imax){
+  if (!((imin>=0)&&(imax>imin)&&(imax<xdata.length))){
+    console.log("getVariance: error: xdata.length=",xdata.length,
+		" indexMin=",imin," indexMax=",imax);
+    return -1;
+  }
+  else{ // regular
+    var avg=getArithmeticAverage(xdata,imin,imax);
+    var sum=0;
+    for(var i=imin; i<=imax; i++){sum+=(xdata[i]-avg)*(xdata[i]-avg);}
+    sum/=(imax-imin);  // (n-1 data points)
+    return sum;
+  }
+}
+
+
+
+    
 
 //##############################################################
 // function for variable replication rate R0 as a function of time
@@ -1661,7 +1754,7 @@ function getIndexCalib(itime){
   return Math.floor(itime/calibInterval);     // MT 2020-08
 }
 
-// last calibration interval must have at least 16 days
+// last calibration interval must have at least Rinterval_last_min days
 function getIndexCalibmax(itime){
   return getIndexCalib(itime-Rinterval_last_min); 
 }
@@ -1836,8 +1929,9 @@ function calibrate(){
   console.log("calibrate(): calibrating R0 finished",
 	      "\n final R0 values R0time=",R0time,
 	      "\n fit quality sse=",sse);
-  console.log("itPresent=",itPresent,
-	      " getIndexCalibmax(itPresent)",getIndexCalibmax(itPresent));
+  
+  //console.log("itPresent=",itPresent,
+//	      " getIndexCalibmax(itPresent)",getIndexCalibmax(itPresent));
   if(false){
     for(var i=data_date.length-7; i<data_date.length; i++){ //!!
       var it=i-data_idataStart;
@@ -1850,6 +1944,35 @@ function calibrate(){
     }
   }
 
+  //################################################
+  // check which lockdown sensitivity fits best the data, i.e., minimizes
+  // variations of R0 before onset of new moutation Jan 2021
+  //################################################
+  
+  if(true){
+    var daySensitivStart=new Date(str_sensitivStart);
+    var daySensitivEnd=new Date(str_sensitivEnd);
+
+    var itSensitivStart=Math.floor(
+      (daySensitivStart.getTime() - startDay.getTime())/oneDay_ms);
+    var itSensitivEnd=Math.floor(
+      (daySensitivEnd.getTime() - startDay.getTime())/oneDay_ms);
+    var jmin=Math.max(0,getIndexCalib(itSensitivStart));
+    var jmax=Math.min(getIndexCalib(itSensitivEnd), R0time.length-1);
+
+    var R0_avg=getArithmeticAverage(R0time,jmin,jmax);
+    var R0_var=getVariance(R0time,jmin,jmax);
+
+    console.log("daySensitivStart=",str_sensitivStart,
+		"daySensitivEnd=",str_sensitivEnd,
+		" stringencySensitivityLin=",stringencySensitivityLin,
+		" season_fracYearPeak=",season_fracYearPeak,
+		" season_relAmplitude=",season_relAmplitude,
+		"\nR0-varcoeff=R0_stddev/R0_avg=",Math.sqrt(R0_var)/R0_avg,
+		" R0_avg=",R0_avg," jmin=",jmin," jmax=",jmax,
+		" R0time.length=",R0time.length,
+		"");
+  }
 
 
    /** ##############################################################
@@ -1859,7 +1982,7 @@ function calibrate(){
   ############################################################## */
 
 
-  console.log("\n\ncalibrate(): entering calibration of IFR ...");
+  //console.log("\n\ncalibrate(): entering calibration of IFR ...");
 
   // depends on IFR_dontUseLastDays see beginning of corona.js
   var itmax_calibIFR=data_dz.length-data_idataStart-IFR_dontUseLastDays;
@@ -1875,7 +1998,7 @@ function calibrate(){
 
   var itrest=itmax_calibIFR%IFRinterval;
   
-  if(true){
+  if(false){
     console.log("IFR calibration: IFR_dontUseLastDays=",IFR_dontUseLastDays,
 		"\n  IFRinterval_last_min=",IFRinterval_last_min,
 		"\n  itmax_calibIFR=",itmax_calibIFR,
@@ -1920,7 +2043,7 @@ function calibrate(){
   
   // !!remove drifts due to the local calibration
 
-  console.log("before removing drifts: IFR65time=",IFR65time);
+  //console.log("before removing drifts: IFR65time=",IFR65time);
   if(false){
   var cumDeathsSim=[];
   cumDeathsSim[0]=data_cumDeaths[data_idataStart];
@@ -1966,7 +2089,7 @@ function calibrate(){
   }
 
 
-  console.log("final calibrated IFR65: IFR65time=",IFR65time);
+  //console.log("final calibrated IFR65: IFR65time=",IFR65time);
 
   
   //!! ANNOYING slightest shift after any country choice back to Germany
@@ -2486,7 +2609,7 @@ function savePreviousSim(){ // save relevant data of drawsim for
     // association see cstr drawSim
     // !! check "def simPrevious"
 
-  if(true){ 
+  if(false){ 
     console.log("in savePreviousSim: ",
 		"itPresent=",itPresent," itmaxPrev=",itmaxPrev);
   }
@@ -2650,30 +2773,31 @@ function myStartStopFunction(){ //!! hier bloederweise Daten noch nicht da!!
 function myRestartFunction(){
   savePreviousSim();
   //console.log("in myRestartFunction: itPresent=",itPresent);
-  //!!!
-  console.log("simulateMutation=",simulateMutation);
+  //console.log("simulateMutation=",simulateMutation);
   if(simulateMutation){
     itStartMut=itPresent-startMut2present-nDaysValid; //!! start B117 dynamics
-    var R0StartMut=R0fun_time(R0time,itStartMut);//!!! include valid! 
-    console.log("myRestartFunction, simulateMutation=true:",
+    var R0StartMut=R0fun_time(R0time,itStartMut);//!!! include valid!
+    if(false){
+      console.log("myRestartFunction, simulateMutation=true:",
 		"\n itPresent=",itPresent,
 		"\n nDaysValid=",nDaysValid,
 		"\n startMut2present=",startMut2present,
 		"\n nDaysValid=",nDaysValid,
 		"\n itStartMut=",itStartMut,"  R0StartMut=",R0StartMut,
-	       "");
+		  "");
+    }
     mutationDynamics=new MutationDynamics(
       dateOld, pOld, dateNew, pNew, R0StartMut, itStartMut);
-    console.log("\n\nmutationDynamics=",mutationDynamics,"\n\n");
+    //console.log("\n\nmyRestartFunction: mutationDynamics=",mutationDynamics,"\n\n");
     //mutationDynamics.update(itPresent);
     //mutationDynamics.update(itPresent+7);
   }
 
   rVacc=0; // as long as vaccinations not yet in data
   setSlider(slider_rVacc, slider_rVaccText, 700*rVacc, " %/Woche");
-  console.log("myRestartFunction before initialize");
+  //console.log("myRestartFunction before initialize");
   initialize();
-  console.log(" myRestartFunction after initialize: drawsim.itmin=",drawsim.itmin);
+  //console.log(" myRestartFunction after initialize: drawsim.itmin=",drawsim.itmin);
   fps=fpsstart;
   it=0; //!!! only instance apart from init where global it is reset to zero
         // cannot set it=itPresen if simulateMutation
@@ -2825,7 +2949,7 @@ function simulationRun() {
   // now in drawsim
   if(showCoronaSimulationDe){
     var websiteText=(isLandscape)
-    ? "traffic-simulation.de" : "";
+    ? "corona-simulation.de" : "";
     document.getElementById("headerValidText").innerHTML=websiteText;
   }
   */
@@ -3021,7 +3145,7 @@ function MutationDynamics(dateOld, pOld, dateNew, pNew,
   
   this.R0wild=R0Start/(1+pStart*(ratioMutWild-1));
   this.R0mut=ratioMutWild*this.R0wild;
-  if(true){
+  if(false){
     console.log("MutationDynamics Constructor: dt=",this.dt,
 		" itNew=",this.itNew,
 		" itStart=",this.itStart,
@@ -3523,9 +3647,12 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
   }
   
  
-  this.Reff=R0*(1-Ivacc)*(1-this.xyz)
-    * ((it<=itPresent) ? 1 : calc_seasonFactor(it));
+  this.Reff=R0 * (1-Ivacc) * (1-this.xyz)
+   // * ((it<=itPresent) ? 1 : calc_seasonFactor(it)); //!!!!
+    * calc_seasonFactor(it); //!!!! if use this, adapt continuation!!
+   // * ((it<=itPresent) ? calc_seasonFactor(it) : calc_seasonFactor(itPresent)*calc_seasonFactor(it));
 
+  
   // include political measures by stringency in [0,100]
   
   if(inCalibration||(!stringencySlider_moved)){
@@ -3535,7 +3662,13 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
   }
   this.Reff *=stringencyFactor(stringency);
   
-  
+  if(false){
+  //if(!inCalibration){
+    console.log(" updateOneDay: it-itPresent=",it-itPresent,
+		" R0=",R0," this.Reff=", this.Reff,
+		" seasonFactor=",calc_seasonFactor(it));
+  }
+
   // source term from external trips
 
   var x0source=casesInflow/100000; // from returners of foreign regions
@@ -4492,13 +4625,13 @@ DrawSim.prototype.drawAxes=function(windowG){
 		 this.xPix0+xrelLeftDate*this.wPix,
 		 this.yPix0+yrelTopDate*this.hPix);
 
-    // display traffic-simulation.de right bottom corner
+    // display corona-simulation.de right bottom corner
 
     if(showCoronaSimulationDe){
       var textsizeWeb=(isSmartphone) ? textsize : 1.4*textsize;
       ctx.font = "bold "+textsizeWeb+"px Arial";
       ctx.fillStyle="rgb(127,127,127)";
-      ctx.fillText("traffic-simulation.de",
+      ctx.fillText("corona-simulation.de",
 		 this.xPix0+this.wPix-10*textsizeWeb,
 		 this.yPix0-1.4*textsizeWeb);
       ctx.font = "normal "+textsize+"px Arial";
