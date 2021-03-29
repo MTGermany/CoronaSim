@@ -1,0 +1,106 @@
+Corona-simulation.de: Wirken Lockdowns?
+
+[ich]
+
+Hallo liebe Simulationsfreunde,
+
+eine der wichtigsten und gleichzeitig kontroversesten Fragen bei der
+Seuche ist, in wie weit Lockdowns wirken und wenn ja, in welchem Maß
+
+Warum ist die Frage so schwierig und nicht abschließend geklärt?
+Einfach, weil man keine Experimente machen kann. Man muss die
+Tatsachen und Daten mit allen ihren dreckigenn Störfakoren nehmen,
+wie sie sind! Die Störaktoren und Probleme sind vielfältig
+
+* Wie drückt man die Lockdownstärke in ein quantitatives,
+  eindimensionales Maß aus?
+
+* Einwohner unterschiedlicher Länder haben unterschiedliche
+  Mentalität. Wie berücksichtigen?
+
+* Unterschiedliches Wetter und Klima, sowohl zwischen den Ländern
+  als auch Winter und Sommer mit unbekanntem Einfluss
+
+* Zahl der Infizierten ist nicht bekannt, nur positiv Getestete
+
+* Änderung der Dynamik durch Teil-Immunität bereits Erkrankter
+  oder der wachsenden Zahl an Geimpften
+
+* Vielfältige Einträge von außen, z.B. in Deutschland zur Zeit aus Polen
+  und Tschechien
+
+* Änderung der Dynamik durch neue Virus-Mutationen wie z.B. die
+  verbreitung von B.1.1.7 in Deutschland, siehe letztes Video
+
+
+Mit meinem Simulator habe ich die Möglichkeit, viele dieser
+Probleme und Störfaktoren zu eliminieren:
+
+[Start Sim mit kl Bild]
+
+* Quantitatives Maß: Der "Stringency-Index der Our World-in Data
+(OWID) Initiative: Er liefert ein vergleichbares Maß für nahezu alle
+Länder dieser Welt. Nicht perfekt, aber er liefert genau das, was
+ich will: Reduktion auf ein eindim quantitatives Maßvon 0 bis 100
+
+* Einwohner unterschiedlicher Länder:
+[Auf Länderauswahl gehen->Österreich]
+Getrennt simulieren und Faktorstärke berechnen. Ist sie in vielen
+Ländern ähnlich, gibt das Vertrauen
+
+* Unterschiedliches Wetter und Klima: Das führe ich neben den
+  Stringency-Index und der Länderauswahl als dritten Faktor
+  heraus. Ich betrachte dabei grob angenähert einen sinusförmigen
+  Verlauf, der multiplikativ auf die Reproduktionszahl eingeht,
+  z.B. Sommer Faktor 0.85, Winter Faktor 1.15. Amplitude
+  und Phase kann ich wählen, z.B. erwarte ich ein Maximum im
+  Mai-August in Ländern auf de rSüdhalbkugel und Amplitude nahe
+  null in Ländern ohne Jahreszeiten
+
+* Zahl der Infizierten ist nicht bekannt, nur Proxy durch
+  Test-Positive: Macht mein Simulator [Österreich auf Neuinfiz vs
+  Tests gehen]
+
+* Änderung der Dynamik durch Teil-Immunität: Macht ebenfalls mein
+  Simulator automatisch [Sim Durchseuchung, Impf-Immunität erster
+  und letzte Zeile Text li unten]
+
+* Einträge von außen und neue Mutationen: Das kann ich nicht direkt
+  quantitativ automatisch kontrollieren, so dass ich Zeiträume ohne
+  starke Änderungen wähle, z.B. höre ich mit der Analyse im
+  Januar 2021 auf, da bis dahin wenig neue Mutationen
+
+
+Was ist nun die Take-Home-Message? Ich habe anhand vieler Länder
+gezeigt, dass ein Lockdown wirksam ist. Je nach Land ist die lineare
+Sensitivität zwischen 0.6 und 0.9, in Deutschland 0.75,
+d.h. Absolute Maximal-Lockdown von 100% reduziert den R-Wert um den
+Faktor 1-0.75=0.25, viertelt also den R0-Wert gegenüber keinerlei
+Maßnahmen.
+
+Ferner habe ich neben der linearen Abhängigkeit auch eine
+quadratische getestet, so dass der Unterschied zwischen 90% und 100%
+größer ist als zwischen 0 und 10%. Da zeigte sich aber, dass das
+die Daten weniger gut bechrieb. Also beschreibt der Stringency-Index
+recht gut eine lineare Abhängigkeit. Dies ist a priori keinesfalls
+klar, da ja der Stringency-Index viele qualitative Maßnahmen in ein
+quantitatives Maß bündelt
+
+Schließlich: Es gibt eine Saisonabhängigkeit, diese ist aber
+schwächer als bei Grippe.In Deutschland ist die Amplitude 10% und
+die Phase 0, also ist im Januar der R-Wert bei sonst gleichen
+Verhältnissen um Faktor 1.1, im Juli um Faktor 0.9
+geändert. Länder auf der Südhalbkugel zeigten wie zu erwarten
+eine Phase um 180 Grad, also Maximum zwischen mai und Juli, viele
+Länder auch eine stärkere Amplitude von 20%. Der Effekt ist also
+deutlich geringer als der der Lockdown-Maßnahmen.
+
+Schließlich noch die aktuelle Corona-Voraussage für Deutschland:
+
+
+Machen Sie's gut und empfehlen Sie das Video, wenn es Ihnen gefallen
+hat!
+
+
+
+

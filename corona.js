@@ -93,14 +93,14 @@ var dayStartMarInit=8; //!! can also exceed 31, date initializer takes it
 var dayStartMar=dayStartMarInit; 
 
 var dayStartYear=dayStartMar+59;
-var startDay=new Date(2020,02,dayStartMar); // months start @ zero, days @ 1
+var dateStart=new Date(2020,02,dayStartMar); // months start @ zero, days @ 1
 var present=new Date();   // time object for present 
 var it=0;
 var oneDay_ms=(1000 * 3600 * 24);
 var itPresentInit=Math.floor(
-    (present.getTime() - startDay.getTime())/oneDay_ms); 
-                // itPresent=days(present-startDay)
-                // floor because startDay time is 00:00 of given day
+    (present.getTime() - dateStart.getTime())/oneDay_ms); 
+                // itPresent=days(present-dateStart)
+                // floor because dateStart time is 00:00 of given day
 
 var itPresent=itPresentInit;
 
@@ -125,10 +125,14 @@ var dataRKI_orig=[];
 
 // do not use last datum (report delay bias in GER and FRA)
 var knockoffLastDatumGerFra=true; 
-var data_dateBegin; // Date object
+
+//var data_dateBegin; // Date object //!!!! remove
+//var data_dateEnd; // Date object
 var data_idataStart; //!! dataGit dataset index for dayStartMar
 var data_itmax;  // !! with respect to dayStartMar=data.length-data_idataStart
 
+//var data2_dateBegin; // Date object //!!!! remove
+//var data2_dateEnd; // Date object //!!!! remove
 var data2_idataStart; // same for dataGit2 set  containing the corona-test data
 var data2_itmax;
 var di2=0;  // i2-i for same date FROM THE END
@@ -503,24 +507,27 @@ var betaTest=0.003; // beta error (false positive) after double testing
 
 
 
-const stringencySensitivityLin=0.70;  // GER 0.70, AUT 0.75, FRA 0.70
-                                    // lin: decr. R[%] per icr. stringency[%]
+const stringencySensitivityLin=0.75; // lin decr. R[%] per icr. stringency[%]
+                                    // GER 0.70, AUT 0.75, FRA 0.70, CZ 0.70
 
-const stringencySensitivitySqr=0.70;  // sqr: R *=(1-str...Sqr) if stri=100%
-
-const season_fracYearPeak=0.00;   // peak of season dependence of R0
+const season_fracYearPeak=1.00;   // peak of season dependence of R0
                                   //!!! -0.1 better but CZ impact artifact
                                   // GER,AUT 0; FRA 0.10, 
-                                  // SA 0.35, US 0.10, IND 0.35
-const season_relAmplitude=0.15;   // GER 0.15, AUT 0.20, FRA 0.10,
-                                  // SA 0.30, US 0.10, IND 0.10
+                                  // SA 0.35, US 0.10, IND 0.35, CZ 0.10
+const season_relAmplitude=0.10;   // GER 0.15, AUT 0.20, FRA 0.10,
+                                  // SA 0.30, US 0.10, IND 0.10, CZ 0.20
 
 const str_sensitivStart="2020-04-10";// GER,AUT: 2020-04-01,
                                      // all others: 2020-05-10
 const str_sensitivEnd="2021-01-10";  // all because of mut.
-var country="Germany";                       // unless Germany
 
-var countryGer=countryGerList[country]; // unless Germany
+const stringencySensitivitySqr=0.70;  // [sqr: R *=(1-str...Sqr) if stri=100%]
+
+
+
+var country="Germany";               // Germany, Czechia
+
+var countryGer=countryGerList[country]; 
 
 
 
@@ -541,7 +548,7 @@ var itmax_calib; //  end calibr time interval =^ data_itmax-1
                  // 20 weeks of data
 
 const calibInterval=7; //!! calibr time interval [days] for one R0 value 7,14
-const Rinterval_last_min=17// do not calibrate remain. period smaller 14,21
+const Rinterval_last_min=14// do not calibrate remain. period smaller 14,21
 const calibrateOnce=false; // following variables only relevant if false
 const nCalibIntervals=6; // multiples of calibInterval, !! >=30/calibInterval
                          // calibrates nCalibIntervals-nOverlap+1 params
@@ -749,6 +756,8 @@ function initializeData(country,insideValidation){
   n0=parseInt(n0List[country]);
 
 
+  // =========== primary data "data" ==============================
+  
   // MT 2020-09  // [] access for strings works ONLY with "" or string vars
   // access ONLY for literals w/o string ""
 
@@ -756,9 +765,12 @@ function initializeData(country,insideValidation){
   //console.log("dataGit_orig[country]=",dataGit_orig[country]);
   if(insideValidation){
     data=(useLandkreise) ? dataRKI[country] : dataGit[country];}
-  var dateInitStr=data[0]["date"];
-  var dateMaxStr=insertLeadingZeroes(data[data.length-1]["date"]);
 
+  
+  var dataMinDateStr=insertLeadingZeroes(data[0]["date"]);
+  var dataMaxDateStr=insertLeadingZeroes(data[data.length-1]["date"]);
+
+  
   // !!! knock off the last datum in German data since often delayed
   // (ONLY Germany and France!)
 
@@ -784,37 +796,48 @@ function initializeData(country,insideValidation){
     console.log("dataGit2_orig[country2]=",dataGit2_orig[country2]);
     console.log("dataGit2[country2]=",dataGit2[country2]);
   }
+
+
   
+  // =========== secondary data "data2" for tests and vaccinations =====
+
   var data2=(insideValidation)
       ? dataGit2[country2].data : dataGit2_orig[country2].data;
-  var dateInitStr2=data2[0]["date"];
-  var dateMaxStr2=data2[data2.length-1]["date"];
 
+  
+  var data2MinDateStr=data2[0]["date"];
+  var data2MaxDateStr=data2[data2.length-1]["date"];
+
+  
   // define index shift di2=i2-i1 for same date
   // (define from the end since some data weekly (!) at very beginning)
   // (see also !!! if useLandkreise)
-  var dateMax=new Date(insertLeadingZeroes(dateMaxStr));
-  var dateMax2=new Date(insertLeadingZeroes(dateMaxStr2));
+  
+  var dataMinDate=new Date(dataMinDateStr);
+  var dataMaxDate=new Date(dataMaxDateStr);
+  var data2MinDate=new Date(data2MinDateStr);
+  var data2MaxDate=new Date(data2MaxDateStr);
+
   di2=data2.length-data.length
-    -Math.round((dateMax2.getTime()-dateMax.getTime())/oneDay_ms);
+    -Math.round( (data2MaxDate.getTime()-dataMaxDate.getTime() )/oneDay_ms);
+
+
+  // ========== define start of simulation ======================
 
   // !! re-initialize; otherwise consequential errors after switching back
   // to countries with more data
   
   dayStartMar=dayStartMarInit;
-  dayStartYear=dayStartMar+59; // for season effects
-  startDay=new Date(2020,02,dayStartMar);
+  dayStartYear=dayStartMar+59; // for calc_seasonFactor
+  dateStart=new Date(2020,02,dayStartMar);
   itPresent=itPresentInit;
 
- // define time shifts start date - start date of the two data sources 
+  // define start date of the two data sources FROM THE END
+  // since data2 sometimes only has weekly entries at the beginning
 
-  data_dateBegin=new Date(insertLeadingZeroes(dateInitStr));
-  data_idataStart=Math.round( // absolute index
-    (startDay.getTime() - data_dateBegin.getTime() )/oneDay_ms);
-
-  data2_dateBegin=new Date(insertLeadingZeroes(dateInitStr2));
-  data2_idataStart=Math.round(
-    (startDay.getTime() - data2_dateBegin.getTime() )/oneDay_ms);
+  data_idataStart=data.length-1 - Math.round( // absolute index
+    (dataMaxDate.getTime()-dateStart.getTime() )/oneDay_ms);
+  data2_idataStart=data_idataStart+di2;
 
   
   // MT 2020-12-10: Check if already cases at intended sim start day
@@ -835,7 +858,7 @@ function initializeData(country,insideValidation){
     var daysForwards=iFirstCase+daysCasesWarmupMin-data_idataStart;
     data_idataStart+=daysForwards;
     data2_idataStart+=daysForwards;
-    startDay=new Date(2020,02,dayStartMar+daysForwards);
+    dateStart=new Date(2020,02,dayStartMar+daysForwards);
     dayStartYear+=daysForwards;
     itPresent -= daysForwards; // di2 unchanged
     console.log("Warning: no data >=ten days before sim start",
@@ -850,12 +873,12 @@ function initializeData(country,insideValidation){
 
   // testing the overall structure
 
-  if(false){
+  if(true){
     var nxtStart=data[data_idataStart]["confirmed"];
 
     console.log(
       "\nChecking times: ",
-      "startDay=",startDay," present=",present,
+      "dateStart=",dateStart," present=",present,
       " itPresent=",itPresent,
       "\nTesting the overall read data structure:",
       "\ndata.length=",data.length,"  data2.length=",data2.length,
@@ -864,7 +887,7 @@ function initializeData(country,insideValidation){
       "\ndata_itmax=",data_itmax,"  data2_itmax=",data2_itmax,
       "\n\ndata[0][\"date\"]=",data[0]["date"],
       "  data2[0][\"date\"]=",data2[0]["date"],
-      "\ndateMaxStr=",dateMaxStr," dateMaxStr2=",dateMaxStr2,
+      "\ndataMaxDateStr=",dataMaxDateStr," data2MaxDateStr=",data2MaxDateStr,
       "\ndi2=",di2,
       "\ndata[data.length-20][\"date\"]=",data[data.length-20]["date"],
       "  data2[data.length-20+di2][\"date\"]=",data2[data.length-20+di2]["date"],
@@ -1127,6 +1150,8 @@ function initializeData(country,insideValidation){
 
         var pModel=Math.sqrt(tauInfectious_fullReporting*data_dn[i]/n0); 
 	if(i==200){console.log("data_dn[i]=",data_dn[i]," n0=",n0);}
+
+
 	// corrections if very vew tests (only at beginning)
 	// or pTest >1
 	
@@ -1153,7 +1178,7 @@ function initializeData(country,insideValidation){
 
 
     else{// no dn data
-      data_pTestModel[i]= pTestInit; //MT 2020-11 change from pTestModelMin
+      data_pTestModel[i]= (i>0) ? data_pTestModel[i-1] : pTestInit;
     }
 
   }
@@ -1221,14 +1246,16 @@ function initializeData(country,insideValidation){
       "\ndata[0][\"date\"]=",data[0]["date"],
       " data[data.length-1][\"date\"]=",data[data.length-1]["date"],
       "\ndata2[0][\"date\"]=",data2[0]["date"],
-      " data2[data2.length-1][\"date\"]=",data2[data2.length-1]["date"]);
+      " data2[data2.length-1][\"date\"]=",data2[data2.length-1]["date"],
+      "data2.length=",data2.length);
 
     for(var i=0; i<data.length; i++){
       //var logging=useLandkreise&&(i>data.length-10);
       //var logging=true;
       //var logging=false;
-      //var logging=(i>data.length-5);
-      var logging=(i==200);
+      //var logging=(i>data.length-10);
+      var logging=(i>data.length-4);
+      //var logging=(i==200);
       if(logging){
 	var it=i-data_idataStart;
         var i2=i+data2_idataStart-data_idataStart;
@@ -1377,35 +1404,66 @@ function calc_seasonFactor(it){
 // general statistics helper function
 //##############################################################
 
-function getArithmeticAverage(xdata,imin,imax){
-  if (!((imin>=0)&&(imax>=imin)&&(imax<xdata.length))){
-    console.log("getArithmeticAverage: error: xdata.length=",xdata.length,
+function getArithmeticAverage(ydata,imin,imax){
+  if (!((imin>=0)&&(imax>=imin)&&(imax<ydata.length))){
+    console.log("getArithmeticAverage: error: ydata.length=",ydata.length,
 		" indexMin=",imin," indexMax=",imax);
     return -1;
   }
   else{ // regular
     var sum=0;
-    for(var i=imin; i<=imax; i++){sum+=xdata[i];}
+    for(var i=imin; i<=imax; i++){sum+=ydata[i];}
     sum/=(imax-imin+1);
     return sum;
   }
 }
 
-function getVariance(xdata,imin,imax){
-  if (!((imin>=0)&&(imax>imin)&&(imax<xdata.length))){
-    console.log("getVariance: error: xdata.length=",xdata.length,
+function getVariance(ydata,imin,imax){
+  if (!((imin>=0)&&(imax>imin)&&(imax<ydata.length))){
+    console.log("getVariance: error: ydata.length=",ydata.length,
 		" indexMin=",imin," indexMax=",imax);
     return -1;
   }
   else{ // regular
-    var avg=getArithmeticAverage(xdata,imin,imax);
+    var avg=getArithmeticAverage(ydata,imin,imax);
     var sum=0;
-    for(var i=imin; i<=imax; i++){sum+=(xdata[i]-avg)*(xdata[i]-avg);}
+    for(var i=imin; i<=imax; i++){sum+=(ydata[i]-avg)*(ydata[i]-avg);}
     sum/=(imax-imin);  // (n-1 data points)
     return sum;
   }
 }
 
+// linear regression in time=index; returns [a,b,residualVariance]
+
+function getTrendResidualVar(ydata,imin,imax){
+  if (!((imin>=0)&&(imax>imin+1)&&(imax<ydata.length))){
+    console.log("getTrendResidualVar: error: ydata.length=",ydata.length,
+		" indexMin=",imin," indexMax=",imax);
+    return -1;
+  }
+  else{ // regular
+    var avgy=getArithmeticAverage(ydata,imin,imax);
+    var avgx=0.5*(imin+imax);
+    var sumxy=0;
+    var sumxx=0;
+    for(var i=imin; i<=imax; i++){
+      sumxy+=(ydata[i]-avgy)*(i-avgx);
+      sumxx+=(i-avgx)*(i-avgx);
+    }
+    var b=sumxy/sumxx;
+
+    var a=avgy-b*avgx;
+    var res=0;
+    for(var i=imin; i<=imax; i++){
+      res+=Math.pow(ydata[i]-a-b*i, 2);
+    }
+
+    res/=(imax-imin);
+  }
+  return [a,b,res];
+}
+  
+  
 
 
     
@@ -1954,15 +2012,15 @@ function calibrate(){
     var daySensitivEnd=new Date(str_sensitivEnd);
 
     var itSensitivStart=Math.floor(
-      (daySensitivStart.getTime() - startDay.getTime())/oneDay_ms);
+      (daySensitivStart.getTime() - dateStart.getTime())/oneDay_ms);
     var itSensitivEnd=Math.floor(
-      (daySensitivEnd.getTime() - startDay.getTime())/oneDay_ms);
+      (daySensitivEnd.getTime() - dateStart.getTime())/oneDay_ms);
     var jmin=Math.max(0,getIndexCalib(itSensitivStart));
     var jmax=Math.min(getIndexCalib(itSensitivEnd), R0time.length-1);
 
     var R0_avg=getArithmeticAverage(R0time,jmin,jmax);
     var R0_var=getVariance(R0time,jmin,jmax);
-
+    var trendResVar=getTrendResidualVar(R0time,jmin,jmax);
     console.log("daySensitivStart=",str_sensitivStart,
 		"daySensitivEnd=",str_sensitivEnd,
 		" stringencySensitivityLin=",stringencySensitivityLin,
@@ -1971,6 +2029,7 @@ function calibrate(){
 		"\nR0-varcoeff=R0_stddev/R0_avg=",Math.sqrt(R0_var)/R0_avg,
 		" R0_avg=",R0_avg," jmin=",jmin," jmax=",jmax,
 		" R0time.length=",R0time.length,
+		"\nvarcoeff_linregr=",Math.sqrt(trendResVar[2])/R0_avg," trendResVar=",trendResVar,
 		"");
   }
 
@@ -2098,7 +2157,7 @@ function calibrate(){
   if(false){
     console.log("IFR65time=",IFR65time);
     console.log("data_idataStart=",data_idataStart);
-    console.log("startDay=",startDay);
+    console.log("dateStart=",dateStart);
     console.log("dayStartMar=",dayStartMar);
     console.log("dayStartYear=",dayStartYear);
     console.log("itPresent=",itPresent);
@@ -2901,7 +2960,7 @@ function myCountryComparison(){ // callback "Kalibriere neu!
   }
   else{
     countryComparison=true;
-    countryCmp="Czechia";
+    countryCmp="Germany";  //Czechia
     document.getElementById("buttonCmp").innerHTML="Stop CZ Vergleich";
  }
   myRestartFunction(); // in both cases; depends on countryComparison
@@ -3122,8 +3181,8 @@ function MutationDynamics(dateOld, pOld, dateNew, pNew,
 
    */
 
-  this.itNew=Math.floor((dateNew.getTime()-startDay.getTime())/oneDay_ms);
-  this.itOld=Math.floor((dateOld.getTime()-startDay.getTime())/oneDay_ms);
+  this.itNew=Math.floor((dateNew.getTime()-dateStart.getTime())/oneDay_ms);
+  this.itOld=Math.floor((dateOld.getTime()-dateStart.getTime())/oneDay_ms);
   this.itStart=itStart;
 
   this.dt =this.itNew-this.itOld;
@@ -4413,15 +4472,15 @@ DrawSim.prototype.drawAxes=function(windowG){
   var days=[];
   var timeRel=[]; // days relative to this.itmax-this.itmin
   var options = {month: "short", day: "2-digit"};
-  //var year=startDay.getFullYear(); // no need; add year for whole January
+  //var year=dateStart.getFullYear(); // no need; add year for whole January
   var phi=40 * Math.PI/180.; // to rotate date display anticlockw. by phi
   var cphi=Math.cos(phi);
   var sphi=Math.sin(phi);
 
-  // calculate weekly date string array for every week after startDay
+  // calculate weekly date string array for every week after dateStart
 
   for(var iw=0; iw<Math.floor(this.itmax/7)+1; iw++){
-    var date=new Date(startDay.getTime()); // copy constructor
+    var date=new Date(dateStart.getTime()); // copy constructor
     date.setDate(date.getDate() + iw*7+1); // set iw*7+1 days ahead (sim it => result at it+1)
     timeTextW[iw]=date.toLocaleDateString("en-us",options);
     //timeTextW[iw]=date.toLocaleDateString("de",options);
@@ -4601,9 +4660,9 @@ DrawSim.prototype.drawAxes=function(windowG){
   if(true){// draw "Durchseuchung" etc
 
     // calculate time string
-    // set it+1 days ahead of startDay (it=time BEFORE sim)
+    // set it+1 days ahead of dateStart (it=time BEFORE sim)
 
-    var date=new Date(startDay.getTime()); // copy constructor
+    var date=new Date(dateStart.getTime()); // copy constructor
     date.setDate(date.getDate() + it+1); 
     var options = {year: "numeric", month: "short", day: "2-digit"};
     var str_date=date.toLocaleDateString("de-de",options);

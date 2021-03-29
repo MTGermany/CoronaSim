@@ -22,7 +22,8 @@ vlc input "--video-filter=croppadd{cropright=250,cropleft=250}" v4l2:///dev/vide
 vlc input "--video-filter=croppadd{cropright=200,cropleft=200}" v4l2:///dev/video0
 vlc input "--video-filter=croppadd{cropright=150,cropleft=150}" v4l2:///dev/video0
 vlc input "--video-filter=croppadd{cropright=100,cropleft=100}" v4l2:///dev/video0
-vlc input "--video-filter=croppadd{croptop=100,cropbottom=100}" v4l2:///dev/video0
+vlc input "--video-filter=croppadd{croptop=0,cropbottom=0}" v4l2:///dev/video0
+
 ACHTUNG: v4l2 mit lowercase 'l', not '1' !
 
 Manipulieren Helligkeit/Kontrast: 
