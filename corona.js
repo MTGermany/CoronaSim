@@ -923,6 +923,11 @@ function initializeData(country,insideValidation){
   data_dxt=[];
   data_dyt=[];
   data_dz=[];
+
+  data_dxt[0]=0; 
+  data_dyt[0]=0;
+  data_dz[0]=0;
+
   data_posRate=[];
   data_cfr=[];
   data_pTestModel=[];
@@ -945,6 +950,52 @@ function initializeData(country,insideValidation){
       ? 0 : data_cumDeaths[i]/data_cumCases[i];
   }
 
+
+  for(var i=1; i<data.length; i++){
+    data_dxt[i]=data_cumCases[i]-data_cumCases[i-1];
+    data_dyt[i]=data_cumRecovered[i]-data_cumRecovered[i-1];
+    // in spain the def of deaths changed -> cum deaths reduced, dz<0
+    data_dz[i]=Math.max(data_cumDeaths[i]-data_cumDeaths[i-1], 0.);
+  }
+
+	
+  //!!!! Correct erratically high forecasts caused by not reported
+  // cases for over a week by shifting some later cases to the missing cases
+  // do not consider the first 9-1=8 weeks
+
+  var growthFactCrit=2;
+  for(var j=0; j<Math.floor(data.length/7)-9; j++){
+    var i0=data.length-1-7*j;
+    var dxtWeek=data_cumCases[i0]-data_cumCases[i0-7];
+    var dxtLastWeek=data_cumCases[i0-7]-data_cumCases[i0-14];
+    if(dxtWeek>growthFactCrit*dxtLastWeek){
+      if(true){
+        console.log("Warning: last date ",data_date[i0],
+		    " correct missing reported cases in data_cumCases:",
+		    " dxtWeek=",dxtWeek,
+		    " dxtLastWeek=",dxtLastWeek,
+		    "");
+      }
+      var fact=1/(2*growthFactCrit);
+      for(var k=0; k<7; k++){
+	var ip=i0-13+k;
+	var im=i0-k;
+	var dxtShift=fact*data_dxt[im];
+	data_dxt[im]-=dxtShift;
+	data_dxt[ip]+=dxtShift;
+      }
+      for(var i=i0-13;i<=i0; i++){ // inverse reconstruction of data_cumCases
+	data_cumCases[i]=data_cumCases[i-1]+data_dxt[i];
+	//console.log("i=",i," data_dxt[i]=",data_dxt[i],
+	//	    " data_cumCases[i]=",data_cumCases[i]);
+      }
+    }
+  }
+  
+
+  
+
+  
   // debug 1: is data=dataRKI[country] or =dataGit[country] there?
   if(false){ // => "final debugging"
   //if(useLandkreise){
@@ -1104,16 +1155,6 @@ function initializeData(country,insideValidation){
   var tauPos=7; //!! keep const 1 week irresp. of tau sliders:
                 // tauPos=7 cancels out weekly pattern
 
-  data_dxt[0]=0; 
-  data_dyt[0]=0;
-  data_dz[0]=0;
-
-  for(var i=1; i<data.length; i++){
-    data_dxt[i]=data_cumCases[i]-data_cumCases[i-1];
-    data_dyt[i]=data_cumRecovered[i]-data_cumRecovered[i-1];
-    // in spain the def of deaths changed -> cum deaths reduced, dz<0
-    data_dz[i]=Math.max(data_cumDeaths[i]-data_cumDeaths[i-1], 0.);
-  }
 
 
   // need new loop because of forward ref at cfr, ifr
@@ -4718,7 +4759,7 @@ DrawSim.prototype.drawAxes=function(windowG){
 
     line++;
     ctx.fillText("Aktuelles R="+(corona.Reff.toFixed(2))
-		 +",  R0 ohne Massnahmen="+(R0_actual.toFixed(2)),
+		 +",  R0 ohne alles="+(R0_actual.toFixed(2)),
 		 this.xPix0+xrelLeft*this.wPix,
 		 this.yPix0+(yrelTopVars-(line)*dyrel)*this.hPix);
     

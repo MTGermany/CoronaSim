@@ -1,0 +1,399 @@
+<?xml version="1.0" standalone="no"?>
+<mlt LC_NUMERIC="C" version="6.25.0" title="Shotcut version 21.03.21" producer="main_bin">
+  <profile description="automatic" width="1192" height="606" progressive="1" sample_aspect_num="1" sample_aspect_den="1" display_aspect_num="1192" display_aspect_den="606" frame_rate_num="60" frame_rate_den="1" colorspace="709"/>
+  <producer id="producer0" in="00:00:00.000" out="00:02:53.067">
+    <property name="length">00:02:53.083</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/talks_slides/CoronaD_Stringency1.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-03-29T17:35:17</property>
+    <property name="shotcut:hash">ed70df5780b4cb9d74ec69f163fa765e</property>
+    <property name="ignore_points">0</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+  </producer>
+  <producer id="producer1" in="00:00:00.000" out="00:01:03.967">
+    <property name="length">00:01:03.983</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/talks_slides/CoronaD_Stringency2.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-03-29T17:38:57</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">21c61c9065055bdbc6e0b57bafb2b103</property>
+  </producer>
+  <producer id="producer2" in="00:00:00.000" out="00:07:10.917">
+    <property name="length">00:07:10.933</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/talks_slides/CoronaD_Stringency3.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-03-29T17:47:11</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">399b0b1dd6ecf1f1d5e06842ea894ea6</property>
+  </producer>
+  <producer id="producer3" in="00:00:00.000" out="00:07:00.967">
+    <property name="length">00:07:00.983</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/talks_slides/CoronaD_Stringency4.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-03-29T18:06:02</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">9fa75c90e9eff5ba00020a7f6a91c844</property>
+  </producer>
+  <producer id="producer4" in="00:00:00.000" out="00:04:23.417">
+    <property name="length">00:04:23.433</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/talks_slides/CoronaD_Stringency5.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-03-29T18:17:46</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">9b8e78dd3f029bc9526433cc85b9ace7</property>
+  </producer>
+  <producer id="producer5" in="00:00:00.000" out="00:03:11.250">
+    <property name="length">00:03:11.267</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/talks_slides/CoronaD_Stringency6.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-03-29T18:37:05</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">c68a8fb0247f0ea4d92dc61407bceb75</property>
+  </producer>
+  <producer id="producer6" in="00:00:00.000" out="00:00:36.267">
+    <property name="length">00:00:36.283</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/talks_slides/CoronaD_Stringency7.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-03-29T18:38:09</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">12830520679377c6951f19502aae5836</property>
+  </producer>
+  <playlist id="main_bin">
+    <property name="xml_retain">1</property>
+    <entry producer="producer0" in="00:00:00.000" out="00:02:53.067"/>
+    <entry producer="producer1" in="00:00:00.000" out="00:01:03.967"/>
+    <entry producer="producer2" in="00:00:00.000" out="00:07:10.917"/>
+    <entry producer="producer3" in="00:00:00.000" out="00:07:00.967"/>
+    <entry producer="producer4" in="00:00:00.000" out="00:04:23.417"/>
+    <entry producer="producer5" in="00:00:00.000" out="00:03:11.250"/>
+    <entry producer="producer6" in="00:00:00.000" out="00:00:36.267"/>
+  </playlist>
+  <producer id="black" in="00:00:00.000" out="00:21:03.433">
+    <property name="length">00:21:03.450</property>
+    <property name="eof">pause</property>
+    <property name="resource">0</property>
+    <property name="aspect_ratio">1</property>
+    <property name="mlt_service">color</property>
+    <property name="mlt_image_format">rgb24a</property>
+    <property name="set.test_audio">0</property>
+  </producer>
+  <playlist id="background">
+    <entry producer="black" in="00:00:00.000" out="00:21:03.433"/>
+  </playlist>
+  <producer id="producer7" in="00:00:00.000" out="00:02:53.067">
+    <property name="length">00:02:53.083</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/talks_slides/CoronaD_Stringency1.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-03-29T17:35:17</property>
+    <property name="shotcut:hash">ed70df5780b4cb9d74ec69f163fa765e</property>
+    <property name="ignore_points">0</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:caption">CoronaD_Stringency1.mkv</property>
+  </producer>
+  <producer id="producer8" in="00:00:00.000" out="00:01:03.967">
+    <property name="length">00:01:03.983</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/talks_slides/CoronaD_Stringency2.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-03-29T17:38:57</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">21c61c9065055bdbc6e0b57bafb2b103</property>
+    <property name="shotcut:caption">CoronaD_Stringency2.mkv</property>
+  </producer>
+  <tractor id="tractor0" global_feed="1" in="00:00:00.000" out="00:00:00.017">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="producer7" in="00:02:44.483" out="00:02:44.500"/>
+    <track producer="producer8" in="00:00:09.000" out="00:00:09.017"/>
+    <transition id="transition0" out="00:00:00.017">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition1" out="00:00:00.017">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="mlt_service">mix</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+    </transition>
+  </tractor>
+  <producer id="producer9" in="00:00:00.000" out="00:07:10.917">
+    <property name="length">00:07:10.933</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/talks_slides/CoronaD_Stringency3.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-03-29T17:47:11</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">399b0b1dd6ecf1f1d5e06842ea894ea6</property>
+    <property name="shotcut:caption">CoronaD_Stringency3.mkv</property>
+  </producer>
+  <tractor id="tractor1" global_feed="1" in="00:00:00.000" out="00:00:00.133">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="producer8" in="00:00:55.183" out="00:00:55.317"/>
+    <track producer="producer9" in="00:00:10.767" out="00:00:10.900"/>
+    <transition id="transition2" out="00:00:00.133">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition3" out="00:00:00.133">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="mlt_service">mix</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+    </transition>
+  </tractor>
+  <producer id="producer11" in="00:00:00.000" out="00:07:00.967">
+    <property name="length">00:07:00.983</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/talks_slides/CoronaD_Stringency4.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-03-29T18:06:02</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">9fa75c90e9eff5ba00020a7f6a91c844</property>
+    <property name="shotcut:caption">CoronaD_Stringency4.mkv</property>
+  </producer>
+  <tractor id="tractor2" in="00:00:00.000" out="00:00:00.100">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="producer9" in="00:05:41.533" out="00:05:41.633"/>
+    <track producer="producer11" in="00:00:01.033" out="00:00:01.133"/>
+    <transition id="transition4" out="00:00:00.100">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition5" out="00:00:00.100">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <producer id="producer12" in="00:00:00.000" out="00:04:23.417">
+    <property name="length">00:04:23.433</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/talks_slides/CoronaD_Stringency5.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-03-29T18:17:46</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">9b8e78dd3f029bc9526433cc85b9ace7</property>
+    <property name="shotcut:caption">CoronaD_Stringency5.mkv</property>
+  </producer>
+  <tractor id="tractor3" global_feed="1" in="00:00:00.000" out="00:00:01.267">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="producer11" in="00:04:37.500" out="00:04:38.767"/>
+    <track producer="producer12" in="00:00:00.000" out="00:00:01.267"/>
+    <transition id="transition6" out="00:00:01.267">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition7" out="00:00:01.267">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="mlt_service">mix</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+    </transition>
+  </tractor>
+  <producer id="producer13" in="00:00:00.000" out="00:03:11.250">
+    <property name="length">00:03:11.267</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/talks_slides/CoronaD_Stringency6.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-03-29T18:37:05</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">c68a8fb0247f0ea4d92dc61407bceb75</property>
+    <property name="shotcut:caption">CoronaD_Stringency6.mkv</property>
+  </producer>
+  <tractor id="tractor4" global_feed="1" in="00:00:00.000" out="00:00:02.217">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="producer12" in="00:04:21.200" out="00:04:23.417"/>
+    <track producer="producer13" in="00:00:00.350" out="00:00:02.567"/>
+    <transition id="transition8" out="00:00:02.217">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition9" out="00:00:02.217">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="mlt_service">mix</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+    </transition>
+  </tractor>
+  <producer id="producer14" in="00:00:00.000" out="00:00:36.267">
+    <property name="length">00:00:36.283</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/talks_slides/CoronaD_Stringency7.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-03-29T18:38:09</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">12830520679377c6951f19502aae5836</property>
+    <property name="shotcut:caption">CoronaD_Stringency7.mkv</property>
+  </producer>
+  <tractor id="tractor5" global_feed="1" in="00:00:00.000" out="00:00:01.550">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="producer13" in="00:02:59.283" out="00:03:00.833"/>
+    <track producer="producer14" in="00:00:25.067" out="00:00:26.617"/>
+    <transition id="transition10" out="00:00:01.550">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition11" out="00:00:01.550">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="mlt_service">mix</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+    </transition>
+  </tractor>
+  <playlist id="playlist0">
+    <property name="shotcut:video">1</property>
+    <property name="shotcut:name">V1</property>
+    <entry producer="producer7" in="00:00:02.017" out="00:02:44.467"/>
+    <entry producer="tractor0" in="00:00:00.000" out="00:00:00.017"/>
+    <entry producer="producer8" in="00:00:09.033" out="00:00:55.167"/>
+    <entry producer="tractor1" in="00:00:00.000" out="00:00:00.133"/>
+    <entry producer="producer9" in="00:00:10.917" out="00:05:41.517"/>
+    <entry producer="tractor2" in="00:00:00.000" out="00:00:00.100"/>
+    <entry producer="producer11" in="00:00:01.150" out="00:04:37.483"/>
+    <entry producer="tractor3" in="00:00:00.000" out="00:00:01.267"/>
+    <entry producer="producer12" in="00:00:01.283" out="00:04:21.183"/>
+    <entry producer="tractor4" in="00:00:00.000" out="00:00:02.217"/>
+    <entry producer="producer13" in="00:00:02.583" out="00:02:59.267"/>
+    <entry producer="tractor5" in="00:00:00.000" out="00:00:01.550"/>
+    <entry producer="producer14" in="00:00:26.633" out="00:00:32.483"/>
+  </playlist>
+  <tractor id="tractor6" title="Shotcut version 21.03.21" global_feed="1" in="00:00:00.000" out="00:21:03.433">
+    <property name="shotcut">1</property>
+    <property name="shotcut:scaleFactor">0.135</property>
+    <property name="shotcut:projectAudioChannels">2</property>
+    <property name="shotcut:projectFolder">1</property>
+    <track producer="background"/>
+    <track producer="playlist0"/>
+    <transition id="transition12">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="mlt_service">mix</property>
+      <property name="always_active">1</property>
+      <property name="sum">1</property>
+    </transition>
+    <transition id="transition13">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="version">0.9</property>
+      <property name="mlt_service">frei0r.cairoblend</property>
+      <property name="threads">0</property>
+      <property name="disable">1</property>
+    </transition>
+  </tractor>
+</mlt>

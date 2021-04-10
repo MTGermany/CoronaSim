@@ -1,0 +1,57 @@
+https://twitter.com/maewald/status/1377738781760032771/photo/1
+=>
+https://www.rki.de/DE/Content/Infekt/EpidBull/Archiv/2021/Ausgaben/13_21.pdf?__blob=publicationFile
+
+
+Hallo Philipp,
+
+ich habe mal dein interessanten Link analysiert, der inzwischen als
+offizielles RKI-Bulletin, nicht nur als Vorabversion vorliegt:
+https://www.rki.de/DE/Content/Infekt/EpidBull/Archiv/2021/Ausgaben/13_21.pdf?__blob=publicationFile
+
+Im Prinzip wird in Abb 1 ein Modell vorgestellt, welches meinem Modell
+sehr aehnlich ist: Erweitertes SEIR-Modell mit expliziten Delays
+(Differenzen- statt Differentialgleichung und mit beobachteten und
+unbeobachteten Zweig bzw. Meldearm und Dunkelziffer).
+Ferner haben die die Altersstruktur in der
+aktiven Dynamik drin, nicht nur in der nachgeordneten
+Auswertung=Berechnung der Anteile der
+Kompartimente Hospitalisierte H, Gestorbene D und Recovered R
+
+Leider weisen selbst die RKI-Publikationen in sich viele
+Widerspr\"uche und Unmklarheiten auf.
+
+Das beginnt schon bei einer
+sauberen Definition der Inkubationszeit. Beim RKI hei\3t es "Die
+Inkubationszeit gibt die Zeit von der Ansteckung bis zum Beginn der
+Erkrankung an"
+(https://www.rki.de/DE/Content/InfAZ/N/Neuartiges_Coronavirus/Steckbrief.html,
+Abschnitt 5)
+Das ist leider Wischi-Waschi, da "Erkrankung" nicht sauber definiert
+ist. \"Ublicherweise bezeichnet man als erkrankte Person eine mit
+Symptomen und in den meisten anderen Dokumenten wird Inkubationszeit
+folgerichtig explizit als die Zeit zwischen Ansteckung und Auftreten
+der ersten 
+Symptome definiert. In der den Parametern deines Links
+zugrundeliegenden Abb. 1 des obigen Dokuments gibt es hingenegen f\"ur
+symptomatische F\"alle das
+Ablaufschema:
+
+Infiziert -> Inkubationszeit eta=6.1 d [Median]
+-> pr\"asymptomatisch infekti\"os -> Dauer phi=2.1 d -> symptomatisch
+infekti\"os -> Dauer mu=3.6 d -> eines der 4 Kompartimente symptomatisch nicht
+infekti\"os, R,D oder H.
+
+Offensichtlich ist hier die Inkubationszeit nicht, wie sonst, die
+Dauer zwischen Ansteckung und Symptomatik, sondern zwischen Ansteckung
+und Infektiosit\"at, w\"ahrend die "normale" Inkubationszeit gleich
+eta+phi approx 8.2 d (anders als arithmetische Mittelwerte sind
+Mediane nicht streng additiv)
+
+\"Ublicherweise bezeichnet man serielles Intervall
+
+
+Beginn der Infektionsitaet Symptomat Faelle Median [d]  6.8-2.1=4.7
+Ende der Infektionsitaet Symptomat Faelle Median [d] 6.8+3.6=10.4
+
+Infektionsdauer asymptomatische Faelle 2.1

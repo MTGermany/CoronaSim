@@ -52,7 +52,7 @@ V2-V3-zweiter Teil V2
 
 
 
-10. Exportieren mit "file" - "Export Video" oder (li unten) "Export"
+10. Exportieren mit "file" - "Export Video" oder (li unten) "export"
 
 Braucht lange! grosse Files
 

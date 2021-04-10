@@ -42,6 +42,7 @@ perl -i -p -e 's/letzten//g' *_eng.js
 perl -i -p -e 's/corona\.js/corona_eng\.js/g' *_eng.html
 perl -i -p -e 's/corona_gui\.js/corona_gui_eng\.js/g' *_eng.html
 
+perl -i -p -e 's/ohne alles/without vacc+measures/g' *_eng.html *_eng.js
 perl -i -p -e 's/Ignoriere/Ignore/g' *_eng.html *_eng.js
 perl -i -p -e 's/Ber\&uuml\;sichtige/Consider/g' *_eng.html *_eng.js
 perl -i -p -e 's/Testh\&auml\;ufigkeit/test frequency/g' *_eng.html *_eng.js

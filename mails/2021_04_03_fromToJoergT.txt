@@ -1,0 +1,32 @@
+
+Sehr geehrter Herr Traeumer,
+
+jetzt sehe ich, was Sie meinen: Die Prognose mit den zu hohen Werte. Diese kommen in der Tat vom Meldeverzug bzw den fehlenden Faellen ueber mehr als zwei Wochen her, mit jetzt nur 2 Wochen mit neuen Faellen. Das Modell sieht also einen Anstieg der Infektionsdynamik von null (nach zwei Wochen von Nullmeldungen ist die Infektionswelle eigentlich tot) auf bedeutende Werte und denkt natuerlich, dass da ein rasender Infektionsanstieg dahinter sein muesste. Solche Datenfehler sind schwierig automatisch beruecksichtigen, da man bei zu viel Interpretation auch echte ploetzliche Ereignisse weginterpretieren koennte. Mit ein- bis 2 Wochen mehr Meldungen von endlichen Fallzahlen wird sich das wieder normalisieren.
+
+Da man als Mensch aber offensichtlich sieht, dass was faul ist (die Nullmeldungen mit null Tests sind faul, nicht etwa die 2000er Inzidenz, die nicht ausgeschlossen ist), muss das die Simulation auch koennen. Ich schaue mal die naechsten Tage, ob es da generische Fehlercheck- und Korrekturmoeglichkeiten ohne die Gefahr eine Ueberintrepertation gibt 
+LG
+
+
+
+Martin Treiber
+
+=======================================================================
+
+
+Sehr geehrter Herr Träumer,
+
+ich kann den Fehler leider nicht reproduzieren, siehe Screenshot der aktuellen Simulation. Vielleicht lag es an der Meldelücke vom 3. - 18. März ohne jede neue Fälle? Aber selbst dies handelt die Simulation. Haben Sie einen Screenshot?
+
+LG
+
+Martin Treiber
+
+=====================================================================
+
+Sehr geehrter Herr Treiber,
+
+Ihre Spanien- Simulation scheint etwas aus den Fugen geraten zu sein... Ich würde mehrere Kästen Bier wettten, dass die Inzidenz dort nicht plötzlich auf 2000 steigt...
+
+LG Jörg Teumer
+
+
