@@ -1,57 +1,67 @@
-https://twitter.com/maewald/status/1377738781760032771/photo/1
-=>
+To: ScholzS@rki.de
+cc: philipp.kleinichen@mailbox.org
+Subj: Fragen zum RKI-Bulletin Ausgabe 2021/13
+
+
+Sehr geehrte Herr Scholz, sehr geehrte Mitarbeiterinnen des RKI,
+
+ich habe eine eigene Simulation, corona-simulation.de, welche auf einem sehr ähnlichen SEIR-artigen Modell basiert wie das in Ihrem letzten offiziellen Bulletin
+
 https://www.rki.de/DE/Content/Infekt/EpidBull/Archiv/2021/Ausgaben/13_21.pdf?__blob=publicationFile
 
+Damit kann man die Wirkung von Lockdowns, variierenden Testzahlen, Testfehlern, Impfraten, externer Einträge, Ausbreitung von Mutationen sowie den Einfluss der Infektionsparameter simulieren. Der Einfluss von Lockdowns wurde makroskopisch-quantitativ mit dem Stringency Index der OWID-Initiative durch Regression bestimmt, ebenso die Saisonalität (Einfluss etwa +/- 15% auf den R0-Wert)
 
-Hallo Philipp,
+Insbesondere habe ich einen Meldearm und einen unbeobachteten Arm (Dunkelfeld). Die Infektionsparameter wie Periode der Infektiosität und mittleres Infektionsalter beim Test sowie das Hellfeld sind einstellbar, werden aber intern geschätzt, wenn man nichts an den Reglern dreht.
 
-ich habe mal dein interessanten Link analysiert, der inzwischen als
-offizielles RKI-Bulletin, nicht nur als Vorabversion vorliegt:
-https://www.rki.de/DE/Content/Infekt/EpidBull/Archiv/2021/Ausgaben/13_21.pdf?__blob=publicationFile
+Um die Default-Settings mit den letzten Erkenntnissen abzugleichen, versuchte ich, diese mit den im Bulletin angegebenen Parameterwerten abzugleichen, stieß dabei aber auf folgende Inkonsistenzen und fehlende Informationen.
 
-Im Prinzip wird in Abb 1 ein Modell vorgestellt, welches meinem Modell
-sehr aehnlich ist: Erweitertes SEIR-Modell mit expliziten Delays
-(Differenzen- statt Differentialgleichung und mit beobachteten und
-unbeobachteten Zweig bzw. Meldearm und Dunkelziffer).
-Ferner haben die die Altersstruktur in der
-aktiven Dynamik drin, nicht nur in der nachgeordneten
-Auswertung=Berechnung der Anteile der
-Kompartimente Hospitalisierte H, Gestorbene D und Recovered R
+Frage 1: Definition der Inkubationszeit und Dauer der Infektiosität sowie serielles Intervall.
 
-Leider weisen selbst die RKI-Publikationen in sich viele
-Widerspr\"uche und Unmklarheiten auf.
+Bei Ihnen heißt es im Steckbrief (https://www.rki.de/DE/Content/InfAZ/N/Neuartiges_Coronavirus/Steckbrief.html, Abschnitt 5) "Die Inkubationszeit gibt die Zeit von der Ansteckung bis zum Beginn der Erkrankung an" Falls man "Beginn der Erkrankung" gleichsetzt mit "Beginn relevanter Symptome", entspricht dies der umgangssprachlichen Definition der Inkubationszeit und auch der in den meisten wissenschaftlichen Dokumenten. Im o.g. Bulletin gilt für symptomatische Fälle  hingegen (für beide Arme) das Ablaufschema:
 
-Das beginnt schon bei einer
-sauberen Definition der Inkubationszeit. Beim RKI hei\3t es "Die
-Inkubationszeit gibt die Zeit von der Ansteckung bis zum Beginn der
-Erkrankung an"
-(https://www.rki.de/DE/Content/InfAZ/N/Neuartiges_Coronavirus/Steckbrief.html,
-Abschnitt 5)
-Das ist leider Wischi-Waschi, da "Erkrankung" nicht sauber definiert
-ist. \"Ublicherweise bezeichnet man als erkrankte Person eine mit
-Symptomen und in den meisten anderen Dokumenten wird Inkubationszeit
-folgerichtig explizit als die Zeit zwischen Ansteckung und Auftreten
-der ersten 
-Symptome definiert. In der den Parametern deines Links
-zugrundeliegenden Abb. 1 des obigen Dokuments gibt es hingenegen f\"ur
-symptomatische F\"alle das
-Ablaufschema:
+Infiziert -> präsymptomatisch infektiös nach Inkubationszeit eta=6.8 d (Median) -> symptomatisch infektiös nach  Dauer phi=2.1 d -> eines der 4 Kompartimente  nicht mehr infektiös, R, D oder H nach Dauer mu=3.6 d.
 
-Infiziert -> Inkubationszeit eta=6.1 d [Median]
--> pr\"asymptomatisch infekti\"os -> Dauer phi=2.1 d -> symptomatisch
-infekti\"os -> Dauer mu=3.6 d -> eines der 4 Kompartimente symptomatisch nicht
-infekti\"os, R,D oder H.
+Sie bezeichnen hier eta, also die Zeit zwischen Ansteckung und Infektiosität, in Tabelle 1 des Bulletins explizit als Inkubationszeit, definieren also die Inkubationszeit um. Die "übliche Inkubationszeit wäre hingegen die Summe eta+phi approx 8.9 d (anders als arithmetische Mittelwerte sind Mediane nicht streng additiv). Frage: Aus dem Diagramm lese ich eine Infektiositätsperiode von symptomatischen Fällen zwischen den Infektionsaltern eta und eta+phi+mu (etwa 6.8 d bis 12.5 d) und für asymptomatische Fälle zwischen eta und eta +nu (etwa 6.8 d bis 8.9 d) ab. Das für meine Simulation wichtige serielle Intervall läge dann etwas vor der Mitte dieser Intervalle (je nach Dunkelziffer und Quarant\"ane-Ma\3nahmen), also so um 8 Tage, nicht wie im Steckbrief um 4 Tage. Was stimmt hier?
 
-Offensichtlich ist hier die Inkubationszeit nicht, wie sonst, die
-Dauer zwischen Ansteckung und Symptomatik, sondern zwischen Ansteckung
-und Infektiosit\"at, w\"ahrend die "normale" Inkubationszeit gleich
-eta+phi approx 8.2 d (anders als arithmetische Mittelwerte sind
-Mediane nicht streng additiv)
+Frage 2: Fehlende Parameterwerte
 
-\"Ublicherweise bezeichnet man serielles Intervall
+In Tabelle 1 fehlen  Werte für die Parameter omega (Hellfeld) und xi (Anteil der Symptomatischen, die vom Dunkel- ins Hellfeld wandern). Im Text wird erwähnt, dass, bei gegebener Altersklasse, das zeitabhängige Hellfeld sowohl von der Zahl der Tests als auch von der Positivrate abhängt, es fehlt aber eine konkrete Formel/Rechnungsvorschrift.
+
+Beispiel: Es werden in einer Woche 4% einer  Altersgruppe getestet und die Positivrate sei 10%. Wie groß ist das Hellfeld? Selbst im hypothetischen Best Case  (keine asymptomatischen Fälle, 100% Test-Sensitivität und -spezifizität) kann man daraus kein Hellfeld abschätzen, da dieses entscheidend von der Teststrategie abhängt!
+
+Nehmen wir an, dass der Test während genau einer Woche im Krankheitsverlauf anschlägt, dann hätte man im Worst Case (reines Zufallsprinzip bei der Testung) ein Hellfeld von 4% (da 4% der Leute in dieser Woche getestet wurden) mit einem wahren Anteil der Neuinfizierten gleich der Positivrate, im Best Case aber  100%, da es im Beispiel mehr Tests als Neuinfizierte gibt (andernfalls wäre die komplette Bevölkerung in weniger als 1/0.04=25 Wochen von 0 auf 100% komplett durchseucht)  mit einem wahren Anteil gleich dem 0.04-fachem der Positivrate. Der wahre Wert liegt dazwischen. Er hängt von der Teststrategie ab (nicht jeder Symptomatische wird statistisch-offiziell getestet, nicht einmal jeder mit einem positiven Schnelltest) und auch vom Meldeverhalten (viele verheimlichen Covid-19-Symptome, um nicht in die Quarantäne zu müssen).
+
+Konkret: Welche Dunkelziffer nahmen Sie letzte Woche an?
+
+Schließlich fehlt komplett ein Zeitparameter, wann die Tests durchgeführt werden (einer der interaktiv veränderbaren Parameter meines Simulators). Für xi=0 gilt insbesondere, dass nach Abb. 1 alle Tests im Infektionsalter < 6.8 d durchgeführt werden (sonst würden sie nicht bereits in der E-Phase in den Meldearm wandern). Die Fälle in der xi-Verzweigung hingegen werden erst später im Infektionsalter > eta+phi=8.9 d getestet. Interpretiere ich so die Abb 1 richtig?
+
+Im Voraus besten Dank für eine Antwort, speziell für die Dunkelziffer,
+
+Martin Treiber
 
 
-Beginn der Infektionsitaet Symptomat Faelle Median [d]  6.8-2.1=4.7
-Ende der Infektionsitaet Symptomat Faelle Median [d] 6.8+3.6=10.4
 
-Infektionsdauer asymptomatische Faelle 2.1
+========================================================
+
+https://twitter.com/maewald/status/1377738781760032771/photo/1 => https://www.rki.de/DE/Content/Infekt/EpidBull/Archiv/2021/Ausgaben/13_21.pdf?__blob=publicationFile
+
+
+
+==========================================================
+
+Im Prinzip wird in Abb 1 ein Modell vorgestellt, welches meinem Modell sehr aehnlich ist: Erweitertes SEIR-Modell mit expliziten Delays (Differenzen- statt Differentialgleichung und mit beobachteten und unbeobachteten Zweig bzw. Meldearm und Dunkelziffer). Ferner haben die die Altersstruktur in der aktiven Dynamik drin, nicht nur in der nachgeordneten Auswertung=Berechnung der Anteile der Kompartimente Hospitalisierte H, Gestorbene D und Recovered R
+
+Leider weisen selbst die RKI-Publikationen in sich viele Widersprüche und Unmklarheiten auf.
+
+Das beginnt schon bei einer sauberen Definition der Inkubationszeit. Beim RKI heißt es "Die Inkubationszeit gibt die Zeit von der Ansteckung bis zum Beginn der Erkrankung an" (https://www.rki.de/DE/Content/InfAZ/N/Neuartiges_Coronavirus/Steckbrief.html, Abschnitt 5) Das ist leider Wischi-Waschi, da "Erkrankung" nicht sauber definiert ist. Üblicherweise bezeichnet man als erkrankte Person eine mit Symptomen und in den meisten anderen Dokumenten wird Inkubationszeit folgerichtig explizit als die Zeit zwischen Ansteckung und Auftreten der ersten Symptome definiert. In der den Parametern deines Links zugrundeliegenden Abb. 1 des obigen Dokuments gibt es hingenegen für symptomatische Fälle das Ablaufschema:
+
+Infiziert -> Inkubationszeit eta=6.1 d [Median] -> präsymptomatisch infektiös -> Dauer phi=2.1 d -> symptomatisch infektiös -> Dauer mu=3.6 d -> eines der 4 Kompartimente symptomatisch nicht infektiös, R,D oder H.
+
+Offensichtlich ist hier die Inkubationszeit nicht, wie sonst, die Dauer zwischen Ansteckung und Symptomatik, sondern zwischen Ansteckung und Infektiosität, während die "normale" Inkubationszeit gleich eta+phi approx 8.2 d (anders als arithmetische Mittelwerte sind Mediane nicht streng additiv)
+
+Üblicherweise bezeichnet man serielles Intervall
+
+
+Beginn der Infektionsitaet Symptomat Faelle Median [d]  6.8-2.1=4.7 Ende der Infektionsitaet Symptomat Faelle Median [d] 6.8+3.6=10.4
+
+Infektionsdauer asymptomatische Faelle 2.1 
