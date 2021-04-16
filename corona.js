@@ -1038,10 +1038,12 @@ function initializeData(country,insideValidation){
     //console.log("i2=",i2," data2[i2]=",data2[i2]);
     data_cumVacc[i]=(
       !(typeof data2[i2].people_vaccinated === "undefined"))
-      ? data2[i2].people_vaccinated : data_cumVacc[i-1];
+      ? data2[i2].people_vaccinated
+      : 2*data_cumVacc[i-1]-data_cumVacc[i-2];
     data_cumVaccFully[i]=(
       !(typeof data2[i2].people_fully_vaccinated === "undefined"))
-      ? data2[i2].people_fully_vaccinated : data_cumVacc[i-1];
+      ? data2[i2].people_fully_vaccinated
+      : 2*data_cumVaccFully[i-1]-data_cumVaccFully[i-1];
     
     data_stringencyIndex[i]=(
       !(typeof data2[i2].stringency_index === "undefined"))
@@ -1060,14 +1062,29 @@ function initializeData(country,insideValidation){
   }
 
   // if data2 is less up-to-date than data, fill data2 derived quantities
-  // with constants
+  // with constants or cum with lin extrapolation
+
   var iLast_data2=Math.min(data.length,data2.length-di2)-1;
+
   for(var i=iLast_data2+1; i<data.length; i++){
-    data_cumTestsCalc[i]=data_cumTestsCalc[iLast_data2];
+    data_cumTestsCalc[i]=data_cumTestsCalc[iLast_data2]
+      + ((data_posRate[iLast_data2]>0)
+	 ? (data_cumCases[i]-data_cumCases[iLast_data2])
+	 /data_posRate[iLast_data2] : 0);
     data_posRate[i]=data_posRate[iLast_data2];
     data_stringencyIndex[i]=data_stringencyIndex[iLast_data2];
-    data_cumVacc[i]=data_cumVacc[iLast_data2];
-    data_cumVaccFully[i]=data_cumVaccFully[iLast_data2];
+    data_cumVacc[i]=data_cumVacc[iLast_data2] + (i-iLast_data2)
+      *(data_cumVacc[iLast_data2]-data_cumVacc[iLast_data2-7])/7.;
+    data_cumVaccFully[i]=data_cumVaccFully[iLast_data2]+ (i-iLast_data2)
+      *(data_cumVaccFully[iLast_data2]-data_cumVaccFully[iLast_data2-7])/7.;
+    if(true){
+      console.log("\ni=",i," iLast_data2=",iLast_data2,
+		  " data_cumVacc[iLast_data2]=",
+		  data_cumVacc[iLast_data2],
+		  " data_cumVacc[iLast_data2-1]=",
+		  data_cumVacc[iLast_data2-1],
+		  "");
+    }
   }
 
 
@@ -1161,7 +1178,6 @@ function initializeData(country,insideValidation){
 
  
   for(var i=0; i<data.length; i++){
-    //data_posRate[i]=data2_posRate[i+di2];
     data_dn[i]=data_dxt[i]/data_posRate[i];// more stable
     if(!((data_dn[i]>0)&&(data_dn[i]<1e11))){data_dn[i]=0;}
     var dnTauPos=data_cumTestsCalc[i+di2]-data_cumTestsCalc[i+di2-tauPos];
@@ -1187,11 +1203,9 @@ function initializeData(country,insideValidation){
 
 	// the sqrt model square root model pTest
 	// (2021-01-04)
-        // updated to full test every 28 instead of 7 days=^ 100%
+        // updated to tauInfectious_fullReporting=84 instead of 7 days=^ 100%
 
         var pModel=Math.sqrt(tauInfectious_fullReporting*data_dn[i]/n0); 
-	if(i==200){console.log("data_dn[i]=",data_dn[i]," n0=",n0);}
-
 
 	// corrections if very vew tests (only at beginning)
 	// or pTest >1
@@ -1200,14 +1214,14 @@ function initializeData(country,insideValidation){
 	*Math.sqrt(1+Math.pow(pModel/pTestModelMin,2));
         data_pTestModel[i]=Math.min(data_pTestModel[i],1);
 
-	// !!! corrections if too strong daily dn jumps
+	// !!!! corrections if too strong daily dn jumps
 	// (late cumulative data reporting)
 
 	//if(false){
 	if(i>0){
 	  var pPrev=data_pTestModel[i-1];
 	  data_pTestModel[i]
-	    =Math.min(1.2*pPrev, Math.max(0.84*pPrev, data_pTestModel[i]));
+	    =Math.min(1.42*pPrev, Math.max(0.71*pPrev, data_pTestModel[i]));
 	}
 	
       }
@@ -1295,7 +1309,7 @@ function initializeData(country,insideValidation){
       //var logging=true;
       //var logging=false;
       //var logging=(i>data.length-10);
-      var logging=(i>data.length-4);
+      var logging=(i>data.length-21);
       //var logging=(i==200);
       if(logging){
 	var it=i-data_idataStart;
@@ -1308,14 +1322,15 @@ function initializeData(country,insideValidation){
 		      ? "i2<0=>undefined" : data2[i2]["date"]),
 	  " i=",i, " i2=",i2,
 	  " data_dxt=",Math.round(data_dxt[i]),
+	  " data_cumCases=",Math.round(data_cumCases[i]),
 	  //" data_dyt=",Math.round(data_dyt[i]),
 	  " data_dz=",Math.round(data_dz[i]),
-	  " data_dn[i]=",data_dn[i].toFixed(1),
-	  " data_posRate[i]=",data_posRate[i],
-	  "\n  data_pTestModel[i]=",data_pTestModel[i].toFixed(3),
-	  " data_pTestModelSmooth[i]=",data_pTestModelSmooth[i].toFixed(3),
-	  " data_cumCases=",Math.round(data_cumCases[i]),
+	  "\n ",
+	  " data_posRate[i]=",data_posRate[i], // primary from data
 	  " data_cumTestsCalc=", Math.round(data_cumTestsCalc[i]),
+	  " data_dn[i]=",data_dn[i].toFixed(1),
+	  " data_pTestModel[i]=",data_pTestModel[i].toFixed(3),
+	  " data_pTestModelSmooth[i]=",data_pTestModelSmooth[i].toFixed(3),
 	  "\n  data_cumVacc=",data_cumVacc[i],
 	  " data_rVacc=",data_rVacc[i], // data_rVacc is smoothed
 	  " IvaccArr=",(it<0) ? 0 : IvaccArr[it],
@@ -3887,7 +3902,6 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
       //!!!! quick hack to avoid sudden drop cases 2021-02-22
       var factor=1.04
       pTest=factor*pTest_weeklyPattern[(idata-data_pTestModel.length)%7];
-      //pTest=data_pTestModelSmooth[data_pTestModelSmooth.length)-1];//!!!!
     }
     if(false){
     //if((!inCalibration)&&(it-itPresent>-25)){
