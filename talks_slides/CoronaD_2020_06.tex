@@ -1,0 +1,137 @@
+%#############################################
+% New pdflatex format,
+% only png, jpg (or svg?) images but positioning now ok
+% template in ~/tex/inputs/template_folien.tex
+% [TODO now specialized to Vkoem_Ma; make general]
+%#############################################
+
+
+\documentclass[mathserif]{beamer}
+%\documentclass[mathserif,handout]{beamer}
+%\usepackage{beamerthemeshadow}
+\input{$HOME/tex/inputs/defsSkript}  %$
+\input{$HOME/tex/inputs/styleBeamerCorona}   %$
+
+\usepackage{graphicx}
+
+
+%##############################################################
+
+\begin{document}
+
+
+
+
+%##############################################################
+\frame{\frametitle{}
+%##############################################################
+
+
+\placebox[center]{0.50}{0.48}
+ {\figSimple{0.95\textwidth}{figsCorona/coronaSim_2020-06.png}}
+
+}
+
+
+
+
+
+%##############################################################
+\frame{\frametitle{Infektionsdynamik f\"ur eine Reproduktionszahl 
+$R_0=2$ ohne Immunit\"at}
+%##############################################################
+
+\visible<1>{\placebox{0.5}{0.52}{
+  \figSimple{0.90\textwidth}{figsCorona/coronaDynamicsTreeTemplate.jpg}}}
+\visible<2>{\placebox{0.5}{0.52}{
+  \figSimple{0.90\textwidth}{figsCorona/coronaDynamicsTree-0.jpg}}}
+\visible<3>{\placebox{0.5}{0.52}{
+  \figSimple{0.90\textwidth}{figsCorona/coronaDynamicsTree-1.jpg}}}
+\visible<4>{\placebox{0.5}{0.52}{
+  \figSimple{0.90\textwidth}{figsCorona/coronaDynamicsTree-2.jpg}}}
+\visible<5>{\placebox{0.5}{0.52}{
+  \figSimple{0.90\textwidth}{figsCorona/coronaDynamicsTree-3.jpg}}}
+\visible<6>{\placebox{0.5}{0.52}{
+  \figSimple{0.90\textwidth}{figsCorona/coronaDynamicsTree-4.jpg}}}
+
+\visible<3>{\placebox{0.5}{0.10}{\parbox{0.9\textwidth}{
+Im Verlauf einer Infektionsgeneration von z.B. $\tau=\unit[7]{Tage}$
+steckt ein Infizierter zwei weitere an}}}
+
+\visible<4->{\placebox{0.5}{0.10}{\parbox{0.9\textwidth}{
+Exponentielle Kaskade: Infiziertenzahl $n=n_0 \exp(\ln(R) t/\tau)$}}}
+
+}
+
+%##############################################################
+\frame{\frametitle{Infektionsdynamik f\"ur eine Reproduktionszahl 
+$R_0=2$ mit Immunit\"at}
+%##############################################################
+
+\visible<1>{\placebox{0.5}{0.52}{
+  \figSimple{0.90\textwidth}{figsCorona/coronaDynamicsTreeTemplate.jpg}}}
+\visible<2>{\placebox{0.5}{0.52}{
+  \figSimple{0.90\textwidth}{figsCorona/coronaDynamicsTreeImmune-0.jpg}}}
+\visible<3>{\placebox{0.5}{0.52}{
+  \figSimple{0.90\textwidth}{figsCorona/coronaDynamicsTreeImmune-1.jpg}}}
+\visible<4>{\placebox{0.5}{0.52}{
+  \figSimple{0.90\textwidth}{figsCorona/coronaDynamicsTreeImmune-2.jpg}}}
+\visible<5>{\placebox{0.5}{0.52}{
+  \figSimple{0.90\textwidth}{figsCorona/coronaDynamicsTreeImmune-3.jpg}}}
+\visible<6>{\placebox{0.5}{0.52}{
+  \figSimple{0.90\textwidth}{figsCorona/coronaDynamicsTreeImmune-4.jpg}}}
+
+\visible<3>{\placebox{0.5}{0.10}{\parbox{0.9\textwidth}{
+Am Anfang gleich: ein 
+Infizierter steckt zwei weitere an, wird aber \blue{selbst immun}
+}}}
+
+\visible<4>{\placebox{0.5}{0.10}{\parbox{0.9\textwidth}{
+Die exponentielle Kaskade startet wie im Fall ohne Immunit\"at, aber
+die \blue{Durchseuchung (Zahl der Schutzschilde) nimmt zu}
+}}}
+
+\visible<5>{\placebox{0.5}{0.10}{\parbox{0.9\textwidth}{
+Der b\"ose Virus trifft nun vermehrt auf immune Personen $\Rightarrow$
+\blue{effektive $R$-Wert sinkt, der exponentielle Verlauf geht in S\"attigung}
+}}}
+
+\visible<6->{\placebox{0.5}{0.10}{\parbox{0.9\textwidth}{
+Der Erreger findet immer weniger ansteckbare Personen
+\blue{$\Rightarrow$ die Infektion trocknet aus, einige bleiben uninfiziert}
+}}}
+
+
+
+}
+
+
+%##############################################################
+\frame{\frametitle{Interaktive Corona-Simulation
+    \texttt{corona-simulation.de} }{
+%##############################################################
+
+\fig{0.7\textwidth}{figsCorona/coronaSim_2020-06.png}
+
+Meine Corona-Simulation  gie\3t
+dies und mehr in ein statistisches Modell
+}}
+
+
+
+\end{document}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

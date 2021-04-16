@@ -1,0 +1,274 @@
+0. Erklaerung
+ ============
+
+* In diesem Beitrag erkläre ich anhand einer interaktiven Simulation
+  der Coronavirus-Pandemie, was man mit Statistik, Ökonometrie und
+  math. Modellierung alles machen kann. 
+
+* Unter corona strich simulation.de können Sie selbst interaktiv
+  simulieren und eigene Szenarien entwerfen 
+
+* Schauen wir uns zunächst einmal das math. Modell an. Ein
+  mathematisches Modell besteht aus Gleichungen, die im Computer
+  simuliert werden. Hinter den Gleichungen stehen Annahmen, die
+  natürlich mehr oder weniger gut zutreffen können. 
+
+* Die Kunst des Statistikers und Ökonometrikers ist es, ein gutes
+  Modell zu entwerfen 
+
+[Infektionsdynamik]
+
+* Fangen wir mit einer anschaulichen Infektionsausbreitung an. Jede
+  Reihe repräsentiert die Bevölkerung zu einem gewissen Zeitpunkt 
+
+[Infektionsdynamik, Folie 2]
+
+* Nun infizieren wir eine Person mit dem Coronavirus. Diese ist der
+  berühmte Patient Null 
+
+[Reproduktionszahl R=2]
+
+* Zwei zentrale Modellparameter sind die Reproduktionszahl R und die
+  mittlere Dauer tau einer "Infektionsgeneration". Hier habe ich R=2
+  angenommen. Der Patient Null infiziert also zwei weitere Personen
+  innerhalb der Generationsdauer tau=5 Tage 
+
+[Reproduktionszahl R=2, Folie 2]
+
+* In jeder Generation setzt sich das fort
+
+[Reproduktionszahl R=2, Folie 3]
+
+* aus den 2 Neuinfizierten werden nach jeweils tau=5 Tagen 4 und 8
+  Personen. Dies führt zu exponentiellen Wachstum, das man in diesem
+  einfachen Fall sogar direkt angeben kann [Gleichung] 
+
+[Reproduktionszahl R=2, Folie 4]
+
+* Aber spätestens nach der 4. Generation ist im Worst Case jeder
+  infiziert, die Infektion kann nicht weiter wachsen. Was ist mit
+  Immunität? Offensichtlich ist das naive Exponentialmodell zu
+  schlecht, da es einen entscheidenden Sachverhalt, die Immunität,
+  nicht enthält 
+
+[Reproduktionszahl R=2 mit Immunität, Folie 1]
+
+* Starten wir also neu mit Patient Null, der wie zuvor zwei infiziert,
+  aber selbst immun wird, dargestellt durch den Schutzschild 
+
+[Reproduktionszahl R=2 mit Immunität, Folie 2]
+
+* Das exponentielle Wachstum am Anfang ist unverändert, nur, dass
+  auch die Immunität wächst. Übrigens sind da Corona-Simulierer
+  ziemlich abgebrüht. Die Personen, die an Covid19 sterben, können
+  ebenso wie die Immunen auch keinen mehr anstecken. Wir sind ja nicht
+  mehr im Pest-Mittelalter. 
+
+[Reproduktionszahl R=2 mit Immunität, Folie 3]
+
+* In der nächsten Generation zeigt sich nun in diesem Beispiel der
+  Effekt der Immunität: Die Viren, die versuchen, eine bereits
+  immune Person anzustecken, prallen am Schutzschiuld ab, die
+  effektive Reproduktionszahl sinkt proportional zur
+  Durchseuchungsrate! Bei einem Anteil von 50% immunen Personen wäre
+  sie z.B. von 2 auf 1 gesunken und die Zahl der aktiv infizierten
+  steigt nicht weiter an. 
+
+[Reproduktionszahl R=2 mit Immunität, Folie 4]
+
+* Bei weiterer Durchseuchung geht R unter 1 und die Infektion läuft
+  sich tot. Einige, aber deutlich weniger als 50%, bleiben uninfiziert 
+
+[corona-simulation.de]
+
+* In meiner Corona-Simulation unter corona-simulation.de habe ich das
+  Modell verfeinert, den Ansteckungszeitpunkt in einen Zeitraum
+  verallgemeinert (2. und 3. Schieberegler) und auch die Tests
+  simuliert, insbesondere die Zeit von der Infektion bis zum Test und
+  die Testrate. Hier ist die Dunkelziffer 1-Testrate gleich 90%, in
+  Wirklichkeit gibt es also neben den 180 000 erfassten Faellen ueber
+  1.6 Millionen nicht erfasste Infizierte, die natürlich auch immun
+  sind. 
+
+
+
+
+1. Default 
+==========
+
+In diesem Video zeige ich, wie man mit  ökonometrischen und
+statistischen Mitteln Versändnis über die Ausbreitung
+der Coronavirus-Pandemie gewinnen kann. 
+
+Dazu dient meine interaktiven
+Simulation corona-simulation.de, mit der Sie auch selbst
+herumexperimentieren können
+
+
+
+[Start Default]
+
+* Ich starte die Simulation unter corona-simulation.de
+
+* Sie laeuft bis zur Gegenwart, zur Zeit der Simulation 3. Juni. Dabei
+  werden die Reproduktionszahlen R  
+  im zweiwöchentlichen Rhythmus an die Daten der registrierten   Fälle
+  angepasst 
+
+* Anpassen heißt, die rote Kurve der simulierten Fallzahlen stimmt
+  möglichst gut mit den Daten (rote Punkte) überein 
+
+* Als Ökonometriker und Statistiker ist aber eine Zahl, und selbst
+  die berühmte Reproduktionszahl, nichts ohne Fehlerschranken. Diese
+  sind mit +/- angegeben und sind naturgemäß umso ungenauer, je
+  näher man an die Gegenwart kommt. Die letzte Schätzung ist extrem
+  ungenau, hier 
+  nahezu unbrauchbar. Jeder, der anderes sagt, verbreitet Fake News. 
+
+2. Schieberegler 
+================
+
+* Warum ist die Ungenauigkeit des letzten Wertes so hoch? Schauen wir
+  dazu kurz auf die interaktiv 
+  einstellbaren Schieberegler, womit Sie die Annahmen der Simulation
+  verändern können.
+
+* Der erste steuert die Reproduktionszahl, also wieviel Personen ein
+  Infizierter im Laufe seiner Krankheit ansteckt, wenn es keine
+  Immunität gibt. Diese wird als einziger bei Start automatisch
+  geschätzt, der Regler bewegt sich also wie von Geisterhand, kann
+  aber von Hand überstimmt werden.
+
+* Der zweite und dritte Regler definieren den Infektionszeitraum, hier
+ ist eine Person also vom 4. bis 12. Tag nach der eigenen Ansteckung
+ infektiös. 
+
+* Die beiden unteren Regler haben nichts mit der eigentlichen
+ Infektionsdynamik, sondern mit den Tests zu tun: Wann wird getestet,
+ hier im Mittel 8 Tage nach der Infektion und wie stark wird getestet,
+ hier 10% der Infizierten, die simulierte Dunkelziffer ist also 90%.
+
+* Warum habe ich die beiden unteren Regler eingeführt? Ökonometrie
+ kommt von "Messen", wir wollen also Modelle anhand von Daten
+ entwickeln, also müssen wir auch die Datenerhebung gleich mit
+ modellieren! 
+
+* Nun verstehen wir auch, warum die Ergebnisse so verzögert
+  erscheinen: Die Infizierten sind nicht sofort ansteckend (zweiter
+  und dritter Regler) und die Angesteckten werden nicht sofort
+  getestet (vierter Regler) 
+
+Das will ich nun mal verifizieren,
+   indem ich mit dem mittleren Restart-Knopf die Simulation neu starte
+  und ab Mai in den Schieberegler eingreife und die
+  Reproduktionszahl von Hand auf 1.5 erhöhe, also das, was viele Skeptiker
+  nach den Lockerungen erwartet hatten.
+
+ [Restart, R=1.5 ab Mai]
+
+ Sie sehen, dass sich die ersten 10 Tage fast nichts tut und dann erst
+ die simulierten Fallzahlen hochgehen. Signifikant messbare
+ Auswirkungen erst ab 10 Tagen.  Deshalb der hohe Schätzfehler in
+ der letzten Periode! 
+
+
+
+Regler Testzeitpunkt
+======================
+
+Offensichtlich sollte der Schätzfehler kleiner werden, wenn
+schneller getestet wird. Ich reduziere also den Testzeitpunkt z.B. von
+8 Tagen auf 3 Tage und kalibriere neu
+
+[Test nach => 3 Tage, "Kalibriere neu"]
+
+Sie sehen nun, dass der Schätzfehler viel geringer
+wird. Überprüfung wieder mit dem R-Regler hoch Anfang Mai: Dazu
+Restart und Schieber ab Mai bewegen
+
+[Restart, R auf 1.5 Anfang Mai]
+
+Die Folgen einer Änderung der Infektionsdynamim sind nun viel
+schneller sichtbar!
+
+Blaue Kurve
+============
+
+Aber wird denn überhaupt so frueh getestet? Die Wahrheit liegt wieder
+in den Daten: Wir kalibrieren neu, drehen aber nun nicht am R-Regler,
+so dass die Schätzung laufen kann
+
+[Testzeitpunkt 3 Tage, kalibriere neu]
+
+Der Verlauf der Fallzahlen, rote Kurve, kann auch mit diesem
+Tetszeitpunkt gut geschätzt werden. Aber gleichzeitig ist der
+Sterbeanteil, die blaue Kurve, daneben, vor allem bei hoher Dynamik am
+Anfang: 
+
+[Reset]
+
+Zum Vergleich stelle ich alles auf den "Auslieferungszustand" und
+simuliere neu, indem ich auf den Reset-Knopf drücke. Die blaue Kurve
+stimmt nun viel besser überein, obwohl nur die rote über die
+R-Werte angepasst wurde! Es gibt also Indizien dafür, dass der
+verzögerte Testzeitpunkt näher an der Wirklichkeit ist.
+
+
+ 
+
+2. Szenario "unverändert" 
+===========================
+
+* Was kann man sonst noch mit der Simulation amchen, außer Annahmen
+  anhad von Daten zu überprüfen. Ja, Prognosen!
+
+* Ich lasse die Simulation weiterlaufen [bis August], indem, ich
+  auf "Go"   drücke. Dabei nehme ich den letzten zuverlässigen
+  R-Wert 0.83 an. 
+
+  [R=0.83, Go]
+
+  Die Infektion   stirbt aus. Bilanz: weniger als 200 000
+  registrierten Fälle und weniger als 10 000 Tote  
+
+* Aber, das wusste angeblich schon Mark Twain: Prognosen sind
+  schwierig, vor allem, wenn sie die Zukunft betreffen". Wir sprechen
+  deshalb anstelle von Prognosen besser von Zukunfts-Szenarien, also
+  bedingten Projektionen in die Zukunft unter verschiedenen Annahmen 
+
+3. Szenario zweite Winter-Welle 
+===========================
+
+* Ich erhöhe nun im September die Reproduktionszahl auf 1.5, dann "Go"
+  => es tut sich lange nichts, erst im Dezember gibt es merklichen
+  Anstieg "Stop" [bei 250 000 Faellen] 
+
+* Warum die Verzögerung? Schauen wir mal hinter die Kulissen, indem
+  wir die "log Darstellung" waehlen. 
+
+* Wir sehen nun die aktuell real infizierten Personen, wobei ich eine
+  Dunkelzifer von 90& angenommen habe. Dies ist eine der vielen
+  Annahmen! Sie war auf ueber einer Million, sank aber auf wenige
+  tausend (dies entspricht wenigen hundert aktiver Faelle) und muss
+  mehrere Monate lang wieder exponentiell auf mehr als eine Million
+  wachsen, bis sie auf die 
+  Beobachtungen durchschlaegt! 
+
+* Machen wir nun einen neuen Lockdown, dauert es etwa 2 Wochen, bis
+  sich merklich was tut! Als eine der Annahmen habe ich nämlich auch
+  eine Verzögerungszeit bei den Tests von 8 Tagen angenommen 
+
+
+4. Andere Laender 
+=================
+
+* stabil: Schweiz
+
+* nach wie vor exponentiell: Indien: Gottseidank bin ich da noch
+  rausgekommen! 
+
+* linear: USA: R-wert R=1, Exponentielle Anstiegsrate proportional
+  ln(R)=0 => kein exponentieller, sondern konstante ahl der aktiven
+  und linearer verlauf der kumul. Faelle 
+
+6. Viele weitere Simulationsmoeglichkeiten, siehe blauer Info-Button! 
