@@ -1,5 +1,0 @@
-Interaktive Corona-Simulation
-
-Abstract:
-
-In diesem Video wird die interaktive Simulation der Covid-19-Pandemie des Lehrstuhls Ökonometrie und -statistik vorgestellt. Sie demonstriert anschaulich,  wie ökonometrische und statistische Methoden zum Verständnis der Infektionsdynamik beitragen. Im Video lernt man, was mathematische Modelle sind, wie sie an die Beobachtungen angepasst werden und wie man damit Analysen und Projektionen in die Zukunft erstellen kann. Jeder kann unter corona-simulation.de die Infektionsdynamik vieler Länder selbst simulieren und seine eigenen Szenarien für eine bedingte Prognose entwerfen! 
