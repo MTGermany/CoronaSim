@@ -347,8 +347,8 @@ var testSlider_moved=false;
 var stringencySlider_moved=false;
 var slider_rVacc_moved=false; // if true, pTest =f(#tests)
 
-var pTestInit=0.1;     // P(Tested|infected)  if !f(#tests) assumed
-var pTestModelMin=0.04;   // if calculated by sqrt- or propto model
+var pTestInit=0.10;     // P(Tested|infected)  if !f(#tests) assumed
+var pTestMin=0.04;   // if calculated by sqrt- or propto model
 
 var includeInfluenceTestNumber=true; // if true, pTest =f(#tests)
 var useSqrtModel=true; // whether use sqrt or linear dependence 
@@ -400,40 +400,59 @@ var dataCmp_dxIncidence=[]; // compare weekly incidence per 100 000 from data
 //######################################################################
 
 /* Data for Germany, 
+https://de.statista.com/statistik/daten/studie/1208627/umfrage/ausbreitung-von-corona-mutationen-in-deutschland/
 KW8: Beginn Mo 2020-02-22, Ende So 2020-02-28, Mitte 2020-02-25
-KW2 p=0.02      2020-01-11
+KW2 p=0.020      2020-01-11
 KW3 p=0.036     2020-01-18
 KW4 p=0.047     2020-01-25
 KW5 p=0.072     2020-02-04
 KW6 p=0.176     2020-02-11
 KW7 p=0.259     2020-02-18
 KW8 p=0.400     2020-02-25
-KW9 p=0.460     2020-03-04
+KW9 p=0.545     2020-03-04
+KW10 p=0.636     2020-03-11
+KW11 p=0.713     2020-03-18
+KW12 p=0.785     2020-03-25
+KW13 p=0.823     2020-04-01
+KW14 p=0.844     2020-04-08
 */
 
 var simulateMutation=true;
 
-//var pOld=0.02;
-//var dateOld=new Date("2021-01-11"); //!!!!
+//var pOld=0.020;
+//var dateOld=new Date("2021-01-14"); //!!!!
 
-var pOld=0.047;
-var dateOld=new Date("2021-01-25"); //!!!!
+var pOld=0.036;
+var dateOld=new Date("2021-01-21"); //!!!! to end 2021-01-18->"2021-01-21
+
+//var pOld=0.047;
+//var dateOld=new Date("2021-01-28"); //!!!!
+
+//var pOld=0.072;
+//var dateOld=new Date("2021-02-07"); //!!!!
 
 //var pOld=0.176;
-//var dateOld=new Date("2021-02-11"); 
+//var dateOld=new Date("2021-02-14"); 
+
+//var pOld=0.400;  
+//var dateOld=new Date("2021-02-28");
 
 
-//var pNew=0.072;
-//var dateNew=new Date("2021-02-04"); 
 
-var pNew=0.176;
-var dateNew=new Date("2021-02-11"); 
+var pNew=0.072;
+var dateNew=new Date("2021-02-07"); //!!!! to end 2021-01-18->"2021-01-21
+
+//var pNew=0.176;
+//var dateNew=new Date("2021-02-14"); 
 
 //var pNew=0.400;  
-//var dateNew=new Date("2021-02-25");
+//var dateNew=new Date("2021-02-28");
 
-//var pNew=0.460;
-//var dateNew=new Date("2021-03-04");
+//var pNew=0.545;
+//var dateNew=new Date("2021-03-07");
+
+var pNew=0.844;
+var dateNew=new Date("2021-04-11");
 
 
 var itStartMut=itPresent-80; // time index where mutation dynamics rather calibr R0 used
@@ -510,7 +529,7 @@ var betaTest=0.003; // beta error (false positive) after double testing
 const stringencySensitivityLin=0.75; // lin decr. R[%] per icr. stringency[%]
                                     // GER 0.70, AUT 0.75, FRA 0.70, CZ 0.70
 
-const season_fracYearPeak=1.00;   // peak of season dependence of R0
+const season_fracYearPeak=0.08;   // peak of season dependence of R0
                                   //!!! -0.1 better but CZ impact artifact
                                   // GER,AUT 0; FRA 0.10, 
                                   // SA 0.35, US 0.10, IND 0.35, CZ 0.10
@@ -1189,35 +1208,38 @@ function initializeData(country,insideValidation){
 
     data_cfr[i]=Math.max(data_cumDeaths[i+tauDie-tauTest]
 		 -data_cumDeaths[i+tauDie-tauTest-tauPos],0.)/dxtTauPos;
+  }
 
+
+  
  
 
     //  proportional or  sqrt-like "Hellfeld" model: 
     // sqrt: assume 100% "Hellfeld" ifP(tested|new infected) if all n0 persons
-    // are  tested within "infectiosity period" of assumed 7 days
+    // are  tested within "infectiosity period" of assumed
+    // tauInfectious_fullReporting days=84 instead of 7 days=^ 100%
     // linear: assume 100% if 10% are tested as above
 
 
+  for(var i=0; i<data.length; i++){
+    
     if((data_dn[i]>0)&&(data_dn[i]<1e11)){
+      
       if(useSqrtModel){ // global var
-
-	// the sqrt model square root model pTest
-	// (2021-01-04)
-        // updated to tauInfectious_fullReporting=84 instead of 7 days=^ 100%
 
         var pModel=Math.sqrt(tauInfectious_fullReporting*data_dn[i]/n0); 
 
 	// corrections if very vew tests (only at beginning)
 	// or pTest >1
 	
-        data_pTestModel[i]=pTestModelMin
-	*Math.sqrt(1+Math.pow(pModel/pTestModelMin,2));
+        data_pTestModel[i]=pTestMin
+	*Math.sqrt(1+Math.pow(pModel/pTestMin,2));
         data_pTestModel[i]=Math.min(data_pTestModel[i],1);
 
 	// !!!! corrections if too strong daily dn jumps
 	// (late cumulative data reporting)
 
-	//if(false){
+        //if(false){
 	if(i>0){
 	  var pPrev=data_pTestModel[i-1];
 	  data_pTestModel[i]
@@ -1225,9 +1247,10 @@ function initializeData(country,insideValidation){
 	}
 	
       }
+
       else{// use proportional model
 	var pModel=10*7*data_dn[i]/n0;
-	data_pTestModel[i]=Math.max(pTestModelMin,Math.min(1,pModel));
+	data_pTestModel[i]=Math.max(pTestMin,Math.min(1,pModel));
       }
     }
 
@@ -1235,10 +1258,60 @@ function initializeData(country,insideValidation){
     else{// no dn data
       data_pTestModel[i]= (i>0) ? data_pTestModel[i-1] : pTestInit;
     }
-
   }
 
 
+  // !!!! sqrt-model supersmooth, linear short-term
+  
+  var testNew_pTest=true; 
+  var rSuperSmooth=1./21; // denom be longer than holiday special effects
+
+  if(testNew_pTest){
+    var pTestSuperSmooth=[];
+    var pTestLinDirect=[];
+    pTestSuperSmooth[0]=pTestInit;
+
+    for(var i=0; i<data.length; i++){
+
+      if((data_dn[i]>0)&&(data_dn[i]<1e11)){
+	pTestLinDirect[i]=tauInfectious_fullReporting*data_dn[i]/n0;
+      }
+      else{
+	pTestLinDirect[i]=(i>0) ? pTestLinDirect[i-1] : pTestInit;
+      }
+      var pSqrt=Math.sqrt(pTestLinDirect[i]);
+
+      pSqrt=Math.min(1, pTestMin*Math.sqrt(1+Math.pow(pSqrt/pTestMin,2)));
+
+      if(i>0) pTestSuperSmooth[i]=rSuperSmooth*pSqrt  // EMA
+	+(1-rSuperSmooth)*pTestSuperSmooth[i-1];
+
+    }
+
+    // normalize high-frequency dn fluctuations to locally E(.)=1
+    // and redefine data_pTestModel!
+    
+    for(var i=0; i<data.length; i++){
+      pTestLinDirect[i]/=Math.pow(pTestSuperSmooth[i],2);
+      data_pTestModel[i]=Math.min(1,pTestSuperSmooth[i]*pTestLinDirect[i]);
+
+      if(i>data.length-21){
+	console.log(
+	  insertLeadingZeroes(data[i]["date"]),
+	  " pTestLinDirect[i]=",pTestLinDirect[i],
+	  " pTestSuperSmooth[i]=",pTestSuperSmooth[i],
+	  " data_pTestModel[i]=",data_pTestModel[i],
+	  "");
+      }
+    }     
+  }
+
+  
+
+
+
+
+  
   
   //kernel=[1/9,2/9,3/9,2/9,1/9];
   kernel=[1/7,1/7,1/7,1/7,1/7,1/7,1/7];  //  in initializeData
