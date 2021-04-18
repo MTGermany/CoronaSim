@@ -467,10 +467,11 @@ var mutationDynamics=new MutationDynamics(dateOld,pOld,dateNew,pNew,2.84, itStar
 
 //###############################################################
 // vaccination specification. Parameters like this.Imax=0.95 (Biontec)
-// or this.vaccmax=0.8;
-// (20% vacc deniers/impossible to vacc) are data elements of Vaccination
+// or this.vaccmax=[...];
+// (age-specific max vacc rate due to vacc deniers/impossible to vacc)
+// are data elements of Vaccination
 //###############################################################
-
+var vaccination;   // in initializeData(country): new Vaccination();
 var pVacc=0;        // vaccination fraction in [0,1]
 var rVaccInit=0;    // pVacc'(t) [fraction per day]
 var rVacc=rVaccInit;
@@ -1146,9 +1147,9 @@ function initializeData(country,insideValidation){
   // calculated immunity fraction profile IvacArr using the dynamics of
   // Vaccination() (!! related to it=i-data_idataStart)
 
-  var vaccData=new Vaccination();  // in sim: CoronaSim.vaccination=new ...
+  vaccination=new Vaccination();  // in sim: CoronaSim.vaccination=new ...
   console.log("before vaccData.initialize(country)");
-  vaccData.initialize(country);
+  vaccination.initialize(country);
   var rVaccData=0;
   for(var it=0; it<itPresent; it++){
     var i=it+data_idataStart;
@@ -1157,9 +1158,9 @@ function initializeData(country,insideValidation){
       rVaccData=data_rVacc[i]; // otherwise unchhanged
     }
     //console.log("it=",it," i=",i," date=",data_date[i]," rVaccData=",rVaccData);
-    vaccData.update(rVaccData,it);  
-    IvaccArr[it]=vaccData.Ivacc; 
-    corrIFRarr[it]=vaccData.corrFactorIFR;
+    vaccination.update(rVaccData,it);  
+    IvaccArr[it]=vaccination.Ivacc; 
+    corrIFRarr[it]=vaccination.corrFactorIFR;
     //if(true){
     //if(it>itPresent-10){
     if(false){
@@ -2084,8 +2085,12 @@ function calibrate(){
         if(logging) console.log(" snapshot for initialiation in next period:",
 		  corona.snapshot);
       }
-    }// end calibration proper (several calibr steps)
+    }// end calibration proper (several calibr steps) R0calib and R0time
 
+
+    //!!!!
+    R0time[R0time.length-1] *=1.001; // for some reason, last leg a bit low
+    //!!!!
 
     firstR0fixed=false; // for the whole simulation use all R0 values in R0time
     useInitSnap=false; 
@@ -2218,9 +2223,9 @@ function calibrate(){
     // scale down to IFR65 for age group 65
 
     var corrIFR0=(it0>=tauDie)
-	? corrIFRarr[it0-tauDie] : corona.vaccination.corrFactorIFR0;
+	? corrIFRarr[it0-tauDie] : vaccination.corrFactorIFR0;
     var corrIFR1=(it1>=tauDie)
-	? corrIFRarr[it1-tauDie] : corona.vaccination.corrFactorIFR0;
+	? corrIFRarr[it1-tauDie] : vaccination.corrFactorIFR0;
 
     IFR65time[j]=IFR0;
     IFR65time[j+1]=IFR1; // time it=(j+1)*IFRinterval=IFR_jmax*IFRinterval
@@ -3368,6 +3373,8 @@ MutationDynamics.prototype.update=function(it){
 }
 
 
+//  RKI Bulletin 2021-03, references/Infektionsparameter_2021_03.pdf
+
 //################################################################
 function Vaccination(){
 //################################################################
@@ -3375,7 +3382,9 @@ function Vaccination(){
   this.tau0=28;      // days after full effect I0 is reached (1 week after)
   this.Ivacc=0;      // population immunity fraction by vaccinations
                      // ! read from application routines after update()
-  this.vaccmax=0.8;  // vacc deniers/med impossibilities in each age group
+  this.vaccmax=[0.35,0.60,0.68,0.75,0.82,0.86,0.90,0.90]; // 1-vacc deniers
+                     // or med impossibilities in each age group
+  this.vaccmaxTot=0; // pop-averaged max vaccination rate
   this.pVaccHist=[]; // history[tau] of vacc percentage pVacc (first vacc.)
 
   this.f_age=[];     // demographic profile of age groups
@@ -3402,6 +3411,12 @@ Vaccination.prototype.initialize=function(country){
     this.pVaccHist_age[ia]=[];
     this.f_age[ia]=0.01*ageProfilePerc[ia];
   }
+
+  this.vaccmaxTot=0;
+  for(var ia=0;ia<ageProfilePerc.length; ia++){
+    this.vaccmaxTot += this.f_age[ia]*this.vaccmax[ia];
+  }
+  
   for(var tau=0; tau<this.tau0; tau++){
     this.pVaccHist[tau]=0;
   }
@@ -3416,8 +3431,10 @@ Vaccination.prototype.initialize=function(country){
 
   this.corrFactorIFR0=this.corrFactorIFR;
   this.ageGroup=ageProfilePerc.length-1; // actual age group to be vacc
+
+  // !!!! Vaccination.initialize called at each calibr run
   
-  //console.log("Vaccination.initialize: this.corrFactorIFR0=",this.corrFactorIFR0);
+  console.log("\n\nVaccination.initialize: this.corrFactorIFR0=",this.corrFactorIFR0, " this.vaccmaxTot=",this.vaccmaxTot,"\n\n");
 }
 
 // update using rate of first vaccinations (no second vacc or other
@@ -3437,20 +3454,22 @@ Vaccination.prototype.update=function(rVacc,it){
 
     // add new daily first vaccination percentage globally
     
-    this.pVaccHist[0]=Math.min(this.pVaccHist[1]+rVacc,this.vaccmax);
+    this.pVaccHist[0]=Math.min(this.pVaccHist[1]+rVacc,this.vaccmaxTot);
+    this.pVaccHist[0]=this.pVaccHist[1]+rVacc;
     pVacc=this.pVaccHist[0]; // global var for display
 
     // distribute new vaccinations top-down to the age groups
 
     var j=this.ageGroup;
-    var p_remaining=this.f_age[j]*(this.vaccmax-this.pVaccHist_age[j][1]);
+    var p_remaining=this.f_age[j]*(this.vaccmax[j]-this.pVaccHist_age[j][1]);
     if(p_remaining>=rVacc){
       this.pVaccHist_age[j][0]=this.pVaccHist_age[j][1]+rVacc/this.f_age[j];
     }
     else{
-      this.pVaccHist_age[j][0]=this.vaccmax;
+      this.pVaccHist_age[j][0]=this.vaccmax[j];
       if(this.ageGroup==0){
-	console.log("Warning: cannot vaccinate more than perc ",this.vaccmax);
+	console.log("Warning: cannot vaccinate more than ",
+		    (100*this.vaccmaxTot).toFixed(1),"% of population" );
       }
       else{
         this.pVaccHist_age[j-1][0]=(rVacc-p_remaining)/this.f_age[j-1];
@@ -3529,7 +3548,7 @@ function CoronaSim(){
   this.snapAvailable=false; // initially, no snapshot of the state exists
   this.Reff=1.11;    // need some start ecause otherwise bug at drawing
                      // undeterministic too early calling of drawsim 
-  this.vaccination=new Vaccination();
+  //this.vaccination=new Vaccination();
 }
 
 
@@ -3808,16 +3827,17 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
   //                    main infection process at step (2)
   // ###############################################
 
-  if(it==0){this.vaccination.initialize(country);}
  
   // IvaccArr[it]: global fixed vacc immunity time profile
   // generated interactively here, if outside calibration
   
   Ivacc=(it>=0) ? IvaccArr[it] : 0; // inside calibration with profile
   corrIFR=(it>=tauDie)
-    ? corrIFRarr[it-tauDie] : this.vaccination.corrFactorIFR0; 
+    ? corrIFRarr[it-tauDie] : vaccination.corrFactorIFR0; 
 
-  if(!inCalibration){
+  //if(false){ //!!!!
+  if( !inCalibration && (it>=0)){
+    if(it==0){vaccination.initialize(country);}
     if(!slider_rVacc_moved){ // if slider moved, rVacc directly from slider
       var i=it+data_idataStart;
       if(i<0){rVacc=0;}
@@ -3826,13 +3846,15 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
       rVacc=(i<data_rVacc.length-7) // data_rVacc is smoothed over one week
 	? data_rVacc[i] : data_rVacc[data_rVacc.length-7];
     }
-    this.vaccination.update(rVacc,it);
-    Ivacc=this.vaccination.Ivacc; //!! geht nicht bei calibration
-    corrIFRarr[it]=this.vaccination.corrFactorIFR;
+    vaccination.update(rVacc,it);
+    Ivacc=vaccination.Ivacc; //!! geht nicht bei calibration
+    corrIFRarr[it]=vaccination.corrFactorIFR;
     corrIFR=(it>=tauDie)
-      ? corrIFRarr[it-tauDie] : this.vaccination.corrFactorIFR0; 
-
+      ? corrIFRarr[it-tauDie] : vaccination.corrFactorIFR0; 
+    //console.log("update outside calib: it=",it," Ivacc=",Ivacc," corrIFR=",corrIFR);
   }
+
+
   
  
   this.Reff=R0 * (1-Ivacc) * (1-this.xyz)

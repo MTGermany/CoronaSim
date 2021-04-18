@@ -1,0 +1,152 @@
+Video "Die Feiertagsl\"ucke - wie bew\"altigt die Simulation Testl\"ucken und
+Meldeverz\"ogerungen?"
+
+[links mein Bild, rechts die fertige corona-simulation.de]
+
+Hallo liebe Simulationsfreunde,
+ich habe mir mal aus \"okonometrischer Sicht ein immer wieder
+auftretendes Datenproblem
+genauer angeschaut. Man sieht es gerade gut, wenn man meine
+Simu;lation unter corona-simulation.de standardm\"a\3ig f\"ur
+Deutschland bis zur gegenwart simulieren l\"asst. Ich nenne es mal die
+Osterl\"ucke
+
+[Pfeil von oben eher links mit eigener Funktionalitaet ohne <super><alt>D] 
+
+[zoomen Scrollrad nach vorne drehen][zeichnen mit eigener Funktionalitaet]
+
+Zoomen wir mal n\"aher rein. Wie gesagt, dass geht in der Simulation
+mit dem Scrollrad.
+
+[Pfeil von unten]
+Merkw\"urdig, auch die Todeszahlen gehe synchron mit den Fallzahlen
+runter und nicht etwa wie \"ublich etwa 20 Tage verz\"ogert
+
+[umstellen auf Tagesansicht]
+
+In der Tagesansicht sieht man noch deutlicher den Grund: Sonst gibt es
+nur 1-2 Tage pro Woche mit wenig Daten, nun aber 4. Klar, Karfreitag
+und Ostersamstag!
+
+Klar: Zu Ostern wurde weniger getestet, oder zwar getestet, aber
+teils nicht gemeldet. In jeden Fall gibt es weniger Testergebnisse.
+
+Bedeutet dies, dass der Virus  zu Ostern weniger wirkt? Nat\"urlich
+nicht! Bedenken Sie immer: Wir k\"onnen gar nicht die Infektionszahl
+bestimmen! Der PCR oder andere Tests sind lediglich eine 
+\"Uberpr\"ufung mit nichtperfekter Sensitivit\"at und vor allem
+Spezifizit\"at der Leute, die einen Test bekamen UND der dann auch
+gemeldet wird.
+
+Die sog. "Cases" f\"ur THE REAL THING zu halten und basierend auf den
+Fallzahlen sogar R-Werte zu berechnen, das bringt auch nur das RKI
+fertig.
+
+Normalerweise macht das wenig aus, da sowohl die R-Werte als auch
+Inzidenz meist ueber 7 Tage Mittel gerechnet werden. De rnatuerlich
+ebenso unrealistische Wochengang gleicht sich so exakt aus
+[Umstellen auf Wocheninzidenz][entfernter Scrollen] [zurueck
+Tag][zurueck Woche]
+
+Ein zweites Problem ist die sich offensichtlich mit den
+Testh\"aufigkeiten \"andernde Dunkelziffer.
+
+[Bulletin S. 13, Abb 9]
+
+Hier eine Sch\"atzung des RKI der Dunkelziffer im Bulletin 2021-13:
+Schwarz ist die altersspez Inzidenz, dunkelblau was das RKI-eigene
+Modell macht (ist \"ubrigens \"ahnlich wie meins, bespreche ich in
+einen der n\"achsten Videos), hellblau das gesch\"atzte Dunkelfeld und
+die H\"ohe der hellblauen Wellen die gesch\"atzte reale
+Gesamtinfktionszahl
+
+[Bullewtin Abb 1 S. 4]
+
+Hier ist das RKI-Modell mit sog. Meldezweig und
+Dunkelziffer.
+
+[runterscrollen]
+
+alle Modellparameter sind hier auch erklaert, bis auf zwei
+
+[hochscrollen]
+
+1. Die anf\"angliche Dunkelziffer 1-omega bzw. omega=die bedingte
+Wahrscheinlichkeit, dass ein Infizierter vor seiner Ansteckbarkeit
+getestet wird, z.B. durch Zufall oder durch R\"uckverfolgung
+
+2. Der Sp\"atentdecker-Anteil xi, also der Anteil der Leute im
+anf\"angl Dunkelfeld, die aufgrund Erk\"altungssymptome oder
+Covidsymptome positiv getestet werden und damit in das Hellfeld
+wandern.
+
+[runterscrollen zu S. 13]
+Das RKI nimmt offensichtlich ein ueber die
+ganze Zeit seit ausbruch konstantes Dunkelfeld an
+[ctr+ ctr+]
+
+Schauen wir mal genauer rein
+Alter 16-29: Max 1 Strich Hellfeld, 4 Striche gesamt, also 25% Hellfeld
+nun zu den ganz alten 80+ beim Max 0.75 Striche Hellfeld, 3 Striche
+gesamt - wieder 25%
+Nun Maerz 2020, Anfang der Pandemie, wo viel weniger getestet wurde:
+zB 40-49. Auch gesamt nahezu 4 fach so hoch. Die nehmen also ein
+konstantes Hellfeld ueber alle Pandemiezeiten und Altersstufen von
+25-30% an, kann man nicht naeher herauslesen.
+
+Wie sieht es aber mit der Testfrequenz aus?
+
+[zu Simulation]
+[Umschalten Testansicht]
+[scrollen ganze Pandemie]
+Anfaenglich viel weniger getestet. Die Annahme des RKI einer
+konstanmten Dunkelziffer ist also nicht plausibel!
+Ebensowenig ist es aber plausibel, einfach das Hellfeld lin mit den
+Testfrequenz steigen zu lassen. Das g\"alte nur, wenn zuf\"allig
+getestet w\"urde.
+
+F\"ur den Wochengang und die Sonderf\"alle wie Ostern hingegen ist
+offensichtl. Hellfeld des Tages prop Testanzahl, sieht man schon an
+den synchron zur\"uckgeganenen Todesf\"allen (auch wenn zu Ostern die
+Auferstehung ist!)
+
+[ich als Vollbild]
+
+Wie l\"osen wir diese doppelte Unsicherheit auf? Unbekanntes und
+variables Hellfeld und Wochengang bei Testungen
+bzw. Ausfall/Rueckgang/Meldeverzug \"uber Feiertage?
+
+langfr-kurzfr
+
+[Sim-Validierungen]
+
+Schluss
+
+
+
+
+
+
+
+
+
+
+
+Bulletin Abb 7: Durchimpfungsschaubild
+
+Bulletin S. 16 Abb 14: Prognose Offensichtlich 0% ist "wie bisher"
+(stringency-Wert 70%), 100%=prae-pandemisches Kontaktverhalten
+(Stringency 0)
+
+=========================================================
+
+Video "Prognose f\"ur den Sommer"
+
+Bulletin Tab. 2: Impfwirkung. Gezeigt inkrementelle Werte, z.B. Sars-2
+Infektiosit\"at 1-((1-0.72)*(1-0.25)) nach 1. mRNA-Imfung,
+1-((1-0.92)*(1-0.5)) nach 2. Impfung => nahezu 100%
+
+
+
+
+

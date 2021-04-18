@@ -1,3 +1,9 @@
+
+#######################################################################
+Massgebliches Dir: ~/versionedProjects/trafficflowdynamics/tex/videos
+#######################################################################
+
+
 https://www.youtube.com/watch?v=P9pzmzXj03A
 
 
@@ -16,6 +22,14 @@ Alles speichern => .mlt Projekt file
 
 2. Verwendete Videos mit "open a file" und "+" im linken Fenster
 in Playlist ablegen (ggf "Playlist" darunter druecken
+
+2a: Besser: File Viewer oeffnen und ganzes Buendel (shift-click) in
+Playslist ziehen
+
+ACHTUNG: Vergewissere, dass alle Files mit Screenrecorder gespeichert
+und zu sind; Screenrecorder vorher zumachen (merkt sich Einstellungen)
+
+
 
 3. Timeline: Dort wird das Video erstellt!
  - Standard: ein Videotrack (=Audio+Video)
@@ -43,6 +57,10 @@ V2-V3-zweiter Teil V2
 - die 4 Videoelemente buendig hintereinanderstellen (falls Ueberlapp,
   wird kontinuierlich uebergeblendet, aber auch im Sound
 
+- Schneiden in einem Clip: Curser an Schneideposition - Symbol "]["
+  (split at playhead) - zwei unabhaengige clips, die man an den Enden
+  schneiden kann
+
 5. Test: Im zentralen rechten oberen Fenster ird geschnittenes Video
   angezeigt, wenn man auf "Project" klickt (gibt auch Option "source")
   Man kann die abgespielte Zeit unten am weissen Strich oder auch oben
@@ -62,6 +80,14 @@ Braucht lange! grosse Files
   GOP (group of pictures, max keyframe) 30  [=1 s]
   - [li unten] "Export File" [dort, wo vorher "Export" stand]
   - filename <projName>.mkv  (mit Extension, sonst DOS)
-  ! Achtung, Gefahr! Nimmt automatisch mlt und ueberschreibt das
+  
+  ACHTUNG Gefahr! Nimmt automatisch mlt und ueberschreibt das
     Projektfile, ausserdem in Unterdir. Aufpassen!
+
+  ACHTUNG!!: Merkt sich nicht Projekt Directory => Files werden ggf in
+  anderem Video Dir gespeichert, wenn man nicht aufpasst!!
+  !!! Kann ggf dort Videos ueberschreiben, man wird moeglicherw
+  nicht gewarnt!!!
+
+
   - save
