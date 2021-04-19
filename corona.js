@@ -513,7 +513,7 @@ var tauSymptoms=7;  // incubation time
 
 var taumax=Math.max(tauDie,tauRecover)+tauAvg+1;
 
-var tauInfectious_fullReporting=84; // !! param of the sqrt pTest model
+var tauInfectious_fullReporting=42; // !! Hellfeld param of sqrt pTest model
 var alphaTest=0.0; // alpha error of test (false negative)
 var betaTest=0.003; // beta error (false positive) after double testing
 

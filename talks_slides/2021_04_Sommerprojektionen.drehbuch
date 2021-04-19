@@ -1,0 +1,58 @@
+Video "Prognose für den Sommer"
+
+Elemente:
+
+* ich, vlc input "--video-filter=croppadd{cropright=200,cropleft=200}" v4l2:///dev/video0
+
+* Chrome local corona-simulation.de
+
+* Bulletin 2021-13, Abb 1
+~/versionedProjects/CoronaSim/references/Infektionsparameter_2021_03.pdf
+
+* Bulletin 2021-13, Abb 9 (evince rechts horiz Striche "open a copy")
+~/versionedProjects/CoronaSim/references/Infektionsparameter_2021_03.pdf
+
+
+=======================================================================
+
+[links mein Bild, rechts die fertige corona-simulation.de]
+
+Hallo liebe Simulationsfreunde,
+
+
+
+=========================================================
+
+
+Bulletin Tab. 2: Impfwirkung. Gezeigt inkrementelle Werte, z.B. Sars-2
+Infektiosität 1-((1-0.72)*(1-0.25)) nach 1. mRNA-Imfung,
+1-((1-0.92)*(1-0.5)) nach 2. Impfung => nahezu 100%
+
+
+[Bulletin Abb 1 S. 4]
+
+Hier ist das RKI-Modell mit sog. Meldezweig und
+Dunkelziffer.
+
+[runterscrollen]
+
+alle Modellparameter sind hier auch erklaert, bis auf zwei
+
+[hochscrollen]
+
+1. Die anfängliche Dunkelziffer 1-omega bzw. omega=die bedingte
+Wahrscheinlichkeit, dass ein Infizierter vor seiner Ansteckbarkeit
+getestet wird, z.B. durch Zufall oder durch Rückverfolgung
+
+2. Der Spätentdecker-Anteil xi, also der Anteil der Leute im
+anfängl Dunkelfeld, die aufgrund Erkältungssymptome oder
+Covidsymptome positiv getestet werden und damit in das Hellfeld
+wandern.
+
+
+
+Bulletin Abb 7: Durchimpfungsschaubild
+
+Bulletin S. 16 Abb 14: Prognose Offensichtlich 0% ist "wie bisher"
+(stringency-Wert 70%), 100%=prae-pandemisches Kontaktverhalten
+(Stringency 0)
