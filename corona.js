@@ -1,4 +1,7 @@
 
+// Deutsches Intensivregister!! 
+//wget https://diviexchange.blob.core.windows.net/%24web/bundesland-zeitreihe.csv
+
 //##################################################################
 // general global variables affecting global appearance
 //##################################################################
@@ -1064,6 +1067,12 @@ function initializeData(country,insideValidation){
       !(typeof data2[i2].people_fully_vaccinated === "undefined"))
       ? data2[i2].people_fully_vaccinated
       : 2*data_cumVaccFully[i-1]-data_cumVaccFully[i-1];
+    if(!(data_cumVacc[i]>=0)){ // NaN or other errors outside of undefined
+      data_cumVacc[i]=data_cumVacc[i-1];
+    }
+    if(!(data_cumVaccFully[i]>=0)){ 
+      data_cumVaccFully[i]=data_cumVaccFully[i-1];
+    }
     
     data_stringencyIndex[i]=(
       !(typeof data2[i2].stringency_index === "undefined"))
@@ -1121,8 +1130,9 @@ function initializeData(country,insideValidation){
       data_rVacc_unsmoothed[i] *= n0/n0List[country2]; //!!! n0/n0Germany n02
       //console.log("n0=",n0," n0List[\"Germany\"]=",n0List["Germany"]);
     }
-    if(false){
+    if(true){
       console.log("i=",i," date=",data[i]["date"],
+		  " data_cumVacc[i]=",data_cumVacc[i],
 		  " data_rVacc_unsmoothed[i]=",data_rVacc_unsmoothed[i]);
     }
 
@@ -3434,7 +3444,11 @@ Vaccination.prototype.initialize=function(country){
 
   // !!!! Vaccination.initialize called at each calibr run
   
-  console.log("\n\nVaccination.initialize: this.corrFactorIFR0=",this.corrFactorIFR0, " this.vaccmaxTot=",this.vaccmaxTot,"\n\n");
+  console.log("\n\nVaccination.initialize: this.corrFactorIFR0=",
+	      this.corrFactorIFR0, " this.vaccmaxTot=",this.vaccmaxTot,
+	      " this.pVaccHist=",this.pVaccHist,
+	      " this.pVaccHist_age=",this.pVaccHist_age,
+	      "\n\n");
 }
 
 // update using rate of first vaccinations (no second vacc or other

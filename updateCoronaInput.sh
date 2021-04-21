@@ -4,8 +4,8 @@
 # 0. Parsing
 #####################################################################
 
-regular=true
-
+regular=true #ATTENTION No boolean but set by existence of first cmdline arg
+echo "regular=$regular"
 if(($#==0)); then
     regular=true;
     echo ""; echo "updateCoronaInput.sh: regular call";
@@ -26,10 +26,10 @@ fi
 
 if [[ $regular == true ]];
 then
-    echo ""; echo "getting RKI Landkreis data ...";
+    echo ""; echo "RKI Landkreis data: calling updateLandkreisData.sh...";
     updateLandkreisData.sh;
-else
-    echo "yet no updateLandkreisData.sh with testing option imple,mented"
+#else
+#    echo "yet no updateLandkreisData.sh with testing option implemented"
 fi
 
 
@@ -63,6 +63,8 @@ perl -i -p -e 's/\}\]\}\,/\}\]\},\n/g' data/githubWithTests.json
 # 2.1 select countries OWID
 ################################
 
+grep Germany data/githubWithTests.json > data/GermanyWithTests_orig.json
+
 grep Germany data/githubWithTests.json > data/tmp.json
 grep Austria data/githubWithTests.json >> data/tmp.json
 grep Czech data/githubWithTests.json >> data/tmp.json
@@ -89,6 +91,7 @@ grep ZAF data/githubWithTests.json >> data/tmp.json # Suedafrika
 ################################
 
 # make each day a line for elimination
+perl -i -p -e 's/\}\,/},\n/g' data/tmp.json data/GermanyWithTests_orig.json
 perl -i -p -e 's/\}\,/},\n/g' data/tmp.json
 
 
@@ -153,7 +156,9 @@ mv data/tmp2.json data/githubWithTests.json
 mv data/tmp.json data/githubWithTests_debug.json
 #rm data/tmp.json data/githubWithTests_debug.json
 
-
+echo "made data/githubWithTests.json"
+echo "made data/githubWithTests_debug.json"
+echo "made data/GermanyWithTests_orig.json"
 
 
 #####################################################################
@@ -209,7 +214,7 @@ cp data/github_debug_Germany.json history/github_debug_Germany_$dateStr.json
 
 # 3.3 final touches
 
-add variable name and neceesary '  ' between rhs of var
+#add variable name and neceesary '  ' between rhs of var
 
 sed -e "1i\dataGitLocal=\'\{" data/tmp.json > data/tmp2.json
 echo "}'" >> data/tmp2.json
@@ -222,13 +227,13 @@ perl -i -p -e "s/\]\,\}/\]\}/g"  data/tmp2.json
 
 rm data/tmp.json
 mv data/tmp2.json data/github.json
+echo "made data/github.json"
+
+
 
 #####################################################################
-# 4. final bookkeeping
+# 4. prepare full githubWithTests_orig for Germany with lines
 #####################################################################
-
-
-# prepare full githubWithTests_orig for Germany with lines
 
 cp data/githubWithTests_orig.json tmp2
 perl -i -p -e 's/\}\]\}\,/\}\]\},\n/g' tmp2
@@ -242,8 +247,10 @@ perl -i -p -e 's/\,\"tests_units\"\:\"[\w\s]+\"//g' tmp
 rm tmp2
 mv tmp data/githubWithTests_debug_Germany.json
 
-# save past json files to history
+#####################################################################
+# 5. save past json files to history
 # (because of the sluggishly reported deaths)
+#####################################################################
 
 
 
@@ -272,6 +279,9 @@ echo ""; echo "propagate to public_html directory"
 upload2public_html.sh
 
 exit
+
+
+
 
 
 #####################################################################
