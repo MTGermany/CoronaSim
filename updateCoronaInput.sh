@@ -160,9 +160,44 @@ echo "made data/githubWithTests.json"
 echo "made data/githubWithTests_debug.json"
 echo "made data/GermanyWithTests_orig.json"
 
+#####################################################################
+# 3. Include separate source with ICUs and other illness data in
+# data/githubWithTests.json
+#####################################################################
+
+if [[ $regular == true ]];
+then
+  echo ""; echo "regular:wgetting DIVI data  ...";
+  wget https://diviexchange.blob.core.windows.net/%24web/bundesland-zeitreihe.csv --output-document=data/DIVI_orig.csv;
+
+  cp data/DIVI_orig.csv data/DIVI.csv;
+
+else echo ""; echo "debug mode: copying DIVI data from saved one";
+  cp data/DIVI_orig.csv data/DIVI.csv;
+fi
+# grep Datum data/DIVI.csv > data/tmp.csv
+# grep DEUTSCHLAND data/DIVI.csv >> data/tmp.csv
+
+grep DEUTSCHLAND data/DIVI.csv > data/tmp.csv
+perl -i -p -e 's/T12.+SCHLAND//g' data/tmp.csv
+perl -i -p -e 's/([0-9]{4})\-([0-9]{2})\-([0-9]{2})\,[0-9]+\,/\"\1-\2-\3\"\,\"ICUcovid\":/g' data/tmp.csv
+perl -i -p -e 's/^\"/\{\"date\":/g' data/tmp.csv
+perl -i -p -e 's/\"ICUcovid\"\:([0-9]+)\,.*$/\"ICUcovid\":\1\}\,/g' data/tmp.csv
+
+sed -e "1i\dataDIVI_Germany_string=\'\{ \"Germany\"\: \[" data/tmp.csv > data/DIVI.json
+echo "]}'" >> data/DIVI.json
+
+# make one line (needed!!) and remove last comma (needed!!) 
+
+perl -i -p -e 's/\n//g' data/DIVI.json
+perl -i -p -e "s/\}\,\]/\}]/g"  data/DIVI.json
+
+#clean
+
+rm data/DIVI.csv 
 
 #####################################################################
-# 3. get lean data w/o test from the pomber github website
+# 4. get lean data w/o test from the pomber github website
 #####################################################################
 
 if [[ $regular == true ]];
@@ -178,7 +213,7 @@ fi
 
     
 
-# 3.1 separate countries in lines: all lines off, then ] => ]\n
+# 4.1 separate countries in lines: all lines off, then ] => ]\n
 
 perl -i -p -e 's/\n//g' data/github.json
 perl -i -p -e 's/\]\,/\],\n/g' data/github.json
@@ -204,7 +239,7 @@ grep Australia data/github.json >> data/tmp.json
 grep Portugal data/github.json >> data/tmp.json
 grep "South Africa" data/github.json >> data/tmp.json
 
-# 3.2 extract Germany data for development reference
+# 4.2 extract Germany data for development reference
 
 grep Germany data/github.json > data/github_debug_Germany.json
 perl -i -p -e 's/\}\,/\}\,\n/g' data/github_debug_Germany.json
@@ -212,7 +247,7 @@ dateStr=`date +"%Y_%m_%d"`
 cp data/github_debug_Germany.json history/github_debug_Germany_$dateStr.json
 
 
-# 3.3 final touches
+# 4.3 final touches
 
 #add variable name and neceesary '  ' between rhs of var
 
@@ -230,9 +265,8 @@ mv data/tmp2.json data/github.json
 echo "made data/github.json"
 
 
-
 #####################################################################
-# 4. prepare full githubWithTests_orig for Germany with lines
+# 5. prepare full githubWithTests_orig for Germany with lines
 #####################################################################
 
 cp data/githubWithTests_orig.json tmp2
@@ -248,7 +282,7 @@ rm tmp2
 mv tmp data/githubWithTests_debug_Germany.json
 
 #####################################################################
-# 5. save past json files to history
+# 6. save past json files to history
 # (because of the sluggishly reported deaths)
 #####################################################################
 
@@ -271,7 +305,7 @@ ls -l history/*debug*_$dateStr.json
 
 
 #####################################################################
-# 5. propagate changes
+# 7. propagate changes
 #####################################################################
 
 echo ""; echo "propagate to public_html directory"

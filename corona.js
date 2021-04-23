@@ -1,6 +1,7 @@
 
 // Deutsches Intensivregister!! 
 //wget https://diviexchange.blob.core.windows.net/%24web/bundesland-zeitreihe.csv
+// JSON implemented, not yet used (DIVI most up-to-date but consistent with OWID (up to 10 days delayed)
 
 //##################################################################
 // general global variables affecting global appearance
@@ -685,6 +686,9 @@ function loadData() {
     }
   }
 
+  dataDIVI_Germany=JSON.parse(dataDIVI_Germany_string);
+  console.log("dataDIVI_Germany=",dataDIVI_Germany);
+  
   dataRKI = JSON.parse(dataRKI_string); // must be different name!!
   dataRKI_orig=JSON.parse(JSON.stringify(dataRKI));
   console.log("dataRKI=",dataRKI);
@@ -1130,7 +1134,7 @@ function initializeData(country,insideValidation){
       data_rVacc_unsmoothed[i] *= n0/n0List[country2]; //!!! n0/n0Germany n02
       //console.log("n0=",n0," n0List[\"Germany\"]=",n0List["Germany"]);
     }
-    if(true){
+    if(false){
       console.log("i=",i," date=",data[i]["date"],
 		  " data_cumVacc[i]=",data_cumVacc[i],
 		  " data_rVacc_unsmoothed[i]=",data_rVacc_unsmoothed[i]);
@@ -1306,7 +1310,9 @@ function initializeData(country,insideValidation){
       pTestLinDirect[i]/=Math.pow(pTestSuperSmooth[i],2);
       data_pTestModel[i]=Math.min(1,pTestSuperSmooth[i]*pTestLinDirect[i]);
 
-      if(i>data.length-21){
+      if(false){// LOG possibly consolidate with DATALOG
+      //if(i>data.length-21){
+
 	console.log(
 	  insertLeadingZeroes(data[i]["date"]),
 	  " pTestLinDirect[i]=",pTestLinDirect[i],
@@ -1393,7 +1399,7 @@ function initializeData(country,insideValidation){
       //var logging=true;
       //var logging=false;
       //var logging=(i>data.length-10);
-      var logging=(i>data.length-21);
+      var logging=(i>data.length-21); // DATALOG possibly consolid with PLOG
       //var logging=(i==200);
       if(logging){
 	var it=i-data_idataStart;
@@ -3197,7 +3203,7 @@ function simulationRun() {
   // to get the initial point it=0) 
 
   if(it==itPresent){ // !! itPresent, not itPresent-1 represents present
-    console.log("before clearInterval: it=",it);
+    //console.log("before clearInterval: it=",it);
     clearInterval(myRun);myStartStopFunction();
   }
 }
@@ -3409,6 +3415,7 @@ function Vaccination(){
   this.iaRef=4;      // age index of reference age group 60-70
   this.multFactor10=3.5; //every 10 years older increases IFR by this factor
 
+  this.vaccmaxreached=false;
   // cannot use this.initialize here
 }
 
@@ -3442,13 +3449,11 @@ Vaccination.prototype.initialize=function(country){
   this.corrFactorIFR0=this.corrFactorIFR;
   this.ageGroup=ageProfilePerc.length-1; // actual age group to be vacc
 
-  // !!!! Vaccination.initialize called at each calibr run
-  
-  console.log("\n\nVaccination.initialize: this.corrFactorIFR0=",
+  if(false){console.log("\n\nVaccination.initialize: this.corrFactorIFR0=",
 	      this.corrFactorIFR0, " this.vaccmaxTot=",this.vaccmaxTot,
 	      " this.pVaccHist=",this.pVaccHist,
 	      " this.pVaccHist_age=",this.pVaccHist_age,
-	      "\n\n");
+			"\n\n");}
 }
 
 // update using rate of first vaccinations (no second vacc or other
@@ -3469,7 +3474,6 @@ Vaccination.prototype.update=function(rVacc,it){
     // add new daily first vaccination percentage globally
     
     this.pVaccHist[0]=Math.min(this.pVaccHist[1]+rVacc,this.vaccmaxTot);
-    this.pVaccHist[0]=this.pVaccHist[1]+rVacc;
     pVacc=this.pVaccHist[0]; // global var for display
 
     // distribute new vaccinations top-down to the age groups
@@ -3482,6 +3486,7 @@ Vaccination.prototype.update=function(rVacc,it){
     else{
       this.pVaccHist_age[j][0]=this.vaccmax[j];
       if(this.ageGroup==0){
+	this.vaccmaxreached=true;
 	console.log("Warning: cannot vaccinate more than ",
 		    (100*this.vaccmaxTot).toFixed(1),"% of population" );
       }
@@ -3494,13 +3499,16 @@ Vaccination.prototype.update=function(rVacc,it){
 
     // update immunity percentage globally and in age groups
     
-    this.Ivacc +=this.I0/(this.tau0-1) // (this.tau0-1) Gartenzauneffekt OK
-      *(this.pVaccHist[0]-this.pVaccHist[this.tau0-1]);
+    if(!this.vaccmaxreached){
+      this.Ivacc +=this.I0/(this.tau0-1) // (this.tau0-1) Gartenzauneffekt OK
+	*(this.pVaccHist[0]-this.pVaccHist[this.tau0-1]);
 
-    for(var ia=0;ia<this.f_age.length; ia++){
-      this.Ivacc_age[ia] +=this.I0/(this.tau0-1) 
-	*(this.pVaccHist_age[ia][0]-this.pVaccHist_age[ia][this.tau0-1]);
+      for(var ia=0;ia<this.f_age.length; ia++){
+        this.Ivacc_age[ia] +=this.I0/(this.tau0-1) 
+	  *(this.pVaccHist_age[ia][0]-this.pVaccHist_age[ia][this.tau0-1]);
+      }
     }
+    //else{console.log("this.vaccmaxreached=true!!");}
   }
 
   else{ // it=0, initialize
@@ -3533,9 +3541,9 @@ Vaccination.prototype.update=function(rVacc,it){
     // debug
 
   if(false){
-    //if(rVacc>0){
+  //if(rVacc>0){
       console.log("Vaccination.update: this.tau0=",this.tau0," it=",it,
-		  "\n this.pVaccHist[0]=",this.pVaccHist[0],
+		  "\n pVacc=this.pVaccHist[0]=",this.pVaccHist[0],
 		  " this.pVaccHist[this.tau0-1]=",this.pVaccHist[this.tau0-1],
 		  " this.Ivacc=",this.Ivacc);
       var sum=0; 
