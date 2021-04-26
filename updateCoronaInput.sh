@@ -194,7 +194,7 @@ perl -i -p -e "s/\}\,\]/\}]/g"  data/DIVI.json
 
 #clean
 
-rm data/DIVI.csv 
+rm data/DIVI.csv data/tmp.csv
 
 #####################################################################
 # 4. get lean data w/o test from the pomber github website

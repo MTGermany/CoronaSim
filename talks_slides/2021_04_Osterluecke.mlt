@@ -1,0 +1,723 @@
+<?xml version="1.0" standalone="no"?>
+<mlt LC_NUMERIC="C" version="6.25.0" title="Shotcut version 21.03.21" producer="main_bin">
+  <profile description="automatic" width="1228" height="708" progressive="1" sample_aspect_num="1" sample_aspect_den="1" display_aspect_num="1228" display_aspect_den="708" frame_rate_num="60" frame_rate_den="1" colorspace="709"/>
+  <producer id="producer0" in="00:00:00.000" out="00:03:36.750">
+    <property name="length">00:03:36.767</property>
+    <property name="eof">pause</property>
+    <property name="resource">Osterluecke_1.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-04-23T14:48:46</property>
+    <property name="shotcut:hash">7e7eecc91a4a2dab0593bc0a1b8e83bb</property>
+    <property name="ignore_points">0</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+  </producer>
+  <producer id="producer1" in="00:00:00.000" out="00:00:54.517">
+    <property name="length">00:00:54.533</property>
+    <property name="eof">pause</property>
+    <property name="resource">Osterluecke_2.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-04-23T14:50:21</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">43887fd372499c67ad5274bfbea7dc57</property>
+  </producer>
+  <producer id="producer2" in="00:00:00.000" out="00:01:47.583">
+    <property name="length">00:01:47.600</property>
+    <property name="eof">pause</property>
+    <property name="resource">Osterluecke_3.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-04-23T14:55:14</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">c167314016cd9ac538bd8200014dc18d</property>
+  </producer>
+  <producer id="producer3" in="00:00:00.000" out="00:03:49.233">
+    <property name="length">00:03:49.250</property>
+    <property name="eof">pause</property>
+    <property name="resource">Osterluecke_4.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-04-23T15:01:00</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">675aeae3f1440e8fc35cf3053706e4b6</property>
+  </producer>
+  <producer id="producer4" in="00:00:00.000" out="00:03:01.550">
+    <property name="length">00:03:01.567</property>
+    <property name="eof">pause</property>
+    <property name="resource">Osterluecke_5.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-04-23T15:04:36</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">3f5164bd32ca0b86ea061ac588f3d702</property>
+  </producer>
+  <producer id="producer5" in="00:00:00.000" out="00:02:19.817">
+    <property name="length">00:02:19.833</property>
+    <property name="eof">pause</property>
+    <property name="resource">Osterluecke_6.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-04-23T15:08:27</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">74d01c803fb4d841fab4f51fd5f5caeb</property>
+  </producer>
+  <producer id="producer6" in="00:00:00.000" out="00:04:15.467">
+    <property name="length">00:04:15.483</property>
+    <property name="eof">pause</property>
+    <property name="resource">Osterluecke_7.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-04-23T15:13:24</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">92f5e982fdcdd9e7fb86a9f8012b3d2e</property>
+  </producer>
+  <producer id="producer7" in="00:00:00.000" out="00:01:07.833">
+    <property name="length">00:01:07.850</property>
+    <property name="eof">pause</property>
+    <property name="resource">Osterluecke_8.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-04-23T15:15:52</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">5d2ae0c128d7b8133278484eb5d3b4fb</property>
+  </producer>
+  <producer id="producer8" in="00:00:00.000" out="00:03:04.100">
+    <property name="length">00:03:04.117</property>
+    <property name="eof">pause</property>
+    <property name="resource">Osterluecke_9.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-04-23T15:19:20</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">379d4c04266379b5220a3e25c8b152d7</property>
+  </producer>
+  <producer id="producer9" in="00:00:00.000" out="00:03:50.583">
+    <property name="length">00:03:50.600</property>
+    <property name="eof">pause</property>
+    <property name="resource">Osterluecke_10.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-04-23T15:25:13</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">792caa4ea28869e57e297db80df9e391</property>
+  </producer>
+  <producer id="producer10" in="00:00:00.000" out="00:02:49.233">
+    <property name="length">00:02:49.250</property>
+    <property name="eof">pause</property>
+    <property name="resource">Osterluecke_11.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-04-23T15:28:53</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">924c0dbd6f1549dbfb200576bf5a2d29</property>
+  </producer>
+  <playlist id="main_bin">
+    <property name="xml_retain">1</property>
+    <entry producer="producer0" in="00:00:00.000" out="00:03:36.750"/>
+    <entry producer="producer1" in="00:00:00.000" out="00:00:54.517"/>
+    <entry producer="producer2" in="00:00:00.000" out="00:01:47.583"/>
+    <entry producer="producer3" in="00:00:00.000" out="00:03:49.233"/>
+    <entry producer="producer4" in="00:00:00.000" out="00:03:01.550"/>
+    <entry producer="producer5" in="00:00:00.000" out="00:02:19.817"/>
+    <entry producer="producer6" in="00:00:00.000" out="00:04:15.467"/>
+    <entry producer="producer7" in="00:00:00.000" out="00:01:07.833"/>
+    <entry producer="producer8" in="00:00:00.000" out="00:03:04.100"/>
+    <entry producer="producer9" in="00:00:00.000" out="00:03:50.583"/>
+    <entry producer="producer10" in="00:00:00.000" out="00:02:49.233"/>
+  </playlist>
+  <producer id="black" in="00:00:00.000" out="00:28:20.983">
+    <property name="length">00:28:21.000</property>
+    <property name="eof">pause</property>
+    <property name="resource">0</property>
+    <property name="aspect_ratio">1</property>
+    <property name="mlt_service">color</property>
+    <property name="mlt_image_format">rgb24a</property>
+    <property name="set.test_audio">0</property>
+  </producer>
+  <playlist id="background">
+    <entry producer="black" in="00:00:00.000" out="00:28:20.983"/>
+  </playlist>
+  <producer id="producer11" in="00:00:00.000" out="00:03:36.750">
+    <property name="length">00:03:36.767</property>
+    <property name="eof">pause</property>
+    <property name="resource">Osterluecke_1.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-04-23T14:48:46</property>
+    <property name="shotcut:hash">7e7eecc91a4a2dab0593bc0a1b8e83bb</property>
+    <property name="ignore_points">0</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:caption">Osterluecke_1.mkv</property>
+  </producer>
+  <producer id="producer12" in="00:00:00.000" out="00:00:54.517">
+    <property name="length">00:00:54.533</property>
+    <property name="eof">pause</property>
+    <property name="resource">Osterluecke_2.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-04-23T14:50:21</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">43887fd372499c67ad5274bfbea7dc57</property>
+    <property name="shotcut:caption">Osterluecke_2.mkv</property>
+  </producer>
+  <tractor id="tractor0" global_feed="1" in="00:00:00.000" out="00:00:00.600">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="producer11" in="00:03:22.967" out="00:03:23.567"/>
+    <track producer="producer12" in="00:00:02.333" out="00:00:02.933"/>
+    <transition id="transition0" out="00:00:00.600">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition1" out="00:00:00.600">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <producer id="producer13" in="00:00:00.000" out="00:01:47.583">
+    <property name="length">00:01:47.600</property>
+    <property name="eof">pause</property>
+    <property name="resource">Osterluecke_3.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-04-23T14:55:14</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">c167314016cd9ac538bd8200014dc18d</property>
+    <property name="shotcut:caption">Osterluecke_3.mkv</property>
+  </producer>
+  <tractor id="tractor1" global_feed="1" in="00:00:00.000" out="00:00:00.500">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="producer12" in="00:00:50.683" out="00:00:51.183"/>
+    <track producer="producer13" in="00:00:00.617" out="00:00:01.117"/>
+    <transition id="transition2" out="00:00:00.500">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition3" out="00:00:00.500">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <producer id="producer14" in="00:00:00.000" out="00:03:49.233">
+    <property name="length">00:03:49.250</property>
+    <property name="eof">pause</property>
+    <property name="resource">Osterluecke_4.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-04-23T15:01:00</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">675aeae3f1440e8fc35cf3053706e4b6</property>
+    <property name="shotcut:caption">Osterluecke_4.mkv</property>
+  </producer>
+  <tractor id="tractor2" global_feed="1" in="00:00:00.000" out="00:00:00.017">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="producer13" in="00:01:37.717" out="00:01:37.733"/>
+    <track producer="producer14" in="00:00:02.733" out="00:00:02.750"/>
+    <transition id="transition4" out="00:00:00.017">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition5" out="00:00:00.017">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <producer id="producer15" in="00:00:00.000" out="00:03:49.233">
+    <property name="length">00:03:49.250</property>
+    <property name="eof">pause</property>
+    <property name="resource">Osterluecke_4.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-04-23T15:01:00</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">675aeae3f1440e8fc35cf3053706e4b6</property>
+    <property name="shotcut:caption">Osterluecke_4.mkv</property>
+  </producer>
+  <tractor id="tractor3" global_feed="1" in="00:00:00.000" out="00:00:00.083">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="producer14" in="00:00:26.100" out="00:00:26.183"/>
+    <track producer="producer15" in="00:00:36.983" out="00:00:37.067"/>
+    <transition id="transition6" out="00:00:00.083">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition7" out="00:00:00.083">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <producer id="producer16" in="00:00:00.000" out="00:03:49.233">
+    <property name="length">00:03:49.250</property>
+    <property name="eof">pause</property>
+    <property name="resource">Osterluecke_4.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-04-23T15:01:00</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">675aeae3f1440e8fc35cf3053706e4b6</property>
+    <property name="shotcut:caption">Osterluecke_4.mkv</property>
+  </producer>
+  <tractor id="tractor4" global_feed="1" in="00:00:00.000" out="00:00:00.117">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="producer15" in="00:01:19.333" out="00:01:19.450"/>
+    <track producer="producer16" in="00:01:22.850" out="00:01:22.967"/>
+    <transition id="transition8" out="00:00:00.117">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition9" out="00:00:00.117">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <producer id="producer17" in="00:00:00.000" out="00:03:01.550">
+    <property name="length">00:03:01.567</property>
+    <property name="eof">pause</property>
+    <property name="resource">Osterluecke_5.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-04-23T15:04:36</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">3f5164bd32ca0b86ea061ac588f3d702</property>
+    <property name="shotcut:caption">Osterluecke_5.mkv</property>
+  </producer>
+  <tractor id="tractor5" global_feed="1" in="00:00:00.000" out="00:00:00.583">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="producer16" in="00:03:48.650" out="00:03:49.233"/>
+    <track producer="producer17" in="00:00:03.300" out="00:00:03.883"/>
+    <transition id="transition10" out="00:00:00.583">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition11" out="00:00:00.583">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <producer id="producer18" in="00:00:00.000" out="00:02:19.817">
+    <property name="length">00:02:19.833</property>
+    <property name="eof">pause</property>
+    <property name="resource">Osterluecke_6.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-04-23T15:08:27</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">74d01c803fb4d841fab4f51fd5f5caeb</property>
+    <property name="shotcut:caption">Osterluecke_6.mkv</property>
+  </producer>
+  <tractor id="tractor6" global_feed="1" in="00:00:00.000" out="00:00:00.533">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="producer17" in="00:02:56.383" out="00:02:56.917"/>
+    <track producer="producer18" in="00:00:01.550" out="00:00:02.083"/>
+    <transition id="transition12" out="00:00:00.533">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition13" out="00:00:00.533">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <producer id="producer19" in="00:00:00.000" out="00:02:19.817">
+    <property name="length">00:02:19.833</property>
+    <property name="eof">pause</property>
+    <property name="resource">Osterluecke_6.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-04-23T15:08:27</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">74d01c803fb4d841fab4f51fd5f5caeb</property>
+    <property name="shotcut:caption">Osterluecke_6.mkv</property>
+  </producer>
+  <tractor id="tractor7" global_feed="1" in="00:00:00.000" out="00:00:00.783">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="producer18" in="00:01:08.617" out="00:01:09.400"/>
+    <track producer="producer19" in="00:01:09.417" out="00:01:10.200"/>
+    <transition id="transition14" out="00:00:00.783">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition15" out="00:00:00.783">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <producer id="producer20" in="00:00:00.000" out="00:04:15.467">
+    <property name="length">00:04:15.483</property>
+    <property name="eof">pause</property>
+    <property name="resource">Osterluecke_7.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-04-23T15:13:24</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">92f5e982fdcdd9e7fb86a9f8012b3d2e</property>
+    <property name="shotcut:caption">Osterluecke_7.mkv</property>
+  </producer>
+  <tractor id="tractor8" global_feed="1" in="00:00:00.000" out="00:00:00.617">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="producer19" in="00:02:12.433" out="00:02:13.050"/>
+    <track producer="producer20" in="00:00:00.450" out="00:00:01.067"/>
+    <transition id="transition16" out="00:00:00.617">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition17" out="00:00:00.617">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <producer id="producer21" in="00:00:00.000" out="00:01:07.833">
+    <property name="length">00:01:07.850</property>
+    <property name="eof">pause</property>
+    <property name="resource">Osterluecke_8.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-04-23T15:15:52</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">5d2ae0c128d7b8133278484eb5d3b4fb</property>
+    <property name="shotcut:caption">Osterluecke_8.mkv</property>
+  </producer>
+  <tractor id="tractor9" global_feed="1" in="00:00:00.000" out="00:00:00.617">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="producer20" in="00:04:10.017" out="00:04:10.633"/>
+    <track producer="producer21" in="00:00:02.450" out="00:00:03.067"/>
+    <transition id="transition18" out="00:00:00.617">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition19" out="00:00:00.617">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <producer id="producer22" in="00:00:00.000" out="00:03:04.100">
+    <property name="length">00:03:04.117</property>
+    <property name="eof">pause</property>
+    <property name="resource">Osterluecke_9.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-04-23T15:19:20</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">379d4c04266379b5220a3e25c8b152d7</property>
+    <property name="shotcut:caption">Osterluecke_9.mkv</property>
+  </producer>
+  <tractor id="tractor10" global_feed="1" in="00:00:00.000" out="00:00:00.767">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="producer21" in="00:01:04.033" out="00:01:04.800"/>
+    <track producer="producer22" in="00:00:02.350" out="00:00:03.117"/>
+    <transition id="transition20" out="00:00:00.767">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition21" out="00:00:00.767">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <producer id="producer23" in="00:00:00.000" out="00:03:50.583">
+    <property name="length">00:03:50.600</property>
+    <property name="eof">pause</property>
+    <property name="resource">Osterluecke_10.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-04-23T15:25:13</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">792caa4ea28869e57e297db80df9e391</property>
+    <property name="shotcut:caption">Osterluecke_10.mkv</property>
+  </producer>
+  <tractor id="tractor11" global_feed="1" in="00:00:00.000" out="00:00:00.717">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="producer22" in="00:02:16.700" out="00:02:17.417"/>
+    <track producer="producer23" in="00:00:02.200" out="00:00:02.917"/>
+    <transition id="transition22" out="00:00:00.717">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition23" out="00:00:00.717">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <producer id="producer24" in="00:00:00.000" out="00:02:49.233">
+    <property name="length">00:02:49.250</property>
+    <property name="eof">pause</property>
+    <property name="resource">Osterluecke_11.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-04-23T15:28:53</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">924c0dbd6f1549dbfb200576bf5a2d29</property>
+    <property name="shotcut:caption">Osterluecke_11.mkv</property>
+  </producer>
+  <tractor id="tractor12" global_feed="1" in="00:00:00.000" out="00:00:01.167">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="producer23" in="00:03:48.767" out="00:03:49.933"/>
+    <track producer="producer24" in="00:00:00.900" out="00:00:02.067"/>
+    <transition id="transition24" out="00:00:01.167">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition25" out="00:00:01.167">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <playlist id="playlist0">
+    <property name="shotcut:video">1</property>
+    <property name="shotcut:name">V1</property>
+    <blank length="00:00:02.183"/>
+    <entry producer="producer11" in="00:00:02.183" out="00:03:22.950"/>
+    <entry producer="tractor0" in="00:00:00.000" out="00:00:00.600"/>
+    <entry producer="producer12" in="00:00:02.950" out="00:00:50.667"/>
+    <entry producer="tractor1" in="00:00:00.000" out="00:00:00.500"/>
+    <entry producer="producer13" in="00:00:01.133" out="00:01:37.700"/>
+    <entry producer="tractor2" in="00:00:00.000" out="00:00:00.017"/>
+    <entry producer="producer14" in="00:00:02.767" out="00:00:26.083"/>
+    <entry producer="tractor3" in="00:00:00.000" out="00:00:00.083"/>
+    <entry producer="producer15" in="00:00:37.083" out="00:01:19.317"/>
+    <entry producer="tractor4" in="00:00:00.000" out="00:00:00.117"/>
+    <entry producer="producer16" in="00:01:22.983" out="00:03:48.633"/>
+    <entry producer="tractor5" in="00:00:00.000" out="00:00:00.583"/>
+    <entry producer="producer17" in="00:00:03.900" out="00:02:56.367"/>
+    <entry producer="tractor6" in="00:00:00.000" out="00:00:00.533"/>
+    <entry producer="producer18" in="00:00:02.100" out="00:01:08.600"/>
+    <entry producer="tractor7" in="00:00:00.000" out="00:00:00.783"/>
+    <entry producer="producer19" in="00:01:10.217" out="00:02:12.417"/>
+    <entry producer="tractor8" in="00:00:00.000" out="00:00:00.617"/>
+    <entry producer="producer20" in="00:00:01.083" out="00:04:10.000"/>
+    <entry producer="tractor9" in="00:00:00.000" out="00:00:00.617"/>
+    <entry producer="producer21" in="00:00:03.083" out="00:01:04.017"/>
+    <entry producer="tractor10" in="00:00:00.000" out="00:00:00.767"/>
+    <entry producer="producer22" in="00:00:03.133" out="00:02:16.683"/>
+    <entry producer="tractor11" in="00:00:00.000" out="00:00:00.717"/>
+    <entry producer="producer23" in="00:00:02.933" out="00:03:48.750"/>
+    <entry producer="tractor12" in="00:00:00.000" out="00:00:01.167"/>
+    <entry producer="producer24" in="00:00:02.083" out="00:02:46.717"/>
+  </playlist>
+  <tractor id="tractor13" title="Shotcut version 21.03.21" global_feed="1" in="00:00:00.000" out="00:28:20.983">
+    <property name="shotcut">1</property>
+    <property name="shotcut:projectAudioChannels">2</property>
+    <property name="shotcut:projectFolder">0</property>
+    <property name="shotcut:scaleFactor">0.334951</property>
+    <track producer="background"/>
+    <track producer="playlist0"/>
+    <transition id="transition26">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="mlt_service">mix</property>
+      <property name="always_active">1</property>
+      <property name="sum">1</property>
+    </transition>
+    <transition id="transition27">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="version">0.9</property>
+      <property name="mlt_service">frei0r.cairoblend</property>
+      <property name="threads">0</property>
+      <property name="disable">1</property>
+    </transition>
+  </tractor>
+</mlt>

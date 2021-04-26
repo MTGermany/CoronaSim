@@ -1,0 +1,157 @@
+
+
+
+%#############################################
+% New pdflatex format,
+% only png, jpg (or svg?) images but positioning now ok
+% template in ~/tex/inputs/template_folien.tex
+% [TODO now specialized to Vkoem_Ma; make general]
+%#############################################
+
+
+\documentclass[mathserif,aspectratio=1610]{beamer}
+%\documentclass[mathserif,handout]{beamer}
+%\usepackage{beamerthemeshadow}
+\input{$HOME/tex/inputs/defsSkript}  %$
+\input{$HOME/tex/inputs/styleBeamerVkoekMa}   %$
+
+\usepackage{graphicx}
+
+
+%##############################################################
+
+\begin{document}
+
+\section*{Epidemiologie-Dynamik}
+
+%##############################################################
+\frame{\frametitle{Epidemiologie-Dynamik: Modellierte Reproduktionszahl}
+%##############################################################
+
+\maindm{R(t)=R_0 \ (1-I) \ (1-D) \ f_M \ f_S}
+\bi
+\item $R_0$: \bfdef{Basisreproduktionsrate}, h\"angt von den 
+  \bfdef{Mutationen} ab
+\pause \item $(1-I)$: Reduktionsfaktor der Infektiosit\"at durch
+\bfdef{Impfungen} 
+  (Annahme: Der Immunit\"atsfaktor $I$ der Bev\"olkerung ist gleich dem 
+  Reduktionsfaktor der Infektiosit\"at)
+\pause \item $(1-D)$: Reduktionsfaktor durch \bfdef{Durchseuchung}
+(Anteil $D$ der 
+Peronen hatten Covid19, 100\% Wirkung)
+\pause \item $f_M=0.25+0.75 \ (1-S/100)$ Reduktionsfaktor durch die
+durch den \bfdef{Stringency Index $S$} charakterisierten
+``Ma\3nahmen'' (Faktor 0.25 bei maximalen Ma\3nahmen durch Datenfit)
+\pause \item $f_S=1+0.1\cos(2\pi \text{ Tag im Jahr}/365)$
+\bfdef{Saisonfaktor} (Amplitude 0.1 durch Datenfit)
+\ei
+\red{$R(t)$ geht in den Exponenten der Entwicklung der realen
+  Neuinfektionsraten ein}
+}
+
+
+%##############################################################
+\frame{\frametitle{Basisreproduktionszahl $R_0$: B.1.1.7-Ausbreitung
+    Deutschland} 
+%##############################################################
+
+\visible<1>{
+ \placebox{0.5}{0.45}{\figSimple{0.80\textwidth}{figsCorona/p117-1.png}}}
+
+\visible<2>{
+ \placebox{0.5}{0.45}{\figSimple{0.80\textwidth}{figsCorona/p117-2.png}}}
+
+\visible<3-7>{
+ \placebox{0.5}{0.45}{\figSimple{0.80\textwidth}{figsCorona/p117-3.png}}}
+
+\visible<8>{
+ \placebox{0.5}{0.45}{\figSimple{0.80\textwidth}{figsCorona/p117-3a.png}}}
+
+\visible<9->{
+ \placebox{0.5}{0.45}{\figSimple{0.80\textwidth}{figsCorona/p117-4.png}}}
+
+\visible<4-8>{\placebox{0.57}{0.60}{\parbox{0.3\textwidth}{
+\maindm{y=\frac{p}{1-p}}
+}}}
+
+\visible<5-8>{\placebox{0.785}{0.60}{\parbox{0.2\textwidth}{
+\maindm{y=y_0e^{r_yt}}
+}}}
+
+\visible<6-8>{\placebox{0.85}{0.47}{\parbox{0.3\textwidth}{
+\maindm{r_y \approx \frac{\ln y(t_2)-\ln y(t_1)}{t_2-t_1}}
+}}}
+
+\visible<7-8>{\placebox{0.785}{0.34}{\parbox{0.2\textwidth}{
+\maindm{p=\frac{y}{1+y}}
+}}}
+
+\visible<7-8>{\placebox{0.843}{0.24}{\parbox{0.3\textwidth}{
+\maindm{\hspace*{1em}=\frac{p_0e^{r_yt}}{1+p_0\left(e^{r_yt}-1\right)}}
+}}}
+
+\visible<10->{\placebox{0.81}{0.60}{\parbox{0.2\textwidth}{
+\maindm{R_0\sup{mut}/R_0\sup{wild} = \tau r_y+1}
+}}}
+
+\visible<11->{\placebox{0.83}{0.50}{\parbox{0.3\textwidth}{
+\maindm{R_0=(1-p) R_0\sup{wild} + pR_0\sup{mut}}
+}}}
+
+\visible<12->{\placebox{0.83}{0.28}{\parbox{0.3\textwidth}{
+\maindm{\Rightarrow \ R_0\sup{wild}, R_0\sup{mut} \ \text{bekannt}}
+}}}
+
+\visible<12->{\placebox{0.836}{0.20}{\parbox{0.3\textwidth}{
+\maindm{\Rightarrow \ R_0(t) \ \text{prognostizieren}}
+}}}
+
+}
+
+%##############################################################
+\frame{\frametitle{Redution der Infektiosit\"at durch Impfungen}
+%##############################################################
+
+\visible<1>{
+ \placebox{0.5}{0.46}{\figSimple{0.96\textwidth}{figsCorona/infectProfile1_ger.png}}}
+\visible<2-3>{
+ \placebox{0.5}{0.46}{\figSimple{0.96\textwidth}{figsCorona/infectProfile2_ger.png}}}
+\visible<4>{
+ \placebox{0.5}{0.46}{\figSimple{0.96\textwidth}{figsCorona/infectProfile3_ger.png}}}
+\visible<5>{
+ \placebox{0.5}{0.46}{\figSimple{0.96\textwidth}{figsCorona/infectProfile4_ger.png}}}
+\visible<6>{
+ \placebox{0.5}{0.46}{\figSimple{0.96\textwidth}{figsCorona/infectProfile5_ger.png}}}
+\visible<7>{
+ \placebox{0.5}{0.46}{\figSimple{0.96\textwidth}{figsCorona/infectProfile6_ger.png}}}
+\visible<8>{
+ \placebox{0.5}{0.46}{\figSimple{0.96\textwidth}{figsCorona/infectProfile7_ger.png}}}
+
+\visible<9>{
+ \placebox{0.5}{0.46}{\figSimple{0.96\textwidth}{figsCorona/infectProfile8_ger.png}}}
+
+\visible<10>{
+ \placebox{0.5}{0.46}{\figSimple{0.96\textwidth}{figsCorona/infectProfile9_ger.png}}}
+
+\visible<3->{\placebox{0.878}{0.30}{
+ \includegraphics[width=0.15\textwidth,angle=90,origin=c]{figsCorona/syringe.png}}}
+\visible<4->{\placebox{0.8}{0.255}{
+ \includegraphics[width=0.15\textwidth,angle=90,origin=c]{figsCorona/syringe.png}}}
+\visible<5->{\placebox{0.722}{0.23}{
+ \includegraphics[width=0.15\textwidth,angle=90,origin=c]{figsCorona/syringe.png}}}
+\visible<6->{\placebox{0.644}{0.20}{
+ \includegraphics[width=0.15\textwidth,angle=90,origin=c]{figsCorona/syringe.png}}}
+\visible<7->{\placebox{0.566}{0.14}{
+ \includegraphics[width=0.15\textwidth,angle=90,origin=c]{figsCorona/syringe.png}}}
+
+\visible<8->{\placebox{0.488}{0.20}{
+ \includegraphics[width=0.15\textwidth,angle=90,origin=c]{figsCorona/syringe.png}}}
+
+\visible<9->{\placebox{0.410}{0.19}{
+ \includegraphics[width=0.15\textwidth,angle=90,origin=c]{figsCorona/syringe.png}}}
+
+}
+
+\end{document}
+%##############################################################
+

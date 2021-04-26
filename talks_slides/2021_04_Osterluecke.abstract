@@ -1,0 +1,7 @@
+Video "Die Feiertagslücke - wie bewältigt die Simulation Testlücken und Meldeverzögerungen?"
+
+https://youtu.be/rMz88aM1IO8
+https://www.youtube.com/playlist?list=PLhsJ0l0GYIUqwSf4esXIdjw-4hGlwqJtD
+
+Neben dem bekannten Wochengang der täglichen Fallzahlen gibt es zusätzliche Lücken durch weniger Testungen und/oder Meldeverzögerungen während Feiertagen wie Ostern oder Weihnachten. Im Gegensatz zum Wochengang überleben diese Feiertagslücken eine gleitende 7-Tage-Mittelung ("Wocheninidenz") und würden bei der naiven Simulation zu Fehlprognosen führen. In diesem Beitrag zeige ich, wie corona-simulation.de diese Datenunregelmäßigkeiten bewältigt. Validierung mit bis zu 4 Wochen Datenentzug zeigt, dass sich das prognostizierte Maximum der dritten Welle (um 200 Anfang Mai) kaum ändert. Damit hat die Simulation den Osterlückentest bestanden.
+

@@ -1,0 +1,17 @@
+
+Das Modell hinter corona-simulation.de
+
+Szenarienvoraussagen wie die im Video "Die Covid-19-Vorhersage: Vergleich meiner Projektion mit der des RKI" hängen empfindlich vom Modell und seinen Stellschrauben ("Modellparameter") ab, da etliche Komponenten den Exponenten des modellierten Wachstumsprozesses (proportional zu R-1 mit der Reproduktionsrate R) beeinflussen. Das verwendete Modell ist das im RKI Bulletin 2021/13 vorgestellten sehr ähnlich und ich übernehme auch, soweit gegeben, die Modellparameter. Im Unterschied zum RKI-Modell beschreibe ich auch die Messung, die Abhängigkeit von der Dunkelziffer und die Saisonalität genauer. Im vorliegenden Video erläutere ich
+
+1. Die teils einstellbaren Infektionsverlaufsparameter wie R-Wert, Inkubationszeit, Zeit der Infektiosität
+
+2. Messparameter wie Zeitpunkt (relativ zur Ansteckung) und Häufigkeit von Tests des Tests
+
+3. Einfluss der altersgruppenfeinen Impfraten auf die Immunität und die Reduktion der Infektiosität
+
+4. Einfluss der Herdenimmunbität der bereits Infizierten
+
+5. Einfluss der Isolationsmaßnahmen ("stringency index")
+
+6. Einfluss der Saison (Sommer/Winter)
+

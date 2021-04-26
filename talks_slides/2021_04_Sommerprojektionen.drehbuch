@@ -1,3 +1,5 @@
+
+
 Video "Prognose für den Sommer"
 
 Elemente:
@@ -15,44 +17,296 @@ Elemente:
 
 =======================================================================
 
-[links mein Bild, rechts die fertige corona-simulation.de]
+[links nahezu Vollbild, Hintergrund fertige corona-simulation.de]
 
 Hallo liebe Simulationsfreunde,
 
+In diesem Video vergleiche ich die Sommerprojektion des RKI mit der
+meines Simulators traffic-simulation.de. F\"ur Projektionen ist
+nat\"urlich das Modell und die Modellparameter, sozusagen die
+Stellschrauben des Modells, wichtig. Ich hatte dazu einige Fragen
+ans RKI bzw die Autoren des relevanten Epidemiologischen Bulletins Nr
+13 gestellt, aber keine Antworten bekommen. Nun, dann halt ohne.
+
+Wie bei mir enthält das
+Gesamtmodell mehrere Komponenten, die sich in
+
+* Infektionsdynamik,
+* epidemiologische Dynamik
+
+trennen lassen. Die *Infektionsdynamik*
+ startet mit der Exosition, also der Infektion, und umfasst die Elemente
+
+1. eigentliche Infektionsdynamik => unbeobachtbare Größen,
+2. Modellierung der Messungen => erhalte beobachtbare Größen,
+3. Sekundäre Folgen => Zahl der Hospitalisierten, Gestorbenen
+und Genesenen und Zeitdauer zu den verschiedenen Endpunkten
 
 
-=========================================================
+Die Wahrscheinlichkeit der Exposition selbst wird durch die
+*epidemiologische Dynamik* modelliert. Sie resultiert in einem
+effektiven R-Wert  und umfasst
 
+4. Impfungen
+5. Verhalten bzw. Massnahmen
+6. Die Jahreszeit
 
-Bulletin Tab. 2: Impfwirkung. Gezeigt inkrementelle Werte, z.B. Sars-2
-Infektiosität 1-((1-0.72)*(1-0.25)) nach 1. mRNA-Imfung,
-1-((1-0.92)*(1-0.5)) nach 2. Impfung => nahezu 100%
+========================================================
+Punkte 1-3: Infektionsdynamik
+========================================================
 
+[Bulletin Titel]
+
+Schauen wir uns zunächst das Bulletin 2021-13, in welchem das RKI
+seine Simulationen präsentiert. Das Modell des RKI ist ebenfalls
+makroskopisch und ähnlich dem meinen:
+
+[Bulletin Abb. 1 S. 4]
+
+Diese Abbildung 1 des Bulletins beschreibt die Infektionsdynamik und
+beginnt dementsprechend mit der Exposition. Wie bei meinen Modell gibt
+es insbesondere ein Hellfeld, genannt Meldearm und 
+ein Dunkelfeld, genannt Dunkelziffer.
+
+Nach der Exposition E, also Ansteckung, gibt es in beiden Armen
+
+* eine Zeit eta bis zum Beginn der Infektiosität,
+
+* eine  weitere Zeit phi bis zum Beginn der Symptome
+
+* und danach eine Zeit mu, bis die Person nicht mehr ansteckend ist
+und aus der aktiven Dynamik herausfällt.
+
+Alle weiteren Compartimente wie Deceased D,
+Hospitalized H und Recovered R können im Sinne einer
+ökonometrischen Modellverkettung durch nachfolgende Modelle
+dargestellt werden.
+
+[Simulation] [Umstellen auf Infektionsparameter]
+
+In meinem Modell kann der Beginn der Infektiosität eta und das Ende
+der Infektiosität eta+phi+mu durch zwei Schieberegler eingestellt
+werden.
+
+[=>Ansicht Infektionsparameter Verschiebung]
 
 [Bulletin Abb 1 S. 4]
 
-Hier ist das RKI-Modell mit sog. Meldezweig und
-Dunkelziffer.
+Neben den Zeitintervallparametern gibt es Anteilwerteparameter,
 
-[runterscrollen]
-
-alle Modellparameter sind hier auch erklaert, bis auf zwei
-
-[hochscrollen]
-
-1. Die anfängliche Dunkelziffer 1-omega bzw. omega=die bedingte
+1. Das anfängliche Hellfeld omega: die bedingte
 Wahrscheinlichkeit, dass ein Infizierter vor seiner Ansteckbarkeit
 getestet wird, z.B. durch Zufall oder durch Rückverfolgung
 
-2. Der Spätentdecker-Anteil xi, also der Anteil der Leute im
-anfängl Dunkelfeld, die aufgrund Erkältungssymptome oder
-Covidsymptome positiv getestet werden und damit in das Hellfeld
-wandern.
+2. Der Spätentdecker-Anteil xi, also die bedingte Wahrscheinlichkeit
+dafür, dass ein bisher nichtgetesteter Symptomatischer aufgrund
+seiner Erkältungs- oder 
+Covidsymptome positiv getestet wird und damit ins Hellfeld
+wandert.
+
+
+Mein Hellfeldanteil umfasst den Anteil der getesteten Infizierten,
+egal ob am Anfang oder nach Auftreten der Symptome getestet. Er
+entspricht also dem Anteil rho der symptomatischen unter allen
+Infizierten, multipliziert mit dem anfänglichen Dunkelfeldanteil
+1-omega und der bedingten
+Testwahrscheinlichkeit xi
+
+[Simulation Hellfeldregler][Start]
+
+Das Hellfeld wird standardmaessig mit der im letzten Video gezeigten
+Methodik geschaetzt, man kann aber auch selbst am Regler drehen und es
+so ueberschreiben
+
+[demo Hellfelddrehen]
+
+[RKI Bulletin Abb. 1]
+
+Es gibt auch Zahlenwerte für alle Modellparameter, bis auf die zwei
+Hellfeldparameter
+
+[<super><alt>D
+omega [umkreisen]
+und xi [umkreisen]
+[esc]
+
+
+[runterscrollen]
+
+Das RKI behauptet im Bulletin zwar, das Dunkelfeld zu kennen (eigentlich ein
+Oxymoron), gibt aber keine Zahlenwerte an. Deshalb die im letzten
+Video dargestellte Schätzung. Zur Zeit Hellfeld bei 30-35% angenommen.
+
+=======================================================================
+Punkte 3: Sekundäre Dynamik
+=======================================================================
+
+
+*Einteilung in Altersklassen mit exponentiell ansteigender IFR und
+Endpunkt "gestorben" nach 20 Tagen erreicht
+
+[mein pdf IFR-Expo, Zeit tau=20 Tage]
+
+* Intensivpatientendynamik noch nicht implementiert. Kommt demnächst
+  zusammen mit dem neuen Maß "Covid-19-Intensivpatienten pro 100 000"
+  
+[simulation -> Infektionsraten] Kalibriert wird IFR65, die IFR der
+60-70 Jährigen. die anderen IFRs ergeben sich aus der
+Exponentialbeziehung 
+
+=======================================================================
+Punkte 4-6: Epidemiologie-Dynamik
+=======================================================================
+
+=======================================================================
+Zunächst Punkt 4: Impfung:
+=======================================================================
+
+Nun zur Epidemiologie-Dynamik, zunächst Modellierug der Impfung:
+
+[Bulletin Abb 7: Durchimpfungsschaubild]
+
+Hier werden mehrere Phasen bzw. Endpunkte unterschieden,
+
+1. Virenansteckung,
+2. Erkrankung der angesteckten sowie Infektiosität der angesteckten
+3. Hospitalisierung der Erkrankten.
+
+Es steht dort, dass es sich um
+kumulierte Wirksamkeiten handelt, also Ausgangspunkt je eine
+susceptible ungeimpfte Person ist und der gesamte Weg zum jeweiligen
+Endpunkt betrahctet wird. Das fuegrt aber zu
+Widersprüchen. Beispielsweise kann die kumulierte Effektivität
+gegen Hospitalisierung nicht kleiner sein als gegen eine Covid-19
+Erkrankung: Ohne Erkrankung keine Hospitalisierung, zumindest nicht
+aufgrund von Covid-19, wie auch im Text dargestellt. Hier ist das aber
+bei mRNA 
+genau anders herum und die unterschiedlichen Altersgruppierungen
+helfen auch nicht aus dem Widerspruch heraus. Das Problem würde
+gelöst, wenn es sich um inkrementelle statt kumulative Effizienzen
+handeln würde.
+
+Für meine Simulation ist nur die letzte Spalte wichtig und hier
+steht schon im Text "SARS-CoV-2-Infektiosität", dass es sich um die
+Effektivität geimpfter vs nichtgeimpfter SARS-COV2 Infizierter
+handelt.
+
+[mein pdf kumulierte Infektiosität]
+
+Die kumulierte Infektiosität nach 2. mRNA-Impfung wird also
+insgesamt um den Faktor (1-0.92)*(1-0.5)=0.04 reduziert, die kum
+Effizienz gegen Ansteckung ist  also 96% und die gegen Krankheit um
+95%. Also sehr ähnlich.
+
+[mein pdf Immunität Geimpfter über die Zeit]
+
+De-facto kann ich also eine simulierte
+immunisierte Person (95% nach 4 Wochen, linearer Anstieg von 0 auf 95%
+während dieser 4 Wochen) auch auch aus der Ansteckungsdynamik rauswerfen,
+was ich gemacht habe.
+
+Für die Impfung selbst habe ich die vorhandenen Impfdosen streng von
+oben herab auf die Altersgruppen verteilt und dabei eine maximale
+Durchimpfung, weniger als 100% aufgrund von Impfverweigerung odfer
+medizinischen Hinderungsgründen, wie das RKI angenommen:
+
+[Bulletin Abb. 6]
+
+Anders als diese Prognose habe ich aber bis zur gegenwart die
+tatsächlichen Impfdosenzahlen, danach eine konstante Impfrate
+angenommen
+
+[Sim zur Zeit nimmt sie mächtig fahrt auf, um 3 % pro Woche]
+
+[weiter sim]
+
+Vorgabe führen zu max. Durchimpfung von ... % und einer effektiven
+Effektivität von 1-Immunisierungsgrad = ...%
+
+
+=======================================================================
+Punkt 5: Sog. Maßnahmen
+=======================================================================
+
+Zur eindim Quantifizierung der "Maßnahmen"  nehme ich, wie in einem
+vorhergehendem Video erklärt, den 
+Stringency Index der OWID Initiative.
+
+=======================================================================
+Punkt 6: Saisonalit\"at
+=======================================================================
+
+Hier nehme ich eine sinusf\"ormige Schwankung an, in Form eines
+Multiplikators des R-Wertes mit Faktoren zwischen 0.9 (Sommer) und 1.1
+(Winter). Werte aus Kalibrierung
+
+=======================================================================
+Zusammenfassung epidemiologische Modellierung
+=======================================================================
+
+In Summe gehen die Impfungen und Maßnahmen zusammen mit der
+Herdenimmunität durch vergangene Infektion und die Jahreszeit
+multiplikativ in den effektiven R-Wert ein: 
+
+[mein pdf R-Berechnung]
+
+
+R=R0*Impfimmunisierungsgrad*(1-Durchseuchung)*Maßnahmenfaktor*Immunisierungsgrad*Jahreszeitenfaktor
+
+[Simulation simuliert bis Jan 2021]
+
+* Die berechnete Basisreproduktionszahl R0 stieg in der Vergangenheit aufgrund
+der B.1.1.7 Mutation von 2.29 (zeigen re oben) bis 3.15 und hat nun
+nahezu den finalen Wert erreicht. 
+
+[vergangenes pdf R0(t)]
+
+Die Rechnung wurde in einem
+vergangenen Video erklärt
+
+[simulieren bis Gegenwart]
+
+Die kalibrierte Basisreproduktionsrate erhöhte sich nahezu im
+Gleichtakt [sim Infektionsparameteransicht]: ein
+Qualitätsmerkmal.
+
+In der Prognose ist sie nahezu unverändert, bis eine neue
+infektiösere Mutation kommt 
+
+
+[simulation]
+
+* Durchseuchung 14.7% => Faktor 0.853
+
+* Impfimmunisierungsgrad 15.4% => Faktor 0.846
+
+[mein pdf R-Berechnung]
+
+* Der Stringency-Index [zeigen] liegt z Zt bei 0.75. Die Kalibrierung
+  passt am besten zu einer linearen Abhängigkeit
+  Faktor=0.25+0.75*(1-stringency/100) z Zt stringency=0.75 => Faktor 0.46
+
+* Saisonalitaet passt am besten zu einem Faktor 1+0.1*cos(2*Pi*Tage/365)
+  => Faktor 0.95
+
+[Simulation Prognose, schauen auf den R-Wert]
+
+* ohne Eingriff aendert sich bei de rPrognose die Impfimmunitaet und
+der Jahrezeitfaktor
+
+* Dreht man am Massnahmenregler, aendert sich auch dadurch R
+
+
+=======================================================================
+Szenarienprognose
+=======================================================================
 
 
 
-Bulletin Abb 7: Durchimpfungsschaubild
 
 Bulletin S. 16 Abb 14: Prognose Offensichtlich 0% ist "wie bisher"
 (stringency-Wert 70%), 100%=prae-pandemisches Kontaktverhalten
 (Stringency 0)
+
+
+

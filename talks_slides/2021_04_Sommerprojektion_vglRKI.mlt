@@ -1,0 +1,468 @@
+<?xml version="1.0" standalone="no"?>
+<mlt LC_NUMERIC="C" version="6.25.0" title="Shotcut version 21.03.21" producer="main_bin">
+  <profile description="automatic" width="1222" height="712" progressive="1" sample_aspect_num="1" sample_aspect_den="1" display_aspect_num="1222" display_aspect_den="712" frame_rate_num="60" frame_rate_den="1" colorspace="709"/>
+  <producer id="producer0" in="00:00:00.000" out="00:00:50.183">
+    <property name="length">00:00:50.200</property>
+    <property name="eof">pause</property>
+    <property name="resource">Sommerprojektion_10.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-04-26T12:49:54</property>
+    <property name="shotcut:hash">d3ad303c4690a2aed4e81d6ce28889f8</property>
+    <property name="ignore_points">0</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+  </producer>
+  <producer id="producer1" in="00:00:00.000" out="00:01:29.617">
+    <property name="length">00:01:29.633</property>
+    <property name="eof">pause</property>
+    <property name="resource">Sommerprojektion_10a.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-04-26T14:48:44</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">5b7107f63c4c77b33a740e65650f531b</property>
+  </producer>
+  <producer id="producer2" in="00:00:00.000" out="00:01:33.133">
+    <property name="length">00:01:33.150</property>
+    <property name="eof">pause</property>
+    <property name="resource">Sommerprojektion_11.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-04-26T12:55:48</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">018d2758527ac34632cc247ce1d8b529</property>
+  </producer>
+  <producer id="producer3" in="00:00:00.000" out="00:02:34.117">
+    <property name="length">00:02:34.133</property>
+    <property name="eof">pause</property>
+    <property name="resource">Sommerprojektion_12.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-04-26T12:59:49</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">4aebe1acf05104eb8564b5d99441c210</property>
+  </producer>
+  <producer id="producer4" in="00:00:00.000" out="00:01:04.467">
+    <property name="length">00:01:04.483</property>
+    <property name="eof">pause</property>
+    <property name="resource">Sommerprojektion_13.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-04-26T13:02:26</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">5f2279a98829c21f6d900ea1a91bce07</property>
+  </producer>
+  <producer id="producer5" in="00:00:00.000" out="00:02:43.533">
+    <property name="length">00:02:43.550</property>
+    <property name="eof">pause</property>
+    <property name="resource">Sommerprojektion_14.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-04-26T13:05:43</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">d2aa335b894c6635653d7363f617aa4f</property>
+  </producer>
+  <producer id="producer6" in="00:00:00.000" out="00:00:57.633">
+    <property name="length">00:00:57.650</property>
+    <property name="eof">pause</property>
+    <property name="resource">Sommerprojektion_15.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-04-26T13:07:27</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">08f31d35e2a2f9dff1bbf4429e105729</property>
+  </producer>
+  <producer id="producer7" in="00:00:00.000" out="00:01:17.267">
+    <property name="length">00:01:17.283</property>
+    <property name="eof">pause</property>
+    <property name="resource">Sommerprojektion_16.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-04-26T13:09:19</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">81eef14952a131c6ac75aa94d29cea07</property>
+  </producer>
+  <producer id="producer8" in="00:00:00.000" out="00:01:12.433">
+    <property name="length">00:01:12.450</property>
+    <property name="eof">pause</property>
+    <property name="resource">Sommerprojektion_19.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-04-26T11:37:54</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">be0b028bdffbfeb9c971605f20ecd318</property>
+  </producer>
+  <playlist id="main_bin">
+    <property name="xml_retain">1</property>
+    <entry producer="producer0" in="00:00:00.000" out="00:00:50.183"/>
+    <entry producer="producer1" in="00:00:00.000" out="00:01:29.617"/>
+    <entry producer="producer2" in="00:00:00.000" out="00:01:33.133"/>
+    <entry producer="producer3" in="00:00:00.000" out="00:02:34.117"/>
+    <entry producer="producer4" in="00:00:00.000" out="00:01:04.467"/>
+    <entry producer="producer5" in="00:00:00.000" out="00:02:43.533"/>
+    <entry producer="producer6" in="00:00:00.000" out="00:00:57.633"/>
+    <entry producer="producer7" in="00:00:00.000" out="00:01:17.267"/>
+    <entry producer="producer8" in="00:00:00.000" out="00:01:12.433"/>
+  </playlist>
+  <producer id="black" in="00:00:00.000" out="00:11:14.433">
+    <property name="length">00:11:14.450</property>
+    <property name="eof">pause</property>
+    <property name="resource">0</property>
+    <property name="aspect_ratio">1</property>
+    <property name="mlt_service">color</property>
+    <property name="mlt_image_format">rgb24a</property>
+    <property name="set.test_audio">0</property>
+  </producer>
+  <playlist id="background">
+    <entry producer="black" in="00:00:00.000" out="00:11:14.433"/>
+  </playlist>
+  <producer id="producer9" in="00:00:00.000" out="00:01:29.617">
+    <property name="length">00:01:29.633</property>
+    <property name="eof">pause</property>
+    <property name="resource">Sommerprojektion_10a.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-04-26T14:48:44</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">5b7107f63c4c77b33a740e65650f531b</property>
+    <property name="shotcut:caption">Sommerprojektion_10a.mkv</property>
+  </producer>
+  <producer id="producer10" in="00:00:00.000" out="00:01:33.133">
+    <property name="length">00:01:33.150</property>
+    <property name="eof">pause</property>
+    <property name="resource">Sommerprojektion_11.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-04-26T12:55:48</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">018d2758527ac34632cc247ce1d8b529</property>
+    <property name="shotcut:caption">Sommerprojektion_11.mkv</property>
+  </producer>
+  <tractor id="tractor0" global_feed="1" in="00:00:00.000" out="00:00:02.167">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="producer9" in="00:01:27.183" out="00:01:29.350"/>
+    <track producer="producer10" in="00:00:00.050" out="00:00:02.217"/>
+    <transition id="transition0" out="00:00:02.167">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition1" out="00:00:02.167">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <producer id="producer11" in="00:00:00.000" out="00:02:34.117">
+    <property name="length">00:02:34.133</property>
+    <property name="eof">pause</property>
+    <property name="resource">Sommerprojektion_12.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-04-26T12:59:49</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">4aebe1acf05104eb8564b5d99441c210</property>
+    <property name="shotcut:caption">Sommerprojektion_12.mkv</property>
+  </producer>
+  <tractor id="tractor1" global_feed="1" in="00:00:00.000" out="00:00:00.533">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="producer10" in="00:01:32.600" out="00:01:33.133"/>
+    <track producer="producer11" in="00:00:00.000" out="00:00:00.533"/>
+    <transition id="transition2" out="00:00:00.533">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition3" out="00:00:00.533">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <producer id="producer12" in="00:00:00.000" out="00:01:04.467">
+    <property name="length">00:01:04.483</property>
+    <property name="eof">pause</property>
+    <property name="resource">Sommerprojektion_13.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-04-26T13:02:26</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">5f2279a98829c21f6d900ea1a91bce07</property>
+    <property name="shotcut:caption">Sommerprojektion_13.mkv</property>
+  </producer>
+  <tractor id="tractor2" global_feed="1" in="00:00:00.000" out="00:00:00.367">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="producer11" in="00:02:32.700" out="00:02:33.067"/>
+    <track producer="producer12" in="00:00:00.000" out="00:00:00.367"/>
+    <transition id="transition4" out="00:00:00.367">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition5" out="00:00:00.367">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <producer id="producer13" in="00:00:00.000" out="00:01:04.467">
+    <property name="length">00:01:04.483</property>
+    <property name="eof">pause</property>
+    <property name="resource">Sommerprojektion_13.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-04-26T13:02:26</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">5f2279a98829c21f6d900ea1a91bce07</property>
+    <property name="shotcut:caption">Sommerprojektion_13.mkv</property>
+  </producer>
+  <tractor id="tractor3" global_feed="1" in="00:00:00.000" out="00:00:00.233">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="producer12" in="00:00:34.550" out="00:00:34.783"/>
+    <track producer="producer13" in="00:00:37.117" out="00:00:37.350"/>
+    <transition id="transition6" out="00:00:00.233">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition7" out="00:00:00.233">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <producer id="producer14" in="00:00:00.000" out="00:02:43.533">
+    <property name="length">00:02:43.550</property>
+    <property name="eof">pause</property>
+    <property name="resource">Sommerprojektion_14.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-04-26T13:05:43</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">d2aa335b894c6635653d7363f617aa4f</property>
+    <property name="shotcut:caption">Sommerprojektion_14.mkv</property>
+  </producer>
+  <tractor id="tractor4" global_feed="1" in="00:00:00.000" out="00:00:00.500">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="producer13" in="00:00:56.983" out="00:00:57.483"/>
+    <track producer="producer14" in="00:00:01.383" out="00:00:01.883"/>
+    <transition id="transition8" out="00:00:00.500">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition9" out="00:00:00.500">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <producer id="producer15" in="00:00:00.000" out="00:00:57.633">
+    <property name="length">00:00:57.650</property>
+    <property name="eof">pause</property>
+    <property name="resource">Sommerprojektion_15.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-04-26T13:07:27</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">08f31d35e2a2f9dff1bbf4429e105729</property>
+    <property name="shotcut:caption">Sommerprojektion_15.mkv</property>
+  </producer>
+  <tractor id="tractor5" global_feed="1" in="00:00:00.000" out="00:00:00.850">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="producer14" in="00:02:42.683" out="00:02:43.533"/>
+    <track producer="producer15" in="00:00:05.600" out="00:00:06.450"/>
+    <transition id="transition10" out="00:00:00.850">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition11" out="00:00:00.850">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <producer id="producer16" in="00:00:00.000" out="00:01:17.267">
+    <property name="length">00:01:17.283</property>
+    <property name="eof">pause</property>
+    <property name="resource">Sommerprojektion_16.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-04-26T13:09:19</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">81eef14952a131c6ac75aa94d29cea07</property>
+    <property name="shotcut:caption">Sommerprojektion_16.mkv</property>
+  </producer>
+  <tractor id="tractor6" global_feed="1" in="00:00:00.000" out="00:00:00.733">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="producer15" in="00:00:56.850" out="00:00:57.583"/>
+    <track producer="producer16" in="00:00:01.750" out="00:00:02.483"/>
+    <transition id="transition12" out="00:00:00.733">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition13" out="00:00:00.733">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <playlist id="playlist0">
+    <property name="shotcut:video">1</property>
+    <property name="shotcut:name">V1</property>
+    <blank length="00:00:05.600"/>
+    <entry producer="producer9" in="00:00:05.067" out="00:01:27.167"/>
+    <entry producer="tractor0" in="00:00:00.000" out="00:00:02.167"/>
+    <entry producer="producer10" in="00:00:02.233" out="00:01:32.583"/>
+    <entry producer="tractor1" in="00:00:00.000" out="00:00:00.533"/>
+    <entry producer="producer11" in="00:00:00.550" out="00:02:32.683"/>
+    <entry producer="tractor2" in="00:00:00.000" out="00:00:00.367"/>
+    <entry producer="producer12" in="00:00:00.383" out="00:00:34.533"/>
+    <entry producer="tractor3" in="00:00:00.000" out="00:00:00.233"/>
+    <entry producer="producer13" in="00:00:37.367" out="00:00:56.967"/>
+    <entry producer="tractor4" in="00:00:00.000" out="00:00:00.500"/>
+    <entry producer="producer14" in="00:00:01.900" out="00:02:42.667"/>
+    <entry producer="tractor5" in="00:00:00.000" out="00:00:00.850"/>
+    <entry producer="producer15" in="00:00:06.467" out="00:00:56.833"/>
+    <entry producer="tractor6" in="00:00:00.000" out="00:00:00.733"/>
+    <entry producer="producer16" in="00:00:02.500" out="00:01:16.250"/>
+  </playlist>
+  <tractor id="tractor7" title="Shotcut version 21.03.21" global_feed="1" in="00:00:00.000" out="00:11:14.433">
+    <property name="shotcut">1</property>
+    <property name="shotcut:scaleFactor">0.187979</property>
+    <property name="shotcut:projectAudioChannels">2</property>
+    <property name="shotcut:projectFolder">0</property>
+    <track producer="background"/>
+    <track producer="playlist0"/>
+    <transition id="transition14">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="mlt_service">mix</property>
+      <property name="always_active">1</property>
+      <property name="sum">1</property>
+    </transition>
+    <transition id="transition15">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="version">0.9</property>
+      <property name="mlt_service">frei0r.cairoblend</property>
+      <property name="threads">0</property>
+      <property name="disable">1</property>
+    </transition>
+  </tractor>
+</mlt>

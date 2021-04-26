@@ -1,5 +1,4 @@
-Video "Die Feiertagslücke - wie bewältigt die Simulation Testlücken und
-Meldeverzögerungen?"
+Video "Die Feiertagslücke - wie bewältigt die Simulation Testlücken und Meldeverzögerungen?"
 
 
 Elemente:
@@ -8,11 +7,9 @@ Elemente:
 
 * Chrome local corona-simulation.de
 
-* Bulletin Abb 9
-~/versionedProjects/CoronaSim/references/Infektionsparameter_2021_03.pdf
+* Bulletin Abb 9 ~/versionedProjects/CoronaSim/references/Infektionsparameter_2021_03.pdf
 
-* evtl. Kopie Bulletin Abb 1
-~/versionedProjects/CoronaSim/references/Infektionsparameter_2021_03.pdf
+* evtl. Kopie Bulletin Abb 1 ~/versionedProjects/CoronaSim/references/Infektionsparameter_2021_03.pdf
 
 =======================================================================
 
@@ -20,194 +17,101 @@ Elemente:
 
 Hallo liebe Simulationsfreunde,
 
-ich habe mir mal aus ökonometrischer Sicht ein
-immer wieder auftretendes Datenproblem
-genauer angeschaut. Man sieht es gerade gut, wenn man meine
-Simu;lation unter corona-simulation.de standardmäßig für
-Deutschland bis zur gegenwart simulieren lässt. Ich nenne es mal die
-Osterlücke
+ich habe mir mal aus ökonometrischer Sicht ein immer wieder auftretendes Datenproblem genauer angeschaut. Man sieht es gerade gut, wenn man meine Simu;lation unter corona-simulation.de standardmäßig für Deutschland bis zur gegenwart simulieren lässt. Ich nenne es mal die Osterlücke
 
-[Pfeil von oben eher links mit eigener Funktionalitaet ohne <super><alt>D] 
+[Pfeil von oben eher links mit eigener Funktionalitaet ohne <super><alt>D]
 
-[zoomen Scrollrad nach vorne drehen][zeichnen mit eigener Funktionalitaet]
+[zoomen Scrollrad nach vorne drehen]
 
-Zoomen wir mal näher rein. Wie gesagt, dass geht in der Simulation
-mit dem Scrollrad.
+Zoomen wir mal näher rein. Wie gesagt, dass geht in der Simulation mit dem Scrollrad.
 
-[Pfeil von unten]
-Merkwürdig, auch die Todeszahlen gehe synchron mit den Fallzahlen
-runter und nicht etwa wie üblich etwa 20 Tage verzögert
+[Pfeil von unten] Merkwürdig, auch die Todeszahlen gehe synchron mit den Fallzahlen runter und nicht etwa wie üblich etwa 20 Tage verzögert
 
 [umstellen auf Tagesansicht]
 
-In der Tagesansicht sieht man noch deutlicher den Grund: Sonst gibt es
-nur 1-2 Tage pro Woche mit wenig Daten, nun aber 4. Klar, Karfreitag
-und Ostersamstag!
+In der Tagesansicht sieht man noch deutlicher den Grund: Sonst gibt es nur 1-2 Tage pro Woche mit wenig Daten, nun aber 4. Klar, Karfreitag und Ostersamstag!
 
-Klar: Zu Ostern wurde weniger getestet, oder zwar getestet, aber
-teils nicht gemeldet. In jeden Fall gibt es weniger Testergebnisse.
+Klar: Zu Ostern wurde weniger getestet, oder zwar getestet, aber teils nicht gemeldet. In jeden Fall gibt es weniger Testergebnisse.
 
-Bedeutet dies, dass der Virus  zu Ostern weniger wirkt? Natürlich
-nicht! Bedenken Sie immer: Wir können gar nicht die Infektionszahl
-bestimmen! Der PCR oder andere Tests sind lediglich eine 
-Überprüfung mit nichtperfekter Sensitivität und vor allem
-Spezifizität der Leute, die einen Test bekamen UND der dann auch
-gemeldet wird.
+Bedeutet dies, dass der Virus  zu Ostern weniger wirkt? Natürlich nicht! Bedenken Sie immer: Wir können gar nicht die Infektionszahl bestimmen! Der PCR oder andere Tests sind lediglich eine Überprüfung mit nichtperfekter Sensitivität und vor allem Spezifizität der Leute, die einen Test bekamen UND der dann auch gemeldet wird.
 
-Die sog. "Cases" für THE REAL THING zu halten und basierend auf den
-Fallzahlen sogar R-Werte zu berechnen, das bringt auch nur das RKI
-fertig.
+Die sog. "Cases" für THE REAL THING zu halten und basierend auf den Fallzahlen sogar R-Werte zu berechnen, das bringt auch nur das RKI fertig.
 
-Normalerweise macht das wenig aus, da sowohl die R-Werte als auch
-Inzidenz meist ueber 7 Tage Mittel gerechnet werden. Der natuerlich
-ebenso unrealistische Wochengang gleicht sich so exakt aus
-[Umstellen auf Wocheninzidenz][entfernter Scrollen] [zurueck
-Tag][zurueck Woche]
+Normalerweise macht das wenig aus, da sowohl die R-Werte als auch Inzidenz meist ueber 7 Tage Mittel gerechnet werden. Der natuerlich ebenso unrealistische Wochengang gleicht sich so exakt aus
 
-Nicht aber die Osterl\"ucke oder auch Weihnachts-Neujahrl\"ucke!
+[Umstellen auf Wocheninzidenz][entfernter Scrollen] [zurueck Tag][zurueck Woche]
 
-Kann man nun einfach bei gegebener Zahl der tats\"achlich Infizierten
-die Fallzahl 
-proportional zur Testzahl machen? Mit dieser verlockenden Annahme
-w\"are die Zahl der tatsaechlich Infizierten proportional zur Fallzahl
-geteilt durch die Testzahl, also proportional zur bekannten Test-Positivrate, die zur Zeit
-so um 10% liegt. Mit dieser verlockenden Annahme hat man die Oster-
-und Weihnachtsl\"ucke geschlossen.
+Nicht aber die Osterlücke oder auch Weihnachts-Neujahrlücke!
+
+Kann man nun einfach bei gegebener Zahl der tatsächlich Infizierten die Fallzahl proportional zur Testzahl machen? Mit dieser verlockenden Annahme wäre die Zahl der tatsaechlich Infizierten proportional zur Fallzahl geteilt durch die Testzahl, also proportional zur bekannten Test-Positivrate
+
+[->Infektionsraten]
+
+zur Zeit so um 12%. Mit dieser verlockenden Annahme hat man die Oster- und Weihnachtslücke geschlossen.
 
 Aber was bedeutet dies?
 
-Diese Annahme w\"urde nur gelten, wenn man blind testet, sozusagen mit
-dem Dartpfeil mit verbundenen Augen auf den Ausdruck des
-Personenregisters wirft und alle Getroffenen Personen testet! Das ist
-offensichtlich nicht der Fall. Man testet zun\"achst die, wo man diese
-Info am dringendsten ben\"otigt (zur Eind\"ammung) und erst, wenn noch
-Tests \"ubrig sind, auch weniger hei\3e F\"alle.
+Diese Annahme würde nur gelten, wenn man blind testet, sozusagen mit dem Dartpfeil mit verbundenen Augen auf den Ausdruck des Personenregisters wirft und alle Getroffenen Personen testet! Das ist offensichtlich nicht der Fall. Man testet zunächst die, wo man diese Info am dringendsten benötigt (zur Eindämmung) und erst, wenn noch Tests übrig sind, auch weniger heiße Fälle.
 
-Es kommt noch schlimmer: Diese Annahme zu Ende gedacht w\"urde
-bedeuten, dass die Zahl der Infizierten nicht nur proportional der
-Positivrate ist, sondern dass der Anteil in der Population gleich dem
-Positivanteil ist. Dann w\"aren also zur Zeit 10% aktiv infiziert, 
-also PCR-positiv und die wahre Inzidenz l\"age bei 10 000 statt 200, wenn man
-die Dauer, in der der PCR positiv anschl\"agt, mit 1 Woche
-ansetzt. Das Hellfeld w\"urde also nur 2% ausmachen! Offensichtlich
-ein unplausibles Ergebnis 
+Es kommt noch schlimmer: Diese Annahme zu Ende gedacht würde bedeuten, dass die Zahl der Infizierten nicht nur proportional der Positivrate ist, sondern dass der Anteil in der Population gleich dem Positivanteil ist. Beim aktuellen Positivanteil von 12% wären also zur Zeit 12% aktiv infiziert, also PCR-positiv und die wahre Inzidenz läge bei 12% mal 100 000=12 000 statt 200, wenn man die Dauer, in der der PCR positiv anschlägt, mit 1 Woche ansetzt. Das Hellfeld würde also nur 2% ausmachen! Offensichtlich ein unplausibles Ergebnis
 
 [Bulletin S. 13, Abb 9]
 
-Was sagt das RKI zum Hellfeld? Schauen wir in eine RKI-Simulation, die im 
-Bulletin 2021-13 dokumentiert ist, genauer auf Abb. 9:
-Schwarz ist die beobachtete altersspez Inzidenz, dunkelblau was das RKI-eigene
-Modell macht (ist übrigens ähnlich wie meins, bespreche ich in
-einen der nächsten Videos), hellblau das geschätzte Dunkelfeld und
-die Höhe der hellblauen Wellen die geschätzte reale
-Gesamtinfktionszahl
+Was sagt das RKI zum Hellfeld? Schauen wir in eine RKI-Simulation, die im Bulletin 2021-13 dokumentiert ist, genauer auf Abb. 9: Schwarz ist die beobachtete altersspez Inzidenz, dunkelblau was das RKI-eigene Modell macht (ist übrigens ähnlich wie meins, bespreche ich in einen der nächsten Videos), hellblau das geschätzte Dunkelfeld und die Höhe der hellblauen Wellen die geschätzte reale Gesamtinfktionszahl
 
-Das RKI nimmt offensichtlich ein ueber die
-ganze Zeit seit ausbruch konstantes Dunkelfeld an
+Das RKI nimmt offensichtlich ein ueber die ganze Zeit seit ausbruch konstantes Dunkelfeld an
 
 [ctrl+ ctrl+]
 
-Schauen wir mal genauer rein
-Alter 16-29: Max 1 Strich Hellfeld, nahezu 4 Striche gesamt, also
-25-28% Hellfeld 
-nun zu den ganz alten 80+ beim Max 0.75 Striche Hellfeld, 3 Striche
-gesamt - wieder gut 25%
-Nun Maerz 2020, Anfang der Pandemie, wo viel weniger getestet wurde:
-zB 40-49. Auch gesamt nahezu 4 fach so hoch. Die nehmen also ein
-konstantes Hellfeld ueber alle Pandemiezeiten und Altersstufen von
-25-30% an, kann man nicht naeher herauslesen.
+Schauen wir mal genauer rein Alter 16-29: Max 1 Strich Hellfeld, nahezu 4 Striche gesamt, also 25-28% Hellfeld nun zu den ganz alten 80+ beim Max 0.75 Striche Hellfeld, 3 Striche gesamt - wieder gut 25% Nun Maerz 2020, Anfang der Pandemie, wo viel weniger getestet wurde: zB 40-49. Auch gesamt nahezu 4 fach so hoch. Die nehmen also ein konstantes Hellfeld ueber alle Pandemiezeiten und Altersstufen von 25-30% an, kann man nicht naeher herauslesen.
 
 Wie sieht es aber mit der Testfrequenz aus?
 
-[zu Simulation]
-[Umschalten Testansicht]
-[scrollen ganze Pandemie]
-Anfaenglich viel weniger getestet. Die Annahme des RKI einer
-konstanmten Dunkelziffer ist also nicht plausibel!
-Ebensowenig ist es aber plausibel, einfach das Hellfeld lin mit den
-Testfrequenz steigen zu lassen. Das gälte nur, wenn zufällig
-getestet würde.
+[zu Simulation] [Umschalten Testansicht] [scrollen ganze Pandemie] Anfaenglich viel weniger getestet. Die Annahme des RKI einer konstanmten Dunkelziffer ist also nicht plausibel! Ebensowenig ist es aber plausibel, einfach das Hellfeld lin mit den Testfrequenz steigen zu lassen. Das gälte nur, wenn zufällig getestet würde.
 
-Für den Wochengang und die Sonderfälle wie Ostern hingegen ist
-offensichtl. Hellfeld des Tages prop Testanzahl, sieht man schon an
-den synchron zurückgeganenen Todesfällen (auch wenn zu Ostern die
-Auferstehung ist!)
+Für den Wochengang und die Sonderfälle wie Ostern hingegen ist offensichtl. Hellfeld des Tages prop Testanzahl, sieht man schon an den synchron zurückgeganenen Todesfällen (auch wenn zu Ostern die Auferstehung ist!)
 
-Das RKI nimmt also das andere Extrem an: Das prozentuale Hellfeld ist
-unabh\"angig von der Zahl der Tests konstant! Auch das ist
-offensichtlich unsinnig, da es dann auch ohne jeden Test den gleichen
-Wert von 25-30% h\"atte! 
+Das RKI nimmt also das andere Extrem an: Das prozentuale Hellfeld ist unabhängig von der Zahl der Tests konstant! Auch das ist offensichtlich unsinnig, da es dann auch ohne jeden Test den gleichen Wert von 25-30% hätte!
 
 [ich als Vollbild]
 
-Wie lösen wir diese doppelte Unsicherheit auf? Unbekanntes und
-variables Hellfeld und Wochengang bei Testungen
-bzw. Ausfall/Rueckgang/Meldeverzug über Feiertage?
+Wie lösen wir diese doppelte Unsicherheit auf? Unbekanntes und variables Hellfeld und Wochengang bei Testungen bzw. Ausfall/Rueckgang/Meldeverzug über Feiertage?
 
-Indem wir zwischen Strategie und operationelle Durchf\"uhrung
-separieren:
+Indem wir zwischen Strategie und operationelle Durchführung separieren:
 
-* Die STRATEGIE, insbesondere die Anzahl der Tests,  \"andert sich nur
-  \"uber Monate, teils in Abh\"angigkeit von politischen Vorgaben,
-  teils in Abh\"angigkeit der vergangenen Positivrate bzw Inzidenz:
-  Die Welle n\"ahrt also die Welle.
+* Die STRATEGIE, insbesondere die Anzahl der Tests,  ändert sich nur   über Monate, teils in Abhängigkeit von politischen Vorgaben,   teils in Abhängigkeit der vergangenen Positivrate bzw Inzidenz:   Die Welle nährt also die Welle.
 
 [Simulation Testzahl]
 
 [ich]
 
-Da zun\"achst die
-  wichtigstenpotentiellen Infektionstr\"ager getestet werden, ist
-  anfangs die Wahrscheinlichkeit hoch, einen Infizierten zu erwischen,
-  bei den letzten Testungen des Kontingents niedriger. Ich nehme dabei
-  als Kompromiss zwischen den obigen Extremen konstantes Hellfeld und
-  Hellfeld proportional Testzahl an, dass das Hellfeld proportional
-  der Wurzel der Testzahl ist mit den Vorgaben, dass es zur Zeit beim
-  aktuellen RKI-Wert um
-  30% liegt
+Da zunächst die   wichtigstenpotentiellen Infektionsträger getestet werden, ist   anfangs die Wahrscheinlichkeit hoch, einen Infizierten zu erwischen,   bei den letzten Testungen des Kontingents niedriger. Ich nehme dabei   als Kompromiss zwischen den obigen Extremen konstantes Hellfeld und   Hellfeld proportional Testzahl an, dass das Hellfeld proportional   der Wurzel der Testzahl ist mit den Vorgaben, dass es zur Zeit beim   aktuellen RKI-Wert um   30% liegt
 
 
 [ich]
 
-* Die OPERATIVE DURCHFUEHRUNG  wird durch Feiertage, Meldeverzug und
-  mehr beeintr\"achtigt, aber w\"ahrend er Wochen und
-  Feiertagsschwankungen ist die Strategie dieselbe. Nur werden halt
-  bisweilen Personen erst einen Tag sp\"ater getestet, daf\"ur
-  entsprechend mehr insgesamt oder sie wurden bereits getestet, aber
-  sp\"ater gemeldet. Bei konstanter realer Neuinfektionszahl l\"asst
-  sich beides plausibel durch einen Anstieg
-  der Fallzahlen und damit des t\"aglichen Hellfelds proportional zur
-  Testzahl erkl\"aren. 
+* Die OPERATIVE DURCHFUEHRUNG  wird durch Feiertage, Meldeverzug und   mehr beeinträchtigt, aber während einer Woche oder ueber   Feiertage ist die Strategie dieselbe. Nur werden halt   bisweilen Personen erst einen Tag später getestet, dafür   entsprechend mehr insgesamt oder sie wurden bereits getestet, aber   später gemeldet.
 
-Also ist die reale Neuinfektionszahl proportional zur Positivzahl
-durch Testzahl, also der Positivquote, nur dass diesmal der Vorfaktor
-nicht durch die Gesamtpopulation, sondern durch die gerade gueltige
-Strategie gem\"a\3 des obigen Wurzelmodells f\"ur das l\"angerfristige
-Hellfeld determiniert ist!
+In der Tat steht bei den Daten das Meldedatum, NICHT das   Testdatum. Sehr schlecht!
 
-{Corona-Simulation Standardsim fertig simuliert]
+Aber Rettung naht: Bei konstanter realer Neuinfektionszahl lässt   sich beides plausibel durch einen Anstieg   der Fallzahlen und damit des täglichen Hellfelds proportional zur   Testzahl erklären.
+
+Also ist die reale Neuinfektionszahl proportional zur Fallzahl *durch* Testzahl, also der Positivquote, nur dass diesmal der Vorfaktor nicht durch die Gesamtpopulation, sondern durch die gerade gueltige Strategie gemäß des obigen Wurzelmodells für das längerfristige Hellfeld determiniert ist!
+
+[Corona-Simulation Standardsim fertig simuliert]
+
+Wie besteht dieser Ansatz nun den Reality-Test? Ich mache dazu eine sog. *Validierung*, nehme der Simulation also die letzten Daten weg und schaue, was sie voraussagt!
+
+[Voraussagen Voll Info, 30% Hellfeld
 
 [Sim-Validierungen] 14, 28, 42 Tage, 42 Tage mit aktueller Testzahl
 
 [ich]
 
-Schluss
-In dieser Folge der corona-simulation.de Videos habe ich die Fallen
-der Interpretation der Fallzahlen aufgezeigt. Das ist eine wahre
-Fundgrube f\"ur einen \"Okonometriker.
+Schluss In dieser Folge der corona-simulation.de Videos habe ich die Fallen der Interpretation der Fallzahlen aufgezeigt. Das ist eine wahre Fundgrube für einen Ökonometriker.
 
-Insbesondere habe ich gezeigt, dass mit der Annahme einer
-Skalentrennung Strategie vs operative Durchf\"uhrung der Tests
-Osterl\"ucken, Feiertagsl\"ucken und andere L\"ucken auff\"ullen
-lassen und die Zukunftsprojektionen nahezu nicht beeinflussen.
+Insbesondere habe ich gezeigt, dass mit der Annahme einer Skalentrennung Strategie vs operative Durchführung der Tests Osterlücken, Feiertagslücken und andere Lücken auffüllen lassen und die Zukunftsprojektionen nahezu nicht beeinflussen.
 
-Auch inmitten des Osterlochs prognostiziert meine Simulation
-dasselbe Inzidenzmaximum bei guten 200 um Anfang Mai herum, also in 10
-Tagen. Eine Validierung der Voraussage f\"ur 4 Wochen liefert
-ebenfalls ein sehr \"ahnliches Ergebnis. Ber\"ucksichtigt man die mit
-der Welle erh\"ohten Tetszahlen "Die Welle n\"ahrt die Welle", sagt
-selbst die 42 Tage Prognose, also VOR der dritten Welle, den richtigen
-Zeitpunkt des Maximums Anfang Mai und auch die ungef\"ahre H\"ohe
-richtig voraus.
+Auch inmitten des Osterlochs prognostiziert meine Simulation dasselbe Inzidenzmaximum bei guten 200 um Anfang Mai herum, also in 10 Tagen. Eine Validierung der Voraussage für 4 Wochen liefert ebenfalls ein sehr ähnliches Ergebnis. Berücksichtigt man die mit der Welle erhöhten Tetszahlen "Die Welle nährt die Welle", sagt selbst die 42 Tage Prognose, also VOR der dritten Welle, den richtigen Zeitpunkt des Maximums Anfang Mai und auch die ungefähre Höhe richtig voraus.
 
 
