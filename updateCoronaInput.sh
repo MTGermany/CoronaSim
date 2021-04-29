@@ -28,8 +28,8 @@ if [[ $regular == true ]];
 then
     echo ""; echo "RKI Landkreis data: calling updateLandkreisData.sh...";
     updateLandkreisData.sh;
-#else
-#    echo "yet no updateLandkreisData.sh with testing option implemented"
+else
+    echo "yet no updateLandkreisData.sh with testing option implemented"
 fi
 
 

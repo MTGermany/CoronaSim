@@ -35,17 +35,17 @@ sed -i '/^.*table/,$d' data/RKI_*_selected.csv
 
 
 ###################################################################
-# cases [Now _cases_ has DIFFERENT format!!!! ( _deaths_ not) ]
+# 2021-01-07 cases [Now _cases_ has DIFFERENT format!!!! ( _deaths_ not) ]
+# 2021-04-29 now deaths same format as cases
 ###################################################################
 
 # wrap up data (not header) in one line per time stamp
-# (2021-01-07) Now _cases_ has DIFFERENT format!!!! ( _deaths_ the old)
 
 
-perl -i -p -e 's/^\s*\<\/tr\>\s*\n//g' data/RKI_cases_selected.csv
-perl -i -p -e 's/^\s*\<tr\>\s*\n//g' data/RKI_cases_selected.csv
-perl -i -p -e 's/^\s*\<td.*line\-number.*\<\/td\>\s*\n//g' data/RKI_cases_selected.csv
-perl -i -p -e 's/^\s+\<td id=.+202([0-9]\-[0-9][0-9]\-[0-9][0-9])/202\1/g' data/RKI_cases_selected.csv
+perl -i -p -e 's/^\s*\<\/tr\>\s*\n//g' data/RKI_*_selected.csv
+perl -i -p -e 's/^\s*\<tr\>\s*\n//g' data/RKI_*_selected.csv
+perl -i -p -e 's/^\s*\<td.*line\-number.*\<\/td\>\s*\n//g' data/RKI_*_selected.csv 
+perl -i -p -e 's/^\s+\<td id=.+202([0-9]\-[0-9][0-9]\-[0-9][0-9])/202\1/g' data/RKI_*_selected.csv 
 
 # select/filter cases to "Kreise": cases (now totally different format!)
 # "LK Erzgebirgskreis"                  Kreis 14521, at 364th place
@@ -55,6 +55,9 @@ perl -i -p -e 's/^\s+\<td id=.+202([0-9]\-[0-9][0-9]\-[0-9][0-9])/202\1/g' data/
 cp  data/RKI_cases_selected.csv data/RKI_cases_Kreis14521.csv
 cp  data/RKI_cases_selected.csv data/RKI_cases_Kreis14612.csv
 cp  data/RKI_cases_selected.csv data/RKI_cases_Kreis14628.csv
+cp  data/RKI_deaths_selected.csv data/RKI_deaths_Kreis14521.csv
+cp  data/RKI_deaths_selected.csv data/RKI_deaths_Kreis14612.csv
+cp  data/RKI_deaths_selected.csv data/RKI_deaths_Kreis14628.csv
 
 
 # pattern: 202?-??-??*,<363 mal Zahl,>*$
@@ -66,11 +69,69 @@ perl -i -p -e 's/(^202.*[0-9])T.*0000\,([0-9]+\,){367}([0-9]+).*/\{\"date\"\: "\
 perl -i -p -e 's/(^202.*[0-9])T.*0000\,([0-9]+\,){371}([0-9]+).*/\{\"date\"\: "\1\"\, \"cases\"\: \3\,/g' data/RKI_cases_Kreis14628.csv 
 
 
+perl -i -p -e 's/(^202.*[0-9])T.*0000\,([0-9]+\,){363}([0-9]+).*/\{\"date\"\: "\1\"\, \"deaths\"\: \3\,/g' data/RKI_deaths_Kreis14521.csv 
 
+perl -i -p -e 's/(^202.*[0-9])T.*0000\,([0-9]+\,){367}([0-9]+).*/\{\"date\"\: "\1\"\, \"deaths\"\: \3\,/g' data/RKI_deaths_Kreis14612.csv 
+
+perl -i -p -e 's/(^202.*[0-9])T.*0000\,([0-9]+\,){371}([0-9]+).*/\{\"date\"\: "\1\"\, \"deaths\"\: \3\,/g' data/RKI_deaths_Kreis14628.csv 
+
+
+
+
+
+
+
+
+##########################################################
+# final merging and transforming to json
+##########################################################
+
+# merge 4 columns of *cases_Kreis* and the two columns of *deaths_Kreis*
+
+for kreis in 14521 14612 14628; do
+  paste data/RKI_cases_Kreis$kreis.csv data/RKI_deaths_Kreis$kreis.csv > data/RKI_Kreis$kreis.json;
+done
+
+
+# add appropriate structure for json
+
+sed -i "1i dataRKI_string='\{\"LK_Erzgebirgskreis\":  [" data/RKI_Kreis14521.json
+sed -i "1i \"SK_Dresden\":  [" data/RKI_Kreis14612.json
+sed -i "1i \"LK_Osterzgebirge\":  [" data/RKI_Kreis14628.json
+perl -i -p -e 's/^\s+\<\/tbody\>*\n/\]\}/g' data/RKI_Kreis*.json
+cat data/RKI_Kreis*.json > data/RKI_selectedKreise.json
+
+# rename "cases" by "confirmed" since this is the name in github.json
+
+perl -i -p -e 's/cases/confirmed/g' data/RKI_selectedKreise.json
+
+# add some missing closing braces
+
+perl -i -p -e 's/\"confirmed\"\:\s*([0-9]+).+\"deaths/\"confirmed\"\: \1, \"deaths/g' data/RKI_selectedKreise.json
+perl -i -p -e 's/\,$/\},/g' data/RKI_selectedKreise.json
+
+
+# do final touches on structure (eliminate newlines, some commas etc)
+
+perl -i -p -e 's/\n//g' data/RKI_selectedKreise.json
+
+perl -i -p -e 's/\}\,\"/\}\]\,  \"/g' data/RKI_selectedKreise.json
+perl -i -p -e "s/\,$/\]\}\'/g" data/RKI_selectedKreise.json
+
+
+# clean up
+
+ rm data/*_Kreis14[0-9]*.*
+
+
+echo "produced data/RKI_selectedKreise.json"
+
+
+exit
 
 
 ###################################################################
-# deaths (format unchanged) 
+# deaths (<2021-04-29, old format unchanged) 
 ###################################################################
 
 perl -i -p -e 's/\<td\>([0-9]+)\<\/td\>.*\n/<td>\1<\/td>/g' data/RKI_deaths_selected.csv
@@ -109,45 +170,33 @@ perl -i -p -e 's/^.*td id=.*\n//g' data/RKI_deaths_Kreis*.csv
 perl -i -p -e 's/^.*\<td\>(\d{4}-\d{2}-\d{2}).*\n//g' data/RKI_deaths_Kreis*.csv
 perl -i -p -e 's/\s+\<td\>(\d+).*$/ \"deaths\": \1\},/g' data/RKI_deaths_Kreis*.csv
 
-
-
-##########################################################
-# final merging and transforming to json
-##########################################################
-
-# merge 4 columns of *cases_Kreis* and the two columns of *deaths_Kreis*
-
-for kreis in 14521 14612 14628; do
-  paste data/RKI_cases_Kreis$kreis.csv data/RKI_deaths_Kreis$kreis.csv > data/RKI_Kreis$kreis.json;
-done
-
-
-# add appropriate structure for json
-
-sed -i "1i dataRKI_string='\{\"LK_Erzgebirgskreis\":  [" data/RKI_Kreis14521.json
-sed -i "1i \"SK_Dresden\":  [" data/RKI_Kreis14612.json
-sed -i "1i \"LK_Osterzgebirge\":  [" data/RKI_Kreis14628.json
-perl -i -p -e 's/^\s+\<\/tbody\>*\n/\]\}/g' data/RKI_Kreis*.json
-cat data/RKI_Kreis*.json > data/RKI_selectedKreise.json
+###################################################################
+# deaths test 2021-04-29
+###################################################################
 
 
 
-# do final touches on structure (eliminate newlines, some commas etc)
+perl -i -p -e 's/^\s*\<\/tr\>\s*\n//g' data/RKI_deaths_selected.csv
+perl -i -p -e 's/^\s*\<tr\>\s*\n//g' data/RKI_deaths_selected.csv
+perl -i -p -e 's/^\s*\<td.*line\-number.*\<\/td\>\s*\n//g' data/RKI_deaths_selected.csv
+perl -i -p -e 's/^\s+\<td id=.+202([0-9]\-[0-9][0-9]\-[0-9][0-9])/202\1/g' data/RKI_deaths_selected.csv
 
-perl -i -p -e 's/\n//g' data/RKI_selectedKreise.json
+# select/filter deaths to "Kreise": deaths (now totally different format!)
+# "LK Erzgebirgskreis"                  Kreis 14521, at 364th place
+# "SK Dresden"                          Kreis 14612, at 368th place
+# "LK Sächsische Schweiz-Osterzgebirge" Kreis 14628, at 372th place
 
-perl -i -p -e 's/\}\,\]\}\"/\}\]\,  \"/g' data/RKI_selectedKreise.json
-perl -i -p -e "s/\}\,\]\}/\}\]\}\'/g" data/RKI_selectedKreise.json
-
-# rename "cases" by "confirmed" since this is the name in github.json
-
-perl -i -p -e 's/cases/confirmed/g' data/RKI_selectedKreise.json
-
-# clean up
-
- rm data/*_Kreis14[0-9]*.*
+cp  data/RKI_deaths_selected.csv data/RKI_deaths_Kreis14521.csv
+cp  data/RKI_deaths_selected.csv data/RKI_deaths_Kreis14612.csv
+cp  data/RKI_deaths_selected.csv data/RKI_deaths_Kreis14628.csv
 
 
-echo "produced data/RKI_selectedKreise.json"
+# pattern: 202?-??-??*,<363 mal Zahl,>*$
+
+perl -i -p -e 's/(^202.*[0-9])T.*0000\,([0-9]+\,){363}([0-9]+).*/\{\"date\"\: "\1\"\, \"deaths\"\: \3\,/g' data/RKI_deaths_Kreis14521.csv 
+
+perl -i -p -e 's/(^202.*[0-9])T.*0000\,([0-9]+\,){367}([0-9]+).*/\{\"date\"\: "\1\"\, \"deaths\"\: \3\,/g' data/RKI_deaths_Kreis14612.csv 
+
+perl -i -p -e 's/(^202.*[0-9])T.*0000\,([0-9]+\,){371}([0-9]+).*/\{\"date\"\: "\1\"\, \"deaths\"\: \3\,/g' data/RKI_deaths_Kreis14628.csv 
 
 
