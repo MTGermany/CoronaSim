@@ -4929,7 +4929,7 @@ DrawSim.prototype.drawAxes=function(windowG){
       //console.log("it=",it);
       mutationDynamics.update(it); //just graphics; double call does not harm
       var mutTopPix=this.yPix0+1.01*this.hPix;
-      var mutLeftPix=this.xPix0+0.80*this.wPix;
+      var mutLeftPix=this.xPix0+0.72*this.wPix;
       line=0;
       ctx.fillText("R0_wild="+mutationDynamics.R0wild.toFixed(2),
 		   mutLeftPix,mutTopPix);

@@ -1,0 +1,27 @@
+Hallo Jörg,
+
+ich habe jetzt mal mit dem covid-simulator.com Simulator rumgespielt und fand ihn sehr einfach gestrickt, zumindest bezueglich dynamische Voraussagen der Infektionen (er mag besser bei der kleinteiligen Simulation der Folgeeffekte wie Zahl der Covid-19 Intensivpatienten usw auf Bundeslandebene oder Bezirke sein).
+
+Er nimmt insbesondere bis auf den Impfprozess keinerlei Abhängigkeiten beim R-Wert an. Die Impfcharakteristik ist auch substandard nachgebildet, was ich durch Einstellung der Impfrate auf 0 bzw max zum vorgegebenen Zeitpunkt reverse engineert habe (vgl. Screenshots): Instantane Kopplung des Durchimpfungsanteils an die Inzidenz. In Wirklichkeit nimmt die Immunität allmählich zu und hat erst eine Woche nach der 2. Impfung das Maximum erreicht, der R-Wert hingegen ist in der Simulation ein Inzidenz-R-Wert, der der Infektiosität etwa 1.5 Wochen nachläuft: 1 Woche aufgrund der Testverzögerung, 0.5 Wochen aufgrund der gleitenden Mittelwerte). Ferner wurde 0% Impfverweigerung und 0% medizinische Gründe gegen eine Impfung angenommen und ein konstanter Wirkungsgrad von etwas mehr als 0.9 angenommen
+
+Die Abhängigkeit von der Testhäufigkeit und dem Meldeverhalten ist überhaupt nicht enthalten. Dies führt zu dem unmöglichen Zapplern im R-Verlauf zwischen 0.2 und über 2 während der Osterlücke.
+
+Es wurde einfach die Fallinzidenz (eine Messgröße) mit Hilfe des linear nur durch den Durchimpfungsanteil sinkenden R-Wertes (der eigentlich auf die echten Infektionen wirkt) schlicht exponentiell nachmodelliert. Die B117-Mutation und ihre Ausbreitung ist eingebaut, das sehe ich anhand der Kurven, aber die ist jetzt bei nahe 100%. Es fehlen folgende Abhängigkeiten des *echten* R-Wertes, die alle bei mir enthalten sind:
+
+* von der Wirkungszunahme der Impfung bis nach dem 2. Shot
+
+* von den Maßnahmen
+
+* von der Jahreszeit
+
+* vom Anteil der bereits Infizierten
+
+* Differenz zum Inzidenz-R-Wert aufgrund  der Testanzahl, dem   Meldeverhalten ("Osterlücke) und der Teststrategie
+
+Und natürlich fehlt ein Validierungsbutton.
+
+Kein Wunder, das der Simulator nicht gescheit prognostiziert ;-) Wie gesagt, der Simulator hat andere Schwerpunkte und mag darin gut sein ...
+
+LG
+
+Martin 

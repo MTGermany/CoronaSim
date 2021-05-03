@@ -1,0 +1,226 @@
+
+
+
+Corona-simulation.de vs RKI und Prof. Lehr: Reality Check der Projektionen
+
+Wie schon angeblich Mark Twain sagte: Prognosen sind schwierig, vor allem, wenn sie die Zukunft betreffen. In diesem Beitrag untersuche ich, Stand 3. Mai 2021, ob bzw welche verschiedenen Corona-Simulationen den Test der Zeit bestanden haben. Dazu prüfe ich etwa 5 Wochen alte Dokumente und Videos (also Erstellungsdatum Ende März oder Anfang April) vom RKI und der Seite covid-simulation.com von Prof. Lehr. Natürlich wird auch corona-simulation.de mittels seiner Validierungs-Funktion unter die Lupe genommen. Dabei kann man allerdings durch nachträgliches Anpassen des Simulationsmodells bzw seiner Parametrisierung "cheaten".
+
+Deshalb checke ich anhand von Ausschnitten, ob meine vergangenen Videos als Originaldokumente des jeweiligen Simulationsstandes gut gereift sind.
+
+Seit der korrekten Implementierung der B.1.1.7-Mutation vor 7 Wochen (Mitte März 2021) sagen alle Videos und Validierungen das realisierte  Inzidenzmaximum der 3. Welle (185 Fälle pro Woche  und 100 000 Einwohner) zu 15% oder besser sowie den Zeitpunkt (Ende April 2021) mit maximal einer  Woche Ungenauigkeit voraus. Die anderen Projektionen hingegen ängstigen die Bürger mit riesigen Peaks oder gar einer Exponential-Dystopie.
+
+
+Elemente:
+
+* ich, vlc input "--video-filter=croppadd{cropright=250,cropleft=250}" v4l2:///dev/video0
+
+* Chrome local corona-simulation.de
+
+* Farbe Bildschirmzeichnen schwarz: <super><alt>D <mouse2>
+
+* Vergangene Videos: (je ein Reiter)
+
+A. Prof. Lehr, Covid-simulator, 16. Maerz
+   https://www.youtube.com/watch?v=JvdIMKJ45BA&t=2370s
+
+B. Prof. Lehr, Doku zum Covid-Simulator, 01. April  S. 246
+   https://covid-simulator.com/wp-content/uploads/2021/04/Report_2021_03_31.pdf
+
+C. RKI Bulletin Nr 13-2021, S. 15 1. April
+   https://www.rki.de/DE/Content/Infekt/EpidBull/Archiv/2021/Ausgaben/13_21.pdf?__blob=publicationFile 
+
+
+
+1. Feiertagsluecke 19:47-19:52, 23. April 2 Wochen
+   https://www.youtube.com/watch?qv=rMz88aM1IO8&list=PLhsJ0l0GYIUqwSf4esXIdjw-4hGlwqJtD&index=3&t=1185s
+
+2. Wirken Lockdowns? 20:35-20:40, 29. Maerz, 5 Wochen
+   29. Maerz, 5 Wochen
+https://www.youtube.com/watch?v=32GhD9Oup9o&list=PLhsJ0l0GYIUqwSf4esXIdjw-4hGlwqJtD&index=4&t=1234s
+
+3. Implementierung der Altersabh 1:41-1:47, 19. Maerz, 6.5 Wochen
+   https://www.youtube.com/watch?v=h1Tn11K5PT8&list=PLhsJ0l0GYIUqwSf4esXIdjw-4hGlwqJtD&index=5&t=99s
+
+4. B117 Logikfehler 13:45-14:15
+   15. Maerz 
+   https://www.youtube.com/watch?v=rSLlEuqx99o&list=PLhsJ0l0GYIUqwSf4esXIdjw-4hGlwqJtD&index=6&t=823s
+
+
+
+=======================================================================
+
+[links nahezu Vollbild, Hintergrund fertige corona-simulation.de]
+
+Corona-simulation.de vs RKI und Prof. Lehr: Reality Check der Projektionen
+
+[Ich Vollbild]
+
+Hallo liebe Simulationsfreunde,
+
+Jetzt muss ich aber doch mal eine Erfolgsmeldung rauslassen: Nach
+Implementierung der B117-Ausbreitung und Entdeckung eines Logikfehlers
+sagt meine Simulation seit über 6 Wochen den Zeitpunkt des Maximums der
+3. Welle und auch die Höhe nahezu quantitativ voraus
+
+[Ich rechts, links Browser]
+Schauen wir uns erst einmal, Stand 3. Mai, den Ist-Zustand, d.h. die
+Ground Truth, an 
+- wohlgemerkt nicht die Ground Truth der Infektionen, sondern der
+positiven Tests
+In Form der berühmt-berüchtigten Wocheninzidenz
+pro 100 000 Einwohner, die standardmaessig bei corona-simulation.de
+gezeigt wird 
+
+[Einkreisen des Maximums]
+
+Das Maximum ist Ende April bei einer Höhe von knapp 200, weiterer Abfall
+
+[kurz weiter simulieren]
+
+Weiterer Abfall erwartet.
+
+[Vollbild]
+
+Wie sieht es nun im Nachhinein mit den Projektionen diverser
+Covid-Simulationen, einschließlich meiner aus?  Das ist ein wirklich
+harter Test, denn Sie wissen ja (Mark Twain oder wer auch immer):
+"Voraussagen sind schwierig, vor allem, wenn sie die Zukunft
+betreffen"
+
+Sie wissen ja auch sicherlich noch, habe ich ja öfters erwähnt,
+dass man keine Prognosen im Sinne unbedingter Voraussagen machen kann,
+sondern nur Projektionen verschiedener Szenarien, z.B. "Wenn die
+Isolationsmaßnahmen am x.x. um y Prozent gelockert werden, dann
+geschieht z" Oder "Wenn die Impfrate am x.x. um y erhöht wurde, dann
+geschieht z" - Das ist Standardwissen eines math. Modellierers und
+Ökonometrikers, aber eminent wichtig.
+
+[Sim mit Bild rechts]
+
+Ich vergleiche im Folgenden das Standardszenario "Weiter so", also
+
+  * keine Änderung des Isolationsverhalten der Bevölkerung
+
+    [blauen Stringency Index zeigen]
+
+     Kommt im Nachhinein gut hin; der OWID Stringency Index ist
+     unverändert, die Bremse ist also für OWID keine Veranlassung
+     zu einer Erhöhung und wenn, wird es durhc lockereres Verhalten
+     der Bevölkerung eh de-facto auf einen konstanten Wert reduziert
+
+  * keine Änderung der Impfdynamik vom Stand der Simulation. Dies
+    ist eine weniger gute Annahme, da sich die Impfrate in den letzten
+    Wochen stark erhoeht hat:
+
+    [Neue Sim ab Jan starten]
+
+    Achten Sie auf den Impfraten-Regler: Verändert sich langsam von
+    etwa 2% pro Woche Ende März auf etwa 4% pro Woche ab Mitte
+    April, jetzt über 4.5%
+
+
+  * Als Testzeitpunkt greife ich Prognosen Ende März/Anfang April
+    heraus. Dazu gibt es einige dokumentierte Prognosen von anderen
+    und die 3. Welle, hauptsächlich getriggert durch die
+    B117-Mutation und in geringerem Maße von geringeren
+    Isolationsverhalten, hat gerade begonnen. Damit hat man ein
+    interesantes Testkriterium:
+
+WANN ist der Scheitelpunkt der Welle
+
+WIE HOCH ist er
+
+Jetzt ist die Ground Truth bestätigt da. So lasst uns den Ve3rgleich
+starten!
+
+[Prof Lehr Video]
+
+Zunächst ein Vortragsvideo von Prof Lehr, der auch Betreiber
+eines interaktiven Simulators covid-simulation.com  ist, Stand 16. Maerz, also vor 6
+1/2 Wochen:
+
+[Video bis 40:06 laufen lassen]
+
+Wichtig: Unter der Annahme, dass alles gleich bleibt=grüne Kurve.
+Es sieht aber irgendwiew so aus, als sei das ein einfacher exponentieller
+Anstieg mit konstantem R-Wert, während dieser bei mir auch im
+Standardszenario von vielen Faktoren abhängt. Insbesondere kann ein
+konstanter R-Wert keinen Peak zeigen, es wächsat einfach
+exponentiell weiter
+
+[pdf-Report Prof. Lehr, 31. Maerz]
+
+Auf der covid-simulator.com Seite von Prof. Lehr gibt es auch
+Berichte zur Lage, hier der vom 31. 03., also etwas später als sein
+Vortrag, vor 5 Wochen. Auf S. 246 gibt es Projektionen unter
+verschiedenen Szenarien. Für uns ist die violette Kurve relevant, da
+sie von gleichbleibenden Annahmen ausgeht. Es gibt da einen
+exorbitanten Anstieg auf kumulierte 7 Millionen Test-Positive zum
+1. Juni. Insbesondere ist weit und breit kein Peak zu sehen, da
+einfach konstantes R angenommen wird. Mit solchen Projektionen
+verschreckt man die Leute und macht die Gemeinde der Covid-Simulanten
+unglaubwürdig. Der jetztige Stand des Simulators unter covid-simulator.com,
+aufgerufen am 2. Mai 2021, gibt übrigens nun plausible Prognosen
+(also ähnlich den Meinigen, har, har!) mit insbesondere ebenfalls
+prognostizierten variablen R-Wert
+
+
+[RKI-Bulletin 1. April]
+
+Schließlich zeige ich noch eine Projektion des RKI aus seinem
+Bulletin Nr 13/2021, das ich schon in einer der letzten Videos
+besprochen habe, und zwar S.15
+
+Die Darstellung ist etwas schwer zu interpretieren, da nicht klar ist,
+was Kontaktreduktion ist: Ausgehend vom präpandemischen
+Kontaktverhalten oder ausgehend vom aktuellen Stand 1. April?
+
+Da die
+Kurven vom 1. Maerz bis 1. April etwa den tatsächlichen entsprechen
+und es danach keinen Bruch gibt, implizieren die Kurven den damaligen
+Status Quo und die 20% beziehen sich auf das Anziehen weiterer  diverser
+Kontaktbremsen.
+
+Wie dem auch sei, alle gezeigten Szenarien haben einen
+späteren und vor allem viel höheren Peak der 3. Welle als den
+tatsächlichen. Hinweis: Hier sind Todesfälle, keine Inzidenzen
+gezeigt.
+
+
+[meine Simulation]
+
+Die tatsächlichen Todesfälle peaken gerade bei knapp 200
+nahezu synchron mit den Fallzahlen. Das kommt daher, dass der typische
+15-20 Tage Delay durch die verstärkte Impfung der Vulnerablen
+ausgeglichen wird.
+
+Ein subtiler statistischer Effekt, der nur rein
+zufällig zu nahezu gleichzeitigen Peaks der Fallzahlen und der
+Todeszahlen führt - den meine Simulation aber natürlich
+automatisch enthält.
+
+[ich Vollbild]
+
+Eine Zwischenzusammenfassung: Die Zukunftsprojektionen des Szenarios
+"unverändert" von vor etwa 6
+Wochen, die ich bei den üblichen Verdächtigen finden konnte, sagen
+alle einen späteren und vor allen drastische höheren Peak der
+3. Welle voraus, über 1000 statt 200 Tote pro Tag oder 6 Millionen
+Positivtests während dieser Welle, während es in Wirklichkeit etwa
+1.5 Millionen sind. 
+Wenn es denn überhaupt einen Peak gibt und die Simulation nicht in 
+einer exponentiellen Dystopie endet.
+
+
+
+
+
+
+
+
+
+
+    
+
+
+

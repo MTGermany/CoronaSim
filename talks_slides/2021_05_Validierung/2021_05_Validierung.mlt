@@ -1,0 +1,574 @@
+<?xml version="1.0" standalone="no"?>
+<mlt LC_NUMERIC="C" version="7.0.0" title="Shotcut version 21.05.01" producer="main_bin">
+  <profile description="automatic" width="1228" height="664" progressive="1" sample_aspect_num="1" sample_aspect_den="1" display_aspect_num="307" display_aspect_den="166" frame_rate_num="60" frame_rate_den="1" colorspace="709"/>
+  <chain id="chain0" out="00:01:43.967">
+    <property name="length">00:01:43.983</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/talks_slides/2021_05_Validierung_01.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="shotcut:hash">efe7748ac2931d8234b45c9df8dc5324</property>
+    <property name="ignore_points">0</property>
+    <property name="creation_time">2021-05-03T17:10:58</property>
+    <property name="xml">was here</property>
+  </chain>
+  <chain id="chain1" out="00:04:27.883">
+    <property name="length">16074</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/talks_slides/2021_05_Validierung_02.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">0e9e64291f954b9ee1500bcb5717f7e3</property>
+  </chain>
+  <chain id="chain2" out="00:01:49.733">
+    <property name="length">6585</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/talks_slides/2021_05_Validierung_03.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">e7c471ce62e26d62aa28483fd754e284</property>
+  </chain>
+  <chain id="chain3" out="00:03:49.783">
+    <property name="length">13788</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/talks_slides/2021_05_Validierung_04.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">728d46d3bbb0549f4002eb59a7fab395</property>
+  </chain>
+  <chain id="chain4" out="00:05:10.050">
+    <property name="length">18604</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/talks_slides/2021_05_Validierung_05.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">a6b80156bf239ed263dd4305ca117898</property>
+  </chain>
+  <chain id="chain5" out="00:01:47.983">
+    <property name="length">6480</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/talks_slides/2021_05_Validierung_06.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">a9c1c935c644193b5755e93324bcdc64</property>
+  </chain>
+  <chain id="chain6" out="00:00:05.267">
+    <property name="length">317</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/talks_slides/2021_05_Validierung_07.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">787ac20a0f7b81960de12cabbb759a56</property>
+  </chain>
+  <chain id="chain7" out="00:01:02.800">
+    <property name="length">3769</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/talks_slides/2021_05_Validierung_08.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">10ba53d02b5685ee21996590e7b5827f</property>
+  </chain>
+  <chain id="chain8" out="00:01:44.450">
+    <property name="length">6268</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/talks_slides/2021_05_Validierung_09.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">a3ebbae4e2c04c130ba7cb669c9fa759</property>
+  </chain>
+  <chain id="chain9" out="00:02:21.150">
+    <property name="length">8470</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/talks_slides/2021_05_Validierung_10.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">b6783403b6997f56f0d4131518937f68</property>
+  </chain>
+  <chain id="chain10" out="00:03:12.267">
+    <property name="length">11537</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/talks_slides/2021_05_Validierung_11.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">871fa76e18cce24fe36e847214b1a726</property>
+  </chain>
+  <chain id="chain11" out="00:05:23.117">
+    <property name="length">19388</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/talks_slides/2021_05_Validierung_12.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">aefac3c952327b458949c89086ecaa02</property>
+  </chain>
+  <chain id="chain12" out="00:01:21.750">
+    <property name="length">4906</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/talks_slides/2021_05_Validierung_13.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">c21b59fbe156a5d2cb84a3eb32ba2f47</property>
+  </chain>
+  <playlist id="main_bin">
+    <property name="xml_retain">1</property>
+    <entry producer="chain0" in="00:00:00.000" out="00:01:43.967"/>
+    <entry producer="chain1" in="00:00:00.000" out="00:04:27.883"/>
+    <entry producer="chain2" in="00:00:00.000" out="00:01:49.733"/>
+    <entry producer="chain3" in="00:00:00.000" out="00:03:49.783"/>
+    <entry producer="chain4" in="00:00:00.000" out="00:05:10.050"/>
+    <entry producer="chain5" in="00:00:00.000" out="00:01:47.983"/>
+    <entry producer="chain6" in="00:00:00.000" out="00:00:05.267"/>
+    <entry producer="chain7" in="00:00:00.000" out="00:01:02.800"/>
+    <entry producer="chain8" in="00:00:00.000" out="00:01:44.450"/>
+    <entry producer="chain9" in="00:00:00.000" out="00:02:21.150"/>
+    <entry producer="chain10" in="00:00:00.000" out="00:03:12.267"/>
+    <entry producer="chain11" in="00:00:00.000" out="00:05:23.117"/>
+    <entry producer="chain12" in="00:00:00.000" out="00:01:21.750"/>
+  </playlist>
+  <producer id="black" in="00:00:00.000" out="00:30:05.783">
+    <property name="length">00:30:05.800</property>
+    <property name="eof">pause</property>
+    <property name="resource">0</property>
+    <property name="aspect_ratio">1</property>
+    <property name="mlt_service">color</property>
+    <property name="mlt_image_format">rgba</property>
+    <property name="set.test_audio">0</property>
+  </producer>
+  <playlist id="background">
+    <entry producer="black" in="00:00:00.000" out="00:30:05.783"/>
+  </playlist>
+  <chain id="chain13" out="00:01:43.967">
+    <property name="length">00:01:43.983</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/talks_slides/2021_05_Validierung_01.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="shotcut:hash">efe7748ac2931d8234b45c9df8dc5324</property>
+    <property name="ignore_points">0</property>
+    <property name="creation_time">2021-05-03T17:10:58</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:caption">2021_05_Validierung_01.mkv</property>
+  </chain>
+  <chain id="chain14" out="00:04:27.883">
+    <property name="length">16074</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/talks_slides/2021_05_Validierung_02.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">0e9e64291f954b9ee1500bcb5717f7e3</property>
+    <property name="shotcut:caption">2021_05_Validierung_02.mkv</property>
+  </chain>
+  <tractor id="tractor0" in="00:00:00.000" out="00:00:00.133">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="chain13" in="00:01:36.767" out="00:01:36.900"/>
+    <track producer="chain14" in="00:00:03.450" out="00:00:03.583"/>
+    <transition id="transition0" out="00:00:00.133">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition1" out="00:00:00.133">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="mlt_service">mix</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+    </transition>
+  </tractor>
+  <chain id="chain15" out="00:01:49.733">
+    <property name="length">6585</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/talks_slides/2021_05_Validierung_03.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">e7c471ce62e26d62aa28483fd754e284</property>
+    <property name="shotcut:caption">2021_05_Validierung_03.mkv</property>
+  </chain>
+  <tractor id="tractor1" in="00:00:00.000" out="00:00:01.150">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="chain14" in="00:04:09.233" out="00:04:10.383"/>
+    <track producer="chain15" in="00:00:02.350" out="00:00:03.500"/>
+    <transition id="transition2" out="00:00:01.150">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition3" out="00:00:01.150">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="mlt_service">mix</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+    </transition>
+  </tractor>
+  <chain id="chain16" out="00:03:49.783">
+    <property name="length">13788</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/talks_slides/2021_05_Validierung_04.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">728d46d3bbb0549f4002eb59a7fab395</property>
+    <property name="shotcut:caption">2021_05_Validierung_04.mkv</property>
+  </chain>
+  <tractor id="tractor2" in="00:00:00.000" out="00:00:00.167">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="chain15" in="00:01:48.600" out="00:01:48.767"/>
+    <track producer="chain16" in="00:00:02.767" out="00:00:02.933"/>
+    <transition id="transition4" out="00:00:00.167">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition5" out="00:00:00.167">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="mlt_service">mix</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+    </transition>
+  </tractor>
+  <chain id="chain17" out="00:05:10.050">
+    <property name="length">18604</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/talks_slides/2021_05_Validierung_05.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">a6b80156bf239ed263dd4305ca117898</property>
+    <property name="shotcut:caption">2021_05_Validierung_05.mkv</property>
+  </chain>
+  <tractor id="tractor3" in="00:00:00.000" out="00:00:00.050">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="chain16" in="00:03:45.867" out="00:03:45.917"/>
+    <track producer="chain17" in="00:00:03.233" out="00:00:03.283"/>
+    <transition id="transition6" out="00:00:00.050">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition7" out="00:00:00.050">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="mlt_service">mix</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+    </transition>
+  </tractor>
+  <chain id="chain18" out="00:01:47.983">
+    <property name="length">6480</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/talks_slides/2021_05_Validierung_06.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">a9c1c935c644193b5755e93324bcdc64</property>
+    <property name="shotcut:caption">2021_05_Validierung_06.mkv</property>
+  </chain>
+  <tractor id="tractor4" in="00:00:00.000" out="00:00:00.967">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="chain17" in="00:05:03.467" out="00:05:04.433"/>
+    <track producer="chain18" in="00:00:01.067" out="00:00:02.033"/>
+    <transition id="transition8" out="00:00:00.967">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition9" out="00:00:00.967">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="mlt_service">mix</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+    </transition>
+  </tractor>
+  <chain id="chain19" out="00:01:44.450">
+    <property name="length">6268</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/talks_slides/2021_05_Validierung_09.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">a3ebbae4e2c04c130ba7cb669c9fa759</property>
+    <property name="shotcut:caption">2021_05_Validierung_09.mkv</property>
+  </chain>
+  <tractor id="tractor5" in="00:00:00.000" out="00:00:00.783">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="chain18" in="00:01:45.933" out="00:01:46.717"/>
+    <track producer="chain19" in="00:00:02.350" out="00:00:03.133"/>
+    <transition id="transition10" out="00:00:00.783">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition11" out="00:00:00.783">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="mlt_service">mix</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+    </transition>
+  </tractor>
+  <chain id="chain20" out="00:02:21.150">
+    <property name="length">8470</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/talks_slides/2021_05_Validierung_10.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">b6783403b6997f56f0d4131518937f68</property>
+    <property name="shotcut:caption">2021_05_Validierung_10.mkv</property>
+  </chain>
+  <tractor id="tractor6" in="00:00:00.000" out="00:00:00.750">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="chain19" in="00:01:35.367" out="00:01:36.117"/>
+    <track producer="chain20" in="00:00:00.700" out="00:00:01.450"/>
+    <transition id="transition12" out="00:00:00.750">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition13" out="00:00:00.750">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="mlt_service">mix</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+    </transition>
+  </tractor>
+  <chain id="chain21" out="00:03:12.267">
+    <property name="length">11537</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/talks_slides/2021_05_Validierung_11.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">871fa76e18cce24fe36e847214b1a726</property>
+    <property name="shotcut:caption">2021_05_Validierung_11.mkv</property>
+  </chain>
+  <tractor id="tractor7" in="00:00:00.000" out="00:00:00.650">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="chain20" in="00:02:16.767" out="00:02:17.417"/>
+    <track producer="chain21" in="00:01:23.617" out="00:01:24.267"/>
+    <transition id="transition14" out="00:00:00.650">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition15" out="00:00:00.650">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <chain id="chain22" out="00:05:23.117">
+    <property name="length">19388</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/talks_slides/2021_05_Validierung_12.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">aefac3c952327b458949c89086ecaa02</property>
+    <property name="shotcut:caption">2021_05_Validierung_12.mkv</property>
+  </chain>
+  <tractor id="tractor8" in="00:00:00.000" out="00:00:00.050">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="chain21" in="00:03:11.633" out="00:03:11.683"/>
+    <track producer="chain22" in="00:00:01.517" out="00:00:01.567"/>
+    <transition id="transition16" out="00:00:00.050">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition17" out="00:00:00.050">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <chain id="chain23" out="00:01:21.750">
+    <property name="length">4906</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/talks_slides/2021_05_Validierung_13.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">c21b59fbe156a5d2cb84a3eb32ba2f47</property>
+    <property name="shotcut:caption">2021_05_Validierung_13.mkv</property>
+  </chain>
+  <tractor id="tractor9" in="00:00:00.000" out="00:00:01.383">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="chain22" in="00:05:21.733" out="00:05:23.117"/>
+    <track producer="chain23" in="00:00:02.933" out="00:00:04.317"/>
+    <transition id="transition18" out="00:00:01.383">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition19" out="00:00:01.383">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <playlist id="playlist0">
+    <property name="shotcut:video">1</property>
+    <property name="shotcut:name">V1</property>
+    <blank length="00:00:00.017"/>
+    <entry producer="chain13" in="00:00:03.750" out="00:01:36.750"/>
+    <entry producer="tractor0" in="00:00:00.000" out="00:00:00.133"/>
+    <entry producer="chain14" in="00:00:03.600" out="00:04:09.217"/>
+    <entry producer="tractor1" in="00:00:00.000" out="00:00:01.150"/>
+    <entry producer="chain15" in="00:00:03.517" out="00:01:48.583"/>
+    <entry producer="tractor2" in="00:00:00.000" out="00:00:00.167"/>
+    <entry producer="chain16" in="00:00:02.950" out="00:03:45.850"/>
+    <entry producer="tractor3" in="00:00:00.000" out="00:00:00.050"/>
+    <entry producer="chain17" in="00:00:03.300" out="00:05:03.450"/>
+    <entry producer="tractor4" in="00:00:00.000" out="00:00:00.967"/>
+    <entry producer="chain18" in="00:00:02.050" out="00:01:45.917"/>
+    <entry producer="tractor5" in="00:00:00.000" out="00:00:00.783"/>
+    <entry producer="chain19" in="00:00:03.150" out="00:01:35.350"/>
+    <entry producer="tractor6" in="00:00:00.000" out="00:00:00.750"/>
+    <entry producer="chain20" in="00:00:01.467" out="00:02:16.750"/>
+    <entry producer="tractor7" in="00:00:00.000" out="00:00:00.650"/>
+    <entry producer="chain21" in="00:01:24.283" out="00:03:11.617"/>
+    <entry producer="tractor8" in="00:00:00.000" out="00:00:00.050"/>
+    <entry producer="chain22" in="00:00:01.583" out="00:05:21.717"/>
+    <entry producer="tractor9" in="00:00:00.000" out="00:00:01.383"/>
+    <entry producer="chain23" in="00:00:04.333" out="00:01:18.133"/>
+  </playlist>
+  <tractor id="tractor10" title="Shotcut version 21.05.01" in="00:00:00.000" out="00:30:05.783">
+    <property name="shotcut">1</property>
+    <property name="shotcut:projectAudioChannels">2</property>
+    <property name="shotcut:projectFolder">1</property>
+    <property name="shotcut:scaleFactor">0.679922</property>
+    <track producer="background"/>
+    <track producer="playlist0"/>
+    <transition id="transition20">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="mlt_service">mix</property>
+      <property name="always_active">1</property>
+      <property name="sum">1</property>
+    </transition>
+    <transition id="transition21">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="version">0.9</property>
+      <property name="mlt_service">frei0r.cairoblend</property>
+      <property name="threads">0</property>
+      <property name="disable">1</property>
+    </transition>
+  </tractor>
+</mlt>
