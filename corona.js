@@ -3470,11 +3470,12 @@ Vaccination.prototype.update=function(rVacc,it){
 	this.pVaccHist_age[ia][tau]=this.pVaccHist_age[ia][tau-1];
       }
     }
-
+     
     // add new daily first vaccination percentage globally
     
     this.pVaccHist[0]=Math.min(this.pVaccHist[1]+rVacc,this.vaccmaxTot);
     pVacc=this.pVaccHist[0]; // global var for display
+    //if(rVacc>0){console.log("new first vacc: this.pVaccHist=",this.pVaccHist);}
 
     // distribute new vaccinations top-down to the age groups
 
@@ -3498,7 +3499,9 @@ Vaccination.prototype.update=function(rVacc,it){
       
 
     // update immunity percentage globally and in age groups
-    
+    // !! only reached if this.vaccmaxreached=false
+
+    //if(rVacc>0){console.log("this.vaccmaxreached=",this.vaccmaxreached);}
     if(!this.vaccmaxreached){
       this.Ivacc +=this.I0/(this.tau0-1) // (this.tau0-1) Gartenzauneffekt OK
 	*(this.pVaccHist[0]-this.pVaccHist[this.tau0-1]);
@@ -3511,7 +3514,12 @@ Vaccination.prototype.update=function(rVacc,it){
     //else{console.log("this.vaccmaxreached=true!!");}
   }
 
-  else{ // it=0, initialize
+  else{ // !!! it=0, initialize or re-initialize at start of interactive sim
+
+    // ! otherwise bug if true during initializeData
+    // => max number already reached
+    this.vaccmaxreached=false;
+    
     for(var ia=0; ia<this.f_age.length; ia++){
       this.Ivacc_age[ia]=0;
     }
@@ -3853,7 +3861,7 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
   // IvaccArr[it]: global fixed vacc immunity time profile
   // generated interactively here, if outside calibration
   
-  Ivacc=(it>=0) ? IvaccArr[it] : 0; // inside calibration with profile
+  Ivacc=(it>=0) ? IvaccArr[it] : 0; // used inside calibration from profile
   corrIFR=(it>=tauDie)
     ? corrIFRarr[it-tauDie] : vaccination.corrFactorIFR0; 
 
@@ -3868,12 +3876,17 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
       rVacc=(i<data_rVacc.length-7) // data_rVacc is smoothed over one week
 	? data_rVacc[i] : data_rVacc[data_rVacc.length-7];
     }
-    vaccination.update(rVacc,it);
-    Ivacc=vaccination.Ivacc; //!! geht nicht bei calibration
+    vaccination.update(rVacc,it); // outside calibration
+    Ivacc=vaccination.Ivacc;      // outside calibration
     corrIFRarr[it]=vaccination.corrFactorIFR;
     corrIFR=(it>=tauDie)
       ? corrIFRarr[it-tauDie] : vaccination.corrFactorIFR0; 
-    //console.log("update outside calib: it=",it," Ivacc=",Ivacc," corrIFR=",corrIFR);
+
+    if(false){
+    //if(IvaccArr[it]>0){
+      console.log("update outside calib: it=",it,
+		  " IvaccArr[it]=",IvaccArr[it]," Ivacc=",Ivacc);
+    }
   }
 
 
