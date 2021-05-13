@@ -205,10 +205,17 @@ a:hover {
 /* ################################################### */
 
 
+#video{ 
+  position: absolute;
+  top:     0.0vh; 
+  right:   44vmin;
+  z-index: 4; /* the higher, the more on top */
+}
+
 #info{ 
   position: absolute;
   top:     0.0vh; 
-  right:   36vmin;
+  right:   32vmin;
   z-index: 4; /* the higher, the more on top */
 }
 
@@ -581,6 +588,14 @@ input[type=range]::-webkit-slider-thumb {
 /* ################################################### */
 /* secondary elements smartphone portrait
 /* ################################################### */
+
+#video{ 
+  position: absolute;
+  top:     8vmin; 
+  right:   32vmin;
+  z-index: 4; /* the higher, the more on top */
+}
+
 
 #info{ /* smartphone portrait */
   position: absolute;
