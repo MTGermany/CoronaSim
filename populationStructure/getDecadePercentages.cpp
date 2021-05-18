@@ -122,11 +122,13 @@ int main(int argc, char* argv[]) {
     decade[i2]=i2;
   }
 
+  /*
   char titleStr[MAXSTR];
   sprintf(titleStr, "%s", "Decade\tpercentage male+female");
   inout.write_array(fnameOut, nData/2, decade, frac10, titleStr);
   cout<<"\nwrote "<<fnameOut<<endl;
-
+  */
+  
   char country[MAXSTR];
   sprintf(country,"\"%s\"    :",projectName);
   if((projectName[0]=='U')&&(projectName[1]=='n')){
@@ -134,9 +136,9 @@ int main(int argc, char* argv[]) {
   if((projectName[0]=='S')&&(projectName[1]=='o')){
     sprintf(country,"%s", "\"South Africa\" :");}
 
-  
-  //cout<<"\ncorresponding line of ageProfileListPerc for\n"
-  //    <<"age groups [0-30,-40,-50,-60,-70,-80,-90, 90+]:\n\n";
+  /*
+  cout<<"\ncorresponding line of ageProfileListPerc for\n"
+      <<"age groups [0-30,-40,-50,-60,-70,-80,-90, 90+]:\n\n";
   double frac0_30=frac10[0]+frac10[1]+frac10[2];
   cout<<"  "<<country<<" ["<<int(100*frac0_30+0.5)<<",";
   for(int i2=3; i2<nData/2; i2++){
@@ -145,6 +147,23 @@ int main(int argc, char* argv[]) {
     if(i2<nData/2-1){cout<<",";}
   }
   cout<<"],"<<endl;
+  */
+
+  /*
+  cout<<"\ncorresponding line of ageProfileListPerc for\n"
+      <<"  age groups [0-10, -20, -30, -40, -50, -60, -70, -80, -90, 90+]:\n\n";
+  */
+
+  // directly for input into source code ageProfileListPerc
+  
+  cout<<"  "<<country<<" [";
+  for(int i2=0; i2<nData/2; i2++){
+    int x=int(100*frac10[i2]+0.5);
+    cout <<((x>0) ? x : 0.1);
+    if(i2<nData/2-1){cout<<",";}
+  }
+  cout<<"],"<<endl;
+ 
   
   return(0);
 }

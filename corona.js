@@ -236,7 +236,31 @@ var n0=n0List["Germany"];  // #persons in Germany
 // cd populationStructure
 // run.sh
 
-const ageProfileListPerc={ // age groups [0-30,-40,-50,-60,-70,-80,-90, 90+]
+const ageProfileListPerc={ // age groups [0-10,-20,-30,-40,-50,-60,-70,-80,-90, 90+]
+ "Austria"    : [10,10,13,14,13,16,11,9,4,1],
+  "Czechia"    : [10,10,11,14,17,12,13,9,3,1],
+  "France"    : [12,12,11,12,13,13,12,8,5,1],
+  "Germany"    : [9,10,11,13,12,16,12,9,6,1],
+  "Greece"    : [9,10,10,13,15,14,12,9,6,1],
+  "India"    : [17,18,17,16,12,9,6,3,1,0.1],
+  "Israel"    : [19,16,14,13,12,9,8,5,2,1],
+  "Italy"    : [8,9,10,12,15,16,12,10,6,1],
+  "Poland"    : [10,10,12,16,14,12,14,7,4,1],
+  "Portugal"    : [8,10,11,12,16,14,13,10,6,1],
+  "Russia"    : [13,10,11,17,14,13,12,6,3,1],
+  "South Africa" : [20,17,17,17,12,8,5,2,1,0.1],
+  "Spain"    : [9,10,10,13,17,15,11,8,5,1],
+  "Sweden"    : [12,11,13,13,13,13,11,10,4,1],
+  "Switzerland"    : [10,10,12,14,14,15,11,9,4,1],
+  "United Kingdom" : [12,11,13,14,13,14,11,8,4,1],
+  "US"    : [12,13,14,13,12,13,12,7,3,1],
+  "LK_Erzgebirgskreis": [9,10,11,13,12,16,12,9,6,1], // as Germany
+  "LK_Osterzgebirge"  : [9,10,11,13,12,16,12,9,6,1],
+  "SK_Dresden"        : [9,10,11,13,12,16,12,9,6,1]
+}
+  
+/* 
+//const ageProfileListPerc={ // age groups [0-30,-40,-50,-60,-70,-80,-90, 90+]
   "Germany"       :     [30,13,12,20,12,9,6,1],
   "Austria"       :     [32,14,13,16,11,9,4,1],
   "Czechia"       :     [31,14,17,12,13,9,3,1],
@@ -255,11 +279,12 @@ const ageProfileListPerc={ // age groups [0-30,-40,-50,-60,-70,-80,-90, 90+]
   "US"            :     [39,13,12,13,12,7,3,1],
   "Australia"     :     [32,14,13,16,11,9,4,1],
   "South Africa"  :     [55,17,12,8,5,2,1,0.1],
-  "LK_Erzgebirgskreis": [30,13,12,16,12,9,6,1],
+  "LK_Erzgebirgskreis": [30,13,12,16,12,9,6,1][9,10,11,13,12,16,12,9,6,1], // as Germany
   "LK_Osterzgebirge"  : [30,13,12,16,12,9,6,1],
   "SK_Dresden"        : [30,13,12,16,12,9,6,1]
 }
-
+*/
+  
 // will be only relevant if "xyz no longer <<1 ("Durchseuchung")
 // will be later changed to fracDie=fracDieInit*pTest/pTestInit;
 const fracDieInitList={
@@ -3389,8 +3414,14 @@ MutationDynamics.prototype.update=function(it){
 }
 
 
-//  RKI Bulletin 2021-03, references/Infektionsparameter_2021_03.pdf
-
+// RKI Bulletin 2021-03, references/Infektionsparameter_2021_03.pdf
+// aktualisierte vacc willingness Germany 2021-05-10:
+// https://de.statista.com/statistik/daten/studie/1197243/umfrage/umfrage-zur-corona-impfbereitschaft-in-deutschland-nach-alter/
+// https://de.statista.com/statistik/daten/studie/1147628/umfrage/umfrage-zur-corona-impfbereitschaft-in-deutschland/
+// 75 Prozent >=18 J  ("auf jeden Fall", mehr "vielleicht",
+//                     steigend ueber Zeit)
+// 72 Prozent der Befragten im Alter von 40 bis 64
+// 92 Prozent ab 65
 //################################################################
 function Vaccination(){
 //################################################################
@@ -3398,22 +3429,27 @@ function Vaccination(){
   this.tau0=28;      // days after full effect I0 is reached (1 week after)
   this.Ivacc=0;      // population immunity fraction by vaccinations
                      // ! read from application routines after update()
-  this.vaccmax=[0.35,0.60,0.68,0.75,0.82,0.86,0.90,0.90]; // 1-vacc deniers
+  this.f_age=[];     // demographic profile of age groups
+                     // [0-10,-20,-30,-40,-50,-60,-70,-80,-90, 90+]
+
+  this.vaccmax=[0, 0.20, 0.55, 0.62, 0.65, 0.72, 0.86, 0.92, 0.94, 0.94];
+  //this.vaccmax=[0, 0.20, 0.60, 0.68, 0.72, 0.80, 0.86, 0.94, 0.94, 0.94];
+  //this.vaccmax=[1,1,1,1,1,1,1,1,1,1];
+                     // 1-vacc deniers
                      // or med impossibilities in each age group
+  
   this.vaccmaxTot=0; // pop-averaged max vaccination rate
   this.pVaccHist=[]; // history[tau] of vacc percentage pVacc (first vacc.)
 
-  this.f_age=[];     // demographic profile of age groups
-                     // [0-30,-40,-50,-60,-70,-80,-90, 90+]
-  this.ageGroup=6;   // will be overwritten in initialize
+  this.ageGroup=0;   // will be overwritten in initialize
   this.pVaccHist_age=[]; // age-specific history[tau]
   this.Ivacc_age=[]; // vacc immunity disaggregated into the age groups
 
   this.corrFactorIFR=1.11; // IFR(not immune pop average)/IFR(group60-70)
                            // ! just init; overridden
   this.corrFactorIFR0=1.11;
-  this.iaRef=4;      // age index of reference age group 60-70
-  this.multFactor10=3.5; //every 10 years older increases IFR by this factor
+  this.iaRef=6;      // age index of reference age group 60-70
+  this.multFactor10=3.2; //every 10 years older increases IFR by this factor
 
   this.vaccmaxreached=false;
   // cannot use this.initialize here
@@ -3502,7 +3538,9 @@ Vaccination.prototype.update=function(rVacc,it){
     // !! only reached if this.vaccmaxreached=false
 
     //if(rVacc>0){console.log("this.vaccmaxreached=",this.vaccmaxreached);}
-    if(!this.vaccmaxreached){
+    if(true){ // OK; restricted by this.pVaccHist[0]=Math.min(..)
+              // and else{this.pVaccHist_age[j][0]=this.vaccmax[j];}
+    //if(!this.vaccmaxreached){
       this.Ivacc +=this.I0/(this.tau0-1) // (this.tau0-1) Gartenzauneffekt OK
 	*(this.pVaccHist[0]-this.pVaccHist[this.tau0-1]);
 
