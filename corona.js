@@ -1,7 +1,27 @@
 
-// Deutsches Intensivregister!! 
+/* Deutsches Intensivregister!! 
 //wget https://diviexchange.blob.core.windows.net/%24web/bundesland-zeitreihe.csv
 // JSON implemented, not yet used (DIVI most up-to-date but consistent with OWID (up to 10 days delayed)
+
+// 2021-06-10 WATCH OUT: NaN Bug in England? No: The truth
+// 2021-06-10 ANNOYING Warum syst zu niedrig am Ende? Werden die letzten
+//            Daten nicht beruecksichtigt???
+//            DONE: Probably stringency index that relaxes too slow =>
+// 2021-06-10 ANNOYING stringencyIndex relaxes too slow
+//            DONE => quick hack fixStringencyLastVals=true;
+// 2021-06-10 ANNOYING Warum in England R0/R=6 so hoch?
+//            DONE: OK
+// 2021-06-10 ANNOYING missing update of data in France since 2021-05-20
+//            DONE => data just remains constant while
+//                    data2 jumps back in the total cases
+//                    cannot be sensibly tackled
+
+TODO 
+ (1) slider fuer Zeit 0...itmax, overrides Go button, danach mit Go weiter
+ (2) Start Oktober 2020; betrifft auch resimulate und reset Button
+
+*/
+
 
 //##################################################################
 // general global variables affecting global appearance
@@ -588,29 +608,58 @@ document.getElementById("title").innerHTML=
 // calibration related parameters/variables
 //###############################################################
 
+/* Procedure:
+
+* calibrated quantity: R0 including new mutations, excluding everything else 
+  (seasons, vacc, lockdown)
+
+* smallest calibr unit for one R0 value = one calibInterval [e.g. 7 days]
+
+* calibrated in chunks of calibInterval*nChunk days [7*6];
+  the last chunk can vary between [7*6+6] days and [7*6+6-7*dn] days
+
+* chunks overlap by nOverlap*calibInterval days [7*4]
+  => advancement dn=nChunk-nOverlap intervals 
+  per chunk [2 intervals, 14 days] 
+
+* in each chunk, the first R0 value is taken from the previous chunk 
+  (unless the first chunk where it is calibrated as well);
+  the last Rinterval_last_min days [28] have the same R0 value 
+  (in the last interval, between [28+6] days and [28+6-7*dn] days)
+  => nChunk-Rinterval_last_min days/calibInterval [2] R0 values
+  newly calibrated per chunk (one more for the first chunk)
+
+*/
+
 var inCalibration=false;  // other calc of vacc
                           // in CoronaSim.updateOneDay 
 var itmin_calib; // start calibr time interval w/resp to dayStartMar
                  //     = dataGit_idataStart+1
 var itmax_calib; //  end calibr time interval =^ data_itmax-1 
                  // should be split if there are more than approx 
-                 // 20 weeks of data
+                 // 15 weeks of data
+var icalibmin;  // getIndexCalib(itmin_c)
+var icalibmax;  // getIndexCalibmax(itmax_c);
 
-const calibInterval=7; //!! calibr time interval [days] for one R0 value 7,14
-const Rinterval_last_min=14// do not calibrate remain. period smaller 14,21
-const calibrateOnce=false; // following variables only relevant if false
-const nCalibIntervals=6; // multiples of calibInterval, !! >=30/calibInterval
-                         // calibrates nCalibIntervals-nOverlap+1 params
+const calibInterval=7;  // 7; calibr time interv [days] for one R0 value 
+
+const nLastUnchanged=4; // 4; <= nChunk-dn=nOverlap
+                        // (may work otherwise but not safe)
+const nChunk=6;         // 6; multiples of calibInterval
+                        // >max(nLastUnchanged,nOverlap)
+const nOverlap=4;       // 4; multiples of calibInterval
+                        // >=max(1,nLastUnchanged)
+                        // <nChunk
+
 var R0=1.42;    // init interactive R for slider corona_gui.js (overridden)
 var R0_actual=R0;
 var R0time=[];   // !! calibrated R0
                 // initialize in function initialize() (then data available)
+
 var R0_hist=[]; R0_hist[0]=R0; // one element PER DAY
 var sigmaR0_hist=[]; sigmaR0_hist[0]=0; 
 
 
-const nOverlap=3;        // multiples of calibInterval, 3
-                         // >=max(1,floor(Rinterval_last_min/calibInterval)
 var useInitSnap;
 var firstR0fixed=false; //if first R0 element firstR0 is fixed @ calibr 
 var firstR0=0;
@@ -993,9 +1042,28 @@ function initializeData(country,insideValidation){
   for(var i=0; i<data.length; i++){
     data_date[i]=data[i]["date"];
     data_cumCases[i]=data[i]["confirmed"];
+
+    // correct for ANNOYING inconsistent RKI data
     if((i>0)&&(data_cumCases[i]<data_cumCases[i-1])){
-      data_cumCases[i]=data_cumCases[i-1]; // ANNOYING inconsistent RKI data
+      data_cumCases[i]=data_cumCases[i-1]; 
     }
+
+    // correct for ANNOYING missing update of data in France since 2021-05-20
+    // as of 2021-06-10
+
+    var i2=i+di2; // di2 defined at data initialisation
+    console.log("i2=",i2," data2[i2]=",data2[i2]);
+    if((i2>=0)&&(i2<data2.length)
+       &&(!(typeof data2[i2].total_cases === "undefined"))
+       &&(!useLandkreise)){
+      console.log("Hier");
+      console.log("data_cumCases[i]=",data_cumCases[i],
+		  " data2[i2].total_cases=",data2[i2].total_cases);
+      data_cumCases[i]=Math.max(data_cumCases[i],data2[i2].total_cases);
+    }
+
+
+    
     data_cumDeaths[i]=data[i]["deaths"];
     data_cumRecovered[i]=(useLandkreise) ? 0 : data[i]["recovered"];
     data_cumCfr[i]=(data_cumCases[i]==0)
@@ -1424,7 +1492,7 @@ function initializeData(country,insideValidation){
       //var logging=true;
       //var logging=false;
       //var logging=(i>data.length-10);
-      var logging=(i>data.length-21); // DATALOG possibly consolid with PLOG
+      var logging=(i>data.length-42); // DATALOG possibly consolid with PLOG
       //var logging=(i==200);
       if(logging){
 	var it=i-data_idataStart;
@@ -1458,6 +1526,26 @@ function initializeData(country,insideValidation){
     }
   }
 
+
+  // !!!! [2021-06-10 hack because stringency index is updated too sloppily
+  // still no reduction as of 2021-06-10 although masive reductions throughout
+
+  var fixStringencyLastVals=true;
+  var daysReduce=14;
+  var factReduce=0.8;
+
+  var istart=Math.min(data.length-daysReduce+nDaysValid, data.length-1);
+
+  if(fixStringencyLastVals&&(nDaysValid<daysReduce)){
+    for(var i=istart; i<data.length; i++){
+      var it=i-data_idataStart;      
+      data_stringencyIndex[i]*=0.8;
+      console.log("it-itPresent=",it-itPresent,
+		  " data_stringencyIndex[i]=",data_stringencyIndex[i]); 
+    }
+  }
+
+  
   if(false){
     console.log("\ninitializeData finished: final weekly pattern:");
     for(var i=0; i<data.length; i++){
@@ -1826,7 +1914,10 @@ function SSEfunc(R0arr, fR0, logging, itStartInp, itMaxInp,
 
     // simulate
 
-    var R0_actual= R0fun_time(R0arr,it-itStart); // ! only R0arr used in SSEfunc
+    // ! only R0arr used in SSEfunc;
+    // R0fun_time uses info whether firstR0fixed
+    // and, if so, init value firstR0
+    var R0_actual= R0fun_time(R0arr,it-itStart); 
     corona.updateOneDay(R0_actual, it, logging); //in SSE; never logging=true!
 
     // increment SSE
@@ -1983,9 +2074,10 @@ function getIndexCalib(itime){
   return Math.floor(itime/calibInterval);     // MT 2020-08
 }
 
-// last calibration interval must have at least Rinterval_last_min days
+// last calibration interval must have at least
+// calibInterval*nLastUnchanged days
 function getIndexCalibmax(itime){
-  return getIndexCalib(itime-Rinterval_last_min); 
+  return getIndexCalib(itime-calibInterval*nLastUnchanged); 
 }
 
 
@@ -2021,39 +2113,25 @@ function calibrate(){
   var itmax_c=data_itmax-1; //basis
 
 
-  if(calibrateOnce){ // global param
-    itmin_c=0;            
-    itmax_c=data_itmax-1; 
-    icalibmin=getIndexCalib(itmin_c);
-    icalibmax=getIndexCalibmax(itmax_c);// *max: >=10d cal intv
-    for(var icalib=icalibmin; icalib<=icalibmax; icalib++){
-      R0calib[icalib-icalibmin]=(icalib==0) ? 1.2 : 1.111 //!!
-    }
-       
-    //#####################################
-    estimateR0(itmin_c, itmax_c, R0calib); // also transfers R0calib to R0time
-    //#####################################
-
-    estimateErrorCovar_R0hist_sigmaR0hist(itmin_c, itmax_c, R0time); 
-  }
 
   // ############################################################
   // calibrate in multiple steps
   // ############################################################
 
-  else{ 
+  if(true){ 
 
     var logging=false; //!!!
 
 
-    var dn=nCalibIntervals-nOverlap;
-    var nPeriods=Math.round((data_itmax-1-Rinterval_last_min)/(calibInterval*dn));
+    var dn=nChunk-nOverlap;
+    var nPeriods=Math.round((data_itmax-1-calibInterval*nLastUnchanged)
+			    /(calibInterval*dn));
 
     var ditOverlap=nOverlap*calibInterval;
  
     for(var ip=0; ip<nPeriods; ip++){
       itmin_c=calibInterval*ip*dn; //=past itsnap
-      itmax_c=itmin_c+calibInterval*nCalibIntervals;
+      itmax_c=itmin_c+calibInterval*nChunk;
 
       //step it calculates to it+1 and SSE needs data at it+1, hence itmax-1
       if(ip==nPeriods-1){itmax_c=data_itmax-1;}
@@ -2067,8 +2145,7 @@ function calibrate(){
 
 
       icalibmin=getIndexCalib(itmin_c);
-      icalibmax=(ip==nPeriods-1) 
-	? getIndexCalibmax(itmax_c) : getIndexCalibmax(itmax_c);
+      icalibmax=getIndexCalibmax(itmax_c);
 
 
       // the follow condition to be false can happen because getIndexCalibmax
@@ -2116,8 +2193,9 @@ function calibrate(){
        //#####################################
         estimateR0(itmin_c, itmax_c, R0calib);  // also R0calib -> R0time
        //#####################################
+
         if(logging){console.log("before covar: R0calib=",R0calib);}
-        estimateErrorCovar_R0hist_sigmaR0hist(itmin_c, itmax_c, R0calib);
+        //estimateErrorCovar_R0hist_sigmaR0hist(itmin_c, itmax_c, R0calib);
 
         // calculate snapshot for init of next period
 
@@ -2125,13 +2203,13 @@ function calibrate(){
         SSEfunc(R0calib,null,false,itmin_c,itmax_c,itsnap,useInitSnap);
         if(logging) console.log(" snapshot for initialiation in next period:",
 		  corona.snapshot);
-      }
-    }// end calibration proper (several calibr steps) R0calib and R0time
+      } // if(icalibmax>icalibmin
+    } // end calibration proper (several calibr steps) R0calib and R0time
 
 
-    //!!!!
-    R0time[R0time.length-1] *=1.001; // for some reason, last leg a bit low
-    //!!!!
+    //!!!
+    //R0time[R0time.length-1] *=1; // for some reason, last leg a bit low
+    //!!!
 
     firstR0fixed=false; // for the whole simulation use all R0 values in R0time
     useInitSnap=false; 
@@ -2488,8 +2566,8 @@ function calibIFR(it0, it1){
 
 function estimateR0(itmin_c, itmax_c, R0calib){
 
-  var icalibmin=getIndexCalib(itmin_c);
-  var icalibmax=getIndexCalibmax(itmax_c);// *max: >=10d cal intv
+  icalibmin=getIndexCalib(itmin_c);
+  icalibmax=getIndexCalibmax(itmax_c);// *max: >=10d cal intv
 
   // set global variables itmin_calib, itmax_calib needed for 
   // fmin.nelderMead
@@ -2570,8 +2648,8 @@ function estimateErrorCovar_R0hist_sigmaR0hist(itmin_c, itmax_c, R0calib){
   if(log){console.log("entering estimateErrorCovar(): R0calib=",R0calib,
 		       " firstR0fixed=",firstR0fixed," firstR0=",firstR0);}
 
-  var icalibmin=getIndexCalib(itmin_c);
-  var icalibmax=getIndexCalibmax(itmax_c);// *max: >=10d cal intv
+  icalibmin=getIndexCalib(itmin_c);
+  icalibmax=getIndexCalibmax(itmax_c);// *max: >=10d cal intv
 
 
   var H=[]; // Hessian of actively estimated R0 elements
@@ -3432,8 +3510,8 @@ function Vaccination(){
   this.f_age=[];     // demographic profile of age groups
                      // [0-10,-20,-30,-40,-50,-60,-70,-80,-90, 90+]
 
-  this.vaccmax=[0, 0.20, 0.55, 0.62, 0.65, 0.72, 0.86, 0.92, 0.94, 0.94];
-  //this.vaccmax=[0, 0.20, 0.60, 0.68, 0.72, 0.80, 0.86, 0.94, 0.94, 0.94];
+  //this.vaccmax=[0, 0.20, 0.55, 0.62, 0.65, 0.72, 0.86, 0.92, 0.94, 0.94];
+  this.vaccmax=[0, 0.30, 0.60, 0.68, 0.72, 0.80, 0.86, 0.94, 0.94, 0.94];
   //this.vaccmax=[1,1,1,1,1,1,1,1,1,1];
                      // 1-vacc deniers
                      // or med impossibilities in each age group
@@ -3945,11 +4023,17 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
   }
   this.Reff *=stringencyFactor(stringency);
   
-  if(false){
+  //if(false){
   //if(!inCalibration){
+  if((!inCalibration)&&(it>itPresent-14)){
     console.log(" updateOneDay: it-itPresent=",it-itPresent,
-		" R0=",R0," this.Reff=", this.Reff,
-		" seasonFactor=",calc_seasonFactor(it));
+		" R0=",R0.toFixed(2),
+		" (1-Ivacc)=",(1-Ivacc).toFixed(2),
+		" (1-this.xyz)=",(1-this.xyz).toFixed(2),
+		" seasonFactor=",calc_seasonFactor(it).toFixed(2),
+		" stringencyFactor(stringency)=",
+		stringencyFactor(stringency).toFixed(2),
+		" this.Reff=", this.Reff.toFixed(2));
   }
 
   // source term from external trips
@@ -4512,7 +4596,7 @@ function DrawSim(){
 		 type: 1, plottype: "points", plotLog: false, 
 		 ytrafo: [100, false,false], color:colCFR};
 
-  this.dataG[22]={key: "Sim IFR (Infection fatality rate) [Promille]", data: [],
+  this.dataG[22]={key: "Sim IFR65 (Infection fatality rate) [Promille]", data: [],
 		 type: 4, plottype: "lines", plotLog: false, 
 		 ytrafo: [1000, false,false], color:colIFR};
 

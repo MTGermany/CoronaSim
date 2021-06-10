@@ -81,7 +81,7 @@ grep ISR data/githubWithTests.json >> data/tmp.json
 grep India data/githubWithTests.json >> data/tmp.json
 grep Russia data/githubWithTests.json >> data/tmp.json
 grep USA data/githubWithTests.json >> data/tmp.json
-grep AUS data/githubWithTests.json >> data/tmp.json
+#grep AUS data/githubWithTests.json >> data/tmp.json # no longer data 2021-06
 grep PRT data/githubWithTests.json >> data/tmp.json
 grep ZAF data/githubWithTests.json >> data/tmp.json # Suedafrika
 
@@ -143,7 +143,7 @@ perl -i -p -e "s/ISR/Israel/g" data/tmp2.json
 perl -i -p -e "s/IND/India/g" data/tmp2.json
 perl -i -p -e "s/RUS/Russia/g" data/tmp2.json
 perl -i -p -e "s/USA/US/g" data/tmp2.json
-perl -i -p -e "s/AUS/Australia/g" data/tmp2.json
+#perl -i -p -e "s/AUS/Australia/g" data/tmp2.json
 perl -i -p -e "s/PRT/Portugal/g" data/tmp2.json
 perl -i -p -e "s/ZAF/SouthAfrica/g" data/tmp2.json # cannot use spaces
 
@@ -235,7 +235,7 @@ grep Israel data/github.json >> data/tmp.json
 grep India data/github.json >> data/tmp.json
 grep Russia data/github.json >> data/tmp.json
 grep US data/github.json >> data/tmp.json
-grep Australia data/github.json >> data/tmp.json
+#grep Australia data/github.json >> data/tmp.json
 grep Portugal data/github.json >> data/tmp.json
 grep "South Africa" data/github.json >> data/tmp.json
 
