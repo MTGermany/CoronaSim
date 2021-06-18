@@ -1,0 +1,31 @@
+When mutation active?
+
+
+Very init of variabes:
+  var simulateMutation=true;
+  define mutationDynamics =new  MutationDynamics(dateOld,pOld,dateNew,...)
+  with country-specific dateOld, datenew (init to Germany)
+  const startMut2present=14; 14 days before present/last data (validation)
+  mutation dynamics takes over calibration
+  
+loadData():
+  setMutationSim(simulateMutation);
+
+myRestartFunction():
+  if simulateMutation:
+    define itStartMut
+    define mutationDynamics
+      =new MutationDynamics(dateOld,pOld,dateNew,pNew,R0StartMut,itStartMut);
+
+simulationRun():
+  simulateMutation=false if R0slider_moved
+
+doSimulationStep():
+  if(simulateMutation&&(it>=itStartMut)):
+    mutationDynamics.update(it); //it = absoliute index, no incrent. update
+    R0_actual=mutationDynamics.R0; // override R0_actual=R0fun_time(..)
+    R0_hist[it]=R0_actual // for drawing
+
+toggleMutationSim():
+  callback from html button "Stop Sim of Mutations"
+  setMutationSim(!simulateMutation), also toggles simulateMutation

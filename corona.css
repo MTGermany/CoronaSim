@@ -300,7 +300,8 @@ a:hover {
   position: absolute;
   top:     28vh; 
   right:   1vw;
-  z-index: 3; 
+  z-index: 3;
+  color: #F00;
 }
 
 #testnumberDiv{

@@ -102,7 +102,8 @@ var isStopped=true
  - date.getFullYear() -> 2020
  - date.getMonth() -> 1 (w/o leading zeroes=February)
  - date.getDate() -> 22  (1-31)
- - add 50 days: date.setDate(date.getDate() + 50);
+ - add 50 days: date.setDate(date.getDate() + 50); or
+                date.setTime(date.getTime() + 50*oneDay_ms);
  - Operator >, < works as expected
  - console.log(date) -> like "Wed Mar 25 2015 01:00:00 GMT+0100 (CET)"
  - date.toDateString() -> Fri Jun 05 2020
@@ -119,8 +120,8 @@ var dayStartMar=dayStartMarInit;
 var dayStartYear=dayStartMar+59;
 var dateStart=new Date(2020,02,dayStartMar); // months start @ zero, days @ 1
 var present=new Date();   // time object for present 
-var it=0;
-var oneDay_ms=(1000 * 3600 * 24);
+var it=0; //!!!!
+const oneDay_ms=(1000 * 3600 * 24);
 var itPresentInit=Math.floor(
     (present.getTime() - dateStart.getTime())/oneDay_ms); 
                 // itPresent=days(present-dateStart)
@@ -150,13 +151,9 @@ var dataRKI_orig=[];
 // do not use last datum (report delay bias in GER and FRA)
 var knockoffLastDatumGerFra=true; 
 
-//var data_dateBegin; // Date object //!!!! remove
-//var data_dateEnd; // Date object
 var data_idataStart; //!! dataGit dataset index for dayStartMar
 var data_itmax;  // !! with respect to dayStartMar=data.length-data_idataStart
 
-//var data2_dateBegin; // Date object //!!!! remove
-//var data2_dateEnd; // Date object //!!!! remove
 var data2_idataStart; // same for dataGit2 set  containing the corona-test data
 var data2_itmax;
 var di2=0;  // i2-i for same date FROM THE END
@@ -384,7 +381,32 @@ const tauRecoverList={
   "SK_Dresden"        : 16
 }
 
+const timeShiftMutationDeltaRefGB={
+  "Germany"       : 44, // OK
+  "Austria"       : 40, // rest (w/o OK flag) speculation at best
+  "Czechia"       : 40,
+  "France"        : 40,
+  "United Kingdom": 0, // OK
+  "Italy"         : 40,
+  "Poland"        : 40,
+  "Spain"         : 40,
+  "Sweden"        : 40,
+  "Switzerland"   : 40,
+  "Greece"        : 40,
+  "Portugal"      : 40,
+  "Israel"        : 18,
+  "India"         : -20, // OK
+  "Russia"        : 18,
+  "US"            : 18,
+  "Australia"     : 18,
+  "South Africa"  : 18,
+  "LK_Erzgebirgskreis": 44, // OK
+  "LK_Osterzgebirge"  : 44, // OK
+  "SK_Dresden"        : 44  // OK
+}
 
+
+  
 
 //#########################################################
 // slider-related variables
@@ -425,7 +447,7 @@ var stringency_hist=[]; stringency_hist[0]=stringency; // one element PER DAY
 
 var usePreviousGlob=true; // wether comparison is active
 var usePrevious=usePreviousGlob; // if *Glob=false,
-   // usePrevious true in, e.g., validation or B117 simulation
+   // usePrevious true in, e.g., validation or Mutation simulation
 var itmaxPrev=0;     // maximum it reached in previous simulation
 var simPrevious=[]; // store previous sim data outside DrawSim (created anew)
                     // needed for validation or if doing mutation scenario
@@ -444,73 +466,122 @@ var dataCmp_dxIncidence=[]; // compare weekly incidence per 100 000 from data
 
 
 
-//######################################################################
-// British B.1.1.7 B117 simulation
-//######################################################################
+/*
+######################################################################
+ Mutation Dynamics
+######################################################################
 
-/* Data for Germany, 
-https://de.statista.com/statistik/daten/studie/1208627/umfrage/ausbreitung-von-corona-mutationen-in-deutschland/
+
+/* Data for Germany: 
+https://www.rki.de/DE/Content/InfAZ/N/Neuartiges_Coronavirus/DESH/Bericht_VOC_2021-06-16.pdf?__blob=publicationFile
+
+Grafik (P1 falsch):
+https://www.n-tv.de/panorama/Delta-Variante-breitet-sich-in-Deutschland-aus-article22624633.html
+
+Data other countries:
+https://www.gisaid.org/hcov19-variants/
+
+Links Variants of Concern auswaehlen (Wildtyp gibt es nicht)
+rechts Zeitraum einstellen und irrelevante Laender abklicken in
+Legende
+
+
+Alpha=Britisch
+Delta=Indian
 KW8: Beginn Mo 2020-02-22, Ende So 2020-02-28, Mitte 2020-02-25
-KW2 p=0.020      2020-01-11
-KW3 p=0.036     2020-01-18
-KW4 p=0.047     2020-01-25
-KW5 p=0.072     2020-02-04
-KW6 p=0.176     2020-02-11
-KW7 p=0.259     2020-02-18
-KW8 p=0.400     2020-02-25
-KW9 p=0.545     2020-03-04
-KW10 p=0.636     2020-03-11
-KW11 p=0.713     2020-03-18
-KW12 p=0.785     2020-03-25
-KW13 p=0.823     2020-04-01
-KW14 p=0.844     2020-04-08
+
+Germany
+KW2021 AlphaAnz Anteil[%] DeltaAnzahl Anteil[%]
+01     5        2.2       0           0
+02     52       8.5       0           0
+03     96       5.4       0           0
+04     285      10.6      0           0
+05     557      17.9      0           0
+06     712      21        0           0
+07     1.201    32.6      0           0
+08     1.887    44        0           0
+09     1.926    51.7      0           0
+10     2.495    64.5      0           0
+11     3.051    74.1      0           0
+12     2.923    79.9      1           0
+13     3.286    86.9      0           0
+14     3.498    88        2           0.1
+15     3.977    88.8      6           0.1
+16     4.420    90.7      32          0.7
+17     3.518    90        55          1.4
+18     4.271    87        86          1.8
+19     3.303    88.5      92          2.5
+20     3.241    90.1      114         3.2
+21     2.148    89.9      89          3.7
+22     1.052    86.4      75          6.2
+
+
+GB
+Date[WeekStart]    PercentageDelta[%]
+2021-04-19          2.2
+2021-05-03         10.7
+2021-05-10         20.3
+2021-05-17         33.6
+2021-05-24         47.0
+2021-05-31         57.3
+2021-06-07         68.9
+2021-06-14         76.6
+2021-06-21         
+2021-06-28         
+
+
+
 */
 
-var simulateMutation=true;
+var simulateMutation=true; // 2021-06-18 now Indian=Delta variant
 
-//var pOld=0.020;
-//var dateOld=new Date("2021-01-14"); //!!!!
+// dateOldGB: center of week interval for data of development in GB,
+// Basis Alpha
+var pOld=0.107;
+var dateOldGB=new Date("2021-05-06"); 
 
-var pOld=0.036;
-var dateOld=new Date("2021-01-21"); //!!!! to end 2021-01-18->"2021-01-21
+var pNew=0.766;
+var dateNewGB=new Date("2021-06-17"); 
 
-//var pOld=0.047;
-//var dateOld=new Date("2021-01-28"); //!!!!
+// shift Delta dynamics [days] for other countries as GB; default Germany
+// !! setDate(dateOldGB.getDate() + shiftDeltaFromGB) => junk !!
 
-//var pOld=0.072;
-//var dateOld=new Date("2021-02-07"); //!!!!
+var shiftDeltaFromGB=timeShiftMutationDeltaRefGB[country]; 
+var dateOld=new Date(dateOldGB.getTime() + oneDay_ms * shiftDeltaFromGB);
+var dateNew=new Date(dateNewGB.getTime() + oneDay_ms * shiftDeltaFromGB);
 
-//var pOld=0.176;
-//var dateOld=new Date("2021-02-14"); 
+console.log("\n\ndateOldGB=",dateOldGB," dateOld=",dateOld);
+console.log("dateNewGB=",dateNewGB," dateNew=",dateNew);
 
-//var pOld=0.400;  
-//var dateOld=new Date("2021-02-28");
-
-
-
-var pNew=0.072;
-var dateNew=new Date("2021-02-07"); //!!!! to end 2021-01-18->"2021-01-21
-
-//var pNew=0.176;
-//var dateNew=new Date("2021-02-14"); 
-
-//var pNew=0.400;  
-//var dateNew=new Date("2021-02-28");
-
-//var pNew=0.545;
-//var dateNew=new Date("2021-03-07");
-
-var pNew=0.844;
-var dateNew=new Date("2021-04-11");
+console.log("orig:",dateOldGB,
+	    "\n+1 day:",new Date(dateOldGB.getTime()+oneDay_ms*1),
+	    "\n+31 days:",new Date(dateOldGB.getTime()+oneDay_ms*31),
+	    "\n+100 days:",new Date(dateOldGB.getTime()+oneDay_ms*100));
 
 
-var itStartMut=itPresent-80; // time index where mutation dynamics rather calibr R0 used
-
-var startMut2present=0; //!!! days start mutation dynamics - present
 
 
-// will be overridden (needed for some initial. )
-var mutationDynamics=new MutationDynamics(dateOld,pOld,dateNew,pNew,2.84, itStartMut);
+
+
+// #days before present or last data in validation
+// where mutation dynamics takes over calibration.
+// At that day, R0_wild and R0_mut are calculated such that
+// p *R0_mut+(1-p)*R0_wild=R0_calib
+// startMut2present should be smaller than
+// period nLastUnchanged*calibInterval (e.g. 28) where calibrated R0
+// does not change (calibration always performed w/o mutation dynamics)
+
+const startMut2present=14; 
+
+// time index where mutation dynamics rather calibr R0 used
+// (overridden in validation)
+var itStartMut=itPresent-startMut2present;
+
+
+
+// will be overridden (needed for some initial. ) (number=R0startMut)
+var mutationDynamics
+    =new MutationDynamics(dateOld,pOld,dateNew,pNew,2.84, itStartMut);
 
 
 
@@ -610,7 +681,8 @@ document.getElementById("title").innerHTML=
 
 /* Procedure:
 
-* calibrated quantity: R0 including new mutations, excluding everything else 
+* calibrated quantity: R0 implicitely including new mutations, explicitely 
+  excluding everything else 
   (seasons, vacc, lockdown)
 
 * smallest calibr unit for one R0 value = one calibInterval [e.g. 7 days]
@@ -629,9 +701,13 @@ document.getElementById("title").innerHTML=
   => nChunk-Rinterval_last_min days/calibInterval [2] R0 values
   newly calibrated per chunk (one more for the first chunk)
 
+* Explicit mutation dynamics NOT part of calibration; 
+  should be reflected implicitly by the calibration results
+
 */
 
-var inCalibration=false;  // other calc of vacc
+var inCalibration=false;  // if true, other calc of vacc and
+                          // explicit mutation dynamics ignored in 
                           // in CoronaSim.updateOneDay 
 var itmin_calib; // start calibr time interval w/resp to dayStartMar
                  //     = dataGit_idataStart+1
@@ -1079,7 +1155,7 @@ function initializeData(country,insideValidation){
   }
 
 	
-  //!!!! Correct erratically high forecasts caused by not reported
+  //!!! Correct erratically high forecasts caused by not reported
   // cases for over a week by shifting some later cases to the missing cases
   // do not consider the first 9-1=8 weeks
 
@@ -1344,7 +1420,7 @@ function initializeData(country,insideValidation){
 	*Math.sqrt(1+Math.pow(pModel/pTestMin,2));
         data_pTestModel[i]=Math.min(data_pTestModel[i],1);
 
-	// !!!! corrections if too strong daily dn jumps
+	// !!! corrections if too strong daily dn jumps
 	// (late cumulative data reporting)
 
         //if(false){
@@ -1369,7 +1445,7 @@ function initializeData(country,insideValidation){
   }
 
 
-  // !!!! sqrt-model supersmooth, linear short-term
+  // !!! sqrt-model supersmooth, linear short-term
   
   var testNew_pTest=true; 
   var rSuperSmooth=1./21; // denom be longer than holiday special effects
@@ -2916,7 +2992,7 @@ function revertWorkingData(){
 //#################################################################
 function savePreviousSim(){ // save relevant data of drawsim for
   // use in the next simulation for comparison,
-  // e.g., validate or B117 simulation
+  // e.g., validate or Mutation simulation
 //#################################################################
     // association see cstr drawSim
     // !! check "def simPrevious"
@@ -3082,13 +3158,22 @@ function myStartStopFunction(){ //!! hier bloederweise Daten noch nicht da!!
 
 // callback restart button
 
-function myRestartFunction(){
+function myRestartFunction(){ // called if new country and other events
   savePreviousSim();
   //console.log("in myRestartFunction: itPresent=",itPresent);
   //console.log("simulateMutation=",simulateMutation);
   if(simulateMutation){
-    itStartMut=itPresent-startMut2present-nDaysValid; //!! start B117 dynamics
+
+    shiftDeltaFromGB=timeShiftMutationDeltaRefGB[country]; 
+    dateOld=new Date(dateOldGB.getTime() + oneDay_ms * shiftDeltaFromGB);
+    dateNew=new Date(dateNewGB.getTime() + oneDay_ms * shiftDeltaFromGB);
+    // start where Mutation dynamics takes over calibration
+    itStartMut=itPresent-startMut2present-nDaysValid; 
     var R0StartMut=R0fun_time(R0time,itStartMut);//!!! include valid!
+
+    mutationDynamics=new MutationDynamics(
+      dateOld, pOld, dateNew, pNew, R0StartMut, itStartMut);
+
     if(false){
       console.log("myRestartFunction, simulateMutation=true:",
 		"\n itPresent=",itPresent,
@@ -3098,8 +3183,7 @@ function myRestartFunction(){
 		"\n itStartMut=",itStartMut,"  R0StartMut=",R0StartMut,
 		  "");
     }
-    mutationDynamics=new MutationDynamics(
-      dateOld, pOld, dateNew, pNew, R0StartMut, itStartMut);
+    
     //console.log("\n\nmyRestartFunction: mutationDynamics=",mutationDynamics,"\n\n");
     //mutationDynamics.update(itPresent);
     //mutationDynamics.update(itPresent+7);
@@ -3111,7 +3195,7 @@ function myRestartFunction(){
   initialize();
   //console.log(" myRestartFunction after initialize: drawsim.itmin=",drawsim.itmin);
   fps=fpsstart;
-  it=0; //!!! only instance apart from init where global it is reset to zero
+  it=0; //!!!! only instance apart from init where global it is reset to zero
         // cannot set it=itPresen if simulateMutation
         // because of dyn Vars vacc, x,y,z
 
@@ -3223,48 +3307,24 @@ function myCountryComparison(){ // callback "Kalibriere neu!
 function setMutationSim(withMutations){
   if(withMutations){
     simulateMutation=true;
-    document.getElementById("buttonMut").innerHTML="Stop B.1.1.7 Sim";
+    document.getElementById("buttonMut").innerHTML="&Delta; Mutation [stop]";
   }
   else{
     simulateMutation=false;
-    document.getElementById("buttonMut").innerHTML="Start B.1.1.7 Sim";
+    document.getElementById("buttonMut").innerHTML="&Delta; Mutation [start]";
   }
 }
 
 
-function toggleMutationSim(){ // callback B117 B.1.1.7 Mutation
+function toggleMutationSim(){ // callback (Delta) Mutation from html button
   setMutationSim(!simulateMutation); // toggles simulateMutation
   myRestartFunction();
 }
 
 
-/*
-function myMutationSim(){ // callback B117 B.1.1.7 Mutation
-  if(simulateMutation){
-    simulateMutation=false;
-    document.getElementById("buttonMut").innerHTML="Start B.1.1.7 Sim";
-  }
-  else{
-    simulateMutation=true;
-    document.getElementById("buttonMut").innerHTML="Stop B.1.1.7 Sim";
-  }
-  console.log("myMutationSim: simulateMutation=",simulateMutation);
-  myRestartFunction();
-}
-*/
 
 
 function simulationRun() {
-
-  /*
-  // misuse DOM headerValidText for printing corona-simulation.de for movies
-  // now in drawsim
-  if(showCoronaSimulationDe){
-    var websiteText=(isLandscape)
-    ? "corona-simulation.de" : "";
-    document.getElementById("headerValidText").innerHTML=websiteText;
-  }
-  */
 
 
   //console.log("simulationRun: before doSimulationStep: it=",it);
@@ -3276,7 +3336,7 @@ function simulationRun() {
   }
   else{
     simulateMutation=false;
-    document.getElementById("buttonMut").innerHTML="Start B.1.1.7 Sim";
+    document.getElementById("buttonMut").innerHTML="Start Mut. Delta Sim";
   }
     
   if(!stringencySlider_moved){
@@ -3320,7 +3380,7 @@ function simulationRun() {
 function doSimulationStep(){
 
   var itSlower=itPresent-42;
-  var itFaster=itPresent+56;
+  var itFaster=itPresent+80;
   var changed_fps=((it==itSlower)||(it==itFaster));
   if(changed_fps){
     fps=(it==itSlower) ? 0.30*fpsstart : fpsstart;
@@ -3331,12 +3391,10 @@ function doSimulationStep(){
   fracDie= IFRfun_time(it);
 
   R0_actual=(R0slider_moved) ? R0 : R0fun_time(R0time,it);
-    //!!!
-  if(simulateMutation){
-    if(it>=itStartMut){
+
+  if(simulateMutation&&(it>=itStartMut)){
       mutationDynamics.update(it);
       R0_actual=mutationDynamics.R0; // override R0_actual=R0fun_time(..)
-    }
   }
  
   R0_hist[it]=R0_actual; // for drawing
@@ -3347,7 +3405,7 @@ function doSimulationStep(){
     ? stringency : data_stringencyIndex[i];
 
 
-  if(false){ // doSimulationStep: logging "allowed"
+  if(false){ // doSimulationStep: logging "allowed"!!!!
     console.log(" doSimulationStep before corona.update: it=",it,
 		"data_cumCases[data_idataStart+it]=",
 		data_cumCases[data_idataStart+it],
@@ -3419,18 +3477,17 @@ function log10(x){return Math.log(x)/ln10;}
 
 //################################################################
 function MutationDynamics(dateOld, pOld, dateNew, pNew,
-			  R0Start, itStart){
+			  R0start, itStart){
 //################################################################
 
-  /** B.1.1.7 Variante https://de.statista.com/statistik/daten/studie/1208627/umfrage/ausbreitung-von-corona-mutationen-in-deutschland/#professional
+  /** See header  Mutation Dynamics
 
 @param dateOld, dateNew:  two dates (Date class) for known mutation
                           penetration rates
 @param pOld, pNew:        corresponding penetration rates
-                          see string "British B.1.1.7"
-@param R0Start:           R0 value where mutation dynamics starts
-@param daysStart2present: it value where mutation dynamics starts
-
+@param R0start:           R0 value where mutation dynamics starts
+@param itStart:           time index it value where mutation dynamics starts
+                          (can be before or after it value for dateOld)
 
    */
 
@@ -3448,15 +3505,17 @@ function MutationDynamics(dateOld, pOld, dateNew, pNew,
   
   var tauR=0.5*(tauRstart+tauRend);
 
-  // based on R0 value R0Start at starting time itPresent-start2present
+  // based on R0 value R0start at starting time itPresent-start2present
   // R0mut/R0wild=tauR*this.ry+1=const
 
   var ratioMutWild=tauR*this.ry+1;
   var yStart=this.yNew*Math.exp(this.ry*(this.itStart-this.itNew));
   var pStart=yStart/(1+yStart);
-  
-  this.R0wild=R0Start/(1+pStart*(ratioMutWild-1));
+
+  // checked; from  p*R0mut+(1-p)*R0wild=R0start
+  this.R0wild=R0start/(1+pStart*(ratioMutWild-1));
   this.R0mut=ratioMutWild*this.R0wild;
+
   if(false){
     console.log("MutationDynamics Constructor: dt=",this.dt,
 		" itNew=",this.itNew,
@@ -3466,7 +3525,7 @@ function MutationDynamics(dateOld, pOld, dateNew, pNew,
 		" pNew=",pNew," yNew=",this.yNew,
 		" pStart=",pStart," yStart=",yStart,
 		" ry=",this.ry,
-		" R0Start=",R0Start,
+		" R0start=",R0start,
 		" ratioMutWild=",ratioMutWild,
 		" R0wild=",this.R0wild,
 		" R0mut=",this.R0mut,
@@ -3981,7 +4040,6 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
   corrIFR=(it>=tauDie)
     ? corrIFRarr[it-tauDie] : vaccination.corrFactorIFR0; 
 
-  //if(false){ //!!!!
   if( !inCalibration && (it>=0)){
     if(it==0){vaccination.initialize(country);}
     if(!slider_rVacc_moved){ // if slider moved, rVacc directly from slider
@@ -4006,12 +4064,8 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
   }
 
 
-  
  
-  this.Reff=R0 * (1-Ivacc) * (1-this.xyz)
-   // * ((it<=itPresent) ? 1 : calc_seasonFactor(it)); //!!!!
-    * calc_seasonFactor(it); //!!!! if use this, adapt continuation!!
-   // * ((it<=itPresent) ? calc_seasonFactor(it) : calc_seasonFactor(itPresent)*calc_seasonFactor(it));
+  this.Reff=R0 * (1-Ivacc) * (1-this.xyz) * calc_seasonFactor(it); 
 
   
   // include political measures by stringency in [0,100]
@@ -4177,7 +4231,7 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
   if(it>=0){// do not use absolute data such as data_dn in warmup!
 
     if(includeInfluenceTestNumber){ 
-      var dn=(idata<data_dn.length) //!!!!
+      var dn=(idata<data_dn.length)
 	? data_dn[idata] : dn_weeklyPattern[(idata-data_pTestModel.length)%7];
       this.dxtFalse=(dn/n0 - pTest*this.xohne[tauTest])*betaTest;
       this.dxtFalse=Math.min(this.dxtFalse, 0.9*this.dxt); 
@@ -4785,6 +4839,10 @@ DrawSim.prototype.drawAxes=function(windowG){
   var sphi=Math.sin(phi);
 
   // calculate weekly date string array for every week after dateStart
+  // !! here, setDate(date.getDate() + ... seems to work over months
+  // but always? No real harm since only display is affected
+  // => otherwise use getDate() [nicht Date()]
+  // with millisecond-constructor using constant oneDay_ms 
 
   for(var iw=0; iw<Math.floor(this.itmax/7)+1; iw++){
     var date=new Date(dateStart.getTime()); // copy constructor
@@ -5024,13 +5082,14 @@ DrawSim.prototype.drawAxes=function(windowG){
 		 this.yPix0+(yrelTopVars-(line)*dyrel)*this.hPix);
 
     line++;
+    ctx.fillStyle="red"; // "rgb(255,0,0)"
     ctx.fillText("Aktuelles R="+(corona.Reff.toFixed(2))
 		 +",  R0 ohne alles="+(R0_actual.toFixed(2)),
 		 this.xPix0+xrelLeft*this.wPix,
 		 this.yPix0+(yrelTopVars-(line)*dyrel)*this.hPix);
     
     line++;
-    var str_text="Aktuelle IFR65="+(100*IFRfun_time(it)).toFixed(2)+" %";
+    ctx.fillStyle="black";     var str_text="Aktuelle IFR65="+(100*IFRfun_time(it)).toFixed(2)+" %";
     ctx.fillText(str_text,
 		 this.xPix0+xrelLeft*this.wPix,
 		 this.yPix0+(yrelTopVars-(line)*dyrel)*this.hPix);
@@ -5066,13 +5125,13 @@ DrawSim.prototype.drawAxes=function(windowG){
       var mutTopPix=this.yPix0+1.01*this.hPix;
       var mutLeftPix=this.xPix0+0.72*this.wPix;
       line=0;
-      ctx.fillText("R0_wild="+mutationDynamics.R0wild.toFixed(2),
+      ctx.fillText("R0_Alpha="+mutationDynamics.R0wild.toFixed(2),
 		   mutLeftPix,mutTopPix);
       line++;
-      ctx.fillText("R0_mut="+mutationDynamics.R0mut.toFixed(2),
+      ctx.fillText("R0_Delta="+mutationDynamics.R0mut.toFixed(2),
 		   mutLeftPix,mutTopPix-line*dyrel*this.hPix);
       line++;
-      ctx.fillText("p_mut="+Math.round(100*mutationDynamics.p)+"%",
+      ctx.fillText("p_Delta="+Math.round(100*mutationDynamics.p)+"%",
 		   mutLeftPix,mutTopPix-line*dyrel*this.hPix);
       line++;
       ctx.fillText("R_0="+mutationDynamics.R0.toFixed(2),
@@ -5183,7 +5242,7 @@ DrawSim.prototype.transferRecordedData=function(){
 
   // windows 2-4
 
-  kernel=[1]; //!!!! worldometer data too strong weekly changes, 
+  kernel=[1]; //!! worldometer data too strong weekly changes, 
                  // more than RKI => slight smoothing
   //kernel=[1/4,2/4,1/4];
 

@@ -1,0 +1,49 @@
+Sehr geehrter Herr Liedtke,
+
+ich beobachte die Variante schomn eine Weile. Bis jetzt waren die Daten leider zu inkonsistent, um sie valide in den Simulator einzubauen: In England machte sie der engl Variante den Garaus, in Indien setzte sie sich gegen ein Gemisch aus anderen Varianten (Urtyp, Britische und andere) durch, aber in Deutschland duempelte sie lange um 2-3%. Aber es waren wohl zu wenig Daten, denn jetzt hat sie auch in D einen Sprung nach oben gemacht.
+
+Damit sind genug Evidenzen fuer einen Einbau in den Simulator vorhanden. Die deutschen Daten reichen zwar noch nicht fuer eine Schaetzung der Infektiositaet, aber die britischen. Ich werde aus diesen den Infektionsfaktor berechnen (wird wohl auf etwa 50% infektioeser als die Britische bzw Alpha herauslaufen) und dies dann auf Deutschland anwenden.
+
+
+Besten Gruss,
+
+Martin Treiber
+
+----------------------------------------------------------
+Dr. Martin Treiber
+         Institute for Transport & Economics, TU Dresden
+	 Chair of Traffic Modelling, Econometrics, and Statistics
+         Falkenbrunnen, Room 123 (two floors up from the entrance!)
+         Würzburger Str. 35, D-01062 Dresden
+         martin.treiber@tu-dresden.de or martin@mtreiber.de
+         www.mtreiber.de
+         phone/fax:     +49 (351) 463 36794 / 36809
+ ---------------------------------------------------------
+
+On 17.06.21 17:48, Liedtke Ralf (PS/EPP3) wrote:
+>
+> Hallo Herr Treiber,
+>
+>  
+>
+> Vielen Dank für den Corona-Simulator, den ich immer gerne nutze.
+>
+>  
+>
+> Gibt es die Möglichkeit die Indische Variante in Prognose mit einzubauen ?
+>
+>  
+>
+> Mit freundlichen Grüßen / Best regards
+>
+> Ralf Liedtke
+>
+> Powertrain Solutions, Engineering Powertrain Technologies (PS/EPP3)
+> Robert Bosch GmbH | Postfach 30 02 40 | 70442 Stuttgart | GERMANY | www.bosch.com
+> Tel. +49 711 811-38202 | Mobil +49 173 8678062 | Telefax +49 711 811-0 | Threema / Threema Work: ZMRR9D5V | Ralf.Liedtke@de.bosch.com
+>
+> Sitz: Stuttgart, Registergericht: Amtsgericht Stuttgart, HRB 14000;
+> Aufsichtsratsvorsitzender: Franz Fehrenbach; Geschäftsführung: Dr. Volkmar Denner,
+> Prof. Dr. Stefan Asenkerschbaumer, Filiz Albrecht, Dr. Michael Bolle, Dr. Christian Fischer,
+> Dr. Stefan Hartung, Dr. Markus Heyn, Harald Kröger, Rolf Najork, Uwe Raschke
+> ​
