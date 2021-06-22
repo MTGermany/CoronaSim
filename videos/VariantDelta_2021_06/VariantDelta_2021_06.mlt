@@ -1,0 +1,1417 @@
+<?xml version="1.0" standalone="no"?>
+<mlt LC_NUMERIC="C" version="6.25.0" title="Shotcut version 21.03.21" producer="main_bin">
+  <profile description="automatic" width="1326" height="710" progressive="1" sample_aspect_num="1" sample_aspect_den="1" display_aspect_num="1326" display_aspect_den="710" frame_rate_num="60" frame_rate_den="1" colorspace="709"/>
+  <producer id="producer0" in="00:00:00.000" out="00:01:07.317">
+    <property name="length">00:01:07.333</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/VariantDelta_01.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-06-22T18:11:25</property>
+    <property name="shotcut:hash">3944e0473369e236bcfcacd7f878dc2e</property>
+    <property name="ignore_points">0</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+  </producer>
+  <producer id="producer1" in="00:00:00.000" out="00:01:10.067">
+    <property name="length">00:01:10.083</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/VariantDelta_02.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-06-22T18:15:13</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">877e6ac04ec55125e5857cc7eeffe4dd</property>
+  </producer>
+  <producer id="producer2" in="00:00:00.000" out="00:00:16.517">
+    <property name="length">00:00:16.533</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/VariantDelta_03_altesVideo.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-06-22T19:18:52</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">2edb0b7a35bcd225443acce86cef154e</property>
+  </producer>
+  <producer id="producer3" in="00:00:00.000" out="00:01:29.233">
+    <property name="length">00:01:29.250</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/VariantDelta_03.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-06-22T18:17:54</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">2d432cc951ae72de7b3c01597c3ea737</property>
+  </producer>
+  <producer id="producer4" in="00:00:00.000" out="00:04:04.200">
+    <property name="length">00:04:04.217</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/VariantDelta_04.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-06-22T18:24:15</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">6cf59012e6a9f811318bd42348905ff9</property>
+  </producer>
+  <producer id="producer5" in="00:00:00.000" out="00:02:37.033">
+    <property name="length">00:02:37.050</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/VariantDelta_05.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-06-22T18:29:07</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">2ed08009ade9550027b2cf95c6b03704</property>
+  </producer>
+  <producer id="producer6" in="00:00:00.000" out="00:01:41.900">
+    <property name="length">00:01:41.917</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/VariantDelta_06.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-06-22T18:31:56</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">bbd9180c72d13f5c2246b5bf23fef682</property>
+  </producer>
+  <producer id="producer7" in="00:00:00.000" out="00:03:32.067">
+    <property name="length">00:03:32.083</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/VariantDelta_07.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-06-22T18:37:23</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">40aa902d6eb6edaa9942aa6cf7673511</property>
+  </producer>
+  <producer id="producer8" in="00:00:00.000" out="00:03:11.917">
+    <property name="length">00:03:11.933</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/VariantDelta_08.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-06-22T18:42:24</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">5e90c77f671235f41c972e9cd3eb2150</property>
+  </producer>
+  <producer id="producer9" in="00:00:00.000" out="00:13:19.817">
+    <property name="length">00:13:19.833</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/VariantDelta_09.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-06-22T18:57:17</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">43ba2bef1690dcb42d86e1f312e522ea</property>
+  </producer>
+  <producer id="producer10" in="00:00:00.000" out="00:03:31.200">
+    <property name="length">00:03:31.217</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/VariantDelta_10.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-06-22T19:01:32</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">4fdd06d47020cbac0264eea05275398e</property>
+  </producer>
+  <producer id="producer11" in="00:00:00.000" out="00:04:19.967">
+    <property name="length">00:04:19.983</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/VariantDelta_11.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-06-22T19:07:30</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">c52dbc831d96e6f02bf374b0fe268fc3</property>
+  </producer>
+  <producer id="producer12" in="00:00:00.000" out="00:00:27.917">
+    <property name="length">00:00:27.933</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/VariantDelta_12.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-06-22T19:08:27</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">4e023cf75f88c8635c77632385874783</property>
+  </producer>
+  <playlist id="main_bin">
+    <property name="xml_retain">1</property>
+    <entry producer="producer0" in="00:00:00.000" out="00:01:07.317"/>
+    <entry producer="producer1" in="00:00:00.000" out="00:01:10.067"/>
+    <entry producer="producer2" in="00:00:00.000" out="00:00:16.517"/>
+    <entry producer="producer3" in="00:00:00.000" out="00:01:29.233"/>
+    <entry producer="producer4" in="00:00:00.000" out="00:04:04.200"/>
+    <entry producer="producer5" in="00:00:00.000" out="00:02:37.033"/>
+    <entry producer="producer6" in="00:00:00.000" out="00:01:41.900"/>
+    <entry producer="producer7" in="00:00:00.000" out="00:03:32.067"/>
+    <entry producer="producer8" in="00:00:00.000" out="00:03:11.917"/>
+    <entry producer="producer9" in="00:00:00.000" out="00:13:19.817"/>
+    <entry producer="producer10" in="00:00:00.000" out="00:03:31.200"/>
+    <entry producer="producer11" in="00:00:00.000" out="00:04:19.967"/>
+    <entry producer="producer12" in="00:00:00.000" out="00:00:27.917"/>
+  </playlist>
+  <producer id="black" in="00:00:00.000" out="00:37:25.733">
+    <property name="length">00:37:25.750</property>
+    <property name="eof">pause</property>
+    <property name="resource">0</property>
+    <property name="aspect_ratio">1</property>
+    <property name="mlt_service">color</property>
+    <property name="mlt_image_format">rgb24a</property>
+    <property name="set.test_audio">0</property>
+  </producer>
+  <playlist id="background">
+    <entry producer="black" in="00:00:00.000" out="00:37:25.733"/>
+  </playlist>
+  <producer id="producer13" in="00:00:00.000" out="00:01:07.317">
+    <property name="length">00:01:07.333</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/VariantDelta_01.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-06-22T18:11:25</property>
+    <property name="shotcut:hash">3944e0473369e236bcfcacd7f878dc2e</property>
+    <property name="ignore_points">0</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:caption">VariantDelta_01.mkv</property>
+  </producer>
+  <producer id="producer14" in="00:00:00.000" out="00:01:10.067">
+    <property name="length">00:01:10.083</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/VariantDelta_02.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-06-22T18:15:13</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">877e6ac04ec55125e5857cc7eeffe4dd</property>
+    <property name="shotcut:caption">VariantDelta_02.mkv</property>
+  </producer>
+  <tractor id="tractor0" global_feed="1" in="00:00:00.000" out="00:00:00.000">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="producer13" in="00:01:02.650" out="00:01:02.650"/>
+    <track producer="producer14" in="00:00:02.017" out="00:00:02.017"/>
+    <transition id="transition0">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition1">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <producer id="producer15" in="00:00:00.000" out="00:00:16.517">
+    <property name="length">00:00:16.533</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/VariantDelta_03_altesVideo.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-06-22T19:18:52</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">2edb0b7a35bcd225443acce86cef154e</property>
+    <property name="shotcut:caption">VariantDelta_03_altesVideo.mkv</property>
+  </producer>
+  <tractor id="tractor1" global_feed="1" in="00:00:00.000" out="00:00:00.350">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="producer14" in="00:00:14.283" out="00:00:14.633"/>
+    <track producer="producer15" in="00:00:02.117" out="00:00:02.467"/>
+    <transition id="transition2" out="00:00:00.350">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition3" out="00:00:00.350">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <producer id="producer16" in="00:00:00.000" out="00:01:10.067">
+    <property name="length">00:01:10.083</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/VariantDelta_02.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-06-22T18:15:13</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">877e6ac04ec55125e5857cc7eeffe4dd</property>
+    <property name="shotcut:caption">VariantDelta_02.mkv</property>
+  </producer>
+  <producer id="producer17" in="00:00:00.000" out="00:01:10.067">
+    <property name="length">00:01:10.083</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/VariantDelta_02.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-06-22T18:15:13</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">877e6ac04ec55125e5857cc7eeffe4dd</property>
+    <property name="shotcut:caption">VariantDelta_02.mkv</property>
+  </producer>
+  <tractor id="tractor2" global_feed="1" in="00:00:00.000" out="00:00:00.017">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="producer16" in="00:00:35.417" out="00:00:35.433"/>
+    <track producer="producer17" in="00:00:36.867" out="00:00:36.883"/>
+    <transition id="transition4" out="00:00:00.017">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition5" out="00:00:00.017">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <producer id="producer18" in="00:00:00.000" out="00:01:10.067">
+    <property name="length">00:01:10.083</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/VariantDelta_02.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-06-22T18:15:13</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">877e6ac04ec55125e5857cc7eeffe4dd</property>
+    <property name="shotcut:caption">VariantDelta_02.mkv</property>
+  </producer>
+  <tractor id="tractor3" global_feed="1" in="00:00:00.000" out="00:00:00.033">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="producer17" in="00:00:50.433" out="00:00:50.467"/>
+    <track producer="producer18" in="00:00:51.267" out="00:00:51.300"/>
+    <transition id="transition6" out="00:00:00.033">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition7" out="00:00:00.033">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <producer id="producer19" in="00:00:00.000" out="00:01:29.233">
+    <property name="length">00:01:29.250</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/VariantDelta_03.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-06-22T18:17:54</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">2d432cc951ae72de7b3c01597c3ea737</property>
+    <property name="shotcut:caption">VariantDelta_03.mkv</property>
+  </producer>
+  <tractor id="tractor4" global_feed="1" in="00:00:00.000" out="00:00:00.400">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="producer18" in="00:01:00.133" out="00:01:00.533"/>
+    <track producer="producer19" in="00:00:07.317" out="00:00:07.717"/>
+    <transition id="transition8" out="00:00:00.400">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition9" out="00:00:00.400">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <producer id="producer20" in="00:00:00.000" out="00:01:29.233">
+    <property name="length">00:01:29.250</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/VariantDelta_03.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-06-22T18:17:54</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">2d432cc951ae72de7b3c01597c3ea737</property>
+    <property name="shotcut:caption">VariantDelta_03.mkv</property>
+  </producer>
+  <tractor id="tractor5" global_feed="1" in="00:00:00.000" out="00:00:00.000">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="producer19" in="00:00:14.800" out="00:00:14.800"/>
+    <track producer="producer20" in="00:00:15.250" out="00:00:15.250"/>
+    <transition id="transition10">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition11">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <producer id="producer21" in="00:00:00.000" out="00:01:29.233">
+    <property name="length">00:01:29.250</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/VariantDelta_03.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-06-22T18:17:54</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">2d432cc951ae72de7b3c01597c3ea737</property>
+    <property name="shotcut:caption">VariantDelta_03.mkv</property>
+  </producer>
+  <tractor id="tractor6" global_feed="1" in="00:00:00.000" out="00:00:00.017">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="producer20" in="00:00:59.233" out="00:00:59.250"/>
+    <track producer="producer21" in="00:01:13.867" out="00:01:13.883"/>
+    <transition id="transition12" out="00:00:00.017">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition13" out="00:00:00.017">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <producer id="producer22" in="00:00:00.000" out="00:04:04.200">
+    <property name="length">00:04:04.217</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/VariantDelta_04.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-06-22T18:24:15</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">6cf59012e6a9f811318bd42348905ff9</property>
+    <property name="shotcut:caption">VariantDelta_04.mkv</property>
+  </producer>
+  <tractor id="tractor7" global_feed="1" in="00:00:00.000" out="00:00:00.733">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="producer21" in="00:01:27.900" out="00:01:28.633"/>
+    <track producer="producer22" in="00:00:01.567" out="00:00:02.300"/>
+    <transition id="transition14" out="00:00:00.733">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition15" out="00:00:00.733">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <producer id="producer23" in="00:00:00.000" out="00:04:04.200">
+    <property name="length">00:04:04.217</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/VariantDelta_04.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-06-22T18:24:15</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">6cf59012e6a9f811318bd42348905ff9</property>
+    <property name="shotcut:caption">VariantDelta_04.mkv</property>
+  </producer>
+  <producer id="producer24" in="00:00:00.000" out="00:02:37.033">
+    <property name="length">00:02:37.050</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/VariantDelta_05.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-06-22T18:29:07</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">2ed08009ade9550027b2cf95c6b03704</property>
+    <property name="shotcut:caption">VariantDelta_05.mkv</property>
+  </producer>
+  <tractor id="tractor8" global_feed="1" in="00:00:00.000" out="00:00:00.683">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="producer23" in="00:03:20.333" out="00:03:21.017"/>
+    <track producer="producer24" in="00:00:01.050" out="00:00:01.733"/>
+    <transition id="transition16" out="00:00:00.683">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition17" out="00:00:00.683">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <producer id="producer25" in="00:00:00.000" out="00:02:37.033">
+    <property name="length">00:02:37.050</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/VariantDelta_05.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-06-22T18:29:07</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">2ed08009ade9550027b2cf95c6b03704</property>
+    <property name="shotcut:caption">VariantDelta_05.mkv</property>
+  </producer>
+  <tractor id="tractor9" global_feed="1" in="00:00:00.000" out="00:00:00.033">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="producer24" in="00:01:18.950" out="00:01:18.983"/>
+    <track producer="producer25" in="00:01:19.483" out="00:01:19.517"/>
+    <transition id="transition18" out="00:00:00.033">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition19" out="00:00:00.033">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <producer id="producer26" in="00:00:00.000" out="00:02:37.033">
+    <property name="length">00:02:37.050</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/VariantDelta_05.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-06-22T18:29:07</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">2ed08009ade9550027b2cf95c6b03704</property>
+    <property name="shotcut:caption">VariantDelta_05.mkv</property>
+  </producer>
+  <tractor id="tractor10" global_feed="1" in="00:00:00.000" out="00:00:00.000">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="producer25" in="00:01:19.950" out="00:01:19.950"/>
+    <track producer="producer26" in="00:01:20.650" out="00:01:20.650"/>
+    <transition id="transition20">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition21">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <producer id="producer27" in="00:00:00.000" out="00:01:41.900">
+    <property name="length">00:01:41.917</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/VariantDelta_06.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-06-22T18:31:56</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">bbd9180c72d13f5c2246b5bf23fef682</property>
+    <property name="shotcut:caption">VariantDelta_06.mkv</property>
+  </producer>
+  <tractor id="tractor11" global_feed="1" in="00:00:00.000" out="00:00:00.583">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="producer26" in="00:02:27.700" out="00:02:28.283"/>
+    <track producer="producer27" in="00:00:01.750" out="00:00:02.333"/>
+    <transition id="transition22" out="00:00:00.583">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition23" out="00:00:00.583">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <producer id="producer28" in="00:00:00.000" out="00:01:41.900">
+    <property name="length">00:01:41.917</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/VariantDelta_06.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-06-22T18:31:56</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">bbd9180c72d13f5c2246b5bf23fef682</property>
+    <property name="shotcut:caption">VariantDelta_06.mkv</property>
+  </producer>
+  <tractor id="tractor12" global_feed="1" in="00:00:00.000" out="00:00:00.050">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="producer27" in="00:00:11.850" out="00:00:11.900"/>
+    <track producer="producer28" in="00:00:12.317" out="00:00:12.367"/>
+    <transition id="transition24" out="00:00:00.050">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition25" out="00:00:00.050">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <producer id="producer29" in="00:00:00.000" out="00:01:41.900">
+    <property name="length">00:01:41.917</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/VariantDelta_06.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-06-22T18:31:56</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">bbd9180c72d13f5c2246b5bf23fef682</property>
+    <property name="shotcut:caption">VariantDelta_06.mkv</property>
+  </producer>
+  <tractor id="tractor13" global_feed="1" in="00:00:00.000" out="00:00:00.033">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="producer28" in="00:00:30.833" out="00:00:30.867"/>
+    <track producer="producer29" in="00:00:32.583" out="00:00:32.617"/>
+    <transition id="transition26" out="00:00:00.033">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition27" out="00:00:00.033">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <producer id="producer30" in="00:00:00.000" out="00:01:41.900">
+    <property name="length">00:01:41.917</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/VariantDelta_06.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-06-22T18:31:56</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">bbd9180c72d13f5c2246b5bf23fef682</property>
+    <property name="shotcut:caption">VariantDelta_06.mkv</property>
+  </producer>
+  <tractor id="tractor14" global_feed="1" in="00:00:00.000" out="00:00:00.017">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="producer29" in="00:00:50.750" out="00:00:50.767"/>
+    <track producer="producer30" in="00:00:53.200" out="00:00:53.217"/>
+    <transition id="transition28" out="00:00:00.017">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition29" out="00:00:00.017">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <producer id="producer31" in="00:00:00.000" out="00:03:32.067">
+    <property name="length">00:03:32.083</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/VariantDelta_07.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-06-22T18:37:23</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">40aa902d6eb6edaa9942aa6cf7673511</property>
+    <property name="shotcut:caption">VariantDelta_07.mkv</property>
+  </producer>
+  <tractor id="tractor15" global_feed="1" in="00:00:00.000" out="00:00:00.933">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="producer30" in="00:01:39.883" out="00:01:40.817"/>
+    <track producer="producer31" in="00:00:00.983" out="00:00:01.917"/>
+    <transition id="transition30" out="00:00:00.933">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition31" out="00:00:00.933">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <producer id="producer32" in="00:00:00.000" out="00:03:32.067">
+    <property name="length">00:03:32.083</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/VariantDelta_07.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-06-22T18:37:23</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">40aa902d6eb6edaa9942aa6cf7673511</property>
+    <property name="shotcut:caption">VariantDelta_07.mkv</property>
+  </producer>
+  <tractor id="tractor16" global_feed="1" in="00:00:00.000" out="00:00:00.033">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="producer31" in="00:00:16.183" out="00:00:16.217"/>
+    <track producer="producer32" in="00:00:16.933" out="00:00:16.967"/>
+    <transition id="transition32" out="00:00:00.033">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition33" out="00:00:00.033">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <producer id="producer33" in="00:00:00.000" out="00:03:32.067">
+    <property name="length">00:03:32.083</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/VariantDelta_07.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-06-22T18:37:23</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">40aa902d6eb6edaa9942aa6cf7673511</property>
+    <property name="shotcut:caption">VariantDelta_07.mkv</property>
+  </producer>
+  <tractor id="tractor17" global_feed="1" in="00:00:00.000" out="00:00:00.000">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="producer32" in="00:00:31.567" out="00:00:31.567"/>
+    <track producer="producer33" in="00:00:33.050" out="00:00:33.050"/>
+    <transition id="transition34">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition35">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <producer id="producer34" in="00:00:00.000" out="00:03:32.067">
+    <property name="length">00:03:32.083</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/VariantDelta_07.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-06-22T18:37:23</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">40aa902d6eb6edaa9942aa6cf7673511</property>
+    <property name="shotcut:caption">VariantDelta_07.mkv</property>
+  </producer>
+  <tractor id="tractor18" global_feed="1" in="00:00:00.000" out="00:00:00.033">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="producer33" in="00:01:07.333" out="00:01:07.367"/>
+    <track producer="producer34" in="00:01:08.817" out="00:01:08.850"/>
+    <transition id="transition36" out="00:00:00.033">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition37" out="00:00:00.033">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <producer id="producer35" in="00:00:00.000" out="00:03:32.067">
+    <property name="length">00:03:32.083</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/VariantDelta_07.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-06-22T18:37:23</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">40aa902d6eb6edaa9942aa6cf7673511</property>
+    <property name="shotcut:caption">VariantDelta_07.mkv</property>
+  </producer>
+  <tractor id="tractor19" global_feed="1" in="00:00:00.000" out="00:00:00.017">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="producer34" in="00:01:38.100" out="00:01:38.117"/>
+    <track producer="producer35" in="00:01:39.133" out="00:01:39.150"/>
+    <transition id="transition38" out="00:00:00.017">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition39" out="00:00:00.017">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <producer id="producer36" in="00:00:00.000" out="00:03:11.917">
+    <property name="length">00:03:11.933</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/VariantDelta_08.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-06-22T18:42:24</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">5e90c77f671235f41c972e9cd3eb2150</property>
+    <property name="shotcut:caption">VariantDelta_08.mkv</property>
+  </producer>
+  <tractor id="tractor20" global_feed="1" in="00:00:00.000" out="00:00:00.000">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="producer35" in="00:03:30.000" out="00:03:30.000"/>
+    <track producer="producer36" in="00:00:01.400" out="00:00:01.400"/>
+    <transition id="transition40">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition41">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <producer id="producer37" in="00:00:00.000" out="00:13:19.817">
+    <property name="length">00:13:19.833</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/VariantDelta_09.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-06-22T18:57:17</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">43ba2bef1690dcb42d86e1f312e522ea</property>
+    <property name="shotcut:caption">VariantDelta_09.mkv</property>
+  </producer>
+  <tractor id="tractor21" global_feed="1" in="00:00:00.000" out="00:00:00.267">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="producer36" in="00:03:10.417" out="00:03:10.683"/>
+    <track producer="producer37" in="00:00:12.300" out="00:00:12.567"/>
+    <transition id="transition42" out="00:00:00.267">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition43" out="00:00:00.267">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <producer id="producer38" in="00:00:00.000" out="00:13:19.817">
+    <property name="length">00:13:19.833</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/VariantDelta_09.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-06-22T18:57:17</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">43ba2bef1690dcb42d86e1f312e522ea</property>
+    <property name="shotcut:caption">VariantDelta_09.mkv</property>
+  </producer>
+  <tractor id="tractor22" global_feed="1" in="00:00:00.000" out="00:00:00.017">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="producer37" in="00:00:33.683" out="00:00:33.700"/>
+    <track producer="producer38" in="00:00:34.233" out="00:00:34.250"/>
+    <transition id="transition44" out="00:00:00.017">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition45" out="00:00:00.017">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <producer id="producer39" in="00:00:00.000" out="00:13:19.817">
+    <property name="length">00:13:19.833</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/VariantDelta_09.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-06-22T18:57:17</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">43ba2bef1690dcb42d86e1f312e522ea</property>
+    <property name="shotcut:caption">VariantDelta_09.mkv</property>
+  </producer>
+  <tractor id="tractor23" global_feed="1" in="00:00:00.000" out="00:00:00.017">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="producer38" in="00:00:39.650" out="00:00:39.667"/>
+    <track producer="producer39" in="00:00:40.383" out="00:00:40.400"/>
+    <transition id="transition46" out="00:00:00.017">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition47" out="00:00:00.017">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <producer id="producer40" in="00:00:00.000" out="00:13:19.817">
+    <property name="length">00:13:19.833</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/VariantDelta_09.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-06-22T18:57:17</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">43ba2bef1690dcb42d86e1f312e522ea</property>
+    <property name="shotcut:caption">VariantDelta_09.mkv</property>
+  </producer>
+  <tractor id="tractor24" global_feed="1" in="00:00:00.000" out="00:00:00.050">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="producer39" in="00:13:03.217" out="00:13:03.267"/>
+    <track producer="producer40" in="00:13:10.917" out="00:13:10.967"/>
+    <transition id="transition48" out="00:00:00.050">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition49" out="00:00:00.050">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <producer id="producer41" in="00:00:00.000" out="00:03:31.200">
+    <property name="length">00:03:31.217</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/VariantDelta_10.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-06-22T19:01:32</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">4fdd06d47020cbac0264eea05275398e</property>
+    <property name="shotcut:caption">VariantDelta_10.mkv</property>
+  </producer>
+  <tractor id="tractor25" global_feed="1" in="00:00:00.000" out="00:00:00.000">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="producer40" in="00:13:17.817" out="00:13:17.817"/>
+    <track producer="producer41" in="00:00:01.283" out="00:00:01.283"/>
+    <transition id="transition50">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition51">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <producer id="producer42" in="00:00:00.000" out="00:03:31.200">
+    <property name="length">00:03:31.217</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/VariantDelta_10.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-06-22T19:01:32</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">4fdd06d47020cbac0264eea05275398e</property>
+    <property name="shotcut:caption">VariantDelta_10.mkv</property>
+  </producer>
+  <tractor id="tractor26" global_feed="1" in="00:00:00.000" out="00:00:00.000">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="producer41" in="00:00:37.067" out="00:00:37.067"/>
+    <track producer="producer42" in="00:00:37.750" out="00:00:37.750"/>
+    <transition id="transition52">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition53">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <producer id="producer43" in="00:00:00.000" out="00:04:19.967">
+    <property name="length">00:04:19.983</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/VariantDelta_11.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-06-22T19:07:30</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">c52dbc831d96e6f02bf374b0fe268fc3</property>
+    <property name="shotcut:caption">VariantDelta_11.mkv</property>
+  </producer>
+  <tractor id="tractor27" global_feed="1" in="00:00:00.000" out="00:00:01.133">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="producer42" in="00:03:26.100" out="00:03:27.233"/>
+    <track producer="producer43" in="00:00:02.050" out="00:00:03.183"/>
+    <transition id="transition54" out="00:00:01.133">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition55" out="00:00:01.133">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <producer id="producer44" in="00:00:00.000" out="00:00:27.917">
+    <property name="length">00:00:27.933</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/VariantDelta_12.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-06-22T19:08:27</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">4e023cf75f88c8635c77632385874783</property>
+    <property name="shotcut:caption">VariantDelta_12.mkv</property>
+  </producer>
+  <tractor id="tractor28" global_feed="1" in="00:00:00.000" out="00:00:00.000">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="producer43" in="00:04:02.817" out="00:04:02.817"/>
+    <track producer="producer44" in="00:00:03.500" out="00:00:03.500"/>
+    <transition id="transition56">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition57">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <producer id="producer45" in="00:00:00.000" out="00:04:19.967">
+    <property name="length">00:04:19.983</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/VariantDelta_11.mkv</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="aspect_ratio">1</property>
+    <property name="creation_time">2021-06-22T19:07:30</property>
+    <property name="global_feed">1</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">c52dbc831d96e6f02bf374b0fe268fc3</property>
+    <property name="shotcut:caption">VariantDelta_11.mkv</property>
+  </producer>
+  <tractor id="tractor29" global_feed="1" in="00:00:00.000" out="00:00:00.017">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="producer44" in="00:00:18.683" out="00:00:18.700"/>
+    <track producer="producer45" in="00:04:15.350" out="00:04:15.367"/>
+    <transition id="transition58" out="00:00:00.017">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition59" out="00:00:00.017">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <playlist id="playlist0">
+    <property name="shotcut:video">1</property>
+    <property name="shotcut:name">V1</property>
+    <entry producer="producer13" in="00:00:03.500" out="00:01:02.633"/>
+    <entry producer="tractor0" in="00:00:00.000" out="00:00:00.000"/>
+    <entry producer="producer14" in="00:00:02.033" out="00:00:14.267"/>
+    <entry producer="tractor1" in="00:00:00.000" out="00:00:00.350"/>
+    <entry producer="producer15" in="00:00:02.483" out="00:00:11.700"/>
+    <entry producer="producer16" in="00:00:27.883" out="00:00:35.400"/>
+    <entry producer="tractor2" in="00:00:00.000" out="00:00:00.017"/>
+    <entry producer="producer17" in="00:00:36.900" out="00:00:50.417"/>
+    <entry producer="tractor3" in="00:00:00.000" out="00:00:00.033"/>
+    <entry producer="producer18" in="00:00:51.317" out="00:01:00.117"/>
+    <entry producer="tractor4" in="00:00:00.000" out="00:00:00.400"/>
+    <entry producer="producer19" in="00:00:07.733" out="00:00:14.783"/>
+    <entry producer="tractor5" in="00:00:00.000" out="00:00:00.000"/>
+    <entry producer="producer20" in="00:00:15.267" out="00:00:59.217"/>
+    <entry producer="tractor6" in="00:00:00.000" out="00:00:00.017"/>
+    <entry producer="producer21" in="00:01:13.900" out="00:01:27.883"/>
+    <entry producer="tractor7" in="00:00:00.000" out="00:00:00.733"/>
+    <entry producer="producer22" in="00:00:02.317" out="00:02:46.733"/>
+    <entry producer="producer23" in="00:02:47.583" out="00:03:20.317"/>
+    <entry producer="tractor8" in="00:00:00.000" out="00:00:00.683"/>
+    <entry producer="producer24" in="00:00:01.750" out="00:01:18.933"/>
+    <entry producer="tractor9" in="00:00:00.000" out="00:00:00.033"/>
+    <entry producer="producer25" in="00:01:19.533" out="00:01:19.933"/>
+    <entry producer="tractor10" in="00:00:00.000" out="00:00:00.000"/>
+    <entry producer="producer26" in="00:01:20.667" out="00:02:27.683"/>
+    <entry producer="tractor11" in="00:00:00.000" out="00:00:00.583"/>
+    <entry producer="producer27" in="00:00:02.350" out="00:00:11.833"/>
+    <entry producer="tractor12" in="00:00:00.000" out="00:00:00.050"/>
+    <entry producer="producer28" in="00:00:12.383" out="00:00:30.817"/>
+    <entry producer="tractor13" in="00:00:00.000" out="00:00:00.033"/>
+    <entry producer="producer29" in="00:00:32.633" out="00:00:50.733"/>
+    <entry producer="tractor14" in="00:00:00.000" out="00:00:00.017"/>
+    <entry producer="producer30" in="00:00:53.233" out="00:01:39.867"/>
+    <entry producer="tractor15" in="00:00:00.000" out="00:00:00.933"/>
+    <entry producer="producer31" in="00:00:01.933" out="00:00:16.167"/>
+    <entry producer="tractor16" in="00:00:00.000" out="00:00:00.033"/>
+    <entry producer="producer32" in="00:00:16.983" out="00:00:31.550"/>
+    <entry producer="tractor17" in="00:00:00.000" out="00:00:00.000"/>
+    <entry producer="producer33" in="00:00:33.067" out="00:01:07.317"/>
+    <entry producer="tractor18" in="00:00:00.000" out="00:00:00.033"/>
+    <entry producer="producer34" in="00:01:08.867" out="00:01:38.083"/>
+    <entry producer="tractor19" in="00:00:00.000" out="00:00:00.017"/>
+    <entry producer="producer35" in="00:01:39.167" out="00:03:29.983"/>
+    <entry producer="tractor20" in="00:00:00.000" out="00:00:00.000"/>
+    <entry producer="producer36" in="00:00:01.417" out="00:03:10.400"/>
+    <entry producer="tractor21" in="00:00:00.000" out="00:00:00.267"/>
+    <entry producer="producer37" in="00:00:12.583" out="00:00:33.667"/>
+    <entry producer="tractor22" in="00:00:00.000" out="00:00:00.017"/>
+    <entry producer="producer38" in="00:00:34.267" out="00:00:39.633"/>
+    <entry producer="tractor23" in="00:00:00.000" out="00:00:00.017"/>
+    <entry producer="producer39" in="00:00:40.417" out="00:13:03.200"/>
+    <entry producer="tractor24" in="00:00:00.000" out="00:00:00.050"/>
+    <entry producer="producer40" in="00:13:10.983" out="00:13:17.800"/>
+    <entry producer="tractor25" in="00:00:00.000" out="00:00:00.000"/>
+    <entry producer="producer41" in="00:00:01.300" out="00:00:37.050"/>
+    <entry producer="tractor26" in="00:00:00.000" out="00:00:00.000"/>
+    <entry producer="producer42" in="00:00:37.767" out="00:03:26.083"/>
+    <entry producer="tractor27" in="00:00:00.000" out="00:00:01.133"/>
+    <entry producer="producer43" in="00:00:03.200" out="00:04:02.800"/>
+    <entry producer="tractor28" in="00:00:00.000" out="00:00:00.000"/>
+    <entry producer="producer44" in="00:00:03.517" out="00:00:18.667"/>
+    <entry producer="tractor29" in="00:00:00.000" out="00:00:00.017"/>
+    <entry producer="producer45" in="00:04:15.383" out="00:04:17.883"/>
+  </playlist>
+  <tractor id="tractor30" title="Shotcut version 21.03.21" global_feed="1" in="00:00:00.000" out="00:37:25.733">
+    <property name="shotcut">1</property>
+    <property name="shotcut:projectAudioChannels">2</property>
+    <property name="shotcut:projectFolder">1</property>
+    <property name="shotcut:scaleFactor">1.80398</property>
+    <track producer="background"/>
+    <track producer="playlist0"/>
+    <transition id="transition60">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="mlt_service">mix</property>
+      <property name="always_active">1</property>
+      <property name="sum">1</property>
+    </transition>
+    <transition id="transition61">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="version">0.9</property>
+      <property name="mlt_service">frei0r.cairoblend</property>
+      <property name="threads">0</property>
+      <property name="disable">1</property>
+    </transition>
+  </tractor>
+</mlt>

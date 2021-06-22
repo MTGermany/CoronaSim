@@ -1,0 +1,202 @@
+Wie gefährlich ist die Delta-Variante?
+
+
+Start: [Ich mit Bild]
+
+Hallo liebe Freunde der gepflegten
+Corona-Simulation, 6 Wochen habe ich nun keine Corona-Videos gemacht, da sich
+alles in Wohlgefallen aufzulösen scheint. Wer Will bei einer Inzidenz
+von 10 Fällen pro Woche und 100000 noch Corona-Videos gucken? 
+
+Da ist aber nun die aus Indien kommende neue Delta-Variante und die
+Prognosen der diversen üblichen Verdächtigen und auch neuer
+Professoren gehen von "nicht weiter schlimm" bis zu "neue Katastrophe,
+[getragen] "Das Ende ist nah!"  
+
+Wer will da bei all diesen alten und neuen Professoren
+noch ein Video vom Ollen Treiber sehen?
+
+Nun ja, mein Track Record spricht für mich Zunächst die Vorhersage
+meines letzten Videos "Corona-simulation.de vs RKI: Reality Check" 
+
+[Video] 2021_05_Validierung.mkv Sekunde 136, "theater mode" index=8]:
+https://www.youtube.com/watch?v=a3er6hAuXgU&list=PLhsJ0l0GYIUqwSf4esXIdjw-4hGlwqJtD&index=8&t=136s
+
+Am 14. juni war die prognostizierte Inzidenz 25
+
+Nun die Realitaet: [Simulation Start 1. Mai]
+Am 14. juni war die reale Inzidenz (orange Balken) knapp 20
+
+Wie schon im letzten Video erwaehnt, koennen Sie auch im Nachhinein
+validieren durch den "Validieren" Button 
+
+[re druecken, validiere 84 Tage]
+
+Stand Anfang April, also 4 Wochen vor dem Peak der 3. Welle, sagte
+diesen meine Simulation zum richtigen Zeitpunkt und in etwa der
+richtigen Hoehe voraus. Einzig danach ist zum 14. Juni die Inzidenz
+nur auf knapp 50 statt 20 gesunken. Aber: Ich lasse ja auch die
+Impfraten gemaess den damaligen Stand weiterlaufen und der ist
+niedriger als nach der gluecklicherweise realisierten starken Zunahme
+der Impfraten: Nur 33.4% mind einmal geimpft, in Wirklichkeit ueber
+50%. 
+ 
+[Neu auf Standard bis Gegenwart, dann Valid 84 Tage und ab 1. April
+Impfrate auf 3.5%] 
+
+Machen wir also eine Szenarienanalyse Stand Anfang April 2021 und
+erhoehen dann die Impfrate von den damaligen 1.8 % auf das Doppelte
+3.5%, denn das entspricht ungefaehr der tats realisierten. Voila:
+Inzidenz 20 84 Tage im Voraus gesagt! Natuerlich mit dem Hindsight der
+erst jetzt bekannten Impfratensteigerung. Aber so verstehen Sie vlt
+das Wesen von Szenarienanalysen. 
+
+[Ich Vollbild]
+
+Vorher, so bis Maerz, waren meine Voraussagen genauso schlecht bzw
+lagen genauso oft daneben wie die von Drosten & Co, aber seitdem ich
+die Dynamik neuer Mutationen eingefuehrt habe, also im April die
+englische Alpha-Variante, sind meine Voraussagen so gut, dass man's
+kaum glauben kann. Da man mit nachtraeglichen Retro-Analysen
+natuerlich beliebig faken kann, ist ein Zweck meiner Videos durchaus,
+Zeitstempel meiner Prognosen bzw Szenarienanalysen zu erhalten. Ein
+echter Factchecker koennte auch meinen Quellcode auf Github
+analysieren bzw. mit ihm simulieren: Alle vergangenen Versionen sind
+abrufbar! 
+
+Nun, mit stolz geschwellter Brust ob des hervorragenden Track records
+auf zum Angriff bzw auf zur Simulation der Indischen Delta-Variante
+und was er fuer Deutschland bedeutet. Auch dieses Video wird, nota
+bene, als Track Record der bedingten Prognosequalitaet meines
+Simulators dienen! 
+
+Was benoetige ich, um Delta zu simulieren?
+
+[Webseite]
+https://www.n-tv.de/panorama/Delta-Variante-breitet-sich-in-Deutschland-aus-article22624633.html
+
+Das wichtigste ist der Verlauf der Ausbreitung der Mutation. Nach
+meinem einfachen Modell findet der S-foermig statt und aus der
+Geschwindigkeit des Anstiegs, genauer gesagt, schon aus zwei
+Datenpunkten, zB diesen [zeigen auf linkesten] und diesen [zeigen auf
+Vierten] kann ich sowohl di zukuenftige Ausbreitung als auch die
+Zunahme der Infektiositaet herleiten! Und aus dieser wiederum eine
+moegliche neue Welle, und zwar quantitativ! 
+
+Hier bei der britischen Variante ist der s-foermige Verlauf sehr gut zu sehen.
+
+Wie sieht es mit den anderen Varianten aus? Beta und Gamma [zeigen]
+duempeln so dahin (Man beachte bei gamma die Skala). Auch Delta lange
+Zeit. Mit 0.5% oder 2% kann ich nichts anfangen, da dann die
+statist. Fehler zu gross sind. Nun gibt es aber einerseits einen
+signifikanten kontinuierlichen Anstieg, der durchaus dem Anfang des
+S-foermigen Anstiegs der Britischen Variante Alpha entspricht! Aber
+ich kann nicht einfach  Alpha nehmen, sondern brauche Laender, wo
+Delta schon weiter fortgeschritten ist. Da bietet sich der
+Herkunftsort Indien oder England an. 
+
+[Webseite]
+https://www.gisaid.org/hcov19-variants/
+
+Auf der Webseite gisaid.org wurde ich fuendig: rechtes Bild. Zunaechst
+einmal klicke ich die stoerenden Laender weg Leider gibt es Indien nur
+aggregiert unter Asia. Ausserdem waren in Indien zuvor ein Mix mit
+bedeutenden Anteilen des Urtyps, der Alpha Variante und anderen
+vorhanden. Ideal UK=England: Nahezu perfekter S-foermiger Anstieg (man
+beachte, dass die Skala bei 80% aufhoert!). Daraus habe ich nun den
+sogenannten Infektiositaetsfaktor berechnet und fuer jedes Land mit
+Daten, insbesondere Deutschland, Indien und England, den
+Anfangszeitpunkt festgesetzt, bei der diese Variante 5%
+ueberschreitet. 
+
+[Simulator fertig sim, Standard]
+[super-alt-D] [orange Farbe waehlen]
+
+Fuer Deutschland erhalte ich aktuell 23% Delta-Anteil. Wohlgemerkt:
+Das ist der geschätzte reale Anteil, der aufgrund der Messverzoegerung
+erst in etwa 10 Tagen gemessen werden wird! Dabei hoffe ich sehr, dass
+es keinen Auswahl-Bias bei der Frage gibt, ob eine positive Covid-19
+Probe sequenziert wird 
+
+Ferner erhalte ich in Deutschland fuer die alte britische
+Alpha-Variante einen R0-Wert von 2.75 [unterstr], fuer die neue
+Delta-Var von ueber 4 [unterstr] und fuer das gesamt-R0 des
+Mutantenmixes 3.03 []. Sie ist etwa 50% infektioeser. Das ist keine
+Ad-Hoc-Annahme, sondern folgt direkt aus den Zeitreihen! 
+
+Machen wir nun also die Standardprojektion: Alles bleibt, wie es ist,
+insbesondere der Lockdowngrad von 54% und die Impfrate: Sie sehen,
+...., dass Sie nichts sehen! Delta kriegt Deutschland nicht unter,
+obwohl der Impfanteil nun bei 65% und die Immunitaet bei 62% stoppt:
+Die von mir ebenfalls simulierte altersabhaengige
+Impfverweigerungsquote und die bisher nicht impfbaren kleineren Kinder
+verhindern, Stand jetzt, mehr. 
+
+Nun Lockdown August auf Null. Passiert immer noch nix! Aber Achtug:
+Das simulierte effektive Reff nach Beruecksichtigung der Impfung, der
+Lockdownmassnahmen, der Immunitaet durch Erkrankung und des
+Jahreszeiteneffektes ist nun oberhalb 1 
+
+[Import 5 Tage etwa 5/10^5/Tag]
+
+Importieren wir also durch Urlaubsreisende ein paar Viren aus Portugal
+oder Argentinien 
+
+[weiter sim]
+
+und lassen weiter simulieren. Spaetestens bei 100 wird die
+Bundesregierung panisch wieder Massnahmen ausrufen,
+z.B. Lockdown-Level 54% wie zur Zeit 
+
+Und siehe da: Sie wirken, anders als letzten Winter, trotz
+infektioeserer Delta-Variante, bereits massiv nach einer Verzoegerung
+von knapp 2 Wochen bzw bei den Todesfaellen von 4 Wochen! 
+
+[Laisser Fair mit] => Winterwelle 300, Peak Dezember
+
+[Laisser Fair ohne] => nix
+
+Die Bottom Line [ich voll] =======================
+
+Was ist die Bottom-Line?
+
+Erstens: Die Delta-Variante hat eine um 50% hoehere Infektiositaet als
+die Britische Variante Alpha die wiederum eine 60% hoehere
+Infektiositaet als der Urtyp von 2020 hat. Das sagt der Treiber, ein
+von jedem oeffentlich-rechtlichen sowie politischen Einfluss
+unabhaengiger Simulant anhand datengetriebener Modelle und
+Simulationen. Das Modell des Infektionsfaktors und des S-foermigen
+Anstieges ist bestechend einfach und hat einen einzigen Parameter, der
+robust aus den Daten ermittelt werden kann und den Verlauf der
+britischen Mutation perfekt voraussagte 
+
+Zweitens: Bei voelligem Laisser-Faire wird die Delta-Mutation zu einer
+Winterwelle der Hoehe 300 im Dezember 2022 fuehren, mit externen
+Eintrag deutlich frueher, waehrend ohne Delta nichts passieren
+wuerde. 
+
+Drittens: Das wird nicht passieren, da, anders als im Winter 2021, im
+Winter 2022 sehr milde Eingriffe, z.B. von Nichts auf das jetztige
+Lockdown-Level 54% oder selbst auf das Minimum-Level 48% vom letzten
+Sommer oder selbst 30% sofort nach der systeminhaerenten Verzoegerung
+von etwa 10 tagen wirken 
+
+Viertens: Die Kinder merken zwar selber nix von Covid. Wuerde man aber
+auch die impfen, hoert die Doppel-Impfrate nicht bei 65% auf, sondern
+geht z.B. bis 75%, was einer Immunitaet von 70% entspricht. Zusammen
+mit der Immunitaet durch die Krankheit selbst ergibt das einer
+Immunitaetsanteil von 75% bzw einen Reduktionsfaktor von 0.25, die
+genau ausreichen, um das R0 der Delta-Variante auch ohne
+Covid-Massnahmen zu neutralisieren: Dann waere Herdenimmunitaet
+erreicht. 
+
+Wie immer gilt das Kleingedruckte:
+
+[schnellgesprochen]
+
+"Analysen der Gegenwart erlauben keine unbedingten Prognosen fuer die
+Zukunft.
+Eine sich abschwächende Immunität bzw die neue Variante Epsilon kann
+alles über den Haufen werfen.
+Bei Unklarheiten fragen Sie den Arzt oder Physiker Ihres Vertrauens"
+

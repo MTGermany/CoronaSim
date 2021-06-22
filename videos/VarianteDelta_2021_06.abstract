@@ -1,0 +1,21 @@
+Wie gefährlich ist die Delta-Variante?
+
+Die britische Alpha-Variante hat die dritte Covid-Welle verursacht. Wird die indische Delta-Variante, die gegenüber Alpha noch einmal um den selben Faktor infektiöser ist wie Alpha gegenüber dem Urtyp, die vierte Welle verursachen?
+
+In diesem Video zeige ich mittels der in corona-simulation.de integrierten Dynamik der Delta-Mutation, dass das dennoch Dank der weit fortgeschrittenen Durchimpfung nicht passieren wird, sofern minimale Vorsichtsmaßnahmen beibehalten werden. Vor allem wird man die bei Aufhebung sämtlicher Maßnahmen im Herbst oder Frühwinter 2021 entstehende vierte Welle durch minimale Maßnahmen, milder als letzten Sommer, sofort wieder einfangen können - ganz im Gegensatz zur Situation im Winter 2020/21.
+
+
+0:00 Einführung
+
+0:48 Test der Prognosekraft von corona-simulation.de anhand vergangener Videos
+
+02:59 Validierung einer bedingten 84-Tages-Prognose
+
+09:30 Ausbreitung der Delta Variante: Was wissen wir?
+
+16:44 Implementierung des Ausbreitungsmodells in den Simulator
+
+23:15 Eigentliche Simulation der Szenarien: Bedingte Prognose
+
+33:08 Take-Home Message
+

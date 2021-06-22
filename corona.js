@@ -15,6 +15,11 @@
 //            DONE => data just remains constant while
 //                    data2 jumps back in the total cases
 //                    cannot be sensibly tackled
+// 2021-06-22 ANNOYING: Falls Null Inzidenz, mehrere 0/0 und x/0-Fehler, 
+   die auch die kum Inzidenz zu NaN werden lassen
+=> Line 4281 debug: this.xt in Israel from 838033 to NaN in it-itPresent=-1
+   d.h. vor Stop und projection! Fehler in alpha-betafehlerberechnung 
+=> "update 2"
 
 TODO 
  (1) slider fuer Zeit 0...itmax, overrides Go button, danach mit Go weiter
@@ -519,6 +524,7 @@ KW2021 AlphaAnz Anteil[%] DeltaAnzahl Anteil[%]
 GB
 Date[WeekStart]    PercentageDelta[%]
 2021-04-19          2.2
+2021-04-26          5.2
 2021-05-03         10.7
 2021-05-10         20.3
 2021-05-17         33.6
@@ -536,12 +542,13 @@ Date[WeekStart]    PercentageDelta[%]
 var simulateMutation=true; // 2021-06-18 now Indian=Delta variant
 
 // dateOldGB: center of week interval for data of development in GB,
-// Basis Alpha
+// Basis Alpha, shifted back by 1-2 weeks because of measurement delay
+// => 7 days back from initPeriod
 var pOld=0.107;
-var dateOldGB=new Date("2021-05-06"); 
+var dateOldGB=new Date("2021-04-27"); 
 
 var pNew=0.766;
-var dateNewGB=new Date("2021-06-17"); 
+var dateNewGB=new Date("2021-06-07"); 
 
 // shift Delta dynamics [days] for other countries as GB; default Germany
 // !! setDate(dateOldGB.getDate() + shiftDeltaFromGB) => junk !!
@@ -635,7 +642,7 @@ var taumax=Math.max(tauDie,tauRecover)+tauAvg+1;
 
 var tauInfectious_fullReporting=42; // !! Hellfeld param of sqrt pTest model
 var alphaTest=0.0; // alpha error of test (false negative)
-var betaTest=0.003; // beta error (false positive) after double testing
+var betaTest=0.002; // beta error (false positive) after double testing
 
 // constant R0 influencing factors (asides from data-mutations)
 // investigation 2021-03-27:
@@ -1550,7 +1557,7 @@ function initializeData(country,insideValidation){
 
 
   // ###############################################
-  // final debugging of  initializeData(country)
+  // !!! final debugging of  initializeData(country)
   // (note: saisonal is always=6 at data.length-1)
   // ###############################################
 
@@ -1616,8 +1623,8 @@ function initializeData(country,insideValidation){
     for(var i=istart; i<data.length; i++){
       var it=i-data_idataStart;      
       data_stringencyIndex[i]*=0.8;
-      console.log("it-itPresent=",it-itPresent,
-		  " data_stringencyIndex[i]=",data_stringencyIndex[i]); 
+      //console.log("it-itPresent=",it-itPresent,
+//		  " data_stringencyIndex[i]=",data_stringencyIndex[i]); 
     }
   }
 
@@ -2476,8 +2483,20 @@ function calibrate(){
   }
   }
 
+  console.log("final calibrated IFR65 before manipulation:\nIFR65time=",
+	      IFR65time); 
+  //!!!! restrict IFR to near IFRcut
+  // unknown artifacts for very low incidence rate
 
-  //console.log("final calibrated IFR65: IFR65time=",IFR65time);
+  for(var j=0; j<IFR65time.length; j++){
+    var IFRcut=0.010;
+    IFR65time[j]=(IFR65time[j]<IFRcut)
+      ? IFR65time[j] : (IFR65time[j]<2*IFRcut)
+      ? IFRcut+0.1*(IFR65time[j]-IFRcut) : 1.1*IFRcut;
+  }
+  
+  console.log("final calibrated IFR65 after manipulation:\nIFR65time=",
+	      IFR65time);
 
   
   //!! ANNOYING slightest shift after any country choice back to Germany
@@ -4076,19 +4095,9 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
     stringency=data_stringencyIndex[i];
   }
   this.Reff *=stringencyFactor(stringency);
-  
-  //if(false){
-  //if(!inCalibration){
-  if((!inCalibration)&&(it>itPresent-14)){
-    console.log(" updateOneDay: it-itPresent=",it-itPresent,
-		" R0=",R0.toFixed(2),
-		" (1-Ivacc)=",(1-Ivacc).toFixed(2),
-		" (1-this.xyz)=",(1-this.xyz).toFixed(2),
-		" seasonFactor=",calc_seasonFactor(it).toFixed(2),
-		" stringencyFactor(stringency)=",
-		stringencyFactor(stringency).toFixed(2),
-		" this.Reff=", this.Reff.toFixed(2));
-  }
+
+  // debug at the end of update => "debug"
+
 
   // source term from external trips
 
@@ -4224,6 +4233,8 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
     this.dxt +=pTest*f_T*this.xohne[tau]*(1-alphaTest);
   }
 
+  
+  
   // add beta error outside tau loop (the test gets dn-pTest*n0*this.xohne
   // noninfected people ) and increment cumulative this.xt
   // Math.min(.) prevents a larger number of false positives than cases
@@ -4249,7 +4260,10 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
     }
 
     if(idata==data_dn.length-1){// save relative value of false positives
-      this.falseTrueRatio=this.dxtFalse/this.dxt;
+      if(this.dxt==0){this.falseTrueRatio=0.1;} //!! standard value for future
+      else{
+	this.falseTrueRatio=Math.min(this.dxtFalse/this.dxt,0.2);//!!! ad hoc
+      }
     }
  
     //this.dxt still only true pos.; define this.dxtFalse before this!
@@ -4265,16 +4279,29 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
 
 
 
-
   //##########################################################
-  // Debug output (filter needed because called in calibration)
+  // !!! Debug output (filter needed because called in calibration)
   //##########################################################
 
-  if(logging){ // filter needed because called in calibration
-  //if(logging&&(it<-19)){ // filter needed because calibration!
-  //if(it>=itPresent){ // it<itPresent in calibration => not reached
-  //if(false&&(it>=itPresent)){ // it<itPresent in calibration => not reached
-    console.log(
+  if(false){
+  //if(!inCalibration){
+  //if((!inCalibration)&&(it>itPresent-14)){
+
+    // debug Reff calculation
+    if(true){
+      console.log(" \nCoronaSim.updateOneDay: it-itPresent=",it-itPresent,
+		" R0=",R0.toFixed(2),
+		" (1-Ivacc)=",(1-Ivacc).toFixed(2),
+		" (1-this.xyz)=",(1-this.xyz).toFixed(2),
+		" seasonFactor=",calc_seasonFactor(it).toFixed(2),
+		" stringencyFactor(stringency)=",
+		stringencyFactor(stringency).toFixed(2),
+		" this.Reff=", this.Reff.toFixed(2));
+    }
+
+   // debug simulated (real and measured) infection numbers
+    if(true){ // filter needed because called in calibration
+      console.log(
       "\nend CoronaSim.updateOneDay: it=",it," R0=",R0.toPrecision(2),
       " this.xAct=",this.xAct.toPrecision(2),
       " this.xyz=",this.xyz.toPrecision(2),
@@ -4290,7 +4317,8 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
       //"\n  this.x[tauRecover-1]=",this.x[tauRecover-1].toPrecision(3),
       //"\n  this.x[tauRecover]=",this.x[tauRecover].toPrecision(3),
       //"\n  this.x[tauRecover+1]=",this.x[tauRecover+1].toPrecision(3),
-      "");
+	"");
+    }
   }
 
 
@@ -5122,8 +5150,8 @@ DrawSim.prototype.drawAxes=function(windowG){
        && simulateMutation &&(it>mutationDynamics.itNew-63)){
       //console.log("it=",it);
       mutationDynamics.update(it); //just graphics; double call does not harm
-      var mutTopPix=this.yPix0+1.01*this.hPix;
-      var mutLeftPix=this.xPix0+0.72*this.wPix;
+      var mutTopPix=this.yPix0+0.90*this.hPix;
+      var mutLeftPix=this.xPix0+0.77*this.wPix;
       line=0;
       ctx.fillText("R0_Alpha="+mutationDynamics.R0wild.toFixed(2),
 		   mutLeftPix,mutTopPix);

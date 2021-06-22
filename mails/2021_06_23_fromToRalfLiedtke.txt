@@ -1,0 +1,43 @@
+Lieber Herr Liedke,
+
+besten Dank fuer die Info, da war tatsaechlich ein Bug: eine "0/0"-Situation bei der Beruecksichtigung der Tets-Sensitivitaet und -spezifizitaet wurde nicht abgefangen. Israel hatte tatsaechlich mehrere Tage lang eine Null-Inzidenz. Real-Time Simulationen fuer viele Laender sind wirklich wie einen Sack Floehe hueten ;-)
+
+Ich habe jetzt uebrigens das Video ueber die Delta-Variante fertig: https://www.youtube.com/watch?v=jyjmZQP80js 
+
+Zu Ihrer Frage ueber die R0-Werte: Obwohl die Basisreproduktionszahl R0 eigentlich eine Virus-Eigenschaft ist und ich da Immunitaet durch Erkrankung oder Impfung, den Saisonaleffekt und die Isolationsmassnahmen herausgerechnet habe, ist er laenderspezifisch: Einerseits durch unterschiedliche Populationsdichten und Baselines fuer den Saisoneffekt, andererseits durch unterschiedliches Kontaktverhalten der Leute verschiedener Laender auch ohne jede Covid-Massnahme, drittens  moeglicherweise Unzulaenglichkeiten bei der Bestimmung des OWID-"Stringency-Index", den ich als quantitatives Mass fuer das Lockdown-Level nehme (jedes Land hat andere Massnahmen) sowie auch die unterschiedliche Einhaltung derselben (Leute in z.B. Italien oder Tschechien haben da einen lockereren Umgang als Deutsche).
+
+Der Faktor, um den Delta infektioeser als Alpha ist, ist hingegen eine echte Virus-Konstante, die auf die Baseline der laenderspezifisch kalibrierten R0-Werte des Vorgaengertyps (Alpha) aufsetzt
+
+Besten Gruss,
+
+
+Martin Treiber
+
+----------------------------------------------------------
+Dr. Martin Treiber
+         Institute for Transport & Economics, TU Dresden
+	 Chair of Traffic Modelling, Econometrics, and Statistics
+         Falkenbrunnen, Room 123 (two floors up from the entrance!)
+         Würzburger Str. 35, D-01062 Dresden
+         martin.treiber@tu-dresden.de or martin@mtreiber.de
+         www.mtreiber.de
+         phone/fax:     +49 (351) 463 36794 / 36809
+ ---------------------------------------------------------
+
+On 21.06.21 15:51, Liedtke Ralf (PS/EPP3) wrote:
+>
+> Lieber Herr Treiber,
+>
+>  
+>
+> Vielen Dank, habe ich heute morgen schon ausprobiert. Könnten Sie schauen, warum in Israel so viele „Menschen“ sterben, obwohl keine Inzidenzen vorhaben sind ?
+>
+> Die Situation tritt nur dann auf, wenn ich die ImportFälle einschalte (siehe Screenshot).
+>
+>  
+>
+> Warum nehmen Sie in England ein anderes R0 für die Delta-Variante an als in Deutschland ?
+>
+>  
+>
+> Herzliche Grüße

@@ -55,7 +55,7 @@ total sequenced Delta (B.617.2)
 https://cov-lineages.org/global_report_B.1.617.2.html
 United Kingdom 22394, India 3882, United States of America 1901, Germany 517, Singapore 244, Belgium 190, Spain 166, Russia 163, Australia 148, Japan 147, Italy 144, Ireland 128, France 95, Thailand 92, Denmark 90, Switzerland 79, Poland 64, Portugal 62, Norway 56, Vietnam 54, Netherlands 53, Luxembourg 51, Bangladesh 43, Sweden 37, Israel 35, Indonesia 32, Mexico 32, South Korea 20, Romania 19, South Africa 19, Qatar 16, Bahrain 14, New Zealand 13, Malaysia 11, Czech Republic 11, Iran 11, Finland 9, Pakistan 8, China 7, Democratic Republic of the Congo 6, Austria 5, Canada 4, Greece 4, Georgia 4, Aruba 3, Botswana 3, Brazil 3, Turkey 3, Cambodia 3, Uganda 3, Reunion 2, Nepal 2, Bulgaria 1, Slovenia 1, Malta 1, Anguilla 1, Hong Kong 1, Ghana 1, Argentina 1, Sint Maarten 1, Sri Lanka 1, Guam 1, Jordan 1, Morocco 1
 
-https://www.gisaid.org/hcov19-variants//
+https://www.gisaid.org/hcov19-variants/
 
 Links Variants of Concern auswaehlen (Wildtyp gibt es nicht)
 rechts Zeitraum einstellen und irrelevante Laender abklicken in
