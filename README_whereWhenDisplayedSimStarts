@@ -1,0 +1,59 @@
+
+setInterval(simulationRun, 1000/fps) 
+====================================
+
+three instances:
+
+(1) myStartStopFunction()
+ ....
+ clearInterval(myRun);
+ myRun=setInterval(simulationRun, 1000/fps);
+ ...
+
+(2) myRestartFunction():
+ myRun=setInterval(simulationRun, 1000/fps);
+
+(3) recursively in simulationRun->doSimulationStep->changed_fps
+
+
+myStartStopFunction()
+=====================
+
+Only called at button interaction and
+once within simulationRun() to stop at present:
+
+clearInterval(myRun);myStartStopFunction();
+
+
+myRestartFunction()
+===================
+
+called  at button interaction and in many instances within code
+
+
+simulationRun()
+===============
+
+ONLY as argument to setInterval(..)
+
+function simulationRun() {
+  ...
+  doSimulationStep(...);
+  ...
+}
+
+doSimulationStep(doDrawing)
+===========================
+
+only called once in code at main run, not warmup
+
+function doSimulationStep(doDrawing){
+
+  if(doDrawing){drawsim.draw(it);}
+  corona.updateOneDay(R0_actual,it,logging);
+  it++;
+  
+// recursively if changed_fps (near the present slower)
+  myRun=setInterval(simulationRun, 1000/fps); 
+
+}

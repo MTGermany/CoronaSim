@@ -20,6 +20,7 @@
 => Line 4281 debug: this.xt in Israel from 838033 to NaN in it-itPresent=-1
    d.h. vor Stop und projection! Fehler in alpha-betafehlerberechnung 
 => "update 2"
+// 2021-07-10 WIEDER MAX ANNOYING: Syst wieder zu niedrig am Ende!!
 
 TODO 
  (1) slider fuer Zeit 0...itmax, overrides Go button, danach mit Go weiter
@@ -72,7 +73,7 @@ document.getElementById("title").innerHTML=
 
 
 const ln10=Math.log(10);
-
+const TINY_VAL=1e-8;
 
 // graphical window at start, 
 
@@ -125,7 +126,7 @@ var dayStartMar=dayStartMarInit;
 var dayStartYear=dayStartMar+59;
 var dateStart=new Date(2020,02,dayStartMar); // months start @ zero, days @ 1
 var present=new Date();   // time object for present 
-var it=0; //!!!!
+var it=0; //!!!
 const oneDay_ms=(1000 * 3600 * 24);
 var itPresentInit=Math.floor(
     (present.getTime() - dateStart.getTime())/oneDay_ms); 
@@ -175,7 +176,7 @@ var data_cumCfr=[];
 var data_cumVacc=[];     // direct, sometimes n.a.
 var data_cumVaccFully=[];     // direct, sometimes n.a.
 var data_stringencyIndex=[];  // degree of measures/lockdown in [0,100]
-var data_rVacc=[];     // fraction of pop per day !!! check if needed
+var data_rVacc=[];     // fraction of pop per day !! check if needed
 
 
 // derived data in data time order
@@ -456,7 +457,7 @@ var usePrevious=usePreviousGlob; // if *Glob=false,
 var itmaxPrev=0;     // maximum it reached in previous simulation
 var simPrevious=[]; // store previous sim data outside DrawSim (created anew)
                     // needed for validation or if doing mutation scenario
-for (var iq=0; iq<=40; iq++){simPrevious[iq]=[];} //!!! def simPrevious
+for (var iq=0; iq<=40; iq++){simPrevious[iq]=[];} // ! def simPrevious
 var nDaysValid=0;     // validation days (default=0=no validation)
 
 
@@ -544,11 +545,11 @@ var simulateMutation=true; // 2021-06-18 now Indian=Delta variant
 // dateOldGB: center of week interval for data of development in GB,
 // Basis Alpha, shifted back by 1-2 weeks because of measurement delay
 // => 7 days back from initPeriod
-var pOld=0.107;
-var dateOldGB=new Date("2021-04-27"); 
+var pOld=0.052;
+var dateOldGB=new Date("2021-04-26"); 
 
-var pNew=0.766;
-var dateNewGB=new Date("2021-06-07"); 
+var pNew=0.470;
+var dateNewGB=new Date("2021-05-24"); 
 
 // shift Delta dynamics [days] for other countries as GB; default Germany
 // !! setDate(dateOldGB.getDate() + shiftDeltaFromGB) => junk !!
@@ -578,7 +579,7 @@ console.log("orig:",dateOldGB,
 // period nLastUnchanged*calibInterval (e.g. 28) where calibrated R0
 // does not change (calibration always performed w/o mutation dynamics)
 
-const startMut2present=14; 
+const startMut2present=35; //35 !!!
 
 // time index where mutation dynamics rather calibr R0 used
 // (overridden in validation)
@@ -586,9 +587,10 @@ var itStartMut=itPresent-startMut2present;
 
 
 
-// will be overridden (needed for some initial. ) (number=R0startMut)
-var mutationDynamics
-    =new MutationDynamics(dateOld,pOld,dateNew,pNew,2.84, itStartMut);
+// will be overridden (needed for some initial. )
+var R0startOnlyHere=42; // ridiculously high
+var mutationDynamics=new MutationDynamics(dateOld,pOld,dateNew,pNew,
+					  R0startOnlyHere, itStartMut);
 
 
 
@@ -641,8 +643,8 @@ var tauSymptoms=7;  // incubation time
 var taumax=Math.max(tauDie,tauRecover)+tauAvg+1;
 
 var tauInfectious_fullReporting=42; // !! Hellfeld param of sqrt pTest model
-var alphaTest=0.0; // alpha error of test (false negative)
-var betaTest=0.002; // beta error (false positive) after double testing
+var alphaTest=0.0; // !!! alpha error of test (false negative)
+var betaTest=0.00; // beta error (false positive) after double testing
 
 // constant R0 influencing factors (asides from data-mutations)
 // investigation 2021-03-27:
@@ -724,6 +726,7 @@ var itmax_calib; //  end calibr time interval =^ data_itmax-1
 var icalibmin;  // getIndexCalib(itmin_c)
 var icalibmax;  // getIndexCalibmax(itmax_c);
 
+//!!!!
 const calibInterval=7;  // 7; calibr time interv [days] for one R0 value 
 
 const nLastUnchanged=4; // 4; <= nChunk-dn=nOverlap
@@ -1135,13 +1138,12 @@ function initializeData(country,insideValidation){
     // as of 2021-06-10
 
     var i2=i+di2; // di2 defined at data initialisation
-    console.log("i2=",i2," data2[i2]=",data2[i2]);
+    //console.log("i2=",i2," data2[i2]=",data2[i2]);
     if((i2>=0)&&(i2<data2.length)
        &&(!(typeof data2[i2].total_cases === "undefined"))
        &&(!useLandkreise)){
-      console.log("Hier");
-      console.log("data_cumCases[i]=",data_cumCases[i],
-		  " data2[i2].total_cases=",data2[i2].total_cases);
+      //console.log("data_cumCases[i]=",data_cumCases[i],
+//		  " data2[i2].total_cases=",data2[i2].total_cases);
       data_cumCases[i]=Math.max(data_cumCases[i],data2[i2].total_cases);
     }
 
@@ -1242,11 +1244,15 @@ function initializeData(country,insideValidation){
     data_cumVacc[i]=(
       !(typeof data2[i2].people_vaccinated === "undefined"))
       ? data2[i2].people_vaccinated
-      : 2*data_cumVacc[i-1]-data_cumVacc[i-2];
+      : data_cumVacc[i-1]
+      + (data_cumVacc[i-1]-data_cumVacc[i-8])/7.; //!!!
+     // : 2*data_cumVacc[i-1]-data_cumVacc[i-2];
     data_cumVaccFully[i]=(
       !(typeof data2[i2].people_fully_vaccinated === "undefined"))
       ? data2[i2].people_fully_vaccinated
-      : 2*data_cumVaccFully[i-1]-data_cumVaccFully[i-1];
+      : data_cumVaccFully[i-1]
+      +(data_cumVaccFully[i-1]-data_cumVaccFully[i-8])/7.; //!!!
+     // : 2*data_cumVaccFully[i-1]-data_cumVaccFully[i-1];
     if(!(data_cumVacc[i]>=0)){ // NaN or other errors outside of undefined
       data_cumVacc[i]=data_cumVacc[i-1];
     }
@@ -1575,7 +1581,7 @@ function initializeData(country,insideValidation){
       //var logging=true;
       //var logging=false;
       //var logging=(i>data.length-10);
-      var logging=(i>data.length-42); // DATALOG possibly consolid with PLOG
+      var logging=(i>data.length-14); // DATALOG possibly consolid with PLOG
       //var logging=(i==200);
       if(logging){
 	var it=i-data_idataStart;
@@ -1610,10 +1616,10 @@ function initializeData(country,insideValidation){
   }
 
 
-  // !!!! [2021-06-10 hack because stringency index is updated too sloppily
+  // !! [2021-06-10 hack because stringency index is updated too sloppily
   // still no reduction as of 2021-06-10 although masive reductions throughout
 
-  var fixStringencyLastVals=true;
+  var fixStringencyLastVals=false;
   var daysReduce=14;
   var factReduce=0.8;
 
@@ -1931,7 +1937,7 @@ function SSEfunc(R0arr, fR0, logging, itStartInp, itMaxInp,
     useInitSnap=useInitSnapInp;
   } // otherwise leave at global state
 
-  if(logging){
+  if(false&&logging){
     console.log("\nEntering SSE func:",
 	//	" R0arr=",R0arr, "\n",
 		"\n start calibr segment: itStart=",itStart,
@@ -1957,7 +1963,7 @@ function SSEfunc(R0arr, fR0, logging, itStartInp, itMaxInp,
 		  " snapshot initialization requested but not available");
       return(" SSE failed!");
     }
-    if(logging){
+    if(false&&logging){
       console.log("SSEfunc; initializing with corona.snapshot: corona.snapshot.it=",corona.snapshot.it);
     }
     corona.setStateFromSnapshot();
@@ -1978,7 +1984,7 @@ function SSEfunc(R0arr, fR0, logging, itStartInp, itMaxInp,
   // SSEfunc: calculate SSE 
 
   //if(logging){ //!! always filter logging!!
-  if(logging&&true){ //!! always filter logging!!
+  if(logging&&false){ //!! always filter logging!!
     var nxtStart=data_cumCases[data_idataStart];
     console.log("SSEfunc: start calculating SSE:",//" R0arr=",R0arr,
 		" takeSnapshot=",takeSnapshot,
@@ -2016,31 +2022,54 @@ function SSEfunc(R0arr, fR0, logging, itStartInp, itMaxInp,
     //var nxtData=data_dxt[data_idataStart+it+1];  // sim from it to it+1
 
 
+    // SSE increment
+    
+    var dsse=Math.pow(Math.log(nxtData)-Math.log(nxtSim),2); //!! Math.log
 
-    sse+=Math.pow(Math.log(nxtData)-Math.log(nxtSim),2); //!! Math.log
-
-    // additionally penalty for negative R0 or R0 near zero
-
-    var R0lowLimit=0.4;  
-    var prefact=0.01;
+    // addtl penalty for negative R0 or R0 near zero
+    var R0lowLimit=0.4; 
+    var prefact=0.001; // 0.001
     if(R0_actual<R0lowLimit){
-      sse += prefact*Math.pow(R0lowLimit-R0_actual,2);
+      dsse += prefact*Math.pow(R0lowLimit-R0_actual,2);
     }
 
-    // additionally penalty for extreme R0 //!! prefact <0.00001
-    prefact=0.000001;
-    sse += prefact*Math.pow(1-R0_actual,2);
+    // addtl penalty for extreme R0
+    prefact=1.e-12; 
+    dsse += prefact*Math.pow(1-R0_actual,2); 
 
+    // !!!! addtl penalty for differences !! some countries have daily diff!
+    var dxtData=data_dxt[data_idataStart+it+1]/n0; 
+    var dxtSim=corona.dxt;
+    var dsseDiff=Math.pow(dxtData-dxtSim,2);
+
+    if(it>itPresent-40){dsse+=1000*(it-itPresent+40)*dsseDiff;}
+
+    // addtl mult near present
+
+    var tau=20.;
+    if(it>itPresent-tau){
+      var mult=100*(1.-(itPresent-it)/tau);
+      dsse *= mult;
+    }
+
+    sse+=dsse;
+
+    
     //if(logging&&(it<5)){
+    if(logging&&(it>itPresent-5)){
     //if(logging&&true){
-    if(logging&&false){
-
-      console.log("SSEfunc after update: it=",it," itSnap=",itSnap,
+    //if(logging&&false){
+      var dsseRaw=Math.pow(Math.log(nxtData)-Math.log(nxtSim),2);
+      console.log("SSEfunc after update: it-itPresent=",it-itPresent,
+		  " itSnap=",itSnap,
 		  " R0_actual=",R0_actual.toFixed(2),
 		  " nxtData=",nxtData,
 		  " nxtSim=",Math.round(nxtSim),
-		  " dnxSim=",Math.round(n0*corona.x[0]),
-		  //" dsse=",Math.pow(Math.log(nxtData)-Math.log(nxtSim),2),
+		  "\n  dnxtData=",Math.round(n0*dxtData),
+		  " dnxtSim=",Math.round(n0*dxtSim),
+		  " dsseRaw=",dsseRaw,
+		  " dsseDiff=",dsseDiff,
+		  " dsse=",dsse,
 		 "");
     }	 
 
@@ -2050,7 +2079,7 @@ function SSEfunc(R0arr, fR0, logging, itStartInp, itMaxInp,
   // only if gradient-based method. 
 
 
-  if(logging){console.log("SSEfunc: returning SSE=",sse,
+  if(logging&&false){console.log("SSEfunc: returning SSE=",sse,
 			 // "\nfor R0arr=",R0arr,
 			  "");}
   return sse;
@@ -2203,7 +2232,7 @@ function calibrate(){
 
   if(true){ 
 
-    var logging=false; //!!!
+    var logging=false; 
 
 
     var dn=nChunk-nOverlap;
@@ -2292,7 +2321,6 @@ function calibrate(){
 
     //!!!
     //R0time[R0time.length-1] *=1; // for some reason, last leg a bit low
-    //!!!
 
     firstR0fixed=false; // for the whole simulation use all R0 values in R0time
     useInitSnap=false; 
@@ -2310,7 +2338,7 @@ function calibrate(){
   } // calbrate R0 with multiple periods
 
 
-  //!!! here logging can be true for check of corona.update and corona.init
+  // ! here logging can be true for check of corona.update and corona.init
 
   var logging=false; 
   //var logging=true;
@@ -2417,7 +2445,7 @@ function calibrate(){
     var it1=itmax_calibIFR-(IFR_jmax-j-1)*IFRinterval;
     var IFRcal=calibIFR(it0,it1);
     // average of old and new calibration, old IFRcal[1] in IFR65time[j]
-    // !!! start: IFRcal[1] better than IFRcal[0] in Germany 
+    // !! start: IFRcal[1] better than IFRcal[0] in Germany 
     var IFR0=(j==0) ? IFRcal[1] : 0.5*(IFRcal[0]+IFR65time[j]);//
     var IFR1=IFRcal[1];
     cumDeathsSim0+=IFRcal[2];
@@ -2483,9 +2511,9 @@ function calibrate(){
   }
   }
 
-  console.log("final calibrated IFR65 before manipulation:\nIFR65time=",
-	      IFR65time); 
-  //!!!! restrict IFR to near IFRcut
+  //console.log("final calibrated IFR65 before manipulation:\nIFR65time=",
+//	      IFR65time); 
+  //!! restrict IFR to near IFRcut
   // unknown artifacts for very low incidence rate
 
   for(var j=0; j<IFR65time.length; j++){
@@ -2495,8 +2523,8 @@ function calibrate(){
       ? IFRcut+0.1*(IFR65time[j]-IFRcut) : 1.1*IFRcut;
   }
   
-  console.log("final calibrated IFR65 after manipulation:\nIFR65time=",
-	      IFR65time);
+  //console.log("final calibrated IFR65 after manipulation:\nIFR65time=",
+//	      IFR65time);
 
   
   //!! ANNOYING slightest shift after any country choice back to Germany
@@ -2719,7 +2747,7 @@ function estimateR0(itmin_c, itmax_c, R0calib){
 
 
  
-  if(false){
+  if(true){
     SSEfunc(R0calib,null,true); // logging of SSEfunc
   }
 
@@ -3187,8 +3215,16 @@ function myRestartFunction(){ // called if new country and other events
     dateOld=new Date(dateOldGB.getTime() + oneDay_ms * shiftDeltaFromGB);
     dateNew=new Date(dateNewGB.getTime() + oneDay_ms * shiftDeltaFromGB);
     // start where Mutation dynamics takes over calibration
-    itStartMut=itPresent-startMut2present-nDaysValid; 
-    var R0StartMut=R0fun_time(R0time,itStartMut);//!!! include valid!
+    itStartMut=itPresent-startMut2present-nDaysValid;
+
+    // !! MT 2021-07-10: Average over some days
+    var daysAvg=18; //even
+    var R0StartMut=0;
+
+    for(var its=itStartMut-daysAvg/2; its<itStartMut+daysAvg/2; its++){
+      R0StartMut+=R0fun_time(R0time,its);
+    }
+    R0StartMut/=daysAvg; 
 
     mutationDynamics=new MutationDynamics(
       dateOld, pOld, dateNew, pNew, R0StartMut, itStartMut);
@@ -3214,7 +3250,7 @@ function myRestartFunction(){ // called if new country and other events
   initialize();
   //console.log(" myRestartFunction after initialize: drawsim.itmin=",drawsim.itmin);
   fps=fpsstart;
-  it=0; //!!!! only instance apart from init where global it is reset to zero
+  it=0; //!!! only instance apart from init where global it is reset to zero
         // cannot set it=itPresen if simulateMutation
         // because of dyn Vars vacc, x,y,z
 
@@ -3224,9 +3260,17 @@ function myRestartFunction(){ // called if new country and other events
   corona.init(0,false); // because initialize redefines CoronaSim()
 
   clearInterval(myRun);
-  drawsim.checkRescaling(it); //  sometimes bug x scaling not reset
 
+  
+  //!!!! skip sim start
+  // corona.updateOneDay too low-level; need doSimulationStep
+  // to update some graphics-related stuff and, e.g., fracDie
 
+  while(it<230){doSimulationStep(false);} // fixed starting time
+
+  
+  drawsim.transferRecordedData(); // update graphics and scaling
+  drawsim.checkRescaling(it); //
   
   myRun=setInterval(simulationRun, 1000/fps);
 
@@ -3347,7 +3391,8 @@ function simulationRun() {
 
 
   //console.log("simulationRun: before doSimulationStep: it=",it);
-  doSimulationStep(); 
+  var doDrawing=true;
+  doSimulationStep(doDrawing); 
   //console.log("R0slider_moved=",R0slider_moved);
   if(!R0slider_moved){
     setSlider(slider_R0, slider_R0Text, R0_actual.toFixed(2),"");
@@ -3396,7 +3441,7 @@ function simulationRun() {
 // because warmup already produced start values for it=0
 //#########################################
 
-function doSimulationStep(){
+function doSimulationStep(doDrawing){
 
   var itSlower=itPresent-42;
   var itFaster=itPresent+80;
@@ -3424,7 +3469,7 @@ function doSimulationStep(){
     ? stringency : data_stringencyIndex[i];
 
 
-  if(false){ // doSimulationStep: logging "allowed"!!!!
+  if(false){ // doSimulationStep: logging "allowed"!!
     console.log(" doSimulationStep before corona.update: it=",it,
 		"data_cumCases[data_idataStart+it]=",
 		data_cumCases[data_idataStart+it],
@@ -3435,15 +3480,12 @@ function doSimulationStep(){
 		"");
   }
 
-  drawsim.draw(it);
+  if(doDrawing){drawsim.draw(it);}
 
-  //!!! test updateOneDay here
-  var logging=false;  // doSimulationStep: logging "allowed"
-  //var logging=(it<20);
-  //var logging=true;
+  //!! test updateOneDay directly in updateOneDay
 
  
-  corona.updateOneDay(R0_actual,it,logging); // in doSimulationStep
+  corona.updateOneDay(R0_actual,it,true); // in doSimulationStep
   itmaxPrev=it;
   
   it++; //!!! ONLY it main update
@@ -3535,9 +3577,12 @@ function MutationDynamics(dateOld, pOld, dateNew, pNew,
   this.R0wild=R0start/(1+pStart*(ratioMutWild-1));
   this.R0mut=ratioMutWild*this.R0wild;
 
-  if(false){
+  if(true){
     console.log("MutationDynamics Constructor: dt=",this.dt,
-		" itNew=",this.itNew,
+		"\n dateOld=",dateOld.toDateString(),
+		"\n dateNew=",dateNew.toDateString(),
+		"\n dateStart=",dateStart.toDateString(),
+		"\n itNew=",this.itNew,
 		" itStart=",this.itStart,
 		" itPresent=",itPresent,
 		" pOld=",pOld," yOld=",this.yOld,
@@ -3581,7 +3626,7 @@ MutationDynamics.prototype.update=function(it){
 //################################################################
 function Vaccination(){
 //################################################################
-  this.I0=0.95;      // fraction of immune people >=1 week after second vacc.
+  this.I0=0.90;      // !!!! frac of immune people >=1 week after second vacc.
   this.tau0=28;      // days after full effect I0 is reached (1 week after)
   this.Ivacc=0;      // population immunity fraction by vaccinations
                      // ! read from application routines after update()
@@ -4111,7 +4156,8 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
   for(var tau=taumax-1; tau>0; tau--){
     this.x[tau]=this.x[tau-1];
     this.xohne[tau]=this.xohne[tau-1];
-    if(logging&&(it<-19)){
+    if(false){ //!! test very start
+    //if(logging&&(it<-19)){
       console.log("tau=",tau," this.x[tau]=",this.x[tau],
 		  " this.xohne[tau]=",this.xohne[tau]);
     }
@@ -4214,8 +4260,8 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
   if(includeInfluenceTestNumber){ 
     if(idata<data_pTestModel.length){pTest=data_pTestModel[idata];} 
     else{
-      //!!!! quick hack to avoid sudden drop cases 2021-02-22
-      var factor=1.04
+      //!! quick hack to avoid sudden drop cases 2021-02-22
+      var factor=1.0
       pTest=factor*pTest_weeklyPattern[(idata-data_pTestModel.length)%7];
     }
     if(false){
@@ -4280,12 +4326,12 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
 
 
   //##########################################################
-  // !!! Debug output (filter needed because called in calibration)
+  // !!! HERE Debug output (filter needed because called in calibration)
   //##########################################################
 
   if(false){
   //if(!inCalibration){
-  //if((!inCalibration)&&(it>itPresent-14)){
+  //if((!inCalibration)&&(it>itPresent-50)){
 
     // debug Reff calculation
     if(true){
@@ -4293,8 +4339,8 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
 		" R0=",R0.toFixed(2),
 		" (1-Ivacc)=",(1-Ivacc).toFixed(2),
 		" (1-this.xyz)=",(1-this.xyz).toFixed(2),
-		" seasonFactor=",calc_seasonFactor(it).toFixed(2),
-		" stringencyFactor(stringency)=",
+		" seasonFac=",calc_seasonFactor(it).toFixed(2),
+		" stringFact=",
 		stringencyFactor(stringency).toFixed(2),
 		" this.Reff=", this.Reff.toFixed(2));
     }
@@ -4304,12 +4350,12 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
       console.log(
       "\nend CoronaSim.updateOneDay: it=",it," R0=",R0.toPrecision(2),
       " this.xAct=",this.xAct.toPrecision(2),
-      " this.xyz=",this.xyz.toPrecision(2),
-      " this.y=",this.y.toPrecision(2),
-      " this.z=",this.z.toPrecision(2),
-      "\n fracDie=IFR65=",fracDie.toPrecision(2),
-      " corrIFR=",corrIFR,
-      " nxt=n0*this.xt=",Math.round(n0*this.xt),
+      //" this.xyz=",this.xyz.toPrecision(2),
+      //" this.y=",this.y.toPrecision(2),
+      //" this.z=",this.z.toPrecision(2),
+      //"\n fracDie=IFR65=",fracDie.toPrecision(2),
+      //" corrIFR=",corrIFR,
+      " dnxt=n0*this.xt=",Math.round(n0*this.dxt),
       " nzSim=n0*this.z=",Math.round(n0*this.z),
       //"\n  this.x[tauDie-1]=",this.x[tauDie-1].toPrecision(3),
       //"\n  this.x[tauDie]=",this.x[tauDie].toPrecision(3),
@@ -5405,21 +5451,52 @@ DrawSim.prototype.checkRescaling=function(it){
       var q=this.qselect[iw][iq];
       var data=this.dataG[q].data;
       var i=(this.dataG[q].type<3) ? it+data_idataStart : it;
+      var iDropped=Math.max(0,i-this.timeWindow);
       var scaling=this.dataG[q].ytrafo[0];
       var type=this.dataG[q].type;
-      var value=data[i]*scaling;
-
-      if(value>this.ymaxType[iw]){
-	this.ymaxType[iw]=value;
+      var valueFirst=data[i]*scaling;
+      var valueDropped=data[iDropped]*scaling; // MT 2021-07-11
+ 
+      
+      if(valueFirst>this.ymaxType[iw]){
+	this.ymaxType[iw]=valueFirst;
 	if(false){
 	  console.log(
 	    "checkRescaling: new maximum! it=",it, "window iw=",iw,
 	    " quantity q=",q," i=",i,
 	    " type=",((type<3) ? "data" : "sim"),
 	    " scaling=",scaling,
-	    "\nbefore restrictions: this.ymaxType[iw]=",this.ymaxType[iw]
+	    "\nnew max: this.ymaxType[iw]=",this.ymaxType[iw]
 	  );
 	}
+      }
+
+      if(false){ // problematic with later rescalings!!!
+        if( (!Number.isNaN(valueDropped)) 
+	  && (valueDropped>=this.ymaxType[iw]-TINY_VAL)){
+	  if(iw==6){
+	  console.log(
+	    "\n\n\ncheckRescaling: reduced maximum due to vanishing highpoints!",
+	    " it=",it, "window iw=",iw,
+	    " quantity q=",q," i=",i,
+	    " type=",((type<3) ? "data" : "sim"),
+	    " scaling=",scaling,
+	    "\n  valueDropped=",valueDropped,
+	    " this.ymaxType[iw]=",this.ymaxType[iw],
+	    "\nnew max: this.ymaxType[iw]=",this.ymaxType[iw]
+	  );
+	  }
+	
+	  // need to sample whole interval because of possible peaks in between
+          // data>0 in order to filter out non-existent empirical quant.
+	  this.ymaxType[iw]=0;
+	  for(var is=iDropped+1; is<=i; is++){
+	    if((data[is]>0)&&(!(Number.isNaN(data[is])))){
+	      this.ymaxType[iw]=Math.max(scaling*data[is],this.ymaxType[iw]);
+	    }
+	  }
+	}
+	this.ymaxType[iw]=Math.max(this.ymaxType[iw],2);
       }
 
     }
