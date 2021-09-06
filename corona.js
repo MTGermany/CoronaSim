@@ -954,9 +954,6 @@ function initializeData(country,insideValidation){
     data=(useLandkreise) ? dataRKI[country] : dataGit[country];}
 
   
-  var dataMinDateStr=insertLeadingZeroes(data[0]["date"]);
-  var dataMaxDateStr=insertLeadingZeroes(data[data.length-1]["date"]);
-
   
   // !!! knock off the last datum in German data since often delayed
   // (ONLY Germany and France!)
@@ -992,6 +989,10 @@ function initializeData(country,insideValidation){
       ? dataGit2[country2].data : dataGit2_orig[country2].data;
 
   
+
+
+  var dataMinDateStr=insertLeadingZeroes(data[0]["date"]);
+  var dataMaxDateStr=insertLeadingZeroes(data[data.length-1]["date"]);
   var data2MinDateStr=data2[0]["date"];
   var data2MaxDateStr=data2[data2.length-1]["date"];
 
@@ -1008,6 +1009,18 @@ function initializeData(country,insideValidation){
   di2=data2.length-data.length
     -Math.round( (data2MaxDate.getTime()-dataMaxDate.getTime() )/oneDay_ms);
 
+  console.log("\n\nFirst def: data2.length=",data2.length,
+	      " data.length=",data.length,
+	      "\n  data[data.length-1][\"date\"]=",
+	      data[data.length-1]["date"],
+	      "\n  data2[data2.length-1][\"date\"]=",
+	      data2[data2.length-1]["date"],
+	      "\n  dataMaxDateStr=",dataMaxDateStr,
+	      "\n  data2MaxDateStr=",data2MaxDateStr,
+	      "\n  dataMaxDate.getTime()=",dataMaxDate.getTime(),
+	      "\n  data2MaxDate.getTime()=",data2MaxDate.getTime(),
+	      " di2=",di2,"\n\n");
+  //alert("stop!");
 
   // ========== define start of simulation ======================
 
@@ -1065,30 +1078,32 @@ function initializeData(country,insideValidation){
 
     console.log(
       "\nChecking times: ",
-      "dateStart=",dateStart," present=",present,
-      " itPresent=",itPresent,
-      "\nTesting the overall read data structure:",
-      "\ndata.length=",data.length,"  data2.length=",data2.length,
-      "\ndata_idataStart=",data_idataStart,
+      "\n  dateStart=",dateStart,
+      "\n  present=",present,
+      "\n  itPresent=",itPresent,
+      "\n\nTesting the overall read data structure:",
+      "\n  data.length=",data.length,"  data2.length=",data2.length,
+      "\n  data_idataStart=",data_idataStart,
       "  data2_idataStart=",data2_idataStart,
-      "\ndata_itmax=",data_itmax,"  data2_itmax=",data2_itmax,
-      "\n\ndata[0][\"date\"]=",data[0]["date"],
-      "  data2[0][\"date\"]=",data2[0]["date"],
-      "\ndataMaxDateStr=",dataMaxDateStr," data2MaxDateStr=",data2MaxDateStr,
-      "\ndi2=",di2,
-      "\ndata[data.length-20][\"date\"]=",data[data.length-20]["date"],
+      "\n  data_itmax=",data_itmax,"  data2_itmax=",data2_itmax,
+      "\n  data[0][\"date\"]=",data[0]["date"],
+      "\n  data2[0][\"date\"]=",data2[0]["date"],
+      "\n  dataMaxDateStr=",dataMaxDateStr,
+      "\n  data2MaxDateStr=",data2MaxDateStr,
+      "\n\ndi2=",di2,
+      "\n  data[data.length-20][\"date\"]=",data[data.length-20]["date"],
       "  data2[data.length-20+di2][\"date\"]=",data2[data.length-20+di2]["date"],
-      "\ndata[data_idataStart][\"date\"]=",data[data_idataStart]["date"],
+      "\n  data[data_idataStart][\"date\"]=",data[data_idataStart]["date"],
       "  data2[data2_idataStart][\"date\"]=",data2[data2_idataStart]["date"],
-      "\ndata[data_idataStart+data_itmax-1][\"date\"]=",
+      "\n  nxtStart=data[data_idataStart][\"confirmed\"]=",nxtStart,
+      "\n  data[data_idataStart+data_itmax-1][\"date\"]=",
          data[data_idataStart+data_itmax-1]["date"],
-      "  data2[data2_idataStart+data2_itmax-1][\"date\"]=",
+      "\n  data2[data2_idataStart+data2_itmax-1][\"date\"]=",
          data2[data2_idataStart+data2_itmax-1]["date"],
-       "\nnxtStart=",nxtStart,
       "\n"
     );
   }
-
+  //alert("stop!");
 
 
   // (1) extract all quantities from "data"
@@ -2238,7 +2253,6 @@ function calibrate(){
     var dn=nChunk-nOverlap;
     var nPeriods=Math.round((data_itmax-1-calibInterval*nLastUnchanged)
 			    /(calibInterval*dn));
-
     var ditOverlap=nOverlap*calibInterval;
  
     for(var ip=0; ip<nPeriods; ip++){
@@ -2246,7 +2260,7 @@ function calibrate(){
       itmax_c=itmin_c+calibInterval*nChunk;
 
       //step it calculates to it+1 and SSE needs data at it+1, hence itmax-1
-      if(ip==nPeriods-1){itmax_c=data_itmax-1;}
+      if(ip==nPeriods-1){itmax_c=data_itmax-1;console.log("SPECIAL CASE!!");}
 
       // global variables for the minimum SSE function
 
@@ -2302,6 +2316,7 @@ function calibrate(){
 
         // estimate 
 
+	//console.log("in calibr: itmin_c=",itmin_c," itmax_c=", itmax_c);
        //#####################################
         estimateR0(itmin_c, itmax_c, R0calib);  // also R0calib -> R0time
        //#####################################
@@ -2351,6 +2366,11 @@ function calibrate(){
   console.log("calibrate(): calibrating R0 finished",
 	      "\n final R0 values R0time=",R0time,
 	      "\n fit quality sse=",sse);
+  if(true){ //!!!
+    console.log("calibration details: nPeriods=",nPeriods,
+		" data_itmax=",data_itmax);
+  }
+
   
   //console.log("itPresent=",itPresent,
 //	      " getIndexCalibmax(itPresent)",getIndexCalibmax(itPresent));
