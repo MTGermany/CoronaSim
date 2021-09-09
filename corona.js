@@ -540,8 +540,8 @@ Date[WeekStart]    PercentageDelta[%]
 
 */
 
-var simulateMutation=true; // 2021-06-18 now Indian=Delta variant
-
+var simulateMutation=false; // 2021-06-18 now Indian=Delta variant
+                           //2021-09-10 !!!! switch off if no actual mutation!
 // dateOldGB: center of week interval for data of development in GB,
 // Basis Alpha, shifted back by 1-2 weeks because of measurement delay
 // => 7 days back from initPeriod
@@ -579,7 +579,8 @@ console.log("orig:",dateOldGB,
 // period nLastUnchanged*calibInterval (e.g. 28) where calibrated R0
 // does not change (calibration always performed w/o mutation dynamics)
 
-const startMut2present=35; //35 !!!
+const startMut2present=25; //25 !!!! errors if too high since then
+// dynamics locked! Better switch off if no actual mutation
 
 // time index where mutation dynamics rather calibr R0 used
 // (overridden in validation)
@@ -1530,9 +1531,8 @@ function initializeData(country,insideValidation){
   //kernel=[1/9,2/9,3/9,2/9,1/9];
   kernel=[1/7,1/7,1/7,1/7,1/7,1/7,1/7];  //  in initializeData
 
-  loggingDebug=true; //!! global debug variable
   data_pTestModelSmooth=smooth(data_pTestModel,kernel);
-  loggingDebug=false;
+  loggingDebug=false; //!! global debug variable
 
  
   // ####################################################
@@ -1856,7 +1856,7 @@ function R0fun_time(R0arr, it){
     var R0=((iTestPrev>=0)&&(nxtNewdenom>0)) ? 0.90*nxtNewnum/nxtNewdenom : 4;
     R0= Math.min(5, Math.max(0.2,R0));
 
-    if(loggingDebug){ //!!! global variable; must=false in calibration
+    if(loggingDebug&&false){ //!!! global variable; must be false in calibration
       console.log(
 	"\n\nin R0fun_time: warmup: it=",it," iPresent=",iPresent,
 	" iTest=",iTest," iTestPrev=",iTestPrev,
@@ -2059,12 +2059,14 @@ function SSEfunc(R0arr, fR0, logging, itStartInp, itMaxInp,
 
     if(it>itPresent-40){dsse+=1000*(it-itPresent+40)*dsseDiff;}
 
-    // addtl mult near present
+    // !!!! addtl mult near present
 
-    var tau=20.;
-    if(it>itPresent-tau){
-      var mult=100*(1.-(itPresent-it)/tau);
-      dsse *= mult;
+    if(true){
+      var tau=20.;
+      if(it>itPresent-tau){
+        var mult=100*(1.-(itPresent-it)/tau);
+        dsse *= mult;
+      }
     }
 
     sse+=dsse;
@@ -3461,7 +3463,7 @@ function simulationRun() {
 // because warmup already produced start values for it=0
 //#########################################
 
-function doSimulationStep(doDrawing){
+function doSimulationStep(doDrawing){ // logging "allowed" here !!
 
   var itSlower=itPresent-42;
   var itFaster=itPresent+80;
@@ -3475,7 +3477,7 @@ function doSimulationStep(doDrawing){
   fracDie= IFRfun_time(it);
 
   R0_actual=(R0slider_moved) ? R0 : R0fun_time(R0time,it);
-
+  //console.log("doSimulationStep: it=",it," R0_actual=",R0_actual);
   if(simulateMutation&&(it>=itStartMut)){
       mutationDynamics.update(it);
       R0_actual=mutationDynamics.R0; // override R0_actual=R0fun_time(..)
@@ -3654,7 +3656,7 @@ function Vaccination(){
                      // [0-10,-20,-30,-40,-50,-60,-70,-80,-90, 90+]
 
   //this.vaccmax=[0, 0.20, 0.55, 0.62, 0.65, 0.72, 0.86, 0.92, 0.94, 0.94];
-  this.vaccmax=[0, 0.30, 0.60, 0.68, 0.72, 0.80, 0.86, 0.94, 0.94, 0.94];
+  this.vaccmax=[0, 0.50, 0.70, 0.78, 0.82, 0.86, 0.90, 0.94, 0.94, 0.94];
   //this.vaccmax=[1,1,1,1,1,1,1,1,1,1];
                      // 1-vacc deniers
                      // or med impossibilities in each age group
