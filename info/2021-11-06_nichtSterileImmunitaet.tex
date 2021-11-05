@@ -1,0 +1,182 @@
+%########################################################
+% skeletons fuer latex2e documente
+% AUSFUEHRLICHERE Version: skeletonAusfuehrlich.tex (dec04)
+%########################################################
+\documentclass[12pt,a4paper]{scrartcl}  
+%\documentclass[twocolumn,showpacs,preprintnumbers,amsmath,amssymb]{revtex4}
+%\documentclass[preprint,showpacs,preprintnumbers,amsmath,amssymb]{revtex4}
+%\documentclass[a4paper]{foils}
+     % Praesentation a la "Powerpoint", vgl. ~/prosperPraesentation/          
+%\documentclass[tu,colorBG,slideColor,pdf]{prosper} 
+
+\usepackage{graphicx} % definiert \includegraphics[width=???mmm]{eps Bild}
+\usepackage[dvips]{color}     %Definiert \definecolor und 
+                              % red,yellow,green,blue,black,gray,white
+\usepackage{lscape} % provides landscape environment fuer txt rotieren:
+%\begin{landscape}.. \end{landscape}
+
+%\usepackage{german}  %Fuck all german options do not work any more (9/2015)
+                      % need defs.tex or defsSkript.tex to correct/circumvent;
+                      % defsSubmit.tex does not have it (since English)
+\usepackage{units} %\unit[3]{m/s^2} => 3 m/s^2 etc!
+\usepackage{amsfonts,amsmath,amssymb} % crucial for correct setting of
+                                % vectors etc
+
+\usepackage{eurosym}  %Euro-Symbol: \euro{Zahl} oder euro{}
+
+\usepackage{hyperref} 
+%                  Internet-Link: \href{http://www.WasAuchImmer.html}
+%                  {\blue{\underline{TextDesLinks} }}
+%                  Lokaler Link: \hyperlink{targetName}{TextDesLinks}
+%                  Link-Target: \hypertarget{targetName}
+%                  Lokaler File-Link: \href{file:///home/ ...}
+%  Info: \myHyperlink{http..}{Linktext}
+
+\usepackage{cite} % z.B. Refs 1,2,3,5 werden zu [1-3,5]  zusammengefasst
+
+
+%\input{defs}          % includes auch ``colors.st''
+\input{defsSkript}          % includes auch ``colors.st''
+%\input{defsSubmit}          % includes auch ``colors.st''
+
+%\textheight230mm
+%\textwidth150mm
+%\oddsidemargin0mm
+%\topmargin0mm
+%\parindent0mm
+
+\renewcommand{\textfraction}{0.2}  % Figures: At least 20% text at each page
+\setlength{\parindent}{0.9em} %horizontal indentation first line
+\setlength{\parskip}{0.5em}  %addtl. vertical space between paragraphs
+
+\usepackage{psfrag}
+
+
+
+
+%########################################################
+
+\begin{document}
+\begin{center}
+\secfont{Non-sterile immunity. How to model it?}
+\\[5mm]
+\bfsf{Martin Treiber}
+\\
+\today
+\end{center}
+
+
+\section{Problem statement}
+
+In Spring 2021, we thought that the new vaccinations offer a nearly
+perfect protection $1-\alpha=\unit[95]{\%}$ against infection, and even
+more against the more severe endpoints such as ICS or death). Moreover,
+we thought that the immunity is \emph{sterile}, i.e., vaccinated people
+(even the infected ones)  are not
+contagious. Then, the effective reproduction number $R\subb{eff}$ in
+terms of the  base reproduction number $R_0$ depends on the
+vaccination protection
+factor $1-\alpha$  and the percentage $p\subb{vacc}$ of fully vaccinated people via
+%
+\bdm
+R\subb{eff}=R_0(1-p\subb{vacc}).
+\edm
+%
+Particularly, at \unit[100]{\%} vaccination, we have
+$R\subb{eff}=0$ since, per assumption, no vaccinated person can infect
+others. If infected vaccinated persons \emph{can} infect, we would
+have $R\subb{eff}=R_0(1-p\subb{vacc})+R_0\alpha p\subb{vacc}$ which,
+for $p\subb{vacc}=1$ would be deep in the herd-immunity
+range. Furthermore, if
+\unit[50]{\%} were vaccinated, we would have, among the infected, an
+odds ratio 
+\bdm
+\text{\#not vaccinated : \#vaccinated} =1/\alpha:1=20:1, 
+\edm
+regardless whether infected vaccinated persons are sterile or not.
+
+However, it turned out (as of November 2021) that sterile immunity
+does not apply. In fact, we have four reproduction rates:
+\bi
+\item $R_{00}$ for the infection path not vaccinated $\to$ not vaccinated
+\item $R_{01}$ for the path not vaccinated $\to$ vaccinated
+\item $R_{10}$ for the path vaccinated $\to$ not vaccinated
+\item $R_{11}$ for the path vaccinated $\to$ vaccinated
+\ei
+Here, $R_{00}$ denotes the average number of people that an infected
+not vaccinated person would infect during his/her desease if nobody were
+vaccinated, while the same person would infect an averaged number
+$R_{01}$ of vaccinated persons if all others were vaccinated. 
+
+In the
+old assmuption of a sterile immunity, these would be the only
+reproduction numbers. If, however, the vaccinated persons are not
+sterile (with 
+respect to contagions), an infected vaccinated person would infect (on
+average) $R_{10}$ persons if everybody else were not vaccinated, and
+$R_{11}$ persons if everybody else were vaccinated.
+\newpage
+
+Hence, we have following problem statement:
+\medskip
+
+\noindent \hspace*{0.10\textwidth}
+\parbox{0.8\textwidth}{
+ \benum \item \textit{What is the effective reproduction rate
+    $R\subb{eff}$ as a function of the four $R$ values and the
+    percentage $p\subb{vacc}$ of vaccinated people?} 
+\item \textit{What is the odds
+    ratio \#not vaccinated : \#vaccinated among the infected people as a
+    function of the $R_{ij}$ and $p\subb{vacc}$?}
+\eenum}
+
+
+
+
+
+
+
+
+
+%##########################################################
+
+
+% \myHyperlink{https://www.traffic-simulation.de/index.html}
+%{www.traffic-simulation.de}.
+
+%##########################################################
+% References
+%##########################################################
+
+%(1) Erstellen
+
+% bibstyles (voller Pfad noetig!): /home/vwitme/staff/treiber/tex/inputs/*.bst
+% bib-Datenbanken (voller Pfad noetig!): /home/vwitme/data/books/bibtex/bibtex/*.bib
+
+%\bibliographystyle{/home/vwitme/staff/treiber/tex/inputs/prsty} 
+\bibliographystyle{/home/vwitme/staff/treiber/tex/inputs/alphadin}
+
+%\bibliography{refs,/home/vwitme/data/books/bibtex/bibtex/database}  %TU
+%\bibliography{refs,databaseLoc}  %Notebook
+
+%(2a) Wenn fertig:
+
+%\include{references.tex}
+
+%(2b) oder (besser!) direktes Einbinden .bbl File
+
+%(3) explizit:
+\begin{thebibliography}{10}
+\bibitem{Einstein-SRT}
+A. Einstein, \textit{Zur Elektrodynamik bewegter K\"orper}, 
+Annalen der Physik \textbf{17}, 891-921 (1905).
+% siehe http://de.wikipedia.org/wiki/Albert_Einstein#Werk
+\bibitem{Einstein-Emc2}
+A. Einstein, \textit{Ist die Tr\"agheit eines K\"orpers von seinem 
+Energieinhalt abh\"angig?}, Annalen der Physik \textbf{18}, 639-641 (1905).
+
+\end{thebibliography}
+
+\end{document}
+%########################################################
+

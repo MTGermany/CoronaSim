@@ -3,6 +3,18 @@
 //wget https://diviexchange.blob.core.windows.net/%24web/bundesland-zeitreihe.csv
 // JSON implemented, not yet used (DIVI most up-to-date but consistent with OWID (up to 10 days delayed)
 
+CHANGE HISTORY
+
+2021-11-05. Implemented non-sterility of vacc people: Factors
+            R0g/R0=1/2  decrease R0 for transmissions vacc->nonvacc
+            Rg0/R0=1/2  decrease R0 for transmissions nonvacc->vacc
+            Rgg/R0=1/4  decrease R0 for transmissions vacc->vacc
+            resulting in vacc reduce factor (1-IVacc+IVacc^2/4) 
+            instead of (1-IVacc)
+
+BUGS/BUGFIXES
+
+// 2021-11-05 
 // 2021-06-10 WATCH OUT: NaN Bug in England? No: The truth
 // 2021-06-10 ANNOYING Warum syst zu niedrig am Ende? Werden die letzten
 //            Daten nicht beruecksichtigt???
@@ -1093,7 +1105,9 @@ function initializeData(country,insideValidation){
       "\n  data2MaxDateStr=",data2MaxDateStr,
       "\n\ndi2=",di2,
       "\n  data[data.length-20][\"date\"]=",data[data.length-20]["date"],
-      "  data2[data.length-20+di2][\"date\"]=",data2[data.length-20+di2]["date"],
+      "  data2[Math.min(data.length-20+di2,data2.length-1)][\"date\"]=",data2[Math.min(data.length-20+di2,data2.length-1)]["date"],
+      "\n  data[data.length-50][\"date\"]=",data[data.length-50]["date"],
+      "  data2[Math.min(data.length-50+di2,data2.length-1)][\"date\"]=",data2[Math.min(data.length-50+di2,data2.length-1)]["date"],
       "\n  data[data_idataStart][\"date\"]=",data[data_idataStart]["date"],
       "  data2[data2_idataStart][\"date\"]=",data2[data2_idataStart]["date"],
       "\n  nxtStart=data[data_idataStart][\"confirmed\"]=",nxtStart,
@@ -3645,27 +3659,35 @@ MutationDynamics.prototype.update=function(it){
 //                     steigend ueber Zeit)
 // 72 Prozent der Befragten im Alter von 40 bis 64
 // 92 Prozent ab 65
+
+// MT 2021-11: Set I0=1. Then, Ivacc is percentage of
+//             "completely vaccinated", and I use several true I0s
+//             in main Reff calculation in CoronaSim.updateOneDay
+
 //################################################################
 function Vaccination(){
 //################################################################
-  this.I0=0.90;      // !!!! frac of immune people >=1 week after second vacc.
+  this.I0=0.75;      // 1-alpha^2 if R01=alpha*R00 (infection nonvacc->vacc)
+                     //              R10=R01 (infection vacc->nonvacc)
+                     //              r11=alpha^2R00 (infection vacc->vacc)
   this.tau0=28;      // days after full effect I0 is reached (1 week after)
-  this.Ivacc=0;      // population immunity fraction by vaccinations
-                     // ! read from application routines after update()
   this.f_age=[];     // demographic profile of age groups
-                     // [0-10,-20,-30,-40,-50,-60,-70,-80,-90, 90+]
+  this.ageGroup=0;   // will be overwritten in initialize
+                    // [0-10,-20,-30,-40,-50,-60,-70,-80,-90, 90+]
 
   //this.vaccmax=[0, 0.20, 0.55, 0.62, 0.65, 0.72, 0.86, 0.92, 0.94, 0.94];
   this.vaccmax=[0, 0.50, 0.70, 0.78, 0.82, 0.86, 0.90, 0.94, 0.94, 0.94];
   //this.vaccmax=[1,1,1,1,1,1,1,1,1,1];
                      // 1-vacc deniers
                      // or med impossibilities in each age group
-  
   this.vaccmaxTot=0; // pop-averaged max vaccination rate
-  this.pVaccHist=[]; // history[tau] of vacc percentage pVacc (first vacc.)
 
-  this.ageGroup=0;   // will be overwritten in initialize
+  this.pVaccHist=[]; // history[tau] of vacc percentage pVacc (first vacc.)
+                     // global Var pVacc=pVaccHist[0] set in .update()
   this.pVaccHist_age=[]; // age-specific history[tau]
+
+  this.Ivacc=0;      // population immunity fraction by vaccinations
+                     // ! read from application routines after update()
   this.Ivacc_age=[]; // vacc immunity disaggregated into the age groups
 
   this.corrFactorIFR=1.11; // IFR(not immune pop average)/IFR(group60-70)
@@ -3758,22 +3780,22 @@ Vaccination.prototype.update=function(rVacc,it){
       
 
     // update immunity percentage globally and in age groups
-    // !! only reached if this.vaccmaxreached=false
+    // Ivacc=I0*MA_asym(pVacc)=I0*MA(pVacc-tau/2)
+
+    
+    // need no check for vaccmaxreached since pVaccHist[0] restr by vaccmax
 
     //if(rVacc>0){console.log("this.vaccmaxreached=",this.vaccmaxreached);}
-    if(true){ // OK; restricted by this.pVaccHist[0]=Math.min(..)
-              // and else{this.pVaccHist_age[j][0]=this.vaccmax[j];}
-    //if(!this.vaccmaxreached){
-      this.Ivacc +=this.I0/(this.tau0-1) // (this.tau0-1) Gartenzauneffekt OK
-	*(this.pVaccHist[0]-this.pVaccHist[this.tau0-1]);
 
-      for(var ia=0;ia<this.f_age.length; ia++){
+    this.Ivacc +=this.I0/(this.tau0-1) // (this.tau0-1) Gartenzauneffekt OK
+      *(this.pVaccHist[0]-this.pVaccHist[this.tau0-1]);
+
+    for(var ia=0;ia<this.f_age.length; ia++){
         this.Ivacc_age[ia] +=this.I0/(this.tau0-1) 
 	  *(this.pVaccHist_age[ia][0]-this.pVaccHist_age[ia][this.tau0-1]);
-      }
     }
-    //else{console.log("this.vaccmaxreached=true!!");}
-  }
+
+  } // if it>0
 
   else{ // !!! it=0, initialize or re-initialize at start of interactive sim
 
@@ -4120,7 +4142,7 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
 
  
   // IvaccArr[it]: global fixed vacc immunity time profile
-  // generated interactively here, if outside calibration
+  // generated here, if outside calibration
   
   Ivacc=(it>=0) ? IvaccArr[it] : 0; // used inside calibration from profile
   corrIFR=(it>=tauDie)
@@ -4150,8 +4172,9 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
   }
 
 
- 
+ //########### main Reff calculation #############################
   this.Reff=R0 * (1-Ivacc) * (1-this.xyz) * calc_seasonFactor(it); 
+ //###############################################################
 
   
   // include political measures by stringency in [0,100]
