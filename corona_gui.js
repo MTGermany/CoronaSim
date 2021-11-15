@@ -206,6 +206,20 @@ slider_rVacc.oninput = function() {
 }
 
 
+//var rBoost;
+
+var slider_rBoost=document.getElementById("slider_rBoost");
+var slider_rBoostText = document.getElementById("slider_rBoostText");
+
+setSlider(slider_rBoost, slider_rBoostText, 700*rBoost, " %");
+
+slider_rBoost.oninput = function() {
+  slider_rBoost_moved=true;
+  slider_rBoostText.innerHTML = "&nbsp;"+this.value+" %";
+  rBoost=parseFloat(this.value/700.);
+}
+
+
 //var casesInflow;
 
 var slider_casesInflow=document.getElementById("slider_casesInflow");
