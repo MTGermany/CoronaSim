@@ -37,7 +37,7 @@ setSlider(slider_R0, slider_R0Text, R0,"");
 
 
 slider_R0.oninput = function() {
-  R0slider_moved=true;
+  slider_R0_moved=true;
   slider_R0Text.innerHTML = "&nbsp;"+this.value;
   R0=parseFloat(this.value);
   console.log("slider1 callback: R0="+R0);
@@ -100,7 +100,7 @@ setSlider(slider_pTest, slider_pTestText, 100*pTest, " %");
 
 slider_pTest.oninput = function() {
   otherSlider_moved=true;
-  testSlider_moved=true;
+  slider_pTest_moved=true;
   includeInfluenceTestNumber=false;
   slider_pTestText.innerHTML = "&nbsp;"+this.value+" %";
   pTest=parseFloat(this.value/100.);
@@ -130,53 +130,6 @@ slider_tauTest.oninput = function() {
 
 
 
-// var R0copy
-
-/*
-var slider_R0cp=document.getElementById("slider_R0cp");
-var slider_R0cpText = document.getElementById("slider_R0cpText");
-
-setSlider(slider_R0cp, slider_R0cpText, R0,"");
-
-
-slider_R0cp.oninput = function() {
-  R0slider_moved=true;
-  slider_R0cpText.innerHTML = "&nbsp;"+this.value;
-  R0=parseFloat(this.value);
-  console.log("slider R0cp callback: R0="+R0);
-}
-*/
-
-
-/*
-
-function str_measures(measures){
-  return ((measures==0) ? "Halli Galli" : 
-	  (measures==1) ? "wie 2019" :
-	  (measures==2) ? "Abstand" :
-	  (measures==3) ? "Abstand+Maske" :
-	  (measures==4) ? "Teil-Lockdown" :
-	  (measures==5) ? "Lockdown" : "Max Shutdown");
-}
-
-function calc_factorMeasures(measures){ // multiplication factor for R
-  var factor=(measures==0) ? 1.20 :
-    (measures==1) ? 1.00 :
-    (measures==2) ? 0.85 :
-    (measures==3) ? 0.80 :
-    (measures==4) ? 0.65 :
-    (measures==5) ? 0.50 : 0.30;
-  return factor/0.65; // relate everything to actual level 4
-}
-
-
-
-// MT 2020-12-22: Do not show measures since not scientific
-// var measures; {0=hulliGalli,1=none,2=distance,3=distance+masks,
-// 4-6=lockdowns}
-*/
-
-
 // var stringency
 
 var slider_stringency=document.getElementById("slider_stringency");
@@ -188,7 +141,7 @@ setSlider(slider_stringency, slider_stringencyText,
 slider_stringency.oninput = function() {
   stringency=parseInt(this.value);
   slider_stringencyText.innerHTML = "&nbsp;"+stringency+" %";
-  stringencySlider_moved=true;
+  slider_stringency_moved=true;
 }
 
 
@@ -223,14 +176,16 @@ slider_rBoost.oninput = function() {
 //var casesInflow;
 
 var slider_casesInflow=document.getElementById("slider_casesInflow");
-var slider_casesInflowText = document.getElementById("slider_casesInflowText");
+var slider_casesInflowText=document.getElementById("slider_casesInflowText");
+if(slider_casesInflow!==null){ // typeof undefined does not work
+  console.log("casesInflow not null");
+  setSlider(slider_casesInflow, slider_casesInflowText, casesInflow,
+	    "/Tag");
 
-setSlider(slider_casesInflow, slider_casesInflowText, casesInflow,
-	  "/Tag");
-
-slider_casesInflow.oninput = function() {
-  slider_casesInflowText.innerHTML = "&nbsp;"+this.value+"/day";
-  casesInflow=parseFloat(this.value);
+  slider_casesInflow.oninput = function() {
+    slider_casesInflowText.innerHTML = "&nbsp;"+this.value+"/day";
+    casesInflow=parseFloat(this.value);
+  }
 }
 
 

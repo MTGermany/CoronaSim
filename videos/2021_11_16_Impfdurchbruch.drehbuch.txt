@@ -1,0 +1,245 @@
+
+corona-simulation.de: Simulation der Impfdurchbr\"uche
+
+
+1. Intro
+=====
+
+[ich im Vollbild]
+
+* Hallo und herzlich willkommen, liebe Freunde von Corona-Simulation.de
+
+* Ich hatte lange kein Corona-Simulationsvideo gemacht.
+
+* Zum Einen, weil lange Zeit wegen niedriger Inzidenz kein Bedarf
+  bestand.
+
+* Zum anderen, da sich in der Dynamik einiges veraendert hat -
+  Stichwort endliche Wirksamkeit der Impfung undd Impfdurchbrueche - und die
+  Simulation nicht mehr praezise war
+
+* NUN konsolidieren sich jedoch die neuen Erkenntnisse UND die
+  Situation ist wieder kritisch
+
+* Ich habe also meine Simulation an die neuen Erkenntnisse
+  angepasst. Da gibt es einerseits einen Preprint
+  der angesehenen wissenschaftlichen Zeitschrift The Lancet, der
+  direkt die Effizienz der 
+  Impfung ueber die Zeit anhand von Millionen von Beobachtungen
+  schaetzt.
+
+* Zum anderen gibt es seit einiger Zeit einigerma3en praezise Angaben
+  zu den sogenannten Impfdurchbruechen.
+
+* Als Modellierer kann man seine Simulation nur an eine von beiden
+  Beobachtungen anpassen, "kalibrieren", wie der Simulant sagt. Wenn
+  dann die andere Beobachtung automatisch stimmt, was bei meiner
+  Simulation der Fall ist, und daneben natuerlich die Fallzahlen und
+  die Todeszahlen, dann ist das Motivation, eine neue Major Version
+  von corona-simulation.de hochzuladen und diese anhand dieses Videos
+  vorzustellen
+
+
+2. Neuen Erkenntnisse 1: Die Lancet-Studie
+==========================================
+
+[../references/2021-10-25_vaccEfficiency_Lancet.pdf]
+
+Die zentrale Frage ist: Wie wirksam sind die Impfstoffe und wie
+aendert sich die Wirksamkeit oder Effizienz mit der Zeit? 
+
+* Dieses Bild zeigt das zentrale Ergebnis der erwaehnten
+  Lancet-Studie, die allerdings nocht nicht peer-reviewed, also von
+  Kollegen begutachtet ist.
+
+* Horizontal sind die Tage seit der vollstaendigen Impfung aufgetragen
+
+* Vertikal die Effizienz der Impfstoffe. Als Statistiker und
+  Oekonometriker muss ich das natuerlich genau definieren und
+  eingrenzen
+
+- Raeumliche Eingrenzung: Studie ist in Schweden, etwa 1 Million
+  Datenpaare
+
+- zeitlich: Dieses Fruehjahr 2021 bis Herbst. Die Delta-Variante ist
+  also bereits weitgehend enthalten, im Ggs zu den Zulassungsstudien
+
+- sachlich: Zu jeder der bis zu ueber 800 000 geimpften Personen wurde AM
+  ANFANG eine ungeimpfte Person mit selben soziodemografischen
+  Hintergrund (Alter, Geschlecht, Schulbildung, Berufstaetigkeit,
+  Standardkrankheiten, Geburtsland), alle natuerlich uninfiziert am
+  Anfang. Dann wurde einfach geschaut, wie viele in jeder Gruppe pro 1
+  Mio Expositionstage im entsprechenden Zeitintervall, z.B. 61-120
+  Tage nach Impfung bzw zeitgleicher Erfassung der Kontrollperson,
+  SYMPTOMATISCH an
+  Covid erkrankten. Falls Leute der Kontrollgruppe sich impften,
+  wurden sie moeglichst passgenau ersetzt.
+
+* Die Effizienz ist dann einfach gleich
+
+  1 - (Zahl der geimpft infizierten)/(Zahl der ungeimpft imfizierten)
+
+  mit diversen Korrewkturfaktoren, dirty details, halt.
+
+* Das Ganze wurde noch nach Alter, Geschlecht, Impfstoff aufgeteilt,
+  aber das geht ueber meinen Simulator hinaus, bis auf die
+  Altersgruppen, die ich fuer die Infection fatality rate (IFR)
+  habe.
+  
+* Es gibt bereits in de raggregierten Betrachtung  riesige
+  Fehlerflaechen fuer laengere Zeitraeume
+
+* chliesslich gibt es eine optimistischere Kurve fuer die
+  Covid19-Todesfaelle
+
+
+2a. Einbau in den Simulator
+==========================
+
+[Viewnior rotes V, file ../references/efficiency.png]
+
+Diese Definition ist genau das, was ich in meinen Simulator einbauen
+kann. Welche Funktion ich dabei waehle ist egal, hauptsaechlich, sie
+schaut aehnlich aus wie diese hier
+
+Schauen wir auf die Effizienz nach 180 Tagen. Sie ist hier
+
+[zeigen]
+
+40%.
+
+[Lancet zeigen]
+
+Ebenso wie im Lancet Preprint
+
+[zurueckswitchen]
+
+
+* Das bedeutet, dass man bei sonst gleichen Bedingnugen als Geimpfter
+  das Risiko um 40% reduziert, symptomatisch AM NAECHSTEN TAG an
+  Covid-19 zu erkranken.
+
+* Geht man ausserdem davon aus, dass symptomatisch erkrankte Geimpfte
+  gleich infektioes sind  wie Ungeimpfte, bedeutet dies, dass der R-Wert
+  fuer diese Gruppe in diesem Beispiel um 40% reduziert ist.
+
+* Das kann man schoen im Simulator durch einen aggregierten R-Wert, je
+  nach Impfhistorie, darstellen
+
+[Auf die Booster-Kurve zeigen]
+
+Was ist mit der orangen Kurve? Dies gibt, als zunaechst wilde Annahme,
+die Effizienz der Booster-Impfung an. Nachdem ja allgemein gesagt
+wird, dass Boostern laenger haelt (zumal ja hoffentlich der Booster an
+die Delta-Mutation angepasst ist), habe ich die Booster-Effizienz
+langsamer zurueckgehen lassen.
+
+[auf Booster fuer kurze tau zeigen]
+
+* Kann wie gesagt voellig falsch sein, macht aber zur Zeit nix, weil wir
+  ja ganz am Anfang beim Boostern sind.
+
+* Natuerlich kann ich die Effizienzen der Geimpften und geboosterten
+  nicht addieren. Vielmehr eliminiere ich fuer jeden frisch Geboosterten die
+  jeweils aelteste noch offene rote Impfkurve und ersetze sie durch die
+  orangene Boosterkurve. Es gilt also nicht "Wer zuerst kommt, mahlt
+  zuerst" sondern 
+
+  "Wer sich zuerst impfen laesst, boostert auch zuerst"
+
+
+3. Impfdurchbrueche
+===================
+
+Ich lasse nun mal den Corona-Simulator laufen, so wie er direkt nach
+Aufrufen von corona-simulation.de startet
+
+[corona-simulation.de lokal starten und bis Juli laufen lassen]
+
+Ich halte mal im Juni dieses Sommers an. Optisch hat sich nicht viel
+geaendert, unter der Haube schon
+
+* Sie sehen einen neuen Regler "Boostrate", die bis zum Verschieben
+  des Reglers datengetrieben ist. Im Juni gibt es noch kaum Booster
+
+[Text "Geboostert" zeigen]
+
+* Auch der kumulierte Anteil der Geboosterten ist noch 0.0%
+
+[Text "Impfdurchbrueche" zeigen]
+
+* Es gibt aber bereits Impfdurchbrueche. Die Simulation mit den gerade
+  gezeigten Effizienzkurven sagt [12.3%]
+
+[ ich im Bild]
+
+* Was ist ein Impfdurchbruch? "Jeder VOLLSTAENDIG geimpfte, der
+  SYMPTOMATISCH an Covid-19 erkrankt ist"
+
+  - Vollstaendig: "Mind 2 Wochen nach der zweiten Dosis"
+  - Symptomatisch: Nur Leute mit positiven Test zaehlen nicht
+  - an Covid-19: Nur PCR-Tests oder direkte Isolierung der Viren
+    zaehlen
+
+  Diese Def passt genau fuer meine Zwecke, da ja auch die Kurven
+  darauf aufgebaut sind
+
+* Was ist der Impfdurchbruchsanteil? "Anteil der Impfdurchbrueche an
+  den symptomatisch Covid-19 erkrankten". Mit Hilfe des Satzes von
+  Bayes bestimmbar
+
+* BEISPIEL: 80% sind geimpft, die Effizienz betrage 75%, dann ist
+
+  p_durchbruch
+  =#Impfdurchbrueche/#Erkrankungen=0.8*0.25/(0.8*0.25+0.2)=0.2/0.4=50%
+
+* Umgekehrt kann man auch die Effizienz aus den Impfdurchbruechen
+  bestimmen. In kontrollierter Weise hat das ja die obige Studie getan
+
+
+[corona-simulation.de wieder zeigen, sim bis 11. Oktober (Datum li oben)]
+
+Nun lassen wir die Simulation bis 11. Oktober weiterlaufen und schauen
+auf die Impfdurchbrueche: 40.1%
+
+[klicken auf
+www.mdr.de/wissen/covid-corona-impfdurchbrueche-aktuelle-zahlen-100.html]
+
+Vergleichen wir nun die Simulation mit den tatsaechlichen Werten,
+z.B. auf dieser empfehlenswerten mdr-Webseite, die woechentlich
+aktualisiert wird. Alle Altersgruppen, Datum 11.Oktober bis
+7. November: 41.0%
+
+[corona-simulation.de wieder zeigen, sim bis 7. November (Datum li oben)]
+
+Die Beobachtungen beziehen sich auf einen Zeitraum, lassen wir also
+bis zum Ende des Zeitraums vorlaufen: 47.5%, Im Mittel also 43.8%
+simuliert vs. 41% in den Daten.
+
+=> eine sehr gute Uebereinstimmung, zumal alle Infizierten, deren
+Impfstatus nicht bekannt ist, zu den nicht vollst Infiz. gezaehlt
+werdne, was die beobachtete Durchbruchsquote etwas drueckt
+
+[corona-simulation.de Gegenwart]
+
+Nun haben wir, Stand 16. November, bereits
+ - 50% Impfdurchbrueche
+ - bei 70% vollstaendig Geimpften
+ - darunter 5% Geboosterte
+ - und einen ueber alle Impf- und Booster-Historien aggregierten
+   Immunitaetsfaktor in der Bevoelkerung von 43%.
+
+Dieser Immunitaetsfaktor reduziert also die Reproduktionsrate um den
+Faktor 1-0.43=0.57
+
+
+
+4. Projektionen in die Zukunft
+==============================
+
+In der Projektion "Status Quo" nicht erschrecken: Die Inzidenz geht nun um Weihnachten/Januar sogar noch weit ueber die am Tegernsee hinaus, was an der im Gegensatz zur bisherigen Simulation rasch abnehmenden Impfwirkung liegt. 
+
+Aber das wird nicht geschehen, da, im Gegensatz zu letztem Jahr, einfache Massnahmen helfen. Wird z.B. die Boosterrate (neuer Regler!) ab Gegenwart auf 4% pro Woche hochgesetzt (das entspricht weniger Impfungen pro Woche als im Sommer) und gleichzeitig die Corona-Massnahmen auf die des Sommers (Grad Max Shutdown bzw "stringency-Index" = 55%) verschaerft, sieht es schon besser aus: Max. Inzidenz Ende Dezember zwar halber Tegernsee (um 500), aber max. Todesrate nur etwa 30% des Maximums letzten Jahres
+
+
+A propos Tegernsee: Setzt man den Impfraten-Schieberegler auf Null, sobald die gegenwaertige Impfrate am Tegernsee von 63% erreicht ist (24. Juli) reproduziert corona-simulation.de die Inzidenz am Tegernsee ;-)
