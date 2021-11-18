@@ -1,0 +1,29 @@
+Corona-simulation.de: Simulation der Impfdurchbrüche
+
+Seit Kurzem kristalliert sich heraus, dass die Impfwirkung in Anwesenheit der Delta-Variante mit der Zeit stark nachlässt: Eine die gesamte schwedische Bevölkerung erfassende Studie gibt dazu Details: https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3949410 . Ferner gibt es in Deutschland gehäuft sog. "Impfdurchbrüche". Beides ist der Grund, warum die Infektionen nun viel stärker hochgingen, als es mein Simulator voraussagte.
+
+Ich habe daher eine neue Major Version hochgeladen, die die Impfcharakteristik der Lancet-Studie und auch Booster-Impfungen enthält. Validiert wurde der Simulator an den deutschen Zahlen zum Impfdurchbrüchen, die z.B. auf der MDR-Webseite https://www.mdr.de/wissen/covid-corona-impfdurchbrueche-aktuelle-zahlen-100.html gut und aktuell dargestellt sind. Corona-simulation.de kann diese sehr gut reproduzieren, und zwar über den gesamten Zeitverlauf und ohne auf diese Daten angepasst zu sein. Auch die Zahlen z.B. am Tegernsee oder in Sachsen werden ohne weitere Anpassung vorausgesagt: Sie beruhen auf einer geringeren Impfrate dort.
+
+Wie bringt man die gegenwärtige Welle unter Kontrolle? 
+
+Neue Major Version meines Simulators mit aktueller Charakteristik der Impfeffizienz sowie Booster-Impfungen:
+
+Projektionen für diese Wintersaison sagen im "Laisser-faire" Szenario eine exorbitante Spitzen-Inzidenz nahe 2000 Fällen pro Woche pro 100 000 Personen voraus. Aber ruhig Blut! Boostert man mit 5% pro Woche und schärft die "Corona-Maßnahmen" moderat auf die Stärke dieses Sommers an, gibt es bereits Anfang Dezember einen Höhepunkt bei einer deutschlandweiten 500-er Inzidenz und insgesamt nur etwa 1/3 der Coronatoten der letzten Wintersaison, nämlich etwa 30 000. 
+
+Die Simulation sagt auch, dass die Maßnahmen einzeln zu wenig  wirken. Nur die Kombination aus Boostern und moderaten Maßnahmen zeigt Erfolg!
+
+00:00 Einführung
+
+02:44 Nachlassen der Impfwirkung: Die Lancet-Studie und Einbau der Impfcharakteristik und des Booster-Effektes in den Simulator
+
+12:27 Impfdurchbrüche, ihre Erklärung und ihre Simulation
+
+22:14 Zukunfstprojektionen: Laisser-faire Szenario
+
+26:17 Szenario "Boostern"
+
+30:27 Szenario "Moderate Anschärfung der Maßnahmen"
+
+35:08 Szenario "Boostern und moderat Anschärfen"
+
+37:17 Ergebnis und Empfehlungen

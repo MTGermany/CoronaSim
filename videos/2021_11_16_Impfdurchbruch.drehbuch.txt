@@ -18,7 +18,7 @@ corona-simulation.de: Simulation der Impfdurchbr\"uche
   Stichwort endliche Wirksamkeit der Impfung undd Impfdurchbrueche - und die
   Simulation nicht mehr praezise war
 
-* NUN konsolidieren sich jedoch die neuen Erkenntnisse UND die
+* NUN konsolidieren sich jedoch die neuen wiss. Erkenntnisse UND die
   Situation ist wieder kritisch
 
 * Ich habe also meine Simulation an die neuen Erkenntnisse
@@ -79,7 +79,7 @@ aendert sich die Wirksamkeit oder Effizienz mit der Zeit?
 
   1 - (Zahl der geimpft infizierten)/(Zahl der ungeimpft imfizierten)
 
-  mit diversen Korrewkturfaktoren, dirty details, halt.
+  mit diversen Korrekturfaktoren, dirty details, halt.
 
 * Das Ganze wurde noch nach Alter, Geschlecht, Impfstoff aufgeteilt,
   aber das geht ueber meinen Simulator hinaus, bis auf die
@@ -188,6 +188,9 @@ geaendert, unter der Haube schon
   den symptomatisch Covid-19 erkrankten". Mit Hilfe des Satzes von
   Bayes bestimmbar
 
+[zeige 2021_11_Impfdurchbruch.pdf]
+
+
 * BEISPIEL: 80% sind geimpft, die Effizienz betrage 75%, dann ist
 
   p_durchbruch
@@ -217,8 +220,13 @@ bis zum Ende des Zeitraums vorlaufen: 47.5%, Im Mittel also 43.8%
 simuliert vs. 41% in den Daten.
 
 => eine sehr gute Uebereinstimmung, zumal alle Infizierten, deren
-Impfstatus nicht bekannt ist, zu den nicht vollst Infiz. gezaehlt
-werdne, was die beobachtete Durchbruchsquote etwas drueckt
+Impfstatus nicht bekannt ist, nie den vollst Infiz. zugeordnet werden,
+was die beobachtete Durchbruchsquote etwas drueckt
+
+Sie wird weiter gedrueckt, da die
+Nichtgeimpften sich ja alle Naslang testen lassen muessen, die
+Geimpften jedoch nicht> Bei den Geimpften fallen somit mehr Infektionen, auch
+symptomatische und damit nach Definition Impfdurchbrueche, unter den Tisch
 
 [corona-simulation.de Gegenwart]
 
@@ -227,7 +235,7 @@ Nun haben wir, Stand 16. November, bereits
  - bei 70% vollstaendig Geimpften
  - darunter 5% Geboosterte
  - und einen ueber alle Impf- und Booster-Historien aggregierten
-   Immunitaetsfaktor in der Bevoelkerung von 43%.
+   Immunitaetsfaktor in der Bevoelkerung von 43%
 
 Dieser Immunitaetsfaktor reduziert also die Reproduktionsrate um den
 Faktor 1-0.43=0.57
@@ -237,9 +245,137 @@ Faktor 1-0.43=0.57
 4. Projektionen in die Zukunft
 ==============================
 
-In der Projektion "Status Quo" nicht erschrecken: Die Inzidenz geht nun um Weihnachten/Januar sogar noch weit ueber die am Tegernsee hinaus, was an der im Gegensatz zur bisherigen Simulation rasch abnehmenden Impfwirkung liegt. 
+Nun also die spannende Frage: Wie sieht es in der Zukunft aus?
 
-Aber das wird nicht geschehen, da, im Gegensatz zu letztem Jahr, einfache Massnahmen helfen. Wird z.B. die Boosterrate (neuer Regler!) ab Gegenwart auf 4% pro Woche hochgesetzt (das entspricht weniger Impfungen pro Woche als im Sommer) und gleichzeitig die Corona-Massnahmen auf die des Sommers (Grad Max Shutdown bzw "stringency-Index" = 55%) verschaerft, sieht es schon besser aus: Max. Inzidenz Ende Dezember zwar halber Tegernsee (um 500), aber max. Todesrate nur etwa 30% des Maximums letzten Jahres
+Zunaechst mal eine Projektion mit dem Status Quo, also keinerlei
+weitere Massnahmen.
+
+[Bis Apr 22 sim]
+
+Aufgrund der abnehmenden Impfwirkung gibt es im Januar eine Inzidenz
+von nahe 2000, im gegensatz zu 1000 de rbisherigen Sim. Grund: Die nun
+modellierte abnehmende Immunitaetswirkung d Impfung.
+
+Eines ist klar: Dieses Szenario wird nicht geschehen, aus guten
+Gruenden. Was tun? Naheliegend sind zweierlei
+
+1. Booster forcieren
+2. Massnahmen
+
+[Sim starten mit Boostern mit 5% ab Gegenwart]
+
+Boostern
+========
+
+Zunaechst nur Boostern mit 5% pro Woche. Das hoert sich viel an, entspricht
+aber nur 2.5% pro Woche bei den Zweitimpfungen, da ja davor auch die
+Erstimpfungen sein muessen. Da hatten wir im Sommer eine hoehere Rate,
+also logistisch ueberhaupt kein Problem u Impfstoff ist auch genug da
+
+Ergebnis:
+
+* Maximum bei 900 halbiert und schon im Dezember statt Jan
+
+* Gesamtzahl an Faellen und Toten geviertelt (halbe Hoehe, halbe
+  Breite
+
+* Warum die Verzoegerung? Es braucht einfach, bis sich die Immunitaet aufbaut
 
 
-A propos Tegernsee: Setzt man den Impfraten-Schieberegler auf Null, sobald die gegenwaertige Impfrate am Tegernsee von 63% erreicht ist (24. Juli) reproduziert corona-simulation.de die Inzidenz am Tegernsee ;-)
+Nur Massnahmen
+==========
+
+Reload bis Gegenwart, nun statt Boostern den Stringency-Index von
+gegenwaertig sehr lockeren 44% auf die Sommerwerte von 60%
+
+* Wirkt viel schneller, bereits nach einer Woche. Warum nicht sofort?
+  Gezeigt ist ja die Inzidenz, also die per PCR-Test gemeldeten
+  Covid-Positiven, nicht die Infektionen. Mein Simulator
+  beruecksichtigt ja auch die Latenzzeit bis zum Test sowie den
+  Meldeverzug.
+
+  [Bild Faelle vs Infizierte]
+
+  Die Infiziertenrate
+  (dunkelviolette Kurve) faellt sofort ab (die hellviolette Kurve war
+  die Sim mit nur Boostern)
+
+* Die Welle dauert aber viel laenger mit dem Maximum Ende Januar, zur
+  Haupt-Erkaeltungs- und Grippezeit. Das ist sozusagen die
+  "Symptombehandlung" der Epidemie, Unterdrueckung der Symptome durch
+  Isolationsmassnahmen, waehrend das Boostern die ursaechliche
+  Behandlung ist
+
+
+Massnahmen und Boostern
+=======================
+
+Nun kombiniere ich beide Massnahmen: Moderate Verschaerfung der
+Massnahmen wie im Sommer und 5% Boostern, bis alle Zweifach Geimpften
+geboostert sind
+
+[Reload u Sim bis Januar]
+
+
+* Peak bei 500 bereits Anfang Dezember, waehrend die violette Kurve
+  mit Massnahmen ohne Boostern zum Erkaeltungs-Hoehepunkt im Januar
+  strebt
+
+* Bereits Anfang Januar kann ich die Massnahmen auf den Stand vor
+  einer Woche lockern (Stringency Index hinkt nach), also 44%:
+  Passiert nix mehr, Seuche fuer diese Saison vorbei, dank Boostern!
+
+* Summa Summarum: Realistische Boosterraten und relative milde
+  Massnahmenverschaerfung ohne jeden Lockdown fuerhen zu einer
+  Maximalinzidenz von 500
+
+* Ist zwar 2 1/2 mal so hoch wie in das Maximum der letzten
+  Wintersaison, es gibt aber maximal 350 Tote pro Tag anstelle der bis
+  nahe 1000 Toten letzte Saison
+
+
+Impf-Verweigerer
+================
+
+Zum Schluss: Wenn die Impfwirkung so nachlaesst, ist die Impfung dann
+nutzlos? Zu diesem Zwecke starte ich die Simulation neu und
+re-simuliere die Gegenwart in Sachsen, am Tegernsee oder anderswo mit
+nur 65% statt etwa 75% Impfquote:
+
+[restart]
+
+Ich lasse die Sim laufen, bis 65% einfach geimpft erreicht sind (Text
+links unten), dann stoppe ich [10. August]
+
+Nun hoere ich einfach mit weiterenm Impfen auf, setze also den Impf- und
+Boosterregler auf Null: Dadurch ueberschreibe ich die ansonsten
+in der Vergangenheit datengetriebenen Regler
+
+* lange 2 Monate  tut sich kaum etwas
+
+* erst mit der Erkaeltungssaison und der nachlassenden Impfwirkung
+  schiessen die Faelle nach oben, ziemlich genau wie in Sachsen
+
+
+Schluss
+=======
+
+Die Bottom-Line:
+
+* Fuege ich die Impfwirkungscharakteristiken neuester
+  wiss. Veroeffentlichungen in den Simulator ein und belasse den
+  ganzen Datenaspekt einschl. simulierter Dunkelziffer und simulierten
+  Meldeverzug, kann ich 
+  die beobachteten Durchbruchskurven reproduzieren: Validierung
+
+* Zwei einfache Massnahmen,
+  - 5% Boosterung pro Woche
+  - moderate Verschaerfung der Massnahmen auf das Sommerniveau
+  (kein Lockdown! keine 15-km Ausgangssperre, Skifahren moeglich!)
+  halten die Seuche 
+  auf ertraeglichem Mass: Zwar 2 1/2 mal so viel Inzidenz, aber die
+  ist eh nicht mehr relevant. Wichtiger ist die Drittelung der
+  Totenanzahl.
+
+Servus und auf Wiedersehen, bis naechstes Mal!
+

@@ -1,0 +1,105 @@
+
+
+
+%#############################################
+% New pdflatex format,
+% only png, jpg (or svg?) images but positioning now ok
+% template in ~/tex/inputs/template_folien.tex
+% [TODO now specialized to Vkoem_Ma; make general]
+%#############################################
+
+
+\documentclass[mathserif,aspectratio=1610]{beamer}
+%\documentclass[mathserif,handout,aspectratio=1610]{beamer}
+%\usepackage{beamerthemeshadow}
+\input{$HOME/tex/inputs/defsSkript}  %$
+\input{$HOME/tex/inputs/styleBeamerCorona}   %$
+
+\usepackage{graphicx}
+
+
+%##############################################################
+
+\begin{document}
+
+\section*{Impfdurchbruchsrate vs. Effizienz der Impfung}
+
+%##############################################################
+\frame{\frametitle{}
+%##############################################################
+
+
+
+%\placebox{0.50}{0.42}
+% {\figSimple{1.10\textwidth}{figsCorona/coronaSimulationDe_1.png}}
+
+% make images pale (see demo_makePale.tex)
+%\makePale{opacity}{centerXrel}{centerYrel}{wrel}{hrel}
+% e.g., \makePale{0.8}{0.5}{0.5}{1}{0.3}
+
+%\makePale{0.7}{0.48}{0.57}{1.2}{1.1}
+
+\placebox{0.50}{0.44}{\parbox{1.0\textwidth}{
+\hspace{0.2\textwidth} \mysubheading{Plakatives Beispiel}
+{\small
+\bi
+\item {\small 1\,000 Leute, darunter $p=\unit[80]{\%}$, also 800, vollst\"andig geimpft}
+\figSimple{0.06\textwidth}{figsCorona/syringe.jpg}
+\hspace{-0.05\textwidth}
+\figSimple{0.06\textwidth}{figsCorona/syringe.jpg}
+\\[-1em]
+
+\pause \item $1-p=\unit[20]{\%}$ bzw 200 sind gar
+nicht/unvollst\"andig geimpft 
+\hspace{0.02\textwidth} 
+{\Huge{$\mathbf{\red{\times}}$}} 
+\hspace{-0.04\textwidth}
+\visible<2->{\figSimple{0.06\textwidth}{figsCorona/syringe.jpg}}
+
+\pause \item Effizienz der Impfung 
+$E=1-\frac{P(\text{am n\"achsten Tag erkrankt}|\text{geimpft})}
+     {P(\text{am n\"achsten Tag erkrankt}|\text{ungeimpft})}
+     = \unit[75]{\%}$
+
+\pause \item Die Erkrankungswahrscheinlichkeit Ungeimpfter f\"ur den
+n\"achsten Tag sei \unit[1]{\%}, also im Mittel 2 Leute
+
+\pause \item Bei einer Effizienz von \unit[75]{\%} ist damit die
+Erkrankungswahrscheinlichkeit Geimpfter \unit[0.25]{\%}, also bei
+800 Leuten ebenfalls 2
+
+\pause \item Damit ist die Impfdurchbruchsquote
+\bdm
+p\subb{durch}=\frac{\text{\# F\"alle bei vollst\"andig Geimpften}}
+{\text{Gesamtzahl der F\"alle}}=\frac{2}{2+2}=\uu{\unit[50]{\%}}
+\edm
+
+\pause \item Allg. Formel im Simulator:
+\vspace{-1em}
+\bdm
+p\subb{durch}=\frac{p(1-E)}{1-pE}
+\edm
+
+\ei
+
+
+}}}
+
+
+}
+
+
+\end{document}
+
+
+
+
+
+
+
+
+
+
+
+
+

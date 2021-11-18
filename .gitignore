@@ -38,8 +38,10 @@ data/RKI_Kreis*.json
 *.save
 
 
-## Movie files
+## Movie/video files
 *.mkv
+*.mpeg
+*.mp4
 
 ## Figure files (no longer)
 #*.fig

@@ -1,0 +1,757 @@
+<?xml version="1.0" standalone="no"?>
+<mlt LC_NUMERIC="C" version="7.1.0" title="Shotcut version 21.10.31" producer="main_bin">
+  <profile description="HD 1080p 25 fps" width="1920" height="1080" progressive="1" sample_aspect_num="1" sample_aspect_den="1" display_aspect_num="16" display_aspect_den="9" frame_rate_num="25" frame_rate_den="1" colorspace="709"/>
+  <chain id="chain0" out="00:01:01.600">
+    <property name="length">00:01:01.640</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_11_Impfdurchbruch_1-(2).mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">12d00639c2ae6f383674a3b8b9995c9d</property>
+  </chain>
+  <chain id="chain1" out="00:01:54.280">
+    <property name="length">00:01:54.320</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_11_Impfdurchbruch_2.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">33ebd65c3e3464a55a9bd3b41b3398e6</property>
+  </chain>
+  <chain id="chain2" out="00:00:26.560">
+    <property name="length">00:00:26.600</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_11_Impfdurchbruch_2a.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">2734ca292d599387358b6e46249933b9</property>
+  </chain>
+  <chain id="chain3" out="00:06:01.560">
+    <property name="length">00:06:01.600</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_11_Impfdurchbruch_3.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="shotcut:hash">dfbdffdd95709bba71e2bd656bf2b7fa</property>
+    <property name="ignore_points">0</property>
+    <property name="creation_time">2021-11-18T12:10:44</property>
+    <property name="xml">was here</property>
+  </chain>
+  <chain id="chain4" out="00:00:30.880">
+    <property name="length">00:00:30.920</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_11_Impfdurchbruch_3a.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">19cdd19ba93e62477a2071c9a78ace3c</property>
+  </chain>
+  <chain id="chain5" out="00:03:46.560">
+    <property name="length">00:03:46.600</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_11_Impfdurchbruch_4.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">1ea9235f6f643ff11a7c94e6a6e91169</property>
+  </chain>
+  <chain id="chain6" out="00:00:57.200">
+    <property name="length">00:00:57.240</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_11_Impfdurchbruch_5.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">fdc043b454ce72a60a9dba0f176f5d0f</property>
+  </chain>
+  <chain id="chain7" out="00:01:36.280">
+    <property name="length">00:01:36.320</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_11_Impfdurchbruch_5a.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">0f705754738a5e59a38271f8b0e24dc7</property>
+  </chain>
+  <chain id="chain8" out="00:01:54.520">
+    <property name="length">00:01:54.560</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_11_Impfdurchbruch_6.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">9083830c7d9e5faa2277b97a71e61f15</property>
+  </chain>
+  <chain id="chain9" out="00:04:51.120">
+    <property name="length">00:04:51.160</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_11_Impfdurchbruch_7.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">bd6cfe820074aafdf72bc8ea854c9436</property>
+  </chain>
+  <chain id="chain10" out="00:02:13.880">
+    <property name="length">00:02:13.920</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_11_Impfdurchbruch_8.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">a7eed71d02e5d961e097034a41e312e2</property>
+  </chain>
+  <chain id="chain11" out="00:01:55.160">
+    <property name="length">00:01:55.200</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_11_Impfdurchbruch_9.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">eee30175ceaaa82e2f16506be2a99437</property>
+  </chain>
+  <playlist id="main_bin">
+    <property name="xml_retain">1</property>
+    <entry producer="chain0" in="00:00:00.000" out="00:01:01.600"/>
+    <entry producer="chain1" in="00:00:00.000" out="00:01:54.280"/>
+    <entry producer="chain2" in="00:00:00.000" out="00:00:26.560"/>
+    <entry producer="chain3" in="00:00:00.000" out="00:06:01.560"/>
+    <entry producer="chain4" in="00:00:00.000" out="00:00:30.880"/>
+    <entry producer="chain5" in="00:00:00.000" out="00:03:46.560"/>
+    <entry producer="chain6" in="00:00:00.000" out="00:00:57.200"/>
+    <entry producer="chain7" in="00:00:00.000" out="00:01:36.280"/>
+    <entry producer="chain8" in="00:00:00.000" out="00:01:54.520"/>
+    <entry producer="chain9" in="00:00:00.000" out="00:04:51.120"/>
+    <entry producer="chain10" in="00:00:00.000" out="00:02:13.880"/>
+    <entry producer="chain11" in="00:00:00.000" out="00:01:55.160"/>
+  </playlist>
+  <producer id="black" in="00:00:00.000" out="00:24:06.800">
+    <property name="length">00:24:06.840</property>
+    <property name="eof">pause</property>
+    <property name="resource">0</property>
+    <property name="aspect_ratio">1</property>
+    <property name="mlt_service">color</property>
+    <property name="mlt_image_format">rgba</property>
+    <property name="set.test_audio">0</property>
+  </producer>
+  <playlist id="background">
+    <entry producer="black" in="00:00:00.000" out="00:24:06.800"/>
+  </playlist>
+  <chain id="chain12" out="00:01:01.600">
+    <property name="length">00:01:01.640</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_11_Impfdurchbruch_1-(2).mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">12d00639c2ae6f383674a3b8b9995c9d</property>
+    <property name="shotcut:caption">2021_11_Impfdurchbruch_1-(2).mkv</property>
+  </chain>
+  <chain id="chain13" out="00:01:54.280">
+    <property name="length">00:01:54.320</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_11_Impfdurchbruch_2.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">33ebd65c3e3464a55a9bd3b41b3398e6</property>
+    <property name="shotcut:caption">2021_11_Impfdurchbruch_2.mkv</property>
+  </chain>
+  <chain id="chain14" out="00:00:26.560">
+    <property name="length">00:00:26.600</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_11_Impfdurchbruch_2a.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">2734ca292d599387358b6e46249933b9</property>
+    <property name="shotcut:caption">2021_11_Impfdurchbruch_2a.mkv</property>
+  </chain>
+  <chain id="chain15" out="00:00:26.560">
+    <property name="length">00:00:26.600</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_11_Impfdurchbruch_2a.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">2734ca292d599387358b6e46249933b9</property>
+    <property name="shotcut:caption">2021_11_Impfdurchbruch_2a.mkv</property>
+  </chain>
+  <chain id="chain16" out="00:06:01.560">
+    <property name="length">00:06:01.600</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_11_Impfdurchbruch_3.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="shotcut:hash">dfbdffdd95709bba71e2bd656bf2b7fa</property>
+    <property name="ignore_points">0</property>
+    <property name="creation_time">2021-11-18T12:10:44</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:caption">2021_11_Impfdurchbruch_3.mkv</property>
+  </chain>
+  <tractor id="tractor0" in="00:00:00.000" out="00:00:01.000">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="chain15" in="00:00:24.720" out="00:00:25.720"/>
+    <track producer="chain16" in="00:00:08.240" out="00:00:09.240"/>
+    <transition id="transition0" out="00:00:01.000">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition1" out="00:00:01.000">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="mlt_service">mix</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+    </transition>
+  </tractor>
+  <chain id="chain17" out="00:06:01.560">
+    <property name="length">00:06:01.600</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_11_Impfdurchbruch_3.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="shotcut:hash">dfbdffdd95709bba71e2bd656bf2b7fa</property>
+    <property name="ignore_points">0</property>
+    <property name="creation_time">2021-11-18T12:10:44</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:caption">2021_11_Impfdurchbruch_3.mkv</property>
+  </chain>
+  <chain id="chain18" out="00:06:01.560">
+    <property name="length">00:06:01.600</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_11_Impfdurchbruch_3.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="shotcut:hash">dfbdffdd95709bba71e2bd656bf2b7fa</property>
+    <property name="ignore_points">0</property>
+    <property name="creation_time">2021-11-18T12:10:44</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:caption">2021_11_Impfdurchbruch_3.mkv</property>
+  </chain>
+  <chain id="chain19" out="00:06:01.560">
+    <property name="length">00:06:01.600</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_11_Impfdurchbruch_3.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="shotcut:hash">dfbdffdd95709bba71e2bd656bf2b7fa</property>
+    <property name="ignore_points">0</property>
+    <property name="creation_time">2021-11-18T12:10:44</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:caption">2021_11_Impfdurchbruch_3.mkv</property>
+  </chain>
+  <chain id="chain20" out="00:06:01.560">
+    <property name="length">00:06:01.600</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_11_Impfdurchbruch_3.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="shotcut:hash">dfbdffdd95709bba71e2bd656bf2b7fa</property>
+    <property name="ignore_points">0</property>
+    <property name="creation_time">2021-11-18T12:10:44</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:caption">2021_11_Impfdurchbruch_3.mkv</property>
+  </chain>
+  <chain id="chain21" out="00:06:01.560">
+    <property name="length">00:06:01.600</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_11_Impfdurchbruch_3.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="shotcut:hash">dfbdffdd95709bba71e2bd656bf2b7fa</property>
+    <property name="ignore_points">0</property>
+    <property name="creation_time">2021-11-18T12:10:44</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:caption">2021_11_Impfdurchbruch_3.mkv</property>
+  </chain>
+  <chain id="chain22" out="00:06:01.560">
+    <property name="length">00:06:01.600</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_11_Impfdurchbruch_3.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="shotcut:hash">dfbdffdd95709bba71e2bd656bf2b7fa</property>
+    <property name="ignore_points">0</property>
+    <property name="creation_time">2021-11-18T12:10:44</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:caption">2021_11_Impfdurchbruch_3.mkv</property>
+  </chain>
+  <chain id="chain23" out="00:06:01.560">
+    <property name="length">00:06:01.600</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_11_Impfdurchbruch_3.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="shotcut:hash">dfbdffdd95709bba71e2bd656bf2b7fa</property>
+    <property name="ignore_points">0</property>
+    <property name="creation_time">2021-11-18T12:10:44</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:caption">2021_11_Impfdurchbruch_3.mkv</property>
+  </chain>
+  <chain id="chain24" out="00:06:01.560">
+    <property name="length">00:06:01.600</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_11_Impfdurchbruch_3.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="shotcut:hash">dfbdffdd95709bba71e2bd656bf2b7fa</property>
+    <property name="ignore_points">0</property>
+    <property name="creation_time">2021-11-18T12:10:44</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:caption">2021_11_Impfdurchbruch_3.mkv</property>
+  </chain>
+  <chain id="chain25" out="00:06:01.560">
+    <property name="length">00:06:01.600</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_11_Impfdurchbruch_3.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="shotcut:hash">dfbdffdd95709bba71e2bd656bf2b7fa</property>
+    <property name="ignore_points">0</property>
+    <property name="creation_time">2021-11-18T12:10:44</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:caption">2021_11_Impfdurchbruch_3.mkv</property>
+  </chain>
+  <chain id="chain26" out="00:00:30.880">
+    <property name="length">00:00:30.920</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_11_Impfdurchbruch_3a.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">19cdd19ba93e62477a2071c9a78ace3c</property>
+    <property name="shotcut:caption">2021_11_Impfdurchbruch_3a.mkv</property>
+  </chain>
+  <tractor id="tractor1" in="00:00:00.000" out="00:00:00.520">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="chain25" in="00:05:59.120" out="00:05:59.640"/>
+    <track producer="chain26" in="00:00:01.320" out="00:00:01.840"/>
+    <transition id="transition2" out="00:00:00.520">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition3" out="00:00:00.520">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="mlt_service">mix</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+    </transition>
+  </tractor>
+  <chain id="chain27" out="00:03:46.560">
+    <property name="length">00:03:46.600</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_11_Impfdurchbruch_4.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">1ea9235f6f643ff11a7c94e6a6e91169</property>
+    <property name="shotcut:caption">2021_11_Impfdurchbruch_4.mkv</property>
+  </chain>
+  <chain id="chain28" out="00:03:46.560">
+    <property name="length">00:03:46.600</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_11_Impfdurchbruch_4.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">1ea9235f6f643ff11a7c94e6a6e91169</property>
+    <property name="shotcut:caption">2021_11_Impfdurchbruch_4.mkv</property>
+  </chain>
+  <chain id="chain29" out="00:01:36.280">
+    <property name="length">00:01:36.320</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_11_Impfdurchbruch_5a.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="shotcut:hash">0f705754738a5e59a38271f8b0e24dc7</property>
+    <property name="shotcut:caption">2021_11_Impfdurchbruch_5a.mkv</property>
+    <property name="xml">was here</property>
+  </chain>
+  <tractor id="tractor2" in="00:00:00.000" out="00:00:01.000">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="chain28" in="00:03:44.520" out="00:03:45.520"/>
+    <track producer="chain29" in="00:00:11.040" out="00:00:12.040"/>
+    <transition id="transition4" out="00:00:01.000">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition5" out="00:00:01.000">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="mlt_service">mix</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+    </transition>
+  </tractor>
+  <chain id="chain30" out="00:01:36.280">
+    <property name="length">00:01:36.320</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_11_Impfdurchbruch_5a.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="shotcut:hash">0f705754738a5e59a38271f8b0e24dc7</property>
+    <property name="shotcut:caption">2021_11_Impfdurchbruch_5a.mkv</property>
+    <property name="xml">was here</property>
+  </chain>
+  <chain id="chain31" out="00:01:36.280">
+    <property name="length">00:01:36.320</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_11_Impfdurchbruch_5a.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">0f705754738a5e59a38271f8b0e24dc7</property>
+    <property name="shotcut:caption">2021_11_Impfdurchbruch_5a.mkv</property>
+  </chain>
+  <chain id="chain32" out="00:01:54.520">
+    <property name="length">00:01:54.560</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_11_Impfdurchbruch_6.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">9083830c7d9e5faa2277b97a71e61f15</property>
+    <property name="shotcut:caption">2021_11_Impfdurchbruch_6.mkv</property>
+  </chain>
+  <tractor id="tractor3" in="00:00:00.000" out="00:00:01.520">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="chain31" in="00:01:34.760" out="00:01:36.280"/>
+    <track producer="chain32" in="00:00:10.200" out="00:00:11.720"/>
+    <transition id="transition6" out="00:00:01.520">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition7" out="00:00:01.520">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <chain id="chain33" out="00:04:51.120">
+    <property name="length">00:04:51.160</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_11_Impfdurchbruch_7.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">bd6cfe820074aafdf72bc8ea854c9436</property>
+    <property name="shotcut:caption">2021_11_Impfdurchbruch_7.mkv</property>
+  </chain>
+  <tractor id="tractor4" in="00:00:00.000" out="00:00:02.240">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="chain32" in="00:01:50.320" out="00:01:52.560"/>
+    <track producer="chain33" in="00:00:00.840" out="00:00:03.080"/>
+    <transition id="transition8" out="00:00:02.240">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition9" out="00:00:02.240">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <chain id="chain34" out="00:04:51.120">
+    <property name="length">00:04:51.160</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_11_Impfdurchbruch_7.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">bd6cfe820074aafdf72bc8ea854c9436</property>
+    <property name="shotcut:caption">2021_11_Impfdurchbruch_7.mkv</property>
+  </chain>
+  <chain id="chain35" out="00:02:13.880">
+    <property name="length">00:02:13.920</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_11_Impfdurchbruch_8.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">a7eed71d02e5d961e097034a41e312e2</property>
+    <property name="shotcut:caption">2021_11_Impfdurchbruch_8.mkv</property>
+  </chain>
+  <tractor id="tractor5" in="00:00:00.000" out="00:00:01.600">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="chain34" in="00:04:47.800" out="00:04:49.400"/>
+    <track producer="chain35" in="00:00:01.000" out="00:00:02.600"/>
+    <transition id="transition10" out="00:00:01.600">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition11" out="00:00:01.600">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <chain id="chain36" out="00:02:13.880">
+    <property name="length">00:02:13.920</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_11_Impfdurchbruch_8.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">a7eed71d02e5d961e097034a41e312e2</property>
+    <property name="shotcut:caption">2021_11_Impfdurchbruch_8.mkv</property>
+  </chain>
+  <chain id="chain37" out="00:02:13.880">
+    <property name="length">00:02:13.920</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_11_Impfdurchbruch_8.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">a7eed71d02e5d961e097034a41e312e2</property>
+    <property name="shotcut:caption">2021_11_Impfdurchbruch_8.mkv</property>
+  </chain>
+  <chain id="chain38" out="00:02:13.880">
+    <property name="length">00:02:13.920</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_11_Impfdurchbruch_8.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">a7eed71d02e5d961e097034a41e312e2</property>
+    <property name="shotcut:caption">2021_11_Impfdurchbruch_8.mkv</property>
+  </chain>
+  <chain id="chain39" out="00:01:55.160">
+    <property name="length">00:01:55.200</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_11_Impfdurchbruch_9.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">eee30175ceaaa82e2f16506be2a99437</property>
+    <property name="shotcut:caption">2021_11_Impfdurchbruch_9.mkv</property>
+  </chain>
+  <tractor id="tractor6" in="00:00:00.000" out="00:00:01.360">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="chain38" in="00:02:10.840" out="00:02:12.200"/>
+    <track producer="chain39" in="00:00:00.600" out="00:00:01.960"/>
+    <transition id="transition12" out="00:00:01.360">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition13" out="00:00:01.360">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <playlist id="playlist0">
+    <property name="shotcut:video">1</property>
+    <property name="shotcut:name">V1</property>
+    <entry producer="chain12" in="00:00:00.000" out="00:00:48.600"/>
+    <entry producer="chain13" in="00:00:03.000" out="00:01:39.480"/>
+    <entry producer="chain14" in="00:00:02.160" out="00:00:19.920"/>
+    <entry producer="chain15" in="00:00:20.760" out="00:00:24.680"/>
+    <entry producer="tractor0" in="00:00:00.000" out="00:00:01.000"/>
+    <entry producer="chain16" in="00:00:09.280" out="00:00:32.040"/>
+    <entry producer="chain17" in="00:00:33.520" out="00:00:49.240"/>
+    <entry producer="chain18" in="00:00:49.960" out="00:02:02.640"/>
+    <entry producer="chain19" in="00:02:03.600" out="00:03:16.960"/>
+    <entry producer="chain20" in="00:03:20.440" out="00:03:35.200"/>
+    <entry producer="chain21" in="00:03:42.160" out="00:04:08.000"/>
+    <entry producer="chain22" in="00:04:09.240" out="00:04:31.120"/>
+    <entry producer="chain23" in="00:04:32.520" out="00:04:44.600"/>
+    <entry producer="chain24" in="00:04:45.800" out="00:04:52.240"/>
+    <entry producer="chain25" in="00:04:55.360" out="00:05:59.080"/>
+    <entry producer="tractor1" in="00:00:00.000" out="00:00:00.520"/>
+    <entry producer="chain26" in="00:00:01.880" out="00:00:29.120"/>
+    <entry producer="chain27" in="00:00:01.720" out="00:03:12.880"/>
+    <entry producer="chain28" in="00:03:14.360" out="00:03:44.480"/>
+    <entry producer="tractor2" in="00:00:00.000" out="00:00:01.000"/>
+    <entry producer="chain29" in="00:00:12.080" out="00:00:32.920"/>
+    <entry producer="chain30" in="00:00:35.680" out="00:01:14.240"/>
+    <blank length="00:00:03.080"/>
+    <entry producer="chain31" in="00:01:15.240" out="00:01:34.720"/>
+    <entry producer="tractor3" in="00:00:00.000" out="00:00:01.520"/>
+    <entry producer="chain32" in="00:00:11.760" out="00:01:50.280"/>
+    <entry producer="tractor4" in="00:00:00.000" out="00:00:02.240"/>
+    <entry producer="chain33" in="00:00:03.120" out="00:00:06.400"/>
+    <entry producer="chain34" in="00:00:17.200" out="00:04:47.760"/>
+    <entry producer="tractor5" in="00:00:00.000" out="00:00:01.600"/>
+    <entry producer="chain35" in="00:00:02.640" out="00:00:08.240"/>
+    <entry producer="chain36" in="00:00:09.160" out="00:00:11.760"/>
+    <entry producer="chain37" in="00:00:12.680" out="00:00:14.040"/>
+    <entry producer="chain38" in="00:00:16.160" out="00:02:10.800"/>
+    <entry producer="tractor6" in="00:00:00.000" out="00:00:01.360"/>
+    <entry producer="chain39" in="00:00:02.000" out="00:01:55.160"/>
+  </playlist>
+  <tractor id="tractor7" title="Shotcut version 21.10.31" in="00:00:00.000" out="00:24:06.800">
+    <property name="shotcut">1</property>
+    <property name="shotcut:projectAudioChannels">2</property>
+    <property name="shotcut:projectFolder">0</property>
+    <property name="shotcut:scaleFactor">0.787022</property>
+    <track producer="background"/>
+    <track producer="playlist0"/>
+    <transition id="transition14">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="mlt_service">mix</property>
+      <property name="always_active">1</property>
+      <property name="sum">1</property>
+    </transition>
+    <transition id="transition15">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="version">0.9</property>
+      <property name="mlt_service">frei0r.cairoblend</property>
+      <property name="threads">0</property>
+      <property name="disable">1</property>
+    </transition>
+  </tractor>
+</mlt>

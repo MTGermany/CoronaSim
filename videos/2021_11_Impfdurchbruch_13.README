@@ -1,0 +1,2 @@
+Das mkv-File war buggy. Hatte kein Ende und lies shotgun in Endlisschleife laufen. Konvertierung in mpeg (ffmpeg) klappte (In Zukunft besser mp4!)
+
