@@ -207,6 +207,7 @@ var data_rBoost=[];
 
 var data_cumTestsCalc=[]; // better calculate  from posRate
 var data_dn=[];
+var data_dnSmoothed=[]; // 1-week smoothing
 var data_dxt=[];
 var data_dyt=[];
 var data_dz=[];
@@ -748,7 +749,7 @@ var icalibmin;  // getIndexCalib(itmin_c)
 var icalibmax;  // getIndexCalibmax(itmax_c);
 
 //!!
-const calibInterval=4;  // !!! 8; calibr time interv [days] for one R0 value 
+const calibInterval=4;  // !!!! 4 or 8; calibr time interv [days] for one R0 value 
                         // better not in sync with week cycle (=7)
 const nLastUnchanged=4; // !! 4; <= nChunk-dn=nOverlap,>=3
                         // (may work otherwise but not safe)
@@ -1149,6 +1150,7 @@ function initializeData(country,insideValidation){
 
   data_cumTestsCalc=[];
   data_dn=[];
+  data_dnSmooth=[];
   data_dxt=[];
   data_dyt=[];
   data_dz=[];
@@ -1458,7 +1460,10 @@ function initializeData(country,insideValidation){
 		 -data_cumDeaths[i+tauDie-tauTest-tauPos],0.)/dxtTauPos;
   }
 
-
+  // there is a var dnSmooth in graphics but this may be smoothed with
+  // other kernel
+  
+  data_dnSmooth=smooth(data_dn,[1/7,1/7,1/7,1/7,1/7,1/7,1/7]);
   
  
 
@@ -3851,7 +3856,6 @@ Vaccination.prototype.initialize=function(country){
   this.pVaccmaxPop=0;
   for(var ia=0;ia<ageProfilePerc.length; ia++){
     this.pVaccmaxPop += this.fAge[ia]*this.pVaccmaxAge[ia];
-    console.log("ia=",ia," this.fAge[ia]*this.pVaccmaxAge[ia]=",this.fAge[ia]*this.pVaccmaxAge[ia]," this.pVaccmaxPop=",this.pVaccmaxPop);
   }
   
   for(var tau=0; tau<this.tau0; tau++){
@@ -4812,8 +4816,7 @@ function DrawSim(){
 
   //console.log("DrawSim created");
 
-  // windowG:
-  // 0=cum,1=log,2=casesReal,3=tests,4=rates,5=casesDaily,6=incidence 
+  // windowG={0=cum,1=log,2=casesReal,3=tests,4=rates,5=casesDaily,6=incid.}
 
   this.unitPers=1000;  // persons counted in multiples of unitPers
 
@@ -5006,7 +5009,7 @@ function DrawSim(){
 		 type: 0, plottype: "bars", plotLog: false, 
 		 ytrafo: [1, false,false], color:colCasesBars};
 
-  this.dataG[19]={key: "Tests pro Tag (in 100)", data: [],
+  this.dataG[19]={key: "Tests pro Tag pro (in 100)", data: [],
 		 type: 0, plottype: "points", plotLog: false, 
 		 ytrafo: [0.01, false,false], color:colTests};
 
@@ -5253,6 +5256,7 @@ DrawSim.prototype.drawAxes=function(windowG){
 
   //define y axis tick/label positions (in y, not pix)
   // actual label not defined here, from this.label_y_window[windowG]
+  // windowG={0=cum,1=log,2=casesReal,3=tests,4=rates,5=casesDaily,6=incid.}
 
   var ymin=this.yminType[windowG];
   var ymax=this.ymaxType[windowG];
@@ -5327,24 +5331,29 @@ DrawSim.prototype.drawAxes=function(windowG){
 
 
 
-  // draw name+values strings on y1 axis
+  // draw axis caption+values strings on y1 axis
+  // windowG={0=cum,1=log,2=casesReal,3=tests,4=rates,5=casesDaily,6=incid}
 
+  var xPix_yAxisCaption=(windowG==3)
+      ? this.xPix0-3.8*textsize : this.xPix0-3.0*textsize;
+  
   var label_y=this.label_y_window[windowG];
   var yPix=(windowG!=1)
     ? this.yPix0+0.01*this.hPix : this.yPix0+0.15*this.hPix;
-  ctx.setTransform(0,-1,1,0,
-		   this.xPix0-3.0*textsize,yPix);
+  ctx.setTransform(0,-1,1,0, xPix_yAxisCaption,yPix);
   ctx.fillText(label_y,0,0);
   ctx.setTransform(1,0,0,1,0,0);
 
-  // normal graphics
+  // draw values on y1 axis: normal graphics
 
+  var xPix_yAxisValStr=(windowG==3)
+      ? this.xPix0-3.2*textsize : this.xPix0-2.5*textsize;
+  
   if(!this.mirroredGraphics){ 
     for(var iy=0; iy<=ny; iy++){
       var valueStr=(windowG!=1)  ? Math.round(iy*dy) : "10^"+iy;
       //console.log("valueStr=",valueStr);
-      ctx.fillText(valueStr,
-		   this.xPix0-2.5*textsize,
+      ctx.fillText(valueStr, xPix_yAxisValStr,
 		   yPix0+(iy*dy-ymin)/(ymax-ymin)*hPix+0.5*textsize);
     }
   }
@@ -5355,15 +5364,14 @@ DrawSim.prototype.drawAxes=function(windowG){
   else{
     for(var iy=0; iy<=ny; iy++){
       var valueStr=Math.round(10*iy*dy);
-      ctx.fillText(valueStr,
-		   this.xPix0-2.5*textsize,
+      ctx.fillText(valueStr, xPix_yAxisValStr,
 		   yPix0+(iy*dy-ymin)/(ymax-ymin)*hPix+0.5*textsize);
     }
     for(var iy=1; iy<=ny; iy++){
       var valueStr=Math.round(100*iy*dy)/100; // quick-hack since neither
       //var valueStr=(iy*dy).toPrecision(2);  // toPrecision nor simple round
       ctx.fillText(valueStr,                  // OK
-		   this.xPix0-2.5*textsize,
+		   xPix_yAxisValStr,
 		   yPix0-(iy*dy-ymin)/(ymax-ymin)*hPix+0.5*textsize);
     }
   }
@@ -5459,8 +5467,15 @@ DrawSim.prototype.drawAxes=function(windowG){
     // 0=cum,1=log,2=casesReal,3=tests,4=rates,5=casesDaily,6=incidence 
 
     var line=0;
-    ctx.fillText("Kumul. Faelle:"+(casesPerc.toFixed(1))
-			    +" %, Sim. Durchseuchung:"+(Xperc.toFixed(1))+" %",
+    var i1=data_idataStart+it;
+    var dn7days=((typeof data_dnSmooth === "undefined")||(i1<0)) ? 0
+	: (i1<data_dnSmooth.length) ? data_dnSmooth[i1]
+	: data_dnSmooth[data_dnSmooth.length-1];
+    ctx.fillText("Testrate: "
+		 +((dn7days*1e6/n0).toFixed(0))
+		 +"/Wo/1 Mio"
+		 +"; Kumul. Faelle:"+(casesPerc.toFixed(1))
+		 +" %, Sim. Durchseuchung:"+(Xperc.toFixed(1))+" %",
 		 this.xPix0+xrelLeft*this.wPix,
 		 this.yPix0+(yrelTopVars-(line)*dyrel)*this.hPix);
 
@@ -5471,14 +5486,11 @@ DrawSim.prototype.drawAxes=function(windowG){
 		 this.xPix0+xrelLeft*this.wPix,
 		 this.yPix0+(yrelTopVars-(line)*dyrel)*this.hPix);
     
-    line++;
-    ctx.fillStyle="black";     var str_text="Aktuelle IFR65="+(100*IFRfun_time(it)).toFixed(2)+" %";
-    ctx.fillText(str_text,
-		 this.xPix0+xrelLeft*this.wPix,
-		 this.yPix0+(yrelTopVars-(line)*dyrel)*this.hPix);
 
     line++;
-    ctx.fillText("Insgesamt Gestorbene (sim.)="+(Math.round(n0*corona.z)),
+    ctx.fillStyle="black";
+    ctx.fillText("Insgesamt Gestorbene (sim.)="+(Math.round(n0*corona.z))
+		 +" Aktuelle IFR65="+(100*IFRfun_time(it)).toFixed(2)+" %",
 		 this.xPix0+xrelLeft*this.wPix,
 		 this.yPix0+(yrelTopVars-(line)*dyrel)*this.hPix);
 
@@ -5910,6 +5922,8 @@ DrawSim.prototype.draw=function(it){
 		this.dataG[38].data.length,
 		"");
   }
+
+  // windowG={0=cum,1=log,2=casesReal,3=tests,4=rates,5=casesDaily,6=incid.}
 
   this.mirroredGraphics=((windowG==2)||(windowG==5)||(windowG==6));
 

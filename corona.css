@@ -783,6 +783,12 @@ input[type=range]::-moz-range-track{
   z-index: 4; 
 }
 
+#video{ 
+  position: absolute;
+  top:     0.0vh; 
+  right:   50vmin;
+  z-index: 4; /* the higher, the more on top */
+}
 
 #startStopDiv{
   position: absolute;
