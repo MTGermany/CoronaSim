@@ -75,6 +75,7 @@ grep Italy data/githubWithTests.json >> data/tmp.json
 grep Poland data/githubWithTests.json >> data/tmp.json
 grep Spain data/githubWithTests.json >> data/tmp.json
 grep Sweden data/githubWithTests.json >> data/tmp.json
+grep Denmark data/githubWithTests.json >> data/tmp.json
 grep Switzerland data/githubWithTests.json >> data/tmp.json
 grep GRC data/githubWithTests.json >> data/tmp.json
 grep ISR data/githubWithTests.json >> data/tmp.json
@@ -137,6 +138,7 @@ perl -i -p -e "s/ITA/Italy/g" data/tmp2.json
 perl -i -p -e "s/POL/Poland/g" data/tmp2.json
 perl -i -p -e "s/ESP/Spain/g" data/tmp2.json
 perl -i -p -e "s/SWE/Sweden/g" data/tmp2.json
+perl -i -p -e "s/DNK/Denmark/g" data/tmp2.json
 perl -i -p -e "s/CHE/Switzerland/g" data/tmp2.json
 perl -i -p -e "s/GRC/Greece/g" data/tmp2.json
 perl -i -p -e "s/ISR/Israel/g" data/tmp2.json
@@ -229,6 +231,7 @@ grep Italy data/github.json >> data/tmp.json
 grep Poland data/github.json >> data/tmp.json
 grep Spain data/github.json >> data/tmp.json
 grep Sweden data/github.json >> data/tmp.json
+grep Denmark data/github.json >> data/tmp.json
 grep Switzerland data/github.json >> data/tmp.json
 grep Greece data/github.json >> data/tmp.json
 grep Israel data/github.json >> data/tmp.json

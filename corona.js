@@ -56,9 +56,6 @@ TODO
 // general global variables affecting global appearance
 //##################################################################
 
-var measuresView=true;  // false: R0 and parameter view
-                    // true: "measures" view
-
 
 // useLiveData=true: Obtain github data "live" via the fetch command
 // Unfortunately, the fetch command is sometimes unstable
@@ -71,6 +68,9 @@ var useLiveDataInit=true;  //!! will be changed by upload script, 2 versions
 var useLiveData=useLiveDataInit;
 
 var loggingDebug=false; //!! global var for testing functions inside calibr
+
+var measuresView=true;  // false: R0 and parameter view
+                    // true: "measures" view
 
 var showCoronaSimulationDe=true; // bottom right
 
@@ -236,6 +236,7 @@ const countryGerList={
   "Poland": "Polen",
   "Spain": "Spanien",
   "Sweden": "Schweden",
+  "Denmark": "Daenemark",
   "Switzerland": "Schweiz",
   "Greece"     : "Griechenland",
   "Portugal": "Portugal",
@@ -263,6 +264,7 @@ const n0List={
   "Poland"        :   38400000,
   "Spain"         :   49300000,
   "Sweden"        :   10000000,
+  "Denmark"       :    5813300,
   "Switzerland"   :    8300000,
   "Greece"        :   10700000,
   "Portugal"      :   10196707,
@@ -279,9 +281,11 @@ const n0List={
 
 var n0=n0List["Germany"];  // #persons in Germany
 
-// https://www.populationpyramid.net
-// cd populationStructure
-// run.sh
+// cd ~/versionedProjects/CoronaSim/populationStructure 
+// goto https://www.populationpyramid.net - select country - download csv
+// - move to this dir and name countries as in the .json files
+// !! comment out title line (otherwise heineous bug, one line too many
+// run.sh (no changes needed)
 
 const ageProfileListPerc={ // age groups [0-10,-20,-30,-40,-50,-60,-70,-80,-90, 90+]
  "Austria"    : [10,10,13,14,13,16,11,9,4,1],
@@ -298,6 +302,7 @@ const ageProfileListPerc={ // age groups [0-10,-20,-30,-40,-50,-60,-70,-80,-90, 
   "South Africa" : [20,17,17,17,12,8,5,2,1,0.1],
   "Spain"    : [9,10,10,13,17,15,11,8,5,1],
   "Sweden"    : [12,11,13,13,13,13,11,10,4,1],
+  "Denmark"    : [11,12,13,11,13,14,11,10,4,1],
   "Switzerland"    : [10,10,12,14,14,15,11,9,4,1],
   "United Kingdom" : [12,11,13,14,13,14,11,8,4,1],
   "US"    : [12,13,14,13,12,13,12,7,3,1],
@@ -306,31 +311,7 @@ const ageProfileListPerc={ // age groups [0-10,-20,-30,-40,-50,-60,-70,-80,-90, 
   "SK_Dresden"        : [9,10,11,13,12,16,12,9,6,1]
 }
   
-/* 
-//const ageProfileListPerc={ // age groups [0-30,-40,-50,-60,-70,-80,-90, 90+]
-  "Germany"       :     [30,13,12,20,12,9,6,1],
-  "Austria"       :     [32,14,13,16,11,9,4,1],
-  "Czechia"       :     [31,14,17,12,13,9,3,1],
-  "France"        :     [35,12,13,13,12,8,5,1],
-  "United Kingdom":     [36,14,13,14,11,8,4,1],
-  "Italy"         :     [28,12,15,16,12,10,6,1],
-  "Poland"        :     [32,16,14,12,14,7,4,1],
-  "Spain"         :     [29,13,17,15,11,8,5,1],
-  "Sweden"        :     [36,13,13,13,11,10,4,1],
-  "Switzerland"   :     [32,14,14,15,11,9,4,1],
-  "Greece"        :     [29,13,15,14,12,9,6,1],
-  "Portugal"      :     [29,12,16,14,13,10,6,1],
-  "Israel"        :     [49,13,12,9,8,5,2,1],
-  "India"         :     [53,16,12,9,6,3,1,0.1],
-  "Russia"        :     [34,17,14,13,12,6,3,1],
-  "US"            :     [39,13,12,13,12,7,3,1],
-  "Australia"     :     [32,14,13,16,11,9,4,1],
-  "South Africa"  :     [55,17,12,8,5,2,1,0.1],
-  "LK_Erzgebirgskreis": [30,13,12,16,12,9,6,1][9,10,11,13,12,16,12,9,6,1], // as Germany
-  "LK_Osterzgebirge"  : [30,13,12,16,12,9,6,1],
-  "SK_Dresden"        : [30,13,12,16,12,9,6,1]
-}
-*/
+
   
 // will be only relevant if "xyz no longer <<1 ("Durchseuchung")
 // will be later changed to fracDie=fracDieInit*pTest/pTestInit;
@@ -344,6 +325,7 @@ const fracDieInitList={
   "Poland"        : 0.0040,
   "Spain"         : 0.0040,
   "Sweden"        : 0.0040,
+  "Denmark"       : 0.0040,
   "Switzerland"   : 0.0055,
   "Greece"        : 0.0055,
   "Portugal"      : 0.0055,
@@ -369,6 +351,7 @@ const tauDieList={
   "Poland"        : 19,
   "Spain"         : 14,
   "Sweden"        : 19,
+  "Denmark"       : 19,
   "Switzerland"   : 19,
   "Greece"        : 14,
   "Portugal"      : 17,
@@ -397,6 +380,7 @@ const tauRecoverList={
   "Poland"        : 25,
   "Spain"         : 25,
   "Sweden"        : 25,
+  "Denmark"       : 25,
   "Switzerland"   : 18,
   "Greece"        : 18,
   "Portugal"      : 18,
@@ -421,6 +405,7 @@ const timeShiftMutationDeltaRefGB={
   "Poland"        : 40,
   "Spain"         : 40,
   "Sweden"        : 40,
+  "Denmark"       : 40,
   "Switzerland"   : 40,
   "Greece"        : 40,
   "Portugal"      : 40,
@@ -763,7 +748,7 @@ var icalibmin;  // getIndexCalib(itmin_c)
 var icalibmax;  // getIndexCalibmax(itmax_c);
 
 //!!
-const calibInterval=8;  // !!! 8; calibr time interv [days] for one R0 value 
+const calibInterval=4;  // !!! 8; calibr time interv [days] for one R0 value 
                         // better not in sync with week cycle (=7)
 const nLastUnchanged=4; // !! 4; <= nChunk-dn=nOverlap,>=3
                         // (may work otherwise but not safe)
@@ -3866,6 +3851,7 @@ Vaccination.prototype.initialize=function(country){
   this.pVaccmaxPop=0;
   for(var ia=0;ia<ageProfilePerc.length; ia++){
     this.pVaccmaxPop += this.fAge[ia]*this.pVaccmaxAge[ia];
+    console.log("ia=",ia," this.fAge[ia]*this.pVaccmaxAge[ia]=",this.fAge[ia]*this.pVaccmaxAge[ia]," this.pVaccmaxPop=",this.pVaccmaxPop);
   }
   
   for(var tau=0; tau<this.tau0; tau++){
@@ -3883,10 +3869,10 @@ Vaccination.prototype.initialize=function(country){
   this.corrFactorIFR0=this.corrFactorIFR;
   this.ageGroup=ageProfilePerc.length-1; // actual age group to be vacc
 
-  if(false){console.log("\n\nVaccination.initialize: this.corrFactorIFR0=",
+  if(true){console.log("\n\nVaccination.initialize: this.corrFactorIFR0=",
 	      this.corrFactorIFR0, " this.pVaccmaxPop=",this.pVaccmaxPop,
-	      " this.pVaccTau=",this.pVaccTau,
-	      " this.pVaccTauAge=",this.pVaccTauAge,
+	      " this.fAge=",this.fAge,
+	     // " this.pVaccTauAge=",this.pVaccTauAge,
 			"\n\n");}
 }
 
