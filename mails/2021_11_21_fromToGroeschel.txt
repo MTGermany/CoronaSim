@@ -1,0 +1,27 @@
+
+Sehr geehrter Herr Groeschel,
+
+in den Standardeinstellungen verwende ich den Shutdown-Grad, wie er als "Stringency Index" von Our World in Data angegeben wird. Es ist natuerlich immer problematisch, eine Vielfalt von Shutdown-Massnahmen auf eine einzige Zahl zu kondensieren (ich persoenlich fand auch die Shutdown-Massnahmen am 10. Augiust nicht so viel schlimmer als bis vor der aktuellen verschaerfung), aber der OWID-Stringency-Index ist wohl das beste, was wir haben, zumal er in einheitlicher Form fuer fast alle Lander verfuegbar ist: Fuer meine Makro-Simulation benoetige ich genau so ein 1d-Mass.
+
+Kontrafaktische Szenarien wie das Festsetzen des Shutdown-Grades auf den Wert am 10. August (59%) koennen Sie aber sehr gut mit meinen Simulator simulieren, indem Sie einfach den Shutdown-Regler am 10./11. August bewegen (vor und wieder zurueck, wenn Sie ihn nur auf den damaligen Wert fixieren wollen): Sobald ein oder mehrere der Regler, die sich sonst datengetrieben aendern, vom Nutzer selbst bewegt werden, hoert der Datenfeed fuer die jeweiligen Regler auf und in der Simulation startet das entsprechende kontrafaktische Szenario.
+
+Beigelegt der Screenshot fuer die Fixierung des Shutdown-Grades am 11. August: Die Welle waere ausgeblieben! (sie wuerde sich im Dezember aufbauen, aber duch geringes Verstaerken der Boosterung, also Projektion eines counterfactual Szenarios, wuerde sie dann ganz ausgeblieben sein.)
+
+
+ Mit freundlichen Grüßen,
+
+ Martin Treiber
+
+
+
+
+Sehr geehrter Dr. Treiber,
+
+seit Ende Juli verfolge ich den extremen Anstieg positiver Tests in verschiedenen Regionen. Trotz hoher Impfrate gibt es Spitzenwerte für Inzidenzen in Israel und auch sehr signifikant auf den Faeroer Inseln und der Isle of Man. Israel hat nicht nur mit den Booster-Impfungen sondern auch mit der Rücknahme von Lockerungen reagiert. Die Angaben für den Shutdown-Grad in Deutschland kann ich eigentlich nicht nachvollziehen, aber tatsächlich gab es am 28.8. nur 25.000 Zuschauer bei Bayern im Stadion um am 22.10. waren es bereits 60.000! Für meine eigene Abschätzung habe ich die Wirksamkeit der Impfung nach 160 Tagen auf Null reduziert und denke, dass nicht Herr Kimmich für die aktuelle Misere verantwortlich ist und männliche Säuglinge nicht der Gefahr einer Herzmuskelentzündung ausgesetzt werden sollen.
+
+Vielleicht könnten Sie bei Ihrer letzten Simulation den Shutdown-Grad am 10. August ebenfalls fixieren, damit die Unsinngkeit der alternativlosen Fixierung auf die 2G-Regel (Ganz viele Kontakte & Gänzlich ungetestet) sichtbar wird.
+
+Mit freundlichen Grüßen
+
+Wolfgang Gröschel
+

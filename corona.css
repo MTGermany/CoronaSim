@@ -180,7 +180,7 @@ a:hover {
   top:   9vh; 
   left:   20vw;
   width:  60vw;
-  height:  13vh;
+  height:  12.5vmin;
   background-color: rgb(222,255,222);
   margin-right: 0vw;
   margin-left: 0vw;
@@ -373,7 +373,7 @@ a:hover {
 
 #sliders2{      /* normal portrait */
   left:   12vw;
-  width:  60vw;
+  width:  65vw;
 }
 
 #contents{ /* contains the canvas */

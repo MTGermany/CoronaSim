@@ -1,20 +1,20 @@
-#meine Laender der Corona-Simualtion.de, 2021-11-19
-#Land  ImpfquoteVollst[%]  Booster[%]  AvgTests/1Mio/Wo  Wocheninz  Bem
-D      70.6		   5.6	       4563		 370	    up
-AUT    65.6		   10.0	       66200		 1000	    up
-CZ     57.0		   5.5	       11500		 820	    up
-FRA    75.1		   7.0	       8400		 140	    (up)
-UK     75.3		   21.5	       16800		 420	    level
-IT     73.1		   5.5	       11400		 95	    (up)
-PL     51.8		   4.5	       5640		 300	    up from zero
-SPA    76.6		   6.8	       4740		 70	    (up)
-SWE    71.8		   0	       1970		 50	    level
-DENM   76.6		   0	       36900		 450	    up
-SWI    67.2		   0	       6100		 360	    up
-GR     60.4		   6.8	       37800		 425	    peak
-PORT   88.0		   0	       6190		 115	    (up)
-ISR    67.7		   44.3	       8150		 40	    (down)
-IND    49.0		   0	       910		 8	    down
-RUS    33.8		   1.8	       3490		 180	    peak
-USA    66.0		   10.2	       4280		 200	    up last week
-SA     21.8		   0	       450		 1	    down
+#meine Laender der Corona-Simulation.de, 2021-11-19
+#Land  0=Eur ImpfquoteVollst[%]  Booster[%]  AvgTests/1Mio/Wo  Wocheninz  Bem
+D      0     70.6	   	 5.6	     4563	       370	    up
+AUT    0     65.6	   	 10.0	     66200	       1000	    up
+CZ     0     57.0	   	 5.5	     11500		 820	    up
+FRA    0     75.1	   	 7.0	     8400		 140	    (up)
+UK     0     75.3	   	 21.5	     16800	       420	    level
+IT     0     73.1	   	 5.5	     11400	       95	    (up)
+PL     0     51.8	   	 4.5	     5640	       300  up from zero
+SPA    0     76.6	   	 6.8	       4740		 70	    (up)
+SWE    0     71.8	   	 0	       1970		 50	    level
+DENM   0     76.6	   	 0	       36900		 450	    up
+SWI    0     67.2	   	 0	       6100		 360	    up
+GR     0     60.4	   	 6.8	       37800		 425	    peak
+PORT   0     88.0	   	 0	       6190		 115	    (up)
+ISR    1     67.7	   	 44.3	       8150		 40	    (down)
+IND    1     49.0	   	 0	       910		 8	    down
+RUS    1     33.8	   	 1.8	       3490		 180	    peak
+USA    1     66.0	   	 10.2	       4280		 200 up last week
+SA     1     21.8	   	 0	       450		 1	    down

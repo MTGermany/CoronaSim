@@ -86,9 +86,11 @@ var activateAnnotations=true; // if true, lines/curves can be drawn with mouse
 
 
 var country="Germany";
-var country2=""; // to be defined/needed for test data if(useLandkreise)
+var country2=""; // needed if the two databases have different country abbrev
 var countryGer="Deutschland";
-var useLandkreise=false; // MT 2020-12-07: =true for new RKI Landkreis data
+// var useLandkreise=false; // MT 2021-11: Deactivated since
+// permanent problems. If reactivate, get unique format for all at
+// initializeData(country,..)
 
 
 document.getElementById("title").innerHTML=
@@ -107,7 +109,7 @@ const TINY_VAL=1e-8;
 
 // initial window; consolidate with first option value of html!!
 // windowG:
-// 0=cum,1=log,2=casesReal,3=tests,4=rates,5=casesDaily,6=incidence
+// 0=cum,1=log,2=casesReal,3=tests,4=rates,5=casesDaily,6=incid,7=causeEffect
 
 var windowG=6; 
 
@@ -217,7 +219,7 @@ var data_pTestModel=[]; // sim. "Hellfeld" P(tested|infected) if f(#tests)=true
 
 var data_dxIncidence=[]; // weekly incidence per 100 000 from data
 var data_dzIncidence=[]; // weekly incidence per 100 000 from data
-
+var data_R=[]; // do not use OWID number because it assumes too high gen time
 var pTest_weeklyPattern=[]; // constant extrapolation with weekly pattern
 var dn_weeklyPattern=[];  // constant extrapolation of #tests "
 
@@ -468,7 +470,7 @@ var usePrevious=usePreviousGlob; // if *Glob=false,
 var itmaxPrev=0;     // maximum it reached in previous simulation
 var simPrevious=[]; // store previous sim data outside DrawSim (created anew)
                     // needed for validation or if doing mutation scenario
-for (var iq=0; iq<=40; iq++){simPrevious[iq]=[];} // ! def simPrevious
+for (var iq=0; iq<=48; iq++){simPrevious[iq]=[];} // !! def simPrevious
 var nDaysValid=0;     // validation days (default=0=no validation)
 
 
@@ -777,9 +779,7 @@ var firstR0=0;
 var IFRinit=0.006;
 var IFRinterval=21; //28
 var IFRinterval_last_min=21;  //21
-var IFR_dontUseLastDaysReg=0;    //regular: all data used
-var IFR_dontUseLastDaysSax=IFRinterval; // !! tackles "Nachmeldungen" lag
-var IFR_dontUseLastDays=IFR_dontUseLastDaysReg;
+var IFR_dontUseLastDays=0;    //regular: all data used
 var IFR65time=[];
 
 
@@ -942,7 +942,7 @@ function insertLeadingZeroes(dateStr){
 
 
 //##############################################################
-// get the data
+// getData: get the data
 //!! also called in validation, so do not use reset validation operations
 // if called inside validation, insideValidation should be true
 //##############################################################
@@ -954,13 +954,8 @@ function initializeData(country,insideValidation){
   country2=(country==="United Kingdom") ? "England" :
     (country==="South Africa") ? "SouthAfrica" :country;
   
-  useLandkreise=(country==="LK_Erzgebirgskreis") // saxon!!
-    || (country==="LK_Osterzgebirge") || (country==="SK_Dresden");
   
-  IFR_dontUseLastDays=(useLandkreise)
-    ? IFR_dontUseLastDaysSax : IFR_dontUseLastDaysReg;
-  if(useLandkreise){country2="Germany";}
-  useLiveData=(useLandkreise) ? false : useLiveDataInit;
+  useLiveData=useLiveDataInit;
   console.log("\n\n======================================================",
 	      "\nin initializeData(country): country=",country,
 	      " country2=",country2,
@@ -973,11 +968,7 @@ function initializeData(country,insideValidation){
   // MT 2020-09  // [] access for strings works ONLY with "" or string vars
   // access ONLY for literals w/o string ""
 
-  var data=(useLandkreise) ? dataRKI_orig[country] : dataGit_orig[country];
-  //console.log("dataGit_orig[country]=",dataGit_orig[country]);
-  if(insideValidation){
-    data=(useLandkreise) ? dataRKI[country] : dataGit[country];}
-
+  var data=(insideValidation) ? dataGit[country] : dataGit_orig[country];
   
   
   // !! knock off the last datum in German data since often delayed
@@ -1024,7 +1015,6 @@ function initializeData(country,insideValidation){
   
   // initializeData: define index shift di2=i2-i1 for same date
   // (define from the end since some data weekly (!) at very beginning)
-  // (see also !! if useLandkreise)
   
   var dataMinDate=new Date(dataMinDateStr);
   var dataMaxDate=new Date(dataMaxDateStr);
@@ -1184,15 +1174,14 @@ function initializeData(country,insideValidation){
     var i2=i+di2; // di2 defined earlier in this function initializeData
     //console.log("i2=",i2," data2[i2]=",data2[i2]);
     if((i2>=0)&&(i2<data2.length)
-       &&(!(typeof data2[i2].total_cases === "undefined"))
-       &&(!useLandkreise)){
+       &&(!(typeof data2[i2].total_cases === "undefined"))){
       data_cumCases[i]=Math.max(data_cumCases[i],data2[i2].total_cases);
     }
 
 
     
     data_cumDeaths[i]=data[i]["deaths"];
-    data_cumRecovered[i]=(useLandkreise) ? 0 : data[i]["recovered"];
+    data_cumRecovered[i]=data[i]["recovered"];
     data_cumCfr[i]=(data_cumCases[i]==0)
       ? 0 : data_cumDeaths[i]/data_cumCases[i];
   }
@@ -1245,7 +1234,6 @@ function initializeData(country,insideValidation){
   
   // debug 1: is data=dataRKI[country] or =dataGit[country] there?
   if(false){ // => "final debugging"
-  //if(useLandkreise){
     console.log("initializeData round 1:",
 		" check data=dataRKI[country] or =dataGit[country]");
     for(var i=0; i<data.length; i++){
@@ -1355,11 +1343,6 @@ function initializeData(country,insideValidation){
   for(var i=1; i<data.length; i++){
     data_rVacc_unsmoothed[i]=(data_cumVacc[i]-data_cumVacc[i-1])/n0;
     data_rBoost_unsmoothed[i]=(data_cumBoost[i]-data_cumBoost[i-1])/n0;
-    if(useLandkreise){
-      data_rVacc_unsmoothed[i] *= n0/n0List[country2]; //!! n0/n0Germany n02
-      data_rBoost_unsmoothed[i] *= n0/n0List[country2]; //!! n0/n0Germany n02
-      //console.log("n0=",n0," n0List[\"Germany\"]=",n0List["Germany"]);
-    }
     if(false){
       console.log("i=",i," date=",data[i]["date"],
 		  " data_cumBoost[i]=",data_cumBoost[i],
@@ -1630,7 +1613,6 @@ function initializeData(country,insideValidation){
       "data2.length=",data2.length);
 
     for(var i=0; i<data.length; i++){
-      //var logging=useLandkreise&&(i>data.length-10);
       //var logging=true;
       //var logging=false;
       //var logging=(i>data.length-10);
@@ -1695,7 +1677,6 @@ function initializeData(country,insideValidation){
   if(false){
     console.log("\ninitializeData finished: final weekly pattern:");
     for(var i=0; i<data.length; i++){
-      //var logging=useLandkreise&&(i>data.length-10);
       var logging=(i>data.length-10);
       if(logging){
 	var is=(70000+i-data.length)%7;
@@ -2466,7 +2447,8 @@ function calibrate(){
     var R0_avg=getArithmeticAverage(R0time,jmin,jmax);
     var R0_var=getVariance(R0time,jmin,jmax);
     var trendResVar=getTrendResidualVar(R0time,jmin,jmax);
-    console.log("daySensitivStart=",str_sensitivStart,
+    if(false){
+      console.log("daySensitivStart=",str_sensitivStart,
 		"daySensitivEnd=",str_sensitivEnd,
 		" stringencySensitivityLin=",stringencySensitivityLin,
 		" season_fracYearPeak=",season_fracYearPeak,
@@ -2475,7 +2457,8 @@ function calibrate(){
 		" R0_avg=",R0_avg," jmin=",jmin," jmax=",jmax,
 		" R0time.length=",R0time.length,
 		"\nvarcoeff_linregr=",Math.sqrt(trendResVar[2])/R0_avg," trendResVar=",trendResVar,
-		"");
+		  "");
+    }
   }
 
 
@@ -3134,24 +3117,33 @@ function savePreviousSim(){ // save relevant data of drawsim for
   // in some combinations, drawsim not defined at the start
   if( typeof drawsim === "undefined"){drawsim=new DrawSim();}
 
+
+  // !!! store data of previous sim for display at the next
   
-  indicesPrev=[34,35,36,37,38,39,40];
+  indicesPrev=[34,35,36,37,38,39,40,44,47,49,51];
   for(var iq=0; iq<indicesPrev.length; iq++){
     simPrevious[indicesPrev[iq]]=[];
   }
+
+  // data quantities
   
   for(var it=0; it<itPresent; it++){
       simPrevious[34][it]=drawsim.dataG[0].data[it];  // "Insg pos Getestete"
       simPrevious[35][it]=drawsim.dataG[2].data[it];  // "Insgesamt Gestorbene"
   }
-    
+
+  // sim quantities
+  
   for(var it=0; it<itmaxPrev; it++){
-    //for(var it=0; it<Math.max(itPresent,itmaxPrev); it++){
       simPrevious[36][it]=drawsim.dataG[23].data[it]; // "Sim Neuinfiz/Tag"
       simPrevious[37][it]=drawsim.dataG[28].data[it]; // "Sim Gestorbene"
       simPrevious[38][it]=drawsim.dataG[32].data[it]; //Sim weekly inc cases
       simPrevious[39][it]=drawsim.dataG[33].data[it]; //Sim weekly inc deaths
       simPrevious[40][it]=drawsim.dataG[29].data[it]; // "Sim Pos pro Tag"
+      simPrevious[44][it]=drawsim.dataG[41].data[it]; // Grad Lockdown
+      simPrevious[47][it]=drawsim.dataG[46].data[it]; // Booster
+      simPrevious[49][it]=drawsim.dataG[48].data[it]; // R-Wert
+      simPrevious[51][it]=drawsim.dataG[50].data[it]; // OK by reference
   }
 }
 
@@ -4177,8 +4169,8 @@ CoronaSim.prototype.init=function(itStart,logging){
 
   // loggingDebug and logging global variables
   // logging can be set controlled at "here logging can be true"
-  loggingDebug=logging&&useLandkreise;
-  //loggingDebug=false; 
+  loggingDebug=false; 
+  //loggingDebug=logging; 
 
   if(loggingDebug){
     console.log("\n\n\ncorona.init warmup before loop:  it0=",it0,
@@ -4816,12 +4808,13 @@ function DrawSim(){
 
   //console.log("DrawSim created");
 
-  // windowG={0=cum,1=log,2=casesReal,3=tests,4=rates,5=casesDaily,6=incid.}
+  // windowG={0=cum,1=log,2=casesReal,3=tests,4=rates,
+  // 5=casesDaily,6=incid,7=causeEffect}
 
   this.unitPers=1000;  // persons counted in multiples of unitPers
 
-  this.yminType=[0,1,0,0,0,0,0];  
-  this.ymaxType=[1,6,2,2,2,2,1]; 
+  this.yminType=[0,1,0,0,0,0,0,0];  
+  this.ymaxType=[1,6,2,2,2,2,1,1.5]; 
 
   this.mirroredGraphics=false; // if death counts upside down
 
@@ -4851,11 +4844,18 @@ function DrawSim(){
   colInfectedTot="rgb(0,0,220)";
   colTests="rgb(0,0,210)";
   colStringency="rgb(0,0,150)";
+  colStringencyValid="rgb(120,120,255)";
   colCmp="rgba(255,50,0,0.3)";
-
+  colVacc="rgb(0,180,0)";
+  colVaccValid="rgb(100,255,100)";
+  colBoost="rgb(0,100,60)";
+  colBoostValid="rgb(0,255,150)";
+  colR="rgb(230,0,0)";
+  colRValid="rgb(255,150,0)";
 
 
   // central container for the graphics data
+  // !! max index 48; also update all instances of simPrevious (2021-11-21)
 
   this.dataG=[];
   this.xtPast=0; // needed to derive yt from balance since no longer calc.
@@ -4872,7 +4872,6 @@ function DrawSim(){
                           // 2=more speculative derivation (IFR)
                           // 3=simulation, 4=speculative simulation
 		 plottype: "lines",  // in "lines", "points", "bars"
-		 plotLog: false,  // if true, logarithm plotted
 		 ytrafo: [0.001, false,false],// [scalefact, half, mirrored]
 		 color:colCasesCumSim
 		}
@@ -4885,7 +4884,6 @@ function DrawSim(){
                           // 2=more speculative derivation (IFR)
                           // 3=simulation, 4=speculative simulation
 		 plottype: "lines",  // in "lines", "points", "bars"
-		 plotLog: false,  // if true, logarithm plotted
 		 ytrafo: [0.001, false,false],// [scalefact, half, mirrored]
 		 color:colCasesCumValid
 		}
@@ -4893,39 +4891,39 @@ function DrawSim(){
   // cumulate data: data key not displayed
   this.dataG[1]={key: "Insg. Genesene unter den Getesteten (Daten und Sim, in 1000)",
 		 data:[],
-		 type: 3, plottype: "lines", plotLog: false, 
+		 type: 3, plottype: "lines", 
 		 ytrafo: [0.001, false,false],
 		 color:colCasesRecovCumSim};
 
   // cumulate data: data key not displayed
   this.dataG[2]={key: "Insg. Gestorbene (Daten und Sim, in 100)", data: [],
-		 type: 3, plottype: "lines", plotLog: false, 
+		 type: 3, plottype: "lines",  
 		 ytrafo: [0.01, false,false],
 		 color:colDead};
   
   this.dataG[35]={key: "Insg. Gestorbene (letzte Sim, in 100)",
                                    //Insgesamt Gestorbene (in 100)", 
 		  data: simPrevious[35], // simPrevious[][] defined in validate()
-		  type: 3, plottype: "lines", plotLog: false, 
+		  type: 3, plottype: "lines",  
 		  ytrafo: [0.01, false,false],
 		  color:colDeadValid};
 
   this.dataG[4]={key: "Insgesamt positiv Getestete (in 1000)",data: [],
-		 type: 0, plottype: "points", plotLog: false, 
+		 type: 0, plottype: "points",  
 		 ytrafo: [0.001, false,false], color:colCasesCum};
 
   // cumulate data: data key not displayed
   this.dataG[5]={key: "Insg. Genesene unter den Getesteten (Daten, in 1000)",
 		 data:[],
-		 type: 0, plottype: "points", plotLog: false, 
+		 type: 0, plottype: "points",  
 		 ytrafo: [0.001, false,false], color:colCasesRecovCum};
 
   this.dataG[6]={key: "Insgesamt Gestorbene (in 100)", data: [],
-		 type: 0, plottype: "points", plotLog: false, 
+		 type: 0, plottype: "points",  
 		 ytrafo: [0.01, false,false], color:colDead};
 
  // this.dataG[7]={key: "#Tote ges/#positiv getestet ges", data: [],
-//		 type: 0, plottype: "points", plotLog: false,
+//		 type: 0, plottype: "points", 
 //		  ytrafo: [1, false,false], color:colPosrateCum};
 
 
@@ -4935,35 +4933,35 @@ function DrawSim(){
 
 
   this.dataG[8]={key: "Aktuell real infizierte Personen", data: [],
-		 type: 4, plottype: "lines", plotLog: true, 
+		 type: 4, plottype: "lines",  
 		 ytrafo: [1, false,false],
 		 color:colInfectedReal};
 
   this.dataG[9]={key: "Insgesamt positiv Getestete", data: [],
-		 type: 3, plottype: "lines", plotLog: true, 
+		 type: 3, plottype: "lines",  
 		 ytrafo: [1, false,false],
 		 color:colCasesCumSim};
 
   this.dataG[12]={key: "Insgesamt Gestorbene", data: [],
-		  type: 3, plottype: "lines", plotLog: true, 
+		  type: 3, plottype: "lines",  
 		  ytrafo: [1, false,false],
 		  color:colDead};
 
   this.dataG[13]={key: "Insgesamt positiv Getestete", data: [],
-		  type: 0, plottype: "points", plotLog: true, 
+		  type: 0, plottype: "points",  
 		  ytrafo: [1, false,false],
 		  color:colCasesCum};
 
   this.dataG[14]={key: "Insgesamt Genesene unter den Getesteten (Daten)", data: [],
-		  type: 0, plottype: "points", plotLog: true, 
+		  type: 0, plottype: "points",  
 		  ytrafo: [1, false,false], color: colCasesRecovCum};
 
   this.dataG[15]={key: "Insgesamt Gestorbene", data: [],
-		  type: 0, plottype: "points", plotLog: true, 
+		  type: 0, plottype: "points",  
 		  ytrafo: [1, false,false], color:colDead};
 
   this.dataG[25]={key: "Simulierte Durchseuchung", data: [],
-		 type: 4, plottype: "lines", plotLog: true, 
+		 type: 4, plottype: "lines",  
 		 ytrafo: [1, false,false], color:colInfectedTot};
 
 
@@ -4972,31 +4970,31 @@ function DrawSim(){
   // ytrafo=[scalefact, half, mirrored] 
 
   this.dataG[16]={key: "Test-Positive pro Tag", data: [],
-		 type: 0, plottype: "bars", plotLog: false, 
+		 type: 0, plottype: "bars",  
 		 ytrafo: [0.1, true,false], color:colCasesBars}; 
                  // real: scale*10
 
   this.dataG[17]={key: "Gestorbene pro Tag", data: [],
-		 type: 0, plottype: "bars", plotLog: false, 
+		 type: 0, plottype: "bars",  
 		 ytrafo: [1, true,true], color:colDead};
 
   this.dataG[23]={key: "Neuinfizierte pro Tag (Sim, in 10)", data: [],
-		 type: 4, plottype: "lines", plotLog: false, 
+		 type: 4, plottype: "lines",  
 		 ytrafo: [0.01, true,false], color:colInfectedLin};
                  // real: scale*10
   this.dataG[36]={key: "Neuinfizierte pro Tag (letzte Sim, in 10)",
                        //Simulierte Neuinfizierte pro Tag (in 10)", 
                   data: simPrevious[36],
-		 type: 4, plottype: "lines", plotLog: false, 
+		 type: 4, plottype: "lines",  
 		 ytrafo: [0.01, true,false], color:colInfectedLinValid};
                  // real: scale*10
 
   this.dataG[28]={key: "Gestorbene pro Tag (Sim)", data: [],
-		 type: 4, plottype: "lines", plotLog: false, 
+		 type: 4, plottype: "lines",  
 		 ytrafo: [1, true,true], color:colDeadSim};
   this.dataG[37]={key: "Gestorbene pro Tag (letzte Sim)", // sim Gestorbene
                  data: simPrevious[37],
-		 type: 4, plottype: "lines", plotLog: false, 
+		 type: 4, plottype: "lines",  
 		 ytrafo: [1, true,true], color:colDeadValid};
 
 
@@ -5006,38 +5004,38 @@ function DrawSim(){
   // ytrafo=[scalefact, half, mirrored]
 
   this.dataG[18]={key: "Test-Positive pro Tag", data: [],
-		 type: 0, plottype: "bars", plotLog: false, 
+		 type: 0, plottype: "bars",  
 		 ytrafo: [1, false,false], color:colCasesBars};
 
   this.dataG[19]={key: "Tests pro Tag pro (in 100)", data: [],
-		 type: 0, plottype: "points", plotLog: false, 
+		 type: 0, plottype: "points",  
 		 ytrafo: [0.01, false,false], color:colTests};
 
   this.dataG[24]={key: "Neuinfizierte pro Tag (Sim, in 10)", data: [],
-		 type: 4, plottype: "lines", plotLog: false, 
+		 type: 4, plottype: "lines",  
 		 ytrafo: [0.1, false,false], color:colInfectedLin};
 
   this.dataG[26]={key: "Simulierte False Positives pro Tag", data: [],
-		 type: 4, plottype: "lines", plotLog: false, 
+		 type: 4, plottype: "lines",  
 		 ytrafo: [1, false,false], color:colFalsePos};
 
   this.dataG[27]={key: "Test-Positive pro Tag (Sim)", data: [],
-		 type: 3, plottype: "lines", plotLog: false, 
+		 type: 3, plottype: "lines",  
 		 ytrafo: [1, false,false], color:colCasesSim};
 
 
   // window 4: infection ratios
 
   this.dataG[20]={key: "Anteil positiver Tests [%]", data: [],
-		 type: 0, plottype: "points", plotLog: false, 
+		 type: 0, plottype: "points",  
 		 ytrafo: [100, false,false], color:colPosrate};
 
   this.dataG[21]={key: "CFR (Case fatality rate) [%]", data: [],
-		 type: 1, plottype: "points", plotLog: false, 
+		 type: 1, plottype: "points",  
 		 ytrafo: [100, false,false], color:colCFR};
 
   this.dataG[22]={key: "Sim IFR65 (Infection fatality rate) [Promille]", data: [],
-		 type: 4, plottype: "lines", plotLog: false, 
+		 type: 4, plottype: "lines",  
 		 ytrafo: [1000, false,false], color:colIFR};
 
 
@@ -5045,61 +5043,122 @@ function DrawSim(){
 
 
   this.dataG[29]={key: "Test-Positive pro Tag (Sim)", data: [],
-		 type: 3, plottype: "lines", plotLog: false, 
+		 type: 3, plottype: "lines",  
 		 ytrafo: [0.1, true,false], color:colCasesSim};
 
   this.dataG[40]={key: "Test-Positive pro Tag (letzte Sim)",
 		  data: simPrevious[40],
-		  type: 3, plottype: "lines", plotLog: false, 
+		  type: 3, plottype: "lines",  
 		  ytrafo: [0.1, true,false], color:colCasesValid};
 
 
-// new window 6 weekly incidence
+// window 6 weekly incidence
 
   this.dataG[30]={key: "Wocheninzidenz Faelle pro 100 000", data: [],
-		 type: 0, plottype: "bars", plotLog: false, 
+		 type: 0, plottype: "bars",  
 		 ytrafo: [0.1, true,false], color:colCasesBars}; // real: scale*10
 
   this.dataG[31]={key: "Wocheninzidenz Gestorbene pro 100 000", data: [],
-		 type: 0, plottype: "bars", plotLog: false, 
+		 type: 0, plottype: "bars",  
 		 ytrafo: [1, true,true], color:colDead};
 
 
   this.dataG[32]={key: "Wocheninzidenz Faelle (Sim)", data: [],
-		 type: 3, plottype: "lines", plotLog: false, 
+		 type: 3, plottype: "lines",  
 		 ytrafo: [0.1, true,false], color:colCasesSim};
 
   this.dataG[38]={key: "Wocheninzidenz Faelle (letzte Sim)", // Wocheninzidenz
 		  data: simPrevious[38],
-		  type: 3, plottype: "lines", plotLog: false, 
+		  type: 3, plottype: "lines",  
 		  ytrafo: [0.1, true,false], color:colCasesValid};
 
   this.dataG[33]={key: "Wocheninzidenz Gestorbene (Sim)", 
 		  data: [],
-		  type: 4, plottype: "lines", plotLog: false, 
+		  type: 4, plottype: "lines",  
 		  ytrafo: [1, true,true], color:colDeadSim};
 
   this.dataG[39]={key: "Wocheninzidenz Gestorbene (letzte Sim)", 
 		  data: simPrevious[39],
-		  type: 4, plottype: "lines", plotLog: false, 
+		  type: 4, plottype: "lines",  
 		  ytrafo: [1, true,true], color:colDeadValid};
 
-  this.dataG[41]={key: "Grad Lockdown [0-100]", data: [],
-		 type: 4, plottype: "lines", plotLog: false, 
+  this.dataG[41]={key: "Grad Lockdown [%]", data: [],
+		 type: 3, plottype: "lines",  
 		 ytrafo: [0.1, true,false], color:colStringency};
 
   this.dataG[42]={key: "Wocheninzidenz Faelle Vergleichsland", data: [],
-		 type: 0, plottype: "bars", plotLog: false, 
+		 type: 0, plottype: "bars",  
 		 ytrafo: [0.1, true,false], color:colCmp}; // real: scale*10
 
 
-  // addtl stringency index at window 6 weekly incidence
+  
+  // MT 2021-11-21 window 7 cause-effect time series:
+  // Grad Lockdown 43/44, Vacc 45, Boosters 46/47, 
+  // R-Wert sim 48/49, (log) Inzidenz 50/51
+
+  this.dataG[43]={key: "Grad Lockdown [0-1]",
+		  data: this.dataG[41].data,
+		  type: 4, // 0=data dir (posCases),
+                           // 1=solid deriv from data (CFR), 
+                           // 2=more speculative derivation (IFR)
+                           // 3=simulation duenn, 4=specul sim thick
+		  plottype: "lines",       // in "lines", "points", "bars"
+		   
+		  ytrafo: [0.01,false,false], // [scalefact, half, mirrored]
+		  color:colStringency};
+  
+  this.dataG[44]={key: "Grad Lockdown (letzte Sim)",
+		  data: simPrevious[44],
+		  type: 3, // 0=data dir (posCases),
+                           // 1=solid deriv from data (CFR), 
+                           // 2=more speculative derivation (IFR)
+                           // 3=simulation, 4=speculative simulation
+		  plottype: "lines",       // in "lines", "points", "bars"
+		   
+		  ytrafo: [0.01,false,false], // [scalefact, half, mirrored]
+		  color:colStringencyValid};
+  
+  this.dataG[45]={key: "Vollst. Impfquote [0-1]", data: [],
+		  type: 3, plottype: "lines",  
+		  ytrafo: [1,false,false], color:colVacc};
+  
+  this.dataG[46]={key: "Boosterquote [0-1]", data: [],
+		  type: 3, plottype: "lines",  
+		  ytrafo: [1,false,false], color:colBoost};
+  
+  this.dataG[47]={key: "Boosterquote (letzte Sim)", data: simPrevious[47],
+		  type: 3, plottype: "lines",  
+		  ytrafo: [1,false,false], color:colBoostValid};
+
+  /*
+  this.dataG[48]={key: "R-Wert (Daten)", data: [],
+		  type: 0, plottype: "lines", 
+		  ytrafo: [1, false,false], color:colCasesSim};*/
+
+  
+
+  this.dataG[48]={key: "R-Wert (Sim)", data: [],
+		  type: 3, plottype: "lines", 
+		  ytrafo: [1, false,false], color:colR};
+
+  this.dataG[49]={key: "R-Wert (letzte Sim)", data: simPrevious[49],
+		  type: 3, plottype: "lines", 
+		  ytrafo: [1, false,false], color:colRValid};
+
+  this.dataG[50]={key: "log10(Wocheninzidenz)", data: [],
+		  type: 3, plottype: "lines", 
+		  ytrafo: [1, false,false], color:colCasesSim};
+
+  this.dataG[51]={key: "log10(Wocheninzidenz) (letzte Sim)",
+		  data: simPrevious[51],
+		  type: 3, plottype: "lines", 
+		  ytrafo: [1, false,false], color:colCasesValid};
 
 
 
 // quantity selector for the different display windows
 // array indices>=34: validation reference
-// 0=cum,1=log,2=casesReal,3=tests,4=rates,5=casesDaily,6=incidence 
+// 0=cum,1=log,2=casesReal,3=tests,4=rates,5=casesDaily,6=incid,7=causeEffect
 
   this.qselectRegular=[];
   this.qselectWithPrev=[];
@@ -5111,7 +5170,9 @@ function DrawSim(){
   this.qselectRegular[3]=[18,19,24,26,27];  // "Daten: Tests"
   this.qselectRegular[4]=[20,21,22];        // "Infektionsraten"
   this.qselectRegular[5]=[16,17,28,29];     // "Taegliche Faelle"
-  this.qselectRegular[6]=[30,31,32,33,41];     // "Wochen-Inzidenz"
+  this.qselectRegular[6]=[30,31,32,33,41];  // "Wochen-Inzidenz"
+  this.qselectRegular[7]=[43,45,46,48,50];  // "Ursache-Wirkung"
+  //this.qselectRegular[7]=[43,45,46,48];  // "Ursache-Wirkung"
 
   if(countryComparison){this.qselectRegular[6]=[30,31,32,33,41,42];}
   
@@ -5122,6 +5183,8 @@ function DrawSim(){
   this.qselectWithPrev[4]=[20,21,22];
   this.qselectWithPrev[5]=[16,17,37,28,40,29];
   this.qselectWithPrev[6]=[30,31,38,32,39,33,41];
+  this.qselectWithPrev[7]=[43,44,45,46,47,48,49,50,51];
+  //this.qselectWithPrev[7]=[43,44,45,46,47,48,49];
   if(countryComparison){this.qselectWithPrev[6]=[30,31,38,32,39,33,41,42];}
 
   for(var iw=0; iw<this.qselectRegular.length; iw++){
@@ -5137,7 +5200,8 @@ function DrawSim(){
 		       countryGer+": taegliche Zahlen",
 		       countryGer+": Anteil [% oder Promille]",
 		       countryGer+": Personen pro Tag",
-		       countryGer+": Pers./Woche/100 000 Ew."
+		       countryGer+": Pers./Woche/100 000 Ew.",
+		       countryGer+": Ursache-Wirkung (relativ)"
 ];
 
 
@@ -5202,7 +5266,20 @@ DrawSim.prototype.drawGridLine=function(type,xyrel){
 }
 
 
-// windowG={0=cum,1=log,2=casesReal,3=tests,4=rates,5=casesDaily,6=incidence} 
+// reference, e.g., R=1 as thick gray horiz line
+
+DrawSim.prototype.drawReferenceLine=function(yrel){
+  var x0=this.xPix0;
+  var x1=x0+this.wPix;
+  var y0=this.yPix0+yrel* this.hPix-0.01*this.hPix;
+  var y1=y0+0.02*this.hPix;
+  ctx.fillStyle="#CCCCCC";
+  ctx.fillRect(x0,y0,this.wPix, 0.02*this.hPix);
+}
+
+
+// windowG:
+// 0=cum,1=log,2=casesReal,3=tests,4=rates,5=casesDaily,6=incid,7=causeEffect
 DrawSim.prototype.drawAxes=function(windowG){
 
   // update the font (drawAxes called at first drawing and after all 
@@ -5256,7 +5333,8 @@ DrawSim.prototype.drawAxes=function(windowG){
 
   //define y axis tick/label positions (in y, not pix)
   // actual label not defined here, from this.label_y_window[windowG]
-  // windowG={0=cum,1=log,2=casesReal,3=tests,4=rates,5=casesDaily,6=incid.}
+  // windowG:
+  //0=cum,1=log,2=casesReal,3=tests,4=rates,5=casesDaily,6=incid,7=causeEffect
 
   var ymin=this.yminType[windowG];
   var ymax=this.ymaxType[windowG];
@@ -5331,20 +5409,21 @@ DrawSim.prototype.drawAxes=function(windowG){
 
 
 
-  // draw axis caption+values strings on y1 axis
-  // windowG={0=cum,1=log,2=casesReal,3=tests,4=rates,5=casesDaily,6=incid}
+  // draw x-axis and y-axis caption+values strings on y1 axis
+  // windowG:
+  //0=cum,1=log,2=casesReal,3=tests,4=rates,5=casesDaily,6=incid,7=causeEffect
 
   var xPix_yAxisCaption=(windowG==3)
       ? this.xPix0-3.8*textsize : this.xPix0-3.0*textsize;
   
   var label_y=this.label_y_window[windowG];
   var yPix=(windowG!=1)
-    ? this.yPix0+0.01*this.hPix : this.yPix0+0.15*this.hPix;
+    ? this.yPix0+0.10*this.hPix : this.yPix0+0.20*this.hPix;
   ctx.setTransform(0,-1,1,0, xPix_yAxisCaption,yPix);
   ctx.fillText(label_y,0,0);
   ctx.setTransform(1,0,0,1,0,0);
 
-  // draw values on y1 axis: normal graphics
+  // y-axis: draw values on y1 axis: normal graphics
 
   var xPix_yAxisValStr=(windowG==3)
       ? this.xPix0-3.2*textsize : this.xPix0-2.5*textsize;
@@ -5352,6 +5431,7 @@ DrawSim.prototype.drawAxes=function(windowG){
   if(!this.mirroredGraphics){ 
     for(var iy=0; iy<=ny; iy++){
       var valueStr=(windowG!=1)  ? Math.round(iy*dy) : "10^"+iy;
+      if(windowG==7){valueStr=(iy*dy).toFixed(1);}
       //console.log("valueStr=",valueStr);
       ctx.fillText(valueStr, xPix_yAxisValStr,
 		   yPix0+(iy*dy-ymin)/(ymax-ymin)*hPix+0.5*textsize);
@@ -5382,7 +5462,7 @@ DrawSim.prototype.drawAxes=function(windowG){
   
   // draw key drawkey (drawAxes)
   // windowG:
-  // 0=cum,1=log,2=casesReal,3=tests,4=rates,5=casesDaily,6=incidence 
+  //0=cum,1=log,2=casesReal,3=tests,4=rates,5=casesDaily,6=incid,7=causeEffect
 
   var dyrel=-1.2*textsize/this.hPix;
   var ikey=0;
@@ -5413,7 +5493,7 @@ DrawSim.prototype.drawAxes=function(windowG){
     }
   }
 
-  if(true){// draw "Durchseuchung" etc
+
 
     // calculate time string
     // set it+1 days ahead of dateStart (it=time BEFORE sim)
@@ -5458,13 +5538,14 @@ DrawSim.prototype.drawAxes=function(windowG){
 
     
     // display other state variables anchored at xrelLeft,yrelTop
-    
+  if(windowG!=7){
     var Xperc=100*corona.xyz;
     var casesPerc=100*corona.xt;
 
     // line lines gap between curve keys and variable text
     // windowG:
-    // 0=cum,1=log,2=casesReal,3=tests,4=rates,5=casesDaily,6=incidence 
+    // 0=cum,1=log,2=casesReal,3=tests,4=rates,5=casesDaily,
+    // 6=incid,7=causeEffect 
 
     var line=0;
     var i1=data_idataStart+it;
@@ -5529,12 +5610,12 @@ DrawSim.prototype.drawAxes=function(windowG){
 		   this.xPix0+xrelLeft*this.wPix,
 		   this.yPix0+(yrelTopVars-(line)*dyrel)*this.hPix);
     }
+  } // windowG !=7
 
-   
     //console.log("it=",it," mutationDynamics=",mutationDynamics);
 
-    if(!(typeof mutationDynamics === "undefined") // sometimes so at begin
-       && simulateMutation &&(it>mutationDynamics.itNew-63)){
+  if(!(typeof mutationDynamics === "undefined") // sometimes so at begin
+     && simulateMutation &&(it>mutationDynamics.itNew-63)){
       //console.log("it=",it);
       mutationDynamics.update(it); //just graphics; double call does not harm
       var mutTopPix=this.yPix0+0.90*this.hPix;
@@ -5552,11 +5633,7 @@ DrawSim.prototype.drawAxes=function(windowG){
       ctx.fillText("R_0="+mutationDynamics.R0.toFixed(2),
 		   mutLeftPix,mutTopPix-line*dyrel*this.hPix);
       
-    }
-    
-    
-  }
-
+  }// draw propagation of new mutation if actively simulated
 
 // R values drawn directly in draw in simulation part
 
@@ -5596,8 +5673,15 @@ DrawSim.prototype.transferSimData=function(it){
     *(this.dataG[0].data[it]-this.dataG[0].data[Math.max(it-7,0)]);
   this.dataG[33].data[it]=100000/n0
     *(this.dataG[2].data[it]-this.dataG[2].data[Math.max(it-7,0)]);
-  
 
+  // MT 2021-11-21: new window 7: cause-effect
+
+  this.dataG[43].data=this.dataG[41].data;
+  this.dataG[45].data[it]=pVaccFull;
+  this.dataG[46].data[it]=pBoost;
+  this.dataG[48].data[it]=corona.Reff;
+  this.dataG[50].data[it]=log10(this.dataG[32].data[it]);
+  
   // get yt  from balance xt past, zt=z
 
   var itPast=it-tauRecover;
@@ -5690,6 +5774,7 @@ DrawSim.prototype.transferRecordedData=function(){
   var kernel=[1/7, 1/7, 1/7, 1/7, 1/7, 1/7, 1/7];
   var cases_smooth=smooth(data_dxt,kernel);
   var deaths_smooth=smooth(data_dz,kernel);
+
   for(var i=6; i<data_dxt.length; i++){
     data_dxIncidence[i]=cases_smooth[i-3]*700000/n0;
     data_dzIncidence[i]=deaths_smooth[i-3]*700000/n0;
@@ -5704,44 +5789,24 @@ DrawSim.prototype.transferRecordedData=function(){
     data_dzIncidence[i]=data_cumDeaths[i]*700000/n0;
   }
 
+  // MT 2021-11-21 for data-driven reproduction rate
+
+  var gen_time=0.5*(tauRstart+tauRend);
+  var gen_di=Math.floor(gen_time);
+
+  for(var i=0; i<data_dxt.length; i++){
+     data_R[i]=(i<data_dxt.length-gen_di)
+      ? Math.pow(data_dxIncidence[i+gen_di]/data_dxIncidence[i],
+		 gen_time/gen_di)
+      : data_R[i-1];
+  }
+
+  
   this.dataG[30].data=data_dxIncidence; // weekly data incidence by reference
   this.dataG[31].data=data_dzIncidence;
 
   this.dataG[41].data=stringency_hist;
-  if(!useLandkreise){
-    this.dataG[42].data=dataCmp_dxIncidence; // reference
-  }
-  else{ // !! if useLandkreise index shift => need to copy element by element
-    // data contains appropriate RKI data of Saxon regions
-    // but data is local (reference) variable in initializeData
-    // => need to redefine
-    
-    var data=dataRKI_orig[country]; // country=saxon region, country2=Germany
-    var dataCmp=dataGit_orig[countryCmp];
-    var dateMaxStr=insertLeadingZeroes(data[data.length-1]["date"]);
-    var dateMaxStrCmp=insertLeadingZeroes(dataCmp[dataCmp.length-1]["date"]);
-    var dateMax=new Date(insertLeadingZeroes(dateMaxStr));
-    var dateMaxCmp=new Date(insertLeadingZeroes(dateMaxStrCmp));
-
-    // define index shift diCmp=iCmp-i|same date
-    // from the end since some data weekly (!) at very beginning)
-    // see also "define index shift di2=i2-i1"
-
-    var diCmp=dataCmp.length-data.length
-	-Math.round((dateMaxCmp.getTime()-dateMax.getTime())/oneDay_ms);
-    console.log("define (Czech) comparison data for Saxon countries:",
-		"\nNeed index shift: diCmp=",diCmp,
-		"\n calculated from dataCmp.length=",dataCmp.length,
-		" data.length=",data.length,
-		" dateMaxStrCmp=",dateMaxStrCmp,
-		" dateMax=",dateMax
-	       );
-    for(var i=0; i<data_dxIncidence.length; i++){
-      this.dataG[42].data[i]= ((i+diCmp>=0)&&(i+diCmp<dataCmp.length))
-	? dataCmp_dxIncidence[i+diCmp] : 0;
-    }
-  }
-  
+  this.dataG[42].data=dataCmp_dxIncidence;
 
 
   if(false){
@@ -5786,7 +5851,8 @@ DrawSim.prototype.checkRescaling=function(it){
 
 
   // (2) possible rescaling in y for all the graph windows
-
+  // !! initialize this.ymaxType=[x,x,x...] to appropriate dimension!
+  
   for(var iw=0; iw<this.qselect.length; iw++){ //windows
     for(iq=0; iq<this.qselect[iw].length; iq++){ // quantity selector
       var q=this.qselect[iw][iq];
@@ -5795,11 +5861,14 @@ DrawSim.prototype.checkRescaling=function(it){
       var iDropped=Math.max(0,i-this.timeWindow);
       var scaling=this.dataG[q].ytrafo[0];
       var type=this.dataG[q].type;
-      var valueFirst=data[i]*scaling;
-      var valueDropped=data[iDropped]*scaling; // MT 2021-07-11
+      var valueFirst=(!(typeof data === "undefined")) ? data[i]*scaling : 0;
  
-      
-      if(valueFirst>this.ymaxType[iw]){
+      if(false){
+	console.log("checkRescaling: iw=",iw," q=",q," scaling=",scaling,
+		    " valueFirst=", valueFirst,
+		    " this.ymaxType[iw]=",this.ymaxType[iw]);
+      }
+      if(valueFirst>this.ymaxType[iw]){ // if valueFirst=NaN etc never true
 	this.ymaxType[iw]=valueFirst;
 	if(false){
 	  console.log(
@@ -5811,36 +5880,13 @@ DrawSim.prototype.checkRescaling=function(it){
 	  );
 	}
       }
-
-      if(false){ // problematic with later rescalings
-        if( (!Number.isNaN(valueDropped)) 
-	  && (valueDropped>=this.ymaxType[iw]-TINY_VAL)){
-	  if(iw==6){
-	  console.log(
-	    "\n\n\ncheckRescaling: reduced maximum due to vanishing highpoints!",
-	    " it=",it, "window iw=",iw,
-	    " quantity q=",q," i=",i,
-	    " type=",((type<3) ? "data" : "sim"),
-	    " scaling=",scaling,
-	    "\n  valueDropped=",valueDropped,
-	    " this.ymaxType[iw]=",this.ymaxType[iw],
-	    "\nnew max: this.ymaxType[iw]=",this.ymaxType[iw]
-	  );
-	  }
-	
-	  // need to sample whole interval because of possible peaks in between
-          // data>0 in order to filter out non-existent empirical quant.
-	  this.ymaxType[iw]=0;
-	  for(var is=iDropped+1; is<=i; is++){
-	    if((data[is]>0)&&(!(Number.isNaN(data[is])))){
-	      this.ymaxType[iw]=Math.max(scaling*data[is],this.ymaxType[iw]);
-	    }
-	  }
-	}
-	this.ymaxType[iw]=Math.max(this.ymaxType[iw],2);
-      }
-
     }
+
+    if(false){
+      console.log("DrawSim.checkRescaling: it=",it," iw=",iw,
+		  " this.ymaxType[iw]=",this.ymaxType[iw]);
+    }
+    
   }
 
 
@@ -5923,7 +5969,8 @@ DrawSim.prototype.draw=function(it){
 		"");
   }
 
-  // windowG={0=cum,1=log,2=casesReal,3=tests,4=rates,5=casesDaily,6=incid.}
+  // windowG:
+  //0=cum,1=log,2=casesReal,3=tests,4=rates,5=casesDaily,6=incid,7=causeEffect
 
   this.mirroredGraphics=((windowG==2)||(windowG==5)||(windowG==6));
 
@@ -5949,6 +5996,11 @@ DrawSim.prototype.draw=function(it){
 
   this.clear();
 
+  if(windowG==7){
+    var yminDraw=this.yminType[windowG];
+    var ymaxDraw=this.ymaxType[windowG];
+    this.drawReferenceLine((1-yminDraw)/(ymaxDraw-yminDraw));
+  }
 
   // draw simulations and data for all windows
 
@@ -5973,15 +6025,6 @@ DrawSim.prototype.draw=function(it){
     var color=this.dataG[q].color;
     var pointType=type;
     var actValue=scaling*this.dataG[q].data[i];
-    if(false){
-    //if(it<5){
-      console.log("draw: it=",it," i=",i,
-		  " windowG=",windowG,
-		  " q=",q,//" type=",type,
-		  " scaling=",scaling," half=",half," downwardsw=",downwards,
-		  " plottype=",plottype,//" wline=",wLine,
-		  " actValue=",actValue);
-    }
 
       // draw some data (the simulations) as lines/curves
 
@@ -6019,7 +6062,9 @@ DrawSim.prototype.draw=function(it){
     this.drawR0Estimate(it);
   }
 
-  this.drawAxes(windowG);  // at the end to have grid+labels at top layer
+  // at the end to have grid+labels at top layer
+  
+  this.drawAxes(windowG);  
 
 
   if(activateAnnotations){drawMouseAnnotations();} // corona_gui.js

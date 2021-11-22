@@ -1,9 +1,9 @@
-F\"uhren h\"ohere Impfraten zu geringerer Covid-19-Inzidenz? Evidenzen
+Führen höhere Impfraten zu geringerer Covid-19-Inzidenz? Evidenzen
 und Modellierung
 
 
-Evidenz
-========
+Evidenz Allgemein
+=================
 
 Streudiagramme Inzidenz vs Impfrate
 [Zeige jeweils die Tabs im Browser]
@@ -34,4 +34,180 @@ Leute, die sich nicht an die Regeln halten oder die Bekaempfung viel
 hoherer vergangener Infektionszahlung durch mehr Impfungen in
 Betracht. In Bundeslaendern wie NW [zeigen] oder Bremen [zeigen] war
 ja die letzte Welle sehr hoch und dies koennten die nachwirkungen sein
+
+
+
+Evidenz Corona-simulation.de
+============================
+
+[zeige corona-simulation.de, Laenderwahl]
+
+Ich habe in meinem Simulator nur einige Laender, die besonders
+interessant sind, so dass das wiss. angreifbar ist. Ich habe aber die
+Laender nach interessanten Aspoekten shcon vor langem ausgewaehlt,
+insofern ist es nicht wie der Schütze, der nach seinem Schuss erst
+die Zielscheibe so setzt, dass er ins Schwarze getroffen hat
+
+[2021_11_Laender.pdf]
+
+Unten der Anteil der vollst geimpften an der Gesmtbevoelerkung
+(einschl Kinder und nicht Impfbaren), auf der y-Achse die bekannte
+Wocheninzidenz
+
+Und...
+
+Auch mein Simulator bzw die Daten der ausgesuchten Laender zeigen,
+dass mit der Impfrate die Inzidenz schwach nach oben geht. Ist also
+impfen schaedlich?
+
+Schauen wir nach [Seite mit Labels]
+
+Die Inzidenz haengt von vielen Dingen ausser der Impfung ab:
+Bevölkerungsstruktur, Wetter, Testverhalten, weiteren Dingen. Hier
+habve ich mal Europa von den anderen Laendern des Simulators
+separiert. Schauen wir die roten Ausrei3er mal genauer an:
+
+[corona-simulation.de, Suedafrika]
+
+Welle im Sommer. Wo liegt SA? Richtig, auf der Suedhalbkugel! Wie
+andere Erkaeltiungskrankheiten ist Covid-19 eine Winterkrankheit,
+wobei Winter geografischer, nicht kalendarischer Winter bedeutet! Kaum
+UV, kalte Luft, viel Aufenthalt im Innenraum => alles foerderlich fuer
+Covid-19
+
+[Seite mit Labels]
+
+[corona-simulation.de, Indien]
+
+Indien: Im Grossteil Indiens ist auch kein Winter, zudem sind die
+Leute erst in den letzten Monaten geimpft worden, sodass die geringere
+Impfquote dennoch besser wirkt. Schliesslich sind die Leute dort jung
+
+[Prognose] Wuerde sich aber langfristig wieder im Mai eine naechste
+Welle erheben, wenn nicht mehr geboostert  wird
+
+[ 3. Ausreisser Russland]
+Hier ist in den Daten was faul: Schwarzer Bereich unten: fiel in den
+anderen Laendern kaum auf. Es wird zwar fast so viel getestet wie in D
+(3000 pro Woche pro 1 Mio), aber anscheinend die Daten geschoent, was
+bei den Toten sicher nicht so leicht ist: 6 Tote/Woche/100000 bei 180
+Faellen/Woche/100000, also eine Case-Fatality Rate von 6/180=3.3%, in
+D 3/400 weniger als 1%, selbst Indien nir etwas maeh als 1%
+
+[Israel]
+Und Israel? Hier sind weniger die 69% vollst Geimpften entscheident,
+als die 44% frisch Geboosterten, bei denen die Wirkung noch ganz
+frisch ist.
+
+[sim bis jan]
+
+Deshalb wird denen auch nix passieren, selbst wenn sie
+die Beschraenkungen weit runterfahren
+
+[Stringency auf 30%, weiter sim]
+
+[pdf, dritte Seite]
+
+Es verbleiben die europaeischen Laender, bei denen nun tatsaechlich
+eine deutliche negative Korrelation zwischen Impfquote und Inzidenz
+ist. Auch da kann nicht notwendigerweoise aus einer Korrelation eine
+Kausalitaet hergeleitet werden, aber die Laender sind doch viel
+homogener: Alle zivilisiert, alle klimatischen Winter bei
+kalendarischen Winter, alle eher alte Leute.
+
+[Polen]
+
+Nur Polen faellt noch aus der Reihe. Schauen wir Polen mal an:
+
+Inzidenz lange nahe null, steigt stark. Ist es rein ein zeitliches
+Problem?
+
+[Prognose]
+
+Nein! Corona-Simulation.de sagt, anders als in D, einen Abfall voraus!
+Was ist hier los? Habe gleich mal den Code gecheckt. War aber kein
+Fehler zu sehen.
+
+[zeigen auf sim Durchseuchung]
+
+Hier, im Kleingedruckten scheint die Loesung zu sein: Dokumentierte
+Durchseuchung 9%, Simulierte Durchseuchung 35%.
+
+Die dokumentierte hohe Durchseuchung (D: 6%) liegt daran, dass Polen lange
+Zeiten hoher Inzidenzen hatte, viel hoeher als D (scrollen zum
+Rauszoomen, auch in D)
+
+[auf tests in PL und D switchen]
+
+Die sehr hohe Sim Durchseuchung von 35% liegt daran, dass
+in der Vergangenheit eher wenig getestet wurde [Vgl mit
+D] wodurch mein Simulator nach einer Heuristik eine hoehere
+Dunkelziffer simuliert. Ferner habe ich Erkrankten einen 100%igen
+Schutz ohne Ablaufdatum verpasst, Studien muessen noch zeigen, ob das
+korrekt ist
+
+(in D 24% auch rel. hoch: D ist auch kein
+Test-Weltmeister).
+
+
+Schlussfolgerung
+===============
+
+[zurueck zu pdf label]
+
+Als Ergebnis halte ich fest: Vielerlei dritte Ursachen koennen eine "falsche"
+Korrelation verursachen, nach der durch die Impfungen die Inzidenzen
+steigen. Viele davon habe ich in meinem Simulator identifiziert wie
+jahreszeiten, Alter, Bevoelkerungsstruktur, Datenmanipulationen,
+Nichtberuecksichtigung des Booster-Effekts und Einfluss der
+Durchseuchung.
+
+Aktuell Deutschland
+===================
+
+Die Massnahmen steigen ja nun drastisch, die Annahme in meinem letzten
+Video wird also wohl Wirklichkeit. Grund, sich die Deutschlandprognose
+bei den wahrsch polit Massnahmen noch mal ansuschauen
+
+[corona-sim D]
+
+Der angedachte Shutdowngrad ist wohl mit Anfang Juni
+vergleichbar. Zwar vieles schaerfer als damals wie im Mai (65%), aber die Schulen
+bleiben zu recht auf, also etwa 60%
+
+[Shutdown Regler auf 60%]
+
+Ferner sollen bis Weihnachten, also 6 Wochen, 25 Mio Menschen
+geboostert sein, also 25/80 etwa 30%. Jetzt 6%, also 24% in 6 Wochen,
+also 4% pro Woche
+
+[Booster Regler auf 4% pro Woche]
+
+Impfen werden sich wohl auch noch etwas mehr, durch die angedrohten
+Konsequenzen:
+
+[Impf-Regler Erstimpfungen 1% pro Woche]
+
+Sim
+
+[Im Jan reduzieren]
+
+Sim bis April
+
+Seuche vorbei.
+
+Nun der Body-Count: jetzt 100 000, am Ende dieser Seuchensaison im
+April 125000, also 25000 neue. Etwa so viele wie die Grippe 2017/18,
+nach RKI 25100 Menschen (Statista hat niedrigere Zahlen)
+
+Mit dieser hoffentlich aufmunternden Botschaft wuensche ich euch Alles
+Gute. Vielleicht ist der abgedroschene Spruch "Bleibt gesund" hier
+ausnahmsweise mal angebracht 
+
+
+
+
+
+
+
 

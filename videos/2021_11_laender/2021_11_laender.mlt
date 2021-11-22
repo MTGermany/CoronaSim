@@ -1,0 +1,627 @@
+<?xml version="1.0" standalone="no"?>
+<mlt LC_NUMERIC="C" version="7.1.0" title="Shotcut version 21.10.31" producer="main_bin">
+  <profile description="automatic" width="1370" height="714" progressive="1" sample_aspect_num="1" sample_aspect_den="1" display_aspect_num="685" display_aspect_den="357" frame_rate_num="1000" frame_rate_den="33" colorspace="709"/>
+  <chain id="chain0" out="00:03:53.856">
+    <property name="length">00:03:53.889</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_11_laender_01.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="shotcut:hash">c6a0e730ba73b64a58cc1722a717d892</property>
+    <property name="ignore_points">0</property>
+    <property name="shotcut:caption">2021_11_laender_01.mkv</property>
+    <property name="xml">was here</property>
+  </chain>
+  <chain id="chain1" out="00:04:14.949">
+    <property name="length">00:04:14.982</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_11_laender_02.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">ce13d85e4a07503fc1077eba5e610240</property>
+  </chain>
+  <chain id="chain2" out="00:14:12.045">
+    <property name="length">00:14:12.078</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_11_laender_03.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">10da4705777a59d3a2bc304910df98fd</property>
+  </chain>
+  <chain id="chain3" out="00:05:45.738">
+    <property name="length">00:05:45.771</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_11_laender_04.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">0cdb6395211088e9ce54ca59b83cd5ff</property>
+  </chain>
+  <chain id="chain4" out="00:02:30.690">
+    <property name="length">00:02:30.723</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_11_laender_05.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">d73736c65916f2bb04ead862b422ad98</property>
+  </chain>
+  <chain id="chain5" out="00:01:09.570">
+    <property name="length">00:01:09.603</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_11_laender_06.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">38369410fb0705ce6afa348b403b5210</property>
+  </chain>
+  <playlist id="main_bin">
+    <property name="xml_retain">1</property>
+    <entry producer="chain0" in="00:00:00.000" out="00:03:53.856"/>
+    <entry producer="chain1" in="00:00:00.000" out="00:04:14.949"/>
+    <entry producer="chain2" in="00:00:00.000" out="00:14:12.045"/>
+    <entry producer="chain3" in="00:00:00.000" out="00:05:45.738"/>
+    <entry producer="chain4" in="00:00:00.000" out="00:02:30.690"/>
+    <entry producer="chain5" in="00:00:00.000" out="00:01:09.570"/>
+  </playlist>
+  <producer id="black" in="00:00:00.000" out="00:29:11.286">
+    <property name="length">00:29:11.319</property>
+    <property name="eof">pause</property>
+    <property name="resource">0</property>
+    <property name="aspect_ratio">1</property>
+    <property name="mlt_service">color</property>
+    <property name="mlt_image_format">rgba</property>
+    <property name="set.test_audio">0</property>
+  </producer>
+  <playlist id="background">
+    <entry producer="black" in="00:00:00.000" out="00:29:11.286"/>
+  </playlist>
+  <chain id="chain6" out="00:03:53.856">
+    <property name="length">00:03:53.889</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_11_laender_01.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="shotcut:hash">c6a0e730ba73b64a58cc1722a717d892</property>
+    <property name="ignore_points">0</property>
+    <property name="shotcut:caption">2021_11_laender_01.mkv</property>
+    <property name="xml">was here</property>
+  </chain>
+  <chain id="chain7" out="00:03:53.856">
+    <property name="length">00:03:53.889</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_11_laender_01.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="shotcut:hash">c6a0e730ba73b64a58cc1722a717d892</property>
+    <property name="ignore_points">0</property>
+    <property name="shotcut:caption">2021_11_laender_01.mkv</property>
+    <property name="xml">was here</property>
+  </chain>
+  <tractor id="tractor0" in="00:00:00.000" out="00:00:00.726">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="chain6" in="00:00:35.046" out="00:00:35.772"/>
+    <track producer="chain7" in="00:00:48.708" out="00:00:49.434"/>
+    <transition id="transition0" out="00:00:00.726">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition1" out="00:00:00.726">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <chain id="chain8" out="00:03:53.856">
+    <property name="length">00:03:53.889</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_11_laender_01.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="shotcut:hash">c6a0e730ba73b64a58cc1722a717d892</property>
+    <property name="ignore_points">0</property>
+    <property name="shotcut:caption">2021_11_laender_01.mkv</property>
+    <property name="xml">was here</property>
+  </chain>
+  <chain id="chain9" out="00:03:53.856">
+    <property name="length">00:03:53.889</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_11_laender_01.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="shotcut:hash">c6a0e730ba73b64a58cc1722a717d892</property>
+    <property name="ignore_points">0</property>
+    <property name="shotcut:caption">2021_11_laender_01.mkv</property>
+    <property name="xml">was here</property>
+  </chain>
+  <chain id="chain10" out="00:03:53.856">
+    <property name="length">00:03:53.889</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_11_laender_01.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="shotcut:hash">c6a0e730ba73b64a58cc1722a717d892</property>
+    <property name="ignore_points">0</property>
+    <property name="shotcut:caption">2021_11_laender_01.mkv</property>
+    <property name="xml">was here</property>
+  </chain>
+  <chain id="chain11" out="00:03:53.856">
+    <property name="length">00:03:53.889</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_11_laender_01.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="shotcut:hash">c6a0e730ba73b64a58cc1722a717d892</property>
+    <property name="ignore_points">0</property>
+    <property name="shotcut:caption">2021_11_laender_01.mkv</property>
+    <property name="xml">was here</property>
+  </chain>
+  <chain id="chain12" out="00:04:14.949">
+    <property name="length">00:04:14.982</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_11_laender_02.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">ce13d85e4a07503fc1077eba5e610240</property>
+    <property name="shotcut:caption">2021_11_laender_02.mkv</property>
+  </chain>
+  <tractor id="tractor1" in="00:00:00.000" out="00:00:00.759">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="chain11" in="00:03:37.983" out="00:03:38.742"/>
+    <track producer="chain12" in="00:00:02.937" out="00:00:03.696"/>
+    <transition id="transition2" out="00:00:00.759">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition3" out="00:00:00.759">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <chain id="chain13" out="00:04:14.949">
+    <property name="length">00:04:14.982</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_11_laender_02.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">ce13d85e4a07503fc1077eba5e610240</property>
+    <property name="shotcut:caption">2021_11_laender_02.mkv</property>
+  </chain>
+  <chain id="chain14" out="00:04:14.949">
+    <property name="length">00:04:14.982</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_11_laender_02.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">ce13d85e4a07503fc1077eba5e610240</property>
+    <property name="shotcut:caption">2021_11_laender_02.mkv</property>
+  </chain>
+  <tractor id="tractor2" in="00:00:00.000" out="00:00:00.627">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="chain13" in="00:00:56.859" out="00:00:57.486"/>
+    <track producer="chain14" in="00:01:00.297" out="00:01:00.924"/>
+    <transition id="transition4" out="00:00:00.627">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition5" out="00:00:00.627">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <chain id="chain15" out="00:04:14.949">
+    <property name="length">00:04:14.982</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_11_laender_02.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">ce13d85e4a07503fc1077eba5e610240</property>
+    <property name="shotcut:caption">2021_11_laender_02.mkv</property>
+  </chain>
+  <chain id="chain16" out="00:04:14.949">
+    <property name="length">00:04:14.982</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_11_laender_02.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">ce13d85e4a07503fc1077eba5e610240</property>
+    <property name="shotcut:caption">2021_11_laender_02.mkv</property>
+  </chain>
+  <chain id="chain17" out="00:14:12.045">
+    <property name="length">00:14:12.078</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_11_laender_03.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">10da4705777a59d3a2bc304910df98fd</property>
+    <property name="shotcut:caption">2021_11_laender_03.mkv</property>
+  </chain>
+  <tractor id="tractor3" in="00:00:00.000" out="00:00:00.891">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="chain16" in="00:04:01.584" out="00:04:02.475"/>
+    <track producer="chain17" in="00:00:02.739" out="00:00:03.630"/>
+    <transition id="transition6" out="00:00:00.891">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition7" out="00:00:00.891">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <chain id="chain18" out="00:14:12.045">
+    <property name="length">00:14:12.078</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_11_laender_03.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">10da4705777a59d3a2bc304910df98fd</property>
+    <property name="shotcut:caption">2021_11_laender_03.mkv</property>
+  </chain>
+  <tractor id="tractor4" in="00:00:00.000" out="00:00:00.561">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="chain17" in="00:01:30.096" out="00:01:30.657"/>
+    <track producer="chain18" in="00:01:32.406" out="00:01:32.967"/>
+    <transition id="transition8" out="00:00:00.561">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition9" out="00:00:00.561">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <chain id="chain19" out="00:14:12.045">
+    <property name="length">00:14:12.078</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_11_laender_03.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">10da4705777a59d3a2bc304910df98fd</property>
+    <property name="shotcut:caption">2021_11_laender_03.mkv</property>
+  </chain>
+  <chain id="chain20" out="00:14:12.045">
+    <property name="length">00:14:12.078</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_11_laender_03.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">10da4705777a59d3a2bc304910df98fd</property>
+    <property name="shotcut:caption">2021_11_laender_03.mkv</property>
+  </chain>
+  <chain id="chain21" out="00:14:12.045">
+    <property name="length">00:14:12.078</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_11_laender_03.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">10da4705777a59d3a2bc304910df98fd</property>
+    <property name="shotcut:caption">2021_11_laender_03.mkv</property>
+  </chain>
+  <chain id="chain22" out="00:14:12.045">
+    <property name="length">00:14:12.078</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_11_laender_03.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">10da4705777a59d3a2bc304910df98fd</property>
+    <property name="shotcut:caption">2021_11_laender_03.mkv</property>
+  </chain>
+  <chain id="chain23" out="00:14:12.045">
+    <property name="length">00:14:12.078</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_11_laender_03.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">10da4705777a59d3a2bc304910df98fd</property>
+    <property name="shotcut:caption">2021_11_laender_03.mkv</property>
+  </chain>
+  <chain id="chain24" out="00:14:12.045">
+    <property name="length">00:14:12.078</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_11_laender_03.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">10da4705777a59d3a2bc304910df98fd</property>
+    <property name="shotcut:caption">2021_11_laender_03.mkv</property>
+  </chain>
+  <chain id="chain25" out="00:05:45.738">
+    <property name="length">00:05:45.771</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_11_laender_04.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">0cdb6395211088e9ce54ca59b83cd5ff</property>
+    <property name="shotcut:caption">2021_11_laender_04.mkv</property>
+  </chain>
+  <tractor id="tractor5" in="00:00:00.000" out="00:00:00.693">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="chain24" in="00:14:10.065" out="00:14:10.758"/>
+    <track producer="chain25" in="00:00:01.683" out="00:00:02.376"/>
+    <transition id="transition10" out="00:00:00.693">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition11" out="00:00:00.693">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <chain id="chain26" out="00:02:30.690">
+    <property name="length">00:02:30.723</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_11_laender_05.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">d73736c65916f2bb04ead862b422ad98</property>
+    <property name="shotcut:caption">2021_11_laender_05.mkv</property>
+  </chain>
+  <tractor id="tractor6" in="00:00:00.000" out="00:00:00.660">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="chain25" in="00:05:22.671" out="00:05:23.331"/>
+    <track producer="chain26" in="00:00:01.056" out="00:00:01.716"/>
+    <transition id="transition12" out="00:00:00.660">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition13" out="00:00:00.660">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <chain id="chain27" out="00:01:09.570">
+    <property name="length">00:01:09.603</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_11_laender_06.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">38369410fb0705ce6afa348b403b5210</property>
+    <property name="shotcut:caption">2021_11_laender_06.mkv</property>
+  </chain>
+  <tractor id="tractor7" in="00:00:00.000" out="00:00:01.122">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="chain26" in="00:02:25.674" out="00:02:26.796"/>
+    <track producer="chain27" in="00:00:10.395" out="00:00:11.517"/>
+    <transition id="transition14" out="00:00:01.122">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition15" out="00:00:01.122">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <chain id="chain28" out="00:01:09.570">
+    <property name="length">00:01:09.603</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_11_laender_06.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">38369410fb0705ce6afa348b403b5210</property>
+    <property name="shotcut:caption">2021_11_laender_06.mkv</property>
+  </chain>
+  <chain id="chain29" out="00:01:09.570">
+    <property name="length">00:01:09.603</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_11_laender_06.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">38369410fb0705ce6afa348b403b5210</property>
+    <property name="shotcut:caption">2021_11_laender_06.mkv</property>
+  </chain>
+  <playlist id="playlist0">
+    <property name="shotcut:video">1</property>
+    <property name="shotcut:name">V1</property>
+    <entry producer="chain6" in="00:00:10.065" out="00:00:35.013"/>
+    <entry producer="tractor0" in="00:00:00.000" out="00:00:00.726"/>
+    <entry producer="chain7" in="00:00:49.467" out="00:01:03.465"/>
+    <entry producer="chain8" in="00:01:04.257" out="00:02:13.926"/>
+    <entry producer="chain9" in="00:02:14.916" out="00:02:22.539"/>
+    <entry producer="chain10" in="00:02:23.364" out="00:02:43.890"/>
+    <entry producer="chain11" in="00:02:50.754" out="00:03:37.950"/>
+    <entry producer="tractor1" in="00:00:00.000" out="00:00:00.759"/>
+    <entry producer="chain12" in="00:00:03.729" out="00:00:07.722"/>
+    <entry producer="chain13" in="00:00:08.283" out="00:00:56.826"/>
+    <entry producer="tractor2" in="00:00:00.000" out="00:00:00.627"/>
+    <entry producer="chain14" in="00:01:00.957" out="00:01:33.099"/>
+    <entry producer="chain15" in="00:01:34.254" out="00:02:30.360"/>
+    <entry producer="chain16" in="00:02:36.267" out="00:04:01.551"/>
+    <entry producer="tractor3" in="00:00:00.000" out="00:00:00.891"/>
+    <entry producer="chain17" in="00:00:03.663" out="00:01:30.063"/>
+    <entry producer="tractor4" in="00:00:00.000" out="00:00:00.561"/>
+    <entry producer="chain18" in="00:01:33.000" out="00:11:27.621"/>
+    <entry producer="chain19" in="00:11:30.327" out="00:11:32.868"/>
+    <entry producer="chain20" in="00:11:35.805" out="00:11:45.078"/>
+    <entry producer="chain21" in="00:11:48.114" out="00:12:55.902"/>
+    <entry producer="chain22" in="00:12:56.859" out="00:13:00.066"/>
+    <entry producer="chain23" in="00:13:07.524" out="00:13:58.344"/>
+    <entry producer="chain24" in="00:14:07.326" out="00:14:10.032"/>
+    <entry producer="tractor5" in="00:00:00.000" out="00:00:00.693"/>
+    <entry producer="chain25" in="00:00:02.409" out="00:05:22.638"/>
+    <entry producer="tractor6" in="00:00:00.000" out="00:00:00.660"/>
+    <entry producer="chain26" in="00:00:01.749" out="00:02:25.641"/>
+    <entry producer="tractor7" in="00:00:00.000" out="00:00:01.122"/>
+    <entry producer="chain27" in="00:00:11.550" out="00:00:19.701"/>
+    <entry producer="chain28" in="00:00:20.724" out="00:00:22.044"/>
+    <entry producer="chain29" in="00:00:22.671" out="00:01:06.006"/>
+  </playlist>
+  <tractor id="tractor8" title="Shotcut version 21.10.31" in="00:00:00.000" out="00:29:11.286">
+    <property name="shotcut">1</property>
+    <property name="shotcut:projectAudioChannels">2</property>
+    <property name="shotcut:projectFolder">1</property>
+    <track producer="background"/>
+    <track producer="playlist0"/>
+    <transition id="transition16">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="mlt_service">mix</property>
+      <property name="always_active">1</property>
+      <property name="sum">1</property>
+    </transition>
+    <transition id="transition17">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="version">0.9</property>
+      <property name="mlt_service">frei0r.cairoblend</property>
+      <property name="threads">0</property>
+      <property name="disable">1</property>
+    </transition>
+  </tractor>
+</mlt>
