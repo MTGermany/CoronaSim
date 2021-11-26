@@ -106,18 +106,28 @@ set out "efficiency.png"
 print "plotting efficiency.png"
 ##############################################################
 
-I0=0.82
-tauHalf=180;
-dtau=40;
-Iincrease=0.06
-tauIncrease=25
+I0=0.80     # initial efficiency (including effect of previous vacc)
+Imax=0.88   # max efficiency
+tauIncrease=25   # approx time where max efficiency approx Imax reached
+tauHalf=180 # time after vacc where waning is strongest
+dtau=40     # typical half-timescale of waning of efficiency
 
-efficiencyInfectFun(x)=-Iincrease*exp(-x/tauIncrease)\
-+(I0+Iincrease)*(1+exp((0-tauHalf)/dtau))\
-      /(1+exp((x-tauHalf)/dtau));
-efficiencyInfectBoosterFun(x)=-Iincrease*exp(-x/tauIncrease)\
-+(I0+Iincrease)*(1+exp((0-tauHalf)/dtau))\
-      /(1+exp((x-2*tauHalf)/(2*dtau)));
+I0boost=0.40
+ImaxBoost=0.92
+tauIncreaseBoost=14
+
+efficiencyInfectFun(x)=(I0-Imax)*exp(-x/tauIncrease)\
++Imax*(1+exp((0-tauHalf)/dtau)) / (1+exp((x-tauHalf)/dtau));
+
+
+#efficiencyInfectBoosterFun(x)=(I0boost-ImaxBoost)*exp(-x/tauIncreaseBoost)\
+#+ImaxBoost*(1+exp((0-tauHalf)/dtau)) / (1+exp((x-2*tauHalf)/(2*dtau)))
+
+## two tanh functions
+
+efficiencyInfectBoosterFun(x)=I0boost\
++0.5*(ImaxBoost-I0boost)*(tanh(2*(x-0.5*tauIncreaseBoost)/tauIncreaseBoost)+1)\
++ImaxBoost*((1+exp((0-tauHalf)/dtau)) / (1+exp((x-2*tauHalf)/(2*dtau)))-1)
 
 set noparam
 set key
@@ -126,7 +136,7 @@ set xlabel "Days since full vaccination or booster"
 set xrange [0:300]
 set xtics 30
 set ylabel "Vaccine effectiveness (infectious infection)"
-set yrange [0:1]
+#set yrange [0:1]
 
 plot\
   efficiencyInfectFun(x) t "Vaccinations" w l ls 2,\

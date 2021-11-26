@@ -733,7 +733,7 @@ var betaTest=0.00; // beta error (false positive) after double testing
 
 
 
-const stringencySensitivityLin=0.75; // lin decr. R[%] per icr. stringency[%]
+const stringencySensitivityLin=0.65; // lin decr. R[%] per icr. stringency[%]
                                     // GER 0.70, AUT 0.75, FRA 0.70, CZ 0.70
 
 const season_fracYearPeak=0.08;   // peak of season dependence of R0
@@ -806,8 +806,10 @@ var icalibmax;  // getIndexCalibmax(itmax_c);
 //!!
 const calibInterval=4;  // !!!! 4 or 8; calibr time interv [days] for one R0 value 
                         // better not in sync with week cycle (=7)
-const nLastUnchanged=4; // !! 4; <= nChunk-dn=nOverlap,>=3
+const nLastUnchanged=4; // !! 3 or 4; <= nChunk-dn=nOverlap,>=3
                         // (may work otherwise but not safe)
+                        // !! with nLastUnchanged=3 some wiggles in the new ICU:
+                        // leave at 4!
 const nChunk=6;         // 6; multiples of calibInterval
                         // >max(nLastUnchanged,nOverlap)
 const nOverlap=4;       // 4; multiples of calibInterval
@@ -1370,6 +1372,7 @@ function initializeData(country,insideValidation){
 	 ? (data_cumCases[i]-data_cumCases[i-1])/data_posRate[i] : 0);
   }
 
+
   // if data2 is less up-to-date than data, fill data2 derived quantities
   // with constants or cum with lin extrapolation
 
@@ -1386,7 +1389,7 @@ function initializeData(country,insideValidation){
       *(data_cumVacc[iLast_data2]-data_cumVacc[iLast_data2-7])/7.;
     data_cumBoost[i]=data_cumBoost[iLast_data2]+ (i-iLast_data2)
       *(data_cumBoost[iLast_data2]-data_cumBoost[iLast_data2-7])/7.;
-    data_icuIncidence=data_icuIncidence[iLast_data2];
+    data_icuIncidence[i]=data_icuIncidence[iLast_data2];
     if(true){
       console.log("\ni=",i," iLast_data2=",iLast_data2,
 		  " data_cumVacc[iLast_data2]=",
@@ -1396,6 +1399,7 @@ function initializeData(country,insideValidation){
 		  "");
     }
   }
+
 
   //=========initializeData (6): calculate vaccination rates ==========
 
@@ -1690,6 +1694,7 @@ function initializeData(country,insideValidation){
         var i2=i+data2_idataStart-data_idataStart;
 	console.log("data2[i2]=",data2[i2]);
 	var scheissData2Undefined=(typeof data2[i2] === "undefined");
+
 	console.log(
 	  " data: ",insertLeadingZeroes(data[i]["date"]),
 	  " data2: ",((scheissData2Undefined)
@@ -1715,6 +1720,7 @@ function initializeData(country,insideValidation){
 	  " data_posRate=",data_posRate[i],
 	  " data_stringencyIndex=", Math.round(data_stringencyIndex[i]),
 	  " data_icuIncidence=",data_icuIncidence[i].toFixed(2),
+	  //" data_icuIncidence=",data_icuIncidence[i],
 	  " "
 	);
       }
@@ -3957,13 +3963,17 @@ function Vaccination(){
   
   this.immunityPop=0; // global vaccination immunity factor 
                       // (0=unprotected, 1=100% prot)
-  this.tau0=30;     // #days between 1th and 2nd vacc (former this.tau0)
-  this.I0=0.82;     // efficiency 1-alpha^2 at second vacc/boost time
+  this.tau0=30;     // #days between 1th and 2nd vacc 
+  this.I0=0.82;     // efficiency 1-alpha^2 at second vacc time
                        // if R01=alpha*R00 (infection nonvacc->vacc)
                        //              R10=R01 (infection vacc->nonvacc)
                        //              R11=alpha^2*R00 (infection vacc->vacc)
-  this.Iincrease=0.06; // further increase to peak after second vacc/booster
+  this.Iincrease=0.06; // further increase to peak after second vacc
   this.tauIncrease=25; // time scale of further increase
+
+  this.I0boost=0.30    // assumed remaining efficicency at boosting time
+  this.ImaxBoost=0.93  // assumed efficicency of booster
+  this.tauIncrBoost=14; // time scale to max efficiency for boosters
   
   this.tauHalf=180;    // #days for reduced efficiency to 50% of I0
                        // !!! assuming double timescales
@@ -4024,10 +4034,15 @@ Vaccination.prototype.initialize=function(country){
   }
 
   for(var tau=0; tau<this.taumax; tau++){
+    var increasePart=this.I0boost
+      + 0.5*(this.ImaxBoost-this.I0boost)
+	* (Math.tanh(2*(tau-0.5*this.tauIncrBoost)/this.tauIncrBoost)+1);
+
+    var decreasePart=this.ImaxBoost
+      *((1+Math.exp((-this.tauHalf)/(this.dtau)))
+	/(1+Math.exp((tau-2*this.tauHalf)/(2*this.dtau)))-1);
     this.IboostTable[tau]
-      = -this.Iincrease*Math.exp(-tau/this.tauIncrease)
-    +(this.I0+this.Iincrease)*(1+Math.exp((0-2*this.tauHalf)/(2*this.dtau)))
-      /(1+Math.exp((tau-2*this.tauHalf)/(2*this.dtau)));
+      = increasePart+decreasePart;
   }
 
   if(false){
@@ -5053,11 +5068,11 @@ function DrawSim(){
   colCasesCumValid="rgb(255,120,10)";
   colCasesRecovCum="rgb(0,150,40)";
   colCasesRecovCumSim="rgb(0,150,40)";
-  colCasesBars="rgb(255,150,0)";  // main plots
-  colCasesSim="rgb(255,0,0)";
+  colCasesBars="rgb(255,100,0)";  // main plots
+  colCasesSim="rgb(255,170,0)";
   colCasesValid="rgb(140,0,140)";
   colFalsePos="rgb(0,220,0)";
-  colDead="rgb(0,0,0)";  
+  colDead="rgba(0,0,0,0.7)";  
   colDeadValid="rgb(180,180,180)";  
   colDeadSim="rgb(120,120,120)";  
   colPosrate="rgb(255,0,255)"; 
@@ -5084,7 +5099,7 @@ function DrawSim(){
   colCasesLog="rgba(255,120,0,0.8)";
   colCasesLogValid="rgba(255,150,30,0.3)";
   colICU="rgb(150,50,0)";
-  colICUsim="rgb(200,100,0)";
+  colICUsim="rgb(210,110,0)";
 
 
 
