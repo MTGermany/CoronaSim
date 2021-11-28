@@ -1,0 +1,456 @@
+<?xml version="1.0" standalone="no"?>
+<mlt LC_NUMERIC="C" version="7.1.0" title="Shotcut version 21.10.31" producer="main_bin">
+  <profile description="automatic" width="1350" height="744" progressive="1" sample_aspect_num="1" sample_aspect_den="1" display_aspect_num="225" display_aspect_den="124" frame_rate_num="1000" frame_rate_den="33" colorspace="709"/>
+  <chain id="chain0" out="00:05:41.778">
+    <property name="length">00:05:41.811</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_11_25_ICU1.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="shotcut:hash">8614b9f1ab6bc3d4f9bcae94f95f4b69</property>
+    <property name="ignore_points">0</property>
+    <property name="creation_time">2021-11-24T19:59:43</property>
+    <property name="xml">was here</property>
+  </chain>
+  <chain id="chain1" out="00:08:08.382">
+    <property name="length">00:08:08.415</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_11_25_ICU2.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">6db3f18543c69a42664ae02e2c40d9fd</property>
+  </chain>
+  <chain id="chain2" out="00:01:31.581">
+    <property name="length">00:01:31.614</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_11_25_ICU3.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">5d91011cb3b9a3d611e377457665ace7</property>
+  </chain>
+  <chain id="chain3" out="00:00:39.006">
+    <property name="length">00:00:39.039</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_11_25_ICU5.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">27512e3e5e43932f3afdda6a0b300d83</property>
+  </chain>
+  <playlist id="main_bin">
+    <property name="xml_retain">1</property>
+    <entry producer="chain0" in="00:00:00.000" out="00:05:41.778"/>
+    <entry producer="chain1" in="00:00:00.000" out="00:08:08.382"/>
+    <entry producer="chain2" in="00:00:00.000" out="00:01:31.581"/>
+    <entry producer="chain3" in="00:00:00.000" out="00:00:39.006"/>
+  </playlist>
+  <producer id="black" in="00:00:00.000" out="00:13:50.193">
+    <property name="length">00:13:50.226</property>
+    <property name="eof">pause</property>
+    <property name="resource">0</property>
+    <property name="aspect_ratio">1</property>
+    <property name="mlt_service">color</property>
+    <property name="mlt_image_format">rgba</property>
+    <property name="set.test_audio">0</property>
+  </producer>
+  <playlist id="background">
+    <entry producer="black" in="00:00:00.000" out="00:13:50.193"/>
+  </playlist>
+  <chain id="chain4" out="00:05:41.778">
+    <property name="length">00:05:41.811</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_11_25_ICU1.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="shotcut:hash">8614b9f1ab6bc3d4f9bcae94f95f4b69</property>
+    <property name="ignore_points">0</property>
+    <property name="creation_time">2021-11-24T19:59:43</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:caption">2021_11_25_ICU1.mkv</property>
+  </chain>
+  <chain id="chain5" out="00:05:41.778">
+    <property name="length">00:05:41.811</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_11_25_ICU1.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="shotcut:hash">8614b9f1ab6bc3d4f9bcae94f95f4b69</property>
+    <property name="ignore_points">0</property>
+    <property name="creation_time">2021-11-24T19:59:43</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:caption">2021_11_25_ICU1.mkv</property>
+  </chain>
+  <chain id="chain6" out="00:05:41.778">
+    <property name="length">00:05:41.811</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_11_25_ICU1.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="shotcut:hash">8614b9f1ab6bc3d4f9bcae94f95f4b69</property>
+    <property name="ignore_points">0</property>
+    <property name="creation_time">2021-11-24T19:59:43</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:caption">2021_11_25_ICU1.mkv</property>
+  </chain>
+  <chain id="chain7" out="00:05:41.778">
+    <property name="length">00:05:41.811</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_11_25_ICU1.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="shotcut:hash">8614b9f1ab6bc3d4f9bcae94f95f4b69</property>
+    <property name="ignore_points">0</property>
+    <property name="creation_time">2021-11-24T19:59:43</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:caption">2021_11_25_ICU1.mkv</property>
+  </chain>
+  <chain id="chain8" out="00:05:41.778">
+    <property name="length">00:05:41.811</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_11_25_ICU1.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="shotcut:hash">8614b9f1ab6bc3d4f9bcae94f95f4b69</property>
+    <property name="ignore_points">0</property>
+    <property name="creation_time">2021-11-24T19:59:43</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:caption">2021_11_25_ICU1.mkv</property>
+  </chain>
+  <chain id="chain9" out="00:05:41.778">
+    <property name="length">00:05:41.811</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_11_25_ICU1.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="shotcut:hash">8614b9f1ab6bc3d4f9bcae94f95f4b69</property>
+    <property name="ignore_points">0</property>
+    <property name="creation_time">2021-11-24T19:59:43</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:caption">2021_11_25_ICU1.mkv</property>
+  </chain>
+  <chain id="chain10" out="00:05:41.778">
+    <property name="length">00:05:41.811</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_11_25_ICU1.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="shotcut:hash">8614b9f1ab6bc3d4f9bcae94f95f4b69</property>
+    <property name="ignore_points">0</property>
+    <property name="creation_time">2021-11-24T19:59:43</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:caption">2021_11_25_ICU1.mkv</property>
+  </chain>
+  <chain id="chain11" out="00:05:41.778">
+    <property name="length">00:05:41.811</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_11_25_ICU1.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="shotcut:hash">8614b9f1ab6bc3d4f9bcae94f95f4b69</property>
+    <property name="ignore_points">0</property>
+    <property name="creation_time">2021-11-24T19:59:43</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:caption">2021_11_25_ICU1.mkv</property>
+  </chain>
+  <chain id="chain12" out="00:08:08.382">
+    <property name="length">00:08:08.415</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_11_25_ICU2.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">6db3f18543c69a42664ae02e2c40d9fd</property>
+    <property name="shotcut:caption">2021_11_25_ICU2.mkv</property>
+  </chain>
+  <tractor id="tractor0" in="00:00:00.000" out="00:00:00.495">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="chain11" in="00:05:29.007" out="00:05:29.502"/>
+    <track producer="chain12" in="00:00:02.442" out="00:00:02.937"/>
+    <transition id="transition0" out="00:00:00.495">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition1" out="00:00:00.495">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <chain id="chain13" out="00:08:08.382">
+    <property name="length">00:08:08.415</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_11_25_ICU2.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">6db3f18543c69a42664ae02e2c40d9fd</property>
+    <property name="shotcut:caption">2021_11_25_ICU2.mkv</property>
+  </chain>
+  <chain id="chain14" out="00:08:08.382">
+    <property name="length">00:08:08.415</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_11_25_ICU2.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">6db3f18543c69a42664ae02e2c40d9fd</property>
+    <property name="shotcut:caption">2021_11_25_ICU2.mkv</property>
+  </chain>
+  <chain id="chain15" out="00:08:08.382">
+    <property name="length">00:08:08.415</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_11_25_ICU2.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">6db3f18543c69a42664ae02e2c40d9fd</property>
+    <property name="shotcut:caption">2021_11_25_ICU2.mkv</property>
+  </chain>
+  <chain id="chain16" out="00:08:08.382">
+    <property name="length">00:08:08.415</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_11_25_ICU2.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">6db3f18543c69a42664ae02e2c40d9fd</property>
+    <property name="shotcut:caption">2021_11_25_ICU2.mkv</property>
+  </chain>
+  <chain id="chain17" out="00:08:08.382">
+    <property name="length">00:08:08.415</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_11_25_ICU2.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">6db3f18543c69a42664ae02e2c40d9fd</property>
+    <property name="shotcut:caption">2021_11_25_ICU2.mkv</property>
+  </chain>
+  <chain id="chain18" out="00:08:08.382">
+    <property name="length">00:08:08.415</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_11_25_ICU2.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">6db3f18543c69a42664ae02e2c40d9fd</property>
+    <property name="shotcut:caption">2021_11_25_ICU2.mkv</property>
+  </chain>
+  <chain id="chain19" out="00:08:08.382">
+    <property name="length">00:08:08.415</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_11_25_ICU2.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">6db3f18543c69a42664ae02e2c40d9fd</property>
+    <property name="shotcut:caption">2021_11_25_ICU2.mkv</property>
+  </chain>
+  <chain id="chain20" out="00:01:31.581">
+    <property name="length">00:01:31.614</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_11_25_ICU3.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">5d91011cb3b9a3d611e377457665ace7</property>
+    <property name="shotcut:caption">2021_11_25_ICU3.mkv</property>
+  </chain>
+  <tractor id="tractor1" in="00:00:00.000" out="00:00:00.363">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="chain19" in="00:07:30.492" out="00:07:30.855"/>
+    <track producer="chain20" in="00:00:14.751" out="00:00:15.114"/>
+    <transition id="transition2" out="00:00:00.363">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition3" out="00:00:00.363">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <chain id="chain21" out="00:01:31.581">
+    <property name="length">00:01:31.614</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_11_25_ICU3.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">5d91011cb3b9a3d611e377457665ace7</property>
+    <property name="shotcut:caption">2021_11_25_ICU3.mkv</property>
+  </chain>
+  <chain id="chain22" out="00:00:39.006">
+    <property name="length">00:00:39.039</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_11_25_ICU5.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">27512e3e5e43932f3afdda6a0b300d83</property>
+    <property name="shotcut:caption">2021_11_25_ICU5.mkv</property>
+  </chain>
+  <tractor id="tractor2" in="00:00:00.000" out="00:00:01.287">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="chain21" in="00:01:28.050" out="00:01:29.337"/>
+    <track producer="chain22" in="00:00:15.807" out="00:00:17.094"/>
+    <transition id="transition4" out="00:00:01.287">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition5" out="00:00:01.287">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <chain id="chain23" out="00:00:39.006">
+    <property name="length">00:00:39.039</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_11_25_ICU5.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">27512e3e5e43932f3afdda6a0b300d83</property>
+    <property name="shotcut:caption">2021_11_25_ICU5.mkv</property>
+  </chain>
+  <playlist id="playlist0">
+    <property name="shotcut:video">1</property>
+    <property name="shotcut:name">V1</property>
+    <entry producer="chain4" in="00:00:11.484" out="00:00:56.265"/>
+    <entry producer="chain5" in="00:00:57.090" out="00:00:59.334"/>
+    <entry producer="chain6" in="00:01:00.165" out="00:02:50.292"/>
+    <entry producer="chain7" in="00:02:52.107" out="00:02:54.681"/>
+    <entry producer="chain8" in="00:02:55.671" out="00:03:10.032"/>
+    <entry producer="chain9" in="00:03:10.923" out="00:03:48.279"/>
+    <entry producer="chain10" in="00:03:49.005" out="00:04:21.879"/>
+    <entry producer="chain11" in="00:04:22.704" out="00:05:28.974"/>
+    <entry producer="tractor0" in="00:00:00.000" out="00:00:00.495"/>
+    <entry producer="chain12" in="00:00:02.970" out="00:00:44.352"/>
+    <entry producer="chain13" in="00:01:00.165" out="00:01:23.463"/>
+    <entry producer="chain14" in="00:01:24.948" out="00:02:03.168"/>
+    <entry producer="chain15" in="00:02:03.861" out="00:02:05.808"/>
+    <entry producer="chain16" in="00:02:07.029" out="00:05:48.642"/>
+    <entry producer="chain17" in="00:05:49.896" out="00:05:57.288"/>
+    <entry producer="chain18" in="00:05:58.311" out="00:07:05.676"/>
+    <entry producer="chain19" in="00:07:06.534" out="00:07:30.459"/>
+    <entry producer="tractor1" in="00:00:00.000" out="00:00:00.363"/>
+    <entry producer="chain20" in="00:00:15.147" out="00:01:21.747"/>
+    <entry producer="chain21" in="00:01:22.407" out="00:01:28.017"/>
+    <entry producer="tractor2" in="00:00:00.000" out="00:00:01.287"/>
+    <entry producer="chain22" in="00:00:17.127" out="00:00:23.793"/>
+    <entry producer="chain23" in="00:00:24.057" out="00:00:36.795"/>
+  </playlist>
+  <tractor id="tractor3" title="Shotcut version 21.10.31" in="00:00:00.000" out="00:13:50.193">
+    <property name="shotcut">1</property>
+    <property name="shotcut:projectAudioChannels">2</property>
+    <property name="shotcut:projectFolder">1</property>
+    <property name="shotcut:scaleFactor">3.05686</property>
+    <track producer="background"/>
+    <track producer="playlist0"/>
+    <transition id="transition6">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="mlt_service">mix</property>
+      <property name="always_active">1</property>
+      <property name="sum">1</property>
+    </transition>
+    <transition id="transition7">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="version">0.9</property>
+      <property name="mlt_service">frei0r.cairoblend</property>
+      <property name="threads">0</property>
+      <property name="disable">1</property>
+    </transition>
+  </tractor>
+</mlt>

@@ -258,24 +258,24 @@ const countryGerList={
 }
 
 const n0List={
-  "Germany"       :   80500000,
-  "Austria"       :    8800000,
+  "Germany"       :   83200000,
+  "Austria"       :    8920000,
   "Czechia"       :   10700000,
   "France"        :   67400000,
-  "United Kingdom":   65100000,
-  "Italy"         :   62200000,
-  "Poland"        :   38400000,
-  "Spain"         :   49300000,
-  "Sweden"        :   10000000,
-  "Denmark"       :    5813300,
-  "Switzerland"   :    8300000,
+  "United Kingdom":   67200000,
+  "Italy"         :   59300000,
+  "Poland"        :   37800000,
+  "Spain"         :   47400000,
+  "Sweden"        :   10400000,
+  "Denmark"       :    5840000,
+  "Switzerland"   :    8637000,
   "Greece"        :   10700000,
-  "Portugal"      :   10196707,
-  "Israel"        :    9100000,
-  "India"         : 1353000000,
-  "Russia"        :  144000000,
-  "US"            :  328000000,
-  "Australia"     :   25499881,
+  "Portugal"      :   10300000,
+  "Israel"        :    9220000,
+  "India"         : 1380000000,
+  "Russia"        :  144100000,
+  "US"            :  329500000,
+  "Australia"     :   25700000,
   "South Africa"  :   59308690,
   "LK_Erzgebirgskreis": 334948,
   "LK_Osterzgebirge"  : 245586,
@@ -1863,8 +1863,17 @@ function stringencyFactor(stringencyIndex){
 
 function calc_seasonFactor(it){
   var phase=2*Math.PI*((dayStartYear+it-365)/365. - season_fracYearPeak);
+
+  if((country==="South Africa")||(country==="Australia")){
+    phase+=Math.PI; // Southern hemisphere
+  }
+
   var factor=1+season_relAmplitude*Math.cos(phase);
- // var factorPresent=1+season_relAmplitude*Math.cos(phasePresent);
+
+  if(country==="India"){
+    factor=1; // no "normal seasons" in most of India
+  }
+  
   if(false){
   //if(it>itPresent){
     console.log("calc_seasonFactor: it=",it," itPresent=",itPresent,
@@ -1951,6 +1960,7 @@ function rgba2rgb(color){
 
 //##############################################################
 // function for variable replication rate R0 as a function of time
+// R0 includes virus strains but nothing else, not even season factor
 // t=tsim-dateStart [days] from t to t+1
 // !! global vars bool firstR0fixed and firstR0 for managing overlap
 //##############################################################
@@ -3809,7 +3819,7 @@ function doSimulationStep(doDrawing){ // logging "allowed" here !!
   //if(true){// doSimulationStep: logging "allowed"
     var idata=data_idataStart+it; // not "+1+" since after it++
     console.log( "doSimulationStep: after it++: it=",it,
-		 " R=",R0_actual.toFixed(2),
+		 " R0=",R0_actual.toFixed(2),
 		" pTest=",pTest.toPrecision(3),
 		" ndx=",Math.round(n0*corona.x[0]),
 		" ndxt=",Math.round(n0*corona.dxt),
@@ -5095,6 +5105,7 @@ function DrawSim(){
   colBoost="rgb(0,200,200)";
   colBoostValid="rgb(100,255,255)";
   colR="rgb(255,0,0)";
+  colR0="rgb(180,0,0)";
   colRValid="rgb(255,150,150)";
   colCasesLog="rgba(255,120,0,0.8)";
   colCasesLogValid="rgba(255,150,30,0.3)";
@@ -5104,7 +5115,7 @@ function DrawSim(){
 
 
   // central container for the graphics data
-  // !! max index 48; also update all instances of simPrevious (2021-11-21)
+  // !! max index 53; also update all instances of simPrevious (2021-11-21)
 
   this.dataG=[];
   this.xtPast=0; // needed to derive yt from balance since no longer calc.
@@ -5401,6 +5412,10 @@ function DrawSim(){
 		  type: 3, plottype: "lines", 
 		  ytrafo: [1, false,false], color:colRValid};
 
+  this.dataG[54]={key: "0.25*R0_Maerz_Sept (Sim)", data: [],
+		  type: 4, plottype: "lines", 
+		  ytrafo: [0.25, false,false], color:colR0};
+
   //this.dataG[50]={key: "log10(Wocheninzidenz)", data: [],
   this.dataG[50]={key: "Wocheninzidenz [%]", data: [],
 		  type: 3, plottype: "bars", 
@@ -5444,7 +5459,7 @@ function DrawSim(){
   this.qselectRegular[4]=[20,21,22];        // "Infektionsraten"
   this.qselectRegular[5]=[16,17,28,29];     // "Taegliche Faelle"
   this.qselectRegular[6]=[30,52,31,32,53,33,41];  // "Wochen-Inzidenz"
-  this.qselectRegular[7]=[50,45,46,43,48];  // "Ursache-Wirkung"
+  this.qselectRegular[7]=[50,45,46,43,48,54];  // "Ursache-Wirkung"
 
   if(countryComparison){this.qselectRegular[6]=[30,31,32,33,41,42];}
   
@@ -5455,7 +5470,7 @@ function DrawSim(){
   this.qselectWithPrev[4]=[20,21,22];
   this.qselectWithPrev[5]=[16,17,37,28,40,29];
   this.qselectWithPrev[6]=[30,52,31,38,32,39,53,33,41];
-  this.qselectWithPrev[7]=[50,51,45,47,46,44,43,49,48];
+  this.qselectWithPrev[7]=[50,51,45,47,46,44,43,49,48,54];
 
   if(countryComparison){this.qselectWithPrev[6]=[30,31,38,32,39,33,41,42];}
 
@@ -5965,6 +5980,7 @@ DrawSim.prototype.transferSimData=function(it){
   this.dataG[45].data[it]=pVaccFull;
   this.dataG[46].data[it]=pBoost;
   this.dataG[48].data[it]=corona.Reff;
+  this.dataG[54].data[it]=R0_actual;
   //this.dataG[50].data[it]=log10(this.dataG[32].data[it]);
   this.dataG[50].data[it]=0.001*this.dataG[32].data[it];
   

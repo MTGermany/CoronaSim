@@ -125,9 +125,14 @@ efficiencyInfectFun(x)=(I0-Imax)*exp(-x/tauIncrease)\
 
 ## two tanh functions
 
+
+
 efficiencyInfectBoosterFun(x)=I0boost\
-+0.5*(ImaxBoost-I0boost)*(tanh(2*(x-0.5*tauIncreaseBoost)/tauIncreaseBoost)+1)\
++0.5*(ImaxBoost-I0boost)\
+*(tanh(2*(x-0.5*tauIncreaseBoost)/tauIncreaseBoost)+1)\
 +ImaxBoost*((1+exp((0-tauHalf)/dtau)) / (1+exp((x-2*tauHalf)/(2*dtau)))-1)
+
+
 
 set noparam
 set key

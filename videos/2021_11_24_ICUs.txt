@@ -1,0 +1,117 @@
+[Ursache-Wirkung separates Video]
+
+
+
+Ich stelle ein neues Feature von Corona-Simulation.de vor: Ein Modell für die zukünftige Belegung der Intensivbetten mit Covid-19 Patienten, welches vor allem den Meldeverzug überbrücken kann und somit neben der Prognose auch als Nowcast nützlich ist.
+
+Daneben sage ich in der Standardprojektion (unveränderte Maßnahmen auf
+dem Stringency-Level 55% und 2.5% Boosterung pro Woche) ein
+Inzidenzmaximum bei 500 Ende November/Anfang Dezember, ein
+ICU-Inzidenzmaximum von 6.5 Covid-Patienten/100 000 Einwohner in der
+zweiten Dezemberwoche und ein Maximum der Todesfallinzidenz von
+2.5/Woche/100 000 in der 3. Dezemberwoche voraus.
+
+0:00 Einleitung
+
+1:05 Simulation der ICU-Belegung
+
+5:12 Zukunftsprojektionen
+
+13:30 Schluss
+
+
+Intro =====
+
+
+[ich im Bild]
+
+Hallo liebe Corona-Simulanten,
+
+ich habe meinem Simulator zwei neue aktuelle Features hinzugefuegt, die ich nun gerne vorstellen will: Intensiv-Patienten samt Prognose sowie eine Ursache-Wirkungs-Analyse, die ich in einem anderen Video besprechen werde.
+
+Ferner mache ich eine erstaunliche Prognose, die sich mit den Szenarien-Projektionen meines Videos letzter Woche deckt: Inzidenz wird noch auf 500 steigen und dann nach einem Plateau im Dezember wieder absinken.
+
+[Corona-simulation.de neu laufen lassen]
+
+ICU
+===
+
+Zunaechst zur neuen ICU-Inzidenz.
+
+Sie sehen unten bei den bisherigen schwarzen Todeszahlen einen neuen braunen Bereich. Das ist die ICU-Inzidenz
+
+Zahl der Covid-Intensivstations-Faelle (engl Intensive care unit, ICU) pro 100 000 Einwohner
+
+* Ist also nicht wie die Fallinzidenz eine Veraenderungsgroesse (je   groesser Zeitraum, z.B von Tag auf Woche, desto groesser), sondern   eine Bestandsgroesse.
+
+* Falls die Leute im Mittel 1 Woche auf Intensiv bleiben, waeren beide   Inzidenzen kommensurabel, bei einem im Mittel laengerem Aufenthalt   wuerden pro Woche entsprechend weniger auf Intensiv kommen
+
+* Neben den dunkelbraunen Balken gibt es noch eine hellbraune Kurve:   die mit meinem Modell simulierte ICU-Inzidenz.
+
+Dazu kalibriere ich   anhand der Daten den Anteil der Infizierten (nicht der   Positivfaelle!), die spaeter auf der   Intensivstation landen. Ich habe einen mittleren Aufenthalt von 8 Tagen und   einen mittleren Aufnahmetag 10 Tage nach der Infektion, also etwa 5   Tage nach dem positiven Test angenommen, aber das Ergebnis haengt   i.W. nur von der mittleren Verzoegerung ab Infektion, nicht von der   Aufenthaltsdauer ab: Halbiert man diese, wuerde sich der an die   Daten angepasste ICU-Anteil entsprechend verdoppeln
+
+Datenverzug
+===========
+
+Wichtig: Mit der Siulation kann ich einen Meldeverzug der Intensivstationen-Daten von bis zu 15 Tagen ueberbruecken
+
+[Gegenwart Balken kringeln mit Maus]
+
+[Zoomen]
+
+Zoomen wir herein, sehen Sie den Datenverzug deutlich: Das Modell weicht auf einmal von den Daten ab! Da diese Meldeverzoegerungen fast immer vorkommen, enthalte ich der Simulation die letzten 10 Tage an ICU-Daten vor, da sie sowieso nicht stimmen
+
+
+Prognose
+========
+
+[key druecken, um Kringel wegzubekommen]
+
+Die beiden Massnahmen, die ich in meinem letzten Video vor 5 Tagen vorausgesehen bzw projektiv simuliert habe, sind nun eingetroffen: Verschaerfung der Massnahmen sowie rapider Anstieg der Boosterung.
+
+* Am 19. November ging, zumindest nach OWID, der "Stringency-Index von   44% auf 55% hoch. Dieser ist wie gesagt, ein eindimensionales Mass   von 0 bis 100 fuer die Staerke der Isolationsmassnahmen
+
+[Neues Fenster "Ursache-Wirkung"]
+
+Das wird wohl im neuen Fenster "Ursache-Wirkung" deutlicher, die ich im naechsten Video besprechen werden.
+
+* unten: Boosterung tuerkis-Kurve steigt steiler an, 2.35% pro Woche
+
+* Mitte: violette Lockdownstaerke steigt auf 55 am 19.
+
+* Als Konsequenz sinkt sofort die wahre Reproduktionsrate R auf etwa   1, also Stagnation
+
+Warum ist dennoch die Inzidenz (simulierte wie gemessene orange) weiter ansteigend? Klar, Verzoegerung! Die nun nicht mehr steignede Anzahl neu Infizierter ist ja noch nicht gemessen worden, also in der Gegenwart unbeobachtbar!
+
+[Rueckswitchen Inzidenzfensrter]
+
+[Prognose bis Weihnachten]
+
+Machen wir also die Projektion des Standardfalles "alles bleibt unveraendert" bis Weihnachten.
+
+* [Pfeil Inzidenzmax] Anfang Dez Plateau bei 500
+
+* Intensivbelegung steigt noch etwas weiter und hat Max bei 6.5 Betten   pro 100 000 in 2. Dezemberwoche, die Zahl der Toten hat Max von 2.5   pro Woche pro 100 000 in der 3. Dezemberwoche
+
+[zeige https://youtu.be/dFWpiL1mIO4?t=2185]
+
+* Das ist ziemlich genau der Mittelwert der beiden Projektionen mit   erhoehten Massnahmen und ohne geboosterte Boosterzahlen (violett) bzw   mit (rot): Max um Ende Nov/Anf Dez bei 500
+
+* Die rote Kurve wuerde nach wie vor Gelten, wenn mir die Booster noch   mehr boostern, z.B. auf 5% pro Woche wie im letzten Video:
+
+Diese rote Kurve ist auch, was ich als wahrscheinl Szenario ansehe, denn wie gesagt 5% pro Woche entspricht nicht mehr Spritzen pro Woche als im Sommer. Hoffen wir, dass es mit der -- SUB-OPTIMALEN -- Bestellstrategie und Logistik der Bundesregierung dennoch moeglich sein wird.
+
+
+Schluss ========
+
+[ich]
+
+Mit dieser, ich finde sehr gewagten Prognose schliesse ich dieses Video. Mal schaun, wie es reift.
+
+Servus, Tscuess und auf Wiedersehen!
+
+
+
+
+
+
