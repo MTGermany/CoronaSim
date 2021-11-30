@@ -1,0 +1,732 @@
+<?xml version="1.0" standalone="no"?>
+<mlt LC_NUMERIC="C" version="7.1.0" title="Shotcut version 21.10.31" producer="main_bin">
+  <profile description="automatic" width="1352" height="824" progressive="1" sample_aspect_num="1" sample_aspect_den="1" display_aspect_num="169" display_aspect_den="103" frame_rate_num="1000" frame_rate_den="33" colorspace="709"/>
+  <chain id="chain0" out="00:00:37.818">
+    <property name="length">00:00:37.851</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_11_30_Gipfel1.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="shotcut:hash">a03673cdc05039c56e6958e1823af822</property>
+    <property name="ignore_points">0</property>
+    <property name="creation_time">2021-11-30T15:40:10</property>
+    <property name="xml">was here</property>
+  </chain>
+  <chain id="chain1" out="00:00:43.758">
+    <property name="length">00:00:43.791</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_11_30_Gipfel2.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">5320f77ee4e0eebeeccaf8b9545945d9</property>
+  </chain>
+  <chain id="chain2" out="00:02:01.287">
+    <property name="length">00:02:01.320</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_11_30_Gipfel3.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">712bee58317eb0061694699c4c822aa9</property>
+  </chain>
+  <chain id="chain3" out="00:00:42.834">
+    <property name="length">00:00:42.867</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_11_30_Gipfel4.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">9c4d689bb2a4eca584af65adcd1a62c8</property>
+  </chain>
+  <chain id="chain4" out="00:03:17.721">
+    <property name="length">00:03:17.754</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_11_30_Gipfel5.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">f38330ecbaec04f8f36dff23d891b464</property>
+  </chain>
+  <chain id="chain5" out="00:03:15.510">
+    <property name="length">00:03:15.543</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_11_30_Gipfel6.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">153dd2453b0ffb6f1e7267b18387c7e6</property>
+  </chain>
+  <chain id="chain6" out="00:00:35.574">
+    <property name="length">00:00:35.607</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_11_30_Gipfel7.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">e29c70563e706b76e633276a6f10cebd</property>
+  </chain>
+  <chain id="chain7" out="00:05:47.553">
+    <property name="length">00:05:47.586</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_11_30_Gipfel8.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">394f77ffaf94713cdfc92422c816cb6f</property>
+  </chain>
+  <chain id="chain8" out="00:00:52.734">
+    <property name="length">00:00:52.767</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_11_30_Gipfel9.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">89e51a9073da93ec54d5ea1cd31447fd</property>
+  </chain>
+  <chain id="chain9" out="00:04:14.883">
+    <property name="length">00:04:14.916</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_11_30_Gipfel10.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">a53cff5eb7fbb6b797fec064eac34a35</property>
+  </chain>
+  <chain id="chain10" out="00:01:33.726">
+    <property name="length">00:01:33.759</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_11_30_Gipfel11.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">8a52ee42f49357e36494e7495fdbdfb2</property>
+  </chain>
+  <chain id="chain11" out="00:03:16.401">
+    <property name="length">00:03:16.434</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_11_30_Gipfel12.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">eda3a6ee985cf9979f0c082b54fd8a66</property>
+  </chain>
+  <chain id="chain12" out="00:01:44.550">
+    <property name="length">00:01:44.583</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_11_30_Gipfel13.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">b31b02dc7cf32b584409d33aa980c486</property>
+  </chain>
+  <playlist id="main_bin" title="Shotcut version 21.10.31">
+    <property name="shotcut:projectAudioChannels">2</property>
+    <property name="shotcut:projectFolder">1</property>
+    <property name="xml_retain">1</property>
+    <entry producer="chain0" in="00:00:00.000" out="00:00:37.818"/>
+    <entry producer="chain1" in="00:00:00.000" out="00:00:43.758"/>
+    <entry producer="chain2" in="00:00:00.000" out="00:02:01.287"/>
+    <entry producer="chain3" in="00:00:00.000" out="00:00:42.834"/>
+    <entry producer="chain4" in="00:00:00.000" out="00:03:17.721"/>
+    <entry producer="chain5" in="00:00:00.000" out="00:03:15.510"/>
+    <entry producer="chain6" in="00:00:00.000" out="00:00:35.574"/>
+    <entry producer="chain7" in="00:00:00.000" out="00:05:47.553"/>
+    <entry producer="chain8" in="00:00:00.000" out="00:00:52.734"/>
+    <entry producer="chain9" in="00:00:00.000" out="00:04:14.883"/>
+    <entry producer="chain10" in="00:00:00.000" out="00:01:33.726"/>
+    <entry producer="chain11" in="00:00:00.000" out="00:03:16.401"/>
+    <entry producer="chain12" in="00:00:00.000" out="00:01:44.550"/>
+  </playlist>
+  <producer id="black" in="00:00:00.000" out="00:19:09.867">
+    <property name="length">00:19:09.900</property>
+    <property name="eof">pause</property>
+    <property name="resource">0</property>
+    <property name="aspect_ratio">1</property>
+    <property name="mlt_service">color</property>
+    <property name="mlt_image_format">rgba</property>
+    <property name="set.test_audio">0</property>
+  </producer>
+  <playlist id="background">
+    <entry producer="black" in="00:00:00.000" out="00:19:09.867"/>
+  </playlist>
+  <chain id="chain13" out="00:00:43.758">
+    <property name="length">00:00:43.791</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_11_30_Gipfel2.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">5320f77ee4e0eebeeccaf8b9545945d9</property>
+    <property name="shotcut:caption">2021_11_30_Gipfel2.mkv</property>
+  </chain>
+  <chain id="chain14" out="00:02:01.287">
+    <property name="length">00:02:01.320</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_11_30_Gipfel3.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">712bee58317eb0061694699c4c822aa9</property>
+    <property name="shotcut:caption">2021_11_30_Gipfel3.mkv</property>
+  </chain>
+  <tractor id="tractor0" in="00:00:00.000" out="00:00:00.957">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="chain13" in="00:00:40.326" out="00:00:41.283"/>
+    <track producer="chain14" in="00:00:00.594" out="00:00:01.551"/>
+    <transition id="transition0" out="00:00:00.957">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition1" out="00:00:00.957">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <chain id="chain15" out="00:02:01.287">
+    <property name="length">00:02:01.320</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_11_30_Gipfel3.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">712bee58317eb0061694699c4c822aa9</property>
+    <property name="shotcut:caption">2021_11_30_Gipfel3.mkv</property>
+  </chain>
+  <chain id="chain16" out="00:00:42.834">
+    <property name="length">00:00:42.867</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_11_30_Gipfel4.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">9c4d689bb2a4eca584af65adcd1a62c8</property>
+    <property name="shotcut:caption">2021_11_30_Gipfel4.mkv</property>
+  </chain>
+  <tractor id="tractor1" in="00:00:00.000" out="00:00:00.726">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="chain15" in="00:00:23.298" out="00:00:24.024"/>
+    <track producer="chain16" in="00:00:03.168" out="00:00:03.894"/>
+    <transition id="transition2" out="00:00:00.726">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition3" out="00:00:00.726">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <chain id="chain17" out="00:03:17.721">
+    <property name="length">00:03:17.754</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_11_30_Gipfel5.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">f38330ecbaec04f8f36dff23d891b464</property>
+    <property name="shotcut:caption">2021_11_30_Gipfel5.mkv</property>
+  </chain>
+  <tractor id="tractor2" in="00:00:00.000" out="00:00:01.056">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="chain16" in="00:00:40.920" out="00:00:41.976"/>
+    <track producer="chain17" in="00:00:04.488" out="00:00:05.544"/>
+    <transition id="transition4" out="00:00:01.056">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition5" out="00:00:01.056">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <chain id="chain18" out="00:03:17.721">
+    <property name="length">00:03:17.754</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_11_30_Gipfel5.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">f38330ecbaec04f8f36dff23d891b464</property>
+    <property name="shotcut:caption">2021_11_30_Gipfel5.mkv</property>
+  </chain>
+  <chain id="chain19" out="00:03:15.510">
+    <property name="length">00:03:15.543</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_11_30_Gipfel6.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">153dd2453b0ffb6f1e7267b18387c7e6</property>
+    <property name="shotcut:caption">2021_11_30_Gipfel6.mkv</property>
+  </chain>
+  <tractor id="tractor3" in="00:00:00.000" out="00:00:00.825">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="chain18" in="00:03:16.896" out="00:03:17.721"/>
+    <track producer="chain19" in="00:00:12.144" out="00:00:12.969"/>
+    <transition id="transition6" out="00:00:00.825">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition7" out="00:00:00.825">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <chain id="chain20" out="00:03:15.510">
+    <property name="length">00:03:15.543</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_11_30_Gipfel6.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">153dd2453b0ffb6f1e7267b18387c7e6</property>
+    <property name="shotcut:caption">2021_11_30_Gipfel6.mkv</property>
+  </chain>
+  <tractor id="tractor4" in="00:00:00.000" out="00:00:00.825">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="chain19" in="00:00:38.709" out="00:00:39.534"/>
+    <track producer="chain20" in="00:00:40.425" out="00:00:41.250"/>
+    <transition id="transition8" out="00:00:00.825">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition9" out="00:00:00.825">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <chain id="chain21" out="00:00:35.574">
+    <property name="length">00:00:35.607</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_11_30_Gipfel7.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">e29c70563e706b76e633276a6f10cebd</property>
+    <property name="shotcut:caption">2021_11_30_Gipfel7.mkv</property>
+  </chain>
+  <tractor id="tractor5" in="00:00:00.000" out="00:00:00.627">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="chain20" in="00:03:06.600" out="00:03:07.227"/>
+    <track producer="chain21" in="00:00:01.188" out="00:00:01.815"/>
+    <transition id="transition10" out="00:00:00.627">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition11" out="00:00:00.627">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <chain id="chain22" out="00:05:47.553">
+    <property name="length">00:05:47.586</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_11_30_Gipfel8.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">394f77ffaf94713cdfc92422c816cb6f</property>
+    <property name="shotcut:caption">2021_11_30_Gipfel8.mkv</property>
+  </chain>
+  <tractor id="tractor6" in="00:00:00.000" out="00:00:00.957">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="chain21" in="00:00:33.726" out="00:00:34.683"/>
+    <track producer="chain22" in="00:00:08.118" out="00:00:09.075"/>
+    <transition id="transition12" out="00:00:00.957">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition13" out="00:00:00.957">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <chain id="chain23" out="00:05:47.553">
+    <property name="length">00:05:47.586</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_11_30_Gipfel8.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">394f77ffaf94713cdfc92422c816cb6f</property>
+    <property name="shotcut:caption">2021_11_30_Gipfel8.mkv</property>
+  </chain>
+  <chain id="chain24" out="00:00:52.734">
+    <property name="length">00:00:52.767</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_11_30_Gipfel9.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">89e51a9073da93ec54d5ea1cd31447fd</property>
+    <property name="shotcut:caption">2021_11_30_Gipfel9.mkv</property>
+  </chain>
+  <tractor id="tractor7" in="00:00:00.000" out="00:00:00.825">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="chain23" in="00:05:45.969" out="00:05:46.794"/>
+    <track producer="chain24" in="00:00:11.154" out="00:00:11.979"/>
+    <transition id="transition14" out="00:00:00.825">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition15" out="00:00:00.825">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <chain id="chain25" out="00:00:52.734">
+    <property name="length">00:00:52.767</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_11_30_Gipfel9.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">89e51a9073da93ec54d5ea1cd31447fd</property>
+    <property name="shotcut:caption">2021_11_30_Gipfel9.mkv</property>
+  </chain>
+  <chain id="chain26" out="00:04:14.883">
+    <property name="length">00:04:14.916</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_11_30_Gipfel10.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">a53cff5eb7fbb6b797fec064eac34a35</property>
+    <property name="shotcut:caption">2021_11_30_Gipfel10.mkv</property>
+  </chain>
+  <tractor id="tractor8" in="00:00:00.000" out="00:00:01.023">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="chain25" in="00:00:51.711" out="00:00:52.734"/>
+    <track producer="chain26" in="00:00:02.409" out="00:00:03.432"/>
+    <transition id="transition16" out="00:00:01.023">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition17" out="00:00:01.023">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <chain id="chain27" out="00:01:33.726">
+    <property name="length">00:01:33.759</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_11_30_Gipfel11.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">8a52ee42f49357e36494e7495fdbdfb2</property>
+    <property name="shotcut:caption">2021_11_30_Gipfel11.mkv</property>
+  </chain>
+  <chain id="chain28" out="00:01:33.726">
+    <property name="length">00:01:33.759</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_11_30_Gipfel11.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">8a52ee42f49357e36494e7495fdbdfb2</property>
+    <property name="shotcut:caption">2021_11_30_Gipfel11.mkv</property>
+  </chain>
+  <chain id="chain29" out="00:01:33.726">
+    <property name="length">00:01:33.759</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_11_30_Gipfel11.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">8a52ee42f49357e36494e7495fdbdfb2</property>
+    <property name="shotcut:caption">2021_11_30_Gipfel11.mkv</property>
+  </chain>
+  <chain id="chain30" out="00:01:33.726">
+    <property name="length">00:01:33.759</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_11_30_Gipfel11.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">8a52ee42f49357e36494e7495fdbdfb2</property>
+    <property name="shotcut:caption">2021_11_30_Gipfel11.mkv</property>
+  </chain>
+  <chain id="chain31" out="00:01:33.726">
+    <property name="length">00:01:33.759</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_11_30_Gipfel11.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">8a52ee42f49357e36494e7495fdbdfb2</property>
+    <property name="shotcut:caption">2021_11_30_Gipfel11.mkv</property>
+  </chain>
+  <chain id="chain32" out="00:01:44.550">
+    <property name="length">00:01:44.583</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_11_30_Gipfel13.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">b31b02dc7cf32b584409d33aa980c486</property>
+    <property name="shotcut:caption">2021_11_30_Gipfel13.mkv</property>
+  </chain>
+  <tractor id="tractor9" in="00:00:00.000" out="00:00:01.683">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="chain31" in="00:01:32.043" out="00:01:33.726"/>
+    <track producer="chain32" in="00:00:10.098" out="00:00:11.781"/>
+    <transition id="transition18" out="00:00:01.683">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition19" out="00:00:01.683">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <chain id="chain33" out="00:01:44.550">
+    <property name="length">00:01:44.583</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_11_30_Gipfel13.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">b31b02dc7cf32b584409d33aa980c486</property>
+    <property name="shotcut:caption">2021_11_30_Gipfel13.mkv</property>
+  </chain>
+  <tractor id="tractor10" in="00:00:00.000" out="00:00:01.122">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="chain32" in="00:00:46.035" out="00:00:47.157"/>
+    <track producer="chain33" in="00:01:30.030" out="00:01:31.152"/>
+    <transition id="transition20" out="00:00:01.122">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition21" out="00:00:01.122">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <playlist id="playlist0">
+    <property name="shotcut:video">1</property>
+    <property name="shotcut:name">V1</property>
+    <entry producer="chain13" in="00:00:15.180" out="00:00:40.293"/>
+    <entry producer="tractor0" in="00:00:00.000" out="00:00:00.957"/>
+    <entry producer="chain14" in="00:00:01.584" out="00:00:18.612"/>
+    <entry producer="chain15" in="00:00:19.272" out="00:00:23.265"/>
+    <entry producer="tractor1" in="00:00:00.000" out="00:00:00.726"/>
+    <entry producer="chain16" in="00:00:03.927" out="00:00:40.887"/>
+    <entry producer="tractor2" in="00:00:00.000" out="00:00:01.056"/>
+    <entry producer="chain17" in="00:00:05.577" out="00:01:24.024"/>
+    <entry producer="chain18" in="00:02:20.526" out="00:03:16.863"/>
+    <entry producer="tractor3" in="00:00:00.000" out="00:00:00.825"/>
+    <entry producer="chain19" in="00:00:13.002" out="00:00:38.676"/>
+    <entry producer="tractor4" in="00:00:00.000" out="00:00:00.825"/>
+    <entry producer="chain20" in="00:00:41.283" out="00:03:06.567"/>
+    <entry producer="tractor5" in="00:00:00.000" out="00:00:00.627"/>
+    <entry producer="chain21" in="00:00:01.848" out="00:00:33.693"/>
+    <entry producer="tractor6" in="00:00:00.000" out="00:00:00.957"/>
+    <entry producer="chain22" in="00:00:09.108" out="00:00:23.067"/>
+    <entry producer="chain23" in="00:00:24.123" out="00:05:45.936"/>
+    <entry producer="tractor7" in="00:00:00.000" out="00:00:00.825"/>
+    <entry producer="chain24" in="00:00:12.012" out="00:00:42.339"/>
+    <entry producer="chain25" in="00:00:43.197" out="00:00:51.678"/>
+    <entry producer="tractor8" in="00:00:00.000" out="00:00:01.023"/>
+    <entry producer="chain26" in="00:00:03.465" out="00:03:46.431"/>
+    <entry producer="chain27" in="00:00:06.369" out="00:00:10.461"/>
+    <entry producer="chain28" in="00:00:13.761" out="00:00:18.117"/>
+    <entry producer="chain29" in="00:00:18.942" out="00:00:37.521"/>
+    <entry producer="chain30" in="00:00:40.887" out="00:01:08.877"/>
+    <entry producer="chain31" in="00:01:11.847" out="00:01:32.010"/>
+    <entry producer="tractor9" in="00:00:00.000" out="00:00:01.683"/>
+    <entry producer="chain32" in="00:00:11.814" out="00:00:46.002"/>
+    <entry producer="tractor10" in="00:00:00.000" out="00:00:01.122"/>
+    <entry producer="chain33" in="00:01:31.185" out="00:01:41.877"/>
+  </playlist>
+  <tractor id="tractor11" title="Shotcut version 21.10.31" in="00:00:00.000" out="00:19:09.867">
+    <property name="shotcut">1</property>
+    <property name="shotcut:projectAudioChannels">2</property>
+    <property name="shotcut:projectFolder">1</property>
+    <track producer="background"/>
+    <track producer="playlist0"/>
+    <transition id="transition22">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="mlt_service">mix</property>
+      <property name="always_active">1</property>
+      <property name="sum">1</property>
+    </transition>
+    <transition id="transition23">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="version">0.9</property>
+      <property name="mlt_service">frei0r.cairoblend</property>
+      <property name="threads">0</property>
+      <property name="disable">1</property>
+    </transition>
+  </tractor>
+</mlt>

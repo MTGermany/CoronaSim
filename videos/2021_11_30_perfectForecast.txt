@@ -1,0 +1,134 @@
+
+Der Corona-Gipfel ist erreicht!
+
+Abstract
+
+In diesem Video zeige ich aus aktuellen Anlass, dass weitere noch strengere Maßnahmen nicht nötig sind. Wie bereits vor 12 Tagen vorausgesagt, hat die Inzidenz in Deutschland ihren Peak bei 500 pro Woche und 100 000 erreicht und wird bis Weihnachten auf 250 bis 300 zurückgehen.
+
+Die Südafrika-Variante könnte dies über den Haufen treffen, aber für
+die gibt es noch keine validen Daten
+
+
+
+Intro
+=====
+
+[ich]
+
+Hallo und herzlich willkommen, in diesem Video aus aktuellem Anlass zeige ich, dass der Aktionismus der Bundesregierung zu spät ist, denn die R-Werte sind bereits knapp unter 1 und der Gipfel der Inzidenzen ist erreicht. Die Inzidenzen werden die nächsten Tage zurückgehen, erst langsam, dann schneller
+
+
+Eingetroffene Projektoin
+=========================
+
+Das habe ich bereits vor 12 Tagen vorausgesehen:
+
+[ https://youtu.be/dFWpiL1mIO4?t=2153 abspielen]
+
+Hier habe ich eine Erhoehung des Shutdown-Levels von 46% auf 60% angenommen und eine Erhoehung der Boostrate von etwa 1% auf 5%
+
+Wie sieht es tatsaechlich aus, wie bewahrheitet sich die Voraussage eies Maximums Ende November bei 500 und einer Seitwaertsbewegung mit leichtem Absinken danach?
+
+[erstes simulations-tab abspielen Start 17. November Abspielen bis bis Gegenwart]
+
+Genau getroffen, dead on the bull's eye, wie die Amis sagen wuerden!
+
+!!! Uebrigens: Meine Zahlen von bis zu 500 sind von RKI. Das entspricht den Zahlen, die auch die Wochenzeitung ZEIT hat. Das RKI hat, aus welchen Gruenden auch immer, niedrigere Werte.
+
+In Wirklichkeit wurde die Shutdown-Staerke sogar in mehreren Schritten auf 76% angehoben, aber das Boostrate nur auf 3.6% erhoeht, aber die letzte Erhoehung des Shutdown-Levels ist noch nicht wirksam und davor passten die etwa 60%. Fuer den Peak ist in erster linie das Shutdown-Level verantwortlich, fuer den Verlauf danach: Seitwaerts oder Abwaerts, zunaechst teils der Shutdown, dann aber mehr und mehr das Boostern!
+
+Aktuelle neue Projektion bei Status Quo
+========================================
+
+Die Standard-Projektion ist immer der Status Quo: Gleichbleibender Shutdownlevel, gleichblibende Impf- und Boosterraten, keine neuen Mutationen, aber natuerlich variable jahreszeiten. Fiuer diese Projektion muss ich nic aendern, einfach weiterlaufen lasen:
+
+[weiter simulieren]
+
+Lassen wir mit Status Quo, also gleichbleibender Impf- und Boosterrate und gleicher Shutdownstaerke weitersimulieren:
+
+* Es geht deutlich abwaerts, zu Weihnachten halbiert auf 250
+
+* Die Intensivfaelle, die in der Gegenwart (Nowcast) bei etwa 5.5 pro   100 000 und nicht wie in den Daten angegeben bei 4 pro 100 000   liegen (Meldeverzug!) werden ein Maximum bei 6.5 pro 100 000 um den   8. Dezember herum haben, die Todesinzidenz ihr Maximum bei 2.6 pro   Woche und 100000 um den 13. Dezember herum
+
+
+Kausalkette
+===========
+
+[Schalten auf Ansicht "Ursache-Wirkung"]
+
+Wie sieht die Kausalkette aus:
+
+* Qualitaetsmass fuer das gesamte Modell ist die braune Kurve, die die   Basisreproduktionszahl R0 hoch- bzw runtergerechnet auf den   Fruehjahr oder Herbst angibt. Das ist die mittlere Zahl der   Ansteckungen durch einen Infizierten ohne jede Massnahmen im   Fruehjahr oder Herbst. Je konstanter diese Zahl ist, desto   besser ist das Modell, denn dies ist die einzige, an die Inzidenzen   kalibrierte Groesse. Hier liegt sie zwischen 3.7 und 4: Sehr konstant
+
+* R0 wuerde erst hochgehen, wenn eine neue Virusvariante wie Omikron   sich ausbreitet. Auch das kann ich explizit modellieren, allerdings   gibt es fuer eine Kalibrierung dieses Durchdringungsprozesses noch   zu wenig Daten, so dass ich sie -- VORLAEUFIG - noch weglasse
+
+* Alle anderen Faktoren kommen aus explizit
+bekannten und quantitativ modellierten Ursachen wie
+
+ - die Jahreseiten (Corona ist eine Winter-Erkaeltungskrankheit
+
+ - die Zahl der Geimpften [auf gruene Kurve zeigen] und Geboosterten
+ [Tuerkise Kurve] einschl. Verteilung der
+ Zeitpunkte der Impfungen und Boosterungen
+
+ - Die Zahl der Genesenen [Zurueck Fenster Inzidenz, obere Textzeile
+ Durchseuchung 28%]
+
+ - die Shutdownstaerke [zurueck Ursache-Wirkung] [ auf violette Kurve    zeigen].
+
+* Diese 4 bekannten Faktoren machen aus der Basisreproduktionszahl R0   [braun zeigen, um 3.7 bis 4 Beachte den Faktor 0.25 in d   Darstellung!] die aktuelle Reproduktionszahl R (rote Kurve)
+
+ - Sie reagiert instantan mit der Durchsetzung (nicht Verkuendung!)    der Massnahmen, waehrend die Boosterungen den allmaehlichen    weiteren Abfall von R verursacht
+
+ - die wenigen neuen Erst- und    Zweitimpfungen hingegen koennen nicht mal den Verfall der    Wirksamkeit der Standardimpfung kompensieren
+
+* Das R bewirkt letztlich dann den Anstieg und Abfall der realen   Infektionsraten und, zeitlich verzoegert und mit einem zusaetzlichen   Faktor je nach Testzahl, auch der Inzidenzen: Inzidenzen sind   positive PCR-Tests, was nicht mit der Zahl der Infektionen   gleichgesetzt werden darf
+
+
+Validierung
+===========
+
+Jetzt will ich Ihnen noch mal life die Prognosegüte zeigen: Ich enthalte der Simulation die letzten 14 Tage an Daten vor, treffe aber die selben polit Entscheid, die tats getroffen werden. Wie gesagt, es gibt keine unbedingte Prognose und diese Simulation kann Politikern als Entscheidungsgrundlage dienen was welche Massnahme wann bewirkt.
+
+{Validieren] [14 tage] [sim bis 16.November]
+
+[sim bis 19. November]
+
+keine Daten mehr! (dass die Intensivzahlen angezeigt werden ist bug; sie werden auch nicht mehr verwendet)
+
+[Erhohung Lockdownstaerke auf 55% Boostrate 2% am 19. November, sim bis 24. Nov]
+
+[Erhoehung Shutdown-Level auf jetztige 76% und Boosterrate auf 3.6%]
+
+weitersim bis Anfang Januar
+
+Also schon vor 14 Tagen kam im Wesentlichen das gleiche raus wie jetzt
+
+
+Das alles gilt nur, falls Omikron nicht einen Strich durch d Rechnung macht
+
+Variante Omikron
+================
+
+
+[Suedafrika simulieren]
+
+SA Inzidenzen: Stiegen extrem an, dann aber ploetzlich kaum noch. Dennoch gibt es ploetzlich viel mehr Infektionen OBOHL IN SA SOMMER IST.
+
+[Auf "ursache-Wirkung" switchen]
+
+Ich sagte ja vorhin, dass die Basisreproduktionsrate R0 sich bei ungeaenderten Virus sich bei guten Modellen kaum aendert, da ja aus ihr alle Effekte rausgerechnet sind. Aendert sie sich anhand der Datenkalibrierung dennoch, ist das ein Indiz fuer neue Varianten. Hier geht sie von 2 auf ueber 4 hoch, mehr als ein Faktor 2!  Das waere die Atombombe. Aber Achtung: Erstens schauen die Daten aus der Sicht eines Datenanalysten wie mich komisch aus. Zweitens versagt das Modell bei extrem niedrigen Inzidenzen wie in SA im Okt/Anf Nov: nahe null, was bei der Schaetzung von R0 eine 0/0 Situation ergibt. Ist auch bei und im Jul/Aug aehnlich, obwohl wir wissen, dass die ganze Zeit Delta herrschte
+
+Schluss
+=======
+
+
+[ich im Bild]
+
+Summa Summarum: Die Inzidenzen werden mit den bereits getroffenen Massnahmen schon bald deutlich zurueckgehen, Weihanchten auf die haelfte. Weietre Massnahmen sind nicht noetig.
+
+Aber: Was ein Gaemchanger sein koennte, ist die Variante Omikron. Dies ist aber noch sehr unsicher.
+
+Das war's für heute. Vielen Dank für das teilen des Videos und auf Wiedersehen!
+
+ 
