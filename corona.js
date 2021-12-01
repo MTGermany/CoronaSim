@@ -2453,9 +2453,8 @@ function calibrate(){
         estimateR0(itmin_c, itmax_c, R0calib);  // also R0calib -> R0time
        //#####################################
 
-        if(logging){console.log("before covar: R0calib=",R0calib);}
-        //estimateErrorCovar_R0hist_sigmaR0hist(itmin_c, itmax_c, R0calib);
-
+        if(logging){console.log("after estimateR0: R0calib=",R0calib);}
+ 
         // calculate snapshot for init of next period
 
         var itsnap=Math.min(calibInterval*dn*(ip+1), itmax_c-1); //!!
@@ -2501,6 +2500,9 @@ function calibrate(){
   if(true){ //!!
     console.log("calibration details: nPeriods=",nPeriods,
 		" data_itmax=",data_itmax);
+    for(var j=R0time.length-6; j<R0time.length; j++){
+      console.log("last vals: j=",j," R0time[j]=",R0time[j]);
+    }
   }
 
   
@@ -2664,7 +2666,7 @@ function calibrate(){
     var it1=itmax_calibICU-(ICU_jmax-j-1)*fracICUinterval;
     
     var ICUcal=calibICU(it0,it1); //!! [beta0,beta1,SSE]
-    //var ICUcal=calibIFR(it0,it1); //!!!! [beta0,beta1,SSE]
+
     var ICU0=(j==0)
 	? 0.5*(ICUcal[0]+ICUcal[1])
 	: 0.5*(ICUcal[0]+fracICUtime[j]); // because of smooth not ICUcal[0] 
@@ -2997,23 +2999,41 @@ function estimateR0(itmin_c, itmax_c, R0calib){
     relates to 4% market share
   ############################################################## */
 
-  for(var ic=0; ic<2; ic++){ //!! 1 or 2
+  for(var ic=0; ic<1; ic++){ //!! 1 or 2
 
+    // after nelderMead, R0calib nearly =sol2_SSEfunc.x
     //##############################################################
     sol2_SSEfunc=fmin.nelderMead(SSEfunc, R0calib);
     //##############################################################
 
   }
 
-
-  // copy tp global R0 table R0time
+  //!!!! restrict R0 variations to +/- a value
+  // use R0calib[] which is the same as R0calib[] to 0.001
+  // unstable, forget it
+  
+  if(false){// do not touch the beginning with tmp R0=22 etc
+  //if(icalibmin>10){// do not touch the beginning with tmp R0=22 etc
+    var dR0max=1;
+    R0calib[0]=Math.max(R0time[icalibmin]-dR0max,R0calib[0]);
+    R0calib[0]=Math.min(R0time[icalibmin]+dR0max,R0calib[0]);
+    for(var j=1; j<R0calib.length; j++){ 
+    //for(var j=R0calib.length-1; j<R0calib.length; j++){ 
+      R0calib[j]=Math.max(R0calib[j-1]-dR0max,R0calib[j]);
+      R0calib[j]=Math.min(R0calib[j-1]+dR0max,R0calib[j]);
+    }
+  }
+  
+  // copy to global R0 table R0time
 
   //console.log("estimateR0 before new transfer: R0time=",R0time);
   if(firstR0fixed) for(var j=0; j<R0calib.length; j++){ 
-     R0time[j+1+icalibmin]=sol2_SSEfunc.x[j];
+     //R0time[j+1+icalibmin]=sol2_SSEfunc.x[j];
+     R0time[j+1+icalibmin]=R0calib[j];
   }
   else for(var j=0; j<R0calib.length; j++){ // normal
-     R0time[j+icalibmin]=sol2_SSEfunc.x[j];
+     //R0time[j+icalibmin]=sol2_SSEfunc.x[j];
+     R0time[j+icalibmin]=R0calib[j];
   }
   if(false){console.log("estimateR0 after new transfer: firstR0fixed=",
 			firstR0fixed, " R0time.length=",R0time.length);
@@ -6197,6 +6217,7 @@ DrawSim.prototype.checkRescaling=function(it){
 
   this.ymaxType[4]=Math.min(this.ymaxType[4], 20); // rel quant. <=20 %
   this.ymaxType[0]=Math.max(this.ymaxType[0], 1); // abs lin to 20
+  this.ymaxType[7]=2; // upper limit for new window "Ursache-Wirkung"
 
 
   //console.log("leaving checkRescaling: this.ymaxType=",this.ymaxType);
@@ -6572,8 +6593,8 @@ DrawSim.prototype.plotBars=function(it, iDataStart, data_arr, scaling,
     var i=iDataStart+ig; // i=iData
     var ip=ig-this.itmin; // ip=ipixel; order number of shown data point
     var value=data_arr[i]*scaling;
-    if((i>0)&&(value>=yminDraw) &&(value<=ymaxDraw)){
-      var yrel=(value-yminDraw)/(ymaxDraw-yminDraw);
+    if((i>0)&&(value>=yminDraw)){
+      var yrel=Math.min(1, (value-yminDraw)/(ymaxDraw-yminDraw));
       var yPix=yPix0+yrel*(yPixMax-yPix0);
       ctx.fillRect(this.xPix[ip]-0.5*w, yPix0, w, yPix-yPix0);
       //if(itg==it){console.log(" yrel=",yrel," yPix=",yPix);}
