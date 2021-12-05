@@ -395,7 +395,7 @@ const fracICUinitList={
 
 const tauICUlist={ // average infection time between admission and exit
   "Germany"       : 16, //16
-  "Austria"       : 16,
+  "Austria"       : 25,
   "Czechia"       : 16,
   "France"        : 16,
   "United Kingdom": 16,
@@ -717,7 +717,8 @@ var tauAvg=5;      // smooth interv for tauTest,tauDie,tauRecover (uneven!)
 var tauRecover=16; // time from infection to full recovery
 var tauSymptoms=7;  // incubation time 
 
-var taumax=Math.max(tauDie,tauRecover)+tauAvg+1;
+var taumax=Math.max(tauDie+tauAvg,tauRecover+tauAvg,
+		    tauICU+Math.floor(tauICUstay/2))+1; //!!!
 
 var tauInfectious_fullReporting=42; // !! Hellfeld param of sqrt pTest model
 var alphaTest=0.0; // !! alpha error of test (false negative)
@@ -3008,7 +3009,7 @@ function estimateR0(itmin_c, itmax_c, R0calib){
 
   }
 
-  //!!!! restrict R0 variations to +/- a value
+  //!! restrict R0 variations to +/- a value
   // use R0calib[] which is the same as R0calib[] to 0.001
   // unstable, forget it
   
@@ -3283,7 +3284,8 @@ function selectDataCountry(){ // callback html select box "countryData"
   tauRecover=parseFloat(tauRecoverList[country]);
   tauICU=parseFloat(tauICUlist[country]);
   tauDie=parseFloat(tauDieList[country]);
-  taumax=Math.max(tauDie,tauRecover)+tauAvg+1;
+  taumax=Math.max(tauDie+tauAvg,tauRecover+tauAvg,
+		    tauICU+Math.floor(tauICUstay/2))+1; //!!!
   setSlider(slider_R0,  slider_R0Text,  R0time[0].toFixed(2),"");
   setSlider(slider_stringency, slider_stringencyText,
 	  Math.round(stringency)," %");
@@ -4009,7 +4011,7 @@ function Vaccination(){
                        // !!! assuming double timescales
                        // for the boosters for now
   this.dtau=40;        // how fast (half-width #days) the reduct. takes place
-  this.taumax=730;     // maximum memory of vaccinations or boosters
+  this.taumaxVacc=730;     // maximum memory of vaccinations or boosters
                        // (zero effect for longer times)
   this.IvaccTable=[];  // vaccination efficiency after index #days
   this.IboostTable=[]; // booster efficiency after index #days
@@ -4055,7 +4057,7 @@ Vaccination.prototype.initialize=function(country){
 
   // MT 2021-11: New detailled efficiency as f(time) and boosters
 
-  for(var tau=0; tau<this.taumax; tau++){
+  for(var tau=0; tau<this.taumaxVacc; tau++){
     this.IvaccTable[tau]= (tau<this.tau0)
       ? this.I0*tau/this.tau0
       : -this.Iincrease*Math.exp(-(tau-this.tau0)/this.tauIncrease)
@@ -4063,7 +4065,7 @@ Vaccination.prototype.initialize=function(country){
       /(1+Math.exp((tau-this.tau0-this.tauHalf)/this.dtau));
   }
 
-  for(var tau=0; tau<this.taumax; tau++){
+  for(var tau=0; tau<this.taumaxVacc; tau++){
     var increasePart=this.I0boost
       + 0.5*(this.ImaxBoost-this.I0boost)
 	* (Math.tanh(2*(tau-0.5*this.tauIncrBoost)/this.tauIncrBoost)+1);
@@ -4168,7 +4170,7 @@ Vaccination.prototype.updateImmunity=function(rVacc,rBoost,it){
 
   this.immunityPop=0;
   var pVaccPast=0;
-  for(var its=Math.max(0,it-this.taumax+1); its<it; its++){
+  for(var its=Math.max(0,it-this.taumaxVacc+1); its<it; its++){
     pVaccPast+=this.rVaccHist[its];
     var includeVacc=(pVaccPast>pBoost);
 
@@ -4712,6 +4714,7 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
   // true dynamics (1): shift age profile of already infected by one
   // ###############################################
 
+
   for(var tau=taumax-1; tau>0; tau--){
     this.x[tau]=this.x[tau-1];
     this.xohne[tau]=this.xohne[tau-1];
@@ -4789,6 +4792,9 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
     for(var tau=tauICU-dtau; tau<=tauICU+dtau; tau++){
       //this.icu+=fracICU*corrIFR*f_icu*this.xohne[tau];
       this.icu+=fracICU*1*f_icu*this.xohne[tau];
+    }
+    if(false){
+      console.log("it=",it," this.icu=",this.icu);
     }
     
   }
@@ -6127,7 +6133,6 @@ DrawSim.prototype.transferRecordedData=function(){
   this.dataG[30].data=data_dxIncidence; // weekly data incidence by reference
   this.dataG[31].data=data_dzIncidence; // weekly death incidence
   this.dataG[52].data=data_icuIncidence; // ICU/100 000 (intensive quantity)
-
   this.dataG[41].data=stringency_hist;
   this.dataG[42].data=dataCmp_dxIncidence;
 
@@ -6215,7 +6220,7 @@ DrawSim.prototype.checkRescaling=function(it){
 
  // (3) restrict scalings for some windows
 
-  this.ymaxType[4]=Math.min(this.ymaxType[4], 20); // rel quant. <=20 %
+  this.ymaxType[4]=Math.min(this.ymaxType[4], 35); // rel quant. <=20 %
   this.ymaxType[0]=Math.max(this.ymaxType[0], 1); // abs lin to 20
   this.ymaxType[7]=2; // upper limit for new window "Ursache-Wirkung"
 
@@ -6337,7 +6342,7 @@ DrawSim.prototype.draw=function(it){
   for(var iq =0; iq<this.qselect[windowG].length; iq++){ 
     var q=this.qselect[windowG][iq];
     var data=this.dataG[q].data;
-    var i=(this.dataG[q].type<3) ? it+data_idataStart : it;
+    var i=(this.dataG[q].type<3) ? it+data_idataStart : it;//!!!!
     var scaling=this.dataG[q].ytrafo[0];
     var half=this.dataG[q].ytrafo[1];
     var downwards=this.dataG[q].ytrafo[2];
@@ -6348,8 +6353,15 @@ DrawSim.prototype.draw=function(it){
     wLine=Math.max(wLine,0.5);
     var color=this.dataG[q].color;
     var pointType=type;
-    var actValue=scaling*this.dataG[q].data[i];
+    var actValue=scaling*data[i];
 
+
+
+    if(false){
+      console.log("drawsim.draw: q=",q," it=",it," i=",i,
+		  " data[i]=",data[i], "actValue=",actValue);
+    }
+    
       // draw some data (the simulations) as lines/curves
 
     if(this.dataG[q].plottype=="lines"){
