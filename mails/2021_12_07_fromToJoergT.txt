@@ -1,0 +1,22 @@
+Hallo Joerg,
+
+ich habe Brasilien und Australien eingebaut (Australien hatte ich im Sommer rausgeschmissen, da keine Daten mehr geliefert wurden; jetzt sind aber wieder welche da), sehe aber in diesen Laendern keine interessanten Verlaeufe.
+
+Zu den Dunkelziffern: die sind ja in meinem Simulator durch die Abhaengigkeit von der Zahl der Tests beruecksichtigt.  Fuer die Boosterimpfung benoetigt man keine Dunkelziffer, da sie ja in der Vollerhebung (in D eher schlecht als recht, in anderen Laendern besser) bekannt sind und die Impfwirkungsprofile ziemlich verlaesslich aus med. Zeitschriften und Preprints bekannt sind. Dieses Impfprofil ist im Simulator direkt als feste Funktion implementiert, da muss/kann man nix schaetzen und kalibrieren. Ausserdem betreffen die Boosters ja auch die Leute in der Dunkelziffer, insofern gibt es da keine Verzerrungen (Verzerrungen mag es bei den gemeldeten Impfdurchbruechen geben, aber das sind sekundaere Groessen).
+
+Omikron hat das Zeug zu einem dystopischen Gamechanger. Ich koennte es jetzt bereits einbauen, dann wuerden zu Weihnachten und danach ueberall die Zahlen explodieren, aber noch ist es dazu zu frueh, da Verzerrungen durch die geringe Anzahl (lokale Nester), die Zahl der Tests und der Omikron-Detektion (wodurch getriggert?) selbst fuer qualitative Aussagen zu hoch sind. Da die SA-Zahlen eher nicht so verlaesslich sind (die geemldeten Faelle schwanken im Simulator stark), setze ich da auf die GB-Zahlen. Hast du da einen Link, der idealerweise taeglich den Anteil von omicron angibt?
+Gruß,
+
+Jörg Teumer <joergteumer@yahoo.de> hat am 06.12.2021 12:00 geschrieben:
+
+
+
+Hallo Martin, 
+
+ich habe mir unterdessen alle Deine neuen Videos angesehen - sehr interessant. Dennoch bin ich der Meinung, dass Du zuviel Wert auf die Boosterimpfungen legst, statt mit der Dunkelziffer zu arbeiten. Dass auf jeden Fall in Sachsen die Inzidenzen im Dezember sprunghaft zurückgehen müssen, versteht sich von selbst, da das Virus schlichtweg keine Wirte mehr finden kann. 
+
+Bei Omikron dürfte ganz entscheidend sein, ob eine überstandene Infektion mit Delta auch vor einer Neuansteckung mit Omikron in dieser Wintersaison schützt (die Boosterimpfugen spielen meines Erachtens keine relevante Rolle). Sollte das nicht der Fall sein, ist jede meiner persönlichen Prognosen und alles in Deinem Video Makulatur.
+
+Und nochmal wiederhole ich: Um die weltweite Entwicklung zu beobachten, wäre es sinnvoll, wenn Du ein repräsentatives Land von jedem Kontinent dabei hättest. Südamerika fehlt einfach. Brasilien wäre der logische Kandidat. Zudem fehlt Australien.  
+
+LG Jörg.  

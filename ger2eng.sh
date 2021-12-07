@@ -138,6 +138,7 @@ perl -i -p -e 's/Indien/India/g' *_eng.html *_eng.js
 perl -i -p -e 's/Russland/Russia/g' *_eng.html *_eng.js
 perl -i -p -e 's/Ru\&szlig\;land/Russia/g' *_eng.html
 perl -i -p -e 's/Australien/Australia/g' *_eng.html
+perl -i -p -e 's/Brasilien/Brazil/g' *_eng.html
 
 echo "created *_eng.html corona_eng.js corona_gui_eng.js"
 

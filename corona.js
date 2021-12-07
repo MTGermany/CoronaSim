@@ -47,7 +47,86 @@ BUGS/BUGFIXES
 
 TODO 
  (1) slider fuer Zeit 0...itmax, overrides Go button, danach mit Go weiter
- (2) Start Oktober 2020; betrifft auch resimulate und reset Button
+
+NEW COUNTRIES, ex. Brasilien/Brasil, Australien
+
+(1) check github_orig.json (emacs OK) how the country is named:
+=> "Brazil", "Australia". 
+This will be the relevant names because github is always loaded online
+
+(2) check githubWithTests_orig.json (only vi!)
+=> "BRA", "Brazil", "AUS", "Australia
+
+(3) edit updateCoronaInput.sh consolidating all names to online-loaded names
+
+grep AUS data/githubWithTests.json >> data/tmp.json
+grep BRA data/githubWithTests.json >> data/tmp.json
+
+perl -i -p -e "s/AUS/Australia/g" data/tmp2.json
+perl -i -p -e "s/BRA/Brazil/g" data/tmp2.json
+
+grep Australia data/github.json >> data/tmp.json
+grep Brazil data/github.json >> data/tmp.json
+
+(4) run updateCoronaInput.sh
+
+(5) edit index.html with value=master country name:
+  <option value="Australia">Australien</option>
+  <option value="Brazil">Brasilien</option>
+
+(6) edit ger2eng.sh
+
+(7) edit corona.js
+
+const countryGerList:
+   "Australia": "Australien",
+   "Brazil": "Brasilien",
+
+const n0List:
+   => https://www.populationpyramid.net - select country - 
+      get n and download csv
+     "Australia"     :   25700000,
+     "Brazil"        :   211049518,
+
+const ageProfileListPerc:
+  cd ~/versionedProjects/CoronaSim/populationStructure 
+  move csv to this dir and rename .csv to the master names: Brazil.csv 
+  !! comment out title line (otherwise heineous bug)
+  run.sh (no changes needed) and copy/paste results:
+  "Australia"  : [13,12,13,15,13,12,10,7,3,1],
+  "Brazil"     : [14,15,16,16,14,11,8,4,2,0.1],
+
+guesses for other country lists:
+const fracDieInitList:
+  "Australia"     : 0.0040,
+  "Brazil"        : 0.0040,
+const tauDieList:
+  "Australia"     : 19,
+  "Brazil"        : 19,
+fracICUinitList:
+  "Australia"     : 0.07,
+  "Brazil"        : 0.07,
+tauICUList:
+  "Australia"     : 16,
+  "Brazil"        : 16,
+tauRecoverList: (not really needed, just to be sure)
+  "Australia"     : 25,
+  "Brazil"        : 25,
+timeShiftMutationDeltaRefGB: (soon be needed with omicron, edit then again!)
+  "Australia"     : 40,
+  "Brazil"        : 40,
+
+If master country name is two words/differ between the two .json file, add 
+a case in the def of country2 (here not needed):
+   country2=(country==="United Kingdom") ? "England" :
+    (country==="South Africa") ? "SouthAfrica" :country;
+
+If country is on Southern hemisphere, add a Pi shift to seasons:
+  if((country==="South Africa")||(country==="Australia")
+     ||(country==="Australia")||(country==="Brazil")){
+    phase+=Math.PI; // Southern hemisphere
+  }
+
 
 */
 
@@ -232,6 +311,8 @@ var dn_weeklyPattern=[];  // constant extrapolation of #tests "
 const countryGerList={
   "Germany": "Deutschland",
   "Austria": "Oesterreich",
+  "Australia": "Australien",
+  "Brazil": "Brasilien",
   "Czechia": "Tschechien",
   "France": "Frankreich",
   "United Kingdom": "England",
@@ -250,7 +331,6 @@ const countryGerList={
   "Russia": "Russland",
   //  "Turkey": "Tuerkei",
   "US": "USA",
-  "Australia": "Australien",
   "South Africa": "Suedafrika",
   "LK_Erzgebirgskreis": "LK Erzgebirgskreis",
   "LK_Osterzgebirge": "LK Osterzgebirge",
@@ -276,6 +356,7 @@ const n0List={
   "Russia"        :  144100000,
   "US"            :  329500000,
   "Australia"     :   25700000,
+  "Brazil"        :   211049518,
   "South Africa"  :   59308690,
   "LK_Erzgebirgskreis": 334948,
   "LK_Osterzgebirge"  : 245586,
@@ -291,7 +372,9 @@ var n0=n0List["Germany"];  // #persons in Germany
 // run.sh (no changes needed)
 
 const ageProfileListPerc={ // age groups [0-10,-20,-30,-40,-50,-60,-70,-80,-90, 90+]
- "Austria"    : [10,10,13,14,13,16,11,9,4,1],
+  "Australia"  : [13,12,13,15,13,12,10,7,3,1],
+  "Austria"    : [10,10,13,14,13,16,11,9,4,1],
+  "Brazil"     : [14,15,16,16,14,11,8,4,2,0.1],
   "Czechia"    : [10,10,11,14,17,12,13,9,3,1],
   "France"    : [12,12,11,12,13,13,12,8,5,1],
   "Germany"    : [9,10,11,13,12,16,12,9,6,1],
@@ -321,6 +404,8 @@ const ageProfileListPerc={ // age groups [0-10,-20,-30,-40,-50,-60,-70,-80,-90, 
 const fracDieInitList={
   "Germany"       : 0.005, // init
   "Austria"       : 0.0031,
+  "Australia"     : 0.0040,
+  "Brazil"        : 0.0040,
   "Czechia"       : 0.0027,
   "France"        : 0.0040,
   "United Kingdom": 0.0040,
@@ -348,6 +433,8 @@ const fracDieInitList={
 const tauDieList={
   "Germany"       : 19, //19
   "Austria"       : 19,
+  "Australia"     : 19,
+  "Brazil"        : 19,
   "Czechia"       : 19,
   "France"        : 19,
   "United Kingdom": 21,
@@ -374,6 +461,8 @@ const tauDieList={
 const fracICUinitList={
   "Germany"       : 0.07, // init
   "Austria"       : 0.07,
+  "Australia"     : 0.07,
+  "Brazil"        : 0.07,
   "Czechia"       : 0.07,
   "France"        : 0.07,
   "United Kingdom": 0.07,
@@ -396,6 +485,8 @@ const fracICUinitList={
 const tauICUlist={ // average infection time between admission and exit
   "Germany"       : 16, //16
   "Austria"       : 25,
+  "Australia"     : 16,
+  "Brazil"        : 16,
   "Czechia"       : 16,
   "France"        : 16,
   "United Kingdom": 16,
@@ -423,6 +514,8 @@ const tauICUlist={ // average infection time between admission and exit
 const tauRecoverList={
   "Germany"       : 16,
   "Austria"       : 16,
+  "Australia"     : 25,
+  "Brazil"        : 25,
   "Czechia"       : 30,
   "France"        : 20,
   "United Kingdom": 25,
@@ -448,6 +541,8 @@ const tauRecoverList={
 const timeShiftMutationDeltaRefGB={
   "Germany"       : 44, // OK
   "Austria"       : 40, // rest (w/o OK flag) speculation at best
+  "Australia"     : 40,
+  "Brazil"        : 40,
   "Czechia"       : 40,
   "France"        : 40,
   "United Kingdom": 0, // OK
@@ -1865,7 +1960,8 @@ function stringencyFactor(stringencyIndex){
 function calc_seasonFactor(it){
   var phase=2*Math.PI*((dayStartYear+it-365)/365. - season_fracYearPeak);
 
-  if((country==="South Africa")||(country==="Australia")){
+  if((country==="South Africa")||(country==="Australia")
+     ||(country==="Australia")||(country==="Brazil")){
     phase+=Math.PI; // Southern hemisphere
   }
 
