@@ -625,28 +625,41 @@ var dataCmp_dxIncidence=[]; // compare weekly incidence per 100 000 from data
 
 
 
-/*
-######################################################################
- Mutation Dynamics
-######################################################################
 
+//######################################################################
+// Mutation Dynamics
+//######################################################################
 
-/* Data for Germany: 
-https://www.rki.de/DE/Content/InfAZ/N/Neuartiges_Coronavirus/DESH/Bericht_VOC_2021-06-16.pdf?__blob=publicationFile
+/* new
 
-Grafik (P1 falsch):
-https://www.n-tv.de/panorama/Delta-Variante-breitet-sich-in-Deutschland-aus-article22624633.html
-
-Data other countries:
 https://www.gisaid.org/hcov19-variants/
-
 Links Variants of Concern auswaehlen (Wildtyp gibt es nicht)
 rechts Zeitraum einstellen und irrelevante Laender abklicken in
 Legende
 
 
+*/
+
+var simulateMutation=true; // !!!! 2021-06-18 now Indian=Delta variant
+
+// #days before present mutation dynamics starts and calibration ends
+// dynamics locked! Better switch off if no actual mutation
+const startMut2present=5; //5 !!! errors if too high since then
+
+// time index where mutation dynamics rather calibr R0 used
+// (overridden in validation)
+var itStartMut=itPresent-startMut2present;
+
+
+var mutationDynamics;     // later: =new MutationDynamics(...);
+
+
+
+
+/* old
 Alpha=Britisch
 Delta=Indian
+
 KW8: Beginn Mo 2020-02-22, Ende So 2020-02-28, Mitte 2020-02-25
 
 Germany
@@ -689,11 +702,9 @@ Date[WeekStart]    PercentageDelta[%]
 2021-06-21         
 2021-06-28         
 
-
-
 */
 
-var simulateMutation=false; // 2021-06-18 now Indian=Delta variant
+var simulateMutationOld=false; // 2021-06-18 now Indian=Delta variant
                            //2021-09-10 !! switch off if no actual mutation!
 // dateOldGB: center of week interval for data of development in GB,
 // Basis Alpha, shifted back by 1-2 weeks because of measurement delay
@@ -732,47 +743,38 @@ console.log("orig:",dateOldGB,
 // period nLastUnchanged*calibInterval (e.g. 28) where calibrated R0
 // does not change (calibration always performed w/o mutation dynamics)
 
-const startMut2present=25; //25 !! errors if too high since then
-// dynamics locked! Better switch off if no actual mutation
 
-// time index where mutation dynamics rather calibr R0 used
-// (overridden in validation)
-var itStartMut=itPresent-startMut2present;
+var mutationDynamicsOld;  // later: =new MutationDynamicsOld(...);
 
-
-
-// will be overridden (needed for some initial. )
-var R0startOnlyHere=42; // ridiculously high
-var mutationDynamics=new MutationDynamics(dateOld,pOld,dateNew,pNew,
-					  R0startOnlyHere, itStartMut);
 
 
 
 //###############################################################
-// vaccination specification. Parameters like this.Imax=0.95 (Biontec)
+// immunity specification. Parameters like this.Imax=0.95 (Biontec)
 // or this.vaccmax=[...];
 // (age-specific max vacc rate due to vacc deniers/impossible to vacc)
-// are data elements of Vaccination
+// are data elements of Immunity
 //###############################################################
-var vaccination;   // in initializeData(country): new Vaccination();
+var immunity;   // in initializeData(country): new Immunity();
 var pVacc=0;        // vaccination fraction in [0,1]
-var pVaccFull=0;    // assume 2 necessary vaccs in interval Vaccination.tau0
-var pBoost=0;        // vaccination fraction in [0,1]
+var pVaccFull=0;    // assume 2 necessary vaccs in interval Immunity.tau0
+var pBoost=0;        // boost fraction in [0,1]
 var rVaccInit=0;    // pVacc'(t) [fraction per day]
 var rVacc=rVaccInit;
 var rBoostInit=0;    // pBoost'(t) [fraction per day]
 var rBoost=rBoostInit;
 
-// actual population immunity factor by vaccinations
-// !! calib: get from immunityArray; sim: from vaccination.updateImmunity(.)
+// actual population immunity factor from vaccinations/boosters
+// !! calib: get from IvaccArray; sim: from immunity.updateVacc(.)
 
-var IvaccPop=0;        
-
+var Ivacc1=0;   // old/standard variant     
+var Ivacc2=0;   // new variant if applicable  
+ 
 // fixed data-driven profile of vacc immunity factor for use in calibration
 
-var immunityArray=[]; 
+var IvaccArray=[]; 
 for(var it=0; it<=itPresent; it++){ 
-  immunityArray[it]=0;
+  IvaccArray[it]=0;
 }
 
 var corrIFR=1.11; // correction factor IFR/IFR65 (value in Germany w/o vacc: 2)
@@ -1537,15 +1539,15 @@ function initializeData(country,insideValidation){
 		data_cumBoost[i]," data_rBoost=", data_rBoost[i]);
   }
   
-  // calculated immunity fraction profile IvaccPopArr using the dynamics of
-  // Vaccination() (!! related to it=i-data_idataStart)
+  // calculated immunity fraction profile IvaccArray using the dynamics of
+  // Immunity() (!! related to it=i-data_idataStart)
 
   
-  vaccination=new Vaccination();  // in sim: CoronaSim.vaccination=new ...
-  console.log("before vaccination.initialize(country)");
-  vaccination.initialize(country);
+  immunity=new Immunity();  
+  console.log("before immunity.initialize(country)");
+  immunity.initialize(country);
 
-  immunityArray=vaccination.calcImmunityArray(data_rVacc, data_rBoost);
+  IvaccArray=immunity.calcIvaccArray(data_rVacc, data_rBoost);
 
 
   var rVaccData=0;
@@ -1556,18 +1558,18 @@ function initializeData(country,insideValidation){
       rVaccData=data_rVacc[i]; // otherwise unchhanged
     }
 
-    //!! vaccination.update needed for data-driven pre-calculation
+    //!! immunity.updateAgeGroups needed for data-driven pre-calculation
     // of population-based IFR correction factors
-    // (immunityArray<-calcImmunityArray
+    // (IvaccArray<-calcIvaccArray
     // used for the actual infection dynamics)
     
-    vaccination.update(rVaccData,it);  
-    corrIFRarr[it]=vaccination.corrFactorIFR; 
+    immunity.updateAgeGroups(rVaccData,it);  
+    corrIFRarr[it]=immunity.corrFactorIFR; 
 
     //if(it>itPresent-10){
     if(false){
       console.log("it=",it,
-		  " immunityArray[it]=",immunityArray[it],
+		  " IvaccArray[it]=",IvaccArray[it],
 		  " corrIFRarr[it]=",corrIFRarr[it],
 		 "");
     }
@@ -1811,7 +1813,7 @@ function initializeData(country,insideValidation){
 	  " data_cumBoost=",data_cumBoost[i].toFixed(0),
 	  " data_rVacc=",data_rVacc[i].toFixed(5), // data_rVacc is smoothed
 	  " data_rBoost=",data_rBoost[i].toFixed(5), // smoothed
-	  " immunityArray=",(it<0) ? 0 : immunityArray[it].toFixed(3),
+	  " IvaccArray=",(it<0) ? 0 : IvaccArray[it].toFixed(3),
 	  "\n ",
 	  " data_posRate=",data_posRate[i],
 	  " data_stringencyIndex=", Math.round(data_stringencyIndex[i]),
@@ -2456,9 +2458,8 @@ function calibrate(){
   fracICUtime=[];
   
   // !! new CoronaSim needed, otherwise side effects if nonzero vaccination
-  // cannot calibrate with vaccinations!!
   
-  corona=new CoronaSim();//  corona.vaccination.initialize;
+  corona=new CoronaSim();
 
   var R0calib=[]; 
  // for(var j=0; j<betaIFRinit.length; j++){ 
@@ -2792,7 +2793,7 @@ function calibrate(){
   }
 
   
-  inCalibration=false; // use dynamic corona.vaccination.update(...)
+  inCalibration=false; // use dynamic corona.immunity.update(...)
 
   
   
@@ -3636,8 +3637,24 @@ function myRestartFunction(){ // called if new country and other events
   //setSlider(slider_rVacc, slider_rVaccText, 700*rVacc, " %");
   //setSlider(slider_rBoost, slider_rBoostText, 700*rBoost, " %");
 
-
+  
+  //!!!! use later immunity class and instantiate mutationDynamics
+  // at doSimulationStep, do the actual update at corona.update
+  
   if(simulateMutation){
+    //itStartMut=itPresent-startMut2present-nDaysValid;
+    itStartMut=itPresent-startMut2present;//!!!! why -nDaysValid?
+
+    var p0=0.05; // !!! at itStartMut
+    var r0=0.3;
+    var I10=0.5;
+    var I20=0.1;
+    var R0=4;
+    mutationDynamics=new MutationDynamics(itStartMut,p0,r0,I10,I20,R0); 
+  }
+
+  
+  if(simulateMutationOld){
 
     shiftDeltaFromGB=timeShiftMutationDeltaRefGB[country]; 
     dateOld=new Date(dateOldGB.getTime() + oneDay_ms * shiftDeltaFromGB);
@@ -3654,7 +3671,7 @@ function myRestartFunction(){ // called if new country and other events
     }
     R0StartMut/=daysAvg; 
 
-    mutationDynamics=new MutationDynamics(
+    mutationDynamicsOld=new MutationDynamicsOld(
       dateOld, pOld, dateNew, pNew, R0StartMut, itStartMut);
 
     if(false){
@@ -3891,9 +3908,9 @@ function doSimulationStep(doDrawing){ // logging "allowed" here !!
 
   R0_actual=(slider_R0_moved) ? R0 : R0fun_time(R0time,it);
   //console.log("doSimulationStep: it=",it," R0_actual=",R0_actual);
-  if(simulateMutation&&(it>=itStartMut)){
-      mutationDynamics.update(it);
-      R0_actual=mutationDynamics.R0; // override R0_actual=R0fun_time(..)
+  if(simulateMutation&&(it>=itStartMut)){ //!!!!
+      //mutationDynamicsOld.update(it);
+      //R0_actual=mutationDynamicsOld.R0; // override R0_actual=R0fun_time(..)
   }
  
   R0_hist[it]=R0_actual; // for drawing
@@ -3964,15 +3981,54 @@ function doSimulationStep(doDrawing){ // logging "allowed" here !!
 function log10(x){return Math.log(x)/ln10;}
 
 
-
-
-
 //################################################################
 //################################################################
 
 
+/*
+
+@param it0: time index where mutation dynamics takes over from calibr
+@param p0:  Fraction p of new mutation at time index it0
+@param r0:  growth rate of odds ratio p/(1-p) at time index it0
+@param I10: pop immunity 1-(1-I10vacc)(1-I10infect) for old strain 1
+@param I20: pop immunity for new strain 2
+@param R0:  complex reproduction number old+new strain @ time index it0
+            (taken from the calibrated value in the application)
+*/
+
 //################################################################
-function MutationDynamics(dateOld, pOld, dateNew, pNew,
+function MutationDynamics(it0,p0,r0,I10,I20,R0){
+//################################################################
+  this.p=[];
+  this.p[it0]=p0;
+  for(var it=0; it<it0; it++){
+    exponent=r0*(it-it0);
+    this.p[it]=(exponent>-100) ? p0*Math.exp(exponent) : 0;
+  }
+  this.y=p0/(1-p0);
+  this.r0=r0;
+  this.tauR=0.5*(tauRstart+tauRend);
+  this.R10=R0/(1+p0*r0*this.tauR);
+  this.R20=this.R10*(r0*this.tauR+1)*(1-I10)/(1-I20);
+  if(true){
+    console.log("MutationDynamics Cstr: this.tauR=",this.tauR,
+		" this.y=",this.y,
+		"\n this.R10=",this.R10,
+		" this.R20=",this.R20);
+  }
+}
+
+// update by Delta t=1 day
+
+MutationDynamics.prototype.update=function(I1,I2,it){
+  var r= (this.R20*(1-I2))/(this.R10*(1-I1)-1)/this.tauR;
+  this.y *= Math.exp(r);
+  this.p[it]=this.y/(1+this.y);
+}
+  
+
+//################################################################
+function MutationDynamicsOld(dateOld, pOld, dateNew, pNew,
 			  R0start, itStart){
 //################################################################
 
@@ -4013,7 +4069,7 @@ function MutationDynamics(dateOld, pOld, dateNew, pNew,
   this.R0mut=ratioMutWild*this.R0wild;
 
   if(true){
-    console.log("MutationDynamics Constructor: dt=",this.dt,
+    console.log("MutationDynamicsOld Constructor: dt=",this.dt,
 		"\n dateOld=",dateOld.toDateString(),
 		"\n dateNew=",dateNew.toDateString(),
 		"\n dateStart=",dateStart.toDateString(),
@@ -4035,12 +4091,12 @@ function MutationDynamics(dateOld, pOld, dateNew, pNew,
 
 // dynamics obeys dy/dt=r0y*y
 
-MutationDynamics.prototype.update=function(it){
+MutationDynamicsOld.prototype.update=function(it){
   this.y=this.yNew*Math.exp(this.ry*(it-this.itNew));
   this.p=this.y/(1+this.y)
   this.R0=(1-this.p)*this.R0wild + this.p*this.R0mut;
   if(false){
-    console.log("MutationDynamics.updateOneDay: it=",it,
+    console.log("MutationDynamicsOld.updateOneDay: it=",it,
 		" it-itPresent=",it-itPresent,
 		" y=",this.y,
 		" p=",this.p,
@@ -4069,28 +4125,42 @@ MutationDynamics.prototype.update=function(it){
 // 72 Prozent der Befragten im Alter von 40 bis 64
 // 92 Prozent ab 65
 
-// MT 2021-11: Set I0=1. Then, IvaccPop is percentage of
-//             "completely vaccinated", and I use several true I0s
-//             in main Reff calculation in CoronaSim.updateOneDay
-
-// NOTICE:  immunity by illness (100%) not considered here !!
 
 //################################################################
-function Vaccination(){
+function Immunity(){
 //################################################################
 
+  // MT 2021-12  Immunity (renamed from Vaccination)
+  // now also includes immunity by infection of up to 2 variants
+  // and a possible waning of immunity by infection is set up as well
+  
  
   // MT 2021-11
   // new variables for detailled efficiency waning and boosters
-  // after second vacc/boost, efficiency can increase a bit further
-  // beyond lin increase
+  // after second vacc/boost
 
-  // best fit to 2021-10-25_vaccEfficiency_Lancet.pdf
-  // !! This is a bit more pessimistic than best fit to "Impfdurchbrueche"
-  // but there all unknown vacc status is cauted as "not complete"
+
+  //################################################################
+  // variables for immunity by infection (waning functions not yet set up)
+  //################################################################
+
+  this.I1infect=0;    // old variant (2021-12: Delta)
+  this.I2infect=0;    // new variant (2021-12: Omicron)
+
+
+  //################################################################
+  // variables for immunity by vaccination/boosters
+  //################################################################
+
+  this.IvaccMutFactor=0.3; // Ivacc2=IvaccMutFactor*I1vacc
+  this.I1vacc=0;      // vaccination immunity factor for standard strain
+  this.I2vacc=0;      // ... for mutation (0=unprotected, 1=100% prot)
+
   
-  this.immunityPop=0; // global vaccination immunity factor 
-                      // (0=unprotected, 1=100% prot)
+  // efficiency functions best fit to 2021-10-25_vaccEfficiency_Lancet.pdf
+  // !! This is a bit more pessimistic than best fit to "Impfdurchbrueche"
+  // but there all unknown vacc status is pidgeonholed as "not complete"
+  
   this.tau0=30;     // #days between 1th and 2nd vacc 
   this.I0=0.82;     // efficiency 1-alpha^2 at second vacc time
                        // if R01=alpha*R00 (infection nonvacc->vacc)
@@ -4120,8 +4190,9 @@ function Vaccination(){
 
 
 
-  
+  // ##############################################################
   // old more global immunity w/o waning or boosters, only for mortality!!!
+  // ##############################################################
   
   this.fAge=[];     // demographic profile of age groups
   this.ageGroup=0;   // will be overwritten in initialize
@@ -4149,8 +4220,17 @@ function Vaccination(){
 }
 
 
-Vaccination.prototype.initialize=function(country){
+//############################################################
 
+Immunity.prototype.initialize=function(country){
+
+
+  pVacc=0; // reset global variables also on display
+  pVaccFull=0;
+  pBoost=0; 
+  this.rVaccHist[0]=0; // daily vacc rate at it=0;
+  this.rBoostHist[0]=0; // daily vacc rate at it=0;
+  
   // MT 2021-11: New detailled efficiency as f(time) and boosters
 
   for(var tau=0; tau<this.taumaxVacc; tau++){
@@ -4175,23 +4255,17 @@ Vaccination.prototype.initialize=function(country){
 
   if(false){
     for(var tau=0; tau<300; tau++){
-      console.log("Vaccination initialize: tau=",tau,
+      console.log("Immunity initialize: tau=",tau,
 		  " IvaccTable=",this.IvaccTable[tau].toFixed(4),
 		  " IboostTable=",this.IboostTable[tau].toFixed(4));
     }
   }
   
   
-  pVacc=0; // reset global variables also on display
-  pVaccFull=0;
-  pBoost=0; 
-  this.rVaccHist[0]=0; // daily vacc rate at it=0;
-  this.rBoostHist[0]=0; // daily vacc rate at it=0;
 
   
-  // before 2021-11
+  // before 2021-11: detailled age groups but no waning functions
   
-  //this.IvaccPop=0;
   this.corrFactorIFR=1;
   var ageProfilePerc=ageProfileListPerc[country];
   for(var ia=0;ia<ageProfilePerc.length; ia++){
@@ -4214,25 +4288,44 @@ Vaccination.prototype.initialize=function(country){
        this.pVaccTauAge[ia][tau]=0;
     }
   }
-  this.update(0,0); // to calculate this.corrFactorIFR for zero vacc
+  this.updateAgeGroups(0,0); // to calculate this.corrFactorIFR for zero vacc
 
   this.corrFactorIFR0=this.corrFactorIFR;
   this.ageGroup=ageProfilePerc.length-1; // actual age group to be vacc
 
-  if(true){console.log("\n\nVaccination.initialize: this.corrFactorIFR0=",
+  if(true){console.log("\n\nImmunity.initialize: this.corrFactorIFR0=",
 	      this.corrFactorIFR0, " this.pVaccmaxPop=",this.pVaccmaxPop,
 	      " this.fAge=",this.fAge,
 	     // " this.pVaccTauAge=",this.pVaccTauAge,
 			"\n\n");}
 }
 
+
+// MT 2021-12: Calculate immunity by vaccinations and past infections
+// at the present stage past infections trivial,
+// 100% same-type, 0% cross immunity
+// xyz from CoronaSim: All infections, old and new variants
+// (because Reff calculates all)
+// updates this.I1vacc, this.I2vacc, this.I1infect, this.I2infect
+
+// !!! future: define waning tables in initialize as in vaccin. immunity 
+
+Immunity.prototype.updateInfections=function(rVacc,rBoost,xyz,xyzMut,it){
+  this.updateVacc(rVacc,rBoost,it);
+  this.I1infect=Math.min(xyz-xyzMut,0.9); //!!
+  this.I2infect=Math.min(xyzMut,0.9); 
+}
+
+
+
+
 // MT 2021-11-15 Time dependent efficiency of vaccinations
 // and (new!) boosters;
 // rVacc, rBoost=daily increase in first vaccs and boosters
 // from data or simulation
-// output: sets this.immunityPop
+// output: sets this.I1vacc
 
-Vaccination.prototype.updateImmunity=function(rVacc,rBoost,it){
+Immunity.prototype.updateVacc=function(rVacc,rBoost,it){
 
   if(pVacc<this.pVaccmaxPop){
     this.rVaccHist[it]=Math.min(rVacc,this.pVaccmaxPop-pVacc);
@@ -4240,7 +4333,7 @@ Vaccination.prototype.updateImmunity=function(rVacc,rBoost,it){
   }
   else{
     this.rVaccHist[it]=0;
-    console.log("Vaccination.update: error: cannot vaccinate more than",
+    console.log("Immunity.update: error: cannot vaccinate more than",
 		" a fraction ",this.pVaccmaxPop," of people");
   }
 
@@ -4255,7 +4348,7 @@ Vaccination.prototype.updateImmunity=function(rVacc,rBoost,it){
   else{
     this.rBoostHist[it]=0;
     pBoost=pVaccFull;
-    console.log("Vaccination.update: error: cannot boost more than",
+    console.log("Immunity.update: error: cannot boost more than",
 		" already vaccinated people");
   }
 
@@ -4264,27 +4357,30 @@ Vaccination.prototype.updateImmunity=function(rVacc,rBoost,it){
   // first (!) vaccinations are replaced by boosters.
   // So drop the pBoost oldest vacinations
 
-  this.immunityPop=0;
+  this.I1vacc=0;
   var pVaccPast=0;
   for(var its=Math.max(0,it-this.taumaxVacc+1); its<it; its++){
     pVaccPast+=this.rVaccHist[its];
     var includeVacc=(pVaccPast>pBoost);
 
-    this.immunityPop
+    this.I1vacc
       +=((includeVacc) ? this.rVaccHist[its]*this.IvaccTable[it-its] : 0)
       + this.rBoostHist[its]*this.IboostTable[it-its];
   }
 
+  this.I2vacc=this.I1vacc*this.IvaccMutFactor
+
+  
   // debug
 
   if(false){
   //if(it>=610){
-    console.log("Vaccination.updateImmunity: it=",it,
+    console.log("Immunity.updateVacc: it=",it,
 		" rVacc=",rVacc.toFixed(5)," rBoost=",rBoost.toFixed(5),
 		"\n pVacc=",pVacc.toFixed(4),
 		" pVaccFull=",pVaccFull.toFixed(4),
 		" pBoost=",pBoost.toFixed(4),
-		" immunityPop=",this.immunityPop.toFixed(4),
+		" I1vacc=",this.I1vacc.toFixed(4),
 		//" this.IvaccTable=",this.IvaccTable,
 		//" this.rVaccHist=",this.rVaccHist,
 	       "");
@@ -4294,45 +4390,13 @@ Vaccination.prototype.updateImmunity=function(rVacc,rBoost,it){
 
 
     
-// MT 2021-11-15 Calculate data-driven global immunity
-// as a fixed array for use in claibration
-// input: arrays of first vaccination and booster rates in "data" format
-// output: immunityArray[it]
-
-Vaccination.prototype.calcImmunityArray=function(data_rVacc, data_rBoost){
-
-  var immunityArray=[];
-  for(var it=0; it<itPresent; it++){
-    var i=it+data_idataStart;
-    if(!( typeof data_rVacc[i] === "undefined")){
-      rVaccData=data_rVacc[i]; // otherwise unchhanged
-    }
-    if(!( typeof data_rBoost[i] === "undefined")){
-      rBoostData=data_rBoost[i]; // otherwise unchhanged
-    }
-    this.updateImmunity(rVaccData, rBoostData,it);
-    immunityArray[it]=this.immunityPop;
-
-    if(false){
-      console.log(
-	"Vaccination.calcImmunityArray: ",
-	"\n it=",it," rVaccData=",rVaccData.toFixed(5),
-	" rBoostData=",rBoostData.toFixed(5),
-	" immunityArray=",immunityArray[it],
-      "");
-    }
-    
-  }
-  return immunityArray;
-}
-
-
 
   
-// update using rate of first vaccinations (no second vacc or other
+// old: update vaccinations over age groups
+// (not used in main Reff-dynamics, only when calculating IFR etc)
 // vaccination brands modelled by this.I0)
 
-Vaccination.prototype.update=function(rVacc,it){
+Immunity.prototype.updateAgeGroups=function(rVacc,it){
   if(it>0){ // no vaccinations for it<=0
 
     // shift history by 1 day
@@ -4361,7 +4425,7 @@ Vaccination.prototype.update=function(rVacc,it){
 
       // check if max vaccination fraction is reached
       // following should be automatically true once global variable pVacc
-      // (updated in this.updateImmunity(.) reaches this.pVaccmaxPop
+      // (updated in this.updateVacc(.) reaches this.pVaccmaxPop
       
       if(this.ageGroup==0){
 	this.vaccmaxreached=true; 
@@ -4419,10 +4483,10 @@ Vaccination.prototype.update=function(rVacc,it){
 
   if(false){
   //if(rVacc>0){
-      console.log("Vaccination.update: this.tau0=",this.tau0," it=",it,
+      console.log("Immunity.updateAgeGroups: this.tau0=",this.tau0," it=",it,
 		  "\n pVacc=this.pVaccTau[0]=",this.pVaccTau[0],
 		  " this.pVaccTau[this.tau0-1]=",this.pVaccTau[this.tau0-1],
-		  " this.immunityPop=",this.immunityPop);
+		  " this.I1vacc=",this.I1vacc);
       var sum=0; 
       for(var ia=0; ia<this.fAge.length; ia++){
 	sum+=this.fAge[ia]*this.immunityAge[ia];
@@ -4438,11 +4502,50 @@ Vaccination.prototype.update=function(rVacc,it){
 
 
 
+// MT 2021-11-15 Calculate data-driven global vacc immunity
+// as a fixed array for use in calibration
+// input: arrays of first vaccination and booster rates in "data" format
+// output: IvaccArray[it]
+
+Immunity.prototype.calcIvaccArray=function(data_rVacc, data_rBoost){
+
+  var IvaccArray=[];
+  for(var it=0; it<itPresent; it++){
+    var i=it+data_idataStart;
+    if(!( typeof data_rVacc[i] === "undefined")){
+      rVaccData=data_rVacc[i]; // otherwise unchhanged
+    }
+    if(!( typeof data_rBoost[i] === "undefined")){
+      rBoostData=data_rBoost[i]; // otherwise unchhanged
+    }
+    this.updateVacc(rVaccData, rBoostData,it);
+    IvaccArray[it]=this.I1vacc;
+
+    if(false){
+      console.log(
+	"Immunity.calcIvaccArray: ",
+	"\n it=",it," rVaccData=",rVaccData.toFixed(5),
+	" rBoostData=",rBoostData.toFixed(5),
+	" IvaccArray=",IvaccArray[it],
+      "");
+    }
+    
+  }
+  return IvaccArray;
+}
+
+
+
+
+
+
+
+
 function CoronaSim(){
   //console.log("CoronaSim created");
 
   // arrays (scalar state variables such as this.z defied in init)
-  this.x=[]; // age struture f(tau|it) of frac infected at given timestep it
+  this.xtau=[]; // age struture f(tau|it) of frac infected at given it
   this.xohne=[]; // age structure =f(tau) without deleting by recover,death 
                  // (!!needed for correct recovery rate and balance x,y,z!)
   this.dx_it=[]; // fraction new infected as f(timestep it),
@@ -4471,16 +4574,16 @@ CoronaSim.prototype.init=function(itStart,logging){
 
   //##############################################################
   // !! it BEFORE warmup. Becaue this.xt is cumulative 
-  // but this.xAct and this.x[] is not, need ALWAYS to start
+  // but this.xAct and this.xtau[] is not, need ALWAYS to start
   // at the very beginning also for large itStart
   // unless following is saved at it=itStart:
 
-  // (1) this.x[] (this.xAct=sum(this.x[])
-  // (2) this.y, this.z  (in contrast to x[] and xAct cumulative, 
+  // (1) this.xtau[] (this.xAct=sum(this.xtau[])
+  // (2) this.y, this.z  (in contrast to xtau[] and xAct cumulative, 
   //                      => need to save as well 
   //                      although not contained in dynamics)
   // (2a) this.icu all present icu patient fraction, not just new admissions
-  // (3) this.xyz (cumulated this.x[0] + this.y + this.z, IN dynamics (sat.)
+  // (3) this.xyz (cumulated this.xtau[0] + this.y + this.z, IN dynamics
   //               canNOT be derived from the other quantities
   // (4) this.xt, this.yt (outside dynamics 
   //                       but needed for calibr, at least xt)
@@ -4490,7 +4593,7 @@ CoronaSim.prototype.init=function(itStart,logging){
   //var it0=Math.max(-21, itStart-28); // it BEFORE warmup
   var it0=-21; // it BEFORE warmup //!! Must be <=-20 for some f... reason
 
-  // xAct: sum of "actually infected" this.x[tau] (neither rec. nor dead)
+  // xAct: sum of "actually infected" this.xtau[tau] (neither rec. nor dead)
   // xyz: cumulative sum of infected (incl recovered, dead)
   this.xAct=10/n0; // must be >1, otherwise eliminated
   this.xyz =this.xAct;
@@ -4500,7 +4603,7 @@ CoronaSim.prototype.init=function(itStart,logging){
   this.z=0;  // cmuulative fraction dead (real=data)
   this.icu=0; // fraction of population in covid-19 icu stations as f(t)
 
-  // init infection-age profile this.x[tau] with exponential
+  // init infection-age profile this.xtau[tau] with exponential
   // initial exponential rate r0 per day  (don't confuse r0 with R0)
 
   var tauR=0.5*(tauRstart+tauRend)// middle period for one repro cycle
@@ -4511,11 +4614,11 @@ CoronaSim.prototype.init=function(itStart,logging){
     denom+=Math.exp(-r0*tau);
   }
   for(var tau=0; tau<taumax; tau++){ // in init
-    this.x[tau]=this.xAct*Math.exp(-r0*tau)/denom;
-    this.xohne[tau]=this.x[tau];
+    this.xtau[tau]=this.xAct*Math.exp(-r0*tau)/denom;
+    this.xohne[tau]=this.xtau[tau];
     if(false){console.log("init: it0=",it0," R0=",R0fun_time(R0time,it0),
 			    " r0=",r0," tau=",tau,
-			    " this.x[tau]=",this.x[tau]);}
+			    " this.xtau[tau]=",this.xtau[tau]);}
   }
 
   // data-driven warmup
@@ -4540,7 +4643,7 @@ CoronaSim.prototype.init=function(itStart,logging){
       console.log("\ncorona.init warmup before update: its=",its,
 			    " R=",Rt.toFixed(2),
 			    " pTest=",pTest.toPrecision(3),
-			    " ndx=",(n0*this.x[0]).toPrecision(3),
+			    " ndx=",(n0*this.xtau[0]).toPrecision(3),
 			    " ndxt=",(n0*this.dxt).toPrecision(3),
 			    " ndxtFalse=",(n0*this.dxtFalse).toPrecision(3),
 		  "");
@@ -4571,7 +4674,7 @@ CoronaSim.prototype.init=function(itStart,logging){
 //		 - pTest*this.xohne[tauTest])*betaTest;//!!
 
   for(var tau=0; tau<taumax; tau++){
-    this.x[tau]     *= scaleDownFact;
+    this.xtau[tau]     *= scaleDownFact;
     this.xohne[tau] *= scaleDownFact;
   }
 
@@ -4580,7 +4683,7 @@ CoronaSim.prototype.init=function(itStart,logging){
 
   if(loggingDebug){
     console.log("CoronaSim.init after warmup: itStart=",itStart,
-		"\n  n0*this.x[0]=",Math.round(n0*this.x[0]),
+		"\n  n0*this.xtau[0]=",Math.round(n0*this.xtau[0]),
 		"\n  n0*this.dxt=",Math.round(n0*this.dxt),
 		"\n  n0*this.dxtFalse=",Math.round(n0*this.dxtFalse),
 		"\n  n0*this.z=",Math.round(n0*this.z),
@@ -4597,12 +4700,12 @@ CoronaSim.prototype.init=function(itStart,logging){
   // save/set complete state (take snapshot of all the variables needed
   // to resume the simulation at a given timestep later on:
 
-  // (1)  this.x[] (this.xAct=sum(this.x[]),
-  // (2)  this.y, this.z  (in contrast to x[] and xAct cumulative, 
+  // (1)  this.xtau[] (this.xAct=sum(this.xtau[]),
+  // (2)  this.y, this.z  (in contrast to xtau[] and xAct cumulative, 
   //                      => need to save as well 
   //                      although not contained in dynamics)
   //      (intensive fraction this.icu not needed since intensiv q)
-  // (3)  this.xyz (cumulated this.x[0] IN dynamics (herd immunity fraction)
+  // (3)  this.xyz (cumulated this.xtau[0] IN dynamics (herd immunity contrib)
   //               canNOT be derived from the other quantities
   // (4)  this.xt outside dynamics  but still needed for calibr
   // called by SSEfunc which is also in control of the time itsnap for it
@@ -4612,7 +4715,7 @@ CoronaSim.prototype.takeSnapshot=function(it){
   this.snapAvailable=true;
   this.snapshot={
     it:   it,
-    x:    [],
+    xtau: [],
     xohne:[],
     xAct: this.xAct,
     y:    this.y,
@@ -4622,7 +4725,7 @@ CoronaSim.prototype.takeSnapshot=function(it){
   }
 
   for(var tau=0; tau<taumax; tau++){ // copy by value
-    this.snapshot.x[tau]=this.x[tau];
+    this.snapshot.xtau[tau]=this.xtau[tau];
     this.snapshot.xohne[tau]=this.xohne[tau];
   }
 
@@ -4634,7 +4737,7 @@ CoronaSim.prototype.takeSnapshot=function(it){
       "\n  this.snapshot.y=",this.snapshot.y.toPrecision(3),
       "\n  this.snapshot.z=",this.snapshot.z.toPrecision(3),
       "\n  this.snapshot.xyz=",this.snapshot.xyz.toPrecision(3),
-      "\n  this.snapshot.x[tauDie]=",this.snapshot.x[tauDie].toPrecision(3),
+      "\n  this.snapshot.xtau[tauDie]=",this.snapshot.xtau[tauDie].toPrecision(3),
       "\n  this.snapshot.xohne[tauDie]=",this.snapshot.xohne[tauDie].toPrecision(3),
       "");
   }
@@ -4646,7 +4749,7 @@ CoronaSim.prototype.takeSnapshot=function(it){
 CoronaSim.prototype.setStateFromSnapshot=function(){
   this.snapshot.it;
   for(var tau=0; tau<taumax; tau++){
-    this.x[tau]=this.snapshot.x[tau];
+    this.xtau[tau]=this.snapshot.xtau[tau];
     this.xohne[tau]=this.snapshot.xohne[tau];
   }
   this.xAct=this.snapshot.xAct;
@@ -4662,7 +4765,7 @@ CoronaSim.prototype.setStateFromSnapshot=function(){
       "\n  this.y=",this.y.toPrecision(3),
       "\n  this.z=",this.z.toPrecision(3),
       "\n  this.xyz=",this.xyz.toPrecision(3),
-      "\n  this.x[tauDie]=",this.x[tauDie].toPrecision(3),
+      "\n  this.xtau[tauDie]=",this.xtau[tauDie].toPrecision(3),
       "\n  this.xohne[tauDie]=",this.xohne[tauDie].toPrecision(3),
       "");
 
@@ -4677,12 +4780,12 @@ CoronaSim.prototype.setStateFromSnapshot=function(){
 
 //#################################################################
 // central update step  ("o" means convolution)
-// x[taumax]=0
-// x[tau+1]=x[tau]
-// x[0]=R*f_R o x * (1-(x+y+z))
+// xtau[taumax]=0
+// xtau[tau+1]=xtau[tau]
+// xtau[0]=R*f_R o x * (1-(x+y+z))
 // if(tauRecover>tauDie){
-//   dz/dt=-dx[tauDie]/dt=fracDie*x[tauDie]
-//   dy/dt=-dx[tauRecover]/dt=x[tauRecover] -> x[tauRecover]=0
+//   dz/dt=-dx[tauDie]/dt=fracDie*xtau[tauDie]
+//   dy/dt=-dx[tauRecover]/dt=xtau[tauRecover] -> xtau[tauRecover]=0
 // } otherwise, the other way round
 
 //#################################################################
@@ -4705,12 +4808,6 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
       "\n fracDie=IFR65=",fracDie.toPrecision(2),
       " nxt=n0*this.xt=",Math.round(n0*this.xt),
       " nzSim=n0*this.z=",Math.round(n0*this.z),
-      //"\n  this.x[tauDie-1]=",this.x[tauDie-1].toPrecision(3),
-      //"\n  this.x[tauDie]=",this.x[tauDie].toPrecision(3),
-      //"\n  this.x[tauDie+1]=",this.x[tauDie+1].toPrecision(3),
-      //"\n  this.x[tauRecover-1]=",this.x[tauRecover-1].toPrecision(3),
-      //"\n  this.x[tauRecover]=",this.x[tauRecover].toPrecision(3),
-      //"\n  this.x[tauRecover+1]=",this.x[tauRecover+1].toPrecision(3),
       "");
   }
 
@@ -4726,15 +4823,20 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
   // ###############################################
 
  
-  // immunityArray[it]: global fixed vacc immunity time profile
-  // generated here, if outside calibration
+  // if in calibration, IvaccPop from global fixed var IvaccArray[it]
+  // if outside, IvaccPop calculated here below
+  // default is inside calibration R0
+  // corrIFR not used inside calibr R0
   
-  IvaccPop=(it>=0) ? immunityArray[it] : 0; // used inside calibration from profile
-  corrIFR=(it>=tauDie)
-    ? corrIFRarr[it-tauDie] : vaccination.corrFactorIFR0; 
+  IvaccPop=(it>=0) ? IvaccArray[it] : 0; // inside calibr R0 from profile
 
+   //####### Reff w/o stringency/seasons inside calibr ############
+  this.Reff=R0 * (1-IvaccPop) * (1-this.xyz); 
+  //###############################################################
+
+  
   if( !inCalibration && (it>=0)){
-    if(it==0){vaccination.initialize(country);}
+    if(it==0){immunity.initialize(country);}
 
     // NOTICE:
     // test if slider_R0_moved in higher level, result passed as arg "R0"
@@ -4758,18 +4860,18 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
       //console.log("!slider_rBoost_moved: rBoost=",rBoost);
     }
 
-    vaccination.update(rVacc,it); // outside calibration, still needed for CFR
-    vaccination.updateImmunity(rVacc,rBoost,it); //MT 2021-11-15=>immunityPop
+    immunity.updateAgeGroups(rVacc,it); // outside calibration, still needed for CFR
+    immunity.updateVacc(rVacc,rBoost,it); //MT 2021-11-15=>I1vacc
 
-    IvaccPop=vaccination.immunityPop;    // outside calibration
+    IvaccPop=immunity.I1vacc;    // outside calibration !!!! TODO
     
-    corrIFRarr[it]=vaccination.corrFactorIFR;
+    corrIFRarr[it]=immunity.corrFactorIFR;
     corrIFR=(it>=tauDie)
-      ? corrIFRarr[it-tauDie] : vaccination.corrFactorIFR0; 
+      ? corrIFRarr[it-tauDie] : immunity.corrFactorIFR0; 
 
     if(false){
     //if(it>=610){
-    //if(Math.abs(immunityArray[it]-IvaccPop)>1e-6){
+    //if(Math.abs(IvaccArray[it]-IvaccPop)>1e-6){
       console.log("update outside calib: it=",it,
 		  " rVacc=",rVacc.toFixed(4),
 		  " rBoost=",rBoost.toFixed(4),
@@ -4777,33 +4879,38 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
 		  " pVaccFull=",pVaccFull.toFixed(4),
 		  " pBoost=",pBoost.toFixed(4),
 		  " IvaccPop=",IvaccPop.toFixed(4),
-		  //"\n immunityArray[it]=",immunityArray[it],
-		  //" diff=",immunityArray[it]-IvaccPop,
+		  //"\n IvaccArray[it]=",IvaccArray[it],
+		  //" diff=",IvaccArray[it]-IvaccPop,
 		 "");
     }
-  }
 
 
- //########### main Reff calculation #############################
-  this.Reff=R0 * (1-IvaccPop) * (1-this.xyz) * calc_seasonFactor(it); 
- //###############################################################
+   //####### Reff w/o stringency/seasons outside calibr ###############
+    this.Reff=R0 * (1-IvaccPop) * (1-this.xyz); 
+   //##################################################################
+    
+  }// if(!inCalibration && (it>=0))
+
+
 
   
-  // include political measures by stringency in [0,100]
+  // include seasonal factor and political measures by stringency in [0,100]
+  // debug at the end of update => "debug"
   
   if(inCalibration||(!slider_stringency_moved)){
     var i=Math.max(0, Math.min(
       data_stringencyIndex.length-1, it+data_idataStart));
     stringency=data_stringencyIndex[i];
   }
-  this.Reff *=stringencyFactor(stringency);
 
-  // debug at the end of update => "debug"
+  //#################################################################
+  this.Reff *= stringencyFactor(stringency) * calc_seasonFactor(it);
+  //#################################################################
 
+  
+  // source term from external trips from returners of foreign regions
 
-  // source term from external trips
-
-  var x0source=casesInflow/100000; // from returners of foreign regions
+  var x0source=casesInflow/100000;
 
   
   // ###############################################
@@ -4812,11 +4919,11 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
 
 
   for(var tau=taumax-1; tau>0; tau--){
-    this.x[tau]=this.x[tau-1];
+    this.xtau[tau]=this.xtau[tau-1];
     this.xohne[tau]=this.xohne[tau-1];
     if(false){ //!! test very start
     //if(logging&&(it<-19)){
-      console.log("tau=",tau," this.x[tau]=",this.x[tau],
+      console.log("tau=",tau," this.xtau[tau]=",this.xtau[tau],
 		  " this.xohne[tau]=",this.xohne[tau]);
     }
   }
@@ -4826,18 +4933,18 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
   // true dynamics (2): infect new people
   // ###############################################
 
-  this.x[0]=x0source;
+  this.xtau[0]=x0source;
   var f_R=1./(tauRend-tauRstart+1);
-  if(logging&&(it<-19)){console.log("1. this.x[0]=",this.x[0]," this.Reff=",this.Reff );}
+  if(logging&&(it<-19)){console.log("1. this.xtau[0]=",this.xtau[0]," this.Reff=",this.Reff );}
 
   if(n0*this.xAct>=1){ // !! infection finally dead if xAct<1
     for(var tau=tauRstart; tau<=tauRend; tau++){
-      this.x[0]+=this.Reff*f_R*this.x[tau];
+      this.xtau[0]+=this.Reff*f_R*this.xtau[tau];
     }
   }
 
-  this.xohne[0]=this.x[0];
-  if(logging&&(it<-19)){console.log("2. this.x[0]=",this.x[0]);}
+  this.xohne[0]=this.xtau[0];
+  if(logging&&(it<-19)){console.log("2. this.xtau[0]=",this.xtau[0]);}
 
 
   // ###############################################
@@ -4847,7 +4954,7 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
 
   // do not need Step 3 recovered/dead for R0 calibration
   // since infection dynamics only depends on this.xyz which is
-  // always updated "+=this.x[0]
+  // always updated "+=this.xtau[0]
   
 
   if(!inCalibration){ 
@@ -4860,7 +4967,7 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
     for(var tau=tauDie-dtau; tau<=tauDie+dtau; tau++){
       var dztau=fracDie*corrIFR*f_D*this.xohne[tau]; //!! here xohne crucial
       this.dz+=dztau;
-      this.x[tau] -=dztau; // xohne remains unsubtracted
+      this.xtau[tau] -=dztau; // xohne remains unsubtracted
     }
 
 
@@ -4868,7 +4975,7 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
     for(var tau=tauRecover-dtau; tau<=tauRecover+dtau; tau++){
       var dy=(1-fracDie)*f_Rec*this.xohne[tau]; //!! here xohne crucial
       dysum+=dy;
-      this.x[tau] -=dy; // xohne remains unsubtracted
+      this.xtau[tau] -=dy; // xohne remains unsubtracted
     }
     this.z   += this.dz;
     this.y   += dysum;
@@ -4901,11 +5008,11 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
   // xyz: relative cumulative sum of infected (incl recovered, dead)
   // ###############################################
 
-  this.xyz+= this.x[0]; // cumulative fraction of newly infected
+  this.xyz+= this.xtau[0]; // cumulative fraction of newly infected
 
   this.xAct=0;  
   for(var tau=0; tau<taumax; tau++){
-    this.xAct     += this.x[tau];
+    this.xAct     += this.xtau[tau];
   }
 
   // MT 2020-12-23 fraction of newly infected at time it 
@@ -4914,7 +5021,7 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
   // need addtl run for preparing data for IFR => just calc it always
  
   if((it>=0)&&(it<itPresent)){
-    this.dx_it[it]=this.x[0];
+    this.dx_it[it]=this.xtau[0];
   }
 
 
@@ -5034,12 +5141,6 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
       //" corrIFR=",corrIFR,
       " dnxt=n0*this.xt=",Math.round(n0*this.dxt),
       " nzSim=n0*this.z=",Math.round(n0*this.z),
-      //"\n  this.x[tauDie-1]=",this.x[tauDie-1].toPrecision(3),
-      //"\n  this.x[tauDie]=",this.x[tauDie].toPrecision(3),
-      //"\n  this.x[tauDie+1]=",this.x[tauDie+1].toPrecision(3),
-      //"\n  this.x[tauRecover-1]=",this.x[tauRecover-1].toPrecision(3),
-      //"\n  this.x[tauRecover]=",this.x[tauRecover].toPrecision(3),
-      //"\n  this.x[tauRecover+1]=",this.x[tauRecover+1].toPrecision(3),
 	"");
     }
   }
@@ -6032,25 +6133,25 @@ DrawSim.prototype.drawAxes=function(windowG){
     }
   } // windowG !=7
 
-    //console.log("it=",it," mutationDynamics=",mutationDynamics);
+    //console.log("it=",it," mutationDynamicsOld=",mutationDynamicsOld);
 
-  if(!(typeof mutationDynamics === "undefined") // sometimes so at begin
-     && simulateMutation &&(it>mutationDynamics.itNew-63)){
+  if(!(typeof mutationDynamicsOld === "undefined") // sometimes so at begin
+     && simulateMutation &&(it>mutationDynamicsOld.itNew-63)){
       //console.log("it=",it);
-      mutationDynamics.update(it); //just graphics; double call does not harm
+      mutationDynamicsOld.update(it); //just graphics; double call does not harm
       var mutTopPix=this.yPix0+0.90*this.hPix;
       var mutLeftPix=this.xPix0+0.77*this.wPix;
       line=0;
-      ctx.fillText("R0_Alpha="+mutationDynamics.R0wild.toFixed(2),
+      ctx.fillText("R0_Alpha="+mutationDynamicsOld.R0wild.toFixed(2),
 		   mutLeftPix,mutTopPix);
       line++;
-      ctx.fillText("R0_Delta="+mutationDynamics.R0mut.toFixed(2),
+      ctx.fillText("R0_Delta="+mutationDynamicsOld.R0mut.toFixed(2),
 		   mutLeftPix,mutTopPix-line*dyrel*this.hPix);
       line++;
-      ctx.fillText("p_Delta="+Math.round(100*mutationDynamics.p)+"%",
+      ctx.fillText("p_Delta="+Math.round(100*mutationDynamicsOld.p)+"%",
 		   mutLeftPix,mutTopPix-line*dyrel*this.hPix);
       line++;
-      ctx.fillText("R_0="+mutationDynamics.R0.toFixed(2),
+      ctx.fillText("R_0="+mutationDynamicsOld.R0.toFixed(2),
 		   mutLeftPix,mutTopPix-line*dyrel*this.hPix);
       
   }// draw propagation of new mutation if actively simulated
@@ -6077,7 +6178,7 @@ DrawSim.prototype.transferSimData=function(it){
   // this.dataG[10].data[it]=log10(n0*corona.y); // obsolete
   this.dataG[12].data[it]=log10(n0*corona.z);
   this.dataG[22].data[it]=IFRfun_time(it); //!! new! IFR
-  this.dataG[23].data[it]=n0*corona.x[0]; // x[0]=infected at infection age 0
+  this.dataG[23].data[it]=n0*corona.xtau[0]; // xtau[0]=infected at infection age 0
   this.dataG[24].data=this.dataG[23].data;
   this.dataG[25].data[it]=log10(n0*corona.xyz); // "Durchseuchung"
   this.dataG[26].data[it]=n0*corona.dxtFalse; // sim number of false positives
