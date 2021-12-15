@@ -1,0 +1,118 @@
+
+Simulation der anstehenden Omicron-Welle
+
+Abstract
+
+Nachdem die Projektion meines Videos vom 18.11. weitgehend eingetroffen sind - Peak der 4. Welle um 500 Ende November, jetztige (15.12.) Inzidenz um 400 nach OWID-Zahlen - wage ich nun eine Omicron-Prognose: Minimum am 21.12, leichter Anstieg bis Jahresende, Omicron-Peak um 1300 Ende Januar. Ich war so erschrocken, dass ich Omikron zu Omega aufgewertet habe! Am 10. März ist die 5. Welle mit Inzidenzen wieder unter 200 vorbei.
+
+Was unter der Haube ist, bringe ich im nächsten Video. 
+
+00:00 Einleitung
+00:24 Simulation bis zur Gegenwart
+01:12 Vergleich mit der Prognose vom 18.11. 
+03:41 Prognose der 5. Omicron-Welle
+06:18 Diskussion
+07:56 Schluss
+
+Intro
+=====
+
+vlc input "--video-filter=croppadd{croptop=50,cropbottom=50}" v4l2:///dev/video10
+
+[ich mit Corona-Hintergrund]
+
+Hallo und herzlich willkommen, aus aktuellem Anlass mache ich ein ganz
+kurzes Video, was die neue Covid-Variante Omicron mit meinem Simulator
+macht
+
+bzw, was es macht, nachdem ich die Omicron-Variante eingebaut habe
+
+Die optischen Elemente sind noch nicht alle angepasst, aber es ist
+jetzt einfach dringend.
+
+
+[Simulation starten]
+
+Zunaechst sieht man nichts, obwohl die Mutantensimulation schon
+gestartet ist.
+
+Eingetroffene Projektion
+=========================
+
+[ich mit Virus]
+
+Bevor ich die Standardprojektion mit Omicron zeige, will ich
+- stolzgeschwellt -
+verkuenden, dass ich den Peak
+der bisherige Welle, mit nahezu exakter Lage und Hoehe des Maximums
+und die jetztige Inzidenz vor nahezu EINEN MONAT am 18. November 2021
+vorausgesagt habe
+
+* Hoehe 500
+
+* 29. November
+
+* Nun 15.12. knapp 400
+
+[ https://youtu.be/dFWpiL1mIO4?t=2153 abspielen]
+
+* Hoehe 500: Check
+
+* 29. November: Check
+
+* 15. Dezember: Inzidenz 420 vs knapp 400: Check, v.A., da ja die
+  Stringency zum Schluss hoeher erhoeht wurde als in meinem Szenario
+  "leichtes Anschaerfen"
+
+
+Projektion mit Omicron, Standardszenario
+=====================================
+
+Nun aber zur Standardprojektion: Stringency, Impf- und Boosterraten
+bleiben wie sie sind
+
+* Mutationsanteil Gegenwart bei etwa 30%. Wohlgemerkt die echten
+  Neuinfektionen, die erst 3-5 Tage spaeter gemesen werden und noch
+  spaeter in den Daten konsolidiert und damit zum Reality-Check
+  nutzbar sind
+
+* Bis 22.12. runter, dann ueber Weihnachten leicht rauf,
+  Mutationsanteil Neujahr schon 85%
+
+* Peak bei 1400 Ende Januar
+
+* Anfang Maerz wird die 200 unterschritten und die Welle ist vorbei
+
+
+Diskussion
+===========
+
+Was alles unter der Haube steckt, das naechste
+Mal. Nur kurz die sesentlichen Aspekte:
+
+* Geringere und schneller nachlassende Wirksamkeit bei Omicron, wo
+  Delta noch zu 50% abgehalten wird, ist es bei Omicron 0, nur Boostern
+  hilft, wenn auch schlechter
+
+* Basisreproduktionszahlen von Delta und Omicron werden in der
+  Simulation an die Inzidenzen kalibriert, mit Messverzug,
+  Dunkelziffer und allem.
+
+* Omicron hat nur eine leicht hoehere Basisreproduktionszahl
+  gegenueber Delta. Das Erobern im Sturm liegt daran, dass die
+  Immunitaet gegenueber Omicron geringer ist, sodass das Verhaeltnis der
+  effektiven Reproduktionszahlen groesser als 2 ist.
+  [Der
+  Immunitaetseinfluss ist aber nicht so extrem, wie
+  von manche Leute angenommen, nach denen R0 von Omicron sogar geringer waere]
+
+* Die Durchsetzung von Omicron, die Infektionszahlen und die Inzidenzen
+  werden simultan simuliert
+
+
+Schluss
+=======
+
+Das wars fuer heute. Ich hoffe innigst, dass meine Simulation diesmal
+die naechsten vier Wochen nicht so praezise voraussagt wie die letzten
+vier bis zur Gegenwart. 

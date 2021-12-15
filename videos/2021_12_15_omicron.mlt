@@ -1,0 +1,457 @@
+<?xml version="1.0" standalone="no"?>
+<mlt LC_NUMERIC="C" version="7.1.0" title="Shotcut version 21.10.31" producer="main_bin">
+  <profile description="automatic" width="1300" height="766" progressive="1" sample_aspect_num="1" sample_aspect_den="1" display_aspect_num="650" display_aspect_den="383" frame_rate_num="1000" frame_rate_den="33" colorspace="709"/>
+  <chain id="chain0" out="00:01:01.848">
+    <property name="length">00:01:01.881</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_15_omega1.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="shotcut:hash">e7f4c79570ad32d9166e1e83bffd6842</property>
+    <property name="ignore_points">0</property>
+    <property name="creation_time">2021-12-15T22:39:50</property>
+    <property name="xml">was here</property>
+  </chain>
+  <chain id="chain1" out="00:00:55.374">
+    <property name="length">00:00:55.407</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_15_omega2.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">ac32ca1c125456a023b456685c430719</property>
+  </chain>
+  <chain id="chain2" out="00:01:14.487">
+    <property name="length">00:01:14.520</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_15_omega3.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">1a9b4af74820ddc1cecf620c6ca6defb</property>
+  </chain>
+  <chain id="chain3" out="00:01:24.189">
+    <property name="length">00:01:24.222</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_15_omega4.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">857cf053573f727436ff92c2f942481d</property>
+  </chain>
+  <chain id="chain4" out="00:03:13.299">
+    <property name="length">00:03:13.332</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_15_omega5.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">2a48ab1bead9b15ac4db04fd1e5499db</property>
+  </chain>
+  <chain id="chain5" out="00:02:25.971">
+    <property name="length">00:02:26.004</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_15_omega6.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">4e6bdf5a13f69ee8f882a2ae0549ee3b</property>
+  </chain>
+  <playlist id="main_bin">
+    <property name="xml_retain">1</property>
+    <entry producer="chain0" in="00:00:00.000" out="00:01:01.848"/>
+    <entry producer="chain1" in="00:00:00.000" out="00:00:55.374"/>
+    <entry producer="chain2" in="00:00:00.000" out="00:01:14.487"/>
+    <entry producer="chain3" in="00:00:00.000" out="00:01:24.189"/>
+    <entry producer="chain4" in="00:00:00.000" out="00:03:13.299"/>
+    <entry producer="chain5" in="00:00:00.000" out="00:02:25.971"/>
+  </playlist>
+  <producer id="black" in="00:00:00.000" out="00:08:24.816">
+    <property name="length">00:08:24.849</property>
+    <property name="eof">pause</property>
+    <property name="resource">0</property>
+    <property name="aspect_ratio">1</property>
+    <property name="mlt_service">color</property>
+    <property name="mlt_image_format">rgba</property>
+    <property name="set.test_audio">0</property>
+  </producer>
+  <playlist id="background">
+    <entry producer="black" in="00:00:00.000" out="00:08:24.816"/>
+  </playlist>
+  <chain id="chain6" out="00:01:01.848">
+    <property name="length">00:01:01.881</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_15_omega1.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="shotcut:hash">e7f4c79570ad32d9166e1e83bffd6842</property>
+    <property name="ignore_points">0</property>
+    <property name="creation_time">2021-12-15T22:39:50</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:caption">2021_12_15_omega1.mkv</property>
+  </chain>
+  <chain id="chain7" out="00:00:55.374">
+    <property name="length">00:00:55.407</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_15_omega2.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">ac32ca1c125456a023b456685c430719</property>
+    <property name="shotcut:caption">2021_12_15_omega2.mkv</property>
+  </chain>
+  <tractor id="tractor0" in="00:00:00.000" out="00:00:00.825">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="chain6" in="00:00:54.120" out="00:00:54.945"/>
+    <track producer="chain7" in="00:00:01.848" out="00:00:02.673"/>
+    <transition id="transition0" out="00:00:00.825">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition1" out="00:00:00.825">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="mlt_service">mix</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+    </transition>
+  </tractor>
+  <chain id="chain8" out="00:01:14.487">
+    <property name="length">00:01:14.520</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_15_omega3.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">1a9b4af74820ddc1cecf620c6ca6defb</property>
+    <property name="shotcut:caption">2021_12_15_omega3.mkv</property>
+  </chain>
+  <tractor id="tractor1" in="00:00:00.000" out="00:00:01.056">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="chain7" in="00:00:49.632" out="00:00:50.688"/>
+    <track producer="chain8" in="00:00:07.458" out="00:00:08.514"/>
+    <transition id="transition2" out="00:00:01.056">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition3" out="00:00:01.056">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="mlt_service">mix</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+    </transition>
+  </tractor>
+  <chain id="chain9" out="00:01:14.487">
+    <property name="length">00:01:14.520</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_15_omega3.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">1a9b4af74820ddc1cecf620c6ca6defb</property>
+    <property name="shotcut:caption">2021_12_15_omega3.mkv</property>
+  </chain>
+  <tractor id="tractor2" in="00:00:00.000" out="00:00:00.693">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="chain8" in="00:00:34.353" out="00:00:35.046"/>
+    <track producer="chain9" in="00:00:38.379" out="00:00:39.072"/>
+    <transition id="transition4" out="00:00:00.693">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition5" out="00:00:00.693">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="mlt_service">mix</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+    </transition>
+  </tractor>
+  <chain id="chain10" out="00:01:14.487">
+    <property name="length">00:01:14.520</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_15_omega3.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">1a9b4af74820ddc1cecf620c6ca6defb</property>
+    <property name="shotcut:caption">2021_12_15_omega3.mkv</property>
+  </chain>
+  <chain id="chain11" out="00:01:14.487">
+    <property name="length">00:01:14.520</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_15_omega3.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">1a9b4af74820ddc1cecf620c6ca6defb</property>
+    <property name="shotcut:caption">2021_12_15_omega3.mkv</property>
+  </chain>
+  <chain id="chain12" out="00:01:24.189">
+    <property name="length">00:01:24.222</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_15_omega4.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">857cf053573f727436ff92c2f942481d</property>
+    <property name="shotcut:caption">2021_12_15_omega4.mkv</property>
+  </chain>
+  <tractor id="tractor3" in="00:00:00.000" out="00:00:00.759">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="chain11" in="00:01:12.375" out="00:01:13.134"/>
+    <track producer="chain12" in="00:00:02.046" out="00:00:02.805"/>
+    <transition id="transition6" out="00:00:00.759">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition7" out="00:00:00.759">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="mlt_service">mix</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+    </transition>
+  </tractor>
+  <chain id="chain13" out="00:01:24.189">
+    <property name="length">00:01:24.222</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_15_omega4.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">857cf053573f727436ff92c2f942481d</property>
+    <property name="shotcut:caption">2021_12_15_omega4.mkv</property>
+  </chain>
+  <chain id="chain14" out="00:01:24.189">
+    <property name="length">00:01:24.222</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_15_omega4.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">857cf053573f727436ff92c2f942481d</property>
+    <property name="shotcut:caption">2021_12_15_omega4.mkv</property>
+  </chain>
+  <chain id="chain15" out="00:01:24.189">
+    <property name="length">00:01:24.222</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_15_omega4.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">857cf053573f727436ff92c2f942481d</property>
+    <property name="shotcut:caption">2021_12_15_omega4.mkv</property>
+  </chain>
+  <chain id="chain16" out="00:01:24.189">
+    <property name="length">00:01:24.222</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_15_omega4.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">857cf053573f727436ff92c2f942481d</property>
+    <property name="shotcut:caption">2021_12_15_omega4.mkv</property>
+  </chain>
+  <chain id="chain17" out="00:03:13.299">
+    <property name="length">00:03:13.332</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_15_omega5.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">2a48ab1bead9b15ac4db04fd1e5499db</property>
+    <property name="shotcut:caption">2021_12_15_omega5.mkv</property>
+  </chain>
+  <tractor id="tractor4" in="00:00:00.000" out="00:00:00.594">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="chain16" in="00:01:14.421" out="00:01:15.015"/>
+    <track producer="chain17" in="00:00:05.577" out="00:00:06.171"/>
+    <transition id="transition8" out="00:00:00.594">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition9" out="00:00:00.594">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <chain id="chain18" out="00:03:13.299">
+    <property name="length">00:03:13.332</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_15_omega5.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">2a48ab1bead9b15ac4db04fd1e5499db</property>
+    <property name="shotcut:caption">2021_12_15_omega5.mkv</property>
+  </chain>
+  <chain id="chain19" out="00:02:25.971">
+    <property name="length">00:02:26.004</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_15_omega6.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">4e6bdf5a13f69ee8f882a2ae0549ee3b</property>
+    <property name="shotcut:caption">2021_12_15_omega6.mkv</property>
+  </chain>
+  <tractor id="tractor5" in="00:00:00.000" out="00:00:01.023">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="chain18" in="00:03:10.263" out="00:03:11.286"/>
+    <track producer="chain19" in="00:00:05.379" out="00:00:06.402"/>
+    <transition id="transition10" out="00:00:01.023">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition11" out="00:00:01.023">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <chain id="chain20" out="00:02:25.971">
+    <property name="length">00:02:26.004</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_15_omega6.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">4e6bdf5a13f69ee8f882a2ae0549ee3b</property>
+    <property name="shotcut:caption">2021_12_15_omega6.mkv</property>
+  </chain>
+  <playlist id="playlist0">
+    <property name="shotcut:video">1</property>
+    <property name="shotcut:name">V1</property>
+    <entry producer="chain6" in="00:00:30.294" out="00:00:54.087"/>
+    <entry producer="tractor0" in="00:00:00.000" out="00:00:00.825"/>
+    <entry producer="chain7" in="00:00:02.706" out="00:00:49.599"/>
+    <entry producer="tractor1" in="00:00:00.000" out="00:00:01.056"/>
+    <entry producer="chain8" in="00:00:08.547" out="00:00:34.320"/>
+    <entry producer="tractor2" in="00:00:00.000" out="00:00:00.693"/>
+    <entry producer="chain9" in="00:00:39.105" out="00:00:54.252"/>
+    <entry producer="chain10" in="00:00:55.506" out="00:01:01.749"/>
+    <entry producer="chain11" in="00:01:06.105" out="00:01:12.342"/>
+    <entry producer="tractor3" in="00:00:00.000" out="00:00:00.759"/>
+    <entry producer="chain12" in="00:00:02.838" out="00:00:06.732"/>
+    <entry producer="chain13" in="00:00:07.425" out="00:00:13.893"/>
+    <entry producer="chain14" in="00:00:15.609" out="00:00:16.896"/>
+    <entry producer="chain15" in="00:00:16.929" out="00:00:21.384"/>
+    <entry producer="chain16" in="00:00:23.298" out="00:01:14.388"/>
+    <entry producer="tractor4" in="00:00:00.000" out="00:00:00.594"/>
+    <entry producer="chain17" in="00:00:06.204" out="00:02:19.272"/>
+    <entry producer="chain18" in="00:02:21.219" out="00:03:10.230"/>
+    <entry producer="tractor5" in="00:00:00.000" out="00:00:01.023"/>
+    <entry producer="chain19" in="00:00:06.435" out="00:01:50.589"/>
+    <entry producer="chain20" in="00:01:58.245" out="00:02:19.965"/>
+  </playlist>
+  <tractor id="tractor6" title="Shotcut version 21.10.31" in="00:00:00.000" out="00:08:24.816">
+    <property name="shotcut">1</property>
+    <property name="shotcut:projectAudioChannels">2</property>
+    <property name="shotcut:projectFolder">0</property>
+    <track producer="background"/>
+    <track producer="playlist0"/>
+    <transition id="transition12">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="mlt_service">mix</property>
+      <property name="always_active">1</property>
+      <property name="sum">1</property>
+    </transition>
+    <transition id="transition13">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="version">0.9</property>
+      <property name="mlt_service">frei0r.cairoblend</property>
+      <property name="threads">0</property>
+      <property name="disable">1</property>
+    </transition>
+  </tractor>
+</mlt>

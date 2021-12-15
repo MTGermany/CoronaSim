@@ -23,7 +23,9 @@ Besser: vlc mit Crop-Moeglichkeiten
 [EXTRA Terminal:]
 
 vlc v4l2:///dev/video0
-vlc input "--video-filter=croppadd{croptop=0,cropbottom=0}" v4l2:///dev/video0
+vlc v4l2:///dev/video10
+vlc input "--video-filter=croppadd{croptop=50,cropbottom=50}" v4l2:///dev/video0
+vlc input "--video-filter=croppadd{croptop=50,cropbottom=50}" v4l2:///dev/video10
 vlc input "--video-filter=croppadd{cropright=300,cropleft=300}" v4l2:///dev/video0
 vlc input "--video-filter=croppadd{cropright=250,cropleft=250}" v4l2:///dev/video0
 vlc input "--video-filter=croppadd{cropright=200,cropleft=200}" v4l2:///dev/video0
