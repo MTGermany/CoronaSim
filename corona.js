@@ -562,7 +562,7 @@ var dtList2present
     =Math.floor((present.getTime()-time_pMutList.getTime())/oneDay_ms); 
 
 const pMutList={ // fraction pMut @ reftime_pMut (0: no data)
-  "Germany"       : 0.03,
+  "Germany"       : 0.02,
   "Austria"       : 0, // rest (w/o OK flag) speculation at best
   "Australia"     : 0,
   "Brazil"        : 0,
@@ -708,7 +708,7 @@ var dataCmp_dxIncidence=[]; // compare weekly incidence per 100 000 from data
 
 
 /* ######################################################################
- Mutation Dynamics
+ Mutation Dynamics (see also immunity.evadeMutFactor)
 ######################################################################*/
 
 var mutationDynamics=new MutationDynamics();   
@@ -742,7 +742,7 @@ console.log("very start: coutry=",country," pMutRef=",pMutRef,
 
 
 //###############################################################
-// Immunity dynamics
+// Immunity dynamics (see also immunity.evadeMutFactor for Omicron)
 // Parameters like this.Imax=0.95 (Biontec)
 // or this.vaccmax=[...];
 // (age-specific max vacc rate due to vacc deniers/impossible to vacc)
@@ -763,8 +763,8 @@ var rBoost=rBoostInit;
 
 var Ivacc1=0;   // old/standard variant     
 var Ivacc2=0;   // new variant if applicable  
-var IvaccPop=0; // !!! as of now = immunity.I1vacc (needed in drawsim)
-// fixed data-driven profile of vacc immunity factor for use in calibration
+var IvaccPop=0; // !!!! as of now = immunity.I1vacc (needed in drawsim)
+// !!!! TODO: need fixed data-driven profile of vacc immunity factor for use in calibration; calculate it later from known Omega fractions and immunity.I1vacc (Delta) and immunity.I2vacc (Omega)
 
 var IvaccArray=[]; 
 for(var it=0; it<=itPresent; it++){ 
@@ -3368,7 +3368,7 @@ function selectDataCountry(){ // callback html select box "countryData"
 	   }
   resetValidation();
   initializeData(country);
-  usePrevious=true;
+  usePrevious=usePreviousGlob;
   console.log("  selectDataCountry: usePrevious=",usePrevious);
 } // selectDataCountry
 
@@ -3731,11 +3731,11 @@ function myCountryComparison(){ // callback "Kalibriere neu!
 function setMutationSim(withMutations){
   if(withMutations){
     simulateMutation=true;
-    document.getElementById("buttonMut").innerHTML="&Delta; Mutation [stop]";
+    document.getElementById("buttonMut").innerHTML="&Omicron; Mutation [stop]";
   }
   else{
     simulateMutation=false;
-    document.getElementById("buttonMut").innerHTML="&Delta; Mutation [start]";
+    document.getElementById("buttonMut").innerHTML="&Omicron; Mutation [start]";
   }
 }
 
@@ -3912,7 +3912,8 @@ function estimate_pMut_timeShift(pIn,r,dt){
 //################################################################
 function MutationDynamics(){
 //################################################################
-  this.p=[];
+  this.p_it=[];
+  this.p=0;
 }
 
 
@@ -3932,19 +3933,20 @@ function MutationDynamics(){
 
 MutationDynamics.prototype.initialize=function(it0,p0,r0,I10,I20,R0){
   this.tauR=0.5*(tauRstart+tauRend); // if changed at the sliders
-  this.p[it0]=p0;
+  this.p_it[it0]=p0;
   for(var it=0; it<it0; it++){
     exponent=r0*(it-it0);
-    this.p[it]=(exponent>-100) ? p0*Math.exp(exponent) : 0;
+    this.p_it[it]=(exponent>-100) ? p0*Math.exp(exponent) : 0;
   }
   this.y=p0/(1-p0);
   this.r0=r0;
   this.R10=R0/(1+p0*r0*this.tauR);
   this.R20=this.R10*(r0*this.tauR+1)*(1-I10)/(1-I20);
   if(true){
-    console.log("MutationDynamics Cstr: this.tauR=",this.tauR,
+    console.log("MutationDynamics initialize: this.tauR=",this.tauR,
+		" pMut=",p0,
 		" this.y=",this.y,
-		"\n this.R10=",this.R10,
+		"\n R0=",R0," this.r0=",this.r0," this.R10=",this.R10,
 		" this.R20=",this.R20);
   }
 }
@@ -3954,7 +3956,8 @@ MutationDynamics.prototype.initialize=function(it0,p0,r0,I10,I20,R0){
 MutationDynamics.prototype.update=function(I1,I2,it){
   var r= ( (this.R20*(1-I2))/(this.R10*(1-I1)) -1)/this.tauR;
   this.y *= Math.exp(r);
-  this.p[it]=this.y/(1+this.y);
+  this.p=this.y/(1+this.y);
+  this.p_it[it]=this.p;
   console.log("MutationDynamics.update: this.R20=",this.R20," I1=",I1," I2=",I2," r=",r);
 }
   
@@ -3988,7 +3991,7 @@ function Immunity(){
   // variables for immunity by vaccination/boosters
   //################################################################
 
-  this.evadeMutFactor=2; // (1-vacceff2)=max(0,1-evadeMutFactor*(1-vaceff1))
+  this.evadeMutFactor=3; // (1-vacceff2)=max(0,1-evadeMutFactor*(1-vaceff1))
   this.I1vacc=0;      // vaccination immunity factor for standard strain
   this.I2vacc=0;      // ... for mutation (0=unprotected, 1=100% prot)
 
@@ -4755,7 +4758,7 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
       
       if(it>itStartMut){
 	mutationDynamics.update(immunity.I1, immunity.I2,it);
-	pMut=mutationDynamics.p[it];
+	pMut=mutationDynamics.p_it[it];
 	R10=mutationDynamics.R10;
 	R20=mutationDynamics.R20;
       }
@@ -5240,8 +5243,8 @@ function DrawSim(){
   colCasesRecovCum="rgb(0,150,40)";
   colCasesRecovCumSim="rgb(0,150,40)";
   colCasesBars="rgb(255,100,0)";  // main plots
-  colCasesSim="rgb(255,170,0)";
-  colCasesValid="rgb(140,0,140)";
+  colCasesSim="rgb(255,150,0)";
+  colCasesValid="rgb(255,200,100)";
   colFalsePos="rgb(0,220,0)";
   colDead="rgba(0,0,0,0.7)";  
   colDeadValid="rgb(180,180,180)";  
@@ -5270,8 +5273,8 @@ function DrawSim(){
   colRValid="rgb(255,150,150)";
   colCasesLog="rgba(255,120,0,0.8)";
   colCasesLogValid="rgba(255,150,30,0.3)";
-  colICU="rgb(150,50,0)";
-  colICUsim="rgb(210,110,0)";
+  colICU="rgb(120,40,0)";
+  colICUsim="rgb(160,80,0)";
 
 
 
@@ -5619,7 +5622,7 @@ function DrawSim(){
   this.qselectRegular[3]=[18,19,24,26,27];  // "Daten: Tests"
   this.qselectRegular[4]=[20,21,22];        // "Infektionsraten"
   this.qselectRegular[5]=[16,17,28,29];     // "Taegliche Faelle"
-  this.qselectRegular[6]=[30,52,31,32,53,33,41];  // "Wochen-Inzidenz"
+  this.qselectRegular[6]=[30,32,52,53,31,33,41];  // "Wochen-Inzidenz"
   this.qselectRegular[7]=[50,45,46,43,48,54];  // "Ursache-Wirkung"
 
   if(countryComparison){this.qselectRegular[6]=[30,31,32,33,41,42];}
@@ -5630,7 +5633,7 @@ function DrawSim(){
   this.qselectWithPrev[3]=[18,19,24,26,27];
   this.qselectWithPrev[4]=[20,21,22];
   this.qselectWithPrev[5]=[16,17,37,28,40,29];
-  this.qselectWithPrev[6]=[30,52,31,38,32,39,53,33,41];
+  this.qselectWithPrev[6]=[30,32,38,52,53,31,33,39,41];
   this.qselectWithPrev[7]=[50,51,45,47,46,44,43,49,48,54];
 
   if(countryComparison){this.qselectWithPrev[6]=[30,31,38,32,39,33,41,42];}
@@ -5977,7 +5980,7 @@ DrawSim.prototype.drawAxes=function(windowG){
       ctx.fillStyle="rgb(127,127,127)";
       ctx.fillText("corona-simulation.de",
 		 this.xPix0+this.wPix-10*textsizeWeb,
-		 this.yPix0-1.4*textsizeWeb);
+		 this.yPix0-0.8*textsizeWeb);
       ctx.font = "normal "+textsize+"px Arial";
       ctx.fillStyle="rgb(0,0,0)";
 
@@ -5996,69 +5999,60 @@ DrawSim.prototype.drawAxes=function(windowG){
     // 0=cum,1=log,2=casesReal,3=tests,4=rates,5=casesDaily,
     // 6=incid,7=causeEffect 
 
-    var line=0;
+    var line=0.5;
     var i1=data_idataStart+it;
     var dn7days=((typeof data_dnSmooth === "undefined")||(i1<0)) ? 0
 	: (i1<data_dnSmooth.length) ? data_dnSmooth[i1]
 	: data_dnSmooth[data_dnSmooth.length-1];
-    ctx.fillText("Testrate: "
-		 +((dn7days*1e6/n0).toFixed(0))
-		 +"/Wo/1 Mio"
-		 +"; Kumul. Faelle:"+(casesPerc.toFixed(1))
-		 +" %, Sim. Durchseuchung:"+(Xperc.toFixed(1))+" %",
-		 this.xPix0+xrelLeft*this.wPix,
-		 this.yPix0+(yrelTopVars-(line)*dyrel)*this.hPix);
 
-    line++;
-    ctx.fillStyle="red"; // "rgb(255,0,0)"
-    ctx.fillText("Aktuelles R="+(corona.Reff.toFixed(2))
-		 +",  R0 ohne alles="+(R0_actual.toFixed(2)),
-		 this.xPix0+xrelLeft*this.wPix,
-		 this.yPix0+(yrelTopVars-(line)*dyrel)*this.hPix);
-    
 
-    line++;
-    ctx.fillStyle="black";
-    ctx.fillText("Insgesamt Gestorbene (sim.)="+(Math.round(n0*corona.z))
-		 +" Aktuelle IFR65="+(100*IFRfun_time(it)).toFixed(2)+" %",
-		 this.xPix0+xrelLeft*this.wPix,
-		 this.yPix0+(yrelTopVars-(line)*dyrel)*this.hPix);
-
-    if(fracICU>0){
+    if(true){
       line++;
-      ctx.fillText("ICU-Inzidenz/100 000 (sim.)="
-		   +(100000*corona.icu).toFixed(1)
-		   //+" IIR="+(100*fracICU/tauICUstay).toFixed(2)+" %"
-		   +"",
+
+      ctx.fillStyle="red"; // "rgb(255,0,0)"
+      ctx.fillText("Aktuelles R="+(corona.Reff.toFixed(2))
+		   +",  R0 ohne alles="+(R0_actual.toFixed(2)),
 		   this.xPix0+xrelLeft*this.wPix,
 		   this.yPix0+(yrelTopVars-(line)*dyrel)*this.hPix);
+      ctx.fillStyle="black";
     }
+
       
     if(pVacc>0){
       line++;
       ctx.fillText("Geimpft: "+(100*pVacc).toFixed(1)
 		   +" %, Vollst. geimpft: "+(100*pVaccFull).toFixed(1)
-		   +" %, Geboostert: "+(100*pBoost).toFixed(1)+" %",
+		   +" %, Geboostert: "+(100*pBoost).toFixed(1)
+		   +" %, Erkrankt:"+(Xperc.toFixed(1))+" %",
 		 this.xPix0+xrelLeft*this.wPix,
 		 this.yPix0+(yrelTopVars-(line)*dyrel)*this.hPix);
     }
 
-    // Impf-state-Variablen incl "Impfdurchbrueche" (bzgl >=1mal geimpft)
-    // p_d=pVaccFull*(1-Ivacc|full)/(pVaccFull*(1-Ivacc|full)+1-pVaccFull)
-    //    approx pVaccAvg*(1-Ivacc)/(pVaccAvg*(1-Ivacc)+1-pVaccAvg)
-    //    = (pVaccAvg-IvaccPop)/(1-IvaccPop)
-    // since IvaccPop=pVaccAvg*Ivacc
 
     if(pVacc>0){
-      var pd=Math.max(0, (0.5*(pVacc+pVaccFull)-IvaccPop)/(1-IvaccPop))
-      //var pd=(pVaccFull-IvaccPop)/(1-IvaccPop) // can lead to vals<0
-      // e.g., if not yet full vacc but partial vacced reduce infections
       line++;
-      ctx.fillText("Impf-Immunitaet der Bevoelkerung: "
-		   +(100*IvaccPop).toFixed(1)
-		   +" %, Sim. Impfdurchbrueche: "+(100*pd).toFixed(1)+" %",
-		 this.xPix0+xrelLeft*this.wPix,
-		 this.yPix0+(yrelTopVars-(line)*dyrel)*this.hPix);
+      var pMut=(it>=itStartMut) ? mutationDynamics.p : 0;
+      var I1=immunity.I1;
+      var I2=immunity.I2;
+      var I=(1-pMut)*I1+pMut*I2;
+      var I1vacc=immunity.I1vacc;
+      var I2vacc=immunity.I2vacc;
+      var Ivacc=(1-pMut)*I1vacc+pMut*I2vacc;
+      
+      // not pVaccFull since also first vacc gives some immunity=> would be negative "Impfdurchbruchsrate" (can also calc exactly "Durchbruchsrate" w/respect to any vacc)
+      var pd=Math.max(0, (0.5*(pVacc+pVaccFull)-Ivacc)/(1-Ivacc))
+
+      var str_omicron=(pMut>0) ? ("%, Omicron: "+(100*I2).toFixed(0)) : "";
+
+      //console.log("pVaccFull=",pVaccFull," Ivacc=",Ivacc);
+      ctx.fillText(
+        // Impf-Immunitaeten: I-Delta="+(100*I1vacc).toFixed(0)
+        // +"%, I-Omicron="+(100*I2vacc).toFixed(0)
+	"Gesamt-Immunitaet Delta: "+(100*I1).toFixed(0)
+	  +str_omicron
+	  +"%, Sim. Impfdurchbrueche: "+(100*pd).toFixed(1)+"%",
+	this.xPix0+xrelLeft*this.wPix,
+	this.yPix0+(yrelTopVars-(line)*dyrel)*this.hPix);
     }
 
    
@@ -6069,6 +6063,36 @@ DrawSim.prototype.drawAxes=function(windowG){
 		   this.xPix0+xrelLeft*this.wPix,
 		   this.yPix0+(yrelTopVars-(line)*dyrel)*this.hPix);
     }
+
+    if(!isSmartphone){
+      line++;
+        ctx.fillText("Testrate: "
+		     +((dn7days*1e6/n0).toFixed(0))
+		     +"/Wo/1 Mio"
+		     +"; Kumul. Faelle:"+(casesPerc.toFixed(1)),
+		     this.xPix0+xrelLeft*this.wPix,
+		     this.yPix0+(yrelTopVars-(line)*dyrel)*this.hPix);
+
+    }
+
+    if(!isSmartphone){
+      line++;
+      ctx.fillText("Insgesamt Gestorbene (sim.)="+(Math.round(n0*corona.z))
+		   +" Aktuelle IFR65="+(100*IFRfun_time(it)).toFixed(2)+" %",
+		   this.xPix0+xrelLeft*this.wPix,
+		   this.yPix0+(yrelTopVars-(line)*dyrel)*this.hPix);
+    }
+    
+    if(!isSmartphone&&(fracICU>0)){
+      line++;
+      ctx.fillText("ICU-Inzidenz/100 000 (sim.)="
+		   +(100000*corona.icu).toFixed(1)
+		   //+" IIR="+(100*fracICU/tauICUstay).toFixed(2)+" %"
+		   +"",
+		   this.xPix0+xrelLeft*this.wPix,
+		   this.yPix0+(yrelTopVars-(line)*dyrel)*this.hPix);
+    }
+    
   } // windowG !=7
 
     //console.log("it=",it," mutationDynamicsOld=",mutationDynamicsOld);
@@ -6420,6 +6444,13 @@ DrawSim.prototype.drawR0Estimate=function(it){
 DrawSim.prototype.draw=function(it){
 //######################################################################
 
+  usePrevious=(isSmartphone) ? false : usePreviousGlob;
+  for(var iw=0; iw<this.qselectRegular.length; iw++){
+    this.qselect[iw]=
+      (usePrevious) ? this.qselectWithPrev[iw] : this.qselectRegular[iw];
+  }
+
+  
   if(false){
     console.log("\nin DrawSim.draw: it=",it,
 		" this.qselect[6]=",this.qselect[6],
