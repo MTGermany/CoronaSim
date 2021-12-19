@@ -22,6 +22,7 @@ perl -i -p -e 's/Simulation der Covid-19 Pandemie/Simulation of the Covid-19 Pan
 perl -i -p -e 's/\"de\"/\"en\"/g' *_eng.html
 
 
+perl -i -p -e 's/Ursache\-Wirkung/Cause\-Effect/g' *_eng.html
 perl -i -p -e 's/kumulierte F\&auml\;lle/Cumulated cases/g' *_eng.html
 perl -i -p -e 's/F\&auml\;lle vs\. Infizierte/Cases vs\. infected/g' *_eng.html
 perl -i -p -e 's/T\&auml\;gliche F\&auml\;lle/Daily cases/g' *_eng.html
@@ -55,8 +56,13 @@ perl -i -p -e 's/Massnahmen/measures/g' *_eng.html *_eng.js
 perl -i -p -e 's/Ansicht/view/g' *_eng.html *_eng.js
 perl -i -p -e 's/ansicht/view/g' *_eng.html *_eng.js
 perl -i -p -e 's/Normale/Normal/g' *_eng.html *_eng.js
+perl -i -p -e 's/Vollst\. geimpft/Fully vaccinated/g' *_eng.html *_eng.js
 perl -i -p -e 's/Geimpft/Vaccinated/g' *_eng.html *_eng.js
+perl -i -p -e 's/Geboostert/Boosters/g' *_eng.html *_eng.js
+perl -i -p -e 's/Infiziert/Infected/g' *_eng.html *_eng.js
 perl -i -p -e 's/Impf\-Immunitaet/Immunity by vacc./g' *_eng.html *_eng.js
+perl -i -p -e 's/Gesamt\-Immunitaet/Total immunity/g' *_eng.html *_eng.js
+perl -i -p -e 's/Sim\. Impfdurchbrueche/Breakthrough vacc\./g' *_eng.html *_eng.js
 perl -i -p -e 's/Teil\-/Partial /g' *_eng.html *_eng.js
 perl -i -p -e 's/Abstand/Distance/g' *_eng.html *_eng.js
 perl -i -p -e 's/Maske/mask/g' *_eng.html *_eng.js
@@ -65,6 +71,7 @@ perl -i -p -e 's/Halli Galli/Endless parties/g' *_eng.html *_eng.js
 perl -i -p -e 's/Import\-F&auml;lle/Imported cases/g' *_eng.html *_eng.js
 perl -i -p -e 's/Kumul\. Faelle/Total cases/g' *_eng.html *_eng.js
 perl -i -p -e 's/W\&ouml\;chentliche Impfrate/Weekly vaccination rate/g' *_eng.html
+perl -i -p -e 's/W\&ouml\;chentliche Boostrate/Weekly booster rate/g' *_eng.html
 perl -i -p -e 's/Fall-Import/Imported cases/g' *_eng.html *_eng.js
 perl -i -p -e 's/Einw\./inh./g' *_eng.html *_eng.js
 
@@ -88,9 +95,15 @@ perl -i -p -e 's/Sim\. Durchseuchung/Sim\. contamination/g' *_eng.js
 perl -i -p -e 's/Simulierte False Positives pro Tag/Simulated daily false positives/g' *_eng.js
 perl -i -p -e 's/Simulierte Gestorbene pro Tag/Simulated daily deaths/g' *_eng.js
 perl -i -p -e 's/Test\-Positive/cases/g' *_eng.js
-perl -i -p -e 's/Wocheninzidenz pro/Weekly incidence per/g' *_eng.js
 perl -i -p -e 's/Wocheninzidenz/Weekly incidence/g' *_eng.js
 perl -i -p -e 's/Wochen\-Inzidenz/Weekly incidence/g' *_eng.js *_eng.html
+perl -i -p -e 's/Wocheninzidenz pro/Weekly incidence per/g' *_eng.js
+perl -i -p -e 's/Intensivinzidenz pro/Weekly ICU cases per/g' *_eng.js
+perl -i -p -e 's/Intensivinzidenz/Weekly ICU cases/g' *_eng.js
+perl -i -p -e 's/ICU\-Inzidenz/ICU incidence/g' *_eng.js
+perl -i -p -e 's/Testrate/Tests/g' *_eng.js
+perl -i -p -e 's/\/Wo/\/week/g' *_eng.js
+perl -i -p -e 's/\/1 Mio/\/million/g' *_eng.js
 perl -i -p -e 's/Grad Lockdown/Stringency index /g' *_eng.js
 perl -i -p -e 's/Grad max\. Shutdown/Stringency index /g' *_eng.js *_eng.html
 
@@ -103,11 +116,17 @@ perl -i -p -e 's/Personen/Persons/g' *_eng.js
 perl -i -p -e 's/taegliche Zahlen/Daily figures/g' *_eng.js
 perl -i -p -e 's/Anteil/Percentage/g' *_eng.js
 perl -i -p -e 's/oder/or/g' *_eng.js
-perl -i -p -e 's/ohne/without/g' *_eng.js *_eng.html
 perl -i -p -e 's/Vergleich/comparison/g' *_eng.js *_eng.html
 perl -i -p -e 's/letzte Sim/last sim/g' *_eng.js
 perl -i -p -e 's/\(Sim/\(sim/g' *_eng.js
 perl -i -p -e 's/Neuinfizierte/New infected/g' *_eng.js
+
+perl -i -p -e 's/Vollst\. Impfquote/Fraction fully vaccinated/g' *_eng.js
+perl -i -p -e 's/Boosterquote/Fraction of boosters/g' *_eng.js
+perl -i -p -e 's/Rt\-Wert/Rt value/g' *_eng.js
+perl -i -p -e 's/R0 \(ohne Saisonalitaet\, sim\)/R0 \(w\/o seasonal effects\, sim\)/g' *_eng.js
+
+perl -i -p -e 's/Daten und Sim/Data and sim/g' *_eng.js
 
 perl -i -p -e 's/Durchseuchung/Contamination/g' *_eng.js
 perl -i -p -e 's/Aktuelles/Actual/g' *_eng.js
@@ -139,6 +158,9 @@ perl -i -p -e 's/Russland/Russia/g' *_eng.html *_eng.js
 perl -i -p -e 's/Ru\&szlig\;land/Russia/g' *_eng.html
 perl -i -p -e 's/Australien/Australia/g' *_eng.html
 perl -i -p -e 's/Brasilien/Brazil/g' *_eng.html
+
+
+perl -i -p -e 's/ohne/without/g' *_eng.js *_eng.html
 
 echo "created *_eng.html corona_eng.js corona_gui_eng.js"
 

@@ -37,10 +37,18 @@ setSlider(slider_R0, slider_R0Text, R0,"");
 
 
 slider_R0.oninput = function() {
-  slider_R0_moved=true;
-  slider_R0Text.innerHTML = "&nbsp;"+this.value;
-  R0=parseFloat(this.value);
-  console.log("slider1 callback: R0="+R0);
+  console.log("slider_R0.oninput start: R0=",R0);
+  if((it<itStartMut)||(!simulateMutation)){
+    slider_R0_moved=true;
+    slider_R0Text.innerHTML = "&nbsp;"+this.value;
+    R0=parseFloat(this.value);
+    console.log("slider1 callback: R0="+R0);
+  }
+  else{ // undo manual slider changes
+    R0=R0fun_time(R0time,it); // =R0_actual
+    setSlider(slider_R0, slider_R0Text, R0.toFixed(2),"");
+  }
+  console.log("slider_R0.oninput end: R0=",R0);
 }
 
 

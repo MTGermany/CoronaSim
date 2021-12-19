@@ -187,7 +187,7 @@ const TINY_VAL=1e-8;
 // (3) check various "windowG==", "windowG!=", "windowG<" etc conditions
 
 // initial window; consolidate with first option value of html!!
-// windowG:
+// windows: variable windowG:
 // 0=cum,1=log,2=casesReal,3=tests,4=rates,5=casesDaily,6=incid,7=causeEffect
 
 var windowG=6; 
@@ -568,12 +568,12 @@ const pMutList={ // fraction pMut @ reftime_pMut (0: no data)
   "Brazil"        : 0,
   "Czechia"       : 0,
   "France"        : 0,
-  "United Kingdom": 0.05, 
+  "United Kingdom": 0.15, 
   "Italy"         : 0,
   "Poland"        : 0,
   "Spain"         : 0,
   "Sweden"        : 0,
-  "Denmark"       : 0.051,
+  "Denmark"       : 0.10,
   "Switzerland"   : 0,
   "Greece"        : 0,
   "Portugal"      : 0,
@@ -3450,7 +3450,7 @@ function savePreviousSim(){ // save relevant data of drawsim for
       simPrevious[40][it]=drawsim.dataG[29].data[it]; // "Sim Pos pro Tag"
       simPrevious[44][it]=drawsim.dataG[41].data[it]; // Grad Lockdown
       simPrevious[47][it]=drawsim.dataG[46].data[it]; // Booster
-      simPrevious[49][it]=drawsim.dataG[48].data[it]; // R-Wert
+      simPrevious[49][it]=drawsim.dataG[48].data[it]; // Rt-Wert
       simPrevious[51][it]=drawsim.dataG[50].data[it]; // OK by reference
   }
 }
@@ -3808,6 +3808,7 @@ function simulationRun() {
 
 function doSimulationStep(doDrawing){ // logging "allowed" here !!
 
+  //console.log("doSimulationStep: it=",it," R0=",R0);
   var itSlower=itPresent-42;
   var itFaster=itPresent+80;
   var changed_fps=((it==itSlower)||(it==itFaster));
@@ -3902,6 +3903,7 @@ function estimate_pMut_timeShift(pIn,r,dt){
   // r: assumed growth rate in odds ratio [1/days]
   // dt: time difference [days]
 
+  if(pIn>=1){return 1;}
   var oddsIn=pIn/(1-pIn);
   var oddsOut=oddsIn*Math.exp(r*dt);
   return oddsOut/(1+oddsOut);
@@ -3914,6 +3916,8 @@ function MutationDynamics(){
 //################################################################
   this.p_it=[];
   this.p=0;
+  this.R10=1; // just dummies before initialize, for safety
+  this.R20=1; 
 }
 
 
@@ -3933,12 +3937,14 @@ function MutationDynamics(){
 
 MutationDynamics.prototype.initialize=function(it0,p0,r0,I10,I20,R0){
   this.tauR=0.5*(tauRstart+tauRend); // if changed at the sliders
+  this.y=(p0<1) ? p0/(1-p0) : 1e10;
   this.p_it[it0]=p0;
+  this.p=p0;
   for(var it=0; it<it0; it++){
     exponent=r0*(it-it0);
-    this.p_it[it]=(exponent>-100) ? p0*Math.exp(exponent) : 0;
+    var ypast=this.y*Math.exp(exponent);
+    this.p_it[it]=ypast/(1+ypast);
   }
-  this.y=p0/(1-p0);
   this.r0=r0;
   this.R10=R0/(1+p0*r0*this.tauR);
   this.R20=this.R10*(r0*this.tauR+1)*(1-I10)/(1-I20);
@@ -3955,10 +3961,11 @@ MutationDynamics.prototype.initialize=function(it0,p0,r0,I10,I20,R0){
 
 MutationDynamics.prototype.update=function(I1,I2,it){
   var r= ( (this.R20*(1-I2))/(this.R10*(1-I1)) -1)/this.tauR;
-  this.y *= Math.exp(r);
+  if(this.y<1e10){this.y *= Math.exp(r);}
   this.p=this.y/(1+this.y);
   this.p_it[it]=this.p;
-  console.log("MutationDynamics.update: this.R20=",this.R20," I1=",I1," I2=",I2," r=",r);
+
+ // console.log("MutationDynamics.update: this.R20=",this.R20," I1=",I1," I2=",I2," r=",r," pMut=",this.p_it[it]);
 }
   
 
@@ -4799,9 +4806,9 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
     // test
     //########################################################
     
-    //if(false){
+    if(false){
     //if((it<3)||(it>=itPresent-10)){
-    if(it>=itPresent-10){
+    //if(it>=itPresent-10){
     //if(Math.abs(IvaccArray[it]-IvaccPop)>1e-6){
       console.log("update outside calib: it=",it,
 		  " rVacc=",rVacc.toFixed(4),
@@ -5522,7 +5529,7 @@ function DrawSim(){
   
   // MT 2021-11-21 window 7 cause-effect time series:
   // Grad Lockdown 43/44, Vacc 45, Boosters 46/47, 
-  // R-Wert sim 48/49, (log) Inzidenz 50/51
+  // Rt-Wert sim 48/49, (log) Inzidenz 50/51
 
   this.dataG[43]={key: "Grad Lockdown [0-1]",
 		  data: this.dataG[41].data,
@@ -5562,21 +5569,21 @@ function DrawSim(){
 		  ytrafo: [1,false,false], color:colBoostValid};
 
   /*
-  this.dataG[48]={key: "R-Wert (Daten)", data: [],
+  this.dataG[48]={key: "Rt-Wert (Daten)", data: [],
 		  type: 0, plottype: "lines", 
 		  ytrafo: [1, false,false], color:colCasesSim};*/
 
   
 
-  this.dataG[48]={key: "R-Wert (Sim)", data: [],
+  this.dataG[48]={key: "Rt-Wert (Sim)", data: [],
 		  type: 3, plottype: "lines", 
 		  ytrafo: [1, false,false], color:colR};
 
-  this.dataG[49]={key: "R-Wert (letzte Sim)", data: simPrevious[49],
+  this.dataG[49]={key: "Rt-Wert (letzte Sim)", data: simPrevious[49],
 		  type: 3, plottype: "lines", 
 		  ytrafo: [1, false,false], color:colRValid};
 
-  this.dataG[54]={key: "0.25*R0_Maerz_Sept (Sim)", data: [],
+  this.dataG[54]={key: "0.25*R0 (ohne Saisonalitaet, sim)", data: [],
 		  type: 4, plottype: "lines", 
 		  ytrafo: [0.25, false,false], color:colR0};
 
@@ -5610,7 +5617,7 @@ function DrawSim(){
 // 0=cum,1=log,2=casesReal,3=tests,4=rates,5=casesDaily,6=incid,7=causeEffect
 
   // Grad Lockdown 43/44, Vacc 45, Boosters 46/47, 
-  // R-Wert sim 48/49, (log) Inzidenz 50/51
+  // Rt-Wert sim 48/49, (log) Inzidenz 50/51
   
   this.qselectRegular=[];
   this.qselectWithPrev=[];
@@ -6009,9 +6016,14 @@ DrawSim.prototype.drawAxes=function(windowG){
     if(true){
       line++;
 
+      var str_R0=(it<itStartMut)
+	?", R0="+(R0_actual.toFixed(2))
+	:", R10="+(mutationDynamics.R10.toFixed(2))
+	+", R20="+(mutationDynamics.R20.toFixed(2))
+	+", pOmicron="+(mutationDynamics.p.toFixed(2));
+      
       ctx.fillStyle="red"; // "rgb(255,0,0)"
-      ctx.fillText("Aktuelles R="+(corona.Reff.toFixed(2))
-		   +",  R0 ohne alles="+(R0_actual.toFixed(2)),
+      ctx.fillText("Aktuelles R="+(corona.Reff.toFixed(2))+str_R0,
 		   this.xPix0+xrelLeft*this.wPix,
 		   this.yPix0+(yrelTopVars-(line)*dyrel)*this.hPix);
       ctx.fillStyle="black";
@@ -6023,7 +6035,7 @@ DrawSim.prototype.drawAxes=function(windowG){
       ctx.fillText("Geimpft: "+(100*pVacc).toFixed(1)
 		   +" %, Vollst. geimpft: "+(100*pVaccFull).toFixed(1)
 		   +" %, Geboostert: "+(100*pBoost).toFixed(1)
-		   +" %, Erkrankt:"+(Xperc.toFixed(1))+" %",
+		   +" %, Infiziert:"+(Xperc.toFixed(1))+" %",
 		 this.xPix0+xrelLeft*this.wPix,
 		 this.yPix0+(yrelTopVars-(line)*dyrel)*this.hPix);
     }
@@ -6042,13 +6054,13 @@ DrawSim.prototype.drawAxes=function(windowG){
       // not pVaccFull since also first vacc gives some immunity=> would be negative "Impfdurchbruchsrate" (can also calc exactly "Durchbruchsrate" w/respect to any vacc)
       var pd=Math.max(0, (0.5*(pVacc+pVaccFull)-Ivacc)/(1-Ivacc))
 
-      var str_omicron=(pMut>0) ? ("%, Omicron: "+(100*I2).toFixed(0)) : "";
+      var str_omicron=(pMut>0) ? ("%, Omicron "+(100*I2).toFixed(0)) : "";
 
       //console.log("pVaccFull=",pVaccFull," Ivacc=",Ivacc);
       ctx.fillText(
         // Impf-Immunitaeten: I-Delta="+(100*I1vacc).toFixed(0)
         // +"%, I-Omicron="+(100*I2vacc).toFixed(0)
-	"Gesamt-Immunitaet Delta: "+(100*I1).toFixed(0)
+	"Gesamt-Immunitaet: Delta "+(100*I1).toFixed(0)
 	  +str_omicron
 	  +"%, Sim. Impfdurchbrueche: "+(100*pd).toFixed(1)+"%",
 	this.xPix0+xrelLeft*this.wPix,
@@ -6064,7 +6076,7 @@ DrawSim.prototype.drawAxes=function(windowG){
 		   this.yPix0+(yrelTopVars-(line)*dyrel)*this.hPix);
     }
 
-    if(!isSmartphone){
+    if((!isSmartphone)&&(windowG!=1)){ // not if logarithm window
       line++;
         ctx.fillText("Testrate: "
 		     +((dn7days*1e6/n0).toFixed(0))
@@ -6075,7 +6087,7 @@ DrawSim.prototype.drawAxes=function(windowG){
 
     }
 
-    if(!isSmartphone){
+    if((!isSmartphone)&&(windowG!=1)){
       line++;
       ctx.fillText("Insgesamt Gestorbene (sim.)="+(Math.round(n0*corona.z))
 		   +" Aktuelle IFR65="+(100*IFRfun_time(it)).toFixed(2)+" %",
@@ -6083,7 +6095,7 @@ DrawSim.prototype.drawAxes=function(windowG){
 		   this.yPix0+(yrelTopVars-(line)*dyrel)*this.hPix);
     }
     
-    if(!isSmartphone&&(fracICU>0)){
+    if(!isSmartphone&&(fracICU>0)&&(windowG!=1)){
       line++;
       ctx.fillText("ICU-Inzidenz/100 000 (sim.)="
 		   +(100000*corona.icu).toFixed(1)
