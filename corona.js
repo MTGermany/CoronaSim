@@ -557,32 +557,32 @@ SA:        2021-12-06 from infections 2021-12-03: 50%
 D:         2021-12-06 from infections 2021-12-03: 3%
 ######################################################################*/
 
-const time_pMutList=new Date("2021-12-03");
+const time_pMutList=new Date("2021-12-10");
 var dtList2present
     =Math.floor((present.getTime()-time_pMutList.getTime())/oneDay_ms); 
 
 const pMutList={ // fraction pMut @ reftime_pMut (0: no data)
-  "Germany"       : 0.02,
-  "Austria"       : 0, // rest (w/o OK flag) speculation at best
-  "Australia"     : 0,
-  "Brazil"        : 0,
-  "Czechia"       : 0,
-  "France"        : 0,
-  "United Kingdom": 0.15, 
-  "Italy"         : 0,
-  "Poland"        : 0,
-  "Spain"         : 0,
-  "Sweden"        : 0,
-  "Denmark"       : 0.10,
-  "Switzerland"   : 0,
-  "Greece"        : 0,
-  "Portugal"      : 0,
-  "Israel"        : 0,
-  "India"         : 0,
-  "Russia"        : 0,
-  "US"            : 0,
-  "Australia"     : 0,
-  "South Africa"  : 0.5
+  "Germany"       : 0.08,
+  "Austria"       : 0.10, // rest (w/o OK flag) speculation at best
+  "Australia"     : 0.30,
+  "Brazil"        : 0.10,
+  "Czechia"       : 0.10,
+  "France"        : 0.15,
+  "United Kingdom": 0.50, 
+  "Italy"         : 0.10,
+  "Poland"        : 0.10,
+  "Spain"         : 0.40,
+  "Sweden"        : 0.10,
+  "Denmark"       : 0.55,
+  "Switzerland"   : 0.10,
+  "Greece"        : 0.10,
+  "Portugal"      : 0.15,
+  "Israel"        : 0.30,
+  "India"         : 0.60,
+  "Russia"        : 0.05,
+  "US"            : 0.05,
+  "Australia"     : 0.30,
+  "South Africa"  : 0.80
 }
 
 
@@ -716,8 +716,8 @@ var mutationDynamics=new MutationDynamics();
 // #days before present mutation dynamics starts and calibration ends
 // dynamics locked! Better switch off if no actual mutation
 
-const startMut2present=5; // 5 !!!  (overridden in valid)
-const rMutStart=0.25; // 0.25: in 3 days factor exp(0.75)=2.1
+const startMut2present=5; // 5 !!!!  (overridden in valid)
+const rMutStart=0.30; // !!!! 0.25: in 3 days factor exp(0.75)=2.1
 
 
 // following repeated in initializeData(country)
@@ -4756,6 +4756,7 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
     if(it==0){immunity.initialize(country);} // in doSimulationStep, !calibr
     if(simulateMutation){
       if(it==itStartMut){ // R0=Rcalib at start of new variant
+	console.log("mutationDynamics.initialize: pMutStart=",pMutStart);
         mutationDynamics.initialize(itStartMut,pMutStart,rMutStart,
 				    immunity.I1, immunity.I2, R0);
 	pMut=pMutStart;
@@ -6016,7 +6017,7 @@ DrawSim.prototype.drawAxes=function(windowG){
     if(true){
       line++;
 
-      var str_R0=(it<itStartMut)
+      var str_R0=((it<itStartMut)||(!simulateMutation))
 	?", R0="+(R0_actual.toFixed(2))
 	:", R10="+(mutationDynamics.R10.toFixed(2))
 	+", R20="+(mutationDynamics.R20.toFixed(2))
