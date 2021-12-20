@@ -577,10 +577,10 @@ const pMutList={ // fraction pMut @ reftime_pMut (0: no data)
   "Switzerland"   : 0.10,
   "Greece"        : 0.10,
   "Portugal"      : 0.15,
-  "Israel"        : 0.30,
+  "Israel"        : 0.40,
   "India"         : 0.60,
-  "Russia"        : 0.05,
-  "US"            : 0.05,
+  "Russia"        : 0.10,
+  "US"            : 0.10,
   "Australia"     : 0.30,
   "South Africa"  : 0.80
 }
