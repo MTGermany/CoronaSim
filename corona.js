@@ -686,8 +686,11 @@ const stringencySensitivitySqr=0.70;  // [sqr: R *=(1-str...Sqr) if stri=100%]
 
 
 var usePreviousGlob=true; // wether comparison is active
-var usePrevious=usePreviousGlob; // if *Glob=false,
+var usePrevious=false; // if *Glob=false,
    // usePrevious true in, e.g., validation or Mutation simulation
+
+var simCount=0; // usePrevious only=true if usePreviousGlob&&(simCount>1)
+
 var itmaxPrev=0;     // maximum it reached in previous simulation
 var simPrevious=[]; // store previous sim data outside DrawSim (created anew)
                     // needed for validation or if doing mutation scenario
@@ -996,7 +999,7 @@ function loadData() {
 	console.log("end loadData(..) live alternative");
         initializeData(country); //!! MUST remain inside; extremely annoying
 	setMutationSim(simulateMutation); // only html
-	myRestartFunction(); // only HERE guaranteed that everything loaded
+	//myRestartFunction(); // only HERE guaranteed that everything loaded NO LONGER NEEDED: 2x restart otherwise
       });
   }
 
@@ -1015,7 +1018,7 @@ function loadData() {
     fracDie=IFRinit; // use IFR start array for init()
     corona.init(0);
     setMutationSim(simulateMutation); // only html
-    myRestartFunction();// only HERE guaranteed that everything loaded=>separately
+    //myRestartFunction();// only HERE guaranteed that everything loaded=>separately NO LONGER NEEDED: 2x restart otherwise
   }
 
   
@@ -1890,7 +1893,7 @@ function initializeData(country,insideValidation){
   // needed to control fmin.nelderMead
 
   calibrate(); // in initializeData(country);
-  myRestartFunction();
+  myRestartFunction(); // needed, otherwise strange effects
 
 
   if(false){
@@ -3336,6 +3339,8 @@ function selectDataCountry(){ // callback html select box "countryData"
                               // "Deutschland"
 
   usePrevious=false;
+  simCount=0;
+  console.log("  selectDataCountry: usePrevious=",usePrevious);
   country=document.getElementById("countries").value;
   countryGer=countryGerList[country];
   n0=parseInt(n0List[country]);
@@ -3368,8 +3373,6 @@ function selectDataCountry(){ // callback html select box "countryData"
 	   }
   resetValidation();
   initializeData(country);
-  usePrevious=usePreviousGlob;
-  console.log("  selectDataCountry: usePrevious=",usePrevious);
 } // selectDataCountry
 
  
@@ -3589,9 +3592,12 @@ function myStartStopFunction(){ //!! hier bloederweise Daten noch nicht da!!
 
 function myRestartFunction(){ // called if new country and other events
   //console.log("in myRestartFunction: itPresent=",itPresent);
-
-  savePreviousSim();
-
+  simCount++;
+  if(simCount>1){
+    savePreviousSim();
+  }
+  usePrevious=usePreviousGlob&&(simCount>1)&&(!isSmartphone);
+  console.log("myRestart: usePrevious=",usePrevious);
   // MT 2021-11-16: reset all applicable sliders to data-driven state
   
   slider_rVacc_moved=false;
@@ -3689,7 +3695,7 @@ function myResetFunction(){
 
 
   selectDataCountry();  
-  myRestartFunction();
+  //myRestartFunction();
 }
 
 
@@ -6457,7 +6463,7 @@ DrawSim.prototype.drawR0Estimate=function(it){
 DrawSim.prototype.draw=function(it){
 //######################################################################
 
-  usePrevious=(isSmartphone) ? false : usePreviousGlob;
+  console.log("draw: simCount=",simCount," usePrevious=",usePrevious);
   for(var iw=0; iw<this.qselectRegular.length; iw++){
     this.qselect[iw]=
       (usePrevious) ? this.qselectWithPrev[iw] : this.qselectRegular[iw];
