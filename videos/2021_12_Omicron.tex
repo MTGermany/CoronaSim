@@ -22,16 +22,270 @@
 
 \begin{document}
 
-\section*{Impfdurchbruchsrate vs. Effizienz der Impfung}
+\section*{Omicron Dynamics}
 
 %##############################################################
-\frame{\frametitle{}
+\frame{\frametitle{Latest observation 1}
 %##############################################################
 
+\placebox{0.30}{0.65}
+ {\figSimple{0.50\textwidth}{figsCorona/2021_12_20_DK_abs.png}}
+\placebox{0.35}{0.22}
+ {\figSimple{0.60\textwidth}{figsCorona/2021_12_15_UK.png}}
+
+\placebox{0.80}{0.47}{\parbox{0.40\textwidth}{
+\bi
+\item The Delta and Omicron variants coexist without
+  directly affecting each other 
+\item Indirect interaction via competing for common ressources, i,e.,
+  \emph{first come, first served}
+\ei
+}}
+
+}
+
+%##############################################################
+\frame{\frametitle{Latest observation 2}
+%##############################################################
+
+\placebox{0.28}{0.46}
+ {\figSimple{0.60\textwidth}{figsCorona/2021_12_20_DK_rel.png}}
+
+\placebox{0.76}{0.42}{\parbox{0.46\textwidth}{
+\bi
+\item The share of Omicron can be well described by a logistic
+  function with growth rate $r$
+\pause \item First transform the observed Omicron share $p$ into the
+\bfdef{odds ratio} $y=p/(1-p)$
+\pause \item From Observation~1 (coexistence), it follows that the odds ratio
+  grows exponentially:
+\vspace{-0.5em}
+\bdm
+y(t)=y_0 \, e^{rt}
+\edm
+\vspace{-1.5em}
+\pause \item Transforming back gives the s-shaped predicted Omicron share
+  (logistic function)
+\vspace{-1em}
+\bdm
+p(t)=\frac{y(t)}{1+y(t)}
+\edm
+\ei
+}}
+
+}
 
 
-%\placebox{0.50}{0.42}
-% {\figSimple{1.10\textwidth}{figsCorona/coronaSimulationDe_1.png}}
+%##############################################################
+\frame{\frametitle{Assumed efficiency against Delta infections}
+%##############################################################
+\placebox{0.40}{0.46}
+ {\figSimple{0.75\textwidth}{figsCorona/2021_12_vaccBoostEfficiencyDelta.png}}
+\placebox{0.85}{0.46}{\parbox{0.20\textwidth}{
+  ``First vaccinated-\\first boostered''\\principle}}
+
+}
+
+%##############################################################
+\frame{\frametitle{Assumed efficiency against Omicron infections}
+%##############################################################
+\placebox{0.40}{0.46}
+ {\figSimple{0.75\textwidth}
+ {figsCorona/2021_12_vaccBoostEfficiencyOmicron.png}}
+\placebox{0.85}{0.46}{\parbox{0.20\textwidth}{
+  Only fresh\\full vaccinations\\or boosters\\help against\\Omicron}}
+
+}
+
+%##############################################################
+\frame{\frametitle{Assumed immunity by infections}
+%##############################################################
+\placebox{0.50}{0.55}{\parbox{0.70\textwidth}{
+\bi
+\item \unit[100]{\%} immunity of Delta against Delta reinfections\\[1em]
+\pause\item \unit[100]{\%} 
+immunity of Omicron against Omicron reinfections\\[1em]
+\pause\item \unit[100]{\%} no cross immunity (people can get both Delta and
+  Omicron infections)
+\ei}}
+
+}
+
+%##############################################################
+\frame{\frametitle{Putting it all together}
+%##############################################################
+\bi
+\item[(1)] The spreading of the fraction $p$ new variant
+  (Omicron) at the cost of the old variants (Delta) is logistic:
+\maindm{
+p(t)=\frac{y_0 e^{rt}}{1+y_0 e^{rt}}, \quad y_0=\frac{p_0}{1-p_0}
+}
+\vspace{1em}
+
+
+\pause \item[(2)] The growth rate $r$ of the logistic growth depends on
+\vspace{1ex}
+
+\bi
+\item the base reproduction numbers $R_{10}$ and $R_{20}$,
+%\ei\ei}\end{document}
+\pause \item the total population immunities (vaccination, boosters,
+  infections) $I_1$ and $I_2$ against each variant,
+\pause \item the generation time $T$ of the infections (assumed to be
+  equal, 5~days):
+\ei\vspace{1ex}
+
+\pause according to
+\maineq{r}{
+r=\frac{1}{T}\left[\frac{R_{20}(1-I_2)}{R_{10}(1-I_1)}-1\right]
+}
+\vspace{1ex}
+
+\emph{Notice:} Since the $I_i$ are time dependent, so is the growth rate $r$
+\ei
+
+}
+
+%##############################################################
+\frame{\frametitle{Putting it all together (ctned)}
+%##############################################################
+\bi
+\item[(3)] Assuming no cross effects, 
+the effective $R_t$ value caused by the mixture of the Delta and
+  Omicron viruses depends on
+\bi
+\item the Omicron percentage $p$
+\item the base reproduction numbers $R_{10}$ and $R_{20}$ of Delta
+  and Omicron, respectively,
+\item the immunity escape fractions $(1-I_1)$ and $(1-I_2)$,
+\item the seasonal multiplicator $f\sup{season}$ %(which I have calibrated)
+\item the stringency (lockdown) multiplicator $f\sup{stringency}$:
+\ei
+
+\maineq{Rt}{R_t=\left[(1-p)R_{10}(1-I_1)+pR_{20}(1-I_2)\right]
+ f\sub{season} f\sub{stringency}}
+\vspace{0em}
+
+\bi
+\pause \item
+\emph{Notice:} Both the \red{growth rate $r$} of the increase of the Delta
+share and the \red{growth rate $(R_t-1)/T$} of the actual infection wave
+depend on $P_1= R_{10}(1-I_1)$ and $P_2=R_{20}(1-I_2)$ such that a positive
+(negative) value of $r$ implies an increase (decrease) of $R_t$\\[1ex]
+\pause\item A positive Omicron spreading $r$ does \red{not} imply that the new
+  variant is more 
+  infectious; only the products $P_1$ and $P_2$ matter\\[1ex]
+\pause\item A \red{positive} spreading $r$ can be related to a 
+\red{negative} infection
+  growth $(R_t-1)/T$ both before \emph{and} after the new variant
+  dominates since, for given $I_1$ and $I_2$, $r$ is only related to
+  the \emph{ratio} $R_{20}/R_{10}$ of the base immunities
+  $\Rightarrow$ next slide
+\ei
+\ei
+
+}
+
+
+%##############################################################
+\frame{\frametitle{Estimating the base reproduction numbers}
+%##############################################################
+
+Assume at time $t=t^*$ given population immunities $I_1^*$ and $I_2^*$
+(see later), and estimations of the Omega share $p^*$, Omicron
+spreading rate $r^*$, and effective reproduction number $R^*_t$ of the
+mixture. Then, we can use Eq~\eqref{r} to obtain the ratio
+
+\maineq{R20R10}
+  {\frac{R_{20}}{R_{10}}=\frac{(r^*T+1)(1-I_1^*)}{1-I_2^*}}
+
+\pause and, with Eq~\eqref{Rt} determine the base reproduction numbers
+individually:
+
+\maineq{R10}
+  {R_{10}=\frac{R^*_t}{(1+p^*r^*T)f\sub{season} f\sub{stringency}}}
+\vspace{1em}
+
+For $t>t^*$, I assume fixed base reproduction numbers and calculate
+the future Omicron spreading and the future wave using
+\eqref{r} and \eqref{Rt} with time varying $I_1$, $I_2$, $p$,
+$f\sub{season}$, and $f\sub{stringency}$
+
+}
+
+%##############################################################
+\frame{\frametitle{Determining the population immunities I: vaccinations}
+%##############################################################
+Here, I make following assumptions
+\bi
+\item Vaccination efficiency curves $I_1\sup{v}(\tau)$ and
+$I_2\sup{v}(\tau)$ against Delta and Omega as shown,
+\pause\item corresponding booster efficencies  $I_1\sup{b}(\tau)$ and
+$I_2\sup{b}(\tau)$,
+\pause\item \emph{First vaccinated-first boostered} 
+\ei
+\pause Since the protection depends on the vaccination times, I sum up the
+different histories weighted with the past daily vaccination and
+booster rates $r^v_{t'}$ and $r^b_{t'}$ (fraction of the population
+per day): 
+\bdm
+I_1\sup{vacc}(t)=\sum_{t'=t_v}^t r^v_{t'}I_1\sup{v}(t-t')
++\sum_{t'=t_b}^t r^b_{t'}I_1\sup{b}(t-t')
+\edm
+where $t_b$ is the time of the first booster shot, and $t_v$ the oldest
+time of the first
+vaccination of any person who is not yet boostered.
+\vspace{1em}
+
+The vaccination immunity $I_2$ is calculated in analogy.
+}
+
+%##############################################################
+\frame{\frametitle{Determining the population immunities II:
+    infections and total}
+%##############################################################
+\bi
+\item Everybody can only be infected once with any variant but there
+  is no cross immunity, so the immunity is just equal to the total
+  percentage $X_1$ and $X_2$ of people infected with either variant: 
+\bdm
+I_1^x=X_1, \quad I_2^x=X_2
+\edm
+
+\emph{Notice}: $X_i$ is not just the cumulated number of cases divided
+by the population because any infection, whether detected or not
+detected, counts
+
+\vspace{1em}
+
+\pause \item There is no correlation between vaccinations and infections:
+\maineq{I1I2}{
+1-I_1=(1-I_1^v)(1-I_1^x), \quad
+1-I_2=(1-I_2^v)(1-I_2^x)
+}
+\ei
+
+}
+
+%##############################################################
+\frame{\frametitle{Simulation}
+%##############################################################
+
+\placebox{0.50}{0.52}
+ {\figSimple{0.95\textwidth}{figsCorona/2021_12_Omicron_screenshot1.png}}
+
+\placebox{0.50}{0.11}{\parbox{0.90\textwidth}{
+  All items $I_1$, $I_2$, $p$, $R_{10}$, $R_{20}$, $f\sub{season}$
+  and $f\sub{stringency}$ are displayed in the simulation}}
+
+}
+
+
+
+\end{document}
+
+
+
 
 % make images pale (see demo_makePale.tex)
 %\makePale{opacity}{centerXrel}{centerYrel}{wrel}{hrel}
@@ -39,60 +293,8 @@
 
 %\makePale{0.7}{0.48}{0.57}{1.2}{1.1}
 
-\placebox{0.50}{0.44}{\parbox{1.0\textwidth}{
-\hspace{0.2\textwidth} \mysubheading{Plakatives Beispiel}
-{\small
-\bi
-\item {\small 1\,000 Leute, darunter $p=\unit[80]{\%}$, also 800, vollst\"andig geimpft}
-\figSimple{0.06\textwidth}{figsCorona/syringe.jpg}
-\hspace{-0.05\textwidth}
-\figSimple{0.06\textwidth}{figsCorona/syringe.jpg}
-\\[-1em]
-
-\pause \item $1-p=\unit[20]{\%}$ bzw 200 sind gar
-nicht/unvollst\"andig geimpft 
-\hspace{0.02\textwidth} 
-{\Huge{$\mathbf{\red{\times}}$}} 
-\hspace{-0.04\textwidth}
-\visible<2->{\figSimple{0.06\textwidth}{figsCorona/syringe.jpg}}
-
-\pause \item Effizienz der Impfung 
-$E=1-\frac{P(\text{am n\"achsten Tag erkrankt}|\text{geimpft})}
-     {P(\text{am n\"achsten Tag erkrankt}|\text{ungeimpft})}
-     = \unit[75]{\%}$
-
-\pause \item Die Erkrankungswahrscheinlichkeit Ungeimpfter f\"ur den
-n\"achsten Tag sei \unit[1]{\%}, also im Mittel 2 Leute
-
-\pause \item Bei einer Effizienz von \unit[75]{\%} ist damit die
-Erkrankungswahrscheinlichkeit Geimpfter \unit[0.25]{\%}, also bei
-800 Leuten ebenfalls 2
-
-\pause \item Damit ist die Impfdurchbruchsquote
-\bdm
-p\subb{durch}=\frac{\text{\# F\"alle bei vollst\"andig Geimpften}}
-{\text{Gesamtzahl der F\"alle}}=\frac{2}{2+2}=\uu{\unit[50]{\%}}
-\edm
-
-\pause \item Allg. Formel im Simulator:
-\vspace{-1em}
-\bdm
-p\subb{durch}=\frac{p(1-E)}{1-pE}
-\edm
-
-\ei
-
-
-}}}
-
-
-}
-
-
-\end{document}
-
-
-
+%\placebox{0.50}{0.44}{\parbox{1.0\textwidth}{
+%\hspace{0.2\textwidth} \mysubheading{Plakatives Beispiel}
 
 
 

@@ -91,8 +91,8 @@ set term pngcairo enhanced color notransparent crop\
 filter(x,val)=(x==val) ? 1 : NaN
 
 ##############################################################
-set out "2021_11_19_full.png"
-print "plotting 2021_11_19_full.png"
+set out "figsCorona/2021_11_19_full.png"
+print "plotting figsCorona/2021_11_19_full.png"
 ##############################################################
 
 
@@ -106,8 +106,8 @@ plot\
   "2021_11_19_Impfquote-Inzidenz.csv" u ($3):($6) t "" w p ls 2
 
 ##############################################################
-set out "2021_11_19_full_coded.png"
-print "plotting 2021_11_19_full_coded.png"
+set out "figsCorona/2021_11_19_full_coded.png"
+print "plotting figsCorona/2021_11_19_full_coded.png"
 ##############################################################
 
 dx=-2
@@ -130,8 +130,8 @@ plot\
     t "restliche Laender" w p ls 7
 
 ##############################################################
-set out "2021_11_19_europa.png"
-print "plotting 2021_11_19_europa.png"
+set out "figsCorona/2021_11_19_europa.png"
+print "plotting figsCorona/2021_11_19_europa.png"
 ##############################################################
 
 set param

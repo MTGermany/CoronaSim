@@ -4015,8 +4015,8 @@ function Immunity(){
   
   this.tau0=30;     // #days between 1th and 2nd vacc 
   this.I0=0.82;     // efficiency 1-alpha^2 at second vacc time
-                       // if R01=alpha*R00 (infection nonvacc->vacc)
-                       //              R10=R01 (infection vacc->nonvacc)
+                       // if R10=alpha*R00 (infection nonvacc->vacc)
+                       //              R10=R10 (infection vacc->nonvacc)
                        //              R11=alpha^2*R00 (infection vacc->vacc)
   this.Iincrease=0.06; // further increase to peak after second vacc
   this.tauIncrease=25; // time scale of further increase

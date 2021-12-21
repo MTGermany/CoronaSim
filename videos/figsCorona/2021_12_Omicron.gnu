@@ -60,6 +60,8 @@ set out "2021_12_20_DK_abs.png"
 print "plotting 2021_12_20_DK_abs.png"
 ##############################################################
 
+set size 1,0.8
+
 set key box top left
 set xlabel "Days since 2021-12-01"
 set ylabel "Confirmed cases"
@@ -74,6 +76,8 @@ set out "2021_12_20_DK_rel.png"
 print "plotting 2021_12_20_DK_rel.png"
 ##############################################################
 
+set size 0.8,1
+
 t2=14 #2021-12-14
 t1=2  #2021-12-02
 
@@ -87,9 +91,9 @@ psim(t)=ysim(t)/(1+ysim(t))
 
 set ylabel "Fraction Omicron [%]"
 set label sprintf("Growth rate r=%.2f days^{-1}",r)\
- at screen 0.3,0.77
+ at screen 0.25,0.72
 set label sprintf("Doubling time ln(2)/r=%.2f days",log(2)/r)\
- at screen 0.3,0.7
+ at screen 0.25,0.66
 
 plot[t=-8:15]\
   "2021_12_20_Daenemark.dat" u ($0-8):(100*$3/$2) t "Data" w p ls 2,\
@@ -97,8 +101,74 @@ plot[t=-8:15]\
 
 print "r=",r
 print "doubling time dt=log(2)/r=",log(2)/r
+unset label
+
+##############################################################
+set out "2021_12_vaccBoostEfficiencyDelta.png"
+print "plotting 2021_12_vaccBoostEfficiencyDelta.png"
+##############################################################
+
+set size 1,1
+set key bottom right
+
+#from corona.js -> function Immunity
+
+#Delta
+
+tau0=30.
+I0=0.82     # efficiency 1-alpha^2 at second vacc time
+Iincrease=0.06 # further increase to peak after second vacc
+tauIncrease=25 # time scale of further increase
+
+I0boost=0.30    # assumed remaining efficicency at boosting time
+ImaxBoost=0.93  # assumed efficicency of booster
+tauIncrBoost=14 # time scale to max efficiency for boosters
+  
+tauHalf=150    # #days for reduced efficiency to 50% of I0
+                       # !!! assuming double timescales
+                       # for the boosters for now !!!!corona.js: 180
+dtau=40        # how fast (half-width #days) the reduct. takes place
+
+#Omicron
+
+evadeMutFactor=3; # (1-vacceff2)=max(0,1-evadeMutFactor*(1-vaceff1))
+  
+# Efficiency vacc (first, assumed second later) vs Delta
+
+I1vacc(tau)= (tau<tau0)\
+      ? I0*tau/tau0\
+      : -Iincrease*exp(-(tau-tau0)/tauIncrease)\
+      +(I0+Iincrease)*(1+exp((0-tauHalf)/dtau))\
+      /(1+exp((tau-tau0-tauHalf)/dtau))
+
+# Efficiency vacc (first, assumed second later) vs Omicron
+
+I2vacc(tau)=max(0, 1-evadeMutFactor*(1-I1vacc(tau)))
+
+# Efficiency Booster vs Delta 
+
+increasePart(tau)=I0boost+ 0.5*(ImaxBoost-I0boost)\
+	* (tanh(2*(tau-0.5*tauIncrBoost)/tauIncrBoost)+1);
+decreasePart(tau)=ImaxBoost\
+      *((1+exp((-tauHalf)/(dtau)))/(1+exp((tau-2*tauHalf)/(2*dtau)))-1);
+I1boost(tau)=increasePart(tau)+decreasePart(tau)
+I2boost(tau)=max(0, 1-evadeMutFactor*(1-I1boost(tau)))
+
+set noparam
+set xlabel "days since first vaccination/booster"
+set ylabel "Prevention efficiency against infection (sympomatic illness)[%]"
+set yrange [0:100]
+plot[tau=0:180]\
+  100*I1vacc(tau) t "Vaccination vs. Delta" w l ls 6,\
+  100*I1boost(tau) t "Booster vs. Delta" w l ls 2
 
 
+##############################################################
+set out "2021_12_vaccBoostEfficiencyOmicron.png"
+print "plotting 2021_12_vaccBoostEfficiencyOmicron.png"
+##############################################################
 
-
-
+set key top right
+plot[tau=0:180]\
+  100*I2vacc(tau) t "Vaccination vs. Omicron" w l ls 6,\
+  100*I2boost(tau) t "Booster vs. Omicron" w l ls 2
