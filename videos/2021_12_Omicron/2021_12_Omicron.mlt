@@ -1,0 +1,841 @@
+<?xml version="1.0" standalone="no"?>
+<mlt LC_NUMERIC="C" version="7.1.0" title="Shotcut version 21.10.31" producer="main_bin">
+  <profile description="automatic" width="1478" height="814" progressive="1" sample_aspect_num="1" sample_aspect_den="1" display_aspect_num="739" display_aspect_den="407" frame_rate_num="1000" frame_rate_den="33" colorspace="709"/>
+  <chain id="chain0" out="00:02:08.910">
+    <property name="length">00:02:08.943</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_12_Omicron1.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="shotcut:hash">19d5ba859436a7f500e439d70a59e46d</property>
+    <property name="ignore_points">0</property>
+    <property name="creation_time">2021-12-21T16:22:49</property>
+    <property name="xml">was here</property>
+  </chain>
+  <chain id="chain1" out="00:03:56.100">
+    <property name="length">00:03:56.133</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_12_Omicron2.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">f73b7b7a9ca2044f78849937901d5e09</property>
+  </chain>
+  <chain id="chain2" out="00:02:07.062">
+    <property name="length">00:02:07.095</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_12_Omicron3.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">9b5f61b6da134042d40d47ed8572d039</property>
+  </chain>
+  <chain id="chain3" out="00:06:22.638">
+    <property name="length">00:06:22.671</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_12_Omicron4.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">dea7f5f130fefb233c72d204fa85dedd</property>
+  </chain>
+  <chain id="chain4" out="00:00:08.151">
+    <property name="length">00:00:08.184</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_12_Omicron5.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">d19dc1e977151757b566d455c3f71c15</property>
+  </chain>
+  <chain id="chain5" out="00:00:25.113">
+    <property name="length">00:00:25.146</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_12_Omicron6.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">f1ffaa845f62f3ed92360dbd09264beb</property>
+  </chain>
+  <chain id="chain6" out="00:07:55.110">
+    <property name="length">00:07:55.143</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_12_Omicron7.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">b11017b15d7979ada2e847b62bf51353</property>
+  </chain>
+  <chain id="chain7" out="00:02:25.641">
+    <property name="length">00:02:25.674</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_12_Omicron8.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">34cc1952f0ab43e29411c83ec34e2a6c</property>
+  </chain>
+  <chain id="chain8" out="00:02:17.457">
+    <property name="length">00:02:17.490</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_12_Omicron9.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">dc994ed2547da600de566ef2518a8609</property>
+  </chain>
+  <chain id="chain9" out="00:04:40.128">
+    <property name="length">00:04:40.161</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_12_Omicron10.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">af1f9a52ba60bf7227a9bc92f33e5dc9</property>
+  </chain>
+  <chain id="chain10" out="00:02:21.351">
+    <property name="length">00:02:21.384</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_12_Omicron11.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">1a88d11aff249249a7599e0b25c37c3f</property>
+  </chain>
+  <chain id="chain11" out="00:01:53.790">
+    <property name="length">00:01:53.823</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_12_Omicron12.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">33e33534afb2357106ffe1621fa2ff14</property>
+  </chain>
+  <playlist id="main_bin" title="Shotcut version 21.10.31">
+    <property name="shotcut:projectAudioChannels">2</property>
+    <property name="shotcut:projectFolder">1</property>
+    <property name="xml_retain">1</property>
+    <entry producer="chain0" in="00:00:00.000" out="00:02:08.910"/>
+    <entry producer="chain1" in="00:00:00.000" out="00:03:56.100"/>
+    <entry producer="chain2" in="00:00:00.000" out="00:02:07.062"/>
+    <entry producer="chain3" in="00:00:00.000" out="00:06:22.638"/>
+    <entry producer="chain4" in="00:00:00.000" out="00:00:08.151"/>
+    <entry producer="chain5" in="00:00:00.000" out="00:00:25.113"/>
+    <entry producer="chain6" in="00:00:00.000" out="00:07:55.110"/>
+    <entry producer="chain7" in="00:00:00.000" out="00:02:25.641"/>
+    <entry producer="chain8" in="00:00:00.000" out="00:02:17.457"/>
+    <entry producer="chain9" in="00:00:00.000" out="00:04:40.128"/>
+    <entry producer="chain10" in="00:00:00.000" out="00:02:21.351"/>
+    <entry producer="chain11" in="00:00:00.000" out="00:01:53.790"/>
+  </playlist>
+  <producer id="black" in="00:00:00.000" out="00:30:15.972">
+    <property name="length">00:30:16.005</property>
+    <property name="eof">pause</property>
+    <property name="resource">0</property>
+    <property name="aspect_ratio">1</property>
+    <property name="mlt_service">color</property>
+    <property name="mlt_image_format">rgba</property>
+    <property name="set.test_audio">0</property>
+  </producer>
+  <playlist id="background">
+    <entry producer="black" in="00:00:00.000" out="00:30:15.972"/>
+  </playlist>
+  <chain id="chain12" out="00:02:08.910">
+    <property name="length">00:02:08.943</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_12_Omicron1.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="shotcut:hash">19d5ba859436a7f500e439d70a59e46d</property>
+    <property name="ignore_points">0</property>
+    <property name="creation_time">2021-12-21T16:22:49</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:caption">2021_12_Omicron1.mkv</property>
+  </chain>
+  <chain id="chain13" out="00:03:56.100">
+    <property name="length">00:03:56.133</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_12_Omicron2.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">f73b7b7a9ca2044f78849937901d5e09</property>
+    <property name="shotcut:caption">2021_12_Omicron2.mkv</property>
+  </chain>
+  <tractor id="tractor0" in="00:00:00.000" out="00:00:01.122">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="chain12" in="00:00:30.129" out="00:00:31.251"/>
+    <track producer="chain13" in="00:00:26.862" out="00:00:27.984"/>
+    <transition id="transition0" out="00:00:01.122">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition1" out="00:00:01.122">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <chain id="chain14" out="00:03:56.100">
+    <property name="length">00:03:56.133</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_12_Omicron2.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">f73b7b7a9ca2044f78849937901d5e09</property>
+    <property name="shotcut:caption">2021_12_Omicron2.mkv</property>
+  </chain>
+  <chain id="chain15" out="00:02:07.062">
+    <property name="length">00:02:07.095</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_12_Omicron3.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">9b5f61b6da134042d40d47ed8572d039</property>
+    <property name="shotcut:caption">2021_12_Omicron3.mkv</property>
+  </chain>
+  <tractor id="tractor1" in="00:00:00.000" out="00:00:00.594">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="chain14" in="00:02:16.170" out="00:02:16.764"/>
+    <track producer="chain15" in="00:00:13.431" out="00:00:14.025"/>
+    <transition id="transition2" out="00:00:00.594">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition3" out="00:00:00.594">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <chain id="chain16" out="00:02:07.062">
+    <property name="length">00:02:07.095</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_12_Omicron3.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">9b5f61b6da134042d40d47ed8572d039</property>
+    <property name="shotcut:caption">2021_12_Omicron3.mkv</property>
+  </chain>
+  <chain id="chain17" out="00:06:22.638">
+    <property name="length">00:06:22.671</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_12_Omicron4.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">dea7f5f130fefb233c72d204fa85dedd</property>
+    <property name="shotcut:caption">2021_12_Omicron4.mkv</property>
+  </chain>
+  <tractor id="tractor2" in="00:00:00.000" out="00:00:00.825">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="chain16" in="00:02:00.231" out="00:02:01.056"/>
+    <track producer="chain17" in="00:00:01.881" out="00:00:02.706"/>
+    <transition id="transition4" out="00:00:00.825">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition5" out="00:00:00.825">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <chain id="chain18" out="00:06:22.638">
+    <property name="length">00:06:22.671</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_12_Omicron4.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">dea7f5f130fefb233c72d204fa85dedd</property>
+    <property name="shotcut:caption">2021_12_Omicron4.mkv</property>
+  </chain>
+  <chain id="chain19" out="00:06:22.638">
+    <property name="length">00:06:22.671</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_12_Omicron4.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">dea7f5f130fefb233c72d204fa85dedd</property>
+    <property name="shotcut:caption">2021_12_Omicron4.mkv</property>
+  </chain>
+  <chain id="chain20" out="00:06:22.638">
+    <property name="length">00:06:22.671</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_12_Omicron4.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">dea7f5f130fefb233c72d204fa85dedd</property>
+    <property name="shotcut:caption">2021_12_Omicron4.mkv</property>
+  </chain>
+  <chain id="chain21" out="00:06:22.638">
+    <property name="length">00:06:22.671</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_12_Omicron4.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">dea7f5f130fefb233c72d204fa85dedd</property>
+    <property name="shotcut:caption">2021_12_Omicron4.mkv</property>
+  </chain>
+  <chain id="chain22" out="00:00:08.151">
+    <property name="length">00:00:08.184</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_12_Omicron5.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">d19dc1e977151757b566d455c3f71c15</property>
+    <property name="shotcut:caption">2021_12_Omicron5.mkv</property>
+  </chain>
+  <chain id="chain23" out="00:00:25.113">
+    <property name="length">00:00:25.146</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_12_Omicron6.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">f1ffaa845f62f3ed92360dbd09264beb</property>
+    <property name="shotcut:caption">2021_12_Omicron6.mkv</property>
+  </chain>
+  <tractor id="tractor3" in="00:00:00.000" out="00:00:00.825">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="chain22" in="00:00:06.501" out="00:00:07.326"/>
+    <track producer="chain23" in="00:00:01.155" out="00:00:01.980"/>
+    <transition id="transition6" out="00:00:00.825">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition7" out="00:00:00.825">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <chain id="chain24" out="00:00:25.113">
+    <property name="length">00:00:25.146</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_12_Omicron6.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">f1ffaa845f62f3ed92360dbd09264beb</property>
+    <property name="shotcut:caption">2021_12_Omicron6.mkv</property>
+  </chain>
+  <chain id="chain25" out="00:00:25.113">
+    <property name="length">00:00:25.146</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_12_Omicron6.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">f1ffaa845f62f3ed92360dbd09264beb</property>
+    <property name="shotcut:caption">2021_12_Omicron6.mkv</property>
+  </chain>
+  <tractor id="tractor4" in="00:00:00.000" out="00:00:00.330">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="chain24" in="00:00:15.576" out="00:00:15.906"/>
+    <track producer="chain25" in="00:00:16.698" out="00:00:17.028"/>
+    <transition id="transition8" out="00:00:00.330">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition9" out="00:00:00.330">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <chain id="chain26" out="00:07:55.110">
+    <property name="length">00:07:55.143</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_12_Omicron7.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">b11017b15d7979ada2e847b62bf51353</property>
+    <property name="shotcut:caption">2021_12_Omicron7.mkv</property>
+  </chain>
+  <tractor id="tractor5" in="00:00:00.000" out="00:00:00.825">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="chain25" in="00:00:21.384" out="00:00:22.209"/>
+    <track producer="chain26" in="00:00:04.620" out="00:00:05.445"/>
+    <transition id="transition10" out="00:00:00.825">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition11" out="00:00:00.825">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <chain id="chain27" out="00:07:55.110">
+    <property name="length">00:07:55.143</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_12_Omicron7.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">b11017b15d7979ada2e847b62bf51353</property>
+    <property name="shotcut:caption">2021_12_Omicron7.mkv</property>
+  </chain>
+  <chain id="chain28" out="00:07:55.110">
+    <property name="length">00:07:55.143</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_12_Omicron7.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">b11017b15d7979ada2e847b62bf51353</property>
+    <property name="shotcut:caption">2021_12_Omicron7.mkv</property>
+  </chain>
+  <chain id="chain29" out="00:02:25.641">
+    <property name="length">00:02:25.674</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_12_Omicron8.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">34cc1952f0ab43e29411c83ec34e2a6c</property>
+    <property name="shotcut:caption">2021_12_Omicron8.mkv</property>
+  </chain>
+  <tractor id="tractor6" in="00:00:00.000" out="00:00:00.495">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="chain28" in="00:07:50.820" out="00:07:51.315"/>
+    <track producer="chain29" in="00:00:03.432" out="00:00:03.927"/>
+    <transition id="transition12" out="00:00:00.495">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition13" out="00:00:00.495">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <chain id="chain30" out="00:02:17.457">
+    <property name="length">00:02:17.490</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_12_Omicron9.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">dc994ed2547da600de566ef2518a8609</property>
+    <property name="shotcut:caption">2021_12_Omicron9.mkv</property>
+  </chain>
+  <tractor id="tractor7" in="00:00:00.000" out="00:00:00.759">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="chain29" in="00:02:15.213" out="00:02:15.972"/>
+    <track producer="chain30" in="00:00:01.287" out="00:00:02.046"/>
+    <transition id="transition14" out="00:00:00.759">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition15" out="00:00:00.759">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <chain id="chain31" out="00:04:40.128">
+    <property name="length">00:04:40.161</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_12_Omicron10.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">af1f9a52ba60bf7227a9bc92f33e5dc9</property>
+    <property name="shotcut:caption">2021_12_Omicron10.mkv</property>
+  </chain>
+  <chain id="chain32" out="00:04:40.128">
+    <property name="length">00:04:40.161</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_12_Omicron10.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">af1f9a52ba60bf7227a9bc92f33e5dc9</property>
+    <property name="shotcut:caption">2021_12_Omicron10.mkv</property>
+  </chain>
+  <chain id="chain33" out="00:04:40.128">
+    <property name="length">00:04:40.161</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_12_Omicron10.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">af1f9a52ba60bf7227a9bc92f33e5dc9</property>
+    <property name="shotcut:caption">2021_12_Omicron10.mkv</property>
+  </chain>
+  <chain id="chain34" out="00:04:40.128">
+    <property name="length">00:04:40.161</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_12_Omicron10.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">af1f9a52ba60bf7227a9bc92f33e5dc9</property>
+    <property name="shotcut:caption">2021_12_Omicron10.mkv</property>
+  </chain>
+  <chain id="chain35" out="00:04:40.128">
+    <property name="length">00:04:40.161</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_12_Omicron10.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">af1f9a52ba60bf7227a9bc92f33e5dc9</property>
+    <property name="shotcut:caption">2021_12_Omicron10.mkv</property>
+  </chain>
+  <chain id="chain36" out="00:02:21.351">
+    <property name="length">00:02:21.384</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_12_Omicron11.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">1a88d11aff249249a7599e0b25c37c3f</property>
+    <property name="shotcut:caption">2021_12_Omicron11.mkv</property>
+  </chain>
+  <tractor id="tractor8" in="00:00:00.000" out="00:00:00.792">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="chain35" in="00:04:39.336" out="00:04:40.128"/>
+    <track producer="chain36" in="00:00:02.475" out="00:00:03.267"/>
+    <transition id="transition16" out="00:00:00.792">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition17" out="00:00:00.792">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <chain id="chain37" out="00:02:21.351">
+    <property name="length">00:02:21.384</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_12_Omicron11.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">1a88d11aff249249a7599e0b25c37c3f</property>
+    <property name="shotcut:caption">2021_12_Omicron11.mkv</property>
+  </chain>
+  <chain id="chain38" out="00:01:53.790">
+    <property name="length">00:01:53.823</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_12_Omicron12.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">33e33534afb2357106ffe1621fa2ff14</property>
+    <property name="shotcut:caption">2021_12_Omicron12.mkv</property>
+  </chain>
+  <tractor id="tractor9" in="00:00:00.000" out="00:00:01.056">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="chain37" in="00:02:18.183" out="00:02:19.239"/>
+    <track producer="chain38" in="00:00:37.950" out="00:00:39.006"/>
+    <transition id="transition18" out="00:00:01.056">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition19" out="00:00:01.056">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <chain id="chain39" out="00:01:53.790">
+    <property name="length">00:01:53.823</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_12_Omicron12.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">33e33534afb2357106ffe1621fa2ff14</property>
+    <property name="shotcut:caption">2021_12_Omicron12.mkv</property>
+  </chain>
+  <chain id="chain40" out="00:01:53.790">
+    <property name="length">00:01:53.823</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_12_Omicron12.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">33e33534afb2357106ffe1621fa2ff14</property>
+    <property name="shotcut:caption">2021_12_Omicron12.mkv</property>
+  </chain>
+  <chain id="chain41" out="00:01:53.790">
+    <property name="length">00:01:53.823</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_12_Omicron12.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">33e33534afb2357106ffe1621fa2ff14</property>
+    <property name="shotcut:caption">2021_12_Omicron12.mkv</property>
+  </chain>
+  <chain id="chain42" out="00:01:53.790">
+    <property name="length">00:01:53.823</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2021_12_Omicron12.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">33e33534afb2357106ffe1621fa2ff14</property>
+    <property name="shotcut:caption">2021_12_Omicron12.mkv</property>
+  </chain>
+  <playlist id="playlist0">
+    <property name="shotcut:video">1</property>
+    <property name="shotcut:name">V1</property>
+    <entry producer="chain12" in="00:00:00.000" out="00:00:30.096"/>
+    <entry producer="tractor0" in="00:00:00.000" out="00:00:01.122"/>
+    <entry producer="chain13" in="00:00:28.017" out="00:02:05.775"/>
+    <entry producer="chain14" in="00:02:06.699" out="00:02:16.137"/>
+    <entry producer="tractor1" in="00:00:00.000" out="00:00:00.594"/>
+    <entry producer="chain15" in="00:00:14.058" out="00:00:19.899"/>
+    <entry producer="chain16" in="00:00:20.856" out="00:02:00.198"/>
+    <entry producer="tractor2" in="00:00:00.000" out="00:00:00.825"/>
+    <entry producer="chain17" in="00:00:02.739" out="00:01:09.834"/>
+    <entry producer="chain18" in="00:01:11.352" out="00:05:27.984"/>
+    <entry producer="chain19" in="00:05:39.567" out="00:05:41.745"/>
+    <entry producer="chain20" in="00:05:42.702" out="00:05:44.781"/>
+    <entry producer="chain21" in="00:05:45.507" out="00:06:21.087"/>
+    <entry producer="chain22" in="00:00:00.792" out="00:00:06.468"/>
+    <entry producer="tractor3" in="00:00:00.000" out="00:00:00.825"/>
+    <entry producer="chain23" in="00:00:02.013" out="00:00:09.933"/>
+    <entry producer="chain24" in="00:00:10.527" out="00:00:15.543"/>
+    <entry producer="tractor4" in="00:00:00.000" out="00:00:00.330"/>
+    <entry producer="chain25" in="00:00:17.061" out="00:00:21.351"/>
+    <entry producer="tractor5" in="00:00:00.000" out="00:00:00.825"/>
+    <entry producer="chain26" in="00:00:05.478" out="00:00:14.949"/>
+    <entry producer="chain27" in="00:00:18.183" out="00:03:03.927"/>
+    <entry producer="chain28" in="00:03:07.458" out="00:07:50.787"/>
+    <entry producer="tractor6" in="00:00:00.000" out="00:00:00.495"/>
+    <entry producer="chain29" in="00:00:03.960" out="00:02:15.180"/>
+    <entry producer="tractor7" in="00:00:00.000" out="00:00:00.759"/>
+    <entry producer="chain30" in="00:00:02.079" out="00:02:11.946"/>
+    <entry producer="chain31" in="00:00:01.716" out="00:00:39.171"/>
+    <entry producer="chain32" in="00:00:39.798" out="00:00:43.362"/>
+    <entry producer="chain33" in="00:00:45.540" out="00:00:53.130"/>
+    <entry producer="chain34" in="00:00:53.922" out="00:04:04.224"/>
+    <entry producer="chain35" in="00:04:04.653" out="00:04:39.303"/>
+    <entry producer="tractor8" in="00:00:00.000" out="00:00:00.792"/>
+    <entry producer="chain36" in="00:00:03.300" out="00:00:05.049"/>
+    <entry producer="chain37" in="00:00:05.940" out="00:02:18.150"/>
+    <entry producer="tractor9" in="00:00:00.000" out="00:00:01.056"/>
+    <entry producer="chain38" in="00:00:39.039" out="00:00:42.900"/>
+    <entry producer="chain39" in="00:00:43.329" out="00:00:52.536"/>
+    <entry producer="chain40" in="00:00:54.516" out="00:00:59.499"/>
+    <entry producer="chain41" in="00:01:02.277" out="00:01:17.556"/>
+    <entry producer="chain42" in="00:01:32.439" out="00:01:50.127"/>
+  </playlist>
+  <tractor id="tractor10" title="Shotcut version 21.10.31" in="00:00:00.000" out="00:30:15.972">
+    <property name="shotcut">1</property>
+    <property name="shotcut:projectAudioChannels">2</property>
+    <property name="shotcut:projectFolder">1</property>
+    <track producer="background"/>
+    <track producer="playlist0"/>
+    <transition id="transition20">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="mlt_service">mix</property>
+      <property name="always_active">1</property>
+      <property name="sum">1</property>
+    </transition>
+    <transition id="transition21">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="version">0.9</property>
+      <property name="mlt_service">frei0r.cairoblend</property>
+      <property name="threads">0</property>
+      <property name="disable">1</property>
+    </transition>
+  </tractor>
+</mlt>

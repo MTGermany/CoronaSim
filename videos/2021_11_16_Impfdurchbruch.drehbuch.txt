@@ -1,5 +1,5 @@
 
-corona-simulation.de: Simulation der Impfdurchbr\"uche
+corona-simulation.de: Simulation der Impfdurchbrüche
 
 
 1. Intro

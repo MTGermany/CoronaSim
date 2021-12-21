@@ -558,22 +558,20 @@ D:         2021-12-06 from infections 2021-12-03: 3%
 ######################################################################*/
 
 const time_pMutList=new Date("2021-12-10");
-var dtList2present
-    =Math.floor((present.getTime()-time_pMutList.getTime())/oneDay_ms); 
 
 const pMutList={ // fraction pMut @ reftime_pMut (0: no data)
-  "Germany"       : 0.08,
+  "Germany"       : 0.10,
   "Austria"       : 0.10, // rest (w/o OK flag) speculation at best
   "Australia"     : 0.30,
   "Brazil"        : 0.10,
-  "Czechia"       : 0.10,
+  "Czechia"       : 0.20,
   "France"        : 0.15,
-  "United Kingdom": 0.50, 
+  "United Kingdom": 0.70, 
   "Italy"         : 0.10,
   "Poland"        : 0.10,
   "Spain"         : 0.40,
   "Sweden"        : 0.10,
-  "Denmark"       : 0.55,
+  "Denmark"       : 0.70,
   "Switzerland"   : 0.10,
   "Greece"        : 0.10,
   "Portugal"      : 0.15,
@@ -582,7 +580,7 @@ const pMutList={ // fraction pMut @ reftime_pMut (0: no data)
   "Russia"        : 0.10,
   "US"            : 0.10,
   "Australia"     : 0.30,
-  "South Africa"  : 0.80
+  "South Africa"  : 0.99
 }
 
 
@@ -646,7 +644,8 @@ var tauSymptoms=7;  // incubation time
 var taumax=Math.max(tauDie+tauAvg,tauRecover+tauAvg,
 		    tauICU+Math.floor(tauICUstay/2))+1; //!!!
 
-var tauInfectious_fullReporting=42; // !! Hellfeld param of sqrt pTest model
+var tauInfectious_fullReporting=35; // !!!! 35 Hellfeld increase sqrt-like
+                                    // with this parameter
 var alphaTest=0.0; // !! alpha error of test (false negative)
 var betaTest=0.00; // beta error (false positive) after double testing
 
@@ -714,28 +713,51 @@ var dataCmp_dxIncidence=[]; // compare weekly incidence per 100 000 from data
  Mutation Dynamics (see also immunity.evadeMutFactor)
 ######################################################################*/
 
+// define mutationDynamics and determine
+// date where present mutation dynamics starts and calibration ends
+// dynamics locked afterwards! Better switch off if no actual mutation
+
 var mutationDynamics=new MutationDynamics();   
 
-// #days before present mutation dynamics starts and calibration ends
-// dynamics locked! Better switch off if no actual mutation
 
-const startMut2present=5; // 5 !!!!  (overridden in valid)
-const rMutStart=0.30; // !!!! 0.25: in 3 days factor exp(0.75)=2.1
+// use_startMutRel=true: start mut fixed time difference
+// dit_startMut2present before present
+// !!!! Not good at beginning of new wave
+// because then p grows logistically while Rcalib approx const
+// R10 and R20 decrease drastically because of R10=R0/(1+p*tau*r)
+
+const use_startMutRel=false; //!!!!
+
+const rMutStart=0.25; // !!!! 0.25-0.30 initial growth rate of odds y/(1-y)
 
 
-// following repeated in initializeData(country)
-var itStartMut=itPresent-startMut2present; // updated if new country
+const time_startMut=new Date("2021-12-10"); // if fixed mut starting time
+const dit_startMut2presentRel=5; // 5 if variable mut starting time
+                          // (fixed time diff dit_startMut2present 2 present) 
+const dit_list2present
+    =Math.floor((present.getTime()-time_pMutList.getTime())/oneDay_ms); 
 
+const dit_startMut2presentAbs
+    =Math.floor((present.getTime()-time_startMut.getTime())/oneDay_ms); 
+
+
+// following updated in initializeData(country) if new country 
+
+var dit_startMut2present = (use_startMutRel)
+    ? dit_startMut2presentRel
+    : dit_startMut2presentAbs;
+
+var itStartMut=itPresent-dit_startMut2present;
 var pMutRef=pMutList[country];
 var simulateMutation=(pMutRef>1e-6);
 
-var dtshift=dtList2present-startMut2present;
+var dtshift=dit_list2present-dit_startMut2present;
 var pMutStart=(simulateMutation)
     ? estimate_pMut_timeShift(pMutRef,rMutStart,dtshift): 0;
 
 console.log("very start: coutry=",country," pMutRef=",pMutRef,
 	    " pMutStart=",pMutStart,
-	    " dtList2present=",dtList2present,
+	    " dit_list2present=",dit_list2present,
 	    " dtshift=",dtshift,
 	    " simulateMutation=",simulateMutation);
 
@@ -1194,13 +1216,16 @@ function initializeData(country,insideValidation){
   data2_itmax=data2.length-data2_idataStart;
 
 
-  // !!! initializeData(country):
+  // initializeData(country):
   // update the time shift to the mutation reference list
 
-  itStartMut=itPresent-startMut2present; // !!!! check for validation change
+  dit_startMut2present = (use_startMutRel)
+    ? dit_startMut2presentRel
+    : dit_startMut2presentAbs;
+  itStartMut=itPresent-dit_startMut2present; // !!! check for validation
   pMutRef=pMutList[country];
   simulateMutation=(pMutRef>1e-6);
-  dtshift=dtList2present-startMut2present;
+  dtshift=dit_list2present-dit_startMut2present;
   pMutStart=(simulateMutation)
     ? estimate_pMut_timeShift(pMutRef,rMutStart,dtshift): 0;
 
@@ -1209,7 +1234,7 @@ function initializeData(country,insideValidation){
 	      " time_pMutList=",time_pMutList,
 	      " pMutRef=",pMutRef,
 	      " pMutStart=",pMutStart,
-	      " dtList2present=",dtList2present,
+	      " dit_list2present=",dit_list2present,
 	      " dtshift=",dtshift,
 	      " simulateMutation=",simulateMutation);
   
@@ -1650,7 +1675,7 @@ function initializeData(country,insideValidation){
       else{
 	pTestLinDirect[i]=(i>0) ? pTestLinDirect[i-1] : pTestInit;
       }
-      var pSqrt=Math.sqrt(pTestLinDirect[i]);
+      var pSqrt=Math.sqrt(pTestLinDirect[i]); //!!!
 
       pSqrt=Math.min(1, pTestMin*Math.sqrt(1+Math.pow(pSqrt/pTestMin,2)));
 
@@ -4750,7 +4775,7 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
     //########################################################
     // CoronaSim.updateOneDay: update immunities and mutations
     // !!!! check itStartMut if validating:
-    //      different to itPresent-startMut2present
+    //      different to itPresent-dit_startMut2present
     // !! do not shift updates to main doSimulationStep because
     // then shifted by one time step
     //########################################################
@@ -6178,6 +6203,23 @@ DrawSim.prototype.transferSimData=function(it){
     *(this.dataG[2].data[it]-this.dataG[2].data[Math.max(it-7,0)]);
   this.dataG[53].data[it]=100000*corona.icu;
 
+  //!!!! reduce ad-hoc week incidences (not base [2], hack!!)
+  // due to new Omicron variant
+  // to do it real: need pMutArr[] for past pMut's
+
+  var reduceFactOmicron=0.50;
+  var reduceTime=30.; //days
+  if(simulateMutation&&(it>itPresent)){
+    var pMut=(it>=itStartMut) ? mutationDynamics.p : 0;
+    var reduceFactorRaw=(1-pMut)+pMut*reduceFactOmicron; 
+    var w=Math.min(1, (it-itPresent)/reduceTime);
+    var reduceFactor=1-w+w*reduceFactorRaw;
+    this.dataG[33].data[it]*=reduceFactor;
+    this.dataG[53].data[it]*=reduceFactor;
+    console.log("drawsim: ICU and death incidence reduce factor=",reduceFactor);
+  }
+
+  
   // MT 2021-11-21: new window 7: cause-effect
 
   this.dataG[43].data=this.dataG[41].data;
@@ -6226,7 +6268,7 @@ DrawSim.prototype.transferSimData=function(it){
 
 
 //######################################################################
-DrawSim.prototype.transferRecordedData=function(){
+DrawSim.prototype.transferRecordedData=function(){ // only measured data
 //######################################################################
 
   if(false){console.log("\nin drawsim.transferRecordedData: it=",it,
