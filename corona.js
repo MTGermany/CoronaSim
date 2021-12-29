@@ -271,7 +271,7 @@ var di2=0;  // i2-i for same date FROM THE END
 
 var data_date=[];
 var data_cumCases=[];
-var data_cumCasesSmooth=[]; //!!!! test calibr: 1-week smoothing
+var data_cumCasesSmooth=[]; //!!! test calibr: 1-week smoothing
 
 
 var data_cumDeaths=[];
@@ -561,26 +561,26 @@ D:         2021-12-06 from infections 2021-12-03: 3%
 const time_pMutList=new Date("2021-12-15"); //!!!!
 
 const pMutList={ // fraction pMut @ reftime_pMut (0: no data)
-  "Germany"       : 0.10,
+  "Germany"       : 0.15,
   "Austria"       : 0.10, // rest (w/o OK flag) speculation at best
   "Australia"     : 0.30,
   "Brazil"        : 0.10,
   "Czechia"       : 0.20,
-  "France"        : 0.15,
-  "United Kingdom": 0.70, 
-  "Italy"         : 0.10,
-  "Poland"        : 0.10,
-  "Spain"         : 0.40,
-  "Sweden"        : 0.10,
-  "Denmark"       : 0.70,
-  "Switzerland"   : 0.10,
-  "Greece"        : 0.10,
-  "Portugal"      : 0.15,
-  "Israel"        : 0.40,
+  "France"        : 0.50,
+  "United Kingdom": 0.75, 
+  "Italy"         : 0.70,
+  "Poland"        : 0.20,
+  "Spain"         : 0.60,
+  "Sweden"        : 0.50,
+  "Denmark"       : 0.80,
+  "Switzerland"   : 0.40,
+  "Greece"        : 0.65,
+  "Portugal"      : 0.50,
+  "Israel"        : 0.80,
   "India"         : 0.60,
-  "Russia"        : 0.10,
-  "US"            : 0.10,
-  "Australia"     : 0.30,
+  "Russia"        : 0.30,
+  "US"            : 0.75,
+  "Australia"     : 0.70,
   "South Africa"  : 0.99
 }
 
@@ -732,7 +732,7 @@ const use_startMutRel=false; //!!!!
 const rMutStart=0.25; // !!!! 0.25-0.30 initial growth rate of odds y/(1-y)
 
 
-const time_startMut=new Date("2021-12-21"); // 2021-12-17 !!!! if fixed mut starting time
+const time_startMut=new Date("2021-12-17"); // 2021-12-17 !!!! if fixed mut starting time
 const dit_startMut2presentRel=5; // 5 if variable mut starting time
                           // (fixed time diff dit_startMut2present 2 present) 
 const dit_list2present
@@ -6471,7 +6471,7 @@ DrawSim.prototype.drawR0Estimate=function(it){
 DrawSim.prototype.draw=function(it){
 //######################################################################
 
-  console.log("draw: simCount=",simCount," usePrevious=",usePrevious);
+  //console.log("draw: simCount=",simCount," usePrevious=",usePrevious);
   for(var iw=0; iw<this.qselectRegular.length; iw++){
     this.qselect[iw]=
       (usePrevious) ? this.qselectWithPrev[iw] : this.qselectRegular[iw];

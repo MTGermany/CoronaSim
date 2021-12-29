@@ -1,0 +1,241 @@
+
+
+
+[ich im Bild mit Skifahrer im Hintergrund]
+[edit bin/virtual_webcam_background/
+[Fenster 1] startVirtualBackground
+[Fenster 2] vlc input "--video-filter=croppadd{croptop=50,cropbottom=50}" v4l2:///dev/video10
+
+
+
+Hallo und herzlich willkommen zu meiner Silvester-Corona-Simulation!
+
+
+https://files.ssi.dk/covid19/omikron/statusrapport/rapport-omikronvarianten-27122021-tr73
+
+https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/1043807/technical-briefing-33.pdf
+= ../references/2021_12_23_OmicronGBt-briefing-33.pdf
+
+figsCorona/2021_12_15_DK_*.png
+figsCorona/2021_12_21_DK_*.png
+
+Ich gebe in diesem Video weitere Projektionen zu der anrollenden
+Omicron-Welle. Um ehrlich zu sein: Der Januar wird nicht gut, wenn
+Sie in den Alpen skifahren wollen, sollten Sie das jetzt bis Ende des
+Jahres tun,
+dann vermutlich problemlos erst wieder im März
+
+Schaun mer mal, warum Omicron so problematisch ist, warum es aber auch
+eine good news gibt
+
+[2021_12_Omicron.pdf]
+
+Ich gebe mal eine Übersicht der neuesten Erkenntnisse, die ich in
+kmeinen Simulator verbaut habe
+
+* Sie sehen Daten von zwei Laender, in denen Omicron schon weit
+  fortgeschritten 
+  ist, Dänemark (oben) und London (unten)
+
+* Schwarze bzw blaue Kurve ist Delta-Inzidenz, rote Omicron-Inzidenz
+
+* Sie sehen zwei Eigenschaften von Omicron
+
+1. Delta (schwarzblau) und Omicron kommen sich nicht gegenseitig
+  ins Gehege zu kommen. Ließe man die roten Kurven weg, schaut es
+  nach normalen Verlauf fuer Delta aus, wie ihn auch meine Simulation
+  ohne Mutation liefern würde
+
+  Natürlich gibt es indirekte Interaktion, denn beide sind im selben
+  Ökosystem und streiten um die Opfer, empfängliche Menschen: Wer
+  zuerst kommt, mahlt zuerst
+
+2. Omicron steigt rapide an in einem Umfeld, wo Delta stagniert
+
+[Folie 2, nur erste Ansicht]
+
+3. Hier ist eine dritte Eigenschaft: Der Anteil von Omicron steigt
+   rapide. Hier Daten aus Holland, da in der IT-Wüste Deutschland
+   keine brauchbaren Daten zu bekommen sind.
+   - Verdopplung anfänglich alle 2.24 Tage
+   - Der gemessene Anteil hinkt den Neuinfizierten Anteil um 5-7 Tage
+   hinterher, also bereits am 11.Dez 40% Neuinfizierte, am 15. eher
+   70% und jetzt 90% in Dänemark
+
+4. Aus Beobachtungen 1 bis 3 folgt, dass nicht nur der Anteil von
+   Omicron, sondern auch die Gesamtinfektionsanzahlen bei unveränderten
+   Umfeld stark ansteigen. Wie das genau zusammenhängt, zeige ich in
+   einem separaten Video mit Blick unter die Motorhaube der Simulation
+
+[Folie 3]
+
+Warum setzt sich Omikron so schnell durch, ist also efektiv viel
+infektiöser?
+
+* Kann entweder an erhöhter Basis-Infektiosität
+  (Basisreproduktionsrate R0) liegen, am besseren Vermögen, die
+  Immunitätsbarriere zu durchbrechen ("Immunity escape") oder an
+  beiden. Selbst eine geringere Basisreproduktionszahl bei starker
+  Immunity escape is möglich.
+
+* Im Blick unter die Motorhaube-Video zeige ich, dass seine
+  Basisreproduktionsrate in etwa gleich ist, also fast alles die
+  Imunity-Escape ausmacht
+
+* Hier also die Schutzwirkungen der Impfungen GEGEN INFEKTION mit
+  delta, wie sie aus den Beobachtungen kommen:
+
+* 10 Tage nach vollst Impfung ist Schutz sehr gut, 180 Tage nach der
+  ersten Impfung, also 150 Tage nach der zweiten, 
+  ist der Schutz aber  nur noch weniger als 50%, nach 8 Monaten nahe
+  Null
+
+* Booster ist besser! Aber hilft Impfen und Boostern auch gegen
+  Omicron oder kann man es gleich bleiben lassen, da ja demnächst
+  Omicron überall zu nahe 100% da ist?
+
+[Folie4]
+
+Hier sind erste Anhaltspunkte für die Wirksamkeiten des alten
+Impf- und Boosterstoffes gegen Omicron
+
+* Die Impfung wirkt nur kurz. Jeder, bei dem der vollständige
+  Impfzeitpunkt mehr als 100 Tage zurückliegt, ist komplett
+  ungeschützt!
+
+* Der Booster wirkt aber deutlich besser. Bereits 14 Tage nach dem
+  Booster schnellt der Infektionsschutz auf 75% hoch und bleibt auch
+  einige Zeit erhalten, wobei die Dauer des Schutzes
+  nur plausible Spekulation ist.
+
+* Gegen die Enpunkte schwere Erkrankung oder Tod wirken die Impfungen
+  noch besser, selbst bei 0% Schutz vor Infektion hat man noch gewissen
+  Schutz gegenüber schwerer Erkrankung/Tod, nach Boostern einen sehr
+  guten Schutz
+
+* Also lasst euch impfen bzw boostern, falls noch nicht geschehen!
+
+[ich im Zimmer]
+
+Genug des Vorgeplänkels, schauen wir uns die Simulation an, in die
+ich all das eingebaut habe. Wie gesagt, technische Details in einem
+separaten Video mit Blick unter die Motorhaube
+
+
+[Simulation Deutschland, vorsimuliert bis August, starten]
+
+Simulieren wir also so, wie der Simulator bei Start von
+corona-simulation.de abläuft.
+
+[pOmicron einkreisen]
+
+* In der Gegenwart 21. Dezember gibt es etwa 50%
+  Omicron-Neufälle. Wohlgemerkt, die 
+  können Sie erst in einer Wo in den Daten sehen, wenn Sie in D nun
+  messen würden, sähen Sie die Neuinfektionsanteile von 5-7 Tagen,
+  also etwa 15%
+
+[R10,R20 einkreisen]
+* Die Basisreproduktionszahlen gleicher Varianten sind um 4 und beide
+  fast gleich. ABER: Die Gesamtimmunität durch Impfung oder
+  Infektion ist fuer Delta 69%, fuer Omicron 19%, daher ist die
+  aktuelle unbeobachtbare echte Reproduktionszahl Rt groesser 1
+
+* Warum sieht man dann nix? Die Simulation zeigt ja die gemessenen
+  Inzidenzen, die verzoegert sind, obwohl unter der Haube natuerlich
+  die echten Infektionen simuliert werden.
+
+[weiter simulieren]
+
+* Wie schon vor 6 Wochen prognostiziert, wird die Weihnachtsinzidenz
+  um 300 liegen
+
+* Sie ist aber auch das Minimum, danach startet die Omicron-Welle
+
+* Maximum ohne Lockdown und mit unveraenderter Impf- und Boosterrate
+  gute 1000 [zeigen] Ende Januar [zeigen] Habe ich so schon im letzten
+  Video vor 1 Woche vorausgesagt, damals mit Maximum 1300, aber die
+  Sim ist da sehr sensitiv auf ungenau beannte Eingangsgroessen,
+  v.A. den Omicron-Anteil zu einer gegebenen Zeit.
+
+* Das Max kann also
+  auch bei 600 oder 1500 liegen, aber eines ist klar: Die
+  Omicron-Welle kommt und ihr Peak ist Ende Januar
+
+* Beachte auch: Irgendwann gehen die PCR-Tests aus, sodass die
+  Inzidenz nicht grenzenlos steigen kann.
+
+* Aber ins Krankenhaus kommen sie ggf, und hier liegt die
+  angekuendigte Good News: Omicron scheint weniger schwerwiegende
+  Erkrankungen zu verursachen. Hier steigt die ICU-Inzidenz und die
+  Todesfallinzidenz gerade auf die aktuellen Werte an, obwohl die
+  Inzidenz doppelt so hoch ist
+
+[weiter sim]
+
+* Weitere Good News: Anfang Maerz unterschreitet die Inzidenz 200,
+  genau wie in meinem letzten Video vorausgesagt und -- "Pandemy is over"
+  Zumal es ab Maerz wohl Omicron-angepasste Impfstoffe gibt
+
+
+[Neusim: Szenarienanalyse Impfen einstellen]
+
+[Neusim: Szenarienanalyse: Max impfen und boostern]
+
+[Neusim: Lockdown 3 Wochen im Januar]
+
+[Neusim: Daenemark]
+
+Nun wollen wir mal Land anschauen, die in Omicron weiter
+sind. Katastrophe! (Obwohl die Todesfallzahlen immer noch
+ueberschaubar sind). Woran liegt's
+An nahezu komplett fehlenden Massnahmen. Die haben aber vo=iel mehr
+Spielraum als wir:
+
+[Neusim mit Lockdown auf dt Level 84% ab Anfang Jan]
+besser
+[Neusim mit Lockdown auf dt Level 84% ab jetzt, Aufhebung 7. Januar]
+viel besser
+
+[Neusim SA]
+Nun wollen wir zum Schluss noch SA simulieren, wo Omicron nun bei 100% ist
+Dort ist Sommer und viele sind infiziert, deshalb trotz geringer
+Stringency und geringem Impfanteil schnell vorueber.
+
+* Warum ueberhaupt noch ansteigend, obwohl die Daten zurueckgehen?
+
+[Fenter "Tests]
+
+Die Tests haben abgenommen, also wonoeglich Artefakt
+
+[Fenster Infektionsraten]
+
+Die Positivanteile der PCR-Tests gehen auch in die Richtiung: Kein
+Abfall bis jetzt
+
+
+
+[Schluss, ich im Zimmer]
+
+Dies war meine Weihnachtssimulation.
+Wie schon im letzten Video gesagt, ich hoffe, das sich mit der
+Prognose Unrecht habe und keine Welle kommen wird,
+
+[cp config_ski.yaml config.yaml]
+
+also Skifahren auch im Januar.
+
+[cp config_corona.yaml config.yaml]
+
+Ich bin da aber eher skeptisch. Anyway, im Maerz ist in allen meinen
+Szenarien die Omicron-Welle vorbei
+
+[cp config_ski.yaml config.yaml]
+Ski Heil, servus und auf Wiedersehen!
+
+
+
+
+
+
+

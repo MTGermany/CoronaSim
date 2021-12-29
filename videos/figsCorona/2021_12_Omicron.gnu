@@ -56,8 +56,8 @@ set term pngcairo enhanced color notransparent crop font "Helvetica,12"
 # font "Helvetica, 14" size 1000,600 
 
 ##############################################################
-set out "2021_12_20_DK_abs.png"
-print "plotting 2021_12_20_DK_abs.png"
+set out "2021_12_15_DK_abs.png"
+print "plotting 2021_12_15_DK_abs.png"
 ##############################################################
 
 set size 1,0.8
@@ -67,13 +67,21 @@ set xlabel "Days since 2021-12-01"
 set ylabel "Confirmed cases"
 
 plot\
-  "2021_12_20_Daenemark.dat" u ($0-8):($2-$3) t "Delta" w lp ls 1,\
-  "2021_12_20_Daenemark.dat" u ($0-8):($3) t "Omicron" w lp ls 2
+  "2021_12_15_Daenemark.dat" u ($0-8):($2-$3) t "Delta" w lp ls 1,\
+  "2021_12_15_Daenemark.dat" u ($0-8):($3) t "Omicron" w lp ls 2
+
+##############################################################
+set out "2021_12_21_DK_abs.png"
+print "plotting 2021_12_21_DK_abs.png"
+##############################################################
+plot\
+  "2021_12_21_Daenemark.dat" u ($0-9):($2*(1-0.01*$6)) t "Delta" w lp ls 1,\
+  "2021_12_21_Daenemark.dat" u ($0-9):($2*0.01*$6) t "Omicron" w lp ls 2
 
 
 ##############################################################
-set out "2021_12_20_DK_rel.png"
-print "plotting 2021_12_20_DK_rel.png"
+set out "2021_12_15_DK_rel.png"
+print "plotting 2021_12_15_DK_rel.png"
 ##############################################################
 
 set size 0.8,1
@@ -86,21 +94,72 @@ p1=0.013+0.001; y1=p1/(1-p1)
 
 r=(log(y2)-log(y1))/(t2-t1)
 
-ysim(t)=y1*exp(r*(t-t1))
-psim(t)=ysim(t)/(1+ysim(t))
+ysim12_15(t)=y1*exp(r*(t-t1))
+psim12_15(t)=ysim12_15(t)/(1+ysim12_15(t))
 
 set ylabel "Fraction Omicron [%]"
 set label sprintf("Growth rate r=%.2f days^{-1}",r)\
- at screen 0.25,0.72
+ at screen 0.135,0.78
 set label sprintf("Doubling time ln(2)/r=%.2f days",log(2)/r)\
- at screen 0.25,0.66
+ at screen 0.135,0.72
 
 plot[t=-8:15]\
-  "2021_12_20_Daenemark.dat" u ($0-8):(100*$3/$2) t "Data" w p ls 2,\
-  t, 100*psim(t) t "Logistic fit" w l ls 2
+  "2021_12_15_Daenemark.dat" u ($0-8):(100*$3/$2) t "Data" w p ls 2,\
+  t, 100*psim12_15(t) t "Logistic fit" w l ls 2
 
 print "r=",r
 print "doubling time dt=log(2)/r=",log(2)/r
+
+
+##############################################################
+set out "2021_12_21_DK_rel.png"
+print "plotting 2021_12_21_DK_rel.png"
+##############################################################
+t2=21 #2021-12-21
+t1=0  #2021-12-02
+
+p2=0.762-0.02; y2=p2/(1-p2)
+p1=0.013; y1=p1/(1-p1)
+
+r=(log(y2)-log(y1))/(t2-t1)
+
+ysim12_21(t)=y1*exp(r*(t-t1))
+psim12_21(t)=ysim12_21(t)/(1+ysim12_21(t))
+
+unset label
+set label sprintf("Growth rate r=%.2f days^{-1}",r)\
+ at screen 0.135,0.78
+set label sprintf("Doubling time ln(2)/r=%.2f days",log(2)/r)\
+ at screen 0.135,0.72
+
+
+plot[t=-8:27]\
+  "2021_12_21_Daenemark.dat" u ($0-9):($6) t "Data" w p ls 2,\
+  t, 100*psim12_21(t) t "Logistic fit" w l ls 2
+
+##############################################################
+set out "2021_12_21_DK_odds.png"
+print "plotting 2021_12_21_DK_odds.png"
+##############################################################
+
+set ylabel "Odds ratio p_{Om}/(1-p_{Om})" offset 0.5,0
+plot[t=-8:21]\
+  "2021_12_21_Daenemark.dat" u ($0-9):(0.01*$6/(1-0.01*$6))\
+                             t "Data" w p ls 2,\
+  t, ysim12_21(t) t "Exponential fit" w l ls 2
+
+##############################################################
+set out "2021_12_21_DK_logodds.png"
+print "plotting 2021_12_21_DK_logodds.png"
+##############################################################
+
+set ylabel "log(Odds ratio p_{Om}/(1-p_{Om}))" offset -0.5,0
+set yrange [-7:]
+plot[t=-8:27]\
+  "2021_12_21_Daenemark.dat" u ($0-9):(log((0.01*$6+0.0001)/(1-0.01*$6)))\
+                             t "Data" w p ls 2,\
+  t, log(ysim12_21(t)) t "Linear fit" w l ls 2
+
 unset label
 
 ##############################################################
