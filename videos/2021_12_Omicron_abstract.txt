@@ -2,5 +2,27 @@ Die Omicron-Welle
 
 Ich habe die neuesten Erkenntnisse zu Omicron in meinen Simulator eingebaut: Ausbreitungsrate, kaum Kreuzeffekte mit der Delta-Variante, Effizienzverlust der gegenwärtigen Impfungen und Booster, aber häufig ein milderer Verlauf. Basierend darauf schätze ich datengetrieben die Basisreproduktionszahl von Omicron (nur etwas höher als Delta) und simuliere mehrere Länder, wobei ich auch die unterschiedlichen Testzahlen berücksichtige.
 
-Wie in der letzten Simulation sage ich in Deutschland einen Omicron-Peak zwischen 1000 und 1500 Fällen pro Woche und 100 000 Ende Januar voraus, bzw weniger, wenn ein Lockdown kommt. Impfen und Boostern ist nach wie vor wesentlich. In Dänemark wird man um einen Lockdown nicht herumkommen und in Südafrika steigt Omicron zwar noch etwas an, rollt aber vorüber, ohne, dass man dort groß was tun muss.
+Wie in der letzten Simulation sage ich in Deutschland einen
+Omicron-Peak zwischen 1000 und 1500 Fällen pro Woche und 100 000
+Einwohnern Ende Januar voraus, bzw weniger, wenn ein Lockdown kommt. Impfen und Boostern ist nach wie vor wesentlich. In Dänemark wird man um einen Lockdown nicht herumkommen und in Südafrika steigt Omicron zwar noch etwas an, rollt aber vorüber, ohne, dass man dort groß was tun muss.
 
+00:00 Einleitung
+
+00:24 Neue, für meinen Simulator relevante  Erkenntnisse zu Omicron
+
+04:00 Warum setzt sich Omicron so schnell durch?
+
+10:09 Simulation: Standardprojektion Deutschland bis März
+
+18:14 Szenario "kein weiteres Impfen und Boostern bis zum neuen
+Wirkstoff im März"
+
+20:18 Szenario Lockdown ab 1. Januar für 3 Wochen
+
+22:32 Simulation Dänemark Standardszenario
+
+24:18 Dänemark: Szenario Lockdown 22. Dezember bis 6. Januar
+
+27:03 Simulation Südafrika Standardszenario
+
+29:18 Schluss: Wie schaut's aus?

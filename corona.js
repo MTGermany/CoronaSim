@@ -271,6 +271,7 @@ var di2=0;  // i2-i for same date FROM THE END
 
 var data_date=[];
 var data_cumCases=[];
+var data_cumCasesSmooth=[]; //!!!! test calibr: 1-week smoothing
 
 
 var data_cumDeaths=[];
@@ -287,7 +288,7 @@ var data_rBoost=[];
 
 var data_cumTestsCalc=[]; // better calculate  from posRate
 var data_dn=[];
-var data_dnSmoothed=[]; // 1-week smoothing
+var data_dnSmooth=[]; // 1-week smoothing
 var data_dxt=[];
 var data_dyt=[];
 var data_dz=[];
@@ -557,7 +558,7 @@ SA:        2021-12-06 from infections 2021-12-03: 50%
 D:         2021-12-06 from infections 2021-12-03: 3%
 ######################################################################*/
 
-const time_pMutList=new Date("2021-12-10");
+const time_pMutList=new Date("2021-12-15"); //!!!!
 
 const pMutList={ // fraction pMut @ reftime_pMut (0: no data)
   "Germany"       : 0.10,
@@ -731,7 +732,7 @@ const use_startMutRel=false; //!!!!
 const rMutStart=0.25; // !!!! 0.25-0.30 initial growth rate of odds y/(1-y)
 
 
-const time_startMut=new Date("2021-12-10"); // if fixed mut starting time
+const time_startMut=new Date("2021-12-21"); // 2021-12-17 !!!! if fixed mut starting time
 const dit_startMut2presentRel=5; // 5 if variable mut starting time
                           // (fixed time diff dit_startMut2present 2 present) 
 const dit_list2present
@@ -1280,6 +1281,7 @@ function initializeData(country,insideValidation){
 
   data_date=[]; 
   data_cumCases=[];
+  data_cumCasesSmooth=[];
   data_cumDeaths=[];
   data_cumRecovered=[];
   data_cumCfr=[];
@@ -1347,7 +1349,7 @@ function initializeData(country,insideValidation){
   }
 
 	
-  //!! Correct erratically high forecasts caused by not reported
+  //!!!! Correct erratically high forecasts caused by not reported
   // cases for over a week by shifting some later cases to the missing cases
   // do not consider the first 9-1=8 weeks
 
@@ -1381,19 +1383,21 @@ function initializeData(country,insideValidation){
   }
   
 
-  
+  // in initializeData(country);
+  // check smoothing the objective data_cumCases for calibration
+  // !!! also smoothes daily cases data_dxt
 
+  var calibrSmoothed=true;
   
-  // debug 1: is data=dataRKI[country] or =dataGit[country] there?
-  if(false){ // => "final debugging"
-    console.log("initializeData round 1:",
-		" check data=dataRKI[country] or =dataGit[country]");
-    for(var i=0; i<data.length; i++){
-      console.log(
-	data_date[i],": data_cumCases[i]=", data_cumCases[i],
-	" data_cumDeaths[i]=",data_cumDeaths[i],
-	" data_cumRecovered[i]=",data_cumRecovered[i]);
+  if(calibrSmoothed){
+    console.log("\nSmooth data_cumCases ...");
+    data_cumCasesSmooth=smooth(data_cumCases,
+			       [1/7,1/7,1/7,1/7,1/7,1/7,1/7],true);
+    data_cumCases=data_cumCasesSmooth;
+    for(var i=1; i<data.length; i++){
+      data_dxt[i]=data_cumCases[i]-data_cumCases[i-1];
     }
+
   }
 
   
@@ -1480,7 +1484,7 @@ function initializeData(country,insideValidation){
     data_cumBoost[i]=data_cumBoost[iLast_data2]+ (i-iLast_data2)
       *(data_cumBoost[iLast_data2]-data_cumBoost[iLast_data2-7])/7.;
     data_icuIncidence[i]=data_icuIncidence[iLast_data2];
-    if(true){
+    if(false){
       console.log("\ni=",i," iLast_data2=",iLast_data2,
 		  " data_cumVacc[iLast_data2]=",
 		  data_cumVacc[iLast_data2],
@@ -1747,15 +1751,6 @@ function initializeData(country,insideValidation){
 
 
 
-  // in initializeData(country);
-  // check smoothing the objective data_cumCases for calibration
-
-  if(false){
-    //kernel=[1/9,2/9,3/9,2/9,1/9];
-    kernel=[1/7,1/7,1/7,1/7,1/7,1/7,1/7];
-    var data_cumCasesSmooth=smooth(data_cumCases,kernel);
-    data_cumCases=data_cumCasesSmooth;
-  }
 
 
 
@@ -1776,7 +1771,7 @@ function initializeData(country,insideValidation){
       //var logging=true;
       //var logging=false;
       //var logging=(i>data.length-10);
-      var logging=(i>data.length-14); // DATALOG possibly consolid with PLOG
+      var logging=(i>data.length-4); 
       //var logging=(i==200);
       if(logging){
 	var it=i-data_idataStart;
@@ -3862,7 +3857,7 @@ function doSimulationStep(doDrawing){ // logging "allowed" here !!
     ? stringency : data_stringencyIndex[i];
 
 
-  if(false){ // doSimulationStep: logging "allowed"!!
+  if(it>itPresent-10){ // doSimulationStep: logging "allowed"!!
     console.log(" doSimulationStep before corona.update: it=",it,
 		"data_cumCases[data_idataStart+it]=",
 		data_cumCases[data_idataStart+it],
@@ -5153,99 +5148,70 @@ function avgArithm(arr,tau){
 }
 
 
-// kernel must have odd #points
+// kernel must have odd #points and normalized to sum=1
 // although negative indices allowed, unstable: 
 // length and initializer expect all indices starting at 0
 
-function smooth(arr, kernel){
+function smooth(arr, kernel, debug){
   if(kernel.length%2==0){
     console.log("smooth: error: kernel.length=",kernel.length,
 		" provided kernel must have an uneven number of points");
     return arr;
   }
-
+  var debugSmooth=(typeof debug === "undefined") ? false : debug;
+  var half=Math.round((kernel.length-1)/2);
   var smooth=[]; 
   for(var i=0; i<arr.length; i++){smooth[i]=0;}
-  var half=Math.round((kernel.length-1)/2);
+
+  // smoothing in the central part where data at i-half...i+half
+  
   for(var i=half; i<arr.length-half; i++){
     for(var di=-half; di<=half; di++){
       smooth[i]+=kernel[half+di]*arr[i+di];
-      //if(i==Math.round(arr.length/2)){
-      //  console.log("i=",i, "di=",di," kernel[half+di]=",kernel[half+di],
-      //    " arr[i+di]=",arr[i+di]);
-      //}
     }
   }
 
-  // lower boundary: just the input (not relevant)
+  // lower and upper boundaries: symmetrically reduce kernel
 
-  for(var i=0; i<half; i++){smooth[i]=arr[i];} // lower boundary not relevant
+  for(var i=0; i<half; i++){
+    var kernelRed=[]; var sum=0;
+    for(var j=0; j<2*i+1; j++){
+      kernelRed[j]=kernel[half-i+j];
+      sum+=kernelRed[j];
+    }
+    for(var j=0; j<2*i+1; j++){
+      kernelRed[j]/=sum;
+    }
 
+    // actually smooth lower and upper boundary
+   
+    for(var di=-i; di<=i; di++){
+      smooth[i]+=kernelRed[i+di]*arr[i+di];
+      smooth[arr.length-i-1]+=kernelRed[i+di]*arr[arr.length-i-1+di];
+    }
+  }
 
-  // upper boundary treatment with or without seasonal analysis
+  // !!! final touches: consolidate 5 last data points conserving
+  // the trend
+
+  if(true&&(kernel.length>=5)&&(arr.length>=5)){
+    var avg=(smooth[arr.length-1]+smooth[arr.length-2]+smooth[arr.length-3]
+	     +smooth[arr.length-4]+smooth[arr.length-4])/5.;
+    // trend=b=sxy/sx2=E((x-xbar)(y-ybar))/sx2=E((x-xbar)y)/sx2, sx2=10
+    var trendLast=(2*smooth[arr.length-1]+smooth[arr.length-2]
+		   -smooth[arr.length-4]-2*smooth[arr.length-5])/10.;
+    for(var i=arr.length-5; i<arr.length; i++){
+      smooth[i]=avg+trendLast*(i-(arr.length-3));
+    }
+  }
   
-  var applySmoothingSeason=false;
-
-  if(!applySmoothingSeason){ // no season analysis
-    // just take raw data
-    // for(var i=arr.length-half; i<arr.length; i++){smooth[i]=arr[i];}
-
-    // use smaller filters (smooth[i]=0 already set at beginning)
-    for(var i=arr.length-half; i<arr.length; i++){
-      var halfRed=arr.length-i-1;
-      var denom=0;
-      for(var di=-halfRed; di<=halfRed; di++){
-	denom+= kernel[half+di];
-      }
-      for(var di=-halfRed; di<=halfRed; di++){
-        smooth[i]+=kernel[half+di]/denom * arr[i+di];
-      }
+  if(debugSmooth){
+    console.log("debug smoothing:");
+    for(var i=arr.length-21; i<arr.length; i++){
+      console.log("  i=",i," arr[i]=",arr[i],
+		  "kernel.length=",kernel.length," smooth[i]=",smooth[i]);
     }
   }
-
-  else{// assume 7d period
-
-    var n=arr.length;
-    var trendLen=3; // 3 periods (in this application, data always available)
-    //console.log("\nsmoothUpper: ");
-    //for(var i=n-10; i<n; i++){console.log("i=",i," arr[i]=",arr[i]);}
-
-
-    var T=[]; // trend
-    var S=[]; // period-7 saison characteristics
-
-    // trend
-
-    for(var i=n-3-7*trendLen; i<n-3; i++){ // 3, not half
-      T[i]=0;
-      for(var j=i-3; j<=i+3; j++){
-	T[i]+=arr[j]/7;
-      }
-      //console.log("i=",i," n=",n," arr[i]=",arr[i]," T[i]=",T[i]);
-    }
-
-    // saison characteristics
-
-    for(var k=0; k<7; k++){S[k]=0;}
-    for(var i=n-3-7*trendLen; i<n-3; i++){
-      k=i%7;
-      S[k] += (arr[i]-T[i])/trendLen;
-    }
-    //for(var k=0; k<7; k++){console.log("k=",k, " e^S[k]=",Math.exp(S[k]));}
-
-    // extrapolation: saison*trend
-
-    var ilast=arr.length-Math.max(half,3)-1;
-    for(var i=arr.length-half; i<arr.length; i++){
-      
-      T[i]=T[ilast]+(i-ilast)*(T[ilast]-T[ilast-7])/7;
-      smooth[i]=T[i]+S[i%7];
-    }
-  }
- 
-
-  //for(var i=arr.length-21; i<arr.length; i++){
-  //  console.log("i=",i," arr[i]=",arr[i]," smooth[i]=",smooth[i]); }
 
   return smooth;
 }
@@ -6113,7 +6079,7 @@ DrawSim.prototype.drawAxes=function(windowG){
         ctx.fillText("Testrate: "
 		     +((dn7days*1e6/n0).toFixed(0))
 		     +"/Wo/1 Mio"
-		     +"; Kumul. Faelle:"+(casesPerc.toFixed(1)),
+		     +"; Kumul. Faelle:"+(casesPerc.toFixed(1)+" %"),
 		     this.xPix0+xrelLeft*this.wPix,
 		     this.yPix0+(yrelTopVars-(line)*dyrel)*this.hPix);
 
