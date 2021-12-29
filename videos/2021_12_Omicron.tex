@@ -31,7 +31,7 @@
 \placebox{0.35}{0.24}
  {\figSimple{0.60\textwidth}{figsCorona/2021_12_15_UK.png}}
 \placebox{0.30}{0.65}
- {\figSimple{0.50\textwidth}{figsCorona/2021_12_20_DK_abs.png}}
+ {\figSimple{0.50\textwidth}{figsCorona/2021_12_15_DK_abs.png}}
 
 \placebox{0.80}{0.47}{\parbox{0.40\textwidth}{
 \bi
@@ -50,7 +50,7 @@
 %##############################################################
 
 \placebox{0.28}{0.46}
- {\figSimple{0.60\textwidth}{figsCorona/2021_12_20_DK_rel.png}}
+ {\figSimple{0.60\textwidth}{figsCorona/2021_12_15_DK_rel.png}}
 
 \placebox{0.76}{0.42}{\parbox{0.46\textwidth}{
 \bi
@@ -71,6 +71,41 @@ y(t)=y_0 \, e^{rt}
 \bdm
 p(t)=\frac{y(t)}{1+y(t)}
 \edm
+\ei
+}}
+
+}
+
+%##############################################################
+\frame{\frametitle{Latest observation 2: Update}
+%##############################################################
+
+\visible<1>{\placebox{0.28}{0.46}
+ {\figSimple{0.60\textwidth}{figsCorona/2021_12_21_DK_rel.png}}}
+\visible<2>{\placebox{0.28}{0.46}
+ {\figSimple{0.60\textwidth}{figsCorona/2021_12_21_DK_odds.png}}}
+\visible<3->{\placebox{0.28}{0.46}
+ {\figSimple{0.60\textwidth}{figsCorona/2021_12_21_DK_logodds.png}}}
+
+\placebox{0.76}{0.42}{\parbox{0.46\textwidth}{
+\bi
+\visible<1->{\item The share of Omicron can be well described by a logistic
+  function with growth rate $r$}
+\visible<2->{\item First transform the observed Omicron share $p$ into the
+  \bfdef{odds ratio} $y=p/(1-p)$}
+\visible<2->{\item From Observation~1 (coexistence), it follows that the odds ratio
+  grows exponentially:
+\vspace{-0.5em}
+\bdm
+y(t)=y_0 \, e^{rt}
+\edm
+\vspace{-1.5em}}
+\visible<3->{\item This means, the \bfdef{log-odds} are essentially
+  linear in time:
+\vspace{0em}
+\bdm
+\ln y(t)=\ln y_0+rt
+\edm}
 \ei
 }}
 

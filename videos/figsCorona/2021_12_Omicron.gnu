@@ -97,7 +97,10 @@ r=(log(y2)-log(y1))/(t2-t1)
 ysim12_15(t)=y1*exp(r*(t-t1))
 psim12_15(t)=ysim12_15(t)/(1+ysim12_15(t))
 
+set xrange [-10:30]
 set ylabel "Fraction Omicron [%]"
+set yrange [0:100]
+set ytics 20
 set label sprintf("Growth rate r=%.2f days^{-1}",r)\
  at screen 0.135,0.78
 set label sprintf("Doubling time ln(2)/r=%.2f days",log(2)/r)\
@@ -132,10 +135,14 @@ set label sprintf("Growth rate r=%.2f days^{-1}",r)\
 set label sprintf("Doubling time ln(2)/r=%.2f days",log(2)/r)\
  at screen 0.135,0.72
 
+set auto y
+set ytics 20
+
 
 plot[t=-8:27]\
   "2021_12_21_Daenemark.dat" u ($0-9):($6) t "Data" w p ls 2,\
   t, 100*psim12_21(t) t "Logistic fit" w l ls 2
+set ytics autofreq
 
 ##############################################################
 set out "2021_12_21_DK_odds.png"
@@ -161,6 +168,7 @@ plot[t=-8:27]\
   t, log(ysim12_21(t)) t "Linear fit" w l ls 2
 
 unset label
+set auto x
 
 ##############################################################
 set out "2021_12_vaccBoostEfficiencyDelta.png"

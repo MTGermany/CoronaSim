@@ -30,8 +30,10 @@ slider_fps.oninput = function() {
 
 // var R0
 
+/*
 var slider_R0=document.getElementById("slider_R0");
 var slider_R0Text = document.getElementById("slider_R0Text");
+
 
 setSlider(slider_R0, slider_R0Text, R0,"");
 
@@ -50,7 +52,7 @@ slider_R0.oninput = function() {
   }
   console.log("slider_R0.oninput end: R0=",R0);
 }
-
+*/
 
 
 //var tauRstart;
@@ -205,9 +207,10 @@ if(slider_casesInflow!==null){ // typeof undefined does not work
 // unit:          as displayed by html, e.g., "%"
 
 function setSlider(slider, sliderText, value, unit){
-  //console.log("setSlider: it=",it," slider=",slider," value=", value);
-  slider.value=value;
-  sliderText.innerHTML="&nbsp;"+value+unit;
+  if(!(typeof slider === "undefined")){  //if(!(typeof.., not if(! typeof..
+    slider.value=value;
+    sliderText.innerHTML="&nbsp;"+value+unit;
+  }
 }
 
 

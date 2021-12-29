@@ -3371,7 +3371,7 @@ function selectDataCountry(){ // callback html select box "countryData"
   tauDie=parseFloat(tauDieList[country]);
   taumax=Math.max(tauDie+tauAvg,tauRecover+tauAvg,
 		    tauICU+Math.floor(tauICUstay/2))+1; //!!!
-  setSlider(slider_R0,  slider_R0Text,  R0time[0].toFixed(2),"");
+  //setSlider(slider_R0,  slider_R0Text,  R0time[0].toFixed(2),"");
   setSlider(slider_stringency, slider_stringencyText,
 	  Math.round(stringency)," %");
   //setSlider(slider_R0cp,  slider_R0cpText,  R0time[0].toFixed(2),"");
@@ -3780,16 +3780,17 @@ function simulationRun() {
   //console.log("simulationRun: before doSimulationStep: it=",it);
   var doDrawing=true;
   doSimulationStep(doDrawing); 
-  //console.log("slider_R0_moved=",slider_R0_moved);
+
+  /*
   if(!slider_R0_moved){
     setSlider(slider_R0, slider_R0Text, R0_actual.toFixed(2),"");
-    //setSlider(slider_R0, slider_R0Text, R0fun_time(R0time,it).toFixed(2),"");
   }
   else{
     simulateMutation=false;
     document.getElementById("buttonMut").innerHTML="Start Mut. Delta Sim";
   }
-    
+  */
+  
   if(!slider_stringency_moved){
     //console.log("setSlider(slider_stringency...): stringency=",stringency);
     setSlider(slider_stringency, slider_stringencyText,
@@ -6169,16 +6170,17 @@ DrawSim.prototype.transferSimData=function(it){
     *(this.dataG[2].data[it]-this.dataG[2].data[Math.max(it-7,0)]);
   this.dataG[53].data[it]=100000*corona.icu;
 
-  //!!!! reduce ad-hoc week incidences (not base [2], hack!!)
+  //!!!! reduce ad-hoc weekly ICU incidences and deaths (not base [2], hack!!)
   // due to new Omicron variant
   // to do it real: need pMutArr[] for past pMut's
 
-  var reduceFactOmicron=0.50;
-  var reduceTime=30.; //days
+  var reduceFactOmicron=0.40; // 0=zero ICUs, 1 is as many as Delta
+  var reduceTime=10.; //days
   if(simulateMutation&&(it>itPresent)){
     var pMut=(it>=itStartMut) ? mutationDynamics.p : 0;
     var reduceFactorRaw=(1-pMut)+pMut*reduceFactOmicron; 
-    var w=Math.min(1, (it-itPresent)/reduceTime);
+    //var w=0.5*Math.tanh(Math.min(1, (it-itPresent)/reduceTime);
+    var w=0.5*(1+Math.tanh((it-itPresent-reduceTime)/(0.8*reduceTime)));
     var reduceFactor=1-w+w*reduceFactorRaw;
     this.dataG[33].data[it]*=reduceFactor;
     this.dataG[53].data[it]*=reduceFactor;
