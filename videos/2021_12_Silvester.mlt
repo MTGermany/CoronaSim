@@ -1,0 +1,1134 @@
+<?xml version="1.0" standalone="no"?>
+<mlt LC_NUMERIC="C" version="7.5.0" title="Shotcut version 21.12.24" producer="main_bin">
+  <profile description="automatic" width="1346" height="846" progressive="1" sample_aspect_num="1" sample_aspect_den="1" display_aspect_num="673" display_aspect_den="423" frame_rate_num="1000" frame_rate_den="33" colorspace="709"/>
+  <chain id="chain0" out="00:00:40.128">
+    <property name="length">00:00:40.161</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Silvester1.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="shotcut:hash">610563f576b612be547be66a9712b43a</property>
+    <property name="ignore_points">0</property>
+    <property name="creation_time">2021-12-30T11:02:59</property>
+    <property name="xml">was here</property>
+  </chain>
+  <chain id="chain1" out="00:02:40.392">
+    <property name="length">00:02:40.425</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Silvester2.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">af2e1b3289e62f786077ec2842a3151d</property>
+  </chain>
+  <chain id="chain2" out="00:03:30.558">
+    <property name="length">00:03:30.591</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Silvester3.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">429858597dd3577217a1cbef4a7385b0</property>
+  </chain>
+  <chain id="chain3" out="00:01:05.643">
+    <property name="length">00:01:05.676</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Silvester4.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">7e0dd5396397d18fb971d423e4f8731f</property>
+  </chain>
+  <chain id="chain4" out="00:03:10.494">
+    <property name="length">00:03:10.527</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Silvester5.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">c13e60b4273dae9ef2727f246b9929b0</property>
+  </chain>
+  <chain id="chain5" out="00:03:20.427">
+    <property name="length">00:03:20.460</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Silvester6.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">ef6408402b373d0b20eea168f272c0f4</property>
+  </chain>
+  <chain id="chain6" out="00:01:41.382">
+    <property name="length">00:01:41.415</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Silvester7.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">6dfd9c27b9f380c63bf92d38fed8f5aa</property>
+  </chain>
+  <chain id="chain7" out="00:00:18.216">
+    <property name="length">00:00:18.249</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Silvester8.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">4b069b58980d206f4ede2f677b3872f7</property>
+  </chain>
+  <chain id="chain8" out="00:02:04.818">
+    <property name="length">00:02:04.851</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Silvester9.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">b09b6ec023cbc500d1d969c2e47cafc0</property>
+  </chain>
+  <chain id="chain9" out="00:01:25.443">
+    <property name="length">00:01:25.476</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Silvester10.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">8af3342ea893eff8d291b9c503d9bd52</property>
+  </chain>
+  <chain id="chain10" out="00:01:05.808">
+    <property name="length">00:01:05.841</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Silvester11.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">6e58bf5a3d4456874dab7d7e024a7ea7</property>
+  </chain>
+  <chain id="chain11" out="00:00:22.539">
+    <property name="length">00:00:22.572</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Silvester12.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">84af89f81d8484cdb8b4d4e3f8891a54</property>
+  </chain>
+  <chain id="chain12" out="00:00:56.364">
+    <property name="length">00:00:56.397</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Silvester13.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">341b0d27ec0d3afb6ebab49b539f9dca</property>
+  </chain>
+  <chain id="chain13" out="00:00:53.856">
+    <property name="length">00:00:53.889</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Silvester14.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">72efc58eec49f7a285f337436f12d19d</property>
+  </chain>
+  <chain id="chain14" out="00:00:44.451">
+    <property name="length">00:00:44.484</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Silvester15.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">05e69ada6907f2725caba289903f03a6</property>
+  </chain>
+  <chain id="chain15" out="00:01:54.021">
+    <property name="length">00:01:54.054</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Silvester16.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">027f1d9ef4d02189d20612ad9ea69083</property>
+  </chain>
+  <chain id="chain16" out="00:00:59.730">
+    <property name="length">00:00:59.763</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Silvester18.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">dba046a94219eb33cbbee19898442e0b</property>
+  </chain>
+  <playlist id="main_bin">
+    <property name="xml_retain">1</property>
+    <entry producer="chain0" in="00:00:00.000" out="00:00:40.128"/>
+    <entry producer="chain1" in="00:00:00.000" out="00:02:40.392"/>
+    <entry producer="chain2" in="00:00:00.000" out="00:03:30.558"/>
+    <entry producer="chain3" in="00:00:00.000" out="00:01:05.643"/>
+    <entry producer="chain4" in="00:00:00.000" out="00:03:10.494"/>
+    <entry producer="chain5" in="00:00:00.000" out="00:03:20.427"/>
+    <entry producer="chain6" in="00:00:00.000" out="00:01:41.382"/>
+    <entry producer="chain7" in="00:00:00.000" out="00:00:18.216"/>
+    <entry producer="chain8" in="00:00:00.000" out="00:02:04.818"/>
+    <entry producer="chain9" in="00:00:00.000" out="00:01:25.443"/>
+    <entry producer="chain10" in="00:00:00.000" out="00:01:05.808"/>
+    <entry producer="chain11" in="00:00:00.000" out="00:00:22.539"/>
+    <entry producer="chain12" in="00:00:00.000" out="00:00:56.364"/>
+    <entry producer="chain13" in="00:00:00.000" out="00:00:53.856"/>
+    <entry producer="chain14" in="00:00:00.000" out="00:00:44.451"/>
+    <entry producer="chain15" in="00:00:00.000" out="00:01:54.021"/>
+    <entry producer="chain16" in="00:00:00.000" out="00:00:59.730"/>
+  </playlist>
+  <producer id="black" in="00:00:00.000" out="00:23:11.682">
+    <property name="length">00:23:11.715</property>
+    <property name="eof">pause</property>
+    <property name="resource">0</property>
+    <property name="aspect_ratio">1</property>
+    <property name="mlt_service">color</property>
+    <property name="mlt_image_format">rgba</property>
+    <property name="set.test_audio">0</property>
+  </producer>
+  <playlist id="background">
+    <entry producer="black" in="00:00:00.000" out="00:23:11.682"/>
+  </playlist>
+  <chain id="chain17" out="00:00:40.128">
+    <property name="length">00:00:40.161</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Silvester1.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="shotcut:hash">610563f576b612be547be66a9712b43a</property>
+    <property name="ignore_points">0</property>
+    <property name="creation_time">2021-12-30T11:02:59</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:caption">2021_12_Silvester1.mkv</property>
+  </chain>
+  <chain id="chain18" out="00:02:40.392">
+    <property name="length">00:02:40.425</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Silvester2.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">af2e1b3289e62f786077ec2842a3151d</property>
+    <property name="shotcut:caption">2021_12_Silvester2.mkv</property>
+  </chain>
+  <tractor id="tractor0" in="00:00:00.000" out="00:00:00.693">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="chain17" in="00:00:35.640" out="00:00:36.333"/>
+    <track producer="chain18" in="00:00:04.587" out="00:00:05.280"/>
+    <transition id="transition0" out="00:00:00.693">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition1" out="00:00:00.693">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="mlt_service">mix</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+    </transition>
+  </tractor>
+  <chain id="chain19" out="00:02:40.392">
+    <property name="length">00:02:40.425</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Silvester2.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">af2e1b3289e62f786077ec2842a3151d</property>
+    <property name="shotcut:caption">2021_12_Silvester2.mkv</property>
+  </chain>
+  <chain id="chain20" out="00:02:40.392">
+    <property name="length">00:02:40.425</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Silvester2.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">af2e1b3289e62f786077ec2842a3151d</property>
+    <property name="shotcut:caption">2021_12_Silvester2.mkv</property>
+  </chain>
+  <chain id="chain21" out="00:02:40.392">
+    <property name="length">00:02:40.425</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Silvester2.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">af2e1b3289e62f786077ec2842a3151d</property>
+    <property name="shotcut:caption">2021_12_Silvester2.mkv</property>
+  </chain>
+  <tractor id="tractor1" in="00:00:00.000" out="00:00:00.594">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="chain20" in="00:00:55.902" out="00:00:56.496"/>
+    <track producer="chain21" in="00:01:17.424" out="00:01:18.018"/>
+    <transition id="transition2" out="00:00:00.594">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition3" out="00:00:00.594">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="mlt_service">mix</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+    </transition>
+  </tractor>
+  <chain id="chain22" out="00:02:40.392">
+    <property name="length">00:02:40.425</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Silvester2.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">af2e1b3289e62f786077ec2842a3151d</property>
+    <property name="shotcut:caption">2021_12_Silvester2.mkv</property>
+  </chain>
+  <chain id="chain23" out="00:02:40.392">
+    <property name="length">00:02:40.425</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Silvester2.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">af2e1b3289e62f786077ec2842a3151d</property>
+    <property name="shotcut:caption">2021_12_Silvester2.mkv</property>
+  </chain>
+  <chain id="chain24" out="00:02:40.392">
+    <property name="length">00:02:40.425</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Silvester2.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">af2e1b3289e62f786077ec2842a3151d</property>
+    <property name="shotcut:caption">2021_12_Silvester2.mkv</property>
+  </chain>
+  <chain id="chain25" out="00:03:30.558">
+    <property name="length">00:03:30.591</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Silvester3.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">429858597dd3577217a1cbef4a7385b0</property>
+    <property name="shotcut:caption">2021_12_Silvester3.mkv</property>
+  </chain>
+  <chain id="chain26" out="00:03:30.558">
+    <property name="length">00:03:30.591</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Silvester3.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">429858597dd3577217a1cbef4a7385b0</property>
+    <property name="shotcut:caption">2021_12_Silvester3.mkv</property>
+  </chain>
+  <chain id="chain27" out="00:03:30.558">
+    <property name="length">00:03:30.591</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Silvester3.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">429858597dd3577217a1cbef4a7385b0</property>
+    <property name="shotcut:caption">2021_12_Silvester3.mkv</property>
+  </chain>
+  <chain id="chain28" out="00:03:30.558">
+    <property name="length">00:03:30.591</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Silvester3.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">429858597dd3577217a1cbef4a7385b0</property>
+    <property name="shotcut:caption">2021_12_Silvester3.mkv</property>
+  </chain>
+  <chain id="chain29" out="00:03:30.558">
+    <property name="length">00:03:30.591</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Silvester3.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">429858597dd3577217a1cbef4a7385b0</property>
+    <property name="shotcut:caption">2021_12_Silvester3.mkv</property>
+  </chain>
+  <chain id="chain30" out="00:01:05.643">
+    <property name="length">00:01:05.676</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Silvester4.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">7e0dd5396397d18fb971d423e4f8731f</property>
+    <property name="shotcut:caption">2021_12_Silvester4.mkv</property>
+  </chain>
+  <chain id="chain31" out="00:03:30.558">
+    <property name="length">00:03:30.591</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Silvester3.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">429858597dd3577217a1cbef4a7385b0</property>
+    <property name="shotcut:caption">2021_12_Silvester3.mkv</property>
+  </chain>
+  <tractor id="tractor2" in="00:00:00.000" out="00:00:00.594">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="chain30" in="00:01:04.224" out="00:01:04.818"/>
+    <track producer="chain31" in="00:01:47.289" out="00:01:47.883"/>
+    <transition id="transition4" out="00:00:00.594">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition5" out="00:00:00.594">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="mlt_service">mix</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+    </transition>
+  </tractor>
+  <chain id="chain32" out="00:03:30.558">
+    <property name="length">00:03:30.591</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Silvester3.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">429858597dd3577217a1cbef4a7385b0</property>
+    <property name="shotcut:caption">2021_12_Silvester3.mkv</property>
+  </chain>
+  <chain id="chain33" out="00:03:30.558">
+    <property name="length">00:03:30.591</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Silvester3.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">429858597dd3577217a1cbef4a7385b0</property>
+    <property name="shotcut:caption">2021_12_Silvester3.mkv</property>
+  </chain>
+  <chain id="chain34" out="00:03:30.558">
+    <property name="length">00:03:30.591</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Silvester3.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">429858597dd3577217a1cbef4a7385b0</property>
+    <property name="shotcut:caption">2021_12_Silvester3.mkv</property>
+  </chain>
+  <chain id="chain35" out="00:03:10.494">
+    <property name="length">00:03:10.527</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Silvester5.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">c13e60b4273dae9ef2727f246b9929b0</property>
+    <property name="shotcut:caption">2021_12_Silvester5.mkv</property>
+  </chain>
+  <chain id="chain36" out="00:03:20.427">
+    <property name="length">00:03:20.460</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Silvester6.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">ef6408402b373d0b20eea168f272c0f4</property>
+    <property name="shotcut:caption">2021_12_Silvester6.mkv</property>
+  </chain>
+  <tractor id="tractor3" in="00:00:00.000" out="00:00:00.495">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="chain35" in="00:03:09.999" out="00:03:10.494"/>
+    <track producer="chain36" in="00:00:01.320" out="00:00:01.815"/>
+    <transition id="transition6" out="00:00:00.495">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition7" out="00:00:00.495">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="mlt_service">mix</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+    </transition>
+  </tractor>
+  <chain id="chain37" out="00:03:20.427">
+    <property name="length">00:03:20.460</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Silvester6.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">ef6408402b373d0b20eea168f272c0f4</property>
+    <property name="shotcut:caption">2021_12_Silvester6.mkv</property>
+  </chain>
+  <chain id="chain38" out="00:03:20.427">
+    <property name="length">00:03:20.460</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Silvester6.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">ef6408402b373d0b20eea168f272c0f4</property>
+    <property name="shotcut:caption">2021_12_Silvester6.mkv</property>
+  </chain>
+  <chain id="chain39" out="00:03:20.427">
+    <property name="length">00:03:20.460</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Silvester6.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">ef6408402b373d0b20eea168f272c0f4</property>
+    <property name="shotcut:caption">2021_12_Silvester6.mkv</property>
+  </chain>
+  <chain id="chain40" out="00:03:20.427">
+    <property name="length">00:03:20.460</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Silvester6.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">ef6408402b373d0b20eea168f272c0f4</property>
+    <property name="shotcut:caption">2021_12_Silvester6.mkv</property>
+  </chain>
+  <chain id="chain41" out="00:03:20.427">
+    <property name="length">00:03:20.460</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Silvester6.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">ef6408402b373d0b20eea168f272c0f4</property>
+    <property name="shotcut:caption">2021_12_Silvester6.mkv</property>
+  </chain>
+  <chain id="chain42" out="00:03:20.427">
+    <property name="length">00:03:20.460</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Silvester6.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">ef6408402b373d0b20eea168f272c0f4</property>
+    <property name="shotcut:caption">2021_12_Silvester6.mkv</property>
+  </chain>
+  <chain id="chain43" out="00:03:20.427">
+    <property name="length">00:03:20.460</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Silvester6.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">ef6408402b373d0b20eea168f272c0f4</property>
+    <property name="shotcut:caption">2021_12_Silvester6.mkv</property>
+  </chain>
+  <chain id="chain44" out="00:03:20.427">
+    <property name="length">00:03:20.460</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Silvester6.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">ef6408402b373d0b20eea168f272c0f4</property>
+    <property name="shotcut:caption">2021_12_Silvester6.mkv</property>
+  </chain>
+  <chain id="chain45" out="00:03:20.427">
+    <property name="length">00:03:20.460</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Silvester6.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">ef6408402b373d0b20eea168f272c0f4</property>
+    <property name="shotcut:caption">2021_12_Silvester6.mkv</property>
+  </chain>
+  <chain id="chain46" out="00:01:41.382">
+    <property name="length">00:01:41.415</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Silvester7.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">6dfd9c27b9f380c63bf92d38fed8f5aa</property>
+    <property name="shotcut:caption">2021_12_Silvester7.mkv</property>
+  </chain>
+  <tractor id="tractor4" in="00:00:00.000" out="00:00:00.891">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="chain45" in="00:03:19.536" out="00:03:20.427"/>
+    <track producer="chain46" in="00:00:01.815" out="00:00:02.706"/>
+    <transition id="transition8" out="00:00:00.891">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition9" out="00:00:00.891">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="mlt_service">mix</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+    </transition>
+  </tractor>
+  <chain id="chain47" out="00:00:18.216">
+    <property name="length">00:00:18.249</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Silvester8.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">4b069b58980d206f4ede2f677b3872f7</property>
+    <property name="shotcut:caption">2021_12_Silvester8.mkv</property>
+  </chain>
+  <tractor id="tractor5" in="00:00:00.000" out="00:00:00.825">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="chain46" in="00:01:40.557" out="00:01:41.382"/>
+    <track producer="chain47" in="00:00:02.079" out="00:00:02.904"/>
+    <transition id="transition10" out="00:00:00.825">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition11" out="00:00:00.825">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="mlt_service">mix</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+    </transition>
+  </tractor>
+  <chain id="chain48" out="00:02:04.818">
+    <property name="length">00:02:04.851</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Silvester9.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">b09b6ec023cbc500d1d969c2e47cafc0</property>
+    <property name="shotcut:caption">2021_12_Silvester9.mkv</property>
+  </chain>
+  <tractor id="tractor6" in="00:00:00.000" out="00:00:01.452">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="chain47" in="00:00:16.764" out="00:00:18.216"/>
+    <track producer="chain48" in="00:00:00.924" out="00:00:02.376"/>
+    <transition id="transition12" out="00:00:01.452">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition13" out="00:00:01.452">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="mlt_service">mix</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+    </transition>
+  </tractor>
+  <chain id="chain49" out="00:02:04.818">
+    <property name="length">00:02:04.851</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Silvester9.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">b09b6ec023cbc500d1d969c2e47cafc0</property>
+    <property name="shotcut:caption">2021_12_Silvester9.mkv</property>
+  </chain>
+  <chain id="chain50" out="00:01:25.443">
+    <property name="length">00:01:25.476</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Silvester10.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">8af3342ea893eff8d291b9c503d9bd52</property>
+    <property name="shotcut:caption">2021_12_Silvester10.mkv</property>
+  </chain>
+  <chain id="chain51" out="00:01:05.808">
+    <property name="length">00:01:05.841</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Silvester11.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">6e58bf5a3d4456874dab7d7e024a7ea7</property>
+    <property name="shotcut:caption">2021_12_Silvester11.mkv</property>
+  </chain>
+  <tractor id="tractor7" in="00:00:00.000" out="00:00:00.891">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="chain50" in="00:01:24.552" out="00:01:25.443"/>
+    <track producer="chain51" in="00:00:03.597" out="00:00:04.488"/>
+    <transition id="transition14" out="00:00:00.891">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition15" out="00:00:00.891">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="mlt_service">mix</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+    </transition>
+  </tractor>
+  <chain id="chain52" out="00:01:05.808">
+    <property name="length">00:01:05.841</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Silvester11.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">6e58bf5a3d4456874dab7d7e024a7ea7</property>
+    <property name="shotcut:caption">2021_12_Silvester11.mkv</property>
+  </chain>
+  <chain id="chain53" out="00:00:22.539">
+    <property name="length">00:00:22.572</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Silvester12.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">84af89f81d8484cdb8b4d4e3f8891a54</property>
+    <property name="shotcut:caption">2021_12_Silvester12.mkv</property>
+  </chain>
+  <tractor id="tractor8" in="00:00:00.000" out="00:00:00.891">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="chain52" in="00:01:04.917" out="00:01:05.808"/>
+    <track producer="chain53" in="00:00:00.825" out="00:00:01.716"/>
+    <transition id="transition16" out="00:00:00.891">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition17" out="00:00:00.891">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="mlt_service">mix</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+    </transition>
+  </tractor>
+  <chain id="chain54" out="00:00:56.364">
+    <property name="length">00:00:56.397</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Silvester13.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">341b0d27ec0d3afb6ebab49b539f9dca</property>
+    <property name="shotcut:caption">2021_12_Silvester13.mkv</property>
+  </chain>
+  <tractor id="tractor9" in="00:00:00.000" out="00:00:00.990">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="chain53" in="00:00:20.922" out="00:00:21.912"/>
+    <track producer="chain54" in="00:00:01.518" out="00:00:02.508"/>
+    <transition id="transition18" out="00:00:00.990">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition19" out="00:00:00.990">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="mlt_service">mix</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+    </transition>
+  </tractor>
+  <chain id="chain55" out="00:00:53.856">
+    <property name="length">00:00:53.889</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Silvester14.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">72efc58eec49f7a285f337436f12d19d</property>
+    <property name="shotcut:caption">2021_12_Silvester14.mkv</property>
+  </chain>
+  <tractor id="tractor10" in="00:00:00.000" out="00:00:00.726">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="chain54" in="00:00:55.638" out="00:00:56.364"/>
+    <track producer="chain55" in="00:00:00.726" out="00:00:01.452"/>
+    <transition id="transition20" out="00:00:00.726">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition21" out="00:00:00.726">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="mlt_service">mix</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+    </transition>
+  </tractor>
+  <chain id="chain56" out="00:00:44.451">
+    <property name="length">00:00:44.484</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Silvester15.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">05e69ada6907f2725caba289903f03a6</property>
+    <property name="shotcut:caption">2021_12_Silvester15.mkv</property>
+  </chain>
+  <tractor id="tractor11" in="00:00:00.000" out="00:00:00.858">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="chain55" in="00:00:52.998" out="00:00:53.856"/>
+    <track producer="chain56" in="00:00:00.957" out="00:00:01.815"/>
+    <transition id="transition22" out="00:00:00.858">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition23" out="00:00:00.858">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="mlt_service">mix</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+    </transition>
+  </tractor>
+  <chain id="chain57" out="00:01:54.021">
+    <property name="length">00:01:54.054</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Silvester16.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">027f1d9ef4d02189d20612ad9ea69083</property>
+    <property name="shotcut:caption">2021_12_Silvester16.mkv</property>
+  </chain>
+  <chain id="chain58" out="00:00:59.730">
+    <property name="length">00:00:59.763</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Silvester18.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">dba046a94219eb33cbbee19898442e0b</property>
+    <property name="shotcut:caption">2021_12_Silvester18.mkv</property>
+  </chain>
+  <tractor id="tractor12" in="00:00:00.000" out="00:00:01.155">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="chain57" in="00:01:46.860" out="00:01:48.015"/>
+    <track producer="chain58" in="00:00:03.267" out="00:00:04.422"/>
+    <transition id="transition24" out="00:00:01.155">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition25" out="00:00:01.155">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <chain id="chain59" out="00:00:59.730">
+    <property name="length">00:00:59.763</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Silvester18.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">dba046a94219eb33cbbee19898442e0b</property>
+    <property name="shotcut:caption">2021_12_Silvester18.mkv</property>
+  </chain>
+  <playlist id="playlist0">
+    <property name="shotcut:video">1</property>
+    <property name="shotcut:name">V1</property>
+    <entry producer="chain17" in="00:00:06.501" out="00:00:35.607"/>
+    <entry producer="tractor0" in="00:00:00.000" out="00:00:00.693"/>
+    <entry producer="chain18" in="00:00:05.313" out="00:00:09.207"/>
+    <entry producer="chain19" in="00:00:10.626" out="00:00:23.562"/>
+    <entry producer="chain20" in="00:00:24.387" out="00:00:55.869"/>
+    <entry producer="tractor1" in="00:00:00.000" out="00:00:00.594"/>
+    <entry producer="chain21" in="00:01:18.051" out="00:01:37.125"/>
+    <entry producer="chain22" in="00:01:38.610" out="00:01:45.771"/>
+    <entry producer="chain23" in="00:01:46.365" out="00:02:14.091"/>
+    <entry producer="chain24" in="00:02:15.543" out="00:02:39.402"/>
+    <entry producer="chain25" in="00:00:03.003" out="00:00:34.848"/>
+    <entry producer="chain26" in="00:00:36.630" out="00:00:45.012"/>
+    <entry producer="chain27" in="00:00:46.761" out="00:00:55.869"/>
+    <entry producer="chain28" in="00:00:56.793" out="00:01:33.429"/>
+    <entry producer="chain29" in="00:01:34.254" out="00:01:38.016"/>
+    <entry producer="chain30" in="00:00:24.387" out="00:01:04.191"/>
+    <entry producer="tractor2" in="00:00:00.000" out="00:00:00.594"/>
+    <entry producer="chain31" in="00:01:47.916" out="00:01:54.054"/>
+    <entry producer="chain32" in="00:01:54.780" out="00:03:12.837"/>
+    <entry producer="chain33" in="00:03:14.190" out="00:03:16.995"/>
+    <entry producer="chain34" in="00:03:18.711" out="00:03:29.931"/>
+    <entry producer="chain35" in="00:00:02.772" out="00:03:09.966"/>
+    <entry producer="tractor3" in="00:00:00.000" out="00:00:00.495"/>
+    <entry producer="chain36" in="00:00:01.848" out="00:00:31.482"/>
+    <entry producer="chain37" in="00:00:32.175" out="00:00:38.544"/>
+    <entry producer="chain38" in="00:00:40.458" out="00:00:58.905"/>
+    <entry producer="chain39" in="00:01:16.368" out="00:01:38.016"/>
+    <entry producer="chain40" in="00:01:39.567" out="00:01:52.470"/>
+    <entry producer="chain41" in="00:01:53.328" out="00:02:13.728"/>
+    <entry producer="chain42" in="00:02:21.549" out="00:02:25.179"/>
+    <entry producer="chain43" in="00:02:26.796" out="00:02:44.352"/>
+    <entry producer="chain44" in="00:03:01.122" out="00:03:04.455"/>
+    <entry producer="chain45" in="00:03:05.412" out="00:03:19.503"/>
+    <entry producer="tractor4" in="00:00:00.000" out="00:00:00.891"/>
+    <entry producer="chain46" in="00:00:02.739" out="00:01:40.524"/>
+    <entry producer="tractor5" in="00:00:00.000" out="00:00:00.825"/>
+    <entry producer="chain47" in="00:00:02.937" out="00:00:16.731"/>
+    <entry producer="tractor6" in="00:00:00.000" out="00:00:01.452"/>
+    <entry producer="chain48" in="00:00:02.409" out="00:00:49.764"/>
+    <entry producer="chain49" in="00:00:50.820" out="00:01:42.867"/>
+    <entry producer="chain50" in="00:00:02.706" out="00:01:24.519"/>
+    <entry producer="tractor7" in="00:00:00.000" out="00:00:00.891"/>
+    <entry producer="chain51" in="00:00:04.521" out="00:00:40.326"/>
+    <entry producer="chain52" in="00:00:56.166" out="00:01:04.884"/>
+    <entry producer="tractor8" in="00:00:00.000" out="00:00:00.891"/>
+    <entry producer="chain53" in="00:00:01.749" out="00:00:20.889"/>
+    <entry producer="tractor9" in="00:00:00.000" out="00:00:00.990"/>
+    <entry producer="chain54" in="00:00:02.541" out="00:00:55.605"/>
+    <entry producer="tractor10" in="00:00:00.000" out="00:00:00.726"/>
+    <entry producer="chain55" in="00:00:01.485" out="00:00:52.965"/>
+    <entry producer="tractor11" in="00:00:00.000" out="00:00:00.858"/>
+    <entry producer="chain56" in="00:00:01.848" out="00:00:44.451"/>
+    <blank length="00:00:00.528"/>
+    <entry producer="chain57" in="00:00:00.000" out="00:01:46.827"/>
+    <entry producer="tractor12" in="00:00:00.000" out="00:00:01.155"/>
+    <entry producer="chain58" in="00:00:04.455" out="00:00:24.882"/>
+    <entry producer="chain59" in="00:00:25.872" out="00:00:55.176"/>
+  </playlist>
+  <tractor id="tractor13" title="Shotcut version 21.12.24" in="00:00:00.000" out="00:23:11.682">
+    <property name="shotcut">1</property>
+    <property name="shotcut:projectAudioChannels">2</property>
+    <property name="shotcut:projectFolder">0</property>
+    <property name="shotcut:scaleFactor">0.698537</property>
+    <track producer="background"/>
+    <track producer="playlist0"/>
+    <transition id="transition26">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="mlt_service">mix</property>
+      <property name="always_active">1</property>
+      <property name="sum">1</property>
+    </transition>
+    <transition id="transition27">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="version">0.1</property>
+      <property name="mlt_service">frei0r.cairoblend</property>
+      <property name="threads">0</property>
+      <property name="disable">1</property>
+    </transition>
+  </tractor>
+</mlt>

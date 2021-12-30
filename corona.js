@@ -731,8 +731,11 @@ const use_startMutRel=false; //!!!!
 
 const rMutStart=0.25; // !!!! 0.25-0.30 initial growth rate of odds y/(1-y)
 
+const factor_generationtime2=0.8; //!!!! Omicron has shorter generation time
+var strFactStartMut=1; // change Om sensitivity to measures with reference
+                       // at start of mut dynamics
 
-const time_startMut=new Date("2021-12-17"); // 2021-12-17 !!!! if fixed mut starting time
+const time_startMut=new Date("2021-12-18"); // 2021-12-17 !!!! if fixed mut starting time
 const dit_startMut2presentRel=5; // 5 if variable mut starting time
                           // (fixed time diff dit_startMut2present 2 present) 
 const dit_list2present
@@ -789,8 +792,6 @@ var rBoost=rBoostInit;
 
 var Ivacc1=0;   // old/standard variant     
 var Ivacc2=0;   // new variant if applicable  
-var IvaccPop=0; // !!!! as of now = immunity.I1vacc (needed in drawsim)
-// !!!! TODO: need fixed data-driven profile of vacc immunity factor for use in calibration; calculate it later from known Omega fractions and immunity.I1vacc (Delta) and immunity.I2vacc (Omega)
 
 var IvaccArray=[]; 
 for(var it=0; it<=itPresent; it++){ 
@@ -3858,7 +3859,8 @@ function doSimulationStep(doDrawing){ // logging "allowed" here !!
     ? stringency : data_stringencyIndex[i];
 
 
-  if(it>itPresent-10){ // doSimulationStep: logging "allowed"!!
+  if(false){ // doSimulationStep: logging "allowed"!!
+  //if(it>itPresent-10){ // doSimulationStep: logging "allowed"!!
     console.log(" doSimulationStep before corona.update: it=",it,
 		"data_cumCases[data_idataStart+it]=",
 		data_cumCases[data_idataStart+it],
@@ -4341,8 +4343,8 @@ Immunity.prototype.updateAgeGroups=function(rVacc,it){
       
       if(this.ageGroup==0){
 	this.vaccmaxreached=true; 
-	console.log("Warning: cannot vaccinate more than ",
-		    (100*this.pVaccmaxPop).toFixed(1),"% of population" );
+	//console.log("Warning: cannot vaccinate more than ",
+	//	    (100*this.pVaccmaxPop).toFixed(1),"% of population" );
       }
       else{
         this.pVaccTauAge[j-1][0]=(rVacc-p_remaining)/this.fAge[j-1];
@@ -4730,27 +4732,31 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
 
 
   // ###############################################
-  // true dynamics (0): calculate the factors contributing to the
-  //                    main infection process at step (2)
+  // true dynamics (0.1): 
+  // calculate Reff inside calibration (no if condition, overriden if appl)
   // ###############################################
-
  
-  // if in calibration, IvaccPop from global fixed var IvaccArray[it]
-  // if outside, IvaccPop calculated here below
-  // default is inside calibration R0
-  // corrIFR not used inside calibr R0
+  var IvaccCalib=(it>=0) ? IvaccArray[it] : 0; 
+
+  var i=Math.max(0, Math.min(
+    data_stringencyIndex.length-1, it+data_idataStart));
+  var stringencyCalib=data_stringencyIndex[i];
+
+  this.Reff=R0 * (1-IvaccCalib) * (1-this.xyz) 
+    * stringencyFactor(stringencyCalib) * calc_seasonFactor(it);
+
+
   
-  IvaccPop=(it>=0) ? IvaccArray[it] : 0; // inside calibr R0 from profile
 
-   //####### Reff w/o stringency/seasons inside calibr ############
-  this.Reff=R0 * (1-IvaccPop) * (1-this.xyz); 
-  //###############################################################
-
-
-
+  // ###############################################
+  // CoronaSim.updateOneDay: true dynamics (0.2): 
+  // calculate Reff outside calibration incl mutation dynamics
+  // ###############################################
+ 
   if( !inCalibration && (it>=0)){
 
-    // NOTICE: test if slider_R0_moved in higher level
+    
+    // NOTICE: whether slider_R0_moved is determined in higher level
 
     if(!slider_rVacc_moved){ // if slider moved, rVacc directly from slider
       var i=it+data_idataStart;
@@ -4766,19 +4772,15 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
 	? data_rBoost[i] : data_rBoost[data_rBoost.length-7];
     }
 
-
-
-    //########################################################
-    // CoronaSim.updateOneDay: update immunities and mutations
-    // !!!! check itStartMut if validating:
-    //      different to itPresent-dit_startMut2present
-    // !! do not shift updates to main doSimulationStep because
-    // then shifted by one time step
-    //########################################################
-
+    
+    // CoronaSim.updateOneDay (0.2) (calc Reff outside calibration:)
+    // update immunities and mutations
+    // !!!! check itStartMut in validation
+    
     var pMut=0; // default if simulateMutation=false or it<itStartMut;
     var R10=R0;
     var R20=R0;
+    
     
     if(it==0){immunity.initialize(country);} // in doSimulationStep, !calibr
     if(simulateMutation){
@@ -4789,6 +4791,8 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
 	pMut=pMutStart;
 	R10=mutationDynamics.R10;
 	R20=mutationDynamics.R20;
+	strFactStartMut=stringencyFactor(stringency);
+	
       }
       
       if(it>itStartMut){
@@ -4802,17 +4806,13 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
     var dx=(it==0) ? this.xyz : this.xtau[0]; // it=0: use accumulated incr.
     immunity.update(rVacc,rBoost,dx,pMut,it);
 
-
-    
-    IvaccPop=immunity.I1vacc;    // outside calibration !!!! TODO
     var I1=immunity.I1;
     var I2=immunity.I2;
 
     
-    //########################################################
-    // update age groups: not part of core simulation but of
+    // CoronaSim.updateOneDay (0.2): update age groups
+    // not part of core simulation but of
     // slaved IFR calculations
-    //########################################################
 
     immunity.updateAgeGroups(rVacc,it); // outside calibr, needed for IFR
     
@@ -4820,31 +4820,43 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
     corrIFR=(it>=tauDie)
       ? corrIFRarr[it-tauDie] : immunity.corrFactorIFR0; 
 
-    
-    //########################################################
-    // central Reff outside calibration (w/o stringency/seasons)
-    //########################################################
 
-    this.Reff=(simulateMutation)
-      ? (1-pMut)*R10*(1-I1) + pMut*R20*(1-I2)
-      : R0 * (1-I1);
 
+    // measures by stringency in [0,100] outside of calibration
     
+    if(!slider_stringency_moved){
+      var i=Math.max(0, Math.min(
+        data_stringencyIndex.length-1, it+data_idataStart));
+      stringency=data_stringencyIndex[i]; // otherwise glob var set by sliders
+    }
+
+     //!!!! MT 2021-12-30: Omicron shorter generation time: TEST factor 0.5
+    var strFact1=stringencyFactor(stringency);
+    var strFact2=strFactStartMut
+	*Math.pow(strFact1/strFactStartMut,1./factor_generationtime2);
+    var Reff1=R10*(1-I1)*strFact1*calc_seasonFactor(it);
+    var Reff2=R20*(1-I2)*strFact2*calc_seasonFactor(it);
+
+    //##########  final Reff outside calibration ##################
+    this.Reff=(simulateMutation) ? (1-pMut)*Reff1+pMut*Reff2 : R0 * (1-I1);
+    //#############################################################
+  
+   
     //########################################################
     // test
     //########################################################
-    
-    if(false){
-    //if((it<3)||(it>=itPresent-10)){
+
+
+    //console.log("stringency=",stringency," rVacc=",rVacc);
+    //if(false){
+    if((it<10)||(it>=itPresent-10)){
     //if(it>=itPresent-10){
-    //if(Math.abs(IvaccArray[it]-IvaccPop)>1e-6){
       console.log("update outside calib: it=",it,
 		  " rVacc=",rVacc.toFixed(4),
 		  " rBoost=",rBoost.toFixed(4),
 		  " pVacc=",pVacc.toFixed(4),
 		  " pVaccFull=",pVaccFull.toFixed(4),
 		  " pBoost=",pBoost.toFixed(4),
-		  " IvaccPop=",IvaccPop.toFixed(4),
 		  "\n    I1vacc=",immunity.I1vacc.toFixed(4),
 		  " I2vacc=",immunity.I2vacc.toFixed(4),
 		  " this.xyz=",this.xyz.toFixed(4),
@@ -4858,8 +4870,14 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
 		  " R20=",R20.toFixed(3),
 		  " I1=",I1.toFixed(4),
 		  " I2=",I2.toFixed(4),
-		  " Reff=",this.Reff.toFixed(3),
-		 "");
+		  " strFactStartMut=",strFactStartMut.toFixed(2),
+		  " strFact1=",strFact1.toFixed(2),
+		  " strFact2=",strFact2.toFixed(2),
+		  "\n    Reff1=",Reff1.toFixed(2),
+		  " Reff2=",Reff2.toFixed(2),
+		  " pMut=",pMut.toFixed(2),
+		  " this.Reff=",this.Reff,
+		  "");
     }
 
 
@@ -4870,20 +4888,7 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
 
 
   
-  // include seasonal factor and political measures by stringency in [0,100]
-  // debug at the end of update => "debug"
-  
-  if(inCalibration||(!slider_stringency_moved)){
-    var i=Math.max(0, Math.min(
-      data_stringencyIndex.length-1, it+data_idataStart));
-    stringency=data_stringencyIndex[i]; // otherwise glob var set by sliders
-  }
 
-  //#################################################################
-  this.Reff *= stringencyFactor(stringency) * calc_seasonFactor(it);
-  //#################################################################
-
-  
   // source term from external trips from returners of foreign regions
 
   var x0source=casesInflow/100000;
@@ -5097,7 +5102,6 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
     if(true){
       console.log(" \nCoronaSim.updateOneDay: it-itPresent=",it-itPresent,
 		" R0=",R0.toFixed(2),
-		" (1-IvaccPop)=",(1-IvaccPop).toFixed(2),
 		" (1-this.xyz)=",(1-this.xyz).toFixed(2),
 		" seasonFac=",calc_seasonFactor(it).toFixed(2),
 		" stringFact=",
@@ -6184,7 +6188,7 @@ DrawSim.prototype.transferSimData=function(it){
     var reduceFactor=1-w+w*reduceFactorRaw;
     this.dataG[33].data[it]*=reduceFactor;
     this.dataG[53].data[it]*=reduceFactor;
-    console.log("drawsim: ICU and death incidence reduce factor=",reduceFactor);
+
   }
 
   

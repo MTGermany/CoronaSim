@@ -1,0 +1,130 @@
+
+Simulationsupdate Omicron: Skifahren oder nicht?
+
+Hier gebe ich einen Update, wie sich die nächsten Wochen und Monate in meiner Simulation zeigen. Die Simulation zeigt: es brodelt bereits unter der Oberfläche und die Inzidenzen werden im Januar steigen.
+
+Generell ist die Höhe des Omicron-Peaks nur sehr ungenau voraussagbar, da sie sensitiv von der aktuellen und unbekannten Omicron-Durchdringung abhängt. Sie wird in Deutschland einer Fall-Wocheninzidenz zwischen 500 und 1500 entsprechen. Weniger unsicher ist der Zeitpunkt des Peaks (Anfang bis Mitte Februar) und das Ende der Seuche (Inzidenz fällt unter 200 Anfang bis Mitte März).
+
+Daneben gebe ich auch Projektionen für das Skifahrerland Österreich und den klassischen "Omicron-Ländern" Dänemark, England und Südafrika.
+
+00:00 Intro
+
+00:30 Simulation Deutschland
+
+03:00 Es brodelt bereits unter der Oberfläche
+
+06:28 Projektion bis März im Standardszenario
+
+09:55 Szenario "voll boostern"
+
+11:45 Szenario "gar nicht mehr boostern"
+
+13:46 Österreich: Skifahren oder nicht?
+
+16:55 England
+
+18:55 Dänemark
+
+20:32 Südafrika
+
+22:21 Schluss
+
+
+[ich im Bild mit Omicron im Hintergrund] [edit ~/bin/virtual_webcam_background/config.yaml] bzw cp config_corona.yaml config.yaml
+
+[Fenster 1] startVirtualBackground [Fenster 2] vlc input "--video-filter=croppadd{croptop=50,cropbottom=50}" v4l2:///dev/video2 !! video10 ging nicht mehr!! Musste modprobe laufen lassen und config.yaml umstellen => ~/bin/virtual_webcam_background/README_Treibi
+
+============================================================
+
+
+Hallo und herzlich willkommen zu meiner Silvester-Corona-Simulation! Hier kurz die aktuelle Lage. In einem weiteren Video blicke ich unter die Motorhaube von corona-simulation.de und insbesondere, wie Omicron simuliert wird. Im Gegensatz zu Delta ist das komplizierter, da es jetzt ja auch Impfungen und Booster gibt, die unterschiedlich gegen Delta und Omicron wirken.
+
+
+[Corona-simulation.de Webseite, Deutschland Standardszenario, Start August, Stop 18. November]
+
+Starten wir mit dem Standardszenario Deutschland. Achten Sie auf die drei Regler, die sich datengetrieben aendern. Lockdownstaerke=stringency, Impfrate und Boostrate
+
+[ https://youtu.be/dFWpiL1mIO4?t=2153 abspielen]
+
+Bereits 18. November habe ich einen Peak bei 500 Ende November und eine deutlich geringere Weihnachtsinzidenz um 350 vorausgesagt, weil ich ansteigende Massnahmen und eine hohe Boosterung erwartete
+
+[Sim bis gegenwart]
+
+In der Tat - acten Sie auf die datengetriebenen Regler - im Wesentlichen so eingetroffen, die Weihnachtsinzidenz ist sogar etwas niedriger, bei 250 statt 350. Ist nun alles Gut? Aus zwei Gruenden nicht
+
+1. Wenig Tests zu Weihnachten 2. Sie ahnen es schon: Omicron
+
+[Fenster "Tests"]
+
+Sie sehen, dass die aktuelle Infektionszahl (violett) schon leicht hochgeht. Warum gehen dann die ebenfalls simulierten Inzidenzen (orange Kurve) runter, im Einklang mit den Daten (hellrote Balken)?
+
+Erstens, weil zu Weihnachten und schon davor weniger getestet wird
+
+[Infektionsratenansicht]
+
+Der Positivanteil ging hingegen kaum runter von 21% auf 20%
+
+[Fenster "Tests"]
+
+Zweitens, weil die Inzidenzen ja aus bereits ausgewerteten PCR-Tests beruhen und ausserdem ein 7-Tages-Mittel in die Vergangenheit. Verzoegerung etwa 3-5 Tage von Infektion bis Test, 1-2 Tage fuer die Auswertung und Durchlaufen der Meldekette (Sie wissen ja, die deutschen Faxgeraete) und schliesslich  3.5 Tage durch das gleitende Wochenmittel, insgesamt mind. 7 Tage Verzoegerungen zur aktuellen Dynamik der violetten Neuinfektionen
+
+Warum gehen aber die aktuellen Infektionen bereits jetzt so hoch: Omicron!
+
+[Fenster Inzidenzen und bis Mitte Februar simulieren]
+
+Bei gleichbleibenden Impf-, Boosterraten sowie Shutdownstaerke von 84% Maximum um 800 Anfang Februar. Mitte März fällt Inzidenz unter 200 und Seuche ist vorbei. Maximale ICU-Belegung und maximale Todeszahlen kaum hoeher als am Delta-Peak
+
+So etwas Aehnliches habe ich bereits vor knapp 2 Wochen vorausgesagt:
+
+[https://youtu.be/vhjcbYVHKwE?list=PLhsJ0l0GYIUqwSf4esXIdjw-4hGlwqJtD&t=330]
+
+Maximum 1200, Zeit Anfang Februar, unter 200 Mitte Maerz. Also nun Maximum bei 800 statt 1200, die Zeiten fuer Max und 200er Inzidenz aber kaum veraendert. Das Maximum hat extreme Unsicherheiten, da es sehr stark vom aktuellen Omicron-Anteil abhaengt - wohlgemerkt, vom tatsaechlichen, nicht dem gemessenen. Es kann bei 500 und bei 1500 liegen, nicht jedoch bei 4000 wie in einer Simulation des Fernsehsenders ARD. Die vorausgesagten Zeiten sind hingegen sehr robust.
+
+[Start D Gegenwart, 10% statt 5% Boosterung]
+
+Etwas Verbesserung
+
+[Start D Gegenwart, 0% statt 5% Boosterung]
+
+Deutliche Verschlechterung
+
+Shutdownlevel ausgereizt
+
+[Oesterreich]
+
+Anders Oesterreich: Standard: Peak so hoch wie Delta Stringency auf 76%, weniger als D, Tourismus erlaubt. Omicron-Welle kaum vorhanden. Warum: Mehr geimpft u geboostert
+
+[England]
+
+Nun paar Laender mit bereits nahezu 100% Omicron: England: Ohne Aenderung Inzidenz > 2000, aber keine hoehere ICU-Inzidenz als D Stringency auf 65% (weit unter D: 84%) Wirkt nach 7-10 Tagen deutlich
+
+[Daenemark]
+
+Aehnlich: Anhebung Stringency 39% auf 65% hilft massiv, aber erst nach 10 Tagen. 10 Tage eher. Waere jetzt der Peak!
+
+[Suedafrika]
+
+Faellt von selbst. Doch warum so langsam?
+
+[Tests]
+
+Massiv weniger Tests -> weniger Inzidenzen bei gleichen Infektionen
+
+[Infektionsraten]
+
+Positivrate der Tests unveraendert
+
+Aber dennoch: Welle dort i.W. vorbei
+
+
+
+[cp config_ski.yaml config.yaml]
+
+Ski Heil, servus und auf Wiedersehen!
+
+
+
+
+
+
+

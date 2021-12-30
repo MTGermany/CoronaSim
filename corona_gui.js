@@ -152,6 +152,7 @@ slider_stringency.oninput = function() {
   stringency=parseInt(this.value);
   slider_stringencyText.innerHTML = "&nbsp;"+stringency+" %";
   slider_stringency_moved=true;
+ // console.log("stringency slider moved: stringency=",stringency);
 }
 
 

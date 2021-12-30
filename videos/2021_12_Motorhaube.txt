@@ -1,25 +1,35 @@
 
 Blick unter die Haube von corona-simulation.de
 
+16:55 England
+18:55 D\"anemark
+20:32 S\"udafrika
 
 [ich im Bild mit Omicron im Hintergrund]
-[edit bin/virtual_webcam_background/
+[edit ~/bin/virtual_webcam_background/config.yaml] bzw
+cp config_corona.yaml config.yaml
+
 [Fenster 1] startVirtualBackground
-[Fenster 2] vlc input "--video-filter=croppadd{croptop=50,cropbottom=50}" v4l2:///dev/video10
+[Fenster 2] vlc input "--video-filter=croppadd{croptop=50,cropbottom=50}" v4l2:///dev/video2
+!! video10 ging nicht mehr!! Musste modprobe laufen lassen und
+config.yaml umstellen => ~/bin/virtual_webcam_background/README_Treibi
+
+============================================================
 
 
 Hallo und herzlich willkommen zu meiner Silvester-Corona-Simulation!
-Neben aktuellen Omicron-Simulationen in
-interessanten Laendern werfe ich hier auch einen Blick unter die
+Hier kurz die aktuelle Lage.
+In einem weiteren Video blicke ich unter die
 Motorhaube von corona-simulation.de und insbesondere, wie Omicron
 simuliert wird. Im Gegensatz zu Delta ist das komplizierter, da es
 jetzt ja auch Impfungen und Booster gibt, die unterschiedlich gegen
 Delta und Omicron wirken.
 
-[Corona-simulation.de Webseite, Deutschland Standardszenario, Start
-August, Stop 20. November]
 
-Zun\"achst aber die Simulationen, Standardszenario Deutschland. Achten
+[Corona-simulation.de Webseite, Deutschland Standardszenario, Start
+August, Stop 18. November]
+
+Starten wir mit dem Standardszenario Deutschland. Achten
 Sie auf die drei Regler, die sich datengetrieben
 aendern. Lockdownstaerke=stringency, Impfrate und Boostrate
 
