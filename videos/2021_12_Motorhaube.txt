@@ -1,187 +1,133 @@
 
 Blick unter die Haube von corona-simulation.de
 
-16:55 England
-18:55 D\"anemark
-20:32 S\"udafrika
+In diesem technischen Video (ohne Simulationen!) werfe ich einen Blick unter die Motorhaube des Corona-Simulators. Warum breitet sich Omicron gemäß eines logistischen Wachstums mit Wachstumsrate r aus und wie bestimmt man r aus den Daten?? Wie hängen die aktuellen Reproduktionsraten R1 und R2 von Delta und Omicron von r ab und welche Faktoren liegen zwischen diesen und den Basisreproduktionsraten R10 bzw R20? Warum muss R20 nicht notwendigerweise größer als R10 sein, obwohl Omicron drastisch zunimmt? Was ändert sich, wenn die Generationenzeit von Omikron kleiner als die von Delta ist? Wie schätzt man die Basisreproduktionszahlen im Simulator und ermöglicht damit mittels den Faktoren für Impfungen, Boosterungen, vergangene Infektionen, Isolationsmaßnahmen und der Jahreszeit die Simulation der Zukunftsszenarien?
 
-[ich im Bild mit Omicron im Hintergrund]
-[edit ~/bin/virtual_webcam_background/config.yaml] bzw
-cp config_corona.yaml config.yaml
 
-[Fenster 1] startVirtualBackground
-[Fenster 2] vlc input "--video-filter=croppadd{croptop=50,cropbottom=50}" v4l2:///dev/video2
-!! video10 ging nicht mehr!! Musste modprobe laufen lassen und
-config.yaml umstellen => ~/bin/virtual_webcam_background/README_Treibi
+00:00 Intro
 
-============================================================
+02:48 Delta vs. Omicron
 
+04:14 Bestimmung der logistischen Wachstumrate der Omicron-Ausbreitung
 
-Hallo und herzlich willkommen zu meiner Silvester-Corona-Simulation!
-Hier kurz die aktuelle Lage.
-In einem weiteren Video blicke ich unter die
-Motorhaube von corona-simulation.de und insbesondere, wie Omicron
-simuliert wird. Im Gegensatz zu Delta ist das komplizierter, da es
-jetzt ja auch Impfungen und Booster gibt, die unterschiedlich gegen
-Delta und Omicron wirken.
+09:40 Herleitung der logistischen Kurve aus den Annahmen
 
+19:29 Basisreproduktionsrate von Omikron
 
-[Corona-simulation.de Webseite, Deutschland Standardszenario, Start
-August, Stop 18. November]
+24:27 Bestimmung der effektiven Infektionsdynamik des Simulators
 
-Starten wir mit dem Standardszenario Deutschland. Achten
-Sie auf die drei Regler, die sich datengetrieben
-aendern. Lockdownstaerke=stringency, Impfrate und Boostrate
+27:57 Kalibrierung der Basisreproduktionsraten von Delta und Omega im Simulator
 
-[ https://youtu.be/dFWpiL1mIO4?t=2153 abspielen]
+30:30 Impf-Immunitäten
 
-Bereits 18. November habe ich einen Peak bei 500 Ende November und eine
-deutlich geringere Weihnachtsinzidenz um 350 vorausgesagt, weil ich
-ansteigende 
-Massnahmen und eine hohe Boosterung erwartete
+36:36 Realisierung im Simulator
 
-[Sim bis gegenwart]
 
-In der Tat - acten Sie auf die datengetriebenen Regler - im Wesentlichen so
-eingetroffen, die Weihnachtsinzidenz ist sogar etwas niedriger, bei
-250 statt 350. Ist nun alles Gut? Aus zwei Gruenden nicht
+Intro
 
-1. Wenig Tests zu Weihnachten
-2. Sie ahnen es schon: Omicron
+=====
 
-[Fenster "Tests"]
+[Ich Vollbild mit Doktorhut] vlc input "--video-filter=croppadd{croptop=10,cropbottom=10}" v4l2:///dev/video0 vlc input "--video-filter=croppadd{cropleft=0,cropright=0}" v4l2:///dev/video0
 
-Sie sehen, dass die aktuelle Infektionszahl (violett) schon leicht
-hochgeht. Warum gehen dann die ebenfalls simulierten Inzidenzen
-(orange Kurve) runter, im Einklang mit den Daten (hellrote Balken)?
 
-Erstens, weil zu Weihnachten und schon davor weniger getestet wird
+Hallo und herzlich willkommen zu meinem letzten Corona-Simulationsvideo dieses Jahres.
 
-[Infektionsratenansicht]
+Hier werfe ich einen Blick unter die Motorhaube des Simulators.
 
-Der Positivanteil ging hingegen kaum runter von 21% auf 20%
+Und zwar nicht die verschiedenen Module, die die Tests simulieren, denn: Infektionen sind nicht gleich Fälle, d.h. positive PCR-Tests. Allerhand Filter und Zeitverzögerungen liegen zwische beiden. Aber das habe ich schon früher gezeigt.
 
-[Fenster "Tests"]
+Hier geht es um die eigentliche Infektionsdynamik, d.h. den Kern des Simulators, v.A., was seit der  Omicron-Variante neu hinzukam. Hier zeige ich nun
 
-Zweitens, weil die Inzidenzen ja aus bereits ausgewerteten PCR-Tests
-beruhen und ausserdem ein 7-Tages-Mittel in die
-Vergangenheit. Verzoegerung etwa 3-5 Tage von Infektion bis Test, 1-2
-Tage fuer die Auswertung und Durchlaufen der Meldekette (Sie wissen
-ja, die deutschen Faxgeraete) und schliesslich  3.5 Tage durch das gleitende
-Wochenmittel,
-insgesamt mind. 7 Tage Verzoegerungen zur aktuellen Dynamik der
-violetten Neuinfektionen
+1. Empirie: Wie Delta und Omicron zusammenwirken und wie sie sich unterscheiden
 
-Warum gehen aber die aktuellen Infektionen bereits jetzt so hoch:
-Omicron!
+2. Wie man die Rate des logistischen Wachstums des Omicron-Anteils aus den Daten bestimmt
 
-[Fenster Inzidenzen und bis Mitte Februar simulieren]
+3. Wie die Rate des logistischen Wachstums mit den Reproduktionsraten zusammenhängen
 
-Bei gleichbleibenden Impf-, Boosterraten sowie Shutdownstaerke von 84%
-Maximum um 800 Anfang Februar. Mitte M\"arz f\"allt Inzidenz
-unter 200 und Seuche ist vorbei. Maximale ICU-Belegung und maximale
-Todeszahlen kaum hoeher als am Delta-Peak
+4. Wie man die Basisreproduktionsrate von Omicron bestimmen kann und warum sie nicht notwendigerweise größer als die von Delta sein muss, obwohl sich Omicron rapide ausbreitet
 
-So etwas Aehnliches habe ich bereits vor knapp 2 Wochen vorausgesagt:
+5. Wie Basisreproduktionsraten, Impfungen/Booster, vergangene Infektinen, Corona-Maßnahmen und die jahreszeit auf die Dynamik im Simulator wirken
 
-[https://youtu.be/vhjcbYVHKwE?list=PLhsJ0l0GYIUqwSf4esXIdjw-4hGlwqJtD&t=330]
+6. Empirisches zu den Immunitäten von Impfung und Booster gegen Delta und Omicron
 
-Maximum 1200, Zeit Anfang Februar, unter 200 Mitte Maerz. Also nun
-Maximum bei 800 statt 1200, die Zeiten fuer Max und 200er Inzidenz
-aber kaum veraendert. Das Maximum hat extreme Unsicherheiten, da es
-sehr stark vom aktuellen Omicron-Anteil abhaengt - wohlgemerkt, vom
-tatsaechlichen, nicht dem gemessenen. Es kann
-bei 500 und bei 1500 liegen, nicht jedoch bei 4000 wie in einer
-Simulation des Fernsehsenders ARD. Die vorausgesagten Zeiten sind
-hingegen sehr robust.
+7. Berechnung der aktuellen Immunitäten im Simulator
 
-[Start D Gegenwart, 10% statt 5% Boosterung]
+WARNUNG: Es kommen nun fette mathematische Formeln. Ich hoffe auf eine Million anfängliche Zuschauer, denn: Wenn jede Formel etwa die Hälfte abschreckt, sind nach den 20 Formeln noch ein Anteil 1 durch 2 hoch 20, also 1/1 Million bzw ein einziger noch dabei. Sind Sie der oder diejenige?
 
-Etwas Verbesserung
 
-[Start D Gegenwart, 0% statt 5% Boosterung]
+1. Empirie: Wie Delta und Omicron zusammenwirken
 
-Deutliche Verschlechterung
+================================================
 
-Shutdownlevel ausgereizt
+[2021_12_Omicron.pdf]
 
-[Oesterreich]
 
-Anders Oesterreich:
-Standard: Peak so hoch wie Delta
-Stringency auf 76%, weniger als D, Tourismus erlaubt. Omicron-Welle
-kaum vorhanden. Warum: Mehr geimpft u geboostert
+2.  Rate des logistischen Wachstums des Omicron-Anteils
 
-[England]
+=======================================================
 
-Nun paar Laender mit bereits nahezu 100% Omicron: England: Ohne
-Aenderung Inzidenz > 2000, aber keine hoehere ICU-Inzidenz als D
-Stringency auf 65% (weit unter D: 84%) Wirkt nach 7-10 Tagen deutlich
+https://files.ssi.dk/covid19/omikron/statusrapport/rapport-omikronvarianten-27122021-tr73
 
-[Daenemark]
+[2021_12_Omicron.pdf]
 
-Aehnlich: Anhebung Stringency 39% auf 65% hilft massiv, aber erst nach
-10 Tagen. 10 Tage eher. Waere jetzt der Peak!
+S. 33 von https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/1043807/technical-briefing-33.pdf
 
-[Suedafrika]
 
-Faellt von selbst. Doch warum so langsam?
+3. Rate des logistischen Wachstums vs. Reproduktionsraten R1 und R2
 
-[Tests]
+==================================================================
 
-Massiv weniger Tests -> weniger Inzidenzen bei gleichen Infektionen
+[2021_12_Omicron.pdf]
 
-[Infektionsraten]
+4. Bestimmung der Basisreproduktionsrate von Omicron
 
-Positivrate der Tests unveraendert
+=====================================================
 
-Aber dennoch: Welle dort i.W. vorbei
+[2021_12_Omicron.pdf]
 
+5. Einflussfaktoren im Simulator
 
-################################################################
-[Ich mit Doktorhut]
-################################################################
+===============================
 
-Ausbreitung Omicron
-==================
+Wie Basisreproduktionsraten, Impfungen/Booster, vergangene Infektinen, Corona-Maßnahmen und die jahreszeit auf die Dynamik im Simulator wirken
 
+[2021_12_Omicron.pdf]
 
-2021_12_Omicron.pdf
-Nach
-"Latest Obs 2: Update" S. 42 von 
-https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/1043807/technical-briefing-33.pdf
+6. Empirisches zu den Immunitäten von Impfung und Booster gegen Delta und Omicron
 
-Dann S. 43,
+========================================================
 
-Wirkung der Impfungen
-=====================
+S. 26 von https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/1043807/technical-briefing-33.pdf
 
-S. 26
-- oben li: Astra-Zeneca wirkt als Impfung nahezu nix gegen Omicron
-- oben re: Bionec-Booster wirkt etwa 50%, Moderna 60% gegen Omicron,
-  beide 90-98% gegen Delta
+- oben li: Astra-Zeneca wirkt als Impfung nahezu nix gegen Omicron - oben re: Bionec-Booster wirkt etwa 50%, Moderna 60% gegen Omicron,   beide 90-98% gegen Delta
 
-- unten li: Biontec gegen Delta von 90% auf 60% nach halben Jahr
-                    gegen Omicron von 60% auf 0% nach 4 Monaten
+- unten li: Biontec gegen Delta von 90% auf 60% nach halben Jahr                     gegen Omicron von 60% auf 0% nach 4 Monaten
 
-- unten re Bionec Booster auf Bionec Impfung 90-95% Delta, 70-50% Om
-           Moderna Booster gleich Delta, besser Omicron: 80-70%
+- unten re Bionec Booster auf Bionec Impfung 90-95% Delta, 70-50% Om            Moderna Booster gleich Delta, besser Omicron: 80-70%
 
-S 27
-- Moderna als Basisimpfung besser als Biontec gegen Delta, gleich
-  gegen Omicron
+S 27 - Moderna als Basisimpfung besser als Biontec gegen Delta, gleich   gegen Omicron
 
-Dann 2021_12_Omicron.pdf ...
+[2021_12_Omicron.pdf]
 
+7. Berechnung der aktuellen Immunitäten im Simulator
 
+======================================================
 
+[2021_12_Omicron.pdf]
 
+Wie sieht es nun mit den Intensivstationsbelegung und den Todesfällen aus? Hier gehe ich um eine Reduktion um einen Faktor 0.4 ausgehend von der kalibrierten bisherigen Infection-Fatality Rate und Infection-ICU-Rate aus: Omicron Ist nur 40% so schwerkrankmachend wie Delta. Und, wie üblich, folgen die Intensivbelegungen bzw Tote 10 bzw 20 Tage nach Infektion
 
+Schluss
 
+=======
 
+[Ich ohne Doktorhut]
 
-[cp config_ski.yaml config.yaml]
-Ski Heil, servus und auf Wiedersehen!
+Das waren nun die technischen Details und Modelle hinter dem Simulator. Ich hoffe, es haben noch nicht alle weggeklickt. Auch, wenn Sie nicht alles verstanden haben, sehen Sie doch, wie viel Mathematik und auch empirische Datenanalyse im Simulator steckt, mit der man aber die neue Omicron-Variante doch ziemlich gut verstehen kann
+
+Ich wünsche ein gesundes und erfolgreiches neues Jahr.
+
+Ski Heil, Servus und auf Wiedersehen!
 
 
 

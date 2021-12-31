@@ -1,0 +1,1177 @@
+<?xml version="1.0" standalone="no"?>
+<mlt LC_NUMERIC="C" version="7.5.0" title="Shotcut version 21.12.24" producer="main_bin">
+  <profile description="automatic" width="1346" height="846" progressive="1" sample_aspect_num="1" sample_aspect_den="1" display_aspect_num="673" display_aspect_den="423" frame_rate_num="1000" frame_rate_den="33" colorspace="709"/>
+  <chain id="chain0" out="00:04:01.815">
+    <property name="length">00:04:01.848</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Motorhaube1.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="shotcut:hash">c4cc4eefc7251758fd24f8707ee13737</property>
+    <property name="ignore_points">0</property>
+    <property name="creation_time">2021-12-30T22:53:17</property>
+    <property name="xml">was here</property>
+  </chain>
+  <chain id="chain1" out="00:00:56.760">
+    <property name="length">00:00:56.793</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Motorhaube2.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">4b1a285cfae45c047473b0ab04ff0a47</property>
+  </chain>
+  <chain id="chain2" out="00:05:54.054">
+    <property name="length">00:05:54.087</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Motorhaube3.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">5e69ad58fa2eab6158aa6163b4abf4ef</property>
+  </chain>
+  <chain id="chain3" out="00:01:44.451">
+    <property name="length">00:01:44.484</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Motorhaube4.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">43afc915bfcd295d8221aa5a94108457</property>
+  </chain>
+  <chain id="chain4" out="00:13:11.550">
+    <property name="length">00:13:11.583</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Motorhaube5.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">2434fffa81f391eb42ccff63a9d0f6a3</property>
+  </chain>
+  <chain id="chain5" out="00:05:31.482">
+    <property name="length">00:05:31.515</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Motorhaube6.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">74943b0aef63acccbe0e7e73b92fad92</property>
+  </chain>
+  <chain id="chain6" out="00:08:50.259">
+    <property name="length">00:08:50.292</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Motorhaube7.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">7831f1281f9240d9d7e23ed37da3a6c7</property>
+  </chain>
+  <chain id="chain7" out="00:10:03.795">
+    <property name="length">00:10:03.828</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Motorhaube8.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">aad5419afb7b5b6d4c8121a85d3eebae</property>
+  </chain>
+  <chain id="chain8" out="00:01:06.897">
+    <property name="length">00:01:06.930</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Motorhaube9.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">394884e7ccb4e6876b29a868add78b28</property>
+  </chain>
+  <playlist id="main_bin" title="Shotcut version 21.12.24">
+    <property name="shotcut:projectAudioChannels">2</property>
+    <property name="shotcut:projectFolder">0</property>
+    <property name="xml_retain">1</property>
+    <entry producer="chain0" in="00:00:00.000" out="00:04:01.815"/>
+    <entry producer="chain1" in="00:00:00.000" out="00:00:56.760"/>
+    <entry producer="chain2" in="00:00:00.000" out="00:05:54.054"/>
+    <entry producer="chain3" in="00:00:00.000" out="00:01:44.451"/>
+    <entry producer="chain4" in="00:00:00.000" out="00:13:11.550"/>
+    <entry producer="chain5" in="00:00:00.000" out="00:05:31.482"/>
+    <entry producer="chain6" in="00:00:00.000" out="00:08:50.259"/>
+    <entry producer="chain7" in="00:00:00.000" out="00:10:03.795"/>
+    <entry producer="chain8" in="00:00:00.000" out="00:01:06.897"/>
+  </playlist>
+  <producer id="black" in="00:00:00.000" out="00:40:19.041">
+    <property name="length">00:40:19.074</property>
+    <property name="eof">pause</property>
+    <property name="resource">0</property>
+    <property name="aspect_ratio">1</property>
+    <property name="mlt_service">color</property>
+    <property name="mlt_image_format">rgba</property>
+    <property name="set.test_audio">0</property>
+  </producer>
+  <playlist id="background">
+    <entry producer="black" in="00:00:00.000" out="00:40:19.041"/>
+  </playlist>
+  <chain id="chain9" out="00:04:01.815">
+    <property name="length">00:04:01.848</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Motorhaube1.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="shotcut:hash">c4cc4eefc7251758fd24f8707ee13737</property>
+    <property name="ignore_points">0</property>
+    <property name="creation_time">2021-12-30T22:53:17</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:caption">2021_12_Motorhaube1.mkv</property>
+  </chain>
+  <chain id="chain10" out="00:04:01.815">
+    <property name="length">00:04:01.848</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Motorhaube1.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="shotcut:hash">c4cc4eefc7251758fd24f8707ee13737</property>
+    <property name="ignore_points">0</property>
+    <property name="creation_time">2021-12-30T22:53:17</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:caption">2021_12_Motorhaube1.mkv</property>
+  </chain>
+  <chain id="chain11" out="00:00:56.760">
+    <property name="length">00:00:56.793</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Motorhaube2.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">4b1a285cfae45c047473b0ab04ff0a47</property>
+    <property name="shotcut:caption">2021_12_Motorhaube2.mkv</property>
+  </chain>
+  <chain id="chain12" out="00:04:01.815">
+    <property name="length">00:04:01.848</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Motorhaube1.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="shotcut:hash">c4cc4eefc7251758fd24f8707ee13737</property>
+    <property name="ignore_points">0</property>
+    <property name="creation_time">2021-12-30T22:53:17</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:caption">2021_12_Motorhaube1.mkv</property>
+  </chain>
+  <chain id="chain13" out="00:04:01.815">
+    <property name="length">00:04:01.848</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Motorhaube1.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="shotcut:hash">c4cc4eefc7251758fd24f8707ee13737</property>
+    <property name="ignore_points">0</property>
+    <property name="creation_time">2021-12-30T22:53:17</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:caption">2021_12_Motorhaube1.mkv</property>
+  </chain>
+  <chain id="chain14" out="00:05:54.054">
+    <property name="length">00:05:54.087</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Motorhaube3.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">5e69ad58fa2eab6158aa6163b4abf4ef</property>
+    <property name="shotcut:caption">2021_12_Motorhaube3.mkv</property>
+  </chain>
+  <tractor id="tractor0" in="00:00:00.000" out="00:00:00.990">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="chain13" in="00:03:57.783" out="00:03:58.773"/>
+    <track producer="chain14" in="00:00:01.716" out="00:00:02.706"/>
+    <transition id="transition0" out="00:00:00.990">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition1" out="00:00:00.990">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <chain id="chain15" out="00:05:54.054">
+    <property name="length">00:05:54.087</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Motorhaube3.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">5e69ad58fa2eab6158aa6163b4abf4ef</property>
+    <property name="shotcut:caption">2021_12_Motorhaube3.mkv</property>
+  </chain>
+  <chain id="chain16" out="00:05:54.054">
+    <property name="length">00:05:54.087</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Motorhaube3.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">5e69ad58fa2eab6158aa6163b4abf4ef</property>
+    <property name="shotcut:caption">2021_12_Motorhaube3.mkv</property>
+  </chain>
+  <tractor id="tractor1" in="00:00:00.000" out="00:00:00.462">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="chain15" in="00:01:06.963" out="00:01:07.425"/>
+    <track producer="chain16" in="00:01:24.618" out="00:01:25.080"/>
+    <transition id="transition2" out="00:00:00.462">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition3" out="00:00:00.462">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <chain id="chain17" out="00:05:54.054">
+    <property name="length">00:05:54.087</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Motorhaube3.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">5e69ad58fa2eab6158aa6163b4abf4ef</property>
+    <property name="shotcut:caption">2021_12_Motorhaube3.mkv</property>
+  </chain>
+  <tractor id="tractor2" in="00:00:00.000" out="00:00:00.594">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="chain16" in="00:03:48.114" out="00:03:48.708"/>
+    <track producer="chain17" in="00:03:52.602" out="00:03:53.196"/>
+    <transition id="transition4" out="00:00:00.594">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition5" out="00:00:00.594">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <chain id="chain18" out="00:05:54.054">
+    <property name="length">00:05:54.087</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Motorhaube3.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">5e69ad58fa2eab6158aa6163b4abf4ef</property>
+    <property name="shotcut:caption">2021_12_Motorhaube3.mkv</property>
+  </chain>
+  <chain id="chain19" out="00:05:54.054">
+    <property name="length">00:05:54.087</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Motorhaube3.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">5e69ad58fa2eab6158aa6163b4abf4ef</property>
+    <property name="shotcut:caption">2021_12_Motorhaube3.mkv</property>
+  </chain>
+  <chain id="chain20" out="00:01:44.451">
+    <property name="length">00:01:44.484</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Motorhaube4.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">43afc915bfcd295d8221aa5a94108457</property>
+    <property name="shotcut:caption">2021_12_Motorhaube4.mkv</property>
+  </chain>
+  <tractor id="tractor3" in="00:00:00.000" out="00:00:00.594">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="chain19" in="00:05:42.867" out="00:05:43.461"/>
+    <track producer="chain20" in="00:00:01.881" out="00:00:02.475"/>
+    <transition id="transition6" out="00:00:00.594">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition7" out="00:00:00.594">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <chain id="chain21" out="00:01:44.451">
+    <property name="length">00:01:44.484</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Motorhaube4.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">43afc915bfcd295d8221aa5a94108457</property>
+    <property name="shotcut:caption">2021_12_Motorhaube4.mkv</property>
+  </chain>
+  <chain id="chain22" out="00:13:11.550">
+    <property name="length">00:13:11.583</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Motorhaube5.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">2434fffa81f391eb42ccff63a9d0f6a3</property>
+    <property name="shotcut:caption">2021_12_Motorhaube5.mkv</property>
+  </chain>
+  <tractor id="tractor4" in="00:00:00.000" out="00:00:00.990">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="chain21" in="00:01:43.164" out="00:01:44.154"/>
+    <track producer="chain22" in="00:00:02.904" out="00:00:03.894"/>
+    <transition id="transition8" out="00:00:00.990">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition9" out="00:00:00.990">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <chain id="chain23" out="00:13:11.550">
+    <property name="length">00:13:11.583</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Motorhaube5.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">2434fffa81f391eb42ccff63a9d0f6a3</property>
+    <property name="shotcut:caption">2021_12_Motorhaube5.mkv</property>
+  </chain>
+  <tractor id="tractor5" in="00:00:00.000" out="00:00:00.891">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="chain22" in="00:00:12.474" out="00:00:13.365"/>
+    <track producer="chain23" in="00:01:01.254" out="00:01:02.145"/>
+    <transition id="transition10" out="00:00:00.891">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition11" out="00:00:00.891">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <chain id="chain24" out="00:13:11.550">
+    <property name="length">00:13:11.583</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Motorhaube5.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">2434fffa81f391eb42ccff63a9d0f6a3</property>
+    <property name="shotcut:caption">2021_12_Motorhaube5.mkv</property>
+  </chain>
+  <chain id="chain25" out="00:13:11.550">
+    <property name="length">00:13:11.583</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Motorhaube5.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">2434fffa81f391eb42ccff63a9d0f6a3</property>
+    <property name="shotcut:caption">2021_12_Motorhaube5.mkv</property>
+  </chain>
+  <chain id="chain26" out="00:13:11.550">
+    <property name="length">00:13:11.583</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Motorhaube5.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">2434fffa81f391eb42ccff63a9d0f6a3</property>
+    <property name="shotcut:caption">2021_12_Motorhaube5.mkv</property>
+  </chain>
+  <chain id="chain27" out="00:13:11.550">
+    <property name="length">00:13:11.583</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Motorhaube5.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">2434fffa81f391eb42ccff63a9d0f6a3</property>
+    <property name="shotcut:caption">2021_12_Motorhaube5.mkv</property>
+  </chain>
+  <chain id="chain28" out="00:13:11.550">
+    <property name="length">00:13:11.583</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Motorhaube5.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">2434fffa81f391eb42ccff63a9d0f6a3</property>
+    <property name="shotcut:caption">2021_12_Motorhaube5.mkv</property>
+  </chain>
+  <chain id="chain29" out="00:13:11.550">
+    <property name="length">00:13:11.583</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Motorhaube5.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">2434fffa81f391eb42ccff63a9d0f6a3</property>
+    <property name="shotcut:caption">2021_12_Motorhaube5.mkv</property>
+  </chain>
+  <chain id="chain30" out="00:13:11.550">
+    <property name="length">00:13:11.583</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Motorhaube5.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">2434fffa81f391eb42ccff63a9d0f6a3</property>
+    <property name="shotcut:caption">2021_12_Motorhaube5.mkv</property>
+  </chain>
+  <tractor id="tractor6" in="00:00:00.000" out="00:00:01.386">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="chain29" in="00:07:48.279" out="00:07:49.665"/>
+    <track producer="chain30" in="00:08:02.178" out="00:08:03.564"/>
+    <transition id="transition12" out="00:00:01.386">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition13" out="00:00:01.386">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <chain id="chain31" out="00:13:11.550">
+    <property name="length">00:13:11.583</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Motorhaube5.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">2434fffa81f391eb42ccff63a9d0f6a3</property>
+    <property name="shotcut:caption">2021_12_Motorhaube5.mkv</property>
+  </chain>
+  <chain id="chain32" out="00:13:11.550">
+    <property name="length">00:13:11.583</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Motorhaube5.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">2434fffa81f391eb42ccff63a9d0f6a3</property>
+    <property name="shotcut:caption">2021_12_Motorhaube5.mkv</property>
+  </chain>
+  <chain id="chain33" out="00:13:11.550">
+    <property name="length">00:13:11.583</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Motorhaube5.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">2434fffa81f391eb42ccff63a9d0f6a3</property>
+    <property name="shotcut:caption">2021_12_Motorhaube5.mkv</property>
+  </chain>
+  <chain id="chain34" out="00:13:11.550">
+    <property name="length">00:13:11.583</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Motorhaube5.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">2434fffa81f391eb42ccff63a9d0f6a3</property>
+    <property name="shotcut:caption">2021_12_Motorhaube5.mkv</property>
+  </chain>
+  <chain id="chain35" out="00:13:11.550">
+    <property name="length">00:13:11.583</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Motorhaube5.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">2434fffa81f391eb42ccff63a9d0f6a3</property>
+    <property name="shotcut:caption">2021_12_Motorhaube5.mkv</property>
+  </chain>
+  <chain id="chain36" out="00:05:31.482">
+    <property name="length">00:05:31.515</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Motorhaube6.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">74943b0aef63acccbe0e7e73b92fad92</property>
+    <property name="shotcut:caption">2021_12_Motorhaube6.mkv</property>
+  </chain>
+  <chain id="chain37" out="00:05:31.482">
+    <property name="length">00:05:31.515</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Motorhaube6.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">74943b0aef63acccbe0e7e73b92fad92</property>
+    <property name="shotcut:caption">2021_12_Motorhaube6.mkv</property>
+  </chain>
+  <chain id="chain38" out="00:05:31.482">
+    <property name="length">00:05:31.515</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Motorhaube6.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">74943b0aef63acccbe0e7e73b92fad92</property>
+    <property name="shotcut:caption">2021_12_Motorhaube6.mkv</property>
+  </chain>
+  <chain id="chain39" out="00:05:31.482">
+    <property name="length">00:05:31.515</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Motorhaube6.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">74943b0aef63acccbe0e7e73b92fad92</property>
+    <property name="shotcut:caption">2021_12_Motorhaube6.mkv</property>
+  </chain>
+  <chain id="chain40" out="00:08:50.259">
+    <property name="length">00:08:50.292</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Motorhaube7.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">7831f1281f9240d9d7e23ed37da3a6c7</property>
+    <property name="shotcut:caption">2021_12_Motorhaube7.mkv</property>
+  </chain>
+  <tractor id="tractor7" in="00:00:00.000" out="00:00:00.693">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="chain39" in="00:05:23.067" out="00:05:23.760"/>
+    <track producer="chain40" in="00:00:01.287" out="00:00:01.980"/>
+    <transition id="transition14" out="00:00:00.693">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition15" out="00:00:00.693">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <chain id="chain41" out="00:08:50.259">
+    <property name="length">00:08:50.292</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Motorhaube7.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">7831f1281f9240d9d7e23ed37da3a6c7</property>
+    <property name="shotcut:caption">2021_12_Motorhaube7.mkv</property>
+  </chain>
+  <chain id="chain42" out="00:08:50.259">
+    <property name="length">00:08:50.292</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Motorhaube7.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">7831f1281f9240d9d7e23ed37da3a6c7</property>
+    <property name="shotcut:caption">2021_12_Motorhaube7.mkv</property>
+  </chain>
+  <chain id="chain43" out="00:08:50.259">
+    <property name="length">00:08:50.292</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Motorhaube7.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">7831f1281f9240d9d7e23ed37da3a6c7</property>
+    <property name="shotcut:caption">2021_12_Motorhaube7.mkv</property>
+  </chain>
+  <chain id="chain44" out="00:08:50.259">
+    <property name="length">00:08:50.292</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Motorhaube7.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">7831f1281f9240d9d7e23ed37da3a6c7</property>
+    <property name="shotcut:caption">2021_12_Motorhaube7.mkv</property>
+  </chain>
+  <chain id="chain45" out="00:08:50.259">
+    <property name="length">00:08:50.292</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Motorhaube7.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">7831f1281f9240d9d7e23ed37da3a6c7</property>
+    <property name="shotcut:caption">2021_12_Motorhaube7.mkv</property>
+  </chain>
+  <chain id="chain46" out="00:08:50.259">
+    <property name="length">00:08:50.292</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Motorhaube7.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">7831f1281f9240d9d7e23ed37da3a6c7</property>
+    <property name="shotcut:caption">2021_12_Motorhaube7.mkv</property>
+  </chain>
+  <tractor id="tractor8" in="00:00:00.000" out="00:00:00.759">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="chain45" in="00:04:43.296" out="00:04:44.055"/>
+    <track producer="chain46" in="00:05:49.500" out="00:05:50.259"/>
+    <transition id="transition16" out="00:00:00.759">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition17" out="00:00:00.759">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <chain id="chain47" out="00:08:50.259">
+    <property name="length">00:08:50.292</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Motorhaube7.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">7831f1281f9240d9d7e23ed37da3a6c7</property>
+    <property name="shotcut:caption">2021_12_Motorhaube7.mkv</property>
+  </chain>
+  <chain id="chain48" out="00:08:50.259">
+    <property name="length">00:08:50.292</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Motorhaube7.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">7831f1281f9240d9d7e23ed37da3a6c7</property>
+    <property name="shotcut:caption">2021_12_Motorhaube7.mkv</property>
+  </chain>
+  <chain id="chain49" out="00:10:03.795">
+    <property name="length">00:10:03.828</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Motorhaube8.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">aad5419afb7b5b6d4c8121a85d3eebae</property>
+    <property name="shotcut:caption">2021_12_Motorhaube8.mkv</property>
+  </chain>
+  <tractor id="tractor9" in="00:00:00.000" out="00:00:00.594">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="chain48" in="00:08:28.710" out="00:08:29.304"/>
+    <track producer="chain49" in="00:00:03.102" out="00:00:03.696"/>
+    <transition id="transition18" out="00:00:00.594">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition19" out="00:00:00.594">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <chain id="chain50" out="00:10:03.795">
+    <property name="length">00:10:03.828</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Motorhaube8.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">aad5419afb7b5b6d4c8121a85d3eebae</property>
+    <property name="shotcut:caption">2021_12_Motorhaube8.mkv</property>
+  </chain>
+  <chain id="chain51" out="00:10:03.795">
+    <property name="length">00:10:03.828</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Motorhaube8.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">aad5419afb7b5b6d4c8121a85d3eebae</property>
+    <property name="shotcut:caption">2021_12_Motorhaube8.mkv</property>
+  </chain>
+  <tractor id="tractor10" in="00:00:00.000" out="00:00:00.891">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="chain50" in="00:05:30.393" out="00:05:31.284"/>
+    <track producer="chain51" in="00:05:33.891" out="00:05:34.782"/>
+    <transition id="transition20" out="00:00:00.891">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition21" out="00:00:00.891">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <chain id="chain52" out="00:10:03.795">
+    <property name="length">00:10:03.828</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Motorhaube8.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">aad5419afb7b5b6d4c8121a85d3eebae</property>
+    <property name="shotcut:caption">2021_12_Motorhaube8.mkv</property>
+  </chain>
+  <tractor id="tractor11" in="00:00:00.000" out="00:00:00.792">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="chain51" in="00:06:11.484" out="00:06:12.276"/>
+    <track producer="chain52" in="00:06:16.467" out="00:06:17.259"/>
+    <transition id="transition22" out="00:00:00.792">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition23" out="00:00:00.792">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <chain id="chain53" out="00:10:03.795">
+    <property name="length">00:10:03.828</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Motorhaube8.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">aad5419afb7b5b6d4c8121a85d3eebae</property>
+    <property name="shotcut:caption">2021_12_Motorhaube8.mkv</property>
+  </chain>
+  <chain id="chain54" out="00:10:03.795">
+    <property name="length">00:10:03.828</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Motorhaube8.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">aad5419afb7b5b6d4c8121a85d3eebae</property>
+    <property name="shotcut:caption">2021_12_Motorhaube8.mkv</property>
+  </chain>
+  <chain id="chain55" out="00:10:03.795">
+    <property name="length">00:10:03.828</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Motorhaube8.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">aad5419afb7b5b6d4c8121a85d3eebae</property>
+    <property name="shotcut:caption">2021_12_Motorhaube8.mkv</property>
+  </chain>
+  <chain id="chain56" out="00:10:03.795">
+    <property name="length">00:10:03.828</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Motorhaube8.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">aad5419afb7b5b6d4c8121a85d3eebae</property>
+    <property name="shotcut:caption">2021_12_Motorhaube8.mkv</property>
+  </chain>
+  <chain id="chain57" out="00:10:03.795">
+    <property name="length">00:10:03.828</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Motorhaube8.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">aad5419afb7b5b6d4c8121a85d3eebae</property>
+    <property name="shotcut:caption">2021_12_Motorhaube8.mkv</property>
+  </chain>
+  <chain id="chain58" out="00:10:03.795">
+    <property name="length">00:10:03.828</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Motorhaube8.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">aad5419afb7b5b6d4c8121a85d3eebae</property>
+    <property name="shotcut:caption">2021_12_Motorhaube8.mkv</property>
+  </chain>
+  <chain id="chain59" out="00:01:06.897">
+    <property name="length">00:01:06.930</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Motorhaube9.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">394884e7ccb4e6876b29a868add78b28</property>
+    <property name="shotcut:caption">2021_12_Motorhaube9.mkv</property>
+  </chain>
+  <tractor id="tractor12" in="00:00:00.000" out="00:00:00.957">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="chain58" in="00:09:53.361" out="00:09:54.318"/>
+    <track producer="chain59" in="00:00:02.211" out="00:00:03.168"/>
+    <transition id="transition24" out="00:00:00.957">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition25" out="00:00:00.957">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <chain id="chain60" out="00:01:06.897">
+    <property name="length">00:01:06.930</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Motorhaube9.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">394884e7ccb4e6876b29a868add78b28</property>
+    <property name="shotcut:caption">2021_12_Motorhaube9.mkv</property>
+  </chain>
+  <chain id="chain61" out="00:01:06.897">
+    <property name="length">00:01:06.930</property>
+    <property name="eof">pause</property>
+    <property name="resource">2021_12_Motorhaube9.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">394884e7ccb4e6876b29a868add78b28</property>
+    <property name="shotcut:caption">2021_12_Motorhaube9.mkv</property>
+  </chain>
+  <playlist id="playlist0">
+    <property name="shotcut:video">1</property>
+    <property name="shotcut:name">V1</property>
+    <entry producer="chain9" in="00:00:42.108" out="00:01:36.036"/>
+    <entry producer="chain10" in="00:01:40.953" out="00:01:58.509"/>
+    <entry producer="chain11" in="00:00:06.864" out="00:00:25.311"/>
+    <entry producer="chain12" in="00:02:32.901" out="00:02:46.893"/>
+    <entry producer="chain13" in="00:02:53.823" out="00:03:57.750"/>
+    <entry producer="tractor0" in="00:00:00.000" out="00:00:00.990"/>
+    <entry producer="chain14" in="00:00:02.739" out="00:00:49.797"/>
+    <entry producer="chain15" in="00:00:50.754" out="00:01:06.930"/>
+    <entry producer="tractor1" in="00:00:00.000" out="00:00:00.462"/>
+    <entry producer="chain16" in="00:01:25.113" out="00:03:48.081"/>
+    <entry producer="tractor2" in="00:00:00.000" out="00:00:00.594"/>
+    <entry producer="chain17" in="00:03:53.229" out="00:05:04.587"/>
+    <entry producer="chain18" in="00:05:08.019" out="00:05:11.880"/>
+    <entry producer="chain19" in="00:05:12.771" out="00:05:42.834"/>
+    <entry producer="tractor3" in="00:00:00.000" out="00:00:00.594"/>
+    <entry producer="chain20" in="00:00:02.508" out="00:00:42.801"/>
+    <entry producer="chain21" in="00:00:44.979" out="00:01:43.131"/>
+    <entry producer="tractor4" in="00:00:00.000" out="00:00:00.990"/>
+    <entry producer="chain22" in="00:00:03.927" out="00:00:12.441"/>
+    <entry producer="tractor5" in="00:00:00.000" out="00:00:00.891"/>
+    <entry producer="chain23" in="00:01:02.178" out="00:02:38.049"/>
+    <entry producer="chain24" in="00:02:39.468" out="00:02:42.735"/>
+    <entry producer="chain25" in="00:02:50.490" out="00:03:15.279"/>
+    <entry producer="chain26" in="00:03:15.939" out="00:04:07.656"/>
+    <entry producer="chain27" in="00:04:14.718" out="00:05:50.028"/>
+    <entry producer="chain28" in="00:06:01.650" out="00:06:21.813"/>
+    <entry producer="chain29" in="00:06:46.068" out="00:07:48.246"/>
+    <entry producer="tractor6" in="00:00:00.000" out="00:00:01.386"/>
+    <entry producer="chain30" in="00:08:03.597" out="00:09:40.293"/>
+    <entry producer="chain31" in="00:10:11.319" out="00:10:21.747"/>
+    <entry producer="chain32" in="00:10:29.007" out="00:10:37.818"/>
+    <entry producer="chain33" in="00:10:39.336" out="00:10:44.484"/>
+    <entry producer="chain34" in="00:10:47.718" out="00:10:56.133"/>
+    <entry producer="chain35" in="00:10:57.618" out="00:12:30.723"/>
+    <entry producer="chain36" in="00:00:17.523" out="00:03:31.053"/>
+    <entry producer="chain37" in="00:03:34.683" out="00:04:00.429"/>
+    <entry producer="chain38" in="00:04:02.937" out="00:04:28.479"/>
+    <entry producer="chain39" in="00:04:29.667" out="00:05:23.034"/>
+    <entry producer="tractor7" in="00:00:00.000" out="00:00:00.693"/>
+    <entry producer="chain40" in="00:00:02.013" out="00:00:40.623"/>
+    <entry producer="chain41" in="00:00:41.712" out="00:00:56.562"/>
+    <entry producer="chain42" in="00:00:57.651" out="00:01:14.652"/>
+    <entry producer="chain43" in="00:01:14.685" out="00:01:27.423"/>
+    <entry producer="chain44" in="00:02:37.026" out="00:03:01.551"/>
+    <entry producer="chain45" in="00:03:02.277" out="00:04:43.263"/>
+    <entry producer="tractor8" in="00:00:00.000" out="00:00:00.759"/>
+    <entry producer="chain46" in="00:05:50.292" out="00:08:14.916"/>
+    <entry producer="chain47" in="00:08:15.708" out="00:08:19.668"/>
+    <entry producer="chain48" in="00:08:20.229" out="00:08:28.677"/>
+    <entry producer="tractor9" in="00:00:00.000" out="00:00:00.594"/>
+    <entry producer="chain49" in="00:00:03.729" out="00:01:03.168"/>
+    <entry producer="chain50" in="00:01:07.029" out="00:05:30.360"/>
+    <entry producer="tractor10" in="00:00:00.000" out="00:00:00.891"/>
+    <entry producer="chain51" in="00:05:34.815" out="00:06:11.451"/>
+    <entry producer="tractor11" in="00:00:00.000" out="00:00:00.792"/>
+    <entry producer="chain52" in="00:06:29.799" out="00:06:36.762"/>
+    <entry producer="chain53" in="00:06:42.966" out="00:07:17.688"/>
+    <entry producer="chain54" in="00:07:19.701" out="00:07:37.389"/>
+    <entry producer="chain55" in="00:07:41.712" out="00:08:22.671"/>
+    <entry producer="chain56" in="00:08:24.156" out="00:08:29.898"/>
+    <entry producer="chain57" in="00:08:34.056" out="00:09:30.723"/>
+    <entry producer="chain58" in="00:09:31.680" out="00:09:53.328"/>
+    <entry producer="tractor12" in="00:00:00.000" out="00:00:00.957"/>
+    <entry producer="chain59" in="00:00:03.201" out="00:00:07.425"/>
+    <entry producer="chain60" in="00:00:29.634" out="00:00:51.348"/>
+    <entry producer="chain61" in="00:00:52.437" out="00:01:03.003"/>
+  </playlist>
+  <tractor id="tractor13" title="Shotcut version 21.12.24" in="00:00:00.000" out="00:40:19.041">
+    <property name="shotcut">1</property>
+    <property name="shotcut:projectAudioChannels">2</property>
+    <property name="shotcut:projectFolder">0</property>
+    <property name="shotcut:scaleFactor">0.679922</property>
+    <track producer="background"/>
+    <track producer="playlist0"/>
+    <transition id="transition26">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="mlt_service">mix</property>
+      <property name="always_active">1</property>
+      <property name="sum">1</property>
+    </transition>
+    <transition id="transition27">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="version">0.1</property>
+      <property name="mlt_service">frei0r.cairoblend</property>
+      <property name="threads">0</property>
+      <property name="disable">1</property>
+    </transition>
+  </tractor>
+</mlt>
