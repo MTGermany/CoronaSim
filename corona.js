@@ -720,7 +720,7 @@ var dataCmp_dxIncidence=[]; // compare weekly incidence per 100 000 from data
 
 var mutationDynamics=new MutationDynamics();   
 
-
+//!!!!! place switch to use mutationDynamics here !!!!
 // use_startMutRel=true: start mut fixed time difference
 // dit_startMut2present before present
 // !!!! Not good at beginning of new wave

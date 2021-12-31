@@ -6,21 +6,21 @@ In diesem technischen Video (ohne Simulationen!) werfe ich einen Blick unter die
 
 00:00 Intro
 
-02:48 Delta vs. Omicron
+02:33 Delta vs. Omicron
 
-04:14 Bestimmung der logistischen Wachstumrate der Omicron-Ausbreitung
+03:58 Bestimmung der logistischen Wachstumrate der Omicron-Ausbreitung
 
-09:40 Herleitung der logistischen Kurve aus den Annahmen
+09:25 Herleitung der logistischen Kurve aus den Annahmen
 
-19:29 Basisreproduktionsrate von Omikron
+19:14 Basisreproduktionsrate von Omikron
 
-24:27 Bestimmung der effektiven Infektionsdynamik des Simulators
+24:12 Bestimmung der effektiven Infektionsdynamik des Simulators
 
-27:57 Kalibrierung der Basisreproduktionsraten von Delta und Omega im Simulator
+27:41 Kalibrierung der Basisreproduktionsraten von Delta und Omega im Simulator
 
-30:30 Impf-Immunitäten
+30:19 Impf-Immunitäten
 
-36:36 Realisierung im Simulator
+36:21 Realisierung im Simulator
 
 
 Intro
