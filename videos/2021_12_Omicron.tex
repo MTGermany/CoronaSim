@@ -133,13 +133,16 @@ past infections) against Delta and Omicron are generally different
 the \bfdef{seasonal factor $f\subb{s}$} are common
 
 \pause\item All factors influencing the effective reproduction number
-$R$ are multiplicative
+$R$ are multiplicative. Daily new infections $x_1$ (Delta) and $x_2$
+(Omicron) develop according to following
 \ei
 
 \pause
 \maineq{baseDyn}{
-\Rightarrow 
-\begin{array}{ll}
+\text{\parbox{24ex}{
+ \bfdef{Infection dynamics\\as 
+\small{$f(R_{01}$, $R_{02}$,\text{ factors})}:}}}
+ \quad \begin{array}{ll}
 x_1(t_0+T_1)=R_1x_1(t_0)=R_{10}(1-I_1)f\subb{m}f\subb{s} x_1(t_0),\\
 x_2(t_0+T_2)=R_2x_2(t_0)=R_{20}(1-I_2)f\subb{m}f\subb{s} x_2(t_0)
 \end{array}
@@ -160,12 +163,13 @@ x_1(t)=x_1(0) R_1^{\ t/T_1}=x_1(0)\exp\left(\frac{t}{T_1}\ln R_1\right)
 \equiv x_1(0)\exp(r_1t), 
 \edm
 \pause
-$x_2(t)$ likewise, or
-\be
-\label{dotx1x2}
-\dot{x}_1=r_1t, \ r_1=\frac{\ln R_1}{T_1}, \quad
-\dot{x}_2=r_2t, \ r_2=\frac{\ln R_2}{T_2}
-\ee
+$x_2(t)$ likewise, so $\dot{x}_1=r_1x_1$ and $\dot{x}_2=r_2x_2$ 
+defining the 
+\maineq{dotx1x2}{
+\text{\bfdef{Effective infection growth rates:}} \quad 
+r_1=\frac{\ln R_1}{T_1}, \quad
+r_2=\frac{\ln R_2}{T_2}
+}
 
 \pause
 How does the odds $y=x_2/x_1$ evolve?
@@ -180,11 +184,14 @@ How does the odds $y=x_2/x_1$ evolve?
 
 \pause
 \maineq{r}{\Rightarrow \quad 
- r=r_2-r_1=\frac{\ln R_2}{T_2}-\frac{\ln R_1}{T_1}}
+ \text{\bfdef{Omicron spread rate:}}\quad
+r=r_2-r_1=\frac{\ln R_2}{T_2}-\frac{\ln R_1}{T_1}
+}
 
 \pause
-\footnotesize{Special case $T_2=T_1=T$: \quad
-$R_2=R_1\exp(rT)$}
+\footnotesize{Special case $T_1=T_2=T$: \quad
+$r=1/T\ln(R_2/R_1)$: the spreading rate is proportional to the
+  \emph{ratio} of the actual reproduction numbers}
 
 }
 
@@ -194,13 +201,16 @@ $R_2=R_1\exp(rT)$}
   the logistic growth rate $r$}
 %##############################################################
 
-Just use Relation~\eqref{r} and insert the definitions of $R_1$ and
-$R_2$ from~\eqref{baseDyn}
+Just use Relation~\eqref{r} and insert the dependence of the actual
+growth rates $R_1$ and
+$R_2$ as a function of the base reproduction numbers $R_{01}$,
+$R_{02}$ and
+factors from~\eqref{baseDyn}
 
 \pause
 After some manipulations ...
-\maineq{R20}{
-R_{20}=\exp(rT_2) \, f\subb{m}^{\gamma-1} \, f\subb{s}^{\gamma-1} \,
+\maineq{R20}{\text{\bfdef{Observed Omicron $R_{02}$:}}\quad
+R_{20}=e^{rT_2} \, f\subb{m}^{\gamma-1} \, f\subb{s}^{\gamma-1} \,
 \frac{\left(R_{10}(1-I_1)\right)^\gamma}{1-I_2}, \quad
 \gamma=\frac{T_2}{T_1}
 }
@@ -244,33 +254,39 @@ from~\eqref{dotx1x2}:
 \edm
 
 \pause
-\bfdef{Effective
-reproduction number $R\subb{eff}$} by association
-$r\subb{eff}\equiv\ln R\subb{eff}/T_1$:
+Associating $r\subb{eff}$ with $\ln R\subb{eff}/T_1$, we get the
 
 \maineq{Reff}{
- \ln R\subb{eff}=(1-p)\ln R_1
- + \frac{p}{\gamma} \ln R_2}
+\text{\bfdef{Effective
+reproduction number:}} \quad R\subb{eff}= R_1^{1-p} \ R_2^{\,p/\gamma}}
 
+{\small
 \pause
 \bi
-\item Because $1/\gamma=T_1/T_2>1$, influence factors, e.g., measures,
+\item Because $1/\gamma=T_1/T_2>1$, influence factors influencing
+  $R_1$ and $R_2$ according to~\eqref{baseDyn} 
   have a more sensitive effect on Omicron 
-  than om Delta: If $T_1/T_2=1/\gamma=2$ and measures lead to a
+  than on Delta: If $T_1/T_2=1/\gamma=2$ and measures lead to a
   factor $1/\sqrt{2}\approx 0.7$ on Delta ($R_1$), they simultaneously
   lead to a factor 1/2 on Omicron ($R_2$)
 \vspace{0.5em}
 
 \pause\item If, at a certain time, the true Omicron share $p$, the
 effective reproduction number $R\subb{eff}$, and the logistic growth
-rate $r$ are known (all three can be estimated), and the generation
-time ratio
-$\gamma=T_2/T_1$ as well as the total immunities $I_1$ and $I_2$ and
-the effects of the measures and the season at 
-this time can be estimated, the Eqs~\eqref{baseDyn},
+rate $r$ are known (all three can be estimated), and 
+$\gamma=T_2/T_1$, $I_1$, $I_2,$ and
+the effects of the measures and the season are approximatively known,
+Eqs~\eqref{baseDyn},
 \eqref{R20}, and~\eqref{Reff} allow for a simultaneous estimation of
 $R_{10}$ and $R_{20}$
+
+\pause\item Later on, they allow for a simultaneous estimation of the
+time varying Omicron spreading rate $r$, the Omicron share $p$, and
+the growth rates $r_1$,
+$r_2$, and $R\sub{eff}$
 \ei
+}
+
 }
 
 

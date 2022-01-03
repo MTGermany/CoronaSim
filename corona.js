@@ -561,21 +561,21 @@ D:         2021-12-06 from infections 2021-12-03: 3%
 const time_pMutList=new Date("2021-12-15"); //!!!!
 
 const pMutList={ // fraction pMut @ reftime_pMut (0: no data)
-  "Germany"       : 0.15,
-  "Austria"       : 0.10, // rest (w/o OK flag) speculation at best
-  "Australia"     : 0.30,
-  "Brazil"        : 0.10,
-  "Czechia"       : 0.20,
+  "Germany"       : 0.05,
+  "Austria"       : 0.20, // rest (w/o OK flag) speculation at best
+  "Czechia"       : 0.10,
   "France"        : 0.50,
   "United Kingdom": 0.75, 
   "Italy"         : 0.70,
-  "Poland"        : 0.20,
+  "Poland"        : 0.10,
   "Spain"         : 0.60,
   "Sweden"        : 0.50,
   "Denmark"       : 0.80,
   "Switzerland"   : 0.40,
   "Greece"        : 0.65,
   "Portugal"      : 0.50,
+  "Australia"     : 0.30,
+  "Brazil"        : 0.10,
   "Israel"        : 0.80,
   "India"         : 0.60,
   "Russia"        : 0.30,
@@ -727,16 +727,16 @@ var mutationDynamics=new MutationDynamics();
 // because then p grows logistically while Rcalib approx const
 // R10 and R20 decrease drastically because of R10=R0/(1+p*tau*r)
 
-const use_startMutRel=false; //!!!!
+const use_startMutRel=true; //!!!!
 
-const rMutStart=0.25; // !!!! 0.25-0.30 initial growth rate of odds y/(1-y)
+const rMutStart=0.20; // !!!! make variable! 0.25-0.30 initial growth rate of odds y/(1-y)
 
 const factor_generationtime2=0.8; //!!!! Omicron has shorter generation time
 var strFactStartMut=1; // change Om sensitivity to measures with reference
                        // at start of mut dynamics
 
-const time_startMut=new Date("2021-12-18"); // 2021-12-17 !!!! if fixed mut starting time
-const dit_startMut2presentRel=5; // 5 if variable mut starting time
+const time_startMut=new Date("2021-12-24"); // 2021-12-17 !!!! if fixed mut starting time
+const dit_startMut2presentRel=7; // 5 if variable mut starting time
                           // (fixed time diff dit_startMut2present 2 present) 
 const dit_list2present
     =Math.floor((present.getTime()-time_pMutList.getTime())/oneDay_ms); 
@@ -3986,7 +3986,7 @@ MutationDynamics.prototype.initialize=function(it0,p0,r0,I10,I20,R0){
   }
 }
 
-// update by Delta t=1 day
+// update by Delta t=1 day !!! implement T2 !=T1, gamma!=1
 
 MutationDynamics.prototype.update=function(I1,I2,it){
   var r= ( (this.R20*(1-I2))/(this.R10*(1-I1)) -1)/this.tauR;
@@ -4798,7 +4798,7 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
       if(it>itStartMut){
 	mutationDynamics.update(immunity.I1, immunity.I2,it);
 	pMut=mutationDynamics.p_it[it];
-	R10=mutationDynamics.R10;
+	R10=mutationDynamics.R10; // needed because initialized to R0
 	R20=mutationDynamics.R20;
       }
     }
@@ -4830,10 +4830,14 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
       stringency=data_stringencyIndex[i]; // otherwise glob var set by sliders
     }
 
-     //!!!! MT 2021-12-30: Omicron shorter generation time: TEST factor 0.5
+    //!!!! MT 2021-12-30: Omicron shorter generation time
+    // by factor_generationtime2 (e.g., 0.8)
     var strFact1=stringencyFactor(stringency);
     var strFact2=strFactStartMut
 	*Math.pow(strFact1/strFactStartMut,1./factor_generationtime2);
+
+    //!!!! still not implemented: the same for seasonFactor:
+    // seasonFactor1=..., ...
     var Reff1=R10*(1-I1)*strFact1*calc_seasonFactor(it);
     var Reff2=R20*(1-I2)*strFact2*calc_seasonFactor(it);
 
