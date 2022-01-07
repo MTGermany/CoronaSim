@@ -184,7 +184,7 @@ How does the odds $y=x_2/x_1$ evolve?
 
 \pause
 \maineq{r}{\Rightarrow \quad 
- \text{\bfdef{Omicron spread rate:}}\quad
+ \text{\bfdef{Omicron spreading rate:}}\quad
 r=r_2-r_1=\frac{\ln R_2}{T_2}-\frac{\ln R_1}{T_1}
 }
 
@@ -210,7 +210,7 @@ factors from~\eqref{baseDyn}
 \pause
 After some manipulations ...
 \maineq{R20}{\text{\bfdef{Observed Omicron $R_{02}$:}}\quad
-R_{20}=e^{rT_2} \, f\subb{m}^{\gamma-1} \, f\subb{s}^{\gamma-1} \,
+R_{20}=e^{rT_2} \, (f\subb{m}f\subb{s})^{\gamma-1} \,
 \frac{\left(R_{10}(1-I_1)\right)^\gamma}{1-I_2}, \quad
 \gamma=\frac{T_2}{T_1}
 }
@@ -283,13 +283,66 @@ $R_{10}$ and $R_{20}$
 \pause\item Later on, they allow for a simultaneous estimation of the
 time varying Omicron spreading rate $r$, the Omicron share $p$, and
 the growth rates $r_1$,
-$r_2$, and $R\sub{eff}$
+$r_2$, and $R\subb{eff}$
 \ei
 }
 
 }
 
+%##############################################################
+\frame{\frametitle{5a. Effective infection growth rate vs Omicron
+    spreading rate}
+%##############################################################
+From~\eqref{r}, we obtain
+\bdm
+e^{rT_1}=R_2^{1/\gamma}R_1^{-1}
+\edm
+Eliminating $R_2$ with~\eqref{Reff}, we get a relation between the
+effective infection growth rate $R\subb{eff}$, the Omicron spreading
+rate $r$, and the actual reproduction number $R_1$ of the ``old''
+variant:
+\maineq{Reff-r}{R\subb{eff}=R_1e^{rT_1p}}
 
+}
+
+
+
+%##############################################################
+\frame{\frametitle{5b. Determining dynamics based on Dutch reference}
+%##############################################################
+{\small
+\bi
+\item Dutch has excellent time series for Omicron share $p$ from which to determine
+$r$ and incidences from which to estimate $R\subb{eff}$. 
+\item For other countries, 
+only $R\subb{eff}$ can be estimated while $r$ (which varies with the
+country as a function of $I_1$, $I_2$ and $f\subb{m}$) is not are
+known
+\item From~\eqref{baseDyn} and~\eqref{r}, we obtain for Holland
+  (prefarably at a time where $p\approx 0.5)$ the base
+  reproduction ratio
+\maineq{R0ratio}{
+\frac{R_{20}}{R_{10}^\gamma}
+ = \frac{e^{rT_2}(1-I_1)^\gamma(f\subb{m}f\subb{s})^{\gamma-1}}{1-I_2}
+ \equiv \alpha}
+\item For other countries, $R_{01}$ and $R_{02}$ may be different
+  (because of behavior, pop  density etc) but we assume
+  $\alpha$=const., so using~\eqref{Reff}, \eqref{baseDyn},
+  and~\eqref{R0ratio}, we get at mutation initialisation, independent
+  from $r$ (but of course we need $p$) 
+\maineq{R01R02othercountries}{
+\frac{R\subb{eff}}{R_{10}}
+=(\alpha(1-I_2))^{p/\gamma}(1-I_1)^{1-p}(f\subb{m}f\subb{s})^{p(1/\gamma-1)+1}, 
+ \quad R_{20}=\alpha R_{10}^{\gamma}
+}
+\item After initialisation, just calculate $R_1$, $R_2$
+  from~\eqref{baseDyn}, $r$ from~\eqref{r}, the new Omicron share via
+  the odds update $\dot{y}=ry$, $p=y/(1+y)$, and the new effective
+  reproduction number $R\subb{eff}$ from ~\eqref{Reff}.
+\ei
+}
+
+}
 
 %##############################################################
 \frame{\frametitle{6. Immunity I: vaccinations/boosters vs. Delta variant}
@@ -472,8 +525,8 @@ the effective $R_t$ value caused by the mixture of the Delta and
 \item the base reproduction numbers $R_{10}$ and $R_{20}$ of Delta
   and Omicron, respectively,
 \item the immunity escape fractions $(1-I_1)$ and $(1-I_2)$,
-\item the seasonal multiplicator $f\supb{season}$ %(which I have calibrated)
-\item the stringency (lockdown) multiplicator $f\supb{stringency}$:
+\item the seasonal multiplicator $f\subb{season}$ %(which I have calibrated)
+\item the stringency (lockdown) multiplicator $f\subb{stringency}$:
 \ei
 
 \maineq{Rt}{R_t=\left[(1-p)R_{10}(1-I_1)+pR_{20}(1-I_2)\right]

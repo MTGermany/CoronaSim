@@ -558,7 +558,7 @@ SA:        2021-12-06 from infections 2021-12-03: 50%
 D:         2021-12-06 from infections 2021-12-03: 3%
 ######################################################################*/
 
-const time_pMutList=new Date("2021-12-15"); //!!!!
+const time_pMutList=new Date("2021-12-16"); //!!!!
 
 const pMutList={ // fraction pMut @ reftime_pMut (0: no data)
   "Germany"       : 0.05,
@@ -566,8 +566,8 @@ const pMutList={ // fraction pMut @ reftime_pMut (0: no data)
   "Czechia"       : 0.10,
   "France"        : 0.50,
   "United Kingdom": 0.75, 
-  "Italy"         : 0.70,
-  "Poland"        : 0.10,
+  "Italy"         : 0.80,
+  "Poland"        : 0.05,
   "Spain"         : 0.60,
   "Sweden"        : 0.50,
   "Denmark"       : 0.80,
@@ -736,7 +736,7 @@ var strFactStartMut=1; // change Om sensitivity to measures with reference
                        // at start of mut dynamics
 
 const time_startMut=new Date("2021-12-24"); // 2021-12-17 !!!! if fixed mut starting time
-const dit_startMut2presentRel=7; // 5 if variable mut starting time
+const dit_startMut2presentRel=8; // !!!! 8 if variable mut starting time
                           // (fixed time diff dit_startMut2present 2 present) 
 const dit_list2present
     =Math.floor((present.getTime()-time_pMutList.getTime())/oneDay_ms); 
@@ -872,7 +872,7 @@ var icalibmax;  // getIndexCalibmax(itmax_c);
 //!!
 const calibInterval=4;  // !!!! 4 or 8; calibr time interv [days] for one R0 value 
                         // better not in sync with week cycle (=7)
-const nLastUnchanged=4; // !! 3 or 4; <= nChunk-dn=nOverlap,>=3
+const nLastUnchanged=3; // !! 3 or 4; <= nChunk-dn=nOverlap,>=3
                         // (may work otherwise but not safe)
                         // !! with nLastUnchanged=3 some wiggles in the new ICU:
                         // leave at 4!
