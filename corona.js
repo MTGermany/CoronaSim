@@ -296,6 +296,13 @@ var data_posRate=[];
 var data_cfr=[];
 var data_pTestModel=[]; // sim. "Hellfeld" P(tested|infected) if f(#tests)=true
 
+
+const pTestInit=0.30;     // P(Tested|infected)  if !f(#tests) assumed
+const pTestMin=0.04;   // if calculated by sqrt- or propto model
+const testExponent=0.3; //!!!! 0.5: sqrt-model data_pTestModel
+                        // propto sqrt(dn), 1: lin model, 0: no test influence
+const tauInfectious_fullReporting=Math.pow(1000,testExponent); // test interval [d] for full reporting
+
 var data_dxIncidence=[]; // weekly incidence per 100 000 from data
 var data_dzIncidence=[]; // weekly incidence per 100 000 from data
 var data_icuIncidence=[]; // ICU patients/100 000 (intensive quant) from data
@@ -560,7 +567,10 @@ D:         2021-12-06 from infections 2021-12-03: 3%
 
 const time_pMutList=new Date("2021-12-16"); //!!!!
 
-const pMutList={ // fraction pMut @ reftime_pMut (0: no data)
+// fraction pMut @ reftime_pMut (must assume nonzero data0
+// because simulation with mutation now needed because of
+// dependent immunities)
+const pMutList={ 
   "Germany"       : 0.05,
   "Austria"       : 0.20, // rest (w/o OK flag) speculation at best
   "Czechia"       : 0.10,
@@ -599,12 +609,10 @@ var slider_rVacc_moved=false;
 var slider_rBoost_moved=false;
 var otherSlider_moved=false;   // coupled sliders such as tauRstart/tau_Rend
 
-var pTestInit=0.10;     // P(Tested|infected)  if !f(#tests) assumed
-var pTestMin=0.04;   // if calculated by sqrt- or propto model
 
 var includeInfluenceTestNumber=true; // if true, pTest =f(#tests)
-var useSqrtModel=true; // whether use sqrt or linear dependence 
-
+// var useSqrtModel=true; // => testExponent
+  
 var tauRstartInit=2;   // active infectivity begins [days since infection]//1
 var tauRendInit=10;    // active infectivity ends [days since infection]//10
 var tauTestInit=7;     // time delay [days] test-infection //8
@@ -645,8 +653,6 @@ var tauSymptoms=7;  // incubation time
 var taumax=Math.max(tauDie+tauAvg,tauRecover+tauAvg,
 		    tauICU+Math.floor(tauICUstay/2))+1; //!!!
 
-var tauInfectious_fullReporting=35; // !!!! 35 Hellfeld increase sqrt-like
-                                    // with this parameter
 var alphaTest=0.0; // !! alpha error of test (false negative)
 var betaTest=0.00; // beta error (false positive) after double testing
 
@@ -727,7 +733,13 @@ var mutationDynamics=new MutationDynamics();
 // because then p grows logistically while Rcalib approx const
 // R10 and R20 decrease drastically because of R10=R0/(1+p*tau*r)
 
+//!! useMutationIfAvailable must be true since w/o no longer works
+// because of the mutation dependent immunities
+const useMutationIfAvailable=true; 
+
 const use_startMutRel=true; //!!!!
+const dit_startMut2presentRel=8; // !!!! 8 if variable mut starting time
+const time_startMut=new Date("2021-12-24"); // if fixed mut starting time
 
 const rMutStart=0.20; // !!!! make variable! 0.25-0.30 initial growth rate of odds y/(1-y)
 
@@ -735,9 +747,6 @@ const factor_generationtime2=0.8; //!!!! Omicron has shorter generation time
 var strFactStartMut=1; // change Om sensitivity to measures with reference
                        // at start of mut dynamics
 
-const time_startMut=new Date("2021-12-24"); // 2021-12-17 !!!! if fixed mut starting time
-const dit_startMut2presentRel=8; // !!!! 8 if variable mut starting time
-                          // (fixed time diff dit_startMut2present 2 present) 
 const dit_list2present
     =Math.floor((present.getTime()-time_pMutList.getTime())/oneDay_ms); 
 
@@ -753,7 +762,7 @@ var dit_startMut2present = (use_startMutRel)
 
 var itStartMut=itPresent-dit_startMut2present;
 var pMutRef=pMutList[country];
-var simulateMutation=(pMutRef>1e-6);
+var simulateMutation=useMutationIfAvailable && (pMutRef>1e-6);
 
 var dtshift=dit_list2present-dit_startMut2present;
 var pMutStart=(simulateMutation)
@@ -1022,7 +1031,9 @@ function loadData() {
         console.log("in fetch function:\n dataGit=",dataGit);
 	console.log("end loadData(..) live alternative");
         initializeData(country); //!! MUST remain inside; extremely annoying
-	setMutationSim(simulateMutation); // only html
+	//setMutationSim(simulateMutation); // only html
+
+	
 	//myRestartFunction(); // only HERE guaranteed that everything loaded NO LONGER NEEDED: 2x restart otherwise
       });
   }
@@ -1041,7 +1052,7 @@ function loadData() {
     initializeData(country); //!! MUST repeat because of annoying time order
     fracDie=IFRinit; // use IFR start array for init()
     corona.init(0);
-    setMutationSim(simulateMutation); // only html
+    //setMutationSim(simulateMutation); // only html
     //myRestartFunction();// only HERE guaranteed that everything loaded=>separately NO LONGER NEEDED: 2x restart otherwise
   }
 
@@ -1226,7 +1237,7 @@ function initializeData(country,insideValidation){
     : dit_startMut2presentAbs;
   itStartMut=itPresent-dit_startMut2present; // !!! check for validation
   pMutRef=pMutList[country];
-  simulateMutation=(pMutRef>1e-6);
+  simulateMutation=useMutationIfAvailable && (pMutRef>1e-6);
   dtshift=dit_list2present-dit_startMut2present;
   pMutStart=(simulateMutation)
     ? estimate_pMut_timeShift(pMutRef,rMutStart,dtshift): 0;
@@ -1615,101 +1626,81 @@ function initializeData(country,insideValidation){
   
  
 
-    //  proportional or  sqrt-like "Hellfeld" model: 
-    // sqrt: assume 100% "Hellfeld" ifP(tested|new infected) if all n0 persons
-    // are  tested within "infectiosity period" of assumed
-    // tauInfectious_fullReporting days=84 instead of 7 days=^ 100%
-    // linear: assume 100% if 10% are tested as above
+  // proportional or  pow-like (special case sqrt-like) "Hellfeld" model:
+  // dictated by testExponent
+  // assume 100% "Hellfeld" if all n0 persons
+  // are  tested within  tauInfectious_fullReporting days
 
+  // use either normal smooth or supersmooth 
+  
+  var rSuperSmooth=1./21; // denom be longer than holiday special effects
 
+  var pTestSuperSmooth=[];
+  pTestSuperSmooth[0]=pTestInit;
+  
   for(var i=0; i<data.length; i++){
     
     if((data_dn[i]>0)&&(data_dn[i]<1e11)){
-      
-      if(useSqrtModel){ // global var
 
-        var pModel=Math.sqrt(tauInfectious_fullReporting*data_dn[i]/n0); 
+      var pModel=Math.pow(tauInfectious_fullReporting*data_dn[i]/n0,
+			  testExponent); 
 
 	// corrections if very vew tests (only at beginning)
 	// or pTest >1
 	
-        data_pTestModel[i]=pTestMin
+      data_pTestModel[i]=pTestMin
 	*Math.sqrt(1+Math.pow(pModel/pTestMin,2));
-        data_pTestModel[i]=Math.min(data_pTestModel[i],1);
+      data_pTestModel[i]=Math.min(data_pTestModel[i],1);
 
 	// !! corrections if too strong daily dn jumps
 	// (late cumulative data reporting)
 
         //if(false){
-	if(i>0){
+      if(i>0){
 	  var pPrev=data_pTestModel[i-1];
 	  data_pTestModel[i]
 	    =Math.min(1.42*pPrev, Math.max(0.71*pPrev, data_pTestModel[i]));
-	}
-	
-      }
-
-      else{// use proportional model
-	var pModel=10*7*data_dn[i]/n0;
-	data_pTestModel[i]=Math.max(pTestMin,Math.min(1,pModel));
       }
     }
-
-
-    else{// no dn data
+    
+    else{ // no valid dn data
       data_pTestModel[i]= (i>0) ? data_pTestModel[i-1] : pTestInit;
     }
   }
+ 
 
-
-  // !! sqrt-model supersmooth, linear short-term
-  
-  var testNew_pTest=true; 
-  var rSuperSmooth=1./21; // denom be longer than holiday special effects
-
-  if(testNew_pTest){
-    var pTestSuperSmooth=[];
-    var pTestLinDirect=[];
-    pTestSuperSmooth[0]=pTestInit;
-
-    for(var i=0; i<data.length; i++){
-
-      if((data_dn[i]>0)&&(data_dn[i]<1e11)){
-	pTestLinDirect[i]=tauInfectious_fullReporting*data_dn[i]/n0;
-      }
-      else{
-	pTestLinDirect[i]=(i>0) ? pTestLinDirect[i-1] : pTestInit;
-      }
-      var pSqrt=Math.sqrt(pTestLinDirect[i]); //!!!
-
-      pSqrt=Math.min(1, pTestMin*Math.sqrt(1+Math.pow(pSqrt/pTestMin,2)));
-
-      if(i>0) pTestSuperSmooth[i]=rSuperSmooth*pSqrt  // EMA
-	+(1-rSuperSmooth)*pTestSuperSmooth[i-1];
-
-    }
-
-    // normalize high-frequency dn fluctuations to locally E(.)=1
-    // and redefine data_pTestModel!
     
+  // optionally EMA
+
+  var useSuperSmooth=false; //!!!
+  
+  if(useSuperSmooth){
     for(var i=0; i<data.length; i++){
-      pTestLinDirect[i]/=Math.pow(pTestSuperSmooth[i],2);
-      data_pTestModel[i]=Math.min(1,pTestSuperSmooth[i]*pTestLinDirect[i]);
-
-      if(false){// LOG possibly consolidate with DATALOG
-      //if(i>data.length-21){
-
-	console.log(
-	  insertLeadingZeroes(data[i]["date"]),
-	  " pTestLinDirect[i]=",pTestLinDirect[i],
-	  " pTestSuperSmooth[i]=",pTestSuperSmooth[i],
-	  " data_pTestModel[i]=",data_pTestModel[i],
-	  "");
-      }
-    }     
+        if(i>0) pTestSuperSmooth[i]=rSuperSmooth*data_pTestModel[i] 
+	  +(1-rSuperSmooth)*pTestSuperSmooth[i-1];
+    }
+    for(var i=0; i<data.length; i++){
+	data_pTestModel[i]=pTestSuperSmooth[i];
+    }
   }
 
+  if(true){
+    console.log("initializeData: modelled test probability \"Hellfeld\"",
+		"for testExponent=",testExponent);
+    for(var i=0; i<data.length; i++){
+      console.log(
+        insertLeadingZeroes(data[i]["date"]),
+        " tauInfectious_fullReporting=",tauInfectious_fullReporting,
+	" data_dn[i]=",data_dn[i],
+	" n0=",n0,
+	" data_pTestModel[i]=",data_pTestModel[i],
+	" pTestSuperSmooth[i]=",pTestSuperSmooth[i],
+	"");
+    }
+  }
+ 
   
+ 
 
 
 
@@ -3292,6 +3283,8 @@ function IFRfun_time(it){ // uses IFR65time
 }
 
 
+// forecast reduction only in the graphics ("reduceFactOmicron")
+
 function fracICUfun_time(it){ // uses fracICUtime
   var itmax_calibICU=data_icuIncidence.length
       -data_idataStart-fracICU_dontUseLastDays;
@@ -3755,14 +3748,18 @@ function myCountryComparison(){ // callback "Kalibriere neu!
 }
 
 
+// comment out document.getEl... if no button in html
+
 function setMutationSim(withMutations){
   if(withMutations){
-    simulateMutation=true;
-    document.getElementById("buttonMut").innerHTML="&Omicron; Mutation [stop]";
+    useMutationIfAvailable=true;
+    simulateMutation=useMutationIfAvailable && (pMutRef>1e-6);
+    //document.getElementById("buttonMut").innerHTML="&Omicron; Mutation [stop]";
   }
   else{
+    useMutationIfAvailable=false;
     simulateMutation=false;
-    document.getElementById("buttonMut").innerHTML="&Omicron; Mutation [start]";
+    //document.getElementById("buttonMut").innerHTML="&Omicron; Mutation [start]";
   }
 }
 
@@ -3977,7 +3974,7 @@ MutationDynamics.prototype.initialize=function(it0,p0,r0,I10,I20,R0){
   this.r0=r0;
   this.R10=R0/(1+p0*r0*this.tauR);
   this.R20=this.R10*(r0*this.tauR+1)*(1-I10)/(1-I20);
-  if(true){
+  if(false){
     console.log("MutationDynamics initialize: this.tauR=",this.tauR,
 		" pMut=",p0,
 		" this.y=",this.y,
@@ -4784,6 +4781,17 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
     
     if(it==0){immunity.initialize(country);} // in doSimulationStep, !calibr
     if(simulateMutation){
+
+      // !!! initialisation just to have access to mutationDynamics.p_it[it]
+      // for graphics etc
+      // NaN at R20 not relevant since later initialized again
+      if(it==0){
+	mutationDynamics.initialize(itStartMut,pMutStart,rMutStart,
+				    immunity.I1, immunity.I2, R0);
+	console.log("mutationDynamics.p_it[itPresent-20]=",
+		    mutationDynamics.p_it[itPresent-20]);
+      }
+      
       if(it==itStartMut){ // R0=Rcalib at start of new variant
 	console.log("mutationDynamics.initialize: pMutStart=",pMutStart);
         mutationDynamics.initialize(itStartMut,pMutStart,rMutStart,
@@ -4852,8 +4860,8 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
 
 
     //console.log("stringency=",stringency," rVacc=",rVacc);
-    //if(false){
-    if((it<10)||(it>=itPresent-10)){
+    if(false){
+    //if((it<10)||(it>=itPresent-10)){
     //if(it>=itPresent-10){
       console.log("update outside calib: it=",it,
 		  " rVacc=",rVacc.toFixed(4),
@@ -5024,7 +5032,6 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
 
   // possibly override slider-controlled pTest with the square-root model;
   // in forecast mode constant trend  with seasonal pattern
-
   if(includeInfluenceTestNumber){ 
     if(idata<data_pTestModel.length){pTest=data_pTestModel[idata];} 
     else{
@@ -5037,8 +5044,13 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
       console.log("CoronaSim.updateOneDay: it-itPresent=",it-itPresent,
 		  " pTest=",pTest);
     }
-    
   }
+  else{
+    pTest=pTestInit;
+  }
+
+  
+  //if(!inCalibration){console.log("pTest=",pTest);}
 
   var dtau=Math.min(Math.floor(tauAvg/2),Math.round(tauTest));
   var f_T=1./(2*dtau+1);
@@ -6024,9 +6036,9 @@ DrawSim.prototype.drawAxes=function(windowG){
       line++;
 
       var str_R0=((it<itStartMut)||(!simulateMutation))
-	?", R0="+(R0_actual.toFixed(2))
-	:", R10="+(mutationDynamics.R10.toFixed(2))
-	+", R20="+(mutationDynamics.R20.toFixed(2))
+	?", R0eff w/o O="+(R0_actual.toFixed(2))
+	:", R0_Delta="+(mutationDynamics.R10.toFixed(2))
+	+", R0_O="+(mutationDynamics.R20.toFixed(2))
 	+", pOmicron="+(mutationDynamics.p.toFixed(2));
       
       ctx.fillStyle="red"; // "rgb(255,0,0)"
@@ -6182,17 +6194,21 @@ DrawSim.prototype.transferSimData=function(it){
   // due to new Omicron variant
   // to do it real: need pMutArr[] for past pMut's
 
-  var reduceFactOmicron=0.40; // 0=zero ICUs, 1 is as many as Delta
-  var reduceTime=10.; //days
-  if(simulateMutation&&(it>itPresent)){
-    var pMut=(it>=itStartMut) ? mutationDynamics.p : 0;
-    var reduceFactorRaw=(1-pMut)+pMut*reduceFactOmicron; 
-    //var w=0.5*Math.tanh(Math.min(1, (it-itPresent)/reduceTime);
-    var w=0.5*(1+Math.tanh((it-itPresent-reduceTime)/(0.8*reduceTime)));
-    var reduceFactor=1-w+w*reduceFactorRaw;
+  var reduceFactOmicron=0.30; // 0=zero ICUs, 1 is as many as Delta
+  var calibrationDelay=14;
+  var ICUDelay=10; // delay between infection and ICU
+
+  if(simulateMutation&&(it>=itPresent-calibrationDelay)){
+
+    // ICUs now relate to pMut 14 days ago
+    // (note: p_it[it] not yet defined, only up to p_it[it-1])
+    var pMut     =mutationDynamics.p_it[it-ICUDelay];
+    var pMutStart=mutationDynamics.p_it[itPresent-calibrationDelay-ICUDelay];
+    var reduceFactor=((1-pMut)+pMut*reduceFactOmicron)
+	/ ((1-pMutStart)+pMutStart*reduceFactOmicron);
     this.dataG[33].data[it]*=reduceFactor;
     this.dataG[53].data[it]*=reduceFactor;
-
+    //console.log("it-itPresent=",it-itPresent," reduceFactorRaw=", reduceFactorRaw," reduceFactor=",reduceFactor);
   }
 
   
