@@ -153,6 +153,7 @@ var measuresView=true;  // false: R0 and parameter view
 
 var showCoronaSimulationDe=true; // bottom right
 
+
 // debugApple=true for debugging of devices w/o console (ipad) redirect
 // it to a html element using console-log-html.js
 // copy corona.js to coronaDebugApple.js and 
@@ -229,15 +230,21 @@ var dayStartMar=dayStartMarInit;
 
 var dayStartYear=dayStartMar+59;
 var dateStart=new Date(2020,02,dayStartMar); // months start @ zero, days @ 1
-var present=new Date();   // time object for present 
+var present=new Date();   // time object for present
+var dateGraphicsStart=new Date("2021-11-01"); //!!! fast sim before
+
 var it=0; //!!
 const oneDay_ms=(1000 * 3600 * 24);
+
 var itPresentInit=Math.floor(
     (present.getTime() - dateStart.getTime())/oneDay_ms); 
                 // itPresent=days(present-dateStart)
                 // floor because dateStart time is 00:00 of given day
-
 var itPresent=itPresentInit;
+
+var itGraphicsStartInit=Math.floor(
+  (dateGraphicsStart.getTime() - dateStart.getTime())/oneDay_ms);
+var itGraphicsStart=itGraphicsStartInit;
 
 
 //######################################################################
@@ -726,10 +733,10 @@ var dataCmp_dxIncidence=[]; // compare weekly incidence per 100 000 from data
 
 var mutationDynamics=new MutationDynamics();   
 
-//!!!!! place switch to use mutationDynamics here !!!!
+//!!! place switch to use mutationDynamics here !!!!
 // use_startMutRel=true: start mut fixed time difference
 // dit_startMut2present before present
-// !!!! Not good at beginning of new wave
+// !!! Not good at beginning of new wave
 // because then p grows logistically while Rcalib approx const
 // R10 and R20 decrease drastically because of R10=R0/(1+p*tau*r)
 
@@ -1185,7 +1192,7 @@ function initializeData(country,insideValidation){
   dayStartYear=dayStartMar+59; // for calc_seasonFactor
   dateStart=new Date(2020,02,dayStartMar);
   itPresent=itPresentInit; // will possibly be changed below
-
+  itGraphicsStart=itGraphicsStartInit;
 
 
   
@@ -1218,6 +1225,7 @@ function initializeData(country,insideValidation){
     dateStart=new Date(2020,02,dayStartMar+daysForwards);
     dayStartYear+=daysForwards;
     itPresent -= daysForwards; // di2 unchanged
+    itGraphicsStart -= daysForwards; // di2 unchanged
     console.log("Warning: no data >=ten days before sim start",
 		"\n => shift start date by ",daysForwards,
 		" days to ",data2[data2_idataStart]["date"]);
@@ -3636,11 +3644,11 @@ function myRestartFunction(){ // called if new country and other events
   clearInterval(myRun);
 
   
-  //!! skip sim start
+  //!!!!! skip sim start
   // corona.updateOneDay too low-level; need doSimulationStep
   // to update some graphics-related stuff and, e.g., fracDie
 
-  while(it<230){doSimulationStep(false);} // fixed starting time
+  while(it<itGraphicsStart){doSimulationStep(false);} // !!!! fixed starting time
 
   
   drawsim.transferRecordedData(); // update graphics and scaling
@@ -3771,8 +3779,9 @@ function toggleMutationSim(){ // callback (Delta) Mutation from html button
 
 
 
+// simulationRun only activated with setInterval after dateGraphicsStart
 
-function simulationRun() {
+function simulationRun() { 
 
 
   //console.log("simulationRun: before doSimulationStep: it=",it);
