@@ -1,0 +1,188 @@
+Infizierte vs Inzidenzen - Das Daten Dilemma Deutschland im Vergleich
+mit \"Osterreich
+
+Einleitung
+=========
+
+[ich]
+
+* Hallo liebe Simulanten, das wird das vorletzte Video diese Saison,
+  warum, erfahrt ihr gleich im letzten Video.
+
+* Da meine Simulation auch die ganze Datenerfassung samt
+  Verzoegerungen und Fehler modelliert, thematisiere ich hier mal das
+  Datendilemma in Deutschland im vergleich mit einem Land, was es
+  besser macht: Oesttereich
+
+
+
+\"Anderungen am Simulator
+==========================
+
+[corona-simulation.de Start]
+
+Ich habe an der Darstellung der Simulation einiges veraendert,
+
+* insbesondere habe ich den unteren Teil, die Intensivstation-Belegung
+  und die an oder mit Covid gestorbenen, vergr\"o\3ert dargestellt, und
+  zwar um den Faktor 100.
+
+* Sind die schwarzen und die orangenen Balken gleich lang, bedeutet
+  dies eine Fallsterblichkeit: Zahl an oder mit Covid gestorbene/Zahl
+  positiver PCR-Tests von 1 %. Also bei der Delta-Welle [zeigen] um 0.6%, bei
+  Omicron [zeigen] um 1 Promille
+
+* Die brauen Balken geben zu jeder Zeit die Zahl der Intensivpatienten
+  mit pos PCR-Test pro 100 000 an. Etwa die H\"alfte davon sind wegen
+  Covid dort, die andere H\"alfte ist aus anderen Gr\"unden auf
+  Intensiv (Unfall, schwere OP), aber halt mit positiven PCR Test 
+
+* Ebenso habe ich die Lockdownst\"arke um den
+  Faktor 10 vergroessert, sie geht jetzt also von 0 bis 1000, nicht von
+  0 bis 100. Sie ging Ende Januar von 84% auf 77% zurueck, bleibt aber
+  eine der h\"ochsten weltweit
+
+
+Deutschland, Standardszenario
+=============================
+
+[Simulieren im Standardszenario]
+
+Simulieren wir also nun im Standardszenario "alles bleibt wie es ist:
+Impfrate, Boosterrate, Zahl der Tests, Lockdownstaerke. Nur die
+Jahreszeit und damit der im Modell kalibrierte Effekt auf die
+Infektionsdynamik aendert sich natuerlich
+
+* Das Inzidenzmaximum wird bald erreicht sein, naemlich 1700 in einer
+Woche, also Mitte Februar. Das hatte ich bereits am 16. Dezember 2021,
+also noch vor der Omicron-Welle, weitgehend vorausgesagt. 
+
+[https://youtu.be/vhjcbYVHKwE?t=319]
+
+1400 Ende Januar/Anfang Beruar. Wohlgemerkt auf einen zeitlichen
+Stand, bei der die orangenen Balken enden.
+
+
+Vergleich mit \"Osterreich
+=========================
+
+[Oesterreich Gegenwart]
+
+Nun aber zum Vergleich mit Oesterreich, der aufgrund unterschiedlicher
+Teststrategien sehr instruktiv ist
+
+[simulieren]
+
+Zunaechst Sim mit Standardszenario: Max wie D Mitte Februar, aber bei
+fast 3000. Sind es aber dort wirklich mehr Infizierte? Schauen wir mal
+tiefer in die anderen Ansichten des Simulators rein!
+
+[Faelle vs Infizierte Oestereich]
+
+Fast 4000 Test-Positive pro Tag und Million, knapp 5000 simulierte
+Infektionen pro Tag und Million
+
+* ACHTUNG. Hier sind die Tageszahlen pro Million, nicht
+  die Wochenzahlen pro 100000 gezeigt, der Zahlenwert ist also um den
+  Faktor 10/7 hoeher als die Wocheninzidenz
+
+* Was sagt unds dies?
+  Die Oesterreicher erwischen fast jeden Infizierten, die
+  Dunkelziffer ist unter 20% !
+
+
+[Faelle vs Infizierte Deutschland]
+
+Die deutschen haben zur Zeit gute 2000 Testpositive pro Tag und Mio,
+aber 6000 Infizierte pro Tag und Million. Nur jeder dritte Infektion
+wird erwischt. Warum der Unterschied?
+
+
+[Tests Deutschland]
+
+In D werden etwa 6000 Tests pro Tag und Mio durchgefuehrt, genau so
+viel, wie simulierte Infektionen (violette Kurve). Konsistent mit den
+2/3 der Infizierten, die nicht durch positive Tests erwischt werden,
+ist die Test-Positivrate gute 30%
+
+[Infektionsraten D]
+
+Diese Positivrate ist viel zu hoch! Ueber 50% kann sie theoretisch gar nicht
+steigen, da jeder positiv Getestete, der nicht gerade stirbt
+(Promillebereich) sich irgendwann mit einem negativen Test
+freitestet.
+
+* Da politisch begruendet nicht alle verfuegbaren
+  Testkapazitaeten genutzt werden (z.B. die von wissenschaftlichen
+  Instituten) und die Teststrategie kritikwuerdig ist, ist bei den
+  Tests die Kapazit\"atsgrenze erreicht. Das hei\3t die
+  Inzidenz kann in D gar nicht auf ueber 2500 steigen,
+  selbst wenn alle auf einmal infiziert waeren! Deshalb gibt es auch
+  bei mir eine so hohe simulierte Dunkelziffer, waehrend sie in Oesterreich
+  so bei 20% liegt.
+
+Warum ist sie in Oesterreich in der Simulation so tief?
+
+[Tests D]
+
+Gehen wir zurueck zur Testansicht und vgl mit Oesterreich:
+
+[Tests Oesterreich]
+
+Statt 5000 pro Million und Tag testen die 100 000 pro Tag und Million,
+also im Mittel jeden alle 10 Tage, einschl. Freitests! Da ist klar,
+dass kaum einer durch die Lappen geht!
+
+[Infektionsraten Oesterreich]
+
+Konsequenterweise ist die Positivrate immer unter gesunden 5%,
+waehrend die Fallsterblichkeit wie in D auf unter 1 Promille, also
+Grippeniveau sinkt.
+
+
+
+Was machen die \"Osterreicher anders?
+======================================
+
+Wie machen die Oessis diese 20 mal so hohe Testh\"aufigkeit?
+
+* Zunaechst mal nutzen sie alle Kapazitaeten, auch die von der
+  Privatwirtschaft und den Forschungsinstituten angebotenen
+
+* Vor allem erlaubt die niedrige Positivrate aber Pooling.
+
+Nehmen wir den Worst-Case in Oesterreich von 5% Positivrate an. Was
+bedeutet da Pooling?
+
+1. Wir teilen jede Probe in zwei Teile und werfen die eine H\"alfte
+  mehrerer  Proben zusammen, z.B. 5 proben
+
+2. Die Mixtur wird mit einem Testkit getestet. In
+  1-0.95^5 approx 80% der faelle ist die gepoolte Probe negativ,
+  d.h. kein einziger ist positiv
+
+3. Ist die gepoolte Probe positiv, werden alle 5 anderen
+  Probenh\"alften einzeln getestet.
+
+Erwartete Zahl der verbrauchten Testkits fuer 5 Proben
+
+    1 + 0.2*5=2
+
+* 2 Testkits fuer 5 Personen. man spart also 60% an PCR-Testkits ein.
+
+* Je geringer
+  die erwartete Positivrate, desto mehr Proben kann man zusammenwerfen
+  und desto effizienter wird das Ganze. Bei deutschen 33% wuerde man durch
+  Poolen mehr Testkits verbrauchen als bei Einzeltestung!
+
+
+
+Bottom Line
+==========
+
+Zusammenfassung: In diesem Video habe ich gezeigt, dass Deutschland
+trotz geringerer Onzidenz wohl eine hoehere Infektionsrate hat als
+Oesterreich, da in Oesterreich 20 mal mehr getestet werden und kaum
+ein Infizierter durch die Lappen geht, waehrend es in Deutschland eine
+simulierte Dunkelziffer von 2/3 der Infizierten gibt
+
