@@ -1,0 +1,31 @@
+Hi Joerg,
+
+da war tatsaechlich eine falsche Interpretation der Daten, die zwar im Mittel richtige Ergenisse liefert, aber jetzt bei der extremen Unregelmaessigkeiten der deutschen Datenlage die letzten Tage betreffen. Nach Korrektur habe ich nun 1420 und fallende Inzidenzen (die ZEIT hat 1477, das ist aber moeglicherweise der gestrige Wert). Warum Dateninterpretation? Bildet man naiv das gleitende 7-Tages-Mittel, gibt es auch bei den Wocheninzidenzen Spruenge, weil die Wochenmaxima und Minima (teils extrem, weniger als 30% des Mittelwertes) nicht immer genau 1 Woche auseinanderliegen, sondern mal 6, mal 8 Tage. Die gleitenden Mittel enthalten also manchmal zwei Maxima, manchmal gar keines und analog mit den Minima.
+
+Man muss also auch die Wochensummen glaetten, was natuerlich erwartungstreu fuer die letzten Tage nur mit kleineren Mittelungsintervallen geht und fuer den letzten Tag gar nicht (da die Daten der Zukunft fehlen).
+
+Bisher hatte ich direkt die kumulierten Originaldaten geglaettet und dann die (nur zur Darstellung verwendeten) geglaetteten taeglichen durch Differenzenbildung errechnet.
+Nun bilde ich erst durch Differenzenbildung aus den kumulierten Originaldaten die taeglichen Daten, glaette diese und berechne damit durch Summenbildung/Integration die geglaetteten kumulierten Faelle, die Basis der Kalibrierung sind. 
+
+Zwar sind Glaettung und Differenzen/Summenbildung/Integration generell kommutativ (Reihenfolge egal, deshalb habe ich es so einfach wie moeglich gemacht), dies gilt aber nicht am Rand wegen des variablen Glaettungsintervalls.
+Besten Gruß,
+
+ ----------------------------------------------------------
+Dr. Martin Treiber
+Institute for Transport & Economics, TU Dresden
+Chair of Traffic Modelling, Econometrics, and Statistics
+Falkenbrunnen, Room 123 (two floors up from the entrance!)
+Würzburger Str. 35, D-01062 Dresden
+martin@mtreiber.de
+www.mtreiber.de
+phone/fax: +49 (351) 463 36794 / 36809
+---------------------------------------------------------
+
+
+Jörg Teumer <joergteumer@yahoo.de> hat am 19.02.2022 16:23 geschrieben:
+
+
+Hallo Martin, woher kommen die Diskrepanzen zwischen Deinem Simulator und den RKI- Daten?
+
+Nach RKI sinkt die Inzidenz täglich und liegt noch bei 1350. Bei Deinem Simulator sind täglich steigende Zahlen zu erkennen bei Inzidenz aktuell um 1650. 
+Was ist da los???

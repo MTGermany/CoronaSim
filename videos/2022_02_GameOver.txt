@@ -1,0 +1,188 @@
+
+Game Over - Warum die Corona-Pandemie nun trotz hoher Inzidenzen vorbei ist
+
+In diesem letzten Video diese Erkältungssaison zeige ich anhand meines Simulators corona-simulation.de, dass die Pandemie trotz "Peak-Covid" in den Inzidenzen eigentlich schon vorbei ist: Sie wandelt sich zur Endemie. Ich zeige deskriptiv die bisherige Entwicklung vom Urtyp über Alpha bis Omicron mit den jeweiligen Virulenzen und simuliere 5 Szenarien von Hammer (der aktuelle weltmeisterlich hohe Maßnahmenlevel wird beibehalten) über Dance (schrittweise, aber nicht vollständige Lockerung) bis zu finalem "Game Over" im Mai und Juni. Dabei zeigt sich, dass längere und/oder stärkere Maßnahmen durchaus zu höheren späteren Wellen führen können! Schussfolgerung: Spätestens im Mai ist komplettes Game Over, also ein finaler Freedom Day angesagt.
+
+
+00:00 Hammer, Dance oder Game Over?
+
+02:33 Die Wellen vom Urtyp über Alpha bis Omicron und die jeweiligen Virulenzen sowie Szenario 0: Hammer
+
+10:51 Vergleich der Omicron-Virulenz mit Grippeviren
+
+13:48 Szenario I: Sofortige Lockerung
+
+15:16 Szenario II Lockerung in Zwei Wochen, weitere Lockerung Anfang April: Dance
+
+19:16 Szenario III: Game Over ab 1. Mai
+
+21:30 Szenario IV: Game Over, aber erst einen Monat später
+
+26:26 Schlussfolgerung: Es ist bald vorbei. Game Over
+
+
+
+
+1. Hammer and Dance vs game Over ============================
+
+[ich]
+
+Dies wird wohl mein letztes Corona-Video, zumindest diese Erkältungssaison sein, denn die Seuche ist nahezu vorbei.
+
+
+[https://unchartedterritories.tomaspueyo.com/p/covid-end-game]
+
+Auch einer der bekanntesten Publizisten, Tomas Pueyo - Ja, der mit dem Hammer und dem Dance, ist nun auch dieser Ansicht.
+
+* Denn nun gilt weder der Hammer: Soforte radikale Schließung und Isolation, die im März 2020 am Anfang zu zögerlich erfolgte
+
+* Noch der Dance, also mit den Restriktionen spielen, so dass die Neuerkrankungen dosiert bleiben
+
+* Sondern nun ist --- GAME OVER --- Aus und vorbei
+
+
+[ich]
+
+Wie das, obwohl doch jeden Tag die sog Inzidenzen auf neue Rekordhöhen steigen oder gerade --- PEAK COVID --- bezüglich der Inzidenzen erreicht ist? Da kann meine Corona-Simulation Instruktives liefern. Zentral sind drei Dinge, die immer wieder verwechselt bzw falsch verstanden werden:
+
+* Erstens sind Inzidenzen nicht gleich Erkrankungen, wie ich im   letzten Video am Beispiel Deutschland und Österreich zeigte
+
+* Zweitens Erkrankung im Jahr 2020/21 ist nicht gleich Erkrankung   jetzt
+
+* Drittens ist Omicron wirklich ein --- GAME CHANGER --- . Weder Hammer noch   Dance können, anders als bei den vorhergehenden Mutationen, die   Gesamtzahl an Infektionen gegenüber dem Game-Over Szenario reduzieren
+
+
+Die aktuelle Simulation in Deutschland ======================================
+
+
+[corona-simulation.de Start]
+
+Wie im letzten Video erläutert, habe ich an der Darstellung der Simulation einiges veraendert, insbesondere habe ich den unteren Teil, die Intensivstation-Belegung und die an oder mit Covid gestorbenen, vergrößert dargestellt, und zwar um den Faktor 100. Gleich lange Balken bedeuten 1 % Fallsterblichkeit bzw bei einer Liegezeit von einer Woche 1 % Intensivstationswahrscheinlichkeit
+
+Das zeigt sehr schoen, wie sich die Verhaeltnisse aendern:
+
+* In der Delta-Welle [Zwei Pfeile oben und unten]   sind die schwarzen, nach unten gehenden Balken   der an oder mit Covid gestorbenen, etwa 60% der orangen   Balken, also 0.6% Fallsterblichkeit bzw   Case Fatality rate, also an oder mit Covid verstorbenen pro   positivem PCR-Test. Gleichzeitig sind bis zu 6 Personen pro 100 000   covidbedingt in Intensivstationen (braune Balken)
+
+[Infektionsraten  klicken, Buchstaben tippen]
+
+* Das zeugt auch sehr schoen die violette Kurve in der Ansicht Infektionsraten
+
+[zuruck Inzidenzen]
+
+
+Die Virulenz und Tödlichkeit der verschiedenen Varianten =========================================================
+
+* Wie sieht es nun in den anderen Wellen aus, der Urtyp, Alpha und   Omicron-Welle?
+
+[Scrollen zoom out]
+
+Durch Mausrad drehen kann man, zumindest am PC, den Darstellungszeitraum veraendern
+
+* Urtyp Maerz/April 2020: Schwarze und braune Balken riesig im   vergleich zu den Inzidenzen
+
+* in der Alpha-Doppelwelle werden Maxima sowohl bei den Todeszahlen   (bis zu 7 pro 100000 pro Woche) unt Intensivbelegung (ebenfalls bis   zu 7 pro 100000) erreicht, das Verhältnis zu den Inzidenzen ist   aber nicht mehr so extrem. Die erste Alpha-Welle hatte noch CFR von   3% (schwarze Balken 3 mal so lang, die zweite 1.2% (schwarze Balken   etwa gleich lang
+
+* Bei Delta waren sie wie gesagt etwa bei 0.6% (schwarze Balken 0.6   mal so lang).
+
+* Und bei Omicron???
+
+[weitersimulieren]
+
+Das Inzidenzmaximum ist bei 1500 erreicht bzw wird, wenn ich die fragwürdige Verschärfung des Lockdowngrades Anfang Februar auf 88% ignoriere, bei 1700 in einer Woche, also Mitte Februar sein. Das hatte ich bereits am 16. Dezember 2021, also noch vor der Omicron-Welle, weitgehend vorausgesagt.
+
+[https://youtu.be/vhjcbYVHKwE?t=319]
+
+1400 Ende Januar/Anfang Beruar. Wohlgemerkt auf einen zeitlichen Stand, bei der die orangenen Balken enden.
+
+Die Todeszahlen und Intensivstationszahlen habe ich aber drastisch ueberschaetzt, da zwar schon aus Wellen in anderen Laendern das Omikron-Infektionsprofil und das Impf- und Boosterprofil bekannt war (ist in der Simulation natuerlich drin), aber nicht die Milde von Omicron.
+
+Sie hat es tatsaechlich nur verdient, O-MIC-ron und nicht O-MEGA genannt zu werden, wie ich es damals versehentlich tat.
+
+Denn sie ist wirklich --- MICKRIG --- ;-)
+
+
+Projektion Standardszenario ============================
+
+[Zurueck zum Basis-Projektionsszenario]
+
+Also zurueck zum aktuellen Basis-Projektionsszenario mit den Annahmen
+
+* selbe Impf- und Boosterraten
+
+* selbe Zahl an Testungen (in D koennen sie ja, wie im anderen Video erläutert, kaum noch steigen)
+
+* unveraenderte Isolationsmaßnahmenstärke von 77%
+
+* Nur die kalibrierte Saisonalität geht ein
+
+Die Sterblichkeitsraten sind nun, mit dem nun bekannten Sterblichkeits- und Intensivstationenprofil, von mir auf max 1.5 pro Woche und 100000 bzw 3 Intensivbetten  pro 100000, die mit Patienten mit positiven Covid-Test belegt sind. Trotz der Zeitverzoegerung werden sie also nur noch wenig steigen.
+
+[Herauszoomen]
+
+Und wohlgemerkt, sie waren schon viel hoeher!
+
+[Hereinzoomen und auf Infektionsraten]
+
+Die Case-Fatality-Rate, Sterblichkeit pro pos PCR-test, ist von 6-10 Promille auf 1.5 Promille gesunken, die simulierte IFR Infection Fatality rate IFR65, also die in der Altersgruppe 60-70 jahren, auf weit unter 1 Promille (wohlgemerkt mit Impfungen)
+
+Wohlgemerkt: Nur die Hälfte von aktuellen Covid-Intensivpatienten sind auch wegen Covid dort, die andere Hälfte ist aus anderen Gründen auf Intensiv (Unfall, schwere OP), aber halt mit positiven PCR Test
+
+
+Vergleich mit der Grippe-CFR ============================
+
+Wie sieht es nun bei der Grippe aus?
+
+[https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3809029/table/T1/?report=objectonly]
+
+Ich zeige hier eine Metastudie aus der wiss. Zeitschrift "Epidemiology", also eine Studie über andere Studien, die hier sehr instruktiv ist
+
+* Erste Gruppe: IFR geschätzt mit serologischen Stichproben. Das   wurde verwerflicherweise in D bei Covid nie gemacht. Werte um 10 pro   100000, also 0.1 Promille
+
+* Zweite Gruppe: Sympomatische Erkrankungen im Nenner, getestet oder   nicht. Weite Streuung
+
+* Dritte Gruppe entspricht unserer Case-Fatality rate: Zaehler   confirmed deaths, Nenner confirmed cases. Dort grippe weit ueber   100, also 1 Promille
+
+
+Lockerungen: Sind sie vernünftig und wenn ja wie viele? =========================================================
+
+Hammer, Dance oder Game Over?
+
+Scenario A: Lockerung sofort auf Sommerniveau (68%), keine weitere Lockerung
+
+Wichtiger als die Erhoehung der Inzidenz (über 2500 kann sie ja in D nicht gehen) sind die unteren grauen Kurven, Unterschied der projizierten künftigen Todeszahlinzidenzen. Bis zu ein Toter/Woche/100 000 Unterschied, aber weitaus geringer als frueher. Aber neue Welle naechsten Spätwinter!
+
+Scenario B: Lockerung in 2 Wochen auf Sommerniveau, ab 1. April auf Minimumswert letzten Jahres (40%) (Ausgehend von Standardszenario!)
+
+Zuerst Dance, dann im Sommer Friede freude Eierkuchen, aber neue Welle naechsten Winter. Aber niedriger trotz im Vgl zu Szenario A sehr lockerer Massnahmen im Sommer!
+
+
+Scenario C: The Dance: Inzidenz immer so bei 500 lassen. Kann nicht ewig so weitergehen!
+
+Scenario D: Halli Galli ab 1. Mai, davor wie Scenario B ((68%-40%)
+
+Scenario E: Halli Galli ab 1. Juni, sonst wie B (68%-40%)? Mehr Restriktionen sind mehr tote!
+
+
+
+Bottom Line ===========
+
+[D, rauszoomen]
+
+Schaut man sich die ganze Pandemie an, sieht man, dass die Pandemie trotz gerade erreichter oder noch nicht erreichtem PEAK-COVID nahezu vorbei ist und sich in eine Endemie wandelt. Ein Phasing Out nach Szenario D zeigt die Richtung. Es wird immer weiter Wellen geben, stärkere Restriktionen können sogar zu höheren Wellen führen
+
+[kumulierte Darstellung]
+
+aber die kumulierten Todeszahlen steigen im Verhältnis zu bisher minimal.
+
+[ich]
+
+Zudem gibt es ja ab März Impfungen gegen die neueren Varianten, in Zukunft jeweils im Frühwinter. Wie halt Grippe. Typisches Zeichen einer Endemie. Wie halt Grippe. Lebensrisiko.
+
+[2022_02_GameOver.png, hereinzoomen auf Bildschirm]
+
+Für die Pandemie und bis auf Weiteres für meine Corona-Videos gilt:
+
+GAME OVER
+
+
+

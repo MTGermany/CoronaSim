@@ -1374,6 +1374,7 @@ function initializeData(country,insideValidation){
   // cases for over a week by shifting some later cases to the missing cases
   // do not consider the first 9-1=8 weeks
 
+  if(false){
   var growthFactCrit=2;
   for(var j=0; j<Math.floor(data.length/7)-9; j++){
     var i0=data.length-1-7*j;
@@ -1410,19 +1411,21 @@ function initializeData(country,insideValidation){
 		  " data_cumCases=",Math.round(data_cumCases[i]));
     }
   }
-
+  }
   // initializeData (4b)
   // check smoothing the objective data_cumCases for calibration
-  // !!! also smoothes daily cases data_dxt to be constant last 4 values
+  // !!!! also smoothes daily cases data_dxt to be constant last 4 values
+  // if kernel >=7 (must be uneven)
 
-  var calibrSmoothed=true;
+  var calibrSmoothedCum=false;
   
-  if(calibrSmoothed){
+  if(calibrSmoothedCum){
     console.log("\nSmooth data_cumCases ...");
     data_cumCasesSmooth=smooth(data_cumCases,
 			       [1/7,1/7,1/7,1/7,1/7,1/7,1/7],false);
 //			       [1/5,1/5,1/5,1/5,1/5],false);
-//			       [1/3,1/3,1/3],false);
+//			       [1/4,1/4,1/4,1/4],false);
+//			       [1/3,1/3,1/3],false); //!!
     data_cumCases=data_cumCasesSmooth;
     for(var i=1; i<data.length; i++){
       data_dxt[i]=data_cumCases[i]-data_cumCases[i-1];
@@ -1435,6 +1438,34 @@ function initializeData(country,insideValidation){
     for(var i=data.length-10; i<data.length; i++){
       console.log(" data_dxt=",Math.round(data_dxt[i]),
 		  " data_cumCases=",Math.round(data_cumCases[i]));
+    }
+  }
+
+  
+  // initializeData (4c) alternative to (4b) smooth dayly cases and
+  // integrate cum cases instead of smooth cum and differentiate daily
+  
+
+  var calibrSmoothedDaily=true;
+  
+  if(calibrSmoothedDaily){
+    console.log("\nSmooth data_dxt (daily) ...");
+    var data_casesDailySmooth=smooth(data_dxt,
+			       [1/7,1/7,1/7,1/7,1/7,1/7,1/7],false);
+//			       [1/5,1/5,1/5,1/5,1/5],false);
+//			       [1/4,1/4,1/4,1/4],false);
+//			       [1/3,1/3,1/3],false); //!!
+    data_dxt=data_casesDailySmooth;
+    for(var i=1; i<data.length; i++){
+      data_cumCases[i]=data_cumCases[i-1]+data_dxt[i];
+    }
+
+    if(true){
+      console.log("initializeData (4c):");
+      for(var i=data.length-10; i<data.length; i++){
+        console.log(" data_dxt=",Math.round(data_dxt[i]),
+		    " data_cumCases=",Math.round(data_cumCases[i]));
+      }
     }
   }
 
@@ -5273,19 +5304,36 @@ function smooth(arr, kernel, debug){
     }
   }
 
-  // !!! final touches: consolidate 5 last data points conserving
-  // the trend
+  // !!! final touches: optionally consolidate 5 last data points conserving
+  // the trend sxy/sx^2|_last points (alternatively 3 points below or none)
 
-  if(true&&(kernel.length>=5)&&(arr.length>=5)){
-    var avg=(smooth[arr.length-1]+smooth[arr.length-2]+smooth[arr.length-3]
-	     +smooth[arr.length-4]+smooth[arr.length-4])/5.;
-    // trend=b=sxy/sx2=E((x-xbar)(y-ybar))/sx2=E((x-xbar)y)/sx2, sx2=10
-    var trendLast=(2*smooth[arr.length-1]+smooth[arr.length-2]
-		   -smooth[arr.length-4]-2*smooth[arr.length-5])/10.;
-    for(var i=arr.length-5; i<arr.length; i++){
-      smooth[i]=avg+trendLast*(i-(arr.length-3));
+  if(false){
+    if((kernel.length>=5)&&(arr.length>=5)){
+      var avg=(smooth[arr.length-1]+smooth[arr.length-2]+smooth[arr.length-3]
+	       +smooth[arr.length-4]+smooth[arr.length-4])/5.;
+      // trend=b=sxy/sx2=E((x-xbar)(y-ybar))/sx2=E((x-xbar)y)/sx2, sx2=10
+      var trendLast=(2*smooth[arr.length-1]+smooth[arr.length-2]
+		     -smooth[arr.length-4]-2*smooth[arr.length-5])/10.;
+      for(var i=arr.length-5; i<arr.length; i++){
+        smooth[i]=avg+trendLast*(i-(arr.length-3));
+      }
     }
   }
+
+  // !!! final touches: optionally consolidate 3 last data points conserving
+  // the trend sxy/sx^2|_last points (alt 5 points or none)
+
+  if(false){
+    if((kernel.length>=3)&&(arr.length>=3)){
+      var avg=(smooth[arr.length-1]+smooth[arr.length-2]
+	       +smooth[arr.length-3])/3.;
+      var trendLast=(smooth[arr.length-1]-smooth[arr.length-3])/2.;
+      for(var i=arr.length-3; i<arr.length; i++){
+        smooth[i]=avg+trendLast*(i-(arr.length-2));
+      }
+    }
+  }
+
   
   if(debugSmooth){
     console.log("debug smoothing:");
@@ -5409,16 +5457,16 @@ function DrawSim(){
 		 color:colCasesRecovCumSim};
 
   // cumulate data: data key not displayed
-  this.dataG[2]={key: "Insg. Gestorbene (Daten und Sim, in 100)", data: [],
+  this.dataG[2]={key: "Insg. Gestorbene (Daten und Sim, in 10)", data: [],
 		 type: 3, plottype: "lines",  
-		 ytrafo: [0.01, false,false],
+		 ytrafo: [0.1, false,false],
 		 color:colDead};
   
-  this.dataG[35]={key: "Insg. Gestorbene (letzte Sim, in 100)",
+  this.dataG[35]={key: "Insg. Gestorbene (letzte Sim, in 10)",
                                    //Insgesamt Gestorbene (in 100)", 
 		  data: simPrevious[35], // simPrevious[][] defined in validate()
 		  type: 3, plottype: "lines",  
-		  ytrafo: [0.01, false,false],
+		  ytrafo: [0.1, false,false],
 		  color:colDeadValid};
 
   this.dataG[4]={key: "Insgesamt positiv Getestete (in 1000)",data: [],
@@ -5431,9 +5479,9 @@ function DrawSim(){
 		 type: 0, plottype: "points",  
 		 ytrafo: [0.001, false,false], color:colCasesRecovCum};
 
-  this.dataG[6]={key: "Insgesamt Gestorbene (in 100)", data: [],
+  this.dataG[6]={key: "Insgesamt Gestorbene (in 10)", data: [],
 		 type: 0, plottype: "points",  
-		 ytrafo: [0.01, false,false], color:colDead};
+		 ytrafo: [0.1, false,false], color:colDead};
 
  // this.dataG[7]={key: "#Tote ges/#positiv getestet ges", data: [],
 //		 type: 0, plottype: "points", 
@@ -6505,10 +6553,10 @@ DrawSim.prototype.checkRescaling=function(it){
   }
 
 
- // (3) restrict scalings for some windows
+ // (3) !!! restrict scalings for some windows
 
-  this.ymaxType[4]=Math.min(this.ymaxType[4], 35); // rel quant. <=20 %
-  this.ymaxType[0]=Math.max(this.ymaxType[0], 1); // abs lin to 20
+  //this.ymaxType[4]=Math.min(this.ymaxType[4], 35); // positive rate [%]
+  //this.ymaxType[0]=Math.max(this.ymaxType[0], 1); 
   //this.ymaxType[7]=3; // upper limit for new window "Ursache-Wirkung"
 
 

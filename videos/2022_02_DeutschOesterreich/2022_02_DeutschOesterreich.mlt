@@ -1,0 +1,495 @@
+<?xml version="1.0" standalone="no"?>
+<mlt LC_NUMERIC="C" version="7.5.0" title="Shotcut version 22.01.30" producer="main_bin">
+  <profile description="automatic" width="1334" height="768" progressive="1" sample_aspect_num="1" sample_aspect_den="1" display_aspect_num="667" display_aspect_den="384" frame_rate_num="1000" frame_rate_den="33" colorspace="709"/>
+  <chain id="chain0" out="00:01:52.272">
+    <property name="length">00:01:52.305</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2022_02_DeutschOesterreich1.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="shotcut:hash">f4f05b076494160a8d5854b8a868e8ea</property>
+    <property name="ignore_points">0</property>
+    <property name="creation_time">2022-02-08T10:38:13</property>
+    <property name="xml">was here</property>
+  </chain>
+  <chain id="chain1" out="00:02:38.379">
+    <property name="length">00:02:38.412</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2022_02_DeutschOesterreich2.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">c5d5f47869040d44d50fb8ba072688d5</property>
+  </chain>
+  <chain id="chain2" out="00:02:52.536">
+    <property name="length">00:02:52.569</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2022_02_DeutschOesterreich3.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">5d737af29405d1a6503c3b5167702d63</property>
+  </chain>
+  <chain id="chain3" out="00:03:01.485">
+    <property name="length">00:03:01.518</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2022_02_DeutschOesterreich4.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">c1436ea5b71a786e5d1bbae42b81561f</property>
+  </chain>
+  <chain id="chain4" out="00:01:15.510">
+    <property name="length">00:01:15.543</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2022_02_DeutschOesterreich5.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">eb47a6d85c573af6daab55055b66f807</property>
+  </chain>
+  <chain id="chain5" out="00:06:56.232">
+    <property name="length">00:06:56.265</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2022_02_DeutschOesterreich6.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">e519954118a08e8f9adee1c938f5ba51</property>
+  </chain>
+  <chain id="chain6" out="00:02:37.719">
+    <property name="length">00:02:37.752</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2022_02_DeutschOesterreich7.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">601e59f24e2ef9daaf6d4f090d4b399c</property>
+  </chain>
+  <chain id="chain7" out="00:02:24.750">
+    <property name="length">00:02:24.783</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2022_02_DeutschOesterreich8.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">f7eb1faf8e402e6c02d9eb2dc10ca79d</property>
+  </chain>
+  <chain id="chain8" out="00:01:17.490">
+    <property name="length">00:01:17.523</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2022_02_DeutschOesterreich9.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">be4911f9872682370d0b4cff739181a8</property>
+  </chain>
+  <playlist id="main_bin" title="Shotcut version 22.01.30">
+    <property name="shotcut:projectAudioChannels">2</property>
+    <property name="shotcut:projectFolder">1</property>
+    <property name="xml_retain">1</property>
+    <entry producer="chain0" in="00:00:00.000" out="00:01:52.272"/>
+    <entry producer="chain1" in="00:00:00.000" out="00:02:38.379"/>
+    <entry producer="chain2" in="00:00:00.000" out="00:02:52.536"/>
+    <entry producer="chain3" in="00:00:00.000" out="00:03:01.485"/>
+    <entry producer="chain4" in="00:00:00.000" out="00:01:15.510"/>
+    <entry producer="chain5" in="00:00:00.000" out="00:06:56.232"/>
+    <entry producer="chain6" in="00:00:00.000" out="00:02:37.719"/>
+    <entry producer="chain7" in="00:00:00.000" out="00:02:24.750"/>
+    <entry producer="chain8" in="00:00:00.000" out="00:01:17.490"/>
+  </playlist>
+  <producer id="black" in="00:00:00.000" out="00:19:41.085">
+    <property name="length">00:19:41.118</property>
+    <property name="eof">pause</property>
+    <property name="resource">0</property>
+    <property name="aspect_ratio">1</property>
+    <property name="mlt_service">color</property>
+    <property name="mlt_image_format">rgba</property>
+    <property name="set.test_audio">0</property>
+  </producer>
+  <playlist id="background">
+    <entry producer="black" in="00:00:00.000" out="00:19:41.085"/>
+  </playlist>
+  <chain id="chain9" out="00:01:52.272">
+    <property name="length">00:01:52.305</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2022_02_DeutschOesterreich1.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="shotcut:hash">f4f05b076494160a8d5854b8a868e8ea</property>
+    <property name="ignore_points">0</property>
+    <property name="creation_time">2022-02-08T10:38:13</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:caption">2022_02_DeutschOesterreich1.mkv</property>
+  </chain>
+  <chain id="chain10" out="00:02:38.379">
+    <property name="length">00:02:38.412</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2022_02_DeutschOesterreich2.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">c5d5f47869040d44d50fb8ba072688d5</property>
+    <property name="shotcut:caption">2022_02_DeutschOesterreich2.mkv</property>
+  </chain>
+  <chain id="chain11" out="00:02:38.379">
+    <property name="length">00:02:38.412</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2022_02_DeutschOesterreich2.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">c5d5f47869040d44d50fb8ba072688d5</property>
+    <property name="shotcut:caption">2022_02_DeutschOesterreich2.mkv</property>
+  </chain>
+  <tractor id="tractor0" in="00:00:00.000" out="00:00:00.858">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="chain10" in="00:00:06.402" out="00:00:07.260"/>
+    <track producer="chain11" in="00:00:12.936" out="00:00:13.794"/>
+    <transition id="transition0" out="00:00:00.858">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition1" out="00:00:00.858">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="mlt_service">mix</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+    </transition>
+  </tractor>
+  <chain id="chain12" out="00:02:38.379">
+    <property name="length">00:02:38.412</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2022_02_DeutschOesterreich2.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">c5d5f47869040d44d50fb8ba072688d5</property>
+    <property name="shotcut:caption">2022_02_DeutschOesterreich2.mkv</property>
+  </chain>
+  <chain id="chain13" out="00:02:52.536">
+    <property name="length">00:02:52.569</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2022_02_DeutschOesterreich3.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">5d737af29405d1a6503c3b5167702d63</property>
+    <property name="shotcut:caption">2022_02_DeutschOesterreich3.mkv</property>
+  </chain>
+  <chain id="chain14" out="00:03:01.485">
+    <property name="length">00:03:01.518</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2022_02_DeutschOesterreich4.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">c1436ea5b71a786e5d1bbae42b81561f</property>
+    <property name="shotcut:caption">2022_02_DeutschOesterreich4.mkv</property>
+  </chain>
+  <chain id="chain15" out="00:06:56.232">
+    <property name="length">00:06:56.265</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2022_02_DeutschOesterreich6.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">e519954118a08e8f9adee1c938f5ba51</property>
+    <property name="shotcut:caption">2022_02_DeutschOesterreich6.mkv</property>
+  </chain>
+  <chain id="chain16" out="00:06:56.232">
+    <property name="length">00:06:56.265</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2022_02_DeutschOesterreich6.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">e519954118a08e8f9adee1c938f5ba51</property>
+    <property name="shotcut:caption">2022_02_DeutschOesterreich6.mkv</property>
+  </chain>
+  <chain id="chain17" out="00:02:37.719">
+    <property name="length">00:02:37.752</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2022_02_DeutschOesterreich7.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">601e59f24e2ef9daaf6d4f090d4b399c</property>
+    <property name="shotcut:caption">2022_02_DeutschOesterreich7.mkv</property>
+  </chain>
+  <chain id="chain18" out="00:02:37.719">
+    <property name="length">00:02:37.752</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2022_02_DeutschOesterreich7.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">601e59f24e2ef9daaf6d4f090d4b399c</property>
+    <property name="shotcut:caption">2022_02_DeutschOesterreich7.mkv</property>
+  </chain>
+  <chain id="chain19" out="00:02:37.719">
+    <property name="length">00:02:37.752</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2022_02_DeutschOesterreich7.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">601e59f24e2ef9daaf6d4f090d4b399c</property>
+    <property name="shotcut:caption">2022_02_DeutschOesterreich7.mkv</property>
+  </chain>
+  <chain id="chain20" out="00:02:37.719">
+    <property name="length">00:02:37.752</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2022_02_DeutschOesterreich7.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">601e59f24e2ef9daaf6d4f090d4b399c</property>
+    <property name="shotcut:caption">2022_02_DeutschOesterreich7.mkv</property>
+  </chain>
+  <chain id="chain21" out="00:02:37.719">
+    <property name="length">00:02:37.752</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2022_02_DeutschOesterreich7.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">601e59f24e2ef9daaf6d4f090d4b399c</property>
+    <property name="shotcut:caption">2022_02_DeutschOesterreich7.mkv</property>
+  </chain>
+  <chain id="chain22" out="00:02:37.719">
+    <property name="length">00:02:37.752</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2022_02_DeutschOesterreich7.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">601e59f24e2ef9daaf6d4f090d4b399c</property>
+    <property name="shotcut:caption">2022_02_DeutschOesterreich7.mkv</property>
+  </chain>
+  <chain id="chain23" out="00:02:37.719">
+    <property name="length">00:02:37.752</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2022_02_DeutschOesterreich7.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">601e59f24e2ef9daaf6d4f090d4b399c</property>
+    <property name="shotcut:caption">2022_02_DeutschOesterreich7.mkv</property>
+  </chain>
+  <chain id="chain24" out="00:02:37.719">
+    <property name="length">00:02:37.752</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2022_02_DeutschOesterreich7.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">601e59f24e2ef9daaf6d4f090d4b399c</property>
+    <property name="shotcut:caption">2022_02_DeutschOesterreich7.mkv</property>
+  </chain>
+  <chain id="chain25" out="00:02:24.750">
+    <property name="length">00:02:24.783</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2022_02_DeutschOesterreich8.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">f7eb1faf8e402e6c02d9eb2dc10ca79d</property>
+    <property name="shotcut:caption">2022_02_DeutschOesterreich8.mkv</property>
+  </chain>
+  <tractor id="tractor1" in="00:00:00.000" out="00:00:00.858">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="chain24" in="00:02:36.861" out="00:02:37.719"/>
+    <track producer="chain25" in="00:00:01.782" out="00:00:02.640"/>
+    <transition id="transition2" out="00:00:00.858">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition3" out="00:00:00.858">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <chain id="chain26" out="00:01:17.490">
+    <property name="length">00:01:17.523</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2022_02_DeutschOesterreich9.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">be4911f9872682370d0b4cff739181a8</property>
+    <property name="shotcut:caption">2022_02_DeutschOesterreich9.mkv</property>
+  </chain>
+  <chain id="chain27" out="00:01:17.490">
+    <property name="length">00:01:17.523</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2022_02_DeutschOesterreich9.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">be4911f9872682370d0b4cff739181a8</property>
+    <property name="shotcut:caption">2022_02_DeutschOesterreich9.mkv</property>
+  </chain>
+  <tractor id="tractor2" in="00:00:00.000" out="00:00:00.297">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="chain26" in="00:00:30.030" out="00:00:30.327"/>
+    <track producer="chain27" in="00:00:51.777" out="00:00:52.074"/>
+    <transition id="transition4" out="00:00:00.297">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition5" out="00:00:00.297">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <playlist id="playlist0">
+    <property name="shotcut:video">1</property>
+    <property name="shotcut:name">V1</property>
+    <entry producer="chain9" in="00:00:03.069" out="00:00:35.871"/>
+    <entry producer="chain10" in="00:00:02.079" out="00:00:06.369"/>
+    <entry producer="tractor0" in="00:00:00.000" out="00:00:00.858"/>
+    <entry producer="chain11" in="00:00:15.477" out="00:02:22.011"/>
+    <entry producer="chain12" in="00:02:23.958" out="00:02:38.379"/>
+    <entry producer="chain13" in="00:00:02.706" out="00:02:00.792"/>
+    <entry producer="chain14" in="00:00:05.775" out="00:02:18.447"/>
+    <entry producer="chain15" in="00:00:00.726" out="00:02:33.660"/>
+    <entry producer="chain16" in="00:02:39.996" out="00:06:56.232"/>
+    <entry producer="chain17" in="00:00:00.759" out="00:00:03.366"/>
+    <entry producer="chain18" in="00:00:04.059" out="00:00:06.831"/>
+    <entry producer="chain19" in="00:00:07.392" out="00:00:12.903"/>
+    <entry producer="chain20" in="00:00:13.563" out="00:00:24.057"/>
+    <entry producer="chain21" in="00:00:24.585" out="00:01:09.108"/>
+    <entry producer="chain22" in="00:01:09.834" out="00:01:56.397"/>
+    <entry producer="chain23" in="00:01:58.443" out="00:02:00.561"/>
+    <entry producer="chain24" in="00:02:01.122" out="00:02:36.828"/>
+    <entry producer="tractor1" in="00:00:00.000" out="00:00:00.858"/>
+    <entry producer="chain25" in="00:00:02.673" out="00:02:22.473"/>
+    <entry producer="chain26" in="00:00:02.310" out="00:00:29.997"/>
+    <entry producer="tractor2" in="00:00:00.000" out="00:00:00.297"/>
+    <entry producer="chain27" in="00:00:52.107" out="00:01:14.784"/>
+  </playlist>
+  <tractor id="tractor3" title="Shotcut version 22.01.30" in="00:00:00.000" out="00:19:41.085">
+    <property name="shotcut">1</property>
+    <property name="shotcut:projectAudioChannels">2</property>
+    <property name="shotcut:projectFolder">1</property>
+    <property name="shotcut:scaleFactor">0.653023</property>
+    <track producer="background"/>
+    <track producer="playlist0"/>
+    <transition id="transition6">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="mlt_service">mix</property>
+      <property name="always_active">1</property>
+      <property name="sum">1</property>
+    </transition>
+    <transition id="transition7">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="version">0.1</property>
+      <property name="mlt_service">frei0r.cairoblend</property>
+      <property name="threads">0</property>
+      <property name="disable">1</property>
+    </transition>
+  </tractor>
+</mlt>

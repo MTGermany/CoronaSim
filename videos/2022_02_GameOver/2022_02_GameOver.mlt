@@ -1,0 +1,1087 @@
+<?xml version="1.0" standalone="no"?>
+<mlt LC_NUMERIC="C" version="7.5.0" title="Shotcut version 22.01.30" producer="main_bin">
+  <profile description="automatic" width="1334" height="768" progressive="1" sample_aspect_num="1" sample_aspect_den="1" display_aspect_num="667" display_aspect_den="384" frame_rate_num="1000" frame_rate_den="33" colorspace="709"/>
+  <chain id="chain0" out="00:01:42.174">
+    <property name="length">00:01:42.207</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2022_02_GameOver1.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="shotcut:hash">31c1916ea4b1308b20ba6a13407dd3c7</property>
+    <property name="ignore_points">0</property>
+    <property name="creation_time">2022-02-08T21:38:08</property>
+    <property name="xml">was here</property>
+  </chain>
+  <chain id="chain1" out="00:01:34.782">
+    <property name="length">00:01:34.815</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2022_02_GameOver2.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">f92472a91ec07313b6d90d2acbd068e0</property>
+  </chain>
+  <chain id="chain2" out="00:07:16.566">
+    <property name="length">00:07:16.599</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2022_02_GameOver3.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">68d31f4ce8f171aa5d0126d92dba6094</property>
+  </chain>
+  <chain id="chain3" out="00:01:53.163">
+    <property name="length">00:01:53.196</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2022_02_GameOver4.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">5b25209ffc627af45bbc859f9084202b</property>
+  </chain>
+  <chain id="chain4" out="00:04:21.549">
+    <property name="length">00:04:21.582</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2022_02_GameOver5.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">5225eb3861407fcd70d2c1566da4e416</property>
+  </chain>
+  <chain id="chain5" out="00:02:52.503">
+    <property name="length">00:02:52.536</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2022_02_GameOver6.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">f891eef7f6274fb89db32cf9cedf7b8b</property>
+  </chain>
+  <chain id="chain6" out="00:04:56.859">
+    <property name="length">00:04:56.892</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2022_02_GameOver7.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">1f681c9ae249e23144f3b714b90f550b</property>
+  </chain>
+  <chain id="chain7" out="00:06:13.068">
+    <property name="length">00:06:13.101</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2022_02_GameOver8.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">49bc72dd7288e4f32c6e962d5e0eccb5</property>
+  </chain>
+  <chain id="chain8" out="00:02:56.760">
+    <property name="length">00:02:56.793</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2022_02_GameOver9.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">c1e16622888a4bb112eff476bd0569cb</property>
+  </chain>
+  <chain id="chain9" out="00:03:19.107">
+    <property name="length">00:03:19.140</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2022_02_GameOver5a.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">5db650621f393c8b8920e796d1813cb7</property>
+  </chain>
+  <chain id="chain10" out="00:03:36.762">
+    <property name="length">00:03:36.795</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2022_02_GameOver7a.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">d4eb571c86df437eda5cf97c2636dd01</property>
+  </chain>
+  <chain id="chain11" out="00:02:38.148">
+    <property name="length">00:02:38.181</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2022_02_GameOver10.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">fe78c291434da30844dbaca6577de675</property>
+  </chain>
+  <chain id="chain12" out="00:01:40.161">
+    <property name="length">00:01:40.194</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2022_02_GameOver11.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">c02745c36c9d9c7e5f62cbfe743ee03a</property>
+  </chain>
+  <chain id="chain13" out="00:01:08.118">
+    <property name="length">00:01:08.151</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2022_02_GameOver12.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">00688bf8ac997b8c96fefc99af3b0d8f</property>
+  </chain>
+  <chain id="chain14" out="00:00:25.542">
+    <property name="length">00:00:25.575</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2022_02_GameOver13.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">7785fc1777a12ca92562b81ef6f2d0b7</property>
+  </chain>
+  <playlist id="main_bin">
+    <property name="xml_retain">1</property>
+    <entry producer="chain0" in="00:00:00.000" out="00:01:42.174"/>
+    <entry producer="chain1" in="00:00:00.000" out="00:01:34.782"/>
+    <entry producer="chain2" in="00:00:00.000" out="00:07:16.566"/>
+    <entry producer="chain3" in="00:00:00.000" out="00:01:53.163"/>
+    <entry producer="chain4" in="00:00:00.000" out="00:04:21.549"/>
+    <entry producer="chain5" in="00:00:00.000" out="00:02:52.503"/>
+    <entry producer="chain6" in="00:00:00.000" out="00:04:56.859"/>
+    <entry producer="chain7" in="00:00:00.000" out="00:06:13.068"/>
+    <entry producer="chain8" in="00:00:00.000" out="00:02:56.760"/>
+    <entry producer="chain9" in="00:00:00.000" out="00:03:19.107"/>
+    <entry producer="chain10" in="00:00:00.000" out="00:03:36.762"/>
+    <entry producer="chain11" in="00:00:00.000" out="00:02:38.148"/>
+    <entry producer="chain12" in="00:00:00.000" out="00:01:40.161"/>
+    <entry producer="chain13" in="00:00:00.000" out="00:01:08.118"/>
+    <entry producer="chain14" in="00:00:00.000" out="00:00:25.542"/>
+  </playlist>
+  <producer id="black" in="00:00:00.000" out="00:29:25.476">
+    <property name="length">00:29:25.509</property>
+    <property name="eof">pause</property>
+    <property name="resource">0</property>
+    <property name="aspect_ratio">1</property>
+    <property name="mlt_service">color</property>
+    <property name="mlt_image_format">rgba</property>
+    <property name="set.test_audio">0</property>
+  </producer>
+  <playlist id="background">
+    <entry producer="black" in="00:00:00.000" out="00:29:25.476"/>
+  </playlist>
+  <chain id="chain15" out="00:01:42.174">
+    <property name="length">00:01:42.207</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2022_02_GameOver1.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="shotcut:hash">31c1916ea4b1308b20ba6a13407dd3c7</property>
+    <property name="ignore_points">0</property>
+    <property name="creation_time">2022-02-08T21:38:08</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:caption">2022_02_GameOver1.mkv</property>
+  </chain>
+  <chain id="chain16" out="00:01:42.174">
+    <property name="length">00:01:42.207</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2022_02_GameOver1.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="shotcut:hash">31c1916ea4b1308b20ba6a13407dd3c7</property>
+    <property name="ignore_points">0</property>
+    <property name="creation_time">2022-02-08T21:38:08</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:caption">2022_02_GameOver1.mkv</property>
+  </chain>
+  <tractor id="tractor0" in="00:00:00.000" out="00:00:00.528">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="chain15" in="00:00:34.155" out="00:00:34.683"/>
+    <track producer="chain16" in="00:00:34.716" out="00:00:35.244"/>
+    <transition id="transition0" out="00:00:00.528">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition1" out="00:00:00.528">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <chain id="chain17" out="00:01:42.174">
+    <property name="length">00:01:42.207</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2022_02_GameOver1.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="shotcut:hash">31c1916ea4b1308b20ba6a13407dd3c7</property>
+    <property name="ignore_points">0</property>
+    <property name="creation_time">2022-02-08T21:38:08</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:caption">2022_02_GameOver1.mkv</property>
+  </chain>
+  <chain id="chain18" out="00:01:42.174">
+    <property name="length">00:01:42.207</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2022_02_GameOver1.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="shotcut:hash">31c1916ea4b1308b20ba6a13407dd3c7</property>
+    <property name="ignore_points">0</property>
+    <property name="creation_time">2022-02-08T21:38:08</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:caption">2022_02_GameOver1.mkv</property>
+  </chain>
+  <chain id="chain19" out="00:01:34.782">
+    <property name="length">00:01:34.815</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2022_02_GameOver2.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">f92472a91ec07313b6d90d2acbd068e0</property>
+    <property name="shotcut:caption">2022_02_GameOver2.mkv</property>
+  </chain>
+  <tractor id="tractor1" in="00:00:00.000" out="00:00:00.792">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="chain18" in="00:01:37.422" out="00:01:38.214"/>
+    <track producer="chain19" in="00:00:02.079" out="00:00:02.871"/>
+    <transition id="transition2" out="00:00:00.792">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition3" out="00:00:00.792">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <chain id="chain20" out="00:01:34.782">
+    <property name="length">00:01:34.815</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2022_02_GameOver2.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">f92472a91ec07313b6d90d2acbd068e0</property>
+    <property name="shotcut:caption">2022_02_GameOver2.mkv</property>
+  </chain>
+  <chain id="chain21" out="00:01:34.782">
+    <property name="length">00:01:34.815</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2022_02_GameOver2.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">f92472a91ec07313b6d90d2acbd068e0</property>
+    <property name="shotcut:caption">2022_02_GameOver2.mkv</property>
+  </chain>
+  <chain id="chain22" out="00:01:34.782">
+    <property name="length">00:01:34.815</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2022_02_GameOver2.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">f92472a91ec07313b6d90d2acbd068e0</property>
+    <property name="shotcut:caption">2022_02_GameOver2.mkv</property>
+  </chain>
+  <chain id="chain23" out="00:07:16.566">
+    <property name="length">00:07:16.599</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2022_02_GameOver3.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">68d31f4ce8f171aa5d0126d92dba6094</property>
+    <property name="shotcut:caption">2022_02_GameOver3.mkv</property>
+  </chain>
+  <tractor id="tractor2" in="00:00:00.000" out="00:00:00.627">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="chain22" in="00:01:31.119" out="00:01:31.746"/>
+    <track producer="chain23" in="00:00:03.399" out="00:00:04.026"/>
+    <transition id="transition4" out="00:00:00.627">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition5" out="00:00:00.627">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <chain id="chain24" out="00:07:16.566">
+    <property name="length">00:07:16.599</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2022_02_GameOver3.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">68d31f4ce8f171aa5d0126d92dba6094</property>
+    <property name="shotcut:caption">2022_02_GameOver3.mkv</property>
+  </chain>
+  <chain id="chain25" out="00:07:16.566">
+    <property name="length">00:07:16.599</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2022_02_GameOver3.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">68d31f4ce8f171aa5d0126d92dba6094</property>
+    <property name="shotcut:caption">2022_02_GameOver3.mkv</property>
+  </chain>
+  <chain id="chain26" out="00:07:16.566">
+    <property name="length">00:07:16.599</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2022_02_GameOver3.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">68d31f4ce8f171aa5d0126d92dba6094</property>
+    <property name="shotcut:caption">2022_02_GameOver3.mkv</property>
+  </chain>
+  <chain id="chain27" out="00:07:16.566">
+    <property name="length">00:07:16.599</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2022_02_GameOver3.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">68d31f4ce8f171aa5d0126d92dba6094</property>
+    <property name="shotcut:caption">2022_02_GameOver3.mkv</property>
+  </chain>
+  <chain id="chain28" out="00:07:16.566">
+    <property name="length">00:07:16.599</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2022_02_GameOver3.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">68d31f4ce8f171aa5d0126d92dba6094</property>
+    <property name="shotcut:caption">2022_02_GameOver3.mkv</property>
+  </chain>
+  <chain id="chain29" out="00:07:16.566">
+    <property name="length">00:07:16.599</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2022_02_GameOver3.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">68d31f4ce8f171aa5d0126d92dba6094</property>
+    <property name="shotcut:caption">2022_02_GameOver3.mkv</property>
+  </chain>
+  <chain id="chain30" out="00:07:16.566">
+    <property name="length">00:07:16.599</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2022_02_GameOver3.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">68d31f4ce8f171aa5d0126d92dba6094</property>
+    <property name="shotcut:caption">2022_02_GameOver3.mkv</property>
+  </chain>
+  <chain id="chain31" out="00:07:16.566">
+    <property name="length">00:07:16.599</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2022_02_GameOver3.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">68d31f4ce8f171aa5d0126d92dba6094</property>
+    <property name="shotcut:caption">2022_02_GameOver3.mkv</property>
+  </chain>
+  <chain id="chain32" out="00:01:53.163">
+    <property name="length">00:01:53.196</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2022_02_GameOver4.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">5b25209ffc627af45bbc859f9084202b</property>
+    <property name="shotcut:caption">2022_02_GameOver4.mkv</property>
+  </chain>
+  <tractor id="tractor3" in="00:00:00.000" out="00:00:00.363">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="chain31" in="00:07:13.827" out="00:07:14.190"/>
+    <track producer="chain32" in="00:00:02.310" out="00:00:02.673"/>
+    <transition id="transition6" out="00:00:00.363">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition7" out="00:00:00.363">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <chain id="chain33" out="00:01:53.163">
+    <property name="length">00:01:53.196</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2022_02_GameOver4.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">5b25209ffc627af45bbc859f9084202b</property>
+    <property name="shotcut:caption">2022_02_GameOver4.mkv</property>
+  </chain>
+  <chain id="chain34" out="00:01:53.163">
+    <property name="length">00:01:53.196</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2022_02_GameOver4.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">5b25209ffc627af45bbc859f9084202b</property>
+    <property name="shotcut:caption">2022_02_GameOver4.mkv</property>
+  </chain>
+  <chain id="chain35" out="00:01:53.163">
+    <property name="length">00:01:53.196</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2022_02_GameOver4.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">5b25209ffc627af45bbc859f9084202b</property>
+    <property name="shotcut:caption">2022_02_GameOver4.mkv</property>
+  </chain>
+  <chain id="chain36" out="00:04:21.549">
+    <property name="length">00:04:21.582</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2022_02_GameOver5.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">5225eb3861407fcd70d2c1566da4e416</property>
+    <property name="shotcut:caption">2022_02_GameOver5.mkv</property>
+  </chain>
+  <chain id="chain37" out="00:03:19.107">
+    <property name="length">00:03:19.140</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2022_02_GameOver5a.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">5db650621f393c8b8920e796d1813cb7</property>
+    <property name="shotcut:caption">2022_02_GameOver5a.mkv</property>
+  </chain>
+  <tractor id="tractor4" in="00:00:00.000" out="00:00:00.396">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="chain36" in="00:00:59.136" out="00:00:59.532"/>
+    <track producer="chain37" in="00:00:15.642" out="00:00:16.038"/>
+    <transition id="transition8" out="00:00:00.396">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition9" out="00:00:00.396">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <chain id="chain38" out="00:03:19.107">
+    <property name="length">00:03:19.140</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2022_02_GameOver5a.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">5db650621f393c8b8920e796d1813cb7</property>
+    <property name="shotcut:caption">2022_02_GameOver5a.mkv</property>
+  </chain>
+  <chain id="chain39" out="00:03:19.107">
+    <property name="length">00:03:19.140</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2022_02_GameOver5a.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">5db650621f393c8b8920e796d1813cb7</property>
+    <property name="shotcut:caption">2022_02_GameOver5a.mkv</property>
+  </chain>
+  <chain id="chain40" out="00:03:19.107">
+    <property name="length">00:03:19.140</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2022_02_GameOver5a.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">5db650621f393c8b8920e796d1813cb7</property>
+    <property name="shotcut:caption">2022_02_GameOver5a.mkv</property>
+  </chain>
+  <chain id="chain41" out="00:03:19.107">
+    <property name="length">00:03:19.140</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2022_02_GameOver5a.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">5db650621f393c8b8920e796d1813cb7</property>
+    <property name="shotcut:caption">2022_02_GameOver5a.mkv</property>
+  </chain>
+  <chain id="chain42" out="00:03:19.107">
+    <property name="length">00:03:19.140</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2022_02_GameOver5a.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">5db650621f393c8b8920e796d1813cb7</property>
+    <property name="shotcut:caption">2022_02_GameOver5a.mkv</property>
+  </chain>
+  <chain id="chain43" out="00:02:52.503">
+    <property name="length">00:02:52.536</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2022_02_GameOver6.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">f891eef7f6274fb89db32cf9cedf7b8b</property>
+    <property name="shotcut:caption">2022_02_GameOver6.mkv</property>
+  </chain>
+  <tractor id="tractor5" in="00:00:00.000" out="00:00:01.023">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="chain42" in="00:03:18.084" out="00:03:19.107"/>
+    <track producer="chain43" in="00:00:01.782" out="00:00:02.805"/>
+    <transition id="transition10" out="00:00:01.023">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition11" out="00:00:01.023">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <chain id="chain44" out="00:03:36.762">
+    <property name="length">00:03:36.795</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2022_02_GameOver7a.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">d4eb571c86df437eda5cf97c2636dd01</property>
+    <property name="shotcut:caption">2022_02_GameOver7a.mkv</property>
+  </chain>
+  <tractor id="tractor6" in="00:00:00.000" out="00:00:00.792">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="chain43" in="00:01:29.601" out="00:01:30.393"/>
+    <track producer="chain44" in="00:00:00.825" out="00:00:01.617"/>
+    <transition id="transition12" out="00:00:00.792">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition13" out="00:00:00.792">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <chain id="chain45" out="00:03:36.762">
+    <property name="length">00:03:36.795</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2022_02_GameOver7a.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">d4eb571c86df437eda5cf97c2636dd01</property>
+    <property name="shotcut:caption">2022_02_GameOver7a.mkv</property>
+  </chain>
+  <chain id="chain46" out="00:03:36.762">
+    <property name="length">00:03:36.795</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2022_02_GameOver7a.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">d4eb571c86df437eda5cf97c2636dd01</property>
+    <property name="shotcut:caption">2022_02_GameOver7a.mkv</property>
+  </chain>
+  <chain id="chain47" out="00:06:13.068">
+    <property name="length">00:06:13.101</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2022_02_GameOver8.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">49bc72dd7288e4f32c6e962d5e0eccb5</property>
+    <property name="shotcut:caption">2022_02_GameOver8.mkv</property>
+  </chain>
+  <tractor id="tractor7" in="00:00:00.000" out="00:00:00.528">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="chain46" in="00:03:32.934" out="00:03:33.462"/>
+    <track producer="chain47" in="00:00:00.990" out="00:00:01.518"/>
+    <transition id="transition14" out="00:00:00.528">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition15" out="00:00:00.528">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <chain id="chain48" out="00:06:13.068">
+    <property name="length">00:06:13.101</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2022_02_GameOver8.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">49bc72dd7288e4f32c6e962d5e0eccb5</property>
+    <property name="shotcut:caption">2022_02_GameOver8.mkv</property>
+  </chain>
+  <chain id="chain49" out="00:06:13.068">
+    <property name="length">00:06:13.101</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2022_02_GameOver8.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">49bc72dd7288e4f32c6e962d5e0eccb5</property>
+    <property name="shotcut:caption">2022_02_GameOver8.mkv</property>
+  </chain>
+  <chain id="chain50" out="00:06:13.068">
+    <property name="length">00:06:13.101</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2022_02_GameOver8.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">49bc72dd7288e4f32c6e962d5e0eccb5</property>
+    <property name="shotcut:caption">2022_02_GameOver8.mkv</property>
+  </chain>
+  <chain id="chain51" out="00:06:13.068">
+    <property name="length">00:06:13.101</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2022_02_GameOver8.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">49bc72dd7288e4f32c6e962d5e0eccb5</property>
+    <property name="shotcut:caption">2022_02_GameOver8.mkv</property>
+  </chain>
+  <chain id="chain52" out="00:06:13.068">
+    <property name="length">00:06:13.101</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2022_02_GameOver8.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">49bc72dd7288e4f32c6e962d5e0eccb5</property>
+    <property name="shotcut:caption">2022_02_GameOver8.mkv</property>
+  </chain>
+  <chain id="chain53" out="00:02:56.760">
+    <property name="length">00:02:56.793</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2022_02_GameOver9.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">c1e16622888a4bb112eff476bd0569cb</property>
+    <property name="shotcut:caption">2022_02_GameOver9.mkv</property>
+  </chain>
+  <chain id="chain54" out="00:02:56.760">
+    <property name="length">00:02:56.793</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2022_02_GameOver9.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">c1e16622888a4bb112eff476bd0569cb</property>
+    <property name="shotcut:caption">2022_02_GameOver9.mkv</property>
+  </chain>
+  <chain id="chain55" out="00:02:38.148">
+    <property name="length">00:02:38.181</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2022_02_GameOver10.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">fe78c291434da30844dbaca6577de675</property>
+    <property name="shotcut:caption">2022_02_GameOver10.mkv</property>
+  </chain>
+  <tractor id="tractor8" in="00:00:00.000" out="00:00:00.726">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="chain54" in="00:02:55.176" out="00:02:55.902"/>
+    <track producer="chain55" in="00:00:02.046" out="00:00:02.772"/>
+    <transition id="transition16" out="00:00:00.726">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition17" out="00:00:00.726">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <chain id="chain56" out="00:02:38.148">
+    <property name="length">00:02:38.181</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2022_02_GameOver10.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">fe78c291434da30844dbaca6577de675</property>
+    <property name="shotcut:caption">2022_02_GameOver10.mkv</property>
+  </chain>
+  <chain id="chain57" out="00:01:40.161">
+    <property name="length">00:01:40.194</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2022_02_GameOver11.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">c02745c36c9d9c7e5f62cbfe743ee03a</property>
+    <property name="shotcut:caption">2022_02_GameOver11.mkv</property>
+  </chain>
+  <tractor id="tractor9" in="00:00:00.000" out="00:00:00.627">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="chain56" in="00:01:42.042" out="00:01:42.669"/>
+    <track producer="chain57" in="00:00:10.725" out="00:00:11.352"/>
+    <transition id="transition18" out="00:00:00.627">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition19" out="00:00:00.627">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <chain id="chain58" out="00:00:25.542">
+    <property name="length">00:00:25.575</property>
+    <property name="eof">pause</property>
+    <property name="resource">/home/mtreiber/versionedProjects/CoronaSim/videos/2022_02_GameOver13.mkv</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">7785fc1777a12ca92562b81ef6f2d0b7</property>
+    <property name="shotcut:caption">2022_02_GameOver13.mkv</property>
+  </chain>
+  <tractor id="tractor10" in="00:00:00.000" out="00:00:00.957">
+    <property name="shotcut:transition">lumaMix</property>
+    <track producer="chain57" in="00:01:25.113" out="00:01:26.070"/>
+    <track producer="chain58" in="00:00:06.534" out="00:00:07.491"/>
+    <transition id="transition20" out="00:00:00.957">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="factory">loader</property>
+      <property name="mlt_service">luma</property>
+      <property name="alpha_over">1</property>
+    </transition>
+    <transition id="transition21" out="00:00:00.957">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="start">-1</property>
+      <property name="accepts_blanks">1</property>
+      <property name="mlt_service">mix</property>
+    </transition>
+  </tractor>
+  <playlist id="playlist0">
+    <property name="shotcut:video">1</property>
+    <property name="shotcut:name">V1</property>
+    <entry producer="chain15" in="00:00:12.606" out="00:00:34.122"/>
+    <entry producer="tractor0" in="00:00:00.000" out="00:00:00.528"/>
+    <entry producer="chain16" in="00:00:35.277" out="00:00:38.511"/>
+    <entry producer="chain17" in="00:00:39.897" out="00:00:43.857"/>
+    <entry producer="chain18" in="00:01:00.363" out="00:01:37.389"/>
+    <entry producer="tractor1" in="00:00:00.000" out="00:00:00.792"/>
+    <entry producer="chain19" in="00:00:02.904" out="00:00:19.107"/>
+    <entry producer="chain20" in="00:00:19.932" out="00:00:47.850"/>
+    <entry producer="chain21" in="00:00:48.576" out="00:01:21.912"/>
+    <entry producer="chain22" in="00:01:22.308" out="00:01:31.086"/>
+    <entry producer="tractor2" in="00:00:00.000" out="00:00:00.627"/>
+    <entry producer="chain23" in="00:00:04.059" out="00:00:23.331"/>
+    <entry producer="chain24" in="00:00:24.090" out="00:01:15.906"/>
+    <entry producer="chain25" in="00:01:39.930" out="00:01:59.070"/>
+    <entry producer="chain26" in="00:02:00.033" out="00:03:06.435"/>
+    <entry producer="chain27" in="00:03:07.326" out="00:03:44.913"/>
+    <entry producer="chain28" in="00:03:45.771" out="00:03:55.506"/>
+    <entry producer="chain29" in="00:04:10.824" out="00:05:15.510"/>
+    <entry producer="chain30" in="00:05:16.137" out="00:05:29.733"/>
+    <entry producer="chain31" in="00:05:30.492" out="00:07:13.794"/>
+    <entry producer="tractor3" in="00:00:00.000" out="00:00:00.363"/>
+    <entry producer="chain32" in="00:00:02.706" out="00:00:17.721"/>
+    <entry producer="chain33" in="00:00:18.612" out="00:00:38.313"/>
+    <entry producer="chain34" in="00:00:38.907" out="00:00:48.642"/>
+    <entry producer="chain35" in="00:00:49.566" out="00:01:01.155"/>
+    <entry producer="chain36" in="00:00:02.409" out="00:00:59.103"/>
+    <entry producer="tractor4" in="00:00:00.000" out="00:00:00.396"/>
+    <entry producer="chain37" in="00:00:16.071" out="00:00:22.143"/>
+    <entry producer="chain38" in="00:00:23.100" out="00:01:45.969"/>
+    <entry producer="chain39" in="00:01:49.203" out="00:01:49.797"/>
+    <entry producer="chain40" in="00:01:50.457" out="00:02:00.198"/>
+    <entry producer="chain41" in="00:02:02.310" out="00:02:31.020"/>
+    <entry producer="chain42" in="00:02:32.010" out="00:03:18.051"/>
+    <entry producer="tractor5" in="00:00:00.000" out="00:00:01.023"/>
+    <entry producer="chain43" in="00:00:02.838" out="00:01:29.568"/>
+    <entry producer="tractor6" in="00:00:00.000" out="00:00:00.792"/>
+    <entry producer="chain44" in="00:00:01.650" out="00:01:49.533"/>
+    <entry producer="chain45" in="00:01:50.589" out="00:02:51.018"/>
+    <entry producer="chain46" in="00:02:52.602" out="00:03:32.901"/>
+    <entry producer="tractor7" in="00:00:00.000" out="00:00:00.528"/>
+    <entry producer="chain47" in="00:00:01.551" out="00:00:08.151"/>
+    <entry producer="chain48" in="00:00:09.042" out="00:02:03.663"/>
+    <entry producer="chain49" in="00:02:31.812" out="00:03:19.965"/>
+    <entry producer="chain50" in="00:03:20.724" out="00:03:23.760"/>
+    <entry producer="chain51" in="00:03:24.387" out="00:05:15.345"/>
+    <entry producer="chain52" in="00:05:16.401" out="00:05:22.572"/>
+    <entry producer="chain53" in="00:00:04.686" out="00:00:29.601"/>
+    <entry producer="chain54" in="00:00:29.634" out="00:02:55.143"/>
+    <entry producer="tractor8" in="00:00:00.000" out="00:00:00.726"/>
+    <entry producer="chain55" in="00:00:02.805" out="00:00:46.035"/>
+    <entry producer="chain56" in="00:00:57.519" out="00:01:42.009"/>
+    <entry producer="tractor9" in="00:00:00.000" out="00:00:00.627"/>
+    <entry producer="chain57" in="00:00:11.385" out="00:01:25.080"/>
+    <entry producer="tractor10" in="00:00:00.000" out="00:00:00.957"/>
+    <entry producer="chain58" in="00:00:07.524" out="00:00:22.968"/>
+  </playlist>
+  <tractor id="tractor11" title="Shotcut version 22.01.30" in="00:00:00.000" out="00:29:25.476">
+    <property name="shotcut">1</property>
+    <property name="shotcut:projectAudioChannels">2</property>
+    <property name="shotcut:projectFolder">1</property>
+    <property name="shotcut:scaleFactor">0.258255</property>
+    <track producer="background"/>
+    <track producer="playlist0"/>
+    <transition id="transition22">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="mlt_service">mix</property>
+      <property name="always_active">1</property>
+      <property name="sum">1</property>
+    </transition>
+    <transition id="transition23">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="version">0.1</property>
+      <property name="mlt_service">frei0r.cairoblend</property>
+      <property name="threads">0</property>
+      <property name="disable">1</property>
+    </transition>
+  </tractor>
+</mlt>
