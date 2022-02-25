@@ -1368,107 +1368,115 @@ function initializeData(country,insideValidation){
     data_dz[i]=Math.max(data_cumDeaths[i]-data_cumDeaths[i-1], 0.);
   }
 
-  
+
+  if(true){
+    console.log("initializeData (4): pure data:");
+    for(var i=data.length-15; i<data.length; i++){
+      console.log(data_date[i],": data_dxt=",Math.round(data_dxt[i]),
+		  " data_cumCases=",Math.round(data_cumCases[i]));
+    }
+  }
+   
   // initializeData (4a):
   // Correct erratically high forecasts caused by not reported
   // cases for over a week by shifting some later cases to the missing cases
   // do not consider the first 9-1=8 weeks
 
-  if(false){
-  var growthFactCrit=2;
-  for(var j=0; j<Math.floor(data.length/7)-9; j++){
-    var i0=data.length-1-7*j;
-    var dxtWeek=data_cumCases[i0]-data_cumCases[i0-7];
-    var dxtLastWeek=data_cumCases[i0-7]-data_cumCases[i0-14];
-    if(dxtWeek>growthFactCrit*dxtLastWeek){
-      if(true){
-        console.log("Warning: last date ",data_date[i0],
+  var correctVeryHighCases=false;
+  
+  if(correctVeryHighCases){
+    var growthFactCrit=2;
+    for(var j=0; j<Math.floor(data.length/7)-9; j++){
+      var i0=data.length-1-7*j;
+      var dxtWeek=data_cumCases[i0]-data_cumCases[i0-7];
+      var dxtLastWeek=data_cumCases[i0-7]-data_cumCases[i0-14];
+      if(dxtWeek>growthFactCrit*dxtLastWeek){
+        if(true){
+          console.log("Warning: last date ",data_date[i0],
 		    " correct missing reported cases in data_cumCases:",
 		    " dxtWeek=",dxtWeek,
 		    " dxtLastWeek=",dxtLastWeek,
 		    "");
-      }
-      var fact=1/(2*growthFactCrit);
-      for(var k=0; k<7; k++){
-	var ip=i0-13+k;
-	var im=i0-k;
-	var dxtShift=fact*data_dxt[im];
-	data_dxt[im]-=dxtShift;
-	data_dxt[ip]+=dxtShift;
-      }
-      for(var i=i0-13;i<=i0; i++){ // inverse reconstruction of data_cumCases
-	data_cumCases[i]=data_cumCases[i-1]+data_dxt[i];
-	//console.log("i=",i," data_dxt[i]=",data_dxt[i],
-	//	    " data_cumCases[i]=",data_cumCases[i]);
+	}
+        var fact=1/(2*growthFactCrit);
+        for(var k=0; k<7; k++){
+	  var ip=i0-13+k;
+	  var im=i0-k;
+	  var dxtShift=fact*data_dxt[im];
+ 	  data_dxt[im]-=dxtShift;
+	  data_dxt[ip]+=dxtShift;
+	}
+	for(var i=i0-13;i<=i0; i++){ // inverse reconstr of data_cumCases
+	  data_cumCases[i]=data_cumCases[i-1]+data_dxt[i];
+	  //console.log("i=",i," data_dxt[i]=",data_dxt[i],
+	  //	    " data_cumCases[i]=",data_cumCases[i]);
+	}
       }
     }
-  }
 
-  if(true){
-    console.log("initializeData (4a):");
-    for(var i=data.length-10; i<data.length; i++){
-      console.log(" data_dxt=",Math.round(data_dxt[i]),
+    if(true){
+      console.log("initializeData (4a) active: correct very high data:");
+      for(var i=data.length-15; i<data.length; i++){
+        console.log(data_date[i],": data_dxt=",Math.round(data_dxt[i]),
 		  " data_cumCases=",Math.round(data_cumCases[i]));
+      }
     }
   }
-  }
-  // initializeData (4b)
-  // check smoothing the objective data_cumCases for calibration
-  // !!!! also smoothes daily cases data_dxt to be constant last 4 values
-  // if kernel >=7 (must be uneven)
 
-  var calibrSmoothedCum=false;
   
-  if(calibrSmoothedCum){
-    console.log("\nSmooth data_cumCases ...");
-    data_cumCasesSmooth=smooth(data_cumCases,
+  // !!! initializeData (4b)
+  // smoothing cumCases then differentiating for daily => artifacts at end
+  // smoothing daily dxt then integrating for cum => opposite artifacts
+  // => test arithmetic average of both procedures!!
+
+  
+ 
+  var calibrSmoothed=true;
+  
+  if(calibrSmoothed){
+    console.log("\nSmooth cases and cumCases ...");
+    var cumCasesSmooth1=[];
+    var cumCasesSmooth2=[];
+    var dailyCasesSmooth1=[];
+    var dailyCasesSmooth2=[];
+    
+    cumCasesSmooth1=smooth(data_cumCases,
 			       [1/7,1/7,1/7,1/7,1/7,1/7,1/7],false);
 //			       [1/5,1/5,1/5,1/5,1/5],false);
 //			       [1/4,1/4,1/4,1/4],false);
 //			       [1/3,1/3,1/3],false); //!!
-    data_cumCases=data_cumCasesSmooth;
+
+    dailyCasesSmooth1[0]=0;
     for(var i=1; i<data.length; i++){
-      data_dxt[i]=data_cumCases[i]-data_cumCases[i-1];
+      dailyCasesSmooth1[i]=cumCasesSmooth1[i]-cumCasesSmooth1[i-1];
     }
-
-  }
-
-    if(true){
-    console.log("initializeData (4b):");
-    for(var i=data.length-10; i<data.length; i++){
-      console.log(" data_dxt=",Math.round(data_dxt[i]),
-		  " data_cumCases=",Math.round(data_cumCases[i]));
-    }
-  }
-
   
-  // initializeData (4c) alternative to (4b) smooth dayly cases and
-  // integrate cum cases instead of smooth cum and differentiate daily
-  
-
-  var calibrSmoothedDaily=true;
-  
-  if(calibrSmoothedDaily){
-    console.log("\nSmooth data_dxt (daily) ...");
-    var data_casesDailySmooth=smooth(data_dxt,
+ 
+    dailyCasesSmooth2=smooth(data_dxt,
 			       [1/7,1/7,1/7,1/7,1/7,1/7,1/7],false);
 //			       [1/5,1/5,1/5,1/5,1/5],false);
 //			       [1/4,1/4,1/4,1/4],false);
-//			       [1/3,1/3,1/3],false); //!!
-    data_dxt=data_casesDailySmooth;
+    //			       [1/3,1/3,1/3],false); //!!
+    
+    cumCasesSmooth2[0]=0;
     for(var i=1; i<data.length; i++){
-      data_cumCases[i]=data_cumCases[i-1]+data_dxt[i];
+      cumCasesSmooth2[i]=cumCasesSmooth2[i-1]+dailyCasesSmooth2[i];
     }
-
+  
+    for(var i=1; i<data.length; i++){ // i=0 already defined
+      data_dxt[i]=0.5*(dailyCasesSmooth1[i]+dailyCasesSmooth2[i]);
+      data_cumCases[i]=0.5*(cumCasesSmooth1[i]+cumCasesSmooth2[i]);
+    }
+    
     if(true){
-      console.log("initializeData (4c):");
-      for(var i=data.length-10; i<data.length; i++){
-        console.log(" data_dxt=",Math.round(data_dxt[i]),
+      console.log("initializeData (4b) active: smooth daily and cum cases");
+      for(var i=data.length-15; i<data.length; i++){
+        console.log(data_date[i],": data_dxt=",Math.round(data_dxt[i]),
 		    " data_cumCases=",Math.round(data_cumCases[i]));
       }
     }
   }
-
+  
 
   //=========initializeData (5): extract  "data2" ===========
 
@@ -5304,7 +5312,8 @@ function smooth(arr, kernel, debug){
     }
   }
 
-  // !!! final touches: optionally consolidate 5 last data points conserving
+  // !!! opt final touches: optionally consolidate 5 last data points
+  // conserving
   // the trend sxy/sx^2|_last points (alternatively 3 points below or none)
 
   if(false){
@@ -5320,20 +5329,17 @@ function smooth(arr, kernel, debug){
     }
   }
 
-  // !!! final touches: optionally consolidate 3 last data points conserving
+  // !!! opt alt final touches: optionally consolidate 3 last data points
+  // conserving
   // the trend sxy/sx^2|_last points (alt 5 points or none)
 
-  if(false){
-    if((kernel.length>=3)&&(arr.length>=3)){
-      var avg=(smooth[arr.length-1]+smooth[arr.length-2]
-	       +smooth[arr.length-3])/3.;
-      var trendLast=(smooth[arr.length-1]-smooth[arr.length-3])/2.;
-      for(var i=arr.length-3; i<arr.length; i++){
-        smooth[i]=avg+trendLast*(i-(arr.length-2));
-      }
+  if(true){
+    if((kernel.length>=2)&&(arr.length>=2)){
+      smooth[arr.length-1]=smooth[arr.length-2];
     }
   }
 
+  // !!! alt final touches: last point is previous to last
   
   if(debugSmooth){
     console.log("debug smoothing:");
