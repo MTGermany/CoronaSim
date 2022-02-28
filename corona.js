@@ -1424,7 +1424,7 @@ function initializeData(country,insideValidation){
   }
 
   
-  // !!! initializeData (4b)
+  // !!!!! initializeData (4b)
   // smoothing cumCases then differentiating for daily => artifacts at end
   // smoothing daily dxt then integrating for cum => opposite artifacts
   // => test arithmetic average of both procedures!!
@@ -1477,6 +1477,21 @@ function initializeData(country,insideValidation){
     }
   }
   
+  // !!!!! initializeData (4c)
+  // all of the above fails in some conspicuous cases for last 3 days.
+  // use direct separation of weekly effects for last 3 days
+  // where avg interval is reduced
+
+  var separateWeeklyOscillationsLast3days=true;
+  if(separateWeeklyOscillationsLast3days){
+    var trend=(data_dxt[data.length-4]-data_dxt[data.length-7])/7;
+    for (var i=data.length-3; i<data.length; i++){
+      data_dxt[i]
+	=Math.max(0., data_dxt[data.length-4]+trend*(i-(data.length-4)));
+      data_cumCases[i]=data_cumCases[i-1]+data_dxt[i];
+    }
+  }
+    
 
   //=========initializeData (5): extract  "data2" ===========
 
@@ -5312,7 +5327,7 @@ function smooth(arr, kernel, debug){
     }
   }
 
-  // !!! opt final touches: optionally consolidate 5 last data points
+  // !!!! opt final touches: optionally consolidate 5 last data points
   // conserving
   // the trend sxy/sx^2|_last points (alternatively 3 points below or none)
 
@@ -5329,11 +5344,11 @@ function smooth(arr, kernel, debug){
     }
   }
 
-  // !!! opt alt final touches: optionally consolidate 3 last data points
+  // !!!! opt alt final touches: optionally consolidate 3 last data points
   // conserving
   // the trend sxy/sx^2|_last points (alt 5 points or none)
 
-  if(true){
+  if(false){
     if((kernel.length>=2)&&(arr.length>=2)){
       smooth[arr.length-1]=smooth[arr.length-2];
     }
