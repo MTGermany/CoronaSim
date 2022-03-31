@@ -311,7 +311,7 @@ const pTestInit=0.30;     // P(Tested|infected)  if !f(#tests) assumed
 const pTestMin=0.04;   // if calculated by sqrt- or propto model
 const testExponent=0.3; //!!! 0.5: sqrt-model data_pTestModel
                         // propto sqrt(dn), 1: lin model, 0: no test influence
-const tauInfectious_fullReporting=Math.pow(1000,testExponent); // test interval [d] for full reporting
+const tauInfectious_fullReporting=Math.pow(5000,testExponent); // test interval [d] for full reporting (the higher, the less "Dunkelfeld")
 
 var data_dxIncidence=[]; // weekly incidence per 100 000 from data
 var data_dzIncidence=[]; // weekly incidence per 100 000 from data
@@ -744,12 +744,12 @@ var mutationDynamics=new MutationDynamics();
 // because then p grows logistically while Rcalib approx const
 // R10 and R20 decrease drastically because of R10=R0/(1+p*tau*r)
 
-//!! useMutationIfAvailable must be true since w/o no longer works
-// because of the mutation dependent immunities
-const useMutationIfAvailable=true; //!!!
+//!! useMutationIfAvailable can again also be false but true more stable
+// (calibration independent from this)
+const useMutationIfAvailable=false; //!!!!
 
 const use_startMutRel=true; 
-const dit_startMut2presentRel=8; //  8 if variable mut starting time
+const dit_startMut2presentRel=8; //  8 if mut and variable mut starting time
 const time_startMut=new Date("2021-12-24"); // if fixed mut starting time
 
 const rMutStart=0.20; // !!! make variable! 0.25-0.30 initial growth rate of odds y/(1-y)
@@ -1371,59 +1371,47 @@ function initializeData(country,insideValidation){
 
   if(true){
     console.log("initializeData (4): pure data:");
-    for(var i=data.length-15; i<data.length; i++){
+    for(var i=data.length-21; i<data.length; i++){
       console.log(data_date[i],": data_dxt=",Math.round(data_dxt[i]),
 		  " data_cumCases=",Math.round(data_cumCases[i]));
     }
   }
    
-  // initializeData (4a):
-  // Correct erratically high forecasts caused by not reported
-  // cases for over a week by shifting some later cases to the missing cases
-  // do not consider the first 9-1=8 weeks
-
-  var correctVeryHighCases=false;
+  // !!!!! initializeData (4a)
+  // override nCorr last days according to trend+season instead of direct data
+  // because late reports often accumulated on last day(s) data
+  // do this before smoothing!
   
-  if(correctVeryHighCases){
-    var growthFactCrit=2;
-    for(var j=0; j<Math.floor(data.length/7)-9; j++){
-      var i0=data.length-1-7*j;
-      var dxtWeek=data_cumCases[i0]-data_cumCases[i0-7];
-      var dxtLastWeek=data_cumCases[i0-7]-data_cumCases[i0-14];
-      if(dxtWeek>growthFactCrit*dxtLastWeek){
-        if(true){
-          console.log("Warning: last date ",data_date[i0],
-		    " correct missing reported cases in data_cumCases:",
-		    " dxtWeek=",dxtWeek,
-		    " dxtLastWeek=",dxtLastWeek,
-		    "");
-	}
-        var fact=1/(2*growthFactCrit);
-        for(var k=0; k<7; k++){
-	  var ip=i0-13+k;
-	  var im=i0-k;
-	  var dxtShift=fact*data_dxt[im];
- 	  data_dxt[im]-=dxtShift;
-	  data_dxt[ip]+=dxtShift;
-	}
-	for(var i=i0-13;i<=i0; i++){ // inverse reconstr of data_cumCases
-	  data_cumCases[i]=data_cumCases[i-1]+data_dxt[i];
-	  //console.log("i=",i," data_dxt[i]=",data_dxt[i],
-	  //	    " data_cumCases[i]=",data_cumCases[i]);
-	}
-      }
+  var separateWeeklyOscillationsLast3days=true;
+  if(separateWeeklyOscillationsLast3days){
+    var nCorr=3;
+    var iCorr=data.length-nCorr;
+    
+    var trendx=(0.5*(data_dxt[iCorr-2]+data_dxt[iCorr-1])
+	       -0.5*(data_dxt[iCorr-9]+data_dxt[iCorr-8]))/7;
+    for (var i=iCorr; i<data.length; i++){
+      data_dxt[i]=Math.max(0., data_dxt[i-7]+7*trendx);
+      data_cumCases[i]=data_cumCases[i-1]+data_dxt[i];
     }
 
+    var trendz=(0.5*(data_dz[iCorr-2]+data_dz[iCorr-1])
+	       -0.5*(data_dz[iCorr-9]+data_dz[iCorr-8]))/7;
+    for (var i=iCorr; i<data.length; i++){
+      data_dz[i]=Math.max(0., data_dz[i-7]+7*trendz);
+      data_cumDeaths[i]=data_cumDeaths[i-1]+data_dz[i];
+    }
+
+    
     if(true){
-      console.log("initializeData (4a) active: correct very high data:");
-      for(var i=data.length-15; i<data.length; i++){
+      console.log("initializeData (4a) active: direct separation of weekly effects for last 3 days");
+      for(var i=data.length-21; i<data.length; i++){
         console.log(data_date[i],": data_dxt=",Math.round(data_dxt[i]),
-		  " data_cumCases=",Math.round(data_cumCases[i]));
+		    " data_cumCases=",Math.round(data_cumCases[i]));
       }
     }
   }
 
-  
+
   // !!!!! initializeData (4b)
   // smoothing cumCases then differentiating for daily => artifacts at end
   // smoothing daily dxt then integrating for cum => opposite artifacts
@@ -1451,47 +1439,50 @@ function initializeData(country,insideValidation){
       dailyCasesSmooth1[i]=cumCasesSmooth1[i]-cumCasesSmooth1[i-1];
     }
   
- 
-    dailyCasesSmooth2=smooth(data_dxt,
+    // fit nLast points for special treatment to this!
+    nLast=3;  // 3,2,1
+    dailyCasesSmooth2=smooth(data_dxt, 
 			       [1/7,1/7,1/7,1/7,1/7,1/7,1/7],false);
-//			       [1/5,1/5,1/5,1/5,1/5],false);
-//			       [1/4,1/4,1/4,1/4],false);
+    //			       [1/5,1/5,1/5,1/5,1/5],false);
     //			       [1/3,1/3,1/3],false); //!!
     
     cumCasesSmooth2[0]=0;
     for(var i=1; i<data.length; i++){
       cumCasesSmooth2[i]=cumCasesSmooth2[i-1]+dailyCasesSmooth2[i];
     }
-  
-    for(var i=1; i<data.length; i++){ // i=0 already defined
+
+    //!!!! which one is best? All three do not work properly
+    // for last int(nAvg/2)=three points => extrapolate lin trend
+    
+    for(var i=1; i<data.length-nLast; i++){ // i=0 already defined
       data_dxt[i]=0.5*(dailyCasesSmooth1[i]+dailyCasesSmooth2[i]);
       data_cumCases[i]=0.5*(cumCasesSmooth1[i]+cumCasesSmooth2[i]);
+      //data_dxt[i]=dailyCasesSmooth1[i];
+      //data_cumCases[i]=cumCasesSmooth1[i];
+      //data_dxt[i]=dailyCasesSmooth2[i];
+      //data_cumCases[i]=cumCasesSmooth2[i];
     }
+
+    var iCorr=data.length-nLast;
+    var trend=data_dxt[iCorr-1]-data_dxt[iCorr-2];
+    for(var i=iCorr; i<data.length; i++){
+      data_dxt[i]=data_dxt[iCorr-1]+(i-(iCorr-1))*trend;
+      data_cumCases[i]=data_cumCases[i-1]+data_dxt[i];
+    }
+
     
     if(true){
       console.log("initializeData (4b) active: smooth daily and cum cases");
-      for(var i=data.length-15; i<data.length; i++){
+      for(var i=data.length-21; i<data.length; i++){
         console.log(data_date[i],": data_dxt=",Math.round(data_dxt[i]),
 		    " data_cumCases=",Math.round(data_cumCases[i]));
       }
     }
   }
   
-  // !!!!! initializeData (4c)
-  // all of the above fails in some conspicuous cases for last 3 days.
-  // use direct separation of weekly effects for last 3 days
-  // where avg interval is reduced
 
-  var separateWeeklyOscillationsLast3days=true;
-  if(separateWeeklyOscillationsLast3days){
-    var trend=(data_dxt[data.length-4]-data_dxt[data.length-7])/7;
-    for (var i=data.length-3; i<data.length; i++){
-      data_dxt[i]
-	=Math.max(0., data_dxt[data.length-4]+trend*(i-(data.length-4)));
-      data_cumCases[i]=data_cumCases[i-1]+data_dxt[i];
-    }
-  }
-    
+
+  
 
   //=========initializeData (5): extract  "data2" ===========
 
@@ -1844,7 +1835,7 @@ function initializeData(country,insideValidation){
     for(var i=0; i<data.length; i++){
       //var logging=true;
       //var logging=false;
-      var logging=(i>data.length-10);
+      var logging=(i>data.length-20);
       //var logging=(i>data.length-4); 
       //var logging=(i==200);
       if(logging){
@@ -3180,19 +3171,16 @@ function estimateR0(itmin_c, itmax_c, R0calib){
 
   }
 
-  //!! restrict R0 variations to +/- a value
+  //!!!! restrict R0 variations to +/- a value
   // use R0calib[] which is the same as R0calib[] to 0.001
   // unstable, forget it
   
-  if(false){// do not touch the beginning with tmp R0=22 etc
+  if(false){
   //if(icalibmin>10){// do not touch the beginning with tmp R0=22 etc
-    var dR0max=1;
-    R0calib[0]=Math.max(R0time[icalibmin]-dR0max,R0calib[0]);
-    R0calib[0]=Math.min(R0time[icalibmin]+dR0max,R0calib[0]);
-    for(var j=1; j<R0calib.length; j++){ 
+    var R0max=30; //!!!!
+    for(var j=0; j<R0calib.length; j++){ 
     //for(var j=R0calib.length-1; j<R0calib.length; j++){ 
-      R0calib[j]=Math.max(R0calib[j-1]-dR0max,R0calib[j]);
-      R0calib[j]=Math.min(R0calib[j-1]+dR0max,R0calib[j]);
+      R0calib[j]=Math.min(R0calib[j],R0max);
     }
   }
   
@@ -3207,9 +3195,24 @@ function estimateR0(itmin_c, itmax_c, R0calib){
      //R0time[j+icalibmin]=sol2_SSEfunc.x[j];
      R0time[j+icalibmin]=R0calib[j];
   }
-  if(false){console.log("estimateR0 after new transfer: firstR0fixed=",
-			firstR0fixed, " R0time.length=",R0time.length);
-	   }
+  if(false){ //!!!! check high R0 values and their restriction
+    console.log("estimateR0 after new transfer: R0calib.length=",
+		R0calib.length,
+		" icalibmin=",icalibmin,
+		" R0time.length=",R0time.length,
+		"\n R0calib=",R0calib,
+		" last elements of R0time:");
+    for(var j=Math.max(0,R0time.length-7); j<R0time.length; j++){
+      var itloc=calibInterval*(j+1);
+      var iloc=itloc+data_idataStart;
+      console.log("interval ",j,
+		  " it=",itloc,
+		  " i=",iloc,
+		  " data_date.length=",data_date.length,
+		  " time=",data_date[iloc],
+		  " R0time[j]=",R0time[j]);
+    }
+  }
 
 
  
@@ -3846,6 +3849,7 @@ function myCountryComparison(){ // callback "Kalibriere neu!
 
 // comment out document.getEl... if no button in html
 
+/*
 function setMutationSim(withMutations){
   if(withMutations){
     useMutationIfAvailable=true;
@@ -3858,13 +3862,14 @@ function setMutationSim(withMutations){
     //document.getElementById("buttonMut").innerHTML="&Omicron; Mutation [start]";
   }
 }
+*/
 
-
+/*
 function toggleMutationSim(){ // callback (Delta) Mutation from html button
   setMutationSim(!simulateMutation); // toggles simulateMutation
   myRestartFunction();
 }
-
+*/
 
 
 // simulationRun only activated with setInterval after dateGraphicsStart
@@ -3989,7 +3994,7 @@ function doSimulationStep(doDrawing){ // logging "allowed" here !!
 
   if(false){// doSimulationStep: logging "allowed"
     //if(true){// doSimulationStep: logging "allowed"
-  //if(it>=itPresent-10){
+  //if(it>=itPresent-30){
     var idata=data_idataStart+it; // not "+1+" since after it++
     console.log( "doSimulationStep: after it++: it=",it,
 		 " R0=",R0_actual.toFixed(2),
@@ -4075,7 +4080,7 @@ MutationDynamics.prototype.initialize=function(it0,p0,r0,I10,I20,R0){
   this.r0=r0;
   this.R10=R0/(1+p0*r0*this.tauR);
   this.R20=this.R10*(r0*this.tauR+1)*(1-I10)/(1-I20);
-  if(false){
+  if(true){
     console.log("MutationDynamics initialize: this.tauR=",this.tauR,
 		" pMut=",p0,
 		" this.y=",this.y,
@@ -4119,13 +4124,14 @@ function Immunity(){
 
   this.I1infect=0;    // standard variant (2021-12: Delta)
   this.I2infect=0;    // new variant if applicable (2021-12: Omicron)
+  this.Iinfectmax=0.899; //!!!! MT 2022-03
 
 
   //################################################################
   // variables for immunity by vaccination/boosters
   //################################################################
 
-  this.evadeMutFactor=3; // (1-vacceff2)=max(0,1-evadeMutFactor*(1-vaceff1))
+  this.evadeMutFactor=3; // (1-vacceff2)=evadeMutFactor*(1-vaceff1) in [0,1]
   this.I1vacc=0;      // vaccination immunity factor for standard strain
   this.I2vacc=0;      // ... for mutation (0=unprotected, 1=100% prot)
 
@@ -4143,12 +4149,13 @@ function Immunity(){
   this.tauIncrease=25; // time scale of further increase
 
   this.I0boost=0.30    // assumed remaining efficicency at boosting time
-  this.ImaxBoost=0.93  // assumed efficicency of booster
+  this.ImaxBoost=0.90  // assumed efficicency of booster
   this.tauIncrBoost=14; // time scale to max efficiency for boosters
   
-  this.tauHalf=180;    // #days for reduced efficiency to 50% of I0
+  this.tauHalf=90;    // #days for reduced efficiency to 50% of I0
                        // !!! assuming double timescales
                        // for the boosters for now
+                       // 2022-03-30: reduced from 180 to 90
   this.dtau=40;        // how fast (half-width #days) the reduct. takes place
   this.taumaxVacc=730;     // maximum memory of vaccinations or boosters
                        // (zero effect for longer times)
@@ -4208,7 +4215,7 @@ Immunity.prototype.initialize=function(country){
   this.I1vacc=0; // not really needed
   this.I2vacc=0; 
   this.I1infect=0; // needed
-  this.I2infect=0; 
+  this.I2infect=0;
   
   // MT 2021-11: New detailled efficiency as f(time) and boosters
   // MT 2021-12: Not possible for infections because these depend on runs
@@ -4319,8 +4326,8 @@ Immunity.prototype.update=function(rVacc,rBoost,dx,p,it){
 // @param p:  actual fraction of new variant (set=0 if !simulateMutation)
 
 Immunity.prototype.updateInfections=function(dx,p,it){
-  this.I1infect=Math.min(this.I1infect+(1-p)*dx,0.9);
-  this.I2infect=Math.min(this.I2infect+p*dx,0.9);
+  this.I1infect=Math.min(this.I1infect+(1-p)*dx,this.Iinfectmax);
+  this.I2infect=Math.min(this.I2infect+p*dx,this.Iinfectmax);
 }
 
 
@@ -4840,9 +4847,10 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
     data_stringencyIndex.length-1, it+data_idataStart));
   var stringencyCalib=data_stringencyIndex[i];
 
-  this.Reff=R0 * (1-IvaccCalib) * (1-this.xyz) 
+  this.Reff=R0 * (1-IvaccCalib) * (1-this.xyz) // need restrict xyz
     * stringencyFactor(stringencyCalib) * calc_seasonFactor(it);
 
+  this.Reffcalib=this.Reff;  // only for debugging 
 
   
 
@@ -4850,7 +4858,9 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
   // CoronaSim.updateOneDay: true dynamics (0.2): 
   // calculate Reff outside calibration incl mutation dynamics
   // ###############################################
- 
+
+  pMut=0; // global; default=0 if simulateMutation=false or it<itStartMut;
+  
   if( !inCalibration && (it>=0)){
 
     
@@ -4870,17 +4880,23 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
 	? data_rBoost[i] : data_rBoost[data_rBoost.length-7];
     }
 
+    if(!slider_stringency_moved){ // otherwise glob var set by sliders
+      var i=Math.max(0, Math.min(
+        data_stringencyIndex.length-1, it+data_idataStart));
+      stringency=data_stringencyIndex[i]; // in [0,100]
+    }
     
     // CoronaSim.updateOneDay (0.2) (calc Reff outside calibration:)
     // update immunities and mutations
     // !!!! check itStartMut in validation
     
-    var pMut=0; // default if simulateMutation=false or it<itStartMut;
     var R10=R0;
     var R20=R0;
-    
+    var strFact1=stringencyFactor(stringency);
+    var strFact2=stringencyFactor(stringency);
     
     if(it==0){immunity.initialize(country);} // in doSimulationStep, !calibr
+
     if(simulateMutation){
 
       // !!! initialisation just to have access to mutationDynamics.p_it[it]
@@ -4909,8 +4925,11 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
 	pMut=mutationDynamics.p_it[it];
 	R10=mutationDynamics.R10; // needed because initialized to R0
 	R20=mutationDynamics.R20;
+	// Omicron shorter generation time by factor_generationtime2	
+	strFact2=strFactStartMut 
+	  *Math.pow(strFact1/strFactStartMut,1./factor_generationtime2);
       }
-    }
+    } // simulateMutation
     
     var dx=(it==0) ? this.xyz : this.xtau[0]; // it=0: use accumulated incr.
     immunity.update(rVacc,rBoost,dx,pMut,it);
@@ -4918,6 +4937,15 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
     var I1=immunity.I1;
     var I2=immunity.I2;
 
+    //!! The same for seasonFactor (seasonFactor1=...) still not implemented
+
+    var Reff1=R10*(1-I1)*strFact1*calc_seasonFactor(it);
+    var Reff2=R20*(1-I2)*strFact2*calc_seasonFactor(it);
+
+    //##########  final Reff outside calibration ##################
+    this.Reff=(simulateMutation) ? (1-pMut)*Reff1+pMut*Reff2 : Reff1;
+    //#############################################################
+  
     
     // CoronaSim.updateOneDay (0.2): update age groups
     // not part of core simulation but of
@@ -4930,30 +4958,6 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
       ? corrIFRarr[it-tauDie] : immunity.corrFactorIFR0; 
 
 
-
-    // measures by stringency in [0,100] outside of calibration
-    
-    if(!slider_stringency_moved){
-      var i=Math.max(0, Math.min(
-        data_stringencyIndex.length-1, it+data_idataStart));
-      stringency=data_stringencyIndex[i]; // otherwise glob var set by sliders
-    }
-
-    //!! MT 2021-12-30: Omicron shorter generation time
-    // by factor_generationtime2 (e.g., 0.8)
-    var strFact1=stringencyFactor(stringency);
-    var strFact2=strFactStartMut
-	*Math.pow(strFact1/strFactStartMut,1./factor_generationtime2);
-
-    //!! still not implemented: the same for seasonFactor:
-    // seasonFactor1=..., ...
-    var Reff1=R10*(1-I1)*strFact1*calc_seasonFactor(it);
-    var Reff2=R20*(1-I2)*strFact2*calc_seasonFactor(it);
-
-    //##########  final Reff outside calibration ##################
-    this.Reff=(simulateMutation) ? (1-pMut)*Reff1+pMut*Reff2 : R0 * (1-I1);
-    //#############################################################
-  
    
     //########################################################
     // test
@@ -5100,9 +5104,14 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
   // (4) sum up the profile of infected people
   // xAct: relative sum of "actually infected" (neither recoverd nor dead)
   // xyz: relative cumulative sum of infected (incl recovered, dead)
+  
+  // MT 2022-03: because of waning immunity 
+  // (1-this.xyz) can become negative also in calibr because no provision
+  // taken in Immunity => restrict it ad-hoc to <=constant immunity.Iinfectmax
   // ###############################################
 
   this.xyz+= this.xtau[0]; // cumulative fraction of newly infected
+  if(this.xyz>immunity.Iinfectmax){this.xyz=immunity.Iinfectmax;} //!!!! MT 2022-03: (1-xyz)>0 needed for calibration
 
   this.xAct=0;  
   for(var tau=0; tau<taumax; tau++){
@@ -5219,27 +5228,38 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
 
 
   //##########################################################
-  // !! HERE calibration debug output
+  // !! HERE updateOneDay debug output
   // (filter needed because called in calibration)
   //##########################################################
 
   //if(false){
-  //if(!inCalibration){
-  if((!inCalibration)&&(it>itPresent-50)){
+  //if(!inCalibration){// filter needed because called in calibration
+  if((!inCalibration)&&((it<50)||(it>itPresent-50))){
 
     // debug Reff calculation
-    if(false){
+    if(true){
       console.log(" \nCoronaSim.updateOneDay: it-itPresent=",it-itPresent,
-		" R0=",R0.toFixed(2),
-		" (1-this.xyz)=",(1-this.xyz).toFixed(2),
-		" seasonFac=",calc_seasonFactor(it).toFixed(2),
-		" stringFact=",
-		stringencyFactor(stringency).toFixed(2),
-		" this.Reff=", this.Reff.toFixed(2));
+	 	  " R0=",R0.toFixed(2),
+		  " this.xyz=",this.xyz.toFixed(2),
+		  " immunity.I1infect=",immunity.I1infect.toFixed(2),
+		  " I1vacc=",
+		  " seasonFac=",calc_seasonFactor(it).toFixed(2),
+		  " strFact1=",stringencyFactor(stringency).toFixed(2),
+		  " strFact2=n.a.here",
+		  "\n (1-I1)=",(1-immunity.I1).toFixed(3),
+		  " (1-I2)=",(1-immunity.I2).toFixed(3),
+		  " pMut=",pMut.toFixed(2),
+		  " this.Reff=", this.Reff.toFixed(2),
+		  " this.Reffcalib=", this.Reffcalib.toFixed(2),
+		  // following only works for it<itPresent
+		 // "\n IvaccCalib=",IvaccCalib.toFixed(2),
+		 // " immunity.I1vacc=",immunity.I1vacc.toFixed(2),
+		 // " (1-Icalib)=",((1-IvaccCalib) * (1-this.xyz)).toFixed(3),
+		  "");
     }
 
    // debug simulated (real and measured) infection numbers
-    if(true){ // filter needed because called in calibration
+    if(true){ 
       console.log(
 	"\nend CoronaSim.updateOneDay: it=",it,
 	//" R0=",R0.toPrecision(2),
@@ -6214,7 +6234,7 @@ DrawSim.prototype.drawAxes=function(windowG){
       ctx.fillText(
         // Impf-Immunitaeten: I-Delta="+(100*I1vacc).toFixed(0)
         // +"%, I-Omicron="+(100*I2vacc).toFixed(0)
-	"Gesamt-Immunitaet: Delta "+(100*I1).toFixed(0)
+	"Gesamt-Immunitaet: "+(100*I1).toFixed(0)
 	  +str_omicron
 	  +"%, Sim. Impfdurchbrueche: "+(100*pd).toFixed(1)+"%",
 	this.xPix0+xrelLeft*this.wPix,
