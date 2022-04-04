@@ -1369,7 +1369,7 @@ function initializeData(country,insideValidation){
   }
 
 
-  if(true){
+  if(false){
     console.log("initializeData (4): pure data:");
     for(var i=data.length-21; i<data.length; i++){
       console.log(data_date[i],": data_dxt=",Math.round(data_dxt[i]),
@@ -1377,33 +1377,62 @@ function initializeData(country,insideValidation){
     }
   }
    
-  // !!!!! initializeData (4a)
-  // override nCorr last days according to trend+season instead of direct data
-  // because late reports often accumulated on last day(s) data
+  // initializeData (4a)
+  // Shift extreme discrepancies to neighboring days forwards and backwards
   // do this before smoothing!
   
-  var separateWeeklyOscillationsLast3days=true;
-  if(separateWeeklyOscillationsLast3days){
-    var nCorr=3;
-    var iCorr=data.length-nCorr;
-    
-    var trendx=(0.5*(data_dxt[iCorr-2]+data_dxt[iCorr-1])
-	       -0.5*(data_dxt[iCorr-9]+data_dxt[iCorr-8]))/7;
-    for (var i=iCorr; i<data.length; i++){
-      data_dxt[i]=Math.max(0., data_dxt[i-7]+7*trendx);
-      data_cumCases[i]=data_cumCases[i-1]+data_dxt[i];
+  var useSaisonAnalysisLastWeek=true; //!!!!!
+  
+  if(useSaisonAnalysisLastWeek){
+
+    // preliminary: shift most extreme events
+    for(var i=0; i<data.length-1; i++){
+
+      // (1) forwards 1-day shift if big->small
+      if(Math.max(data_dxt[i+1],1)/Math.max(data_dxt[i],1)<0.3){
+	var avg=0.5*(data_dxt[i]+data_dxt[i+1]);
+	data_dxt[i]=avg;
+	data_dxt[i+1]=avg;
+      }
+      if(Math.max(data_dz[i+1],1)/Math.max(data_dz[i],1)<0.3){
+	var avg=0.5*(data_dz[i]+data_dz[i+1]);
+	data_dz[i]=avg;
+	data_dz[i+1]=avg;
+      }
+    }
+      // (2) backwards 1-day shift if after (1) there is still small->big
+      
+    for(var i=0; i<data.length-1; i++){
+      if(Math.max(data_dxt[i],1)/Math.max(data_dxt[i+1],1)<0.3){
+	//console.log("(2): i=",i," data_date[i]=",data_date[i],
+		    //" data_dxt[i]=",data_dxt[i],
+	//	    " data_dxt[i+1]=",data_dxt[i+1]);
+	var avg=0.5*(data_dxt[i]+data_dxt[i+1]);
+	data_dxt[i]=avg;
+	data_dxt[i+1]=avg;
+	//console.log("(2) after: data_date[i]=",data_date[i]," data_dxt[i]=data_dxt[i+1]=",data_dxt[i+1]);
+      }
+      if(Math.max(data_dz[i],1)/Math.max(data_dz[i+1],1)<0.3){
+	var avg=0.5*(data_dz[i]+data_dz[i+1]);
+	data_dz[i]=avg;
+	data_dz[i+1]=avg;
+      }
     }
 
-    var trendz=(0.5*(data_dz[iCorr-2]+data_dz[iCorr-1])
-	       -0.5*(data_dz[iCorr-9]+data_dz[iCorr-8]))/7;
-    for (var i=iCorr; i<data.length; i++){
-      data_dz[i]=Math.max(0., data_dz[i-7]+7*trendz);
+
+
+    for(var i=1; i<data.length; i++){
+      data_cumCases[i]=data_cumCases[i-1]+data_dxt[i];
       data_cumDeaths[i]=data_cumDeaths[i-1]+data_dz[i];
     }
 
+
+ 
     
+
     if(true){
-      console.log("initializeData (4a) active: direct separation of weekly effects for last 3 days");
+      console.log("initializeData (4a) active: ",
+		  " direct saison analysis for last week");
       for(var i=data.length-21; i<data.length; i++){
         console.log(data_date[i],": data_dxt=",Math.round(data_dxt[i]),
 		    " data_cumCases=",Math.round(data_cumCases[i]));
@@ -1412,65 +1441,49 @@ function initializeData(country,insideValidation){
   }
 
 
-  // !!!!! initializeData (4b)
+  // initializeData (4b)
   // smoothing cumCases then differentiating for daily => artifacts at end
   // smoothing daily dxt then integrating for cum => opposite artifacts
   // => test arithmetic average of both procedures!!
 
   
  
-  var calibrSmoothed=true;
+  var calibrSmoothed=true; //!!!!!
   
   if(calibrSmoothed){
-    console.log("\nSmooth cases and cumCases ...");
-    var cumCasesSmooth1=[];
-    var cumCasesSmooth2=[];
-    var dailyCasesSmooth1=[];
-    var dailyCasesSmooth2=[];
+    var dailyCasesSmooth=[];
     
-    cumCasesSmooth1=smooth(data_cumCases,
+    dailyCasesSmooth=smooth(data_dxt,
 			       [1/7,1/7,1/7,1/7,1/7,1/7,1/7],false);
-//			       [1/5,1/5,1/5,1/5,1/5],false);
-//			       [1/4,1/4,1/4,1/4],false);
-//			       [1/3,1/3,1/3],false); //!!
 
-    dailyCasesSmooth1[0]=0;
     for(var i=1; i<data.length; i++){
-      dailyCasesSmooth1[i]=cumCasesSmooth1[i]-cumCasesSmooth1[i-1];
-    }
-  
-    // fit nLast points for special treatment to this!
-    nLast=3;  // 3,2,1
-    dailyCasesSmooth2=smooth(data_dxt, 
-			       [1/7,1/7,1/7,1/7,1/7,1/7,1/7],false);
-    //			       [1/5,1/5,1/5,1/5,1/5],false);
-    //			       [1/3,1/3,1/3],false); //!!
-    
-    cumCasesSmooth2[0]=0;
-    for(var i=1; i<data.length; i++){
-      cumCasesSmooth2[i]=cumCasesSmooth2[i-1]+dailyCasesSmooth2[i];
-    }
-
-    //!!!! which one is best? All three do not work properly
-    // for last int(nAvg/2)=three points => extrapolate lin trend
-    
-    for(var i=1; i<data.length-nLast; i++){ // i=0 already defined
-      data_dxt[i]=0.5*(dailyCasesSmooth1[i]+dailyCasesSmooth2[i]);
-      data_cumCases[i]=0.5*(cumCasesSmooth1[i]+cumCasesSmooth2[i]);
-      //data_dxt[i]=dailyCasesSmooth1[i];
-      //data_cumCases[i]=cumCasesSmooth1[i];
-      //data_dxt[i]=dailyCasesSmooth2[i];
-      //data_cumCases[i]=cumCasesSmooth2[i];
-    }
-
-    var iCorr=data.length-nLast;
-    var trend=data_dxt[iCorr-1]-data_dxt[iCorr-2];
-    for(var i=iCorr; i<data.length; i++){
-      data_dxt[i]=data_dxt[iCorr-1]+(i-(iCorr-1))*trend;
+      data_dxt[i]=dailyCasesSmooth[i];
       data_cumCases[i]=data_cumCases[i-1]+data_dxt[i];
     }
 
     
+    // fit nLast points for special treatment to this!
+
+    var ignoreLastDays=0;
+    var istartAct=data.length-ignoreLastDays-7;
+    var istartLast=istartAct-7;
+
+    var avgActWeek=0;
+    var avgLastWeek=0;
+    for(var di=0; di<7; di++){
+      avgActWeek+=data_dxt[istartAct+di];
+      avgLastWeek+=data_dxt[istartLast+di];
+    }
+    avgActWeek/=7.;
+    avgLastWeek/=7.;
+    var trend=(avgActWeek-avgLastWeek)/7;
+
+    for(var di=0; di<3+ignoreLastDays; di++){
+      var i=data.length-ignoreLastDays-3+di;
+      data_dxt[i]=Math.max(0.,avgActWeek+(di+1)*trend);
+      data_cumCases[i]=data_cumCases[i-1]+data_dxt[i];
+    }
+
     if(true){
       console.log("initializeData (4b) active: smooth daily and cum cases");
       for(var i=data.length-21; i<data.length; i++){
