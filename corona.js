@@ -4137,8 +4137,8 @@ function Immunity(){
 
   this.I1infect=0;    // standard variant (2021-12: Delta)
   this.I2infect=0;    // new variant if applicable (2021-12: Omicron)
-  this.Iinfectmax=0.899; //!!!! MT 2022-03
-
+  this.Iinfectmax=0.80; //!!!! MT 2022-03
+  this.immunityInfectDecayRate=1./180;
 
   //################################################################
   // variables for immunity by vaccination/boosters
@@ -4162,7 +4162,7 @@ function Immunity(){
   this.tauIncrease=25; // time scale of further increase
 
   this.I0boost=0.30    // assumed remaining efficicency at boosting time
-  this.ImaxBoost=0.90  // assumed efficicency of booster
+  this.ImaxBoost=0.60  // assumed efficicency of booster
   this.tauIncrBoost=14; // time scale to max efficiency for boosters
   
   this.tauHalf=90;    // #days for reduced efficiency to 50% of I0
@@ -4170,7 +4170,7 @@ function Immunity(){
                        // for the boosters for now
                        // 2022-03-30: reduced from 180 to 90
   this.dtau=40;        // how fast (half-width #days) the reduct. takes place
-  this.taumaxVacc=730;     // maximum memory of vaccinations or boosters
+  this.taumaxVacc=150;     // maximum memory of vaccinations or boosters
                        // (zero effect for longer times)
   this.IvaccTable=[];  // vaccination efficiency after index #days
   this.IboostTable=[]; // booster efficiency after index #days
@@ -4338,8 +4338,15 @@ Immunity.prototype.update=function(rVacc,rBoost,dx,p,it){
 // @param dx: daily number of new infected
 // @param p:  actual fraction of new variant (set=0 if !simulateMutation)
 
+
+// !!! Must copy here what I did in main simulation update for xyz
+// because calibration does not use Immunity,
+// only tables produced by it ahead
+
 Immunity.prototype.updateInfections=function(dx,p,it){
+  this.I1infect*=(1-this.immunityInfectDecayRate);
   this.I1infect=Math.min(this.I1infect+(1-p)*dx,this.Iinfectmax);
+  this.I2infect*=(1-this.immunityInfectDecayRate);
   this.I2infect=Math.min(this.I2infect+p*dx,this.Iinfectmax);
 }
 
@@ -4910,7 +4917,7 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
     
     if(it==0){immunity.initialize(country);} // in doSimulationStep, !calibr
 
-    if(simulateMutation){
+    if(simulateMutation){  // is false as of 2022-09-16
 
       // !!! initialisation just to have access to mutationDynamics.p_it[it]
       // for graphics etc
@@ -4955,6 +4962,8 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
     var Reff1=R10*(1-I1)*strFact1*calc_seasonFactor(it);
     var Reff2=R20*(1-I2)*strFact2*calc_seasonFactor(it);
 
+    //[MT 2022-09-17] simulateMutation is off
+    
     //##########  final Reff outside calibration ##################
     this.Reff=(simulateMutation) ? (1-pMut)*Reff1+pMut*Reff2 : Reff1;
     //#############################################################
@@ -4972,44 +4981,7 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
 
 
    
-    //########################################################
-    // test
-    //########################################################
-
-
-    //console.log("stringency=",stringency," rVacc=",rVacc);
-    if(false){
-    //if((it<10)||(it>=itPresent-10)){
-    //if(it>=itPresent-10){
-      console.log("update outside calib: it=",it,
-		  " rVacc=",rVacc.toFixed(4),
-		  " rBoost=",rBoost.toFixed(4),
-		  " pVacc=",pVacc.toFixed(4),
-		  " pVaccFull=",pVaccFull.toFixed(4),
-		  " pBoost=",pBoost.toFixed(4),
-		  "\n    I1vacc=",immunity.I1vacc.toFixed(4),
-		  " I2vacc=",immunity.I2vacc.toFixed(4),
-		  " this.xyz=",this.xyz.toFixed(4),
-		  " I1infect=",immunity.I1infect.toFixed(4),
-		  " I2infect=",immunity.I2infect.toFixed(4),
-		  " n0*dx=",(n0*this.xtau[0]).toFixed(0),
-		  " n0*dxt=",(n0*this.dxt).toFixed(0),
-		  "\n    pMut=",pMut.toFixed(3),
-		  " R0=",R0.toFixed(3),
-		  " R10=",R10.toFixed(3),
-		  " R20=",R20.toFixed(3),
-		  " I1=",I1.toFixed(4),
-		  " I2=",I2.toFixed(4),
-		  " strFactStartMut=",strFactStartMut.toFixed(2),
-		  " strFact1=",strFact1.toFixed(2),
-		  " strFact2=",strFact2.toFixed(2),
-		  "\n    Reff1=",Reff1.toFixed(2),
-		  " Reff2=",Reff2.toFixed(2),
-		  " pMut=",pMut.toFixed(2),
-		  " this.Reff=",this.Reff,
-		  "");
-    }
-
+    // test/debug further below
 
 
     
@@ -5117,15 +5089,22 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
   // (4) sum up the profile of infected people
   // xAct: relative sum of "actually infected" (neither recoverd nor dead)
   // xyz: relative cumulative sum of infected (incl recovered, dead)
-  
-  // MT 2022-03: because of waning immunity 
-  // (1-this.xyz) can become negative also in calibr because no provision
-  // taken in Immunity => restrict it ad-hoc to <=constant immunity.Iinfectmax
-  // ###############################################
+    // ###############################################
 
   this.xyz+= this.xtau[0]; // cumulative fraction of newly infected
-  if(this.xyz>immunity.Iinfectmax){this.xyz=immunity.Iinfectmax;} //!!!! MT 2022-03: (1-xyz)>0 needed for calibration
 
+  // [MT 2022-09-16]
+  // immunity wanes, relax it and restrict it
+  // since xyz<1 needed: factor (1-this.xyz) when calculating Reff from rR0 
+  // !!! must copy here for xyz (main and calibr) what I did in Immunity()
+  // for I1infect
+  
+  this.xyz*=(1-immunity.immunityInfectDecayRate);
+  this.xyz=Math.min(immunity.Iinfectmax, this.xyz);
+
+
+
+  
   this.xAct=0;  
   for(var tau=0; tau<taumax; tau++){
     this.xAct     += this.xtau[tau];
@@ -5272,7 +5251,7 @@ CoronaSim.prototype.updateOneDay=function(R0,it,logging){
     }
 
    // debug simulated (real and measured) infection numbers
-    if(true){ 
+    if(false){ 
       console.log(
 	"\nend CoronaSim.updateOneDay: it=",it,
 	//" R0=",R0.toPrecision(2),
@@ -6341,7 +6320,7 @@ DrawSim.prototype.transferSimData=function(it){
   this.dataG[22].data[it]=IFRfun_time(it); //!! new! IFR
   this.dataG[23].data[it]=1e6*corona.xtau[0]; // xtau[0]=infected at infection age 0
   this.dataG[24].data=this.dataG[23].data;
-  this.dataG[25].data[it]=log10(1e6*corona.xyz); // "Durchseuchung"
+  this.dataG[25].data[it]=log10(1e6*corona.xyz); // Immun. by "Durchseuchung"
   this.dataG[26].data[it]=1e6*corona.dxtFalse; // sim number of false positives
   this.dataG[27].data[it]=1e6*corona.dxt; // sim number of positive tests
   this.dataG[28].data[it]=1e6*corona.dz; // sim number of deaths per day
